@@ -1,0 +1,10 @@
+Most news is posted on the metalinks project homepage at sourceforge.net:
+  metalinks.sourceforge.net
+
+27 Oct 2005
+Release 0.1.0, because it's nice it needed a good high version number ;-)
+
+ 4 Sept 2005
+Release of 0.0.4. Soon a stable DTD will be realized. Then the only thing for
+metalink to be done is drop the libcrypto++ library in favour of libgcrypt.
+This because we need libgcrypt for the symmetric cyphers (used in GNUnet).

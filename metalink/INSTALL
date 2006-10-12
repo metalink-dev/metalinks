@@ -1,0 +1,16 @@
+
+First install the dependencies:
+	libgcrypt
+	BOOST program_options
+	BOOST filesystem
+
+Then, if you have A-A-P installed (aap --version) do:
+	aap install
+
+Otherwise use make:
+	make
+	make install (With the right rights)
+
+Some code documentation can be generated using doxygen.
+
+More information an newer versions can be found at http://metalinks.sourceforge.net

@@ -1,0 +1,45 @@
+0.1.2:
+- Added options: source, publisher, description, rights, format. 
+- Speedup in GNUnet algorithm.
+
+0.1.1:
+- New XSL sheet loaded
+- Critical bugfix: ed2k hash for files larger then 9mb was garbage.
+
+0.1.0:
+- Dropped Crypto++ library as a dependency
+- Cleaned up most code
+- Added noxsl option
+- Added --genxsl option to generate local XSL sheets
+  (Online XSLT sheets for local files
+  are a security hazzard for a local user)
+
+0.0.7:
+- Changes .metalink.xml -> .metalinks.xml
+
+0.0.6:
+- Translate all "." in filenames to "_" for the .metalink.xml files
+    (.gz will add content-encoding in HTTP response for most servers).
+
+0.0.5:
+- Moved to version 1 of the metalinks draft
+- Kept the publisher option back, which should be moved to the Dublin Core
+- Moved makefile and aap files to the root
+- Moved links to SourceForge project
+
+0.0.4:
+- Added --no{hash} options.
+- Added support for a publisher link in the metalinks (--publisher options)
+
+0.0.3:
+-	Support for GNUnet links.
+- Support for stdout collecting of files
+- Bugfix on empty files
+- Added ED2K size limit (more then 4GB), see README
+- Added --sourcebase option
+
+0.0.2:
+-	Added more options
+
+0.0.1:
+-	Initial testing version

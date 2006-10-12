@@ -1,0 +1,10 @@
+- Output saving
+- Error handling
+- File picker
+- Merge/Split Metalinks records
+- Add information to metalinks records, like description etc.
+? Call metalink on a file and load the metalinks record from the stdout option.
+? Mail to a friend function
+? P2P program detection
+? OS detection
+? Command runner
