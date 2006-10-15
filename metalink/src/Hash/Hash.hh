@@ -28,6 +28,7 @@ class Hash
 		virtual std::string name() const = 0;
 		virtual void update(char const *bytes, unsigned numbytes) = 0;
 		virtual void finalize() = 0;
+		virtual std::string const &value() const = 0;
 		virtual ~Hash()
 		{}
 };

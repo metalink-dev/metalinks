@@ -25,12 +25,16 @@
 #include <vector>
 #include <sstream>
 
+#include <utility>
+
+#include "../Preprocessor/foreach.hh"
+
 class MetalinkFile: public std::string
 {
 		std::string d_filename;
-		std::vector<std::string> d_paths;
+		std::vector< std::pair<std::string, std::string> > d_paths;
 		unsigned long long d_size;
-
+		std::vector< std::pair<std::string, std::string> > d_vers;
 	public:
 		
 		MetalinkFile(std::string const &filename)
@@ -41,15 +45,34 @@ class MetalinkFile: public std::string
 		{
 			d_size = s;
 		}
-		void addPath(std::string const &path)
+
+		void addVerification(std::string const &name, std::string const &value)
 		{
-			d_paths.push_back(path);
+			d_vers.push_back(std::make_pair(name, value));
 		}
-		
+		void addPath(std::string const &type, std::string const &value)
+		{
+			d_paths.push_back(std::make_pair(type, value));
+		}
+
 		void finalize()
 		{
 			std::ostringstream record;
-			record << "record";
+			record << "\t<file name=\"" << d_filename << "\">\n"
+				<< "\t\t<size>126023668</size>\n"
+   			<< "\t\t<verification>\n";
+   		_foreach(v, d_vers)
+   		{
+   			record << "\t\t\t<hash type=\"" << v->first << "\">"
+   				<< v->second
+   				<< "</hash>\n";
+   		}
+	   	record << "\t\t</verification>\n";
+	   	record << "\t\t<resources>\n";
+	   	_foreach(p, d_paths)
+	   		record << "\t\t\t<url type=\"" << p->first << "\">" << p->second << "</url>\n";
+	   	record << "\t\t</resources>\n";
+			record << "\t</file>";
 			assign(record.str());
 		}
 };

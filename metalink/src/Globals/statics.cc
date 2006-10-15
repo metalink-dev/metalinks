@@ -30,8 +30,3 @@ bool Globals::showDTD(false);
 bool Globals::noxsl(true);
 std::string Globals::xsl("xsl/metalinks_xhtml.xsl");
 std::string Globals::metalinkExtension(".metalinks");
-bool Globals::domd5(true);
-bool Globals::dosha1(true);
-bool Globals::dosha512(true);
-bool Globals::doed2k(true);
-bool Globals::dognunet070(true);

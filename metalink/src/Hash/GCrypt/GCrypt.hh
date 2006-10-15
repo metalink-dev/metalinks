@@ -59,7 +59,7 @@ class GCrypt: public Hash
 		virtual void update(char const *bytes, unsigned numbytes);
 		virtual void finalize();
 		
-		std::string const &value() const;
+		virtual std::string const &value() const;
 };
 }//namespace
 #endif
