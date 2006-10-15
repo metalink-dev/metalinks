@@ -18,9 +18,19 @@
 
 */
 
-#include "Metalink.ih"
-
-void Metalink::insertFooter(std::ostream &str, std::string const &indent)
+#ifndef _Hash_HH_INCLUDED_
+#define	_Hash_HH_INCLUDED_
+namespace bneijt
 {
-	str << indent << "</metalinks>\n";
+class Hash
+{
+	public:
+		virtual std::string name() const = 0;
+		virtual void update(char const *bytes, unsigned numbytes) = 0;
+		virtual void finalize() = 0;
+		virtual ~Hash()
+		{}
+};
 }
+#endif
+

@@ -18,14 +18,41 @@
 
 */
 
-#include "Metalink.ih"
+#ifndef _MetalinkFile_HH_INCLUDED_
+#define	_MetalinkFile_HH_INCLUDED_
 
-Metalink::Metalink(std::string const &filename)
-	:
-	d_filename(filename),
-	d_pub(""),
-	d_size(0)
+#include <string>
+#include <vector>
+#include <sstream>
+
+class MetalinkFile: public std::string
 {
-	boost::filesystem::path filePath(d_filename, boost::filesystem::native);
-	d_basename = filePath.leaf();
-}
+		std::string d_filename;
+		std::vector<std::string> d_paths;
+		unsigned long long d_size;
+
+	public:
+		
+		MetalinkFile(std::string const &filename)
+		:
+			d_filename(filename)
+		{}
+		void setSize(unsigned long long s)
+		{
+			d_size = s;
+		}
+		void addPath(std::string const &path)
+		{
+			d_paths.push_back(path);
+		}
+		
+		void finalize()
+		{
+			std::ostringstream record;
+			record << "record";
+			assign(record.str());
+		}
+};
+
+#endif
+

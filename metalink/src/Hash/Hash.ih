@@ -17,12 +17,4 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-
-#include "Metalink.ih"
-
-std::string const &Metalink::publisher(std::string const &pub)
-{
-	if(!pub.empty())
-		d_pub = pub;
-	return d_pub;
-}
+#include "Hash.hh"

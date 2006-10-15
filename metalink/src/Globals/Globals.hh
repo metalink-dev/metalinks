@@ -35,13 +35,14 @@ struct Globals
 
 		static std::string xsl;
 		static std::string stylesheet;
+		static std::string metalinkExtension;
 		
 		static bool domd5;
 		static bool dosha1;
 		static bool dosha512;
 		static bool doed2k;
 		static bool dognunet070;
-};
+		};
 }//namespace
 #endif
 

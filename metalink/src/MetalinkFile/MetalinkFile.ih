@@ -17,15 +17,4 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-
-#include "Metalink.ih"
-
-bool Metalink::ok() const
-{
-	//Minimal of one digest
-	if(d_digests.size() < 1)
-		return false;
-
-	//Must have a nonzero size
-	return d_size != 0;
-}
+#include "MetalinkFile.hh"
