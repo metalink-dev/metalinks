@@ -21,13 +21,15 @@
 #include "Globals.ih"
 
 std::string const Globals::programName("metalink");
-std::string const Globals::programDescription("Simple XML metadata creation utility");
-unsigned const Globals::version[] = {0,1,2};
+std::string const Globals::programDescription("Metalink XML generator");
+unsigned const Globals::version[] = {0,2,0};
 
-bool Globals::showDTD(true);
-bool Globals::noxsl(false);
+
+//Legacy options
+bool Globals::showDTD(false);
+bool Globals::noxsl(true);
 std::string Globals::xsl("xsl/metalinks_xhtml.xsl");
-
+std::string Globals::metalinkExtension(".metalinks");
 bool Globals::domd5(true);
 bool Globals::dosha1(true);
 bool Globals::dosha512(true);

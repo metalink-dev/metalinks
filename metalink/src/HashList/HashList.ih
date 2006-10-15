@@ -17,33 +17,4 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-
-#include "Metalink.ih"
-
-std::string Metalink::httpSafe(std::string const &value) const
-{
-	//Return the HTTP safe version of a string
-	
-	/*Currently this is too strict, but it states:
-		Space -> Plus
-		[a-zA-Z0-9]	stay
-		Anything else -> underscore
-	*/
-	std::string s(value);	//S is the safe value
-	for(unsigned i = 0; i < s.size(); ++i)
-	{
-		if(s[i] >= 'A' && s[i] <= 'Z')
-			continue;
-		if(s[i] >= 'a' && s[i] <= 'z')
-			continue;
-		if(s[i] >= '0' && s[i] <= '9')
-			continue;
-		if(s[i] == ' ')
-		{
-			s[i] = '+';
-			continue;
-		}
-		s[i] = '_';
-	}
-	return s;
-}
+#include "HashList.hh"

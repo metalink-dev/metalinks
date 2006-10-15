@@ -18,17 +18,29 @@
 
 */
 
-#ifndef _DigestRecord_HH_INCLUDED_
-#define	_DigestRecord_HH_INCLUDED_
-namespace bneijt
+#ifndef _String_HH_INCLUDED_
+#define	_String_HH_INCLUDED_
+
+#include <string>
+
+class String: public std::string
 {
-struct DigestRecord
-{
-	std::string digest = "";
-	std::string type = "";
-	std::string base = "hexadecimal";
-	std::string encoding = "plain";
+	public:
+		String(std::string const & string)
+		:
+			std::string(string)
+		{}
+		
+		bool endsIn(String const &ending)
+		{
+			return this->size() >= ending.size()
+				&&  this->compare(
+					this->size() - ending.size(),
+					ending.size(),
+					ending
+					) == 0;
+		}
 };
-}//namespace
+
 #endif
 

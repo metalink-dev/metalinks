@@ -18,29 +18,34 @@
 
 */
 
-#include "Metalink.ih"
-
-std::string Metalink::xmlSafe(std::string const &filename) const
+#ifndef _HashList_HH_INCLUDED_
+#define	_HashList_HH_INCLUDED_
+#include <vector>
+#include "../Hash/Hash.hh"
+#include "../Preprocessor/foreach.hh"
+namespace bneijt
 {
-	//Generate the XML version of the filename....
-	//TODO Check for XML compliance
-	//TODO optimize?
-	std::string fn = "";
-	for(unsigned i = 0; i < filename.size(); ++i)
-		switch(filename[i])
+class HashList: public std::vector<Hash *>
+{
+	public:
+		void destroyMembers()
 		{
-			case '&':
-				fn += "&amp;";
-				break;
-			case '<':
-				fn += "&lt;";
-				break;
-			case '>':
-				fn += "&gt;";
-				break;
-			default:
-				fn += filename[i];
+			_foreach(it, *this)
+				delete *it;
 		}
-
-	return fn;
+		void update(char const *bytes, unsigned numbytes)
+		{
+			_foreach(hash, *this)
+				(*hash)->update(bytes, numbytes);
+		}
+		
+		void finalize()
+		{
+			_foreach(hash, *this)
+				(*hash)->finalize();
+		}
+		
+};
 }
+#endif
+

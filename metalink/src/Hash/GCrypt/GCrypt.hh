@@ -24,13 +24,13 @@
 #include <gcrypt.h>
 #include <string>
 
-
+#include "../Hash.hh"
 namespace bneijt
 {
 /** \brief Class based libgcrypt interface
 Simple wrapper for a few libgcrypt functions.
 */
-class GCrypt
+class GCrypt: public Hash
 {
 		std::string d_value;
 		gcry_md_hd_t d_hash;
@@ -49,15 +49,15 @@ class GCrypt
 			gcry_md_close(d_hash);
 		}
 
-		std::string name() const;
+		virtual std::string name() const;
 
 		unsigned size()
 		{
 			return gcry_md_get_algo_dlen(d_algo);
 		}
 		void from(char const *data, unsigned len, unsigned char* key) const;
-		void update(char const *bytes, unsigned numbytes);
-		void finalize();
+		virtual void update(char const *bytes, unsigned numbytes);
+		virtual void finalize();
 		
 		std::string const &value() const;
 };
