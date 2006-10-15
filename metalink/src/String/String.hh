@@ -40,6 +40,14 @@ class String: public std::string
 					ending
 					) == 0;
 		}
+		std::string translated(char from, char to)
+		{
+			std::string copy(*this);
+			_foreach(c, copy)
+				if(*c == from)
+					*c = to;
+			return copy;
+		}
 };
 
 #endif

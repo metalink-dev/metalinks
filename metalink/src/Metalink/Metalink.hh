@@ -34,13 +34,19 @@ class Metalink
 		static std::string from(std::vector< MetalinkFile > files)
 		{
 			std::ostringstream out;
-			out << "Hello";
+			out << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
+			out << "<metalink version=\"3.0\" xmlns=\"http://www.metalinker.org/\">\n";
+
+ 
+ 			out << "<files>\n";
 			_foreach(file, files)
 			{
 				file->finalize();
-				out << "\n";
 				out << *file;
+				out << "\n";
 			}
+ 			out << "</files>\n";
+
 			return out.str();
 		}
 	

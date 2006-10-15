@@ -42,14 +42,9 @@
 
 
 #include "Hash/GCrypt/GCrypt.hh"
-/*
-#include "Hash/HashMD5/HashMD5.hh"
-#include "Hash/HashMD4/HashMD4.hh"
 #include "Hash/HashED2K/HashED2K.hh"
 #include "Hash/HashGNUnet/HashGNUnet.hh"
-#include "Hash/HashSHA1/HashSHA1.hh"
-#include "Hash/HashSHA512/HashSHA512.hh"
-*/
+
 #include "Globals/Globals.hh"
 #include "String/String.hh"
 
@@ -81,8 +76,7 @@ try
 
 		po::options_description digestOptions("Digest options");
 		digestOptions.add_options()
-			("list", "List digest algorithms")
-			("with", po::value< vector<string> >(), "Include the given digest")
+			("digest,d", po::value< vector<string> >(), "Include given digest")
 			;
 
 	  po::options_description hiddenOptions("Hidden options");
@@ -116,12 +110,14 @@ try
 		cout << "Version " << Globals::version[0] << "." << Globals::version[1] << "." << Globals::version[2];
 		cout << ", Copyright (C) 2005 A. Bram Neijt <bneijt@gmail.com>\n";
 		cout << Globals::programName << " comes with ABSOLUTELY NO WARRANTY and is licensed under GPL version 2\n\n";
-		cout << "Usage: " << Globals::programName << " [options] <input files>\n";
+		cout << "Usage: " << Globals::programName << " [options] <input files> < <mirror paths> > <metalinkfile>\n";
 		cout << helpOptions << "\n";
-		cout << "Example: Generate the stylesheet and seperate records for all files\n\t"
-				 << Globals::programName << " --genxsl *\n";
-		cout << "Example: Generate the stylesheet and an index of all files\n\t"
-				 << Globals::programName << " --genxsl -c * > index.metalinks.xml\n";
+		cout << "Supported algorithms are (-d options):\n"
+			<< "md2 md4 md5 sha1 sha256 sha384 sha512 rmd160 tiger haval crc32"
+			<< "\n";
+
+		cout << "Example: echo http http://example.com | "
+				 << Globals::programName << " -d md5 -d sha1 *\n";
 			return 1;
 		}
 		
@@ -140,9 +136,9 @@ try
 		_foreach(i, tmp)
 			inputFiles.push_back(*i);
 
-		if(variableMap.count("with"))
+		if(variableMap.count("digest"))
 		{
-			vector<string> ttmp = variableMap["with"].as< vector<string> >();
+			vector<string> ttmp = variableMap["digest"].as< vector<string> >();
 			_foreach(i, ttmp)
 				digests.push_back(*i);
 		}
@@ -160,7 +156,18 @@ try
 		throw;
   }
   
-
+	//Read paths form stdin
+	std::vector<std::string> paths;
+	while(true)
+	{
+		string path;
+		getline(cin, path);
+		if(cin.eof())
+			break;
+		paths.push_back(path);
+	}
+	
+	
   //For each file, create a record from it and add it to records.
 	std::vector< MetalinkFile > records;
 	_foreach(it, inputFiles)
@@ -214,10 +221,35 @@ try
 		
 		HashList hl;
 		//Add needed hashes
+		//Known hashes: md2 md4 md5
+		if(count(digests.begin(), digests.end(), "md2") > 0)
+			hl.push_back(new GCrypt(GCRY_MD_MD2));
+		if(count(digests.begin(), digests.end(), "md4") > 0)
+			hl.push_back(new GCrypt(GCRY_MD_MD4));
 		if(count(digests.begin(), digests.end(), "md5") > 0)
 			hl.push_back(new GCrypt(GCRY_MD_MD5));
+		//Known hashes: sha1 sha256 sha384 sha512
+		if(count(digests.begin(), digests.end(), "sha1") > 0)
+			hl.push_back(new GCrypt(GCRY_MD_SHA1));
+		if(count(digests.begin(), digests.end(), "sha256") > 0)
+			hl.push_back(new GCrypt(GCRY_MD_SHA256));
+		if(count(digests.begin(), digests.end(), "sha384") > 0)
+			hl.push_back(new GCrypt(GCRY_MD_SHA384));
+		if(count(digests.begin(), digests.end(), "sha512") > 0)
+			hl.push_back(new GCrypt(GCRY_MD_SHA512));
 
-		
+		//Known hashes: rmd160 tiger haval
+		if(count(digests.begin(), digests.end(), "rmd160") > 0)
+			hl.push_back(new GCrypt(GCRY_MD_RMD160));
+		if(count(digests.begin(), digests.end(), "tiger") > 0)
+			hl.push_back(new GCrypt(GCRY_MD_TIGER));
+		if(count(digests.begin(), digests.end(), "haval") > 0)
+			hl.push_back(new GCrypt(GCRY_MD_HAVAL));
+
+		//Known hashes: crc32
+		if(count(digests.begin(), digests.end(), "crc32") > 0)
+			hl.push_back(new GCrypt(GCRY_MD_CRC32));
+
 		//Fill hashes
 		static unsigned const blockSize(10240);
 		char data[blockSize];
@@ -247,8 +279,31 @@ try
 		
 		//FINALIZE
 		hl.finalize();
-		//Add hashes
-
+		//Add hashes and P2P paths
+		_foreach(hp, hl)
+		{
+		
+		
+			record.addVerification((*hp)->name(), (*hp)->value());
+			
+			//Add P2P specials
+			if((*hp)->value() == "sha1")
+				record.addPath("magnet", "magnet:?xt=urn:sha1:" + (*hp)->value() + "&dn=" + filename.translated(' ', '+'));
+		}
+		
+		//Add remaining paths/mirrors
+		_foreach(path, paths)
+		{
+			string::size_type sep = path->find(' ');
+			if(sep != string::npos)
+				record.addPath(path->substr(0, sep), path->substr(sep +1, path->size()));
+			else
+			{
+				cerr << "Warning: No '<type> <path>' in mirror string, using default http type\n";
+				record.addPath("http", *path);
+			}
+		}
+		
 		records.push_back(record);
 		hl.destroyMembers();
 		
