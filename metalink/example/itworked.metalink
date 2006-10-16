@@ -13,9 +13,11 @@
 			<hash type="ripemd160">6681db653f962f491fad3ff77650e2cbc773f6e9</hash>
 			<hash type="tiger192">ef17adfdef4196cc0959f1605f8b78e28c1ccb85a98a32a5</hash>
 			<hash type="crc32">eee376aa</hash>
+			<hash type="ed2k">51f826bebf81bd88944b32f284020b99</hash>
 		</verification>
 		<resources>
-			<url type="magnet">magnet:?xt=urn:sha1:04e54c88df5357d629f123aa4c0ab5a90cb52eee&dn=metalinks/itworked.png</url>
+			<url type="magnet">magnet:?xt=urn:sha1:04e54c88df5357d629f123aa4c0ab5a90cb52eee&amp;dn=metalinks/itworked.png</url>
+			<url type="ed2k">ed2k://|file|metalinks/itworked.png|1123|51f826bebf81bd88944b32f284020b99|/</url>
 			<url type="http">http://surfnet.dl.sourceforge.net/sourceforge/metalinks/itworked.png</url>
 			<url type="http">http://umn.dl.sourceforge.net/sourceforge/metalinks/itworked.png</url>
 			<url type="http">http://nchc.dl.sourceforge.net/sourceforge/metalinks/itworked.png</url>
@@ -38,3 +40,4 @@
 		</resources>
 	</file>
 </files>
+</metalink>

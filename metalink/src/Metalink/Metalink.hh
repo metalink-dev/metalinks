@@ -46,7 +46,7 @@ class Metalink
 				out << "\n";
 			}
  			out << "</files>\n";
-
+			out << "</metalink>\n";
 			return out.str();
 		}
 	
