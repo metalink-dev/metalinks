@@ -62,7 +62,7 @@ int main(int argc, char *argv[])
 try
 {
 	po::variables_map variableMap;
-	
+	bool allDigests;
 /////////Program argument handling
 	vector<string> inputFiles, digests;
 	
@@ -77,6 +77,7 @@ try
 		po::options_description digestOptions("Digest options");
 		digestOptions.add_options()
 			("digest,d", po::value< vector<string> >(), "Include given digest")
+			("alldigests", "Include all possible digests")
 			;
 
 	  po::options_description hiddenOptions("Hidden options");
@@ -113,11 +114,13 @@ try
 		cout << "Usage: " << Globals::programName << " [options] <input files> < <mirror paths> > <metalinkfile>\n";
 		cout << helpOptions << "\n";
 		cout << "Supported algorithms are (-d options):\n"
-			<< "md2 md4 md5 sha1 sha256 sha384 sha512 rmd160 tiger haval crc32"
+			<< "md4 md5 sha1 sha256 sha384 sha512 rmd160 tiger haval crc32"
 			<< "\n";
 
-		cout << "Example: echo http http://example.com | "
+		cout << "Example: http://example.com/ as a mirror:\n echo http http://example.com | "
 				 << Globals::programName << " -d md5 -d sha1 *\n";
+		cout << "Example: Only P2P links:\n echo -n | "
+				 << Globals::programName << " -d sha1 *\n";
 			return 1;
 		}
 		
@@ -142,8 +145,7 @@ try
 			_foreach(i, ttmp)
 				digests.push_back(*i);
 		}
-
-
+		allDigests = variableMap.count("alldigests") > 0;
 	}
   catch(exception& e)
   {
@@ -221,33 +223,32 @@ try
 		
 		HashList hl;
 		//Add needed hashes
-		//Known hashes: md2 md4 md5
-		if(count(digests.begin(), digests.end(), "md2") > 0)
-			hl.push_back(new GCrypt(GCRY_MD_MD2));
-		if(count(digests.begin(), digests.end(), "md4") > 0)
+		//Known hashes: md4 md5
+		if(allDigests || count(digests.begin(), digests.end(), "md4") > 0)
 			hl.push_back(new GCrypt(GCRY_MD_MD4));
-		if(count(digests.begin(), digests.end(), "md5") > 0)
+		if(allDigests || count(digests.begin(), digests.end(), "md5") > 0)
 			hl.push_back(new GCrypt(GCRY_MD_MD5));
+
 		//Known hashes: sha1 sha256 sha384 sha512
-		if(count(digests.begin(), digests.end(), "sha1") > 0)
+		if(allDigests || count(digests.begin(), digests.end(), "sha1") > 0)
 			hl.push_back(new GCrypt(GCRY_MD_SHA1));
-		if(count(digests.begin(), digests.end(), "sha256") > 0)
+		if(allDigests || count(digests.begin(), digests.end(), "sha256") > 0)
 			hl.push_back(new GCrypt(GCRY_MD_SHA256));
-		if(count(digests.begin(), digests.end(), "sha384") > 0)
+		if(allDigests || count(digests.begin(), digests.end(), "sha384") > 0)
 			hl.push_back(new GCrypt(GCRY_MD_SHA384));
-		if(count(digests.begin(), digests.end(), "sha512") > 0)
+		if(allDigests || count(digests.begin(), digests.end(), "sha512") > 0)
 			hl.push_back(new GCrypt(GCRY_MD_SHA512));
 
 		//Known hashes: rmd160 tiger haval
-		if(count(digests.begin(), digests.end(), "rmd160") > 0)
+		if(allDigests || count(digests.begin(), digests.end(), "rmd160") > 0)
 			hl.push_back(new GCrypt(GCRY_MD_RMD160));
-		if(count(digests.begin(), digests.end(), "tiger") > 0)
+		if(allDigests || count(digests.begin(), digests.end(), "tiger") > 0)
 			hl.push_back(new GCrypt(GCRY_MD_TIGER));
-		if(count(digests.begin(), digests.end(), "haval") > 0)
-			hl.push_back(new GCrypt(GCRY_MD_HAVAL));
+//		if(allDigests || count(digests.begin(), digests.end(), "haval") > 0)
+//			hl.push_back(new GCrypt(GCRY_MD_HAVAL));
 
 		//Known hashes: crc32
-		if(count(digests.begin(), digests.end(), "crc32") > 0)
+		if(allDigests || count(digests.begin(), digests.end(), "crc32") > 0)
 			hl.push_back(new GCrypt(GCRY_MD_CRC32));
 
 		//Fill hashes
@@ -287,7 +288,7 @@ try
 			record.addVerification((*hp)->name(), (*hp)->value());
 			
 			//Add P2P specials
-			if((*hp)->value() == "sha1")
+			if((*hp)->name() == "sha1")
 				record.addPath("magnet", "magnet:?xt=urn:sha1:" + (*hp)->value() + "&dn=" + filename.translated(' ', '+'));
 		}
 		
@@ -296,7 +297,7 @@ try
 		{
 			string::size_type sep = path->find(' ');
 			if(sep != string::npos)
-				record.addPath(path->substr(0, sep), path->substr(sep +1, path->size()));
+				record.addPath(path->substr(0, sep), path->substr(sep +1, path->size()) + filename);
 			else
 			{
 				cerr << "Warning: No '<type> <path>' in mirror string, using default http type\n";
@@ -306,7 +307,7 @@ try
 		
 		records.push_back(record);
 		hl.destroyMembers();
-		
+		cerr << "\n";
 	}//Foreach
 	
 	cout << Metalink::from(records);
