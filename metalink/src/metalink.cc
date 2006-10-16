@@ -114,7 +114,7 @@ try
 		cout << "Usage: " << Globals::programName << " [options] <input files> < <mirror paths> > <metalinkfile>\n";
 		cout << helpOptions << "\n";
 		cout << "Supported algorithms are (-d options):\n"
-			<< "md4 md5 sha1 sha256 sha384 sha512 rmd160 tiger haval crc32"
+			<< "md4 md5 sha1 sha256 sha384 sha512 rmd160 tiger crc32"
 			<< "\n";
 
 		cout << "Example: http://example.com/ as a mirror:\n echo http http://example.com | "
@@ -244,8 +244,6 @@ try
 			hl.push_back(new GCrypt(GCRY_MD_RMD160));
 		if(allDigests || count(digests.begin(), digests.end(), "tiger") > 0)
 			hl.push_back(new GCrypt(GCRY_MD_TIGER));
-//		if(allDigests || count(digests.begin(), digests.end(), "haval") > 0)
-//			hl.push_back(new GCrypt(GCRY_MD_HAVAL));
 
 		//Known hashes: crc32
 		if(allDigests || count(digests.begin(), digests.end(), "crc32") > 0)
