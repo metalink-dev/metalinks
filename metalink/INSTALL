@@ -11,6 +11,8 @@ Otherwise use make:
 	make
 	make install (With the right rights)
 
+All SVN development is done with ccbuild, so entering the source directory and executing ccbuild, should produce a valid binary. (http://ccbuild.sf.net/)
+
 Some code documentation can be generated using doxygen.
 
 More information an newer versions can be found at http://metalinks.sourceforge.net

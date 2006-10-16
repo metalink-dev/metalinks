@@ -45,7 +45,12 @@ class MetalinkFile: public std::string
 		{
 			d_size = s;
 		}
-
+		std::string size() const
+		{
+			std::ostringstream s;
+			s << d_size;
+			return s.str();
+		}
 		void addVerification(std::string const &name, std::string const &value)
 		{
 			d_vers.push_back(std::make_pair(name, value));
