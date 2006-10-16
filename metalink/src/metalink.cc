@@ -112,16 +112,16 @@ try
 		cout << Globals::programName << " - " << Globals::programDescription << "\n";
 		cout << "Version " << Globals::version[0] << "." << Globals::version[1] << "." << Globals::version[2];
 		cout << ", Copyright (C) 2005 A. Bram Neijt <bneijt@gmail.com>\n";
-		cout << Globals::programName << " comes with ABSOLUTELY NO WARRANTY and is licensed under GPL version 2\n\n";
-		cout << "Usage: " << Globals::programName << " [options] <input files or -md5> < <mirror paths> > <metalinkfile>\n";
+		cout << Globals::programName << " comes with ABSOLUTELY NO WARRANTY and is licensed under GPLv2\n";
+		cout << "Usage:\n  " << Globals::programName << " [options] <input files | -md5> < <mirror paths> > <metalinkfile>\n";
 		cout << helpOptions << "\n";
 		cout << "Supported algorithms are (-d options):\n"
-			<< "md4 md5 sha1 sha256 sha384 sha512 rmd160 tiger crc32 ed2k gnunet"
+			<< "  md4 md5 sha1 sha256 sha384 sha512 rmd160 tiger crc32 ed2k gnunet"
 			<< "\n";
 
-		cout << "Example: http://example.com/ as a mirror:\n echo http http://example.com | "
+		cout << "\nExample: http://example.com/ as a mirror:\n echo http http://example.com | "
 				 << Globals::programName << " -d md5 -d sha1 *\n";
-		cout << "Example: Only P2P links:\n echo -n | "
+		cout << "Example: only P2P links:\n echo -n | "
 				 << Globals::programName << " -d sha1 *\n";
 			return 1;
 		}
