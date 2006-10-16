@@ -1,5 +1,6 @@
 
 - More documentation
 - Make a larger TODO list
+- Add MD5sum file list support
 
 Also see `sh todo.sh`

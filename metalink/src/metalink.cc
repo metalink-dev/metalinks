@@ -64,7 +64,7 @@ try
 	po::variables_map variableMap;
 	bool allDigests;
 /////////Program argument handling
-	vector<string> inputFiles, digests;
+	vector<string> inputFiles, digests, md5Files;
 	
 	try
 	{
@@ -72,6 +72,7 @@ try
 		po::options_description generalOptions("General options");
 		generalOptions.add_options()
 			("help,h", "Produce a help message")
+//			("md5", po:value< vector<string> >, "Generate metalink from md5sum file")
 			;
 
 		po::options_description digestOptions("Digest options");
@@ -139,6 +140,15 @@ try
 		_foreach(i, tmp)
 			inputFiles.push_back(*i);
 
+
+
+		if(variableMap.count("md5"))
+		{
+			vector<string> ttmp = variableMap["md5"].as< vector<string> >();
+			_foreach(i, ttmp)
+				md5Files.push_back(*i);
+		}
+
 		if(variableMap.count("digest"))
 		{
 			vector<string> ttmp = variableMap["digest"].as< vector<string> >();
@@ -169,9 +179,18 @@ try
 		paths.push_back(path);
 	}
 	
-	
-  //For each file, create a record from it and add it to records.
+
+	//Generate records
 	std::vector< MetalinkFile > records;
+
+	_foreach(md5, md5Files)
+	{
+		//Open and read the file
+		//Split up the lines
+		//Add the records for all paths
+	}
+
+  //For each file, create a record from it and add it to records.
 	_foreach(it, inputFiles)
 	{
 		String filename(*it);
@@ -192,22 +211,6 @@ try
 		if(boost::filesystem::is_directory( targetFile ))
 		{
 			cerr << "Skipping directory '" << filename << "'\n";
-			continue;
-		}
-		
-		//Generate the output filename
-		std::string metalinkFilename = *it;
-		for(std::string::size_type i = 0; i < metalinkFilename.size(); ++i)
-			if(metalinkFilename[i] == '.')
-				metalinkFilename[i] = '_';
-		
-		metalinkFilename += Globals::metalinkExtension;
-				
-		boost::filesystem::path targetMetafile(metalinkFilename, boost::filesystem::native);
-
-		if(boost::filesystem::exists( targetMetafile ))
-		{
-			cerr << "Skipping '" << filename << "' because a '" << Globals::metalinkExtension << "' already exists.\n";
 			continue;
 		}
 		
@@ -301,7 +304,7 @@ try
 			if((*hp)->name() == "gnunet")
 				record.addPath("gnunet", "gnunet://ecrs/chk/" + (*hp)->value() + "." + record.size());
 		}
-		
+				
 		//Add remaining paths/mirrors
 		_foreach(path, paths)
 		{
