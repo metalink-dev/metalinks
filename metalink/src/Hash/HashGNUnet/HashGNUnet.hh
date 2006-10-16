@@ -39,7 +39,7 @@
 namespace bneijt
 {
 
-class HashGNUnet
+class HashGNUnet: public Hash
 {
 		std::string d_value;
 		
@@ -57,7 +57,10 @@ class HashGNUnet
 		HashGNUnet();
 		~HashGNUnet();
 		
-		std::string name(){ return "gnunet070";}
+		std::string name() const
+		{
+			return "gnunet";
+		}
 		
 		void update(char const *bytes, unsigned numbytes);
 		void finalize();

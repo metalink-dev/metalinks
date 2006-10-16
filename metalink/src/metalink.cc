@@ -114,7 +114,7 @@ try
 		cout << "Usage: " << Globals::programName << " [options] <input files> < <mirror paths> > <metalinkfile>\n";
 		cout << helpOptions << "\n";
 		cout << "Supported algorithms are (-d options):\n"
-			<< "md4 md5 sha1 sha256 sha384 sha512 rmd160 tiger crc32 ed2k"
+			<< "md4 md5 sha1 sha256 sha384 sha512 rmd160 tiger crc32 ed2k gnunet"
 			<< "\n";
 
 		cout << "Example: http://example.com/ as a mirror:\n echo http http://example.com | "
@@ -253,6 +253,10 @@ try
 		if(allDigests || count(digests.begin(), digests.end(), "ed2k") > 0)
 			hl.push_back(new HashED2K());
 
+		//Known hashes: gnunet
+		if(allDigests || count(digests.begin(), digests.end(), "gnunet") > 0)
+			hl.push_back(new HashGNUnet());
+
 		//Fill hashes
 		static unsigned const blockSize(10240);
 		char data[blockSize];
@@ -294,6 +298,8 @@ try
 				record.addPath("magnet", "magnet:?xt=urn:sha1:" + (*hp)->value() + "&amp;dn=" + filename.translated(' ', '+'));
 			if((*hp)->name() == "ed2k")
 				record.addPath("ed2k", "ed2k://|file|" + filename.translated('|', '_') + "|" + record.size() + "|" + (*hp)->value() + "|/");
+			if((*hp)->name() == "gnunet")
+				record.addPath("gnunet", "gnunet://ecrs/chk/" + (*hp)->value() + "." + record.size());
 		}
 		
 		//Add remaining paths/mirrors
