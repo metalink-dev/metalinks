@@ -28,22 +28,27 @@
 #include <utility>
 
 #include "../Preprocessor/foreach.hh"
-
+/** The file segment of a metalink
+*/
 class MetalinkFile: public std::string
 {
 		std::string d_filename;
 		std::vector< std::pair<std::string, std::string> > d_paths;
+		bool d_sizeSet;
 		unsigned long long d_size;
 		std::vector< std::pair<std::string, std::string> > d_vers;
 	public:
 		
 		MetalinkFile(std::string const &filename)
 		:
-			d_filename(filename)
+			d_filename(filename),
+			d_sizeSet(false),
+			d_size(0)
 		{}
 		void setSize(unsigned long long s)
 		{
 			d_size = s;
+			d_sizeSet = true;
 		}
 		std::string size() const
 		{
@@ -63,9 +68,10 @@ class MetalinkFile: public std::string
 		void finalize()
 		{
 			std::ostringstream record;
-			record << "\t<file name=\"" << d_filename << "\">\n"
-				<< "\t\t<size>126023668</size>\n"
-   			<< "\t\t<verification>\n";
+			record << "\t<file name=\"" << d_filename << "\">\n";
+			if(d_sizeSet)
+				record << "\t\t<size>126023668</size>\n";
+   		record << "\t\t<verification>\n";
    		_foreach(v, d_vers)
    		{
    			record << "\t\t\t<hash type=\"" << v->first << "\">"
