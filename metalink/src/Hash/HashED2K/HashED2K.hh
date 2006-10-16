@@ -24,10 +24,11 @@
 #include <string>
 #include <vector>
 
+#include "../Hash.hh"
 #include "../HashMD4/HashMD4.hh"
 namespace bneijt
 {
-class HashED2K
+class HashED2K: public Hash
 {
 	// 4GB network limit is:   4290048000
 	// Blocksize = 9500*1024
@@ -46,7 +47,10 @@ class HashED2K
 			d_value("")
 		{}
 	
-		std::string name(){ return "ed2k";}
+		std::string name() const
+		{
+			return "ed2k";
+		}
 		
 		void update(char const *bytes, unsigned numbytes);
 		void finalize();
