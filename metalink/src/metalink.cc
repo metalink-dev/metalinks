@@ -38,6 +38,7 @@
 
 #include "Metalink/Metalink.hh"
 #include "MetalinkFile/MetalinkFile.hh"
+#include "MD5File/MD5File.hh"
 #include "HashList/HashList.hh"
 
 
@@ -72,7 +73,7 @@ try
 		po::options_description generalOptions("General options");
 		generalOptions.add_options()
 			("help,h", "Produce a help message")
-//			("md5", po:value< vector<string> >, "Generate metalink from md5sum file")
+			("md5", po::value< vector<string> >(), "Generate metalink from md5sum file(s)")
 			;
 
 		po::options_description digestOptions("Digest options");
@@ -112,7 +113,7 @@ try
 		cout << "Version " << Globals::version[0] << "." << Globals::version[1] << "." << Globals::version[2];
 		cout << ", Copyright (C) 2005 A. Bram Neijt <bneijt@gmail.com>\n";
 		cout << Globals::programName << " comes with ABSOLUTELY NO WARRANTY and is licensed under GPL version 2\n\n";
-		cout << "Usage: " << Globals::programName << " [options] <input files> < <mirror paths> > <metalinkfile>\n";
+		cout << "Usage: " << Globals::programName << " [options] <input files or -md5> < <mirror paths> > <metalinkfile>\n";
 		cout << helpOptions << "\n";
 		cout << "Supported algorithms are (-d options):\n"
 			<< "md4 md5 sha1 sha256 sha384 sha512 rmd160 tiger crc32 ed2k gnunet"
@@ -126,9 +127,9 @@ try
 		}
 		
 		//Verify input files
-		if(variableMap.count("input-file") == 0)
+		if(variableMap.count("input-file") == 0 && variableMap.count("md5") == 0)
 		{
-			cerr << "No input files given\nTry: " << argv[0] << " --help\n";
+			cerr << "No input files or md5 flags given\nTry: " << argv[0] << " --help\n";
 			return 1;
 		} 
 
@@ -136,10 +137,12 @@ try
 
 
 		//Store input files and digests for later use
-		vector<string> tmp = variableMap["input-file"].as< vector<string> >();
-		_foreach(i, tmp)
-			inputFiles.push_back(*i);
-
+		if(variableMap.count("input-file"))
+		{
+			vector<string> tmp = variableMap["input-file"].as< vector<string> >();
+			_foreach(i, tmp)
+				inputFiles.push_back(*i);
+		}
 
 
 		if(variableMap.count("md5"))
@@ -186,8 +189,32 @@ try
 	_foreach(md5, md5Files)
 	{
 		//Open and read the file
-		//Split up the lines
+		MD5File file(*md5);
+		
+		pair<string, string> r;
+		
 		//Add the records for all paths
+		while(file.record(&r))
+		{
+			MetalinkFile record(r.second);
+			record.addVerification("md5", r.first);
+			
+			//Add remaining paths/mirrors
+			_foreach(path, paths)
+			{
+				string::size_type sep = path->find(' ');
+				if(sep != string::npos)
+					record.addPath(path->substr(0, sep), path->substr(sep +1, path->size()) + r.second);
+				else
+				{
+					cerr << "Warning: No '<type> <path>' in mirror string, using default http type\n";
+					record.addPath("http", *path);
+				}
+			}
+			records.push_back(record);
+		}
+		
+		
 	}
 
   //For each file, create a record from it and add it to records.
