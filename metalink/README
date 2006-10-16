@@ -7,13 +7,7 @@
 Read INSTALL for installation instructions.
 
 metalink is a small program based on libgcrypt and some boost libraries.
-It generates a .metalink.xml file for every file given on the commandline.
-
-These files can be used in combination with an XSLT stylesheet to generate 
-a multitude of P2P links or MD5 sum checksum files. A defauld XSL can be
-generated using --genxsl. Put the XSLT in a subdirectory, like --genxsl does,
-to make sure you can still hash all files without creating an metalinks record
-for the XSLT file.
+It generates a metalink record on the stdout for every file given on the commandline.
 
 Be patient: the implementation isn't yet optimized and calculating 
  the hashes for 600MB can take up to two minutes on a 1 GHz machine.
@@ -27,13 +21,10 @@ ED2K links don't support files larger then 4GB (4294967295),
 however metalink only supports ED2K links of no more then 4290048000 bytes
  (which is a nice whole number of blocks).
  
-Files with a ".metalink.xml" extension will never be hashed.
+Files with a ".metalink" extension will never be hashed.
 
-
-	-= Examples =-
-Create .metalink.xml files for all local iso files and generate the default XSL
-	metalink --genxsl *.iso
-	
-Create one index with all files you want
-	metalink -c *.iso > index.metalink.xml
-	
+For and example of use:
+	cd example
+	./gen.sh
+This will, if all goes well, generate a valid itworked.metalink file.
+Use metalink --help for more information.
