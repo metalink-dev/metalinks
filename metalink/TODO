@@ -1,5 +1,7 @@
 
 - More documentation
+- Add --version option
+- Better "unknown commandline option" handling (nicer looking)
 - for the mirror file: filter out double //s (except in http:// or ftp://)
 - for the mirror file: use the file as "base" urls, and be able to specify "relative" urls as
 	options if needed - like say the base url listed in the file is
@@ -8,6 +10,6 @@
 	"http://ftp.iasi.roedu.net/mirrors/centos.org/4.4/isos/i386/" but make
 	sure to strip out //
 - when using a md5sum file: option for whether to list all the files in one metalink, or make
-	separate metalinks for each line.
+	separate metalinks for each line. (Currently an ugly seperate script, see example/seperatemd5.sh)
 
 Also see `sh todo.sh`
