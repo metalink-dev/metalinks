@@ -228,8 +228,9 @@ try
 			record.addVerification("md5", r.first);
 			
 			//Add remaining paths/mirrors
+			//Remove preprended '/' and './' if needed, they should be in the mirror list
 			_foreach(path, paths)
-				record.addPath(path->first, path->second + r.second);
+				record.addPath(path->first, path->second, r.second);
 
 			records.push_back(record);
 		}
@@ -357,8 +358,7 @@ try
 				
 		//Add remaining paths/mirrors
 		_foreach(path, paths)
-			record.addPath(path->first, path->second + filename);
-
+			record.addPath(path->first, path->second, filename);
 		
 		records.push_back(record);
 		hl.destroyMembers();
