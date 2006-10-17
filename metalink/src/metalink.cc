@@ -64,7 +64,7 @@ int main(int argc, char *argv[])
 try
 {
 	po::variables_map variableMap;
-	bool allDigests;
+	bool allDigests(false), readMirrors(true);
 /////////Program argument handling
 	vector<string> inputFiles, md5Files;
 	vector<string> digests;//TODO: Move vector->set and use members instead of count algorithm
@@ -76,6 +76,7 @@ try
 		generalOptions.add_options()
 			("help,h", "Produce a help message")
 			("md5", po::value< vector<string> >(), "Generate metalink from md5sum file(s)")
+			("nomirrors", po::value< vector<string> >(), "Don't read mirrors from stdin")
 			;
 
 		po::options_description digestOptions("Digest options");
@@ -161,7 +162,6 @@ try
 			_foreach(i, ttmp)
 				digests.push_back(*i);
 		}
-		allDigests = variableMap.count("alldigests") > 0;
 		if(variableMap.count("somedigests"))
 		{
 			digests.push_back("md5");
@@ -169,6 +169,11 @@ try
 			digests.push_back("ed2k");
 			digests.push_back("gnunet");
 		}
+		
+		//Simple boolean options
+		allDigests = variableMap.count("alldigests") > 0;
+		readMirrors = variableMap.count("nomirrors") == 0;
+
 	}
   catch(exception& e)
   {
@@ -181,9 +186,9 @@ try
 		throw;
   }
   
-	//Read paths form stdin
+	//Read paths from stdin
 	std::vector< pair<string,string> > paths;
-	while(true)
+	while(readMirrors)
 	{
 		string path;
 		getline(cin, path);
