@@ -60,10 +60,12 @@ class MetalinkFile: public std::string
 		{
 			d_vers.push_back(std::make_pair(name, value));
 		}
-		void addPath(std::string const &type, std::string const &value)
-		{
-			d_paths.push_back(std::make_pair(type, value));
-		}
+		
+		///Add path of type to the uri list
+		void addPath(std::string const &type, std::string const &value);
+		
+		///Add path and make sure to clean file from preprended slashes
+		void addPath(std::string const &type, std::string const &base, std::string const & file);
 
 		void finalize()
 		{

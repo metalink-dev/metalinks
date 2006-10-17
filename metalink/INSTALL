@@ -7,6 +7,8 @@ First install the dependencies:
 Then, if you have A-A-P installed (aap --version) do:
 	aap install
 
+You can cleanup afterwards with: aap cleanALL
+
 Otherwise use make:
 	make
 	make install (With the right rights)

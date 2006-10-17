@@ -78,4 +78,5 @@ CLEANFILES += $ConfigurationFilenameForMetalink
 	"src/Hash/HashED2K/value.cc"
 	"src/Hash/HashED2K/update.cc"
 	"src/Hash/HashED2K/finalize.cc"
+	"src/MetalinkFile/addPath.cc"
 
