@@ -26,11 +26,35 @@
 class String: public std::string
 {
 	public:
+		String()
+		:
+			std::string()
+		{}
+
 		String(std::string const & string)
 		:
 			std::string(string)
 		{}
 		
+		String const &operator=(std::string const &s)
+		{
+			this->assign(s);
+			return *this;
+		}
+
+		void strip()
+		{
+			char const * const trimstring("\x01\x02\x03\x04\x05\x06\x06\x07\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f\x10\x11\x12\x13\x14\x15\x16\x17\x18\x19\x1a\x1b\x1c\x1d\x1e\x1f\x20");
+			std::string::size_type pos = this->find_first_not_of(trimstring);
+			this->erase(0, pos);
+			pos = this->find_last_not_of(trimstring);
+			this->erase(pos + 1);
+		}
+		
+		bool endsIn(char const endc)
+		{
+			return this->size() > 1 && (*this)[this->size() -1] == endc;
+		}
 		bool endsIn(String const &ending)
 		{
 			return this->size() >= ending.size()
@@ -40,6 +64,8 @@ class String: public std::string
 					ending
 					) == 0;
 		}
+		
+		
 		std::string translated(char from, char to)
 		{
 			std::string copy(*this);

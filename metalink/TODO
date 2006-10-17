@@ -1,5 +1,13 @@
 
 - More documentation
-- Make a larger TODO list
+- for the mirror file: filter out double //s (except in http:// or ftp://)
+- for the mirror file: use the file as "base" urls, and be able to specify "relative" urls as
+	options if needed - like say the base url listed in the file is
+	"http://ftp.iasi.roedu.net/mirrors/centos.org/" and the relative url
+	is "/4.4/isos/i386/" - patch these together to get
+	"http://ftp.iasi.roedu.net/mirrors/centos.org/4.4/isos/i386/" but make
+	sure to strip out //
+- when using a md5sum file: option for whether to list all the files in one metalink, or make
+	separate metalinks for each line.
 
 Also see `sh todo.sh`
