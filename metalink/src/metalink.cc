@@ -31,6 +31,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <utility>
 #include <algorithm>
 #include <boost/program_options.hpp>
 #include <boost/filesystem/operations.hpp>
@@ -65,7 +66,8 @@ try
 	po::variables_map variableMap;
 	bool allDigests;
 /////////Program argument handling
-	vector<string> inputFiles, digests, md5Files;
+	vector<string> inputFiles, md5Files;
+	vector<string> digests;//TODO: Move vector->set and use members instead of count algorithm
 	
 	try
 	{
@@ -79,6 +81,7 @@ try
 		po::options_description digestOptions("Digest options");
 		digestOptions.add_options()
 			("digest,d", po::value< vector<string> >(), "Include given digest")
+			("somedigests", "Include: md5 sha1 ed2k gnunet")
 			("alldigests", "Include all possible digests")
 			;
 
@@ -159,6 +162,13 @@ try
 				digests.push_back(*i);
 		}
 		allDigests = variableMap.count("alldigests") > 0;
+		if(variableMap.count("somedigests"))
+		{
+			digests.push_back("md5");
+			digests.push_back("sha1");
+			digests.push_back("ed2k");
+			digests.push_back("gnunet");
+		}
 	}
   catch(exception& e)
   {
@@ -172,14 +182,32 @@ try
   }
   
 	//Read paths form stdin
-	std::vector<std::string> paths;
+	std::vector< pair<string,string> > paths;
 	while(true)
 	{
 		string path;
 		getline(cin, path);
+
 		if(cin.eof())
 			break;
-		paths.push_back(path);
+		
+		String first, second;
+		string::size_type sep = path.find(' ');
+		if(sep != string::npos && sep < 25)
+		{
+			first = path.substr(0, sep);
+			second = path.substr(sep +1, path.size());
+		}
+		else
+		{
+			cerr << "Warning: No '<type> <path>' or type > 25 in mirror string, using default http type.\n";
+			first = "http";
+			second = path;
+		}
+		second.strip();
+		if(not second.endsIn('/'))
+			second += "/";
+		paths.push_back(make_pair(first, second));
 	}
 	
 
@@ -201,16 +229,8 @@ try
 			
 			//Add remaining paths/mirrors
 			_foreach(path, paths)
-			{
-				string::size_type sep = path->find(' ');
-				if(sep != string::npos)
-					record.addPath(path->substr(0, sep), path->substr(sep +1, path->size()) + r.second);
-				else
-				{
-					cerr << "Warning: No '<type> <path>' in mirror string, using default http type\n";
-					record.addPath("http", *path);
-				}
-			}
+				record.addPath(path->first, path->second + r.second);
+
 			records.push_back(record);
 		}
 		
@@ -319,8 +339,13 @@ try
 		//Add hashes and P2P paths
 		_foreach(hp, hl)
 		{
-		
-		
+			//Only P2P link, not verify
+			if((*hp)->name() == "gnunet")
+			{
+				record.addPath("gnunet", "gnunet://ecrs/chk/" + (*hp)->value() + "." + record.size());
+				continue;
+			}
+			
 			record.addVerification((*hp)->name(), (*hp)->value());
 			
 			//Add P2P specials
@@ -328,22 +353,12 @@ try
 				record.addPath("magnet", "magnet:?xt=urn:sha1:" + (*hp)->value() + "&amp;dn=" + filename.translated(' ', '+'));
 			if((*hp)->name() == "ed2k")
 				record.addPath("ed2k", "ed2k://|file|" + filename.translated('|', '_') + "|" + record.size() + "|" + (*hp)->value() + "|/");
-			if((*hp)->name() == "gnunet")
-				record.addPath("gnunet", "gnunet://ecrs/chk/" + (*hp)->value() + "." + record.size());
 		}
 				
 		//Add remaining paths/mirrors
 		_foreach(path, paths)
-		{
-			string::size_type sep = path->find(' ');
-			if(sep != string::npos)
-				record.addPath(path->substr(0, sep), path->substr(sep +1, path->size()) + filename);
-			else
-			{
-				cerr << "Warning: No '<type> <path>' in mirror string, using default http type\n";
-				record.addPath("http", *path);
-			}
-		}
+			record.addPath(path->first, path->second + filename);
+
 		
 		records.push_back(record);
 		hl.destroyMembers();
