@@ -56,8 +56,9 @@ CLEANFILES += $ConfigurationFilenameForMetalink
 	{ var_INCLUDE = $IncludeForMetalink}
 	{ var_DEFINE = $DefineForMetalink}
 	"src/metalink.cc"
-	"src/Globals/stylesheet.cc"
 	"src/Globals/statics.cc"
+	"src/Globals/XMLSafe.cc"
+	"src/Globals/XMLQuotedSafe.cc"
 	"src/Hash/HashGNUnet/value.cc"
 	"src/Hash/HashGNUnet/update.cc"
 	"src/Hash/HashGNUnet/pushChk.cc"
@@ -78,5 +79,6 @@ CLEANFILES += $ConfigurationFilenameForMetalink
 	"src/Hash/HashED2K/value.cc"
 	"src/Hash/HashED2K/update.cc"
 	"src/Hash/HashED2K/finalize.cc"
+	"src/MetalinkFile/finalize.cc"
 	"src/MetalinkFile/addPath.cc"
 

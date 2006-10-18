@@ -26,7 +26,7 @@
 #include <sstream>
 
 #include <utility>
-
+#include "../Globals/Globals.hh"
 #include "../Preprocessor/foreach.hh"
 /** The file segment of a metalink
 */
@@ -67,27 +67,7 @@ class MetalinkFile: public std::string
 		///Add path and make sure to clean file from preprended slashes
 		void addPath(std::string const &type, std::string const &base, std::string const & file);
 
-		void finalize()
-		{
-			std::ostringstream record;
-			record << "\t<file name=\"" << d_filename << "\">\n";
-			if(d_sizeSet)
-				record << "\t\t<size>126023668</size>\n";
-   		record << "\t\t<verification>\n";
-   		_foreach(v, d_vers)
-   		{
-   			record << "\t\t\t<hash type=\"" << v->first << "\">"
-   				<< v->second
-   				<< "</hash>\n";
-   		}
-	   	record << "\t\t</verification>\n";
-	   	record << "\t\t<resources>\n";
-	   	_foreach(p, d_paths)
-	   		record << "\t\t\t<url type=\"" << p->first << "\">" << p->second << "</url>\n";
-	   	record << "\t\t</resources>\n";
-			record << "\t</file>";
-			assign(record.str());
-		}
+		void finalize();
 };
 
 #endif

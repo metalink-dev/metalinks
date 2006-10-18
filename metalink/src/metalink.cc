@@ -76,7 +76,7 @@ try
 		generalOptions.add_options()
 			("help,h", "Produce a help message")
 			("md5", po::value< vector<string> >(), "Generate metalink from md5sum file(s)")
-			("nomirrors", po::value< vector<string> >(), "Don't read mirrors from stdin")
+			("nomirrors", "Don't read mirrors from stdin")
 			;
 
 		po::options_description digestOptions("Digest options");
