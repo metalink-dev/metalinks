@@ -30,13 +30,12 @@ struct Globals
 		static std::string const programDescription;
 		static unsigned const version[3];
 		
-		static bool showDTD;
-		static bool noxsl;
-
-		static std::string xsl;
-		static std::string stylesheet;
 		static std::string metalinkExtension;
-		};
+
+		//XML escape functions
+		static std::string XMLSafe(std::string value);
+		static std::string XMLQuotedSafe(std::string value);
+};
 }//namespace
 #endif
 

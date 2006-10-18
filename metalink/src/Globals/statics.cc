@@ -24,9 +24,4 @@ std::string const Globals::programName("metalink");
 std::string const Globals::programDescription("Metalink XML generator");
 unsigned const Globals::version[] = {0,2,0};
 
-
-//Legacy options
-bool Globals::showDTD(false);
-bool Globals::noxsl(true);
-std::string Globals::xsl("xsl/metalinks_xhtml.xsl");
 std::string Globals::metalinkExtension(".metalinks");
