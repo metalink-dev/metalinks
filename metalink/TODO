@@ -1,6 +1,7 @@
 
 - More documentation
 - Add --version option
+- Add --rpath or --baseurl option
 - Better "unknown commandline option" handling (nicer looking)
 - for the mirror file: use the file as "base" urls, and be able to specify "relative" urls as
 	options if needed - like say the base url listed in the file is
@@ -10,5 +11,6 @@
 	sure to strip out //
 - when using a md5sum file: option for whether to list all the files in one metalink, or make
 	separate metalinks for each line. (Currently an ugly seperate script, see example/seperatemd5.sh)
+- Add support for preference and location uri attributes
 
 Also see `sh todo.sh`
