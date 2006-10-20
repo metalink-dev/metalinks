@@ -65,6 +65,7 @@ try
 {
 	po::variables_map variableMap;
 	bool allDigests(false), readMirrors(true);
+	string baseUrl("");
 /////////Program argument handling
 	vector<string> inputFiles, md5Files;
 	vector<string> digests;//TODO: Move vector->set and use members instead of count algorithm
@@ -76,6 +77,7 @@ try
 		generalOptions.add_options()
 			("help,h", "Produce a help message")
 			("md5", po::value< vector<string> >(), "Generate metalink from md5sum file(s)")
+			("baseurl", po::value< string >(),"Append a base url to the mirrors ('/' is not checked)")
 			("nomirrors", "Don't read mirrors from stdin")
 			;
 
@@ -169,11 +171,13 @@ try
 			digests.push_back("ed2k");
 			digests.push_back("gnunet");
 		}
+
+		if(variableMap.count("baseurl") > 0)
+			baseUrl = variableMap["baseurl"].as< string >();
 		
 		//Simple boolean options
 		allDigests = variableMap.count("alldigests") > 0;
 		readMirrors = variableMap.count("nomirrors") == 0;
-
 	}
   catch(exception& e)
   {
@@ -212,6 +216,8 @@ try
 		second.strip();
 		if(not second.endsIn('/'))
 			second += "/";
+		//Add baseUrl
+		second += baseUrl;
 		paths.push_back(make_pair(first, second));
 	}
 	

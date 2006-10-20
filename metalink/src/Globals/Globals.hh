@@ -31,6 +31,7 @@ struct Globals
 		static unsigned const version[3];
 		
 		static std::string metalinkExtension;
+		static char const dirSep;
 
 		//XML escape functions
 		static std::string XMLSafe(std::string value);
