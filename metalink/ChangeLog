@@ -1,3 +1,9 @@
+0.2.1:
+- Added nomirrors, somedigests, mindigests, alldigests options.
+- Added XML escaping of the needed strings
+- Added generator to the generated xml
+- Cleaned up source
+
 0.2.0:
 - Moved to the new Metalinker.org system and file specs
 - Full rewrite of program structure.
