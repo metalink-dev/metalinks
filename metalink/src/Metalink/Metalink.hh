@@ -35,7 +35,7 @@ class Metalink
 		{
 			std::ostringstream out;
 			out << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-			out << "<metalink version=\"3.0\" xmlns=\"http://www.metalinker.org/\">\n";
+			out << "<metalink version=\"3.0\" xmlns=\"http://www.metalinker.org/\" generator=\"http://metalinks.sourceforge.net/\">\n";
 
  
  			out << "<files>\n";
