@@ -2,8 +2,6 @@
 - More documentation
 - Add "type location preference" to mirror list.
 - Work out platform dependecy kinks (win paths -> normal paths)
-- Add --version option
-- Better "unknown commandline option" handling (nicer looking)
 - for the mirror file: use the file as "base" urls, and be able to specify "relative" urls as
 	options if needed - like say the base url listed in the file is
 	"http://ftp.iasi.roedu.net/mirrors/centos.org/" and the relative url
