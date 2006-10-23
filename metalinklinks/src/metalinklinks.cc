@@ -22,14 +22,11 @@
 
 	This is a "bare C++" implementation of simple Metalink uri extraction.
 	
-	Given a Metalink and a number of uri types, it generates a list of links
-	on the stdout.
+	Given a Metalink file and a type, it outputs all links of the given type.
 	
-	Use this in combination with downloaders (like wget, gnunet-download and such) to generate
-	a list of links.
+	Use this in combination with downloaders (like wget, gnunet-download and such)
+	to generate a list of links.
 
-	Only one link per identifier is created, so to create a list of the first http mirrors
-	of the files in the Metalink, use: metalinklinks http http http http http http record.metalink
 */
 
 #include <iostream>
@@ -45,7 +42,6 @@ using namespace bneijt;
 int main(int argc, char *argv[])
 try
 {
-	cerr << "Warning: This program is not done yet, it will currently display all the links of all the files, not just the first x of a type.\n";
 	
 	if(argc < 3)
 	{

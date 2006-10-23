@@ -1,6 +1,6 @@
 Metalinklinks
 
-Metalinklinks is a small, pure C++ program what will extract the links from a metalink file. It is ment to be using in combination with commandline P2P file download utilities, like gnunet-download and amule-tools.
+Metalinklinks is a small, pure C++ program what will extract the links from a metalink file. It is ment to be used to create link lists for other applications which don't support metalinks yet.
 
 For example, using amule-tools to download all the ed2k links from a metalink file:
   metalinklinks ed2k metalinks.metalink |xargs -n1 ed2k
