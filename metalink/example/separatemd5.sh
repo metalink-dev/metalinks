@@ -1,4 +1,4 @@
-
+#!/bin/sh
 #Bash/AWK script to create separate metalink files per MD5SUM entry
 #A) You must have metalink in your PATH (try: metalink --help)
 #B) Usage: sh ./separatemd5.sh MD5SUMS sfmirrors
