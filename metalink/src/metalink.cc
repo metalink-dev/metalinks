@@ -78,6 +78,7 @@ try
 		po::options_description generalOptions("General options");
 		generalOptions.add_options()
 			("help,h", "Produce a help message")
+			("version", "Print out the name and version")
 			("md5", po::value< vector<string> >(), "Generate metalink from md5sum file(s)")
 			("baseurl", po::value< string >(),"Append a base url to the mirrors ('/' is not checked)")
 			("nomirrors", "Don't read mirrors from stdin")
@@ -134,7 +135,14 @@ try
 				 << Globals::programName << " -d sha1 *\n";
 			return 1;
 		}
-		
+		if(variableMap.count("version"))
+		{
+			cout << Globals::programName << " version "
+					<< Globals::version[0] << "."
+					<< Globals::version[1] << "."
+					<< Globals::version[2] << "\n";
+			return 1;
+		}		
 		//Verify input files
 		if(variableMap.count("input-file") == 0 && variableMap.count("md5") == 0)
 		{
@@ -387,6 +395,10 @@ try
 	cout << Metalink::from(records);
 	
 	return 0;
+}
+catch(const boost::program_options::unknown_option &e)
+{
+	cerr << e.what() << endl;
 }
 catch(const std::exception &e)
 {
