@@ -33,6 +33,8 @@
 #include <string>
 #include <utility>
 #include <algorithm>
+#include <vector>
+#include <set>
 #include <boost/program_options.hpp>
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/convenience.hpp>
@@ -68,7 +70,7 @@ try
 	string baseUrl("");
 /////////Program argument handling
 	vector<string> inputFiles, md5Files;
-	vector<string> digests;//TODO: Move vector->set and use members instead of count algorithm
+	set<string> digests;
 	
 	try
 	{
@@ -84,6 +86,7 @@ try
 		po::options_description digestOptions("Digest options");
 		digestOptions.add_options()
 			("digest,d", po::value< vector<string> >(), "Include given digest")
+			("mindigests", "Include: md5 sha1")
 			("somedigests", "Include: md5 sha1 ed2k gnunet")
 			("alldigests", "Include all possible digests")
 			;
@@ -162,14 +165,19 @@ try
 		{
 			vector<string> ttmp = variableMap["digest"].as< vector<string> >();
 			_foreach(i, ttmp)
-				digests.push_back(*i);
+				digests.insert(*i);
+		}
+		if(variableMap.count("mindigests"))
+		{
+			digests.insert("md5");
+			digests.insert("sha1");
 		}
 		if(variableMap.count("somedigests"))
 		{
-			digests.push_back("md5");
-			digests.push_back("sha1");
-			digests.push_back("ed2k");
-			digests.push_back("gnunet");
+			digests.insert("md5");
+			digests.insert("sha1");
+			digests.insert("ed2k");
+			digests.insert("gnunet");
 		}
 
 		if(variableMap.count("baseurl") > 0)
@@ -286,37 +294,37 @@ try
 		HashList hl;
 		//Add needed hashes
 		//Known hashes: md4 md5
-		if(allDigests || count(digests.begin(), digests.end(), "md4") > 0)
+		if(allDigests || digests.count("md4") > 0)
 			hl.push_back(new GCrypt(GCRY_MD_MD4));
-		if(allDigests || count(digests.begin(), digests.end(), "md5") > 0)
+		if(allDigests || digests.count("md5") > 0)
 			hl.push_back(new GCrypt(GCRY_MD_MD5));
 
 		//Known hashes: sha1 sha256 sha384 sha512
-		if(allDigests || count(digests.begin(), digests.end(), "sha1") > 0)
+		if(allDigests || digests.count("sha1") > 0)
 			hl.push_back(new GCrypt(GCRY_MD_SHA1));
-		if(allDigests || count(digests.begin(), digests.end(), "sha256") > 0)
+		if(allDigests || digests.count("sha256") > 0)
 			hl.push_back(new GCrypt(GCRY_MD_SHA256));
-		if(allDigests || count(digests.begin(), digests.end(), "sha384") > 0)
+		if(allDigests || digests.count("sha384") > 0)
 			hl.push_back(new GCrypt(GCRY_MD_SHA384));
-		if(allDigests || count(digests.begin(), digests.end(), "sha512") > 0)
+		if(allDigests || digests.count("sha512") > 0)
 			hl.push_back(new GCrypt(GCRY_MD_SHA512));
 
 		//Known hashes: rmd160 tiger haval
-		if(allDigests || count(digests.begin(), digests.end(), "rmd160") > 0)
+		if(allDigests || digests.count("rmd160") > 0)
 			hl.push_back(new GCrypt(GCRY_MD_RMD160));
-		if(allDigests || count(digests.begin(), digests.end(), "tiger") > 0)
+		if(allDigests || digests.count("tiger") > 0)
 			hl.push_back(new GCrypt(GCRY_MD_TIGER));
 
 		//Known hashes: crc32
-		if(allDigests || count(digests.begin(), digests.end(), "crc32") > 0)
+		if(allDigests || digests.count("crc32") > 0)
 			hl.push_back(new GCrypt(GCRY_MD_CRC32));
 
 		//Known hashes: ed2k
-		if(allDigests || count(digests.begin(), digests.end(), "ed2k") > 0)
+		if(allDigests || digests.count("ed2k") > 0)
 			hl.push_back(new HashED2K());
 
 		//Known hashes: gnunet
-		if(allDigests || count(digests.begin(), digests.end(), "gnunet") > 0)
+		if(allDigests || digests.count("gnunet") > 0)
 			hl.push_back(new HashGNUnet());
 
 		//Fill hashes
