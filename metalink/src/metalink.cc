@@ -39,6 +39,8 @@
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/convenience.hpp>
 
+#include "Mirror/Mirror.hh"
+#include "MirrorList/MirrorList.hh"
 #include "Metalink/Metalink.hh"
 #include "MetalinkFile/MetalinkFile.hh"
 #include "MD5File/MD5File.hh"
@@ -207,6 +209,8 @@ try
   }
   
 	//Read paths from stdin
+	MirrorList mirl(cin);
+	
 	std::vector< pair<string,string> > paths;
 	while(readMirrors)
 	{
@@ -336,7 +340,7 @@ try
 			hl.push_back(new HashGNUnet());
 
 		//Fill hashes
-		static unsigned const blockSize(10240);
+		static unsigned const blockSize(102400);
 		char data[blockSize];
 		unsigned read(0);
 		char const * spinner = "\\|/\\|/-";
@@ -352,7 +356,7 @@ try
 				break;
 			size += read;
 			
-			if(++spini % 300 == 0)
+			if(++spini % 150 == 0)
 				cerr << "\b" << spinner[++spinii%7];
 				
 			//Update hashes
