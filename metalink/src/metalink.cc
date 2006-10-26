@@ -340,7 +340,7 @@ try
 			hl.push_back(new HashGNUnet());
 
 		//Fill hashes
-		static unsigned const blockSize(102400);
+		static unsigned const blockSize(10240);
 		char data[blockSize];
 		unsigned read(0);
 		char const * spinner = "\\|/\\|/-";
