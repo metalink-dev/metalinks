@@ -382,7 +382,7 @@ try
 			
 			//Add P2P specials
 			if((*hp)->name() == "sha1")
-				record.addPath("magnet", "magnet:?xt=urn:sha1:" + (*hp)->value() + "&amp;dn=" + filename.translated(' ', '+'));
+				record.addPath("magnet", "magnet:?xt=urn:sha1:" + (*hp)->value() + "&dn=" + filename.translated(' ', '+'));
 			if((*hp)->name() == "ed2k")
 				record.addPath("ed2k", "ed2k://|file|" + filename.translated('|', '_') + "|" + record.size() + "|" + (*hp)->value() + "|/");
 		}
