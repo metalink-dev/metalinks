@@ -18,3 +18,13 @@
 
 */
 #include "Metalink.hh"
+
+
+#include <sstream>
+#include <iostream>
+#include <fstream>
+#include <algorithm>
+#include <iterator>
+
+using namespace bneijt;
+using namespace std;

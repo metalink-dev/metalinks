@@ -12,6 +12,7 @@ std::string Globals::XMLSafe(std::string value)
 		"&amp;",
 	};
 	
+	
 	for(unsigned i(0); froma[i]; ++i)
 	{
 		string const from(froma[i]);
@@ -24,13 +25,8 @@ std::string Globals::XMLSafe(std::string value)
 			
 			if(pos == string::npos)
 				break;
-//			cout << static_cast<int>(pos) << " o" << from.size() << " s" << to.size() << endl;
-//			cout << " [" << value << "] ";
 			value = value.substr(0, pos) + to + value.substr(pos + from.size());
-//			break;
-//			cout << " [" << value << "] ";
 			offset += pos + to.size();
-//break;
 		}
 	}
 	return value;

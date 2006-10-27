@@ -24,6 +24,7 @@ GlobalHeadersForMetalink = \
 	"algorithm"
 	"boost/filesystem/convenience.hpp"
 	"boost/filesystem/operations.hpp"
+	"boost/lexical_cast.hpp"
 	"boost/program_options.hpp"
 	"cassert"
 	"cctype"
@@ -31,6 +32,7 @@ GlobalHeadersForMetalink = \
 	"gcrypt.h"
 	"iomanip"
 	"iostream"
+	"iterator"
 	"set"
 	"sstream"
 	"string"
@@ -57,6 +59,7 @@ CLEANFILES += $ConfigurationFilenameForMetalink
 	{ var_INCLUDE = $IncludeForMetalink}
 	{ var_DEFINE = $DefineForMetalink}
 	"src/metalink.cc"
+	"src/String/translated.cc"
 	"src/Globals/statics.cc"
 	"src/Globals/XMLSafe.cc"
 	"src/Globals/XMLQuotedSafe.cc"
@@ -80,7 +83,13 @@ CLEANFILES += $ConfigurationFilenameForMetalink
 	"src/Hash/HashED2K/value.cc"
 	"src/Hash/HashED2K/update.cc"
 	"src/Hash/HashED2K/finalize.cc"
+	"src/HashList/update.cc"
+	"src/HashList/finalize.cc"
+	"src/HashList/destroyMembers.cc"
 	"src/MetalinkFile/finalize.cc"
 	"src/MetalinkFile/addPath.cc"
 	"src/MirrorList/MirrorList.cc"
+	"src/Mirror/asXMLWithFile.cc"
+	"src/Mirror/Mirror.cc"
+	"src/Metalink/from.cc"
 

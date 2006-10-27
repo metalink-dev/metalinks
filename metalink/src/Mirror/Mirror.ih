@@ -18,3 +18,10 @@
 
 */
 #include "Mirror.hh"
+
+#include <boost/lexical_cast.hpp>
+#include <sstream>
+#include "../Globals/Globals.hh"
+
+using namespace bneijt;
+using namespace std;

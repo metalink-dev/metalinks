@@ -28,7 +28,7 @@ namespace bneijt {
 class MirrorList: public std::vector<Mirror>
 {
 	public:
-		MirrorList(std::istream &s);
+		MirrorList(std::istream &s, std::string const &baseUrl);
 
 		void add(std::string const &path,
 				std::string const &preference = "",

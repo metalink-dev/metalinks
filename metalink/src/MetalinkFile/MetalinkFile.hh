@@ -26,25 +26,33 @@
 #include <sstream>
 
 #include <utility>
+
+#include "../MirrorList/MirrorList.hh"
+
 #include "../Globals/Globals.hh"
 #include "../Preprocessor/foreach.hh"
+namespace bneijt
+{
 /** The file segment of a metalink
 */
 class MetalinkFile: public std::string
 {
 		std::string d_filename;
 		std::vector< std::pair<std::string, std::string> > d_paths;
+		MirrorList const *d_ml;
 		bool d_sizeSet;
 		unsigned long long d_size;
 		std::vector< std::pair<std::string, std::string> > d_vers;
 	public:
 		
-		MetalinkFile(std::string const &filename)
+		MetalinkFile(std::string const &filename, MirrorList const *ml)
 		:
 			d_filename(filename),
+			d_ml(ml),
 			d_sizeSet(false),
 			d_size(0)
 		{}
+
 		void setSize(unsigned long long s)
 		{
 			d_size = s;
@@ -61,14 +69,14 @@ class MetalinkFile: public std::string
 			d_vers.push_back(std::make_pair(name, value));
 		}
 		
-		///Add path of type to the uri list
-		void addPath(std::string const &type, std::string const &value);
+		///Add path and make sure to clean file from preprended slashes
+		void addPath(std::string const &type, std::string const & file);
 		
 		///Add path and make sure to clean file from preprended slashes
 		void addPath(std::string const &type, std::string const &base, std::string const & file);
 
 		void finalize();
 };
-
+}
 #endif
 

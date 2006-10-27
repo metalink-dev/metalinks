@@ -1,9 +1,7 @@
 
 - More documentation
-- Add "type location preference" to mirror list.
 - Work out platform dependecy kinks (win paths -> normal paths)
 - when using a md5sum file: option for whether to list all the files in one metalink, or make
-	separate metalinks for each line. (Currently an ugly seperate script, see example/seperatemd5.sh)
-- Add support for preference and location uri attributes
+	separate metalinks for each line. (Currently an ugly separate script, see example/separatemd5.sh)
 
 Also see `sh todo.sh`

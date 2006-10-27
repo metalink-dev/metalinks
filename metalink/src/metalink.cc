@@ -56,7 +56,7 @@
 
 #include "Misc/Preprocessor/Foreach.hh"
 
-
+#include <cassert>
 #include <sys/stat.h>	//mkdir(2)
 #include <sys/types.h> //mkdir(2)
 
@@ -70,6 +70,7 @@ try
 	po::variables_map variableMap;
 	bool allDigests(false), readMirrors(true);
 	string baseUrl("");
+	string headerFile("");
 /////////Program argument handling
 	vector<string> inputFiles, md5Files;
 	set<string> digests;
@@ -83,6 +84,7 @@ try
 			("version", "Print out the name and version")
 			("md5", po::value< vector<string> >(), "Generate metalink from md5sum file(s)")
 			("baseurl", po::value< string >(),"Append a base url to the mirrors ('/' is not checked)")
+			("headerfile", po::value< string >(),"Include file after the root element decleration.")
 			("nomirrors", "Don't read mirrors from stdin")
 			;
 
@@ -90,7 +92,7 @@ try
 		digestOptions.add_options()
 			("digest,d", po::value< vector<string> >(), "Include given digest")
 			("mindigests", "Include: md5 sha1")
-			("somedigests", "Include: md5 sha1 ed2k gnunet")
+			("somedigests", "Include: md5 sha1 ed2k")
 			("alldigests", "Include all possible digests")
 			;
 
@@ -125,16 +127,19 @@ try
 		cout << "Version " << Globals::version[0] << "." << Globals::version[1] << "." << Globals::version[2];
 		cout << ", Copyright (C) 2005 A. Bram Neijt <bneijt@gmail.com>\n";
 		cout << Globals::programName << " comes with ABSOLUTELY NO WARRANTY and is licensed under GPLv2\n";
-		cout << "Usage:\n  " << Globals::programName << " [options] <input files | -md5> < <mirror paths> > <metalinkfile>\n";
+		cout << "Usage:\n  " << Globals::programName << " [options] <input files | -md5> < <mirror list> > <metalinkfile>\n";
 		cout << helpOptions << "\n";
 		cout << "Supported algorithms are (-d options):\n"
 			<< "  md4 md5 sha1 sha256 sha384 sha512 rmd160 tiger crc32 ed2k gnunet"
 			<< "\n";
-
-		cout << "\nExample: http://example.com/ as a mirror:\n echo http http://example.com | "
+		cout << "\nMirror lists are single line defenitions according to:\n"
+				 << " [preference [location] [type] % ] <mirror base url>\n";
+		cout << "\nExample: http://example.com/ as a mirror:\n echo http://example.com | "
 				 << Globals::programName << " -d md5 -d sha1 *\n";
-		cout << "Example: only P2P links:\n echo -n | "
-				 << Globals::programName << " -d sha1 *\n";
+		cout << "\nExample: http://example.com/ as a mirror with preference and location:\n "
+				 << "echo 10 us % http://example.com | " << Globals::programName << " -d md5 -d sha1 *\n";
+		cout << "Example: only P2P links:\n "
+				 << Globals::programName << " --nomirrors -d sha1 *\n";
 			return 1;
 		}
 		if(variableMap.count("version"))
@@ -187,11 +192,12 @@ try
 			digests.insert("md5");
 			digests.insert("sha1");
 			digests.insert("ed2k");
-			digests.insert("gnunet");
 		}
 
 		if(variableMap.count("baseurl") > 0)
 			baseUrl = variableMap["baseurl"].as< string >();
+		if(variableMap.count("headerfile") > 0)
+			headerFile = variableMap["headerfile"].as< string >();
 		
 		//Simple boolean options
 		allDigests = variableMap.count("alldigests") > 0;
@@ -209,63 +215,27 @@ try
   }
   
 	//Read paths from stdin
-	MirrorList mirl(cin);
+	MirrorList const mirrorList(cin, baseUrl);
 	
-	std::vector< pair<string,string> > paths;
-	while(readMirrors)
-	{
-		string path;
-		getline(cin, path);
-
-		if(cin.eof())
-			break;
-		
-		String first, second;
-		string::size_type sep = path.find(' ');
-		if(sep != string::npos && sep < 25)
-		{
-			first = path.substr(0, sep);
-			second = path.substr(sep +1, path.size());
-		}
-		else
-		{
-			cerr << "Warning: No '<type> <path>' or type > 25 in mirror string, using default http type.\n";
-			first = "http";
-			second = path;
-		}
-		second.strip();
-		if(not second.endsIn('/'))
-			second += "/";
-		//Add baseUrl
-		second += baseUrl;
-		paths.push_back(make_pair(first, second));
-	}
-	
-
 	//Generate records
 	std::vector< MetalinkFile > records;
 
 	_foreach(md5, md5Files)
 	{
+		//assert("Currently broken, sorry");
 		//Open and read the file
 		MD5File file(*md5);
 		
 		pair<string, string> r;
 		
 		//Add the records for all paths
+
 		while(file.record(&r))
 		{
-			MetalinkFile record(r.second);
+			MetalinkFile record(r.second, &mirrorList);
 			record.addVerification("md5", r.first);
-			
-			//Add remaining paths/mirrors
-			//Remove preprended '/' and './' if needed, they should be in the mirror list
-			_foreach(path, paths)
-				record.addPath(path->first, path->second, r.second);
-
 			records.push_back(record);
 		}
-		
 		
 	}
 
@@ -300,7 +270,7 @@ try
 			continue;
 		}
 
-		MetalinkFile record(filename);
+		MetalinkFile record(filename, &mirrorList);
 		cerr << "Hashing '" << filename << "' ... ";
 		
 		HashList hl;
@@ -368,6 +338,7 @@ try
 		
 		//FINALIZE
 		hl.finalize();
+
 		//Add hashes and P2P paths
 		_foreach(hp, hl)
 		{
@@ -387,22 +358,24 @@ try
 				record.addPath("ed2k", "ed2k://|file|" + filename.translated('|', '_') + "|" + record.size() + "|" + (*hp)->value() + "|/");
 		}
 				
-		//Add remaining paths/mirrors
-		_foreach(path, paths)
-			record.addPath(path->first, path->second, filename);
+		//Mirror list already added
 		
 		records.push_back(record);
 		hl.destroyMembers();
 		cerr << "\n";
 	}//Foreach
 	
-	cout << Metalink::from(records);
+	cout << Metalink::from(records, headerFile);
 	
 	return 0;
 }
 catch(const boost::program_options::unknown_option &e)
 {
 	cerr << e.what() << endl;
+}
+catch(const char*e)
+{
+	cerr << "Exiting with ERRORS: " << e << endl;	
 }
 catch(const std::exception &e)
 {

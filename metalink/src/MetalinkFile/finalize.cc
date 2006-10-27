@@ -15,6 +15,10 @@ void MetalinkFile::finalize()
  	}
   record << "\t\t</verification>\n";
   record << "\t\t<resources>\n";
+
+  _foreach(mirror, *d_ml)
+  	record << "\t\t\t" << mirror->asXMLWithFile(d_filename) << "\n";
+ 
   _foreach(p, d_paths)
   	record << "\t\t\t<url type=\"" << p->first << "\">" << Globals::XMLSafe(p->second) << "</url>\n";
  	record << "\t\t</resources>\n";

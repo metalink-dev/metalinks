@@ -18,3 +18,7 @@
 
 */
 #include "String.hh"
+
+#include "../Preprocessor/foreach.hh"
+
+using namespace bneijt;
