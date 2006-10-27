@@ -22,29 +22,15 @@
 #define	_HashList_HH_INCLUDED_
 #include <vector>
 #include "../Hash/Hash.hh"
-#include "../Preprocessor/foreach.hh"
+
 namespace bneijt
 {
 class HashList: public std::vector<Hash *>
 {
 	public:
-		void destroyMembers()
-		{
-			_foreach(it, *this)
-				delete *it;
-		}
-		void update(char const *bytes, unsigned numbytes)
-		{
-			_foreach(hash, *this)
-				(*hash)->update(bytes, numbytes);
-		}
-		
-		void finalize()
-		{
-			_foreach(hash, *this)
-				(*hash)->finalize();
-		}
-		
+		void destroyMembers();
+		void update(char const *bytes, unsigned int numbytes);
+		void finalize();		
 };
 }
 #endif

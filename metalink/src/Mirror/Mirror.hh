@@ -37,20 +37,9 @@ class Mirror
 		Mirror(std::string const &path,
 				std::string const &preference = "",
 				std::string const &location = "",
-				std::string const &type = "")
-			:
-				d_path(path),
-				d_preference(0),
-				d_location(location),
-				d_type(type)
-		{
-			if(preference.size())
-				throw "Can't set preference yet";
-		}
-		std::string const &asXML()
-		{
-			throw "Need asXML now";
-		}
+				std::string const &type = "");
+
+		std::string asXMLWithFile(std::string const &file) const;
 };
 }
 #endif

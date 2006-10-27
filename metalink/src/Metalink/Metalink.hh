@@ -22,7 +22,7 @@
 #define	_Metalink_HH_INCLUDED_
 
 #include <string>
-#include <sstream>
+#include <vector>
 #include "../MetalinkFile/MetalinkFile.hh"
 #include "../Preprocessor/foreach.hh"
 
@@ -31,25 +31,7 @@ namespace bneijt
 class Metalink
 {
 	public:
-		static std::string from(std::vector< MetalinkFile > files)
-		{
-			std::ostringstream out;
-			out << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
-			out << "<metalink version=\"3.0\" xmlns=\"http://www.metalinker.org/\" generator=\"http://metalinks.sourceforge.net/\">\n";
-
- 
- 			out << "<files>\n";
-			_foreach(file, files)
-			{
-				file->finalize();
-				out << *file;
-				out << "\n";
-			}
- 			out << "</files>\n";
-			out << "</metalink>\n";
-			return out.str();
-		}
-	
+		static std::string from(std::vector< MetalinkFile > files, std::string const headerFile = "");
 };
 }
 #endif

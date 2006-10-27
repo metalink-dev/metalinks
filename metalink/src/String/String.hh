@@ -22,7 +22,7 @@
 #define	_String_HH_INCLUDED_
 
 #include <string>
-
+namespace bneijt{
 class String: public std::string
 {
 	public:
@@ -66,15 +66,8 @@ class String: public std::string
 		}
 		
 		
-		std::string translated(char from, char to)
-		{
-			std::string copy(*this);
-			_foreach(c, copy)
-				if(*c == from)
-					*c = to;
-			return copy;
-		}
+		std::string translated(char from, char to);
 };
-
+}
 #endif
 
