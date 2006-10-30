@@ -69,6 +69,10 @@ MirrorList::MirrorList(std::istream &s, std::string const &baseUrl, bool run)
 				cerr << "Warning: can't determine type for mirror: " << path << "\n";
 			}
 		}
+		//Allow no location in mirror defenition
+		if(arg.size() > 0 && arg[0] == "0")
+			arg[0] = "";
+		
 		//Add the whole mirror information
 		//Mirror file contains: location preference type % path
 		//(path, preference, location, type)
