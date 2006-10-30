@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<metalink version="3.0" xmlns="http://www.metalinker.org/">
+<metalink version="3.0" xmlns="http://www.metalinker.org/" generator="http://metalinks.sourceforge.net/">
+
 <files>
 	<file name="metalinks/itworked.png">
-		<size>126023668</size>
+		<size>1123</size>
 		<verification>
 			<hash type="md4">51f826bebf81bd88944b32f284020b99</hash>
 			<hash type="md5">907d15afcb32289b782a045d2ec2e36e</hash>
@@ -14,31 +15,27 @@
 			<hash type="tiger192">ef17adfdef4196cc0959f1605f8b78e28c1ccb85a98a32a5</hash>
 			<hash type="crc32">eee376aa</hash>
 			<hash type="ed2k">51f826bebf81bd88944b32f284020b99</hash>
-			<hash type="gnunet">7RDLDN4JKJE5QHEUII8GK14IQC68RBCAH1BSRTONE24KNPB4L18RHGJ5M35S7S67QH4D4ORLICBEQID82OD766EI70GEG2FBD18CH28.AKMG2UL03LS58EG3HVD6M060RC6L6TE4AKUCRQALCCMCC5GI1BIMG416907PFUU3VPOE1K8EH9BS0U66AJL5AUJ9DG8CFV5LE7LC9R8</hash>
 		</verification>
 		<resources>
+			<url location="nl" type="http">http://surfnet.dl.sourceforge.net/sourceforge/metalinks/itworked.png</url>
+			<url location="us" type="http">http://umn.dl.sourceforge.net/sourceforge/metalinks/itworked.png</url>
+			<url location="tw" type="http">http://nchc.dl.sourceforge.net/sourceforge/metalinks/itworked.png</url>
+			<url location="jp" type="http">http://jaist.dl.sourceforge.net/sourceforge/metalinks/itworked.png</url>
+			<url location="ch" type="http">http://puzzle.dl.sourceforge.net/sourceforge/metalinks/itworked.png</url>
+			<url type="http">http://ovh.dl.sourceforge.net/sourceforge/metalinks/itworked.png</url>
+			<url location="ie" type="http">http://heanet.dl.sourceforge.net/sourceforge/metalinks/itworked.png</url>
+			<url type="http">http://internap.dl.sourceforge.net/sourceforge/metalinks/itworked.png</url>
+			<url type="http">http://keihanna.dl.sourceforge.net/sourceforge/metalinks/itworked.png</url>
+			<url location="au" type="http">http://optusnet.dl.sourceforge.net/sourceforge/metalinks/itworked.png</url>
+			<url location="us" type="http">http://superb-east.dl.sourceforge.net/sourceforge/metalinks/itworked.png</url>
+			<url location="us" type="http">http://superb-west.dl.sourceforge.net/sourceforge/metalinks/itworked.png</url>
+			<url location="uk" type="http">http://kent.dl.sourceforge.net/sourceforge/metalinks/itworked.png</url>
+			<url location="us" type="http">http://easynews.dl.sourceforge.net/sourceforge/metalinks/itworked.png</url>
+			<url location="us" type="http">http://ufpr.dl.sourceforge.net/sourceforge/metalinks/itworked.png</url>
+			<url location="gr" type="http">http://mesh.dl.sourceforge.net/sourceforge/metalinks/itworked.png</url>
 			<url type="magnet">magnet:?xt=urn:sha1:04e54c88df5357d629f123aa4c0ab5a90cb52eee&amp;dn=metalinks/itworked.png</url>
 			<url type="ed2k">ed2k://|file|metalinks/itworked.png|1123|51f826bebf81bd88944b32f284020b99|/</url>
 			<url type="gnunet">gnunet://ecrs/chk/7RDLDN4JKJE5QHEUII8GK14IQC68RBCAH1BSRTONE24KNPB4L18RHGJ5M35S7S67QH4D4ORLICBEQID82OD766EI70GEG2FBD18CH28.AKMG2UL03LS58EG3HVD6M060RC6L6TE4AKUCRQALCCMCC5GI1BIMG416907PFUU3VPOE1K8EH9BS0U66AJL5AUJ9DG8CFV5LE7LC9R8.1123</url>
-			<url type="http">http://surfnet.dl.sourceforge.net/sourceforge/metalinks/itworked.png</url>
-			<url type="http">http://umn.dl.sourceforge.net/sourceforge/metalinks/itworked.png</url>
-			<url type="http">http://nchc.dl.sourceforge.net/sourceforge/metalinks/itworked.png</url>
-			<url type="http">http://surfnet.dl.sourceforge.net/sourceforge/metalinks/metalinks/itworked.png</url>
-			<url type="http">http://jaist.dl.sourceforge.net/sourceforge/metalinks/itworked.png</url>
-			<url type="http">http://puzzle.dl.sourceforge.net/sourceforge/metalinks/itworked.png</url>
-			<url type="http">http://ovh.dl.sourceforge.net/sourceforge/metalinks/itworked.png</url>
-			<url type="http">http://heanet.dl.sourceforge.net/sourceforge/metalinks/itworked.png</url>
-			<url type="http">http://internap.dl.sourceforge.net/sourceforge/metalinks/itworked.png</url>
-			<url type="http">http://keihanna.dl.sourceforge.net/sourceforge/metalinks/itworked.png</url>
-			<url type="http">http://optusnet.dl.sourceforge.net/sourceforge/metalinks/itworked.png</url>
-			<url type="http">http://superb-east.dl.sourceforge.net/sourceforge/metalinks/itworked.png</url>
-			<url type="http">http://superb-west.dl.sourceforge.net/sourceforge/metalinks/itworked.png</url>
-			<url type="http">http://belnet.dl.sourceforge.net/sourceforge/metalinks/metalinks/itworked.png</url>
-			<url type="http">http://switch.dl.sourceforge.net/sourceforge/metalinks/metalinks/itworked.png</url>
-			<url type="http">http://kent.dl.sourceforge.net/sourceforge/metalinks/itworked.png</url>
-			<url type="http">http://easynews.dl.sourceforge.net/sourceforge/metalinks/itworked.png</url>
-			<url type="http">http://ufpr.dl.sourceforge.net/sourceforge/metalinks/itworked.png</url>
-			<url type="http">http://mesh.dl.sourceforge.net/sourceforge/metalinks/itworked.png</url>
 		</resources>
 	</file>
 </files>

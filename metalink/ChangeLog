@@ -2,6 +2,8 @@
 - Added headerfile option, to allow a file to be included just after <metlink>
 - Removed gnunet from somedigests (slowing down and not used often)
 - Added support for type, preference, location to mirror list
+- Fixed filesize bug
+- Added --addpath option
 - Updated examples in help
 
 0.2.1:
