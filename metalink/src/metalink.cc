@@ -127,19 +127,22 @@ try
 		cout << "Version " << Globals::version[0] << "." << Globals::version[1] << "." << Globals::version[2];
 		cout << ", Copyright (C) 2005 A. Bram Neijt <bneijt@gmail.com>\n";
 		cout << Globals::programName << " comes with ABSOLUTELY NO WARRANTY and is licensed under GPLv2\n";
-		cout << "Usage:\n  " << Globals::programName << " [opts] (input files or -md5) < (mirror list) > (metalinkfile)\n";
+		cout << "Usage:\n  " << Globals::programName << " [options] (input files or -md5) < (mirror list) > (metalinkfile)\n";
 		cout << helpOptions << "\n";
 		cout << "Supported algorithms are (-d options):\n"
 			<< "  md4 md5 sha1 sha256 sha384 sha512 rmd160 tiger crc32 ed2k gnunet"
 			<< "\n";
 		cout << "\nMirror lists are single line definitions according to:\n"
 				 << " [location [preference] [type] % ] <mirror base url>\n";
-		cout << "\nExample: http://example.com/ as a mirror:\n echo http://example.com | "
+		cout << "\nExamples:\n";
+		cout << "http://example.com/ as a mirror:\n echo http://example.com | "
 				 << Globals::programName << " -d md5 -d sha1 *\n";
-		cout << "\nExample: http://example.com/ as a mirror with preference and location:\n "
+		cout << "\nhttp://example.com/ as a mirror with preference and location:\n "
 				 << "echo us 10 % http://example.com | " << Globals::programName << " -d md5 -d sha1 *\n";
-		cout << "Example: only P2P links:\n "
-				 << Globals::programName << " --nomirrors -d sha1 *\n";
+		cout << "\nhttp://example.com/ as a mirror with preference only:\n "
+				 << "echo 0 10 % http://example.com | " << Globals::programName << " -d md5 *\n";
+		cout << "\nOnly P2P links:\n "
+				 << Globals::programName << " --nomirrors -d sha1 -d ed2k -d gnunet *\n";
 			return 1;
 		}
 		if(variableMap.count("version"))
