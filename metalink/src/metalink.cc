@@ -83,7 +83,7 @@ try
 			("help,h", "Produce a help message")
 			("version", "Print out the name and version")
 			("md5", po::value< vector<string> >(), "Generate metalink from md5sum file(s)")
-			("baseurl", po::value< string >(),"Append a base url to the mirrors ('/' is not checked)")
+			("addpath", po::value< string >(),"Append a path to the mirrors ('/' is not checked)")
 			("headerfile", po::value< string >(),"Include file after the root element decleration.")
 			("nomirrors", "Don't read mirrors from stdin")
 			;
@@ -127,7 +127,7 @@ try
 		cout << "Version " << Globals::version[0] << "." << Globals::version[1] << "." << Globals::version[2];
 		cout << ", Copyright (C) 2005 A. Bram Neijt <bneijt@gmail.com>\n";
 		cout << Globals::programName << " comes with ABSOLUTELY NO WARRANTY and is licensed under GPLv2\n";
-		cout << "Usage:\n  " << Globals::programName << " [options] <input files | -md5> < <mirror list> > <metalinkfile>\n";
+		cout << "Usage:\n  " << Globals::programName << " [opts] (input files or -md5) < (mirror list) > (metalinkfile)\n";
 		cout << helpOptions << "\n";
 		cout << "Supported algorithms are (-d options):\n"
 			<< "  md4 md5 sha1 sha256 sha384 sha512 rmd160 tiger crc32 ed2k gnunet"
@@ -194,8 +194,8 @@ try
 			digests.insert("ed2k");
 		}
 
-		if(variableMap.count("baseurl") > 0)
-			baseUrl = variableMap["baseurl"].as< string >();
+		if(variableMap.count("addparh") > 0)
+			baseUrl = variableMap["addpath"].as< string >();
 		if(variableMap.count("headerfile") > 0)
 			headerFile = variableMap["headerfile"].as< string >();
 		
