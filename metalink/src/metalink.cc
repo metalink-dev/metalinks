@@ -84,7 +84,7 @@ try
 			("version", "Print out the name and version")
 			("md5", po::value< vector<string> >(), "Generate metalink from md5sum file(s)")
 			("addpath", po::value< string >(),"Append a path to the mirrors ('/' is not checked)")
-			("headerfile", po::value< string >(),"Include file after the root element decleration.")
+			("headerfile", po::value< string >(),"Include file after the root element declaration.")
 			("nomirrors", "Don't read mirrors from stdin")
 			;
 
@@ -132,12 +132,12 @@ try
 		cout << "Supported algorithms are (-d options):\n"
 			<< "  md4 md5 sha1 sha256 sha384 sha512 rmd160 tiger crc32 ed2k gnunet"
 			<< "\n";
-		cout << "\nMirror lists are single line defenitions according to:\n"
-				 << " [preference [location] [type] % ] <mirror base url>\n";
+		cout << "\nMirror lists are single line definitions according to:\n"
+				 << " [location [preference] [type] % ] <mirror base url>\n";
 		cout << "\nExample: http://example.com/ as a mirror:\n echo http://example.com | "
 				 << Globals::programName << " -d md5 -d sha1 *\n";
 		cout << "\nExample: http://example.com/ as a mirror with preference and location:\n "
-				 << "echo 10 us % http://example.com | " << Globals::programName << " -d md5 -d sha1 *\n";
+				 << "echo us 10 % http://example.com | " << Globals::programName << " -d md5 -d sha1 *\n";
 		cout << "Example: only P2P links:\n "
 				 << Globals::programName << " --nomirrors -d sha1 *\n";
 			return 1;

@@ -27,7 +27,7 @@
 
 #include "../String/String.hh"
 
-//#define DEBUGLEVEL 2
+#define DEBUGLEVEL 2
 #include "../Preprocessor/debug.hh"
 
 using namespace bneijt;
