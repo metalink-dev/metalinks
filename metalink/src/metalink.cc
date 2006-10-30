@@ -215,7 +215,7 @@ try
   }
   
 	//Read paths from stdin
-	MirrorList const mirrorList(cin, baseUrl);
+	MirrorList const mirrorList(cin, baseUrl, readMirrors);
 	
 	//Generate records
 	std::vector< MetalinkFile > records;
