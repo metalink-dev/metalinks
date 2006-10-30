@@ -4,7 +4,8 @@ MirrorList::MirrorList(std::istream &s, std::string const &baseUrl, bool run)
 {	
 	if(!run)
 		return;
-
+		
+	//Mirror file contains: location preference type % path
 	//Initialize from stream
 	string line, word;
 	unsigned int mlLine(0);
@@ -69,10 +70,11 @@ MirrorList::MirrorList(std::istream &s, std::string const &baseUrl, bool run)
 			}
 		}
 		//Add the whole mirror information
+		//Mirror file contains: location preference type % path
 		//(path, preference, location, type)
 		add(path + baseUrl,
-			(arg.size() > 0 ? arg[0] : ""),
 			(arg.size() > 1 ? arg[1] : ""),
+			(arg.size() > 0 ? arg[0] : ""),
 			type			
 			);
 	}
