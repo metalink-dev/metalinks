@@ -76,6 +76,7 @@ MirrorList::MirrorList(std::istream &s, std::string const &baseUrl, bool run)
 		//Add the whole mirror information
 		//Mirror file contains: location preference type % path
 		//(path, preference, location, type)
+		//_debugLevel1("Adding: " << (path + baseUrl));
 		add(path + baseUrl,
 			(arg.size() > 1 ? arg[1] : ""),
 			(arg.size() > 0 ? arg[0] : ""),
