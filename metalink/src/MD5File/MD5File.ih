@@ -18,3 +18,7 @@
 
 */
 #include "MD5File.hh"
+
+
+using namespace std;
+using namespace bneijt;

@@ -225,7 +225,6 @@ try
 
 	_foreach(md5, md5Files)
 	{
-		//assert("Currently broken, sorry");
 		//Open and read the file
 		MD5File file(*md5);
 		
