@@ -1,3 +1,9 @@
+0.3.1svn:
+- Bugfix: Unable to open warning message fixed
+- Help message typo (-md5 -> --md5)
+- Root XML node attributes split over multiple lines
+- Bugfix --addpath was broken (due to typo in option scanner)
+
 0.3.0:
 - Added headerfile option, to allow a file to be included just after <metlink>
 - Removed gnunet from somedigests (slowing down and not used often)
