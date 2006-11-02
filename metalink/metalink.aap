@@ -86,6 +86,7 @@ CLEANFILES += $ConfigurationFilenameForMetalink
 	"src/HashList/update.cc"
 	"src/HashList/finalize.cc"
 	"src/HashList/destroyMembers.cc"
+	"src/MD5File/record.cc"
 	"src/MetalinkFile/finalize.cc"
 	"src/MetalinkFile/addPath.cc"
 	"src/MirrorList/MirrorList.cc"
