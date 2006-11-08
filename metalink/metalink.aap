@@ -13,10 +13,11 @@ DefineForMetalink = $?GeneratedDefineForMetalink $?ExtraDefineForMetalink
 
 # Library flags for src/metalink.cc
 GeneratedLibsForMetalink = \
-	"-lboost_program_options"
 	"-lboost_filesystem"
+	"-lboost_program_options"
 	"-lgcrypt"
 	"-lgpg-error"
+	"-lboost_regex"
 
 LibsForMetalink = $?GeneratedLibsForMetalink $?ExtraIncludeForMetalink
 # Sorted list of used global headers
@@ -26,6 +27,7 @@ GlobalHeadersForMetalink = \
 	"boost/filesystem/operations.hpp"
 	"boost/lexical_cast.hpp"
 	"boost/program_options.hpp"
+	"boost/regex.hpp"
 	"cassert"
 	"cctype"
 	"fstream"

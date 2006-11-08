@@ -1,10 +1,13 @@
 #& -l
 #lib BOOST
-boost/program_options.hpp									-lboost_program_options
-boost/filesystem/path.hpp									-lboost_filesystem
-boost/filesystem/operations.hpp						-lboost_filesystem
-boost/filesystem/convenience.hpp					-lboost_filesystem
+boost/program_options.hpp		-lboost_program_options
+boost/filesystem/path.hpp		-lboost_filesystem
+boost/filesystem/operations.hpp		-lboost_filesystem
+boost/filesystem/convenience.hpp	-lboost_filesystem
 boost/lexical_cast.hpp	
+boost/regex.hpp				-lboost_regex	
 
 #Lib gcrypt
 gcrypt.h	`libgcrypt-config --cflags --libs`
+sys/stat.h	
+sys/types.h	

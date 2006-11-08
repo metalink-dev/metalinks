@@ -3,6 +3,7 @@ First install the dependencies:
 	libgcrypt
 	BOOST program_options
 	BOOST filesystem
+	BOOST regex (as of 0.3.1)
 
 Then, if you have A-A-P installed (aap --version) do:
 	aap install

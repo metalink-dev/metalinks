@@ -14,12 +14,34 @@ bool MD5File::record(std::pair<std::string, std::string> *val)
 {
 	std::string line;
 	std::getline(*this, line);
-	if(this->eof())
+	
+	//Check for MD5 ( starting point
+	regex md5line("MD5 ?\\(([^)]+)\\) ?= ?([a-fA-F0-9]+)");
+	cmatch match;
+	if(regex_match(line.c_str(), match, md5line))
+	{
+		_debugLevel2("openssl line");
+		val->first = match[2];
+		val->second = match[1];
+	}
+	else
+	{
+		_debugLevel2("md5sum line");
+		if(this->eof())
+			return false;
+		std::string::size_type sep = line.rfind(' ');
+		if(sep == std::string::npos)
+			return false;
+		val->first = line.substr(0, sep -1);
+		val->second = line.substr(sep +1, line.size());//double space for md5 sums
+	}
+	_debugLevel2("MD5 (" << val->second << ") '" << val->first << "'");
+	if(val->first.length() != 32)
+	{
+		cerr << "Warning: Unsupported MD5 line: " << line << "\n";
+		cerr << "Warning: MD5 sum scanning stopped\n";
 		return false;
-	std::string::size_type sep = line.find(' ');
-	if(sep == std::string::npos)
-		return false;
-	val->first = line.substr(0, sep);
-	val->second = line.substr(sep +2, line.size());//double space for md5 sums
+	}
+	
 	return true;
 }
