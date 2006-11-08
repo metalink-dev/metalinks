@@ -31,7 +31,7 @@ namespace bneijt
 class Metalink
 {
 	public:
-		static std::string from(std::vector< MetalinkFile > files, std::string const headerFile = "");
+		static std::string from(std::vector< MetalinkFile > files, std::string const headerFile = "", std::string const desc = "");
 };
 }
 #endif

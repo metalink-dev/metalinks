@@ -1,7 +1,7 @@
 #include "Metalink.ih"
 
 //TODO indentation
-std::string Metalink::from(std::vector< MetalinkFile > files, std::string const headerFile)
+std::string Metalink::from(std::vector< MetalinkFile > files, std::string const headerFile, std::string const desc)
 {
 	std::ostringstream out;
 	//Root
@@ -30,6 +30,8 @@ std::string Metalink::from(std::vector< MetalinkFile > files, std::string const 
 			throw "Opening headerfile failed";
 		}
 	}
+	if(desc.size() > 0)
+		out << "\t<description>" << Globals::XMLSafe(desc) << "</description>\n";
 	
 	//Files section
 	if(files.size() > 0)

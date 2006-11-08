@@ -19,6 +19,7 @@
 */
 #include "Metalink.hh"
 
+#include "../Globals/Globals.hh"
 
 #include <sstream>
 #include <iostream>
