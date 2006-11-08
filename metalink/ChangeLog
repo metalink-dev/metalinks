@@ -6,6 +6,8 @@
 - Add location if none is given and the host has a landcode
 - Added boost_regex library dependency
 - Added "MD5()=" type md5list support
+- Added --desc option, to add a metalink description
+- Bugfix: XML escape sequences for "<>"
 
 0.3.0:
 - Added headerfile option, to allow a file to be included just after <metlink>

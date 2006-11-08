@@ -7,12 +7,16 @@ std::string Globals::XMLQuotedSafe(std::string value)
 	char *froma[] = {
 		"&",
 		"\"",
+		"<",
+		">",
 		0
 	};
 	
 	char *tob[] = {
 		"&amp;",
-		"&quot;"
+		"&quot;",
+		"&lt;",
+		"&gt;"
 	};
 	
 	for(unsigned i(0); froma[i]; ++i)

@@ -5,11 +5,15 @@ std::string Globals::XMLSafe(std::string value)
 	//Entities
 	char *froma[] = {
 		"&",
+		"<",
+		">",
 		0
 	};
 	
 	char *tob[] = {
 		"&amp;",
+		"&lt;",
+		"&gt;"
 	};
 	
 	

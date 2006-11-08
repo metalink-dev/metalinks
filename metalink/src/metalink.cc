@@ -70,6 +70,7 @@ try
 	po::variables_map variableMap;
 	bool allDigests(false), readMirrors(true);
 	string baseUrl("");
+	string metalinkDescription("");
 	string headerFile("");
 /////////Program argument handling
 	vector<string> inputFiles, md5Files;
@@ -83,9 +84,10 @@ try
 			("help,h", "Produce a help message")
 			("version", "Print out the name and version")
 			("md5", po::value< vector<string> >(), "Generate metalink from md5sum file(s)")
-			("addpath", po::value< string >(),"Append a path to the mirrors ('/' is not checked)")
-			("headerfile", po::value< string >(),"Include file after the root element declaration.")
+			("addpath", po::value< string >(), "Append a path to the mirrors ('/' is not checked)")
+			("headerfile", po::value< string >(), "Include file after the root element declaration.")
 			("nomirrors", "Don't read mirrors from stdin")
+			("desc", po::value< string >(), "Add metalink description")
 			;
 
 		po::options_description digestOptions("Digest options");
@@ -201,6 +203,9 @@ try
 			baseUrl = variableMap["addpath"].as< string >();
 		if(variableMap.count("headerfile") > 0)
 			headerFile = variableMap["headerfile"].as< string >();
+		if(variableMap.count("desc") > 0)
+			metalinkDescription = variableMap["desc"].as< string >();
+		
 		
 		//Simple boolean options
 		allDigests = variableMap.count("alldigests") > 0;
@@ -367,7 +372,7 @@ try
 		cerr << "\n";
 	}//Foreach
 	
-	cout << Metalink::from(records, headerFile);
+	cout << Metalink::from(records, headerFile, metalinkDescription);
 	
 	return 0;
 }
