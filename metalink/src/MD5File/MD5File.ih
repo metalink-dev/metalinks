@@ -18,6 +18,7 @@
 
 */
 #include <boost/regex.hpp> 
+#include <iostream>
 
 #include "MD5File.hh"
 
