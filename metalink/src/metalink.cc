@@ -292,7 +292,6 @@ try
 			hl.push_back(new GCrypt(GCRY_MD_SHA384));
 		if(allDigests || digests.count("sha512") > 0)
 			hl.push_back(new GCrypt(GCRY_MD_SHA512));
-
 		//Known hashes: rmd160 tiger haval
 		if(allDigests || digests.count("rmd160") > 0)
 			hl.push_back(new GCrypt(GCRY_MD_RMD160));
@@ -351,6 +350,7 @@ try
 				continue;
 			}
 			
+			//Either make pieces a special name or add a new system for piece based hashing
 			record.addVerification((*hp)->name(), (*hp)->value());
 			
 			//Add P2P specials
@@ -374,6 +374,10 @@ try
 catch(const boost::program_options::unknown_option &e)
 {
 	cerr << e.what() << endl;
+}
+catch(std::string const &e)
+{
+	cerr << "Exiting with ERRORS: " << e << endl;	
 }
 catch(const char*e)
 {

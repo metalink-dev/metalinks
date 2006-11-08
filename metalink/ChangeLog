@@ -3,6 +3,9 @@
 - Help message typo (-md5 -> --md5)
 - Root XML node attributes split over multiple lines
 - Bugfix --addpath was broken (due to typo in option scanner)
+- Add location if none is given and the host has a landcode
+- Added boost_regex library dependency
+- Added "MD5()=" type md5list support
 
 0.3.0:
 - Added headerfile option, to allow a file to be included just after <metlink>
