@@ -5,6 +5,7 @@ First install the dependencies:
 	BOOST filesystem
 	BOOST regex (as of 0.3.1)
 
+
 Then, if you have A-A-P installed (aap --version) do:
 	aap install
 
@@ -17,5 +18,12 @@ Otherwise use make:
 All SVN development is done with ccbuild, so entering the source directory and executing ccbuild, should produce a valid binary. (http://ccbuild.sf.net/)
 
 Some code documentation can be generated using doxygen.
+
+
+For Ubuntu users, this might work:
+
+sudo apt-get install g++ libgcrypt-dev libboost-regex-dev libboost-program-options-dev libboost-filesystem-dev libboost-dev aap
+sudo aap install
+sudo aap cleanALL
 
 More information an newer versions can be found at http://metalinks.sourceforge.net
