@@ -124,7 +124,7 @@ src/Mirror/o/asXMLWithFile.o: src/Mirror/asXMLWithFile.cc src/Mirror/Mirror.ih s
 src/Mirror/o/Mirror.o: src/Mirror/Mirror.cc src/Mirror/Mirror.ih src/Preprocessor/debug.hh src/Globals/Globals.hh src/Mirror/Mirror.hh
 	$(CC) $(CCADDFLAGS)  -c  -o "src/Mirror/o/Mirror.o" "src/Mirror/Mirror.cc" 
 
-src/Metalink/o/from.o: src/Metalink/from.cc src/Metalink/Metalink.ih src/Metalink/Metalink.hh src/Preprocessor/foreach.hh src/MetalinkFile/MetalinkFile.hh src/Globals/Globals.hh src/MirrorList/MirrorList.hh src/Mirror/Mirror.hh
+src/Metalink/o/from.o: src/Metalink/from.cc src/Metalink/Metalink.ih src/Globals/Globals.hh src/Metalink/Metalink.hh src/Preprocessor/foreach.hh src/MetalinkFile/MetalinkFile.hh src/MirrorList/MirrorList.hh src/Mirror/Mirror.hh
 	$(CC) $(CCADDFLAGS)  -c -o "src/Metalink/o/from.o" "src/Metalink/from.cc" 
 
 src/o/metalink.o: src/o/ src/metalink.cc src/Misc/Preprocessor/Foreach.hh src/String/String.hh src/Globals/Globals.hh src/Hash/HashGNUnet/HashGNUnet.hh src/Hash/HashGNUnet/SessionKey/SessionKey.hh src/Hash/HashSHA512/HashSHA512.hh src/Hash/GCrypt/GCrypt.hh src/Hash/Hash.hh src/Hash/HashED2K/HashED2K.hh src/Hash/HashMD4/HashMD4.hh src/HashList/HashList.hh src/MD5File/MD5File.hh src/MetalinkFile/MetalinkFile.hh src/Preprocessor/foreach.hh src/MirrorList/MirrorList.hh src/Mirror/Mirror.hh src/Metalink/Metalink.hh

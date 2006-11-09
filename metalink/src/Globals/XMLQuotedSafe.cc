@@ -2,7 +2,6 @@
 
 std::string Globals::XMLQuotedSafe(std::string value)
 {
-	//TODO Quote thingies: " -> &quot;
 	//Entities
 	char *froma[] = {
 		"&",
