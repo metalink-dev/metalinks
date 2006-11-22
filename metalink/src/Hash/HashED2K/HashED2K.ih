@@ -28,7 +28,7 @@
 #include <cctype>			//toupper
 */
 //#define DEBUGLEVEL 3
-#include "../../Misc/Preprocessor/Debug.hh"
+#include "../../Preprocessor/Debug.hh"
 
 
 using namespace bneijt;

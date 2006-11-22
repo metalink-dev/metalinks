@@ -26,6 +26,15 @@
 	All hash classes are part of a vector created at the beginning.
 	
 	As the list of hashes used is still small, we'll just learn to live with it.
+	
+	<pieces length="131072">
+  <hash type="sha1" piece=”0”>example-sha1-hash</hash>
+  <hash type="sha1" piece=”1”>example-sha1-hash</hash>
+</pieces>
+
+	
+	
+	
 */
 
 #include <iostream>
@@ -53,8 +62,8 @@
 
 #include "Globals/Globals.hh"
 #include "String/String.hh"
-
-#include "Misc/Preprocessor/Foreach.hh"
+#define DEBUGLEVEL 3
+#include "Preprocessor/Preprocessor.hh"
 
 #include <cassert>
 #include <sys/stat.h>	//mkdir(2)
@@ -277,6 +286,10 @@ try
 			continue;
 		}
 
+	_debugLevel2("string------------------: " << targetFile.string() << '\n'
+	  << "native_directory_string-: " << targetFile.native_directory_string() << '\n'
+  	<< "native_file_string------: " << targetFile.native_file_string() << '\n');
+  	
 		MetalinkFile record(filename, &mirrorList);
 		cerr << "Hashing '" << filename << "' ... ";
 		
