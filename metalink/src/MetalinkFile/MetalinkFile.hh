@@ -28,6 +28,8 @@
 #include <utility>
 
 #include "../MirrorList/MirrorList.hh"
+#include "../Hash/Hash.hh"
+
 
 #include "../Globals/Globals.hh"
 #include "../Preprocessor/foreach.hh"
@@ -43,6 +45,8 @@ class MetalinkFile: public std::string
 		bool d_sizeSet;
 		unsigned long long d_size;
 		std::vector< std::pair<std::string, std::string> > d_vers;
+		std::vector< std::string > d_verificationLines;
+		
 	public:
 		
 		MetalinkFile(std::string const &filename, MirrorList const *ml)
@@ -64,6 +68,11 @@ class MetalinkFile: public std::string
 			s << d_size;
 			return s.str();
 		}
+		void addVerification(std::string const &h)
+		{
+			d_verificationLines.push_back(h);
+		}
+
 		void addVerification(std::string const &name, std::string const &value)
 		{
 			d_vers.push_back(std::make_pair(name, value));

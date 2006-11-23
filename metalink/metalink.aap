@@ -13,10 +13,10 @@ DefineForMetalink = $?GeneratedDefineForMetalink $?ExtraDefineForMetalink
 
 # Library flags for src/metalink.cc
 GeneratedLibsForMetalink = \
-	"-lboost_filesystem"
-	"-lboost_program_options"
 	"-lgcrypt"
 	"-lgpg-error"
+	"-lboost_filesystem"
+	"-lboost_program_options"
 	"-lboost_regex"
 
 LibsForMetalink = $?GeneratedLibsForMetalink $?ExtraIncludeForMetalink
@@ -65,6 +65,17 @@ CLEANFILES += $ConfigurationFilenameForMetalink
 	"src/Globals/statics.cc"
 	"src/Globals/XMLSafe.cc"
 	"src/Globals/XMLQuotedSafe.cc"
+	"src/Hash/HashPieces/xml.cc"
+	"src/Hash/HashPieces/value.cc"
+	"src/Hash/HashPieces/update.cc"
+	"src/Hash/HashPieces/finalize.cc"
+	"src/Hash/HashPieces/HashPieces.cc"
+	"src/Hash/GCrypt/value.cc"
+	"src/Hash/GCrypt/update.cc"
+	"src/Hash/GCrypt/name.cc"
+	"src/Hash/GCrypt/from.cc"
+	"src/Hash/GCrypt/finalize.cc"
+	"src/Hash/xml.cc"
 	"src/Hash/HashGNUnet/value.cc"
 	"src/Hash/HashGNUnet/update.cc"
 	"src/Hash/HashGNUnet/pushChk.cc"
@@ -74,11 +85,6 @@ CLEANFILES += $ConfigurationFilenameForMetalink
 	"src/Hash/HashGNUnet/blockKeyAndQuery.cc"
 	"src/Hash/HashGNUnet/blockKey.cc"
 	"src/Hash/HashGNUnet/HashGNUnet.cc"
-	"src/Hash/GCrypt/value.cc"
-	"src/Hash/GCrypt/update.cc"
-	"src/Hash/GCrypt/name.cc"
-	"src/Hash/GCrypt/from.cc"
-	"src/Hash/GCrypt/finalize.cc"
 	"src/Hash/HashGNUnet/SessionKey/statics.cc"
 	"src/Hash/HashGNUnet/SessionKey/fromHash.cc"
 	"src/Hash/HashCRC32/from.cc"

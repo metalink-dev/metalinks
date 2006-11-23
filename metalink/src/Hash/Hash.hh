@@ -20,6 +20,9 @@
 
 #ifndef _Hash_HH_INCLUDED_
 #define	_Hash_HH_INCLUDED_
+
+#include <string>
+
 namespace bneijt
 {
 class Hash
@@ -29,6 +32,7 @@ class Hash
 		virtual void update(char const *bytes, unsigned numbytes) = 0;
 		virtual void finalize() = 0;
 		virtual std::string const &value() const = 0;
+		virtual std::string xml() const;
 		virtual ~Hash()
 		{}
 };

@@ -17,10 +17,14 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-#include "Hash.hh"
+#include "HashPieces.hh"
 
-#include <string>
 #include <sstream>
+#include <cassert>
+
+#include "../GCrypt/GCrypt.hh"
+//#define DEBUGLEVEL 3980
+#include "../../Preprocessor/debug.hh"
 
 using namespace bneijt;
 using namespace std;

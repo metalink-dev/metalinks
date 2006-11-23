@@ -14,6 +14,12 @@ void MetalinkFile::finalize()
  			<< v->second
  			<< "</hash>\n";
  	}
+ 	
+ 	_foreach(v, d_verificationLines)
+ 	{
+ 		record << "\t\t\t" << (*v) << "\n";
+ 	}
+ 	
   record << "\t\t</verification>\n";
   record << "\t\t<resources>\n";
 

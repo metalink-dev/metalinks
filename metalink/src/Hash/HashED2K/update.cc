@@ -45,13 +45,15 @@ void HashED2K::update(char const *bytes, unsigned numbytes)
 		d_md4.finalize();
 		std::string value = d_md4.value();
 //		transform(value.begin(), value.end(), value.begin(), ::toupper);
-		_debugLevel2("Push " + value);
+		_debugLevel2("Push " << value);
 		d_hashlist.push_back(value);
 		
 		//Write rest to new MD4
 		unsigned tail = numbytes - head;
+		_debugLevel2("Overflow: " << tail);
+		
 		d_md4.update(bytes + head, tail);
 		
-		d_count = 0;
+		d_count = tail;
 	}
 }
