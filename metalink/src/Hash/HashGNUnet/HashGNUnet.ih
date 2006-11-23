@@ -28,6 +28,6 @@
 #include <gcrypt.h>
 
 //#define DEBUGLEVEL 2
-#include "../../Preprocessor/Debug.hh"
+#include "../../Preprocessor/debug.hh"
 
 using namespace bneijt;

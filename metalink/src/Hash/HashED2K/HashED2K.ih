@@ -23,12 +23,9 @@
 #include <iomanip>
 #include <cassert>
 #include <sstream>
-/*
-#include <algorithm>	//transform
-#include <cctype>			//toupper
-*/
+
 //#define DEBUGLEVEL 3
-#include "../../Preprocessor/Debug.hh"
+#include "../../Preprocessor/debug.hh"
 
 
 using namespace bneijt;

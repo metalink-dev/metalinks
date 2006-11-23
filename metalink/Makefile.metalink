@@ -37,32 +37,20 @@ src/Globals/o/XMLSafe.o: src/Globals/XMLSafe.cc src/Globals/Globals.ih src/Globa
 src/Globals/o/XMLQuotedSafe.o: src/Globals/XMLQuotedSafe.cc src/Globals/Globals.ih src/Globals/Globals.hh
 	$(CC) $(CCADDFLAGS)  -c -o "src/Globals/o/XMLQuotedSafe.o" "src/Globals/XMLQuotedSafe.cc" 
 
-src/Hash/HashGNUnet/o/value.o: src/Hash/HashGNUnet/value.cc src/Hash/HashGNUnet/HashGNUnet.ih src/Misc/Preprocessor/Debug.hh src/Hash/HashSHA512/HashSHA512.hh src/Hash/GCrypt/GCrypt.hh src/Hash/Hash.hh src/Hash/HashGNUnet/HashGNUnet.hh src/Hash/HashGNUnet/SessionKey/SessionKey.hh
-	$(CC) $(CCADDFLAGS)  -c -o "src/Hash/HashGNUnet/o/value.o" "src/Hash/HashGNUnet/value.cc" 
+src/Hash/HashPieces/o/xml.o: src/Hash/HashPieces/xml.cc src/Hash/HashPieces/HashPieces.ih src/Preprocessor/debug.hh src/Hash/GCrypt/GCrypt.hh src/Hash/Hash.hh src/Hash/HashPieces/HashPieces.hh src/Preprocessor/foreach.hh
+	$(CC) $(CCADDFLAGS)  -c -o "src/Hash/HashPieces/o/xml.o" "src/Hash/HashPieces/xml.cc" 
 
-src/Hash/HashGNUnet/o/update.o: src/Hash/HashGNUnet/update.cc src/Hash/HashGNUnet/HashGNUnet.ih src/Misc/Preprocessor/Debug.hh src/Hash/HashSHA512/HashSHA512.hh src/Hash/GCrypt/GCrypt.hh src/Hash/Hash.hh src/Hash/HashGNUnet/HashGNUnet.hh src/Hash/HashGNUnet/SessionKey/SessionKey.hh
-	$(CC) $(CCADDFLAGS)  -c -o "src/Hash/HashGNUnet/o/update.o" "src/Hash/HashGNUnet/update.cc" 
+src/Hash/HashPieces/o/value.o: src/Hash/HashPieces/value.cc src/Hash/HashPieces/HashPieces.ih src/Preprocessor/debug.hh src/Hash/GCrypt/GCrypt.hh src/Hash/Hash.hh src/Hash/HashPieces/HashPieces.hh src/Preprocessor/foreach.hh
+	$(CC) $(CCADDFLAGS)  -c -o "src/Hash/HashPieces/o/value.o" "src/Hash/HashPieces/value.cc" 
 
-src/Hash/HashGNUnet/o/pushChk.o: src/Hash/HashGNUnet/pushChk.cc src/Hash/HashGNUnet/HashGNUnet.ih src/Misc/Preprocessor/Debug.hh src/Hash/HashSHA512/HashSHA512.hh src/Hash/GCrypt/GCrypt.hh src/Hash/Hash.hh src/Hash/HashGNUnet/HashGNUnet.hh src/Hash/HashGNUnet/SessionKey/SessionKey.hh
-	$(CC) $(CCADDFLAGS)  -c -o "src/Hash/HashGNUnet/o/pushChk.o" "src/Hash/HashGNUnet/pushChk.cc" 
+src/Hash/HashPieces/o/update.o: src/Hash/HashPieces/update.cc src/Hash/HashPieces/HashPieces.ih src/Preprocessor/debug.hh src/Hash/GCrypt/GCrypt.hh src/Hash/Hash.hh src/Hash/HashPieces/HashPieces.hh src/Preprocessor/foreach.hh
+	$(CC) $(CCADDFLAGS)  -c -o "src/Hash/HashPieces/o/update.o" "src/Hash/HashPieces/update.cc" 
 
-src/Hash/HashGNUnet/o/gnunettisch.o: src/Hash/HashGNUnet/gnunettisch.cc src/Hash/HashGNUnet/HashGNUnet.ih src/Misc/Preprocessor/Debug.hh src/Hash/HashSHA512/HashSHA512.hh src/Hash/GCrypt/GCrypt.hh src/Hash/Hash.hh src/Hash/HashGNUnet/HashGNUnet.hh src/Hash/HashGNUnet/SessionKey/SessionKey.hh
-	$(CC) $(CCADDFLAGS)  -c -o "src/Hash/HashGNUnet/o/gnunettisch.o" "src/Hash/HashGNUnet/gnunettisch.cc" 
+src/Hash/HashPieces/o/finalize.o: src/Hash/HashPieces/finalize.cc src/Hash/HashPieces/HashPieces.ih src/Preprocessor/debug.hh src/Hash/GCrypt/GCrypt.hh src/Hash/Hash.hh src/Hash/HashPieces/HashPieces.hh src/Preprocessor/foreach.hh
+	$(CC) $(CCADDFLAGS)  -c -o "src/Hash/HashPieces/o/finalize.o" "src/Hash/HashPieces/finalize.cc" 
 
-src/Hash/HashGNUnet/o/finalize.o: src/Hash/HashGNUnet/finalize.cc src/Hash/HashGNUnet/HashGNUnet.ih src/Misc/Preprocessor/Debug.hh src/Hash/HashSHA512/HashSHA512.hh src/Hash/GCrypt/GCrypt.hh src/Hash/Hash.hh src/Hash/HashGNUnet/HashGNUnet.hh src/Hash/HashGNUnet/SessionKey/SessionKey.hh
-	$(CC) $(CCADDFLAGS)  -c -o "src/Hash/HashGNUnet/o/finalize.o" "src/Hash/HashGNUnet/finalize.cc" 
-
-src/Hash/HashGNUnet/o/encryptBlock.o: src/Hash/HashGNUnet/encryptBlock.cc src/Hash/HashGNUnet/HashGNUnet.ih src/Misc/Preprocessor/Debug.hh src/Hash/HashSHA512/HashSHA512.hh src/Hash/GCrypt/GCrypt.hh src/Hash/Hash.hh src/Hash/HashGNUnet/HashGNUnet.hh src/Hash/HashGNUnet/SessionKey/SessionKey.hh
-	$(CC) $(CCADDFLAGS)  -c -o "src/Hash/HashGNUnet/o/encryptBlock.o" "src/Hash/HashGNUnet/encryptBlock.cc" 
-
-src/Hash/HashGNUnet/o/blockKeyAndQuery.o: src/Hash/HashGNUnet/blockKeyAndQuery.cc src/Hash/HashGNUnet/HashGNUnet.ih src/Misc/Preprocessor/Debug.hh src/Hash/HashSHA512/HashSHA512.hh src/Hash/GCrypt/GCrypt.hh src/Hash/Hash.hh src/Hash/HashGNUnet/HashGNUnet.hh src/Hash/HashGNUnet/SessionKey/SessionKey.hh
-	$(CC) $(CCADDFLAGS)  -c -o "src/Hash/HashGNUnet/o/blockKeyAndQuery.o" "src/Hash/HashGNUnet/blockKeyAndQuery.cc" 
-
-src/Hash/HashGNUnet/o/blockKey.o: src/Hash/HashGNUnet/blockKey.cc src/Hash/HashGNUnet/HashGNUnet.ih src/Misc/Preprocessor/Debug.hh src/Hash/HashSHA512/HashSHA512.hh src/Hash/GCrypt/GCrypt.hh src/Hash/Hash.hh src/Hash/HashGNUnet/HashGNUnet.hh src/Hash/HashGNUnet/SessionKey/SessionKey.hh
-	$(CC) $(CCADDFLAGS)  -c -o "src/Hash/HashGNUnet/o/blockKey.o" "src/Hash/HashGNUnet/blockKey.cc" 
-
-src/Hash/HashGNUnet/o/HashGNUnet.o: src/Hash/HashGNUnet/HashGNUnet.cc src/Hash/HashGNUnet/HashGNUnet.ih src/Misc/Preprocessor/Debug.hh src/Hash/HashSHA512/HashSHA512.hh src/Hash/GCrypt/GCrypt.hh src/Hash/Hash.hh src/Hash/HashGNUnet/HashGNUnet.hh src/Hash/HashGNUnet/SessionKey/SessionKey.hh
-	$(CC) $(CCADDFLAGS)  -c -o "src/Hash/HashGNUnet/o/HashGNUnet.o" "src/Hash/HashGNUnet/HashGNUnet.cc" 
+src/Hash/HashPieces/o/HashPieces.o: src/Hash/HashPieces/HashPieces.cc src/Hash/HashPieces/HashPieces.ih src/Preprocessor/debug.hh src/Hash/GCrypt/GCrypt.hh src/Hash/Hash.hh src/Hash/HashPieces/HashPieces.hh src/Preprocessor/foreach.hh
+	$(CC) $(CCADDFLAGS)  -c -o "src/Hash/HashPieces/o/HashPieces.o" "src/Hash/HashPieces/HashPieces.cc" 
 
 src/Hash/GCrypt/o/value.o: src/Hash/GCrypt/value.cc src/Hash/GCrypt/GCrypt.ih src/Hash/GCrypt/GCrypt.hh src/Hash/Hash.hh
 	$(CC) $(CCADDFLAGS)  -c -o "src/Hash/GCrypt/o/value.o" "src/Hash/GCrypt/value.cc" 
@@ -79,6 +67,36 @@ src/Hash/GCrypt/o/from.o: src/Hash/GCrypt/from.cc src/Hash/GCrypt/GCrypt.ih src/
 src/Hash/GCrypt/o/finalize.o: src/Hash/GCrypt/finalize.cc src/Hash/GCrypt/GCrypt.ih src/Hash/GCrypt/GCrypt.hh src/Hash/Hash.hh
 	$(CC) $(CCADDFLAGS)  -c -o "src/Hash/GCrypt/o/finalize.o" "src/Hash/GCrypt/finalize.cc" 
 
+src/Hash/o/xml.o: src/Hash/xml.cc src/Hash/Hash.ih src/Hash/Hash.hh
+	$(CC) $(CCADDFLAGS)  -c -o "src/Hash/o/xml.o" "src/Hash/xml.cc" 
+
+src/Hash/HashGNUnet/o/value.o: src/Hash/HashGNUnet/value.cc src/Hash/HashGNUnet/HashGNUnet.ih src/Preprocessor/debug.hh src/Hash/HashSHA512/HashSHA512.hh src/Hash/GCrypt/GCrypt.hh src/Hash/Hash.hh src/Hash/HashGNUnet/HashGNUnet.hh src/Hash/HashGNUnet/SessionKey/SessionKey.hh
+	$(CC) $(CCADDFLAGS)  -c -o "src/Hash/HashGNUnet/o/value.o" "src/Hash/HashGNUnet/value.cc" 
+
+src/Hash/HashGNUnet/o/update.o: src/Hash/HashGNUnet/update.cc src/Hash/HashGNUnet/HashGNUnet.ih src/Preprocessor/debug.hh src/Hash/HashSHA512/HashSHA512.hh src/Hash/GCrypt/GCrypt.hh src/Hash/Hash.hh src/Hash/HashGNUnet/HashGNUnet.hh src/Hash/HashGNUnet/SessionKey/SessionKey.hh
+	$(CC) $(CCADDFLAGS)  -c -o "src/Hash/HashGNUnet/o/update.o" "src/Hash/HashGNUnet/update.cc" 
+
+src/Hash/HashGNUnet/o/pushChk.o: src/Hash/HashGNUnet/pushChk.cc src/Hash/HashGNUnet/HashGNUnet.ih src/Preprocessor/debug.hh src/Hash/HashSHA512/HashSHA512.hh src/Hash/GCrypt/GCrypt.hh src/Hash/Hash.hh src/Hash/HashGNUnet/HashGNUnet.hh src/Hash/HashGNUnet/SessionKey/SessionKey.hh
+	$(CC) $(CCADDFLAGS)  -c -o "src/Hash/HashGNUnet/o/pushChk.o" "src/Hash/HashGNUnet/pushChk.cc" 
+
+src/Hash/HashGNUnet/o/gnunettisch.o: src/Hash/HashGNUnet/gnunettisch.cc src/Hash/HashGNUnet/HashGNUnet.ih src/Preprocessor/debug.hh src/Hash/HashSHA512/HashSHA512.hh src/Hash/GCrypt/GCrypt.hh src/Hash/Hash.hh src/Hash/HashGNUnet/HashGNUnet.hh src/Hash/HashGNUnet/SessionKey/SessionKey.hh
+	$(CC) $(CCADDFLAGS)  -c -o "src/Hash/HashGNUnet/o/gnunettisch.o" "src/Hash/HashGNUnet/gnunettisch.cc" 
+
+src/Hash/HashGNUnet/o/finalize.o: src/Hash/HashGNUnet/finalize.cc src/Hash/HashGNUnet/HashGNUnet.ih src/Preprocessor/debug.hh src/Hash/HashSHA512/HashSHA512.hh src/Hash/GCrypt/GCrypt.hh src/Hash/Hash.hh src/Hash/HashGNUnet/HashGNUnet.hh src/Hash/HashGNUnet/SessionKey/SessionKey.hh
+	$(CC) $(CCADDFLAGS)  -c -o "src/Hash/HashGNUnet/o/finalize.o" "src/Hash/HashGNUnet/finalize.cc" 
+
+src/Hash/HashGNUnet/o/encryptBlock.o: src/Hash/HashGNUnet/encryptBlock.cc src/Hash/HashGNUnet/HashGNUnet.ih src/Preprocessor/debug.hh src/Hash/HashSHA512/HashSHA512.hh src/Hash/GCrypt/GCrypt.hh src/Hash/Hash.hh src/Hash/HashGNUnet/HashGNUnet.hh src/Hash/HashGNUnet/SessionKey/SessionKey.hh
+	$(CC) $(CCADDFLAGS)  -c -o "src/Hash/HashGNUnet/o/encryptBlock.o" "src/Hash/HashGNUnet/encryptBlock.cc" 
+
+src/Hash/HashGNUnet/o/blockKeyAndQuery.o: src/Hash/HashGNUnet/blockKeyAndQuery.cc src/Hash/HashGNUnet/HashGNUnet.ih src/Preprocessor/debug.hh src/Hash/HashSHA512/HashSHA512.hh src/Hash/GCrypt/GCrypt.hh src/Hash/Hash.hh src/Hash/HashGNUnet/HashGNUnet.hh src/Hash/HashGNUnet/SessionKey/SessionKey.hh
+	$(CC) $(CCADDFLAGS)  -c -o "src/Hash/HashGNUnet/o/blockKeyAndQuery.o" "src/Hash/HashGNUnet/blockKeyAndQuery.cc" 
+
+src/Hash/HashGNUnet/o/blockKey.o: src/Hash/HashGNUnet/blockKey.cc src/Hash/HashGNUnet/HashGNUnet.ih src/Preprocessor/debug.hh src/Hash/HashSHA512/HashSHA512.hh src/Hash/GCrypt/GCrypt.hh src/Hash/Hash.hh src/Hash/HashGNUnet/HashGNUnet.hh src/Hash/HashGNUnet/SessionKey/SessionKey.hh
+	$(CC) $(CCADDFLAGS)  -c -o "src/Hash/HashGNUnet/o/blockKey.o" "src/Hash/HashGNUnet/blockKey.cc" 
+
+src/Hash/HashGNUnet/o/HashGNUnet.o: src/Hash/HashGNUnet/HashGNUnet.cc src/Hash/HashGNUnet/HashGNUnet.ih src/Preprocessor/debug.hh src/Hash/HashSHA512/HashSHA512.hh src/Hash/GCrypt/GCrypt.hh src/Hash/Hash.hh src/Hash/HashGNUnet/HashGNUnet.hh src/Hash/HashGNUnet/SessionKey/SessionKey.hh
+	$(CC) $(CCADDFLAGS)  -c -o "src/Hash/HashGNUnet/o/HashGNUnet.o" "src/Hash/HashGNUnet/HashGNUnet.cc" 
+
 src/Hash/HashGNUnet/SessionKey/o/statics.o: src/Hash/HashGNUnet/SessionKey/statics.cc src/Hash/HashGNUnet/SessionKey/SessionKey.ih src/Hash/HashCRC32/HashCRC32.hh src/Hash/HashGNUnet/SessionKey/SessionKey.hh src/Hash/HashSHA512/HashSHA512.hh src/Hash/GCrypt/GCrypt.hh src/Hash/Hash.hh
 	$(CC) $(CCADDFLAGS)  -c -o "src/Hash/HashGNUnet/SessionKey/o/statics.o" "src/Hash/HashGNUnet/SessionKey/statics.cc" 
 
@@ -88,13 +106,13 @@ src/Hash/HashGNUnet/SessionKey/o/fromHash.o: src/Hash/HashGNUnet/SessionKey/from
 src/Hash/HashCRC32/o/from.o: src/Hash/HashCRC32/from.cc src/Hash/HashCRC32/HashCRC32.ih src/Hash/HashCRC32/HashCRC32.hh
 	$(CC) $(CCADDFLAGS)  -c -o "src/Hash/HashCRC32/o/from.o" "src/Hash/HashCRC32/from.cc" 
 
-src/Hash/HashED2K/o/value.o: src/Hash/HashED2K/value.cc src/Hash/HashED2K/HashED2K.ih src/Misc/Preprocessor/Debug.hh src/Hash/HashED2K/HashED2K.hh src/Hash/HashMD4/HashMD4.hh src/Hash/GCrypt/GCrypt.hh src/Hash/Hash.hh
+src/Hash/HashED2K/o/value.o: src/Hash/HashED2K/value.cc src/Hash/HashED2K/HashED2K.ih src/Preprocessor/debug.hh src/Hash/HashED2K/HashED2K.hh src/Hash/HashMD4/HashMD4.hh src/Hash/GCrypt/GCrypt.hh src/Hash/Hash.hh
 	$(CC) $(CCADDFLAGS)  -c -o "src/Hash/HashED2K/o/value.o" "src/Hash/HashED2K/value.cc" 
 
-src/Hash/HashED2K/o/update.o: src/Hash/HashED2K/update.cc src/Hash/HashED2K/HashED2K.ih src/Misc/Preprocessor/Debug.hh src/Hash/HashED2K/HashED2K.hh src/Hash/HashMD4/HashMD4.hh src/Hash/GCrypt/GCrypt.hh src/Hash/Hash.hh
+src/Hash/HashED2K/o/update.o: src/Hash/HashED2K/update.cc src/Hash/HashED2K/HashED2K.ih src/Preprocessor/debug.hh src/Hash/HashED2K/HashED2K.hh src/Hash/HashMD4/HashMD4.hh src/Hash/GCrypt/GCrypt.hh src/Hash/Hash.hh
 	$(CC) $(CCADDFLAGS)  -c -o "src/Hash/HashED2K/o/update.o" "src/Hash/HashED2K/update.cc" 
 
-src/Hash/HashED2K/o/finalize.o: src/Hash/HashED2K/finalize.cc src/Hash/HashED2K/HashED2K.ih src/Misc/Preprocessor/Debug.hh src/Hash/HashED2K/HashED2K.hh src/Hash/HashMD4/HashMD4.hh src/Hash/GCrypt/GCrypt.hh src/Hash/Hash.hh
+src/Hash/HashED2K/o/finalize.o: src/Hash/HashED2K/finalize.cc src/Hash/HashED2K/HashED2K.ih src/Preprocessor/debug.hh src/Hash/HashED2K/HashED2K.hh src/Hash/HashMD4/HashMD4.hh src/Hash/GCrypt/GCrypt.hh src/Hash/Hash.hh
 	$(CC) $(CCADDFLAGS)  -c -o "src/Hash/HashED2K/o/finalize.o" "src/Hash/HashED2K/finalize.cc" 
 
 src/HashList/o/update.o: src/HashList/update.cc src/HashList/HashList.ih src/Preprocessor/foreach.hh src/HashList/HashList.hh src/Hash/Hash.hh
@@ -109,10 +127,10 @@ src/HashList/o/destroyMembers.o: src/HashList/destroyMembers.cc src/HashList/Has
 src/MD5File/o/record.o: src/MD5File/record.cc src/MD5File/MD5File.ih src/Preprocessor/debug.hh src/MD5File/MD5File.hh
 	$(CC) $(CCADDFLAGS)  -c -o "src/MD5File/o/record.o" "src/MD5File/record.cc" 
 
-src/MetalinkFile/o/finalize.o: src/MetalinkFile/finalize.cc src/MetalinkFile/MetalinkFile.ih src/MetalinkFile/MetalinkFile.hh src/Preprocessor/foreach.hh src/Globals/Globals.hh src/MirrorList/MirrorList.hh src/Mirror/Mirror.hh
+src/MetalinkFile/o/finalize.o: src/MetalinkFile/finalize.cc src/MetalinkFile/MetalinkFile.ih src/MetalinkFile/MetalinkFile.hh src/Preprocessor/foreach.hh src/Globals/Globals.hh src/Hash/Hash.hh src/MirrorList/MirrorList.hh src/Mirror/Mirror.hh
 	$(CC) $(CCADDFLAGS)  -c -o "src/MetalinkFile/o/finalize.o" "src/MetalinkFile/finalize.cc" 
 
-src/MetalinkFile/o/addPath.o: src/MetalinkFile/addPath.cc src/MetalinkFile/MetalinkFile.ih src/MetalinkFile/MetalinkFile.hh src/Preprocessor/foreach.hh src/Globals/Globals.hh src/MirrorList/MirrorList.hh src/Mirror/Mirror.hh
+src/MetalinkFile/o/addPath.o: src/MetalinkFile/addPath.cc src/MetalinkFile/MetalinkFile.ih src/MetalinkFile/MetalinkFile.hh src/Preprocessor/foreach.hh src/Globals/Globals.hh src/Hash/Hash.hh src/MirrorList/MirrorList.hh src/Mirror/Mirror.hh
 	$(CC) $(CCADDFLAGS)  -c -o "src/MetalinkFile/o/addPath.o" "src/MetalinkFile/addPath.cc" 
 
 src/MirrorList/o/MirrorList.o: src/MirrorList/MirrorList.cc src/MirrorList/MirrorList.ih src/Preprocessor/debug.hh src/String/String.hh src/MirrorList/MirrorList.hh src/Mirror/Mirror.hh
@@ -124,12 +142,12 @@ src/Mirror/o/asXMLWithFile.o: src/Mirror/asXMLWithFile.cc src/Mirror/Mirror.ih s
 src/Mirror/o/Mirror.o: src/Mirror/Mirror.cc src/Mirror/Mirror.ih src/Preprocessor/debug.hh src/Globals/Globals.hh src/Mirror/Mirror.hh
 	$(CC) $(CCADDFLAGS)  -c  -o "src/Mirror/o/Mirror.o" "src/Mirror/Mirror.cc" 
 
-src/Metalink/o/from.o: src/Metalink/from.cc src/Metalink/Metalink.ih src/Globals/Globals.hh src/Metalink/Metalink.hh src/Preprocessor/foreach.hh src/MetalinkFile/MetalinkFile.hh src/MirrorList/MirrorList.hh src/Mirror/Mirror.hh
+src/Metalink/o/from.o: src/Metalink/from.cc src/Metalink/Metalink.ih src/Globals/Globals.hh src/Metalink/Metalink.hh src/Preprocessor/foreach.hh src/MetalinkFile/MetalinkFile.hh src/Hash/Hash.hh src/MirrorList/MirrorList.hh src/Mirror/Mirror.hh
 	$(CC) $(CCADDFLAGS)  -c -o "src/Metalink/o/from.o" "src/Metalink/from.cc" 
 
-src/o/metalink.o: src/o/ src/metalink.cc src/Misc/Preprocessor/Foreach.hh src/String/String.hh src/Globals/Globals.hh src/Hash/HashGNUnet/HashGNUnet.hh src/Hash/HashGNUnet/SessionKey/SessionKey.hh src/Hash/HashSHA512/HashSHA512.hh src/Hash/GCrypt/GCrypt.hh src/Hash/Hash.hh src/Hash/HashED2K/HashED2K.hh src/Hash/HashMD4/HashMD4.hh src/HashList/HashList.hh src/MD5File/MD5File.hh src/MetalinkFile/MetalinkFile.hh src/Preprocessor/foreach.hh src/MirrorList/MirrorList.hh src/Mirror/Mirror.hh src/Metalink/Metalink.hh
+src/o/metalink.o: src/o/ src/metalink.cc src/Preprocessor/debug.hh src/String/String.hh src/Globals/Globals.hh src/Hash/HashPieces/HashPieces.hh src/Preprocessor/foreach.hh src/Hash/Hash.hh src/Hash/HashGNUnet/HashGNUnet.hh src/Hash/HashGNUnet/SessionKey/SessionKey.hh src/Hash/HashSHA512/HashSHA512.hh src/Hash/GCrypt/GCrypt.hh src/Hash/HashED2K/HashED2K.hh src/Hash/HashMD4/HashMD4.hh src/HashList/HashList.hh src/MD5File/MD5File.hh src/MetalinkFile/MetalinkFile.hh src/MirrorList/MirrorList.hh src/Mirror/Mirror.hh src/Metalink/Metalink.hh
 	$(CC) $(CCADDFLAGS)  -c  -o "src/o/metalink.o" "src/metalink.cc" 
 
-src/metalink: src/Globals/o/ src/Hash/GCrypt/o/ src/Hash/HashCRC32/o/ src/Hash/HashED2K/o/ src/Hash/HashGNUnet/SessionKey/o/ src/Hash/HashGNUnet/o/ src/HashList/o/ src/MD5File/o/ src/Metalink/o/ src/MetalinkFile/o/ src/Mirror/o/ src/MirrorList/o/ src/String/o/ src/o/  src/String/o/translated.o src/Globals/o/statics.o src/Globals/o/XMLSafe.o src/Globals/o/XMLQuotedSafe.o src/Hash/HashGNUnet/o/value.o src/Hash/HashGNUnet/o/update.o src/Hash/HashGNUnet/o/pushChk.o src/Hash/HashGNUnet/o/gnunettisch.o src/Hash/HashGNUnet/o/finalize.o src/Hash/HashGNUnet/o/encryptBlock.o src/Hash/HashGNUnet/o/blockKeyAndQuery.o src/Hash/HashGNUnet/o/blockKey.o src/Hash/HashGNUnet/o/HashGNUnet.o src/Hash/GCrypt/o/value.o src/Hash/GCrypt/o/update.o src/Hash/GCrypt/o/name.o src/Hash/GCrypt/o/from.o src/Hash/GCrypt/o/finalize.o src/Hash/HashGNUnet/SessionKey/o/statics.o src/Hash/HashGNUnet/SessionKey/o/fromHash.o src/Hash/HashCRC32/o/from.o src/Hash/HashED2K/o/value.o src/Hash/HashED2K/o/update.o src/Hash/HashED2K/o/finalize.o src/HashList/o/update.o src/HashList/o/finalize.o src/HashList/o/destroyMembers.o src/MD5File/o/record.o src/MetalinkFile/o/finalize.o src/MetalinkFile/o/addPath.o src/MirrorList/o/MirrorList.o src/Mirror/o/asXMLWithFile.o src/Mirror/o/Mirror.o src/Metalink/o/from.o src/o/metalink.o
-	$(CC) $(CCADDFLAGS)  "src/String/o/translated.o" "src/Globals/o/statics.o" "src/Globals/o/XMLSafe.o" "src/Globals/o/XMLQuotedSafe.o" "src/Hash/HashGNUnet/o/value.o" "src/Hash/HashGNUnet/o/update.o" "src/Hash/HashGNUnet/o/pushChk.o" "src/Hash/HashGNUnet/o/gnunettisch.o" "src/Hash/HashGNUnet/o/finalize.o" "src/Hash/HashGNUnet/o/encryptBlock.o" "src/Hash/HashGNUnet/o/blockKeyAndQuery.o" "src/Hash/HashGNUnet/o/blockKey.o" "src/Hash/HashGNUnet/o/HashGNUnet.o" "src/Hash/GCrypt/o/value.o" "src/Hash/GCrypt/o/update.o" "src/Hash/GCrypt/o/name.o" "src/Hash/GCrypt/o/from.o" "src/Hash/GCrypt/o/finalize.o" "src/Hash/HashGNUnet/SessionKey/o/statics.o" "src/Hash/HashGNUnet/SessionKey/o/fromHash.o" "src/Hash/HashCRC32/o/from.o" "src/Hash/HashED2K/o/value.o" "src/Hash/HashED2K/o/update.o" "src/Hash/HashED2K/o/finalize.o" "src/HashList/o/update.o" "src/HashList/o/finalize.o" "src/HashList/o/destroyMembers.o" "src/MD5File/o/record.o" "src/MetalinkFile/o/finalize.o" "src/MetalinkFile/o/addPath.o" "src/MirrorList/o/MirrorList.o" "src/Mirror/o/asXMLWithFile.o" "src/Mirror/o/Mirror.o" "src/Metalink/o/from.o" "src/o/metalink.o" -lgcrypt -lgpg-error -lboost_regex -lboost_filesystem -lboost_program_options -o "src/metalink" 
+src/metalink: src/Globals/o/ src/Hash/GCrypt/o/ src/Hash/HashCRC32/o/ src/Hash/HashED2K/o/ src/Hash/HashGNUnet/SessionKey/o/ src/Hash/HashGNUnet/o/ src/Hash/HashPieces/o/ src/Hash/o/ src/HashList/o/ src/MD5File/o/ src/Metalink/o/ src/MetalinkFile/o/ src/Mirror/o/ src/MirrorList/o/ src/String/o/ src/o/  src/String/o/translated.o src/Globals/o/statics.o src/Globals/o/XMLSafe.o src/Globals/o/XMLQuotedSafe.o src/Hash/HashPieces/o/xml.o src/Hash/HashPieces/o/value.o src/Hash/HashPieces/o/update.o src/Hash/HashPieces/o/finalize.o src/Hash/HashPieces/o/HashPieces.o src/Hash/GCrypt/o/value.o src/Hash/GCrypt/o/update.o src/Hash/GCrypt/o/name.o src/Hash/GCrypt/o/from.o src/Hash/GCrypt/o/finalize.o src/Hash/o/xml.o src/Hash/HashGNUnet/o/value.o src/Hash/HashGNUnet/o/update.o src/Hash/HashGNUnet/o/pushChk.o src/Hash/HashGNUnet/o/gnunettisch.o src/Hash/HashGNUnet/o/finalize.o src/Hash/HashGNUnet/o/encryptBlock.o src/Hash/HashGNUnet/o/blockKeyAndQuery.o src/Hash/HashGNUnet/o/blockKey.o src/Hash/HashGNUnet/o/HashGNUnet.o src/Hash/HashGNUnet/SessionKey/o/statics.o src/Hash/HashGNUnet/SessionKey/o/fromHash.o src/Hash/HashCRC32/o/from.o src/Hash/HashED2K/o/value.o src/Hash/HashED2K/o/update.o src/Hash/HashED2K/o/finalize.o src/HashList/o/update.o src/HashList/o/finalize.o src/HashList/o/destroyMembers.o src/MD5File/o/record.o src/MetalinkFile/o/finalize.o src/MetalinkFile/o/addPath.o src/MirrorList/o/MirrorList.o src/Mirror/o/asXMLWithFile.o src/Mirror/o/Mirror.o src/Metalink/o/from.o src/o/metalink.o
+	$(CC) $(CCADDFLAGS)  "src/String/o/translated.o" "src/Globals/o/statics.o" "src/Globals/o/XMLSafe.o" "src/Globals/o/XMLQuotedSafe.o" "src/Hash/HashPieces/o/xml.o" "src/Hash/HashPieces/o/value.o" "src/Hash/HashPieces/o/update.o" "src/Hash/HashPieces/o/finalize.o" "src/Hash/HashPieces/o/HashPieces.o" "src/Hash/GCrypt/o/value.o" "src/Hash/GCrypt/o/update.o" "src/Hash/GCrypt/o/name.o" "src/Hash/GCrypt/o/from.o" "src/Hash/GCrypt/o/finalize.o" "src/Hash/o/xml.o" "src/Hash/HashGNUnet/o/value.o" "src/Hash/HashGNUnet/o/update.o" "src/Hash/HashGNUnet/o/pushChk.o" "src/Hash/HashGNUnet/o/gnunettisch.o" "src/Hash/HashGNUnet/o/finalize.o" "src/Hash/HashGNUnet/o/encryptBlock.o" "src/Hash/HashGNUnet/o/blockKeyAndQuery.o" "src/Hash/HashGNUnet/o/blockKey.o" "src/Hash/HashGNUnet/o/HashGNUnet.o" "src/Hash/HashGNUnet/SessionKey/o/statics.o" "src/Hash/HashGNUnet/SessionKey/o/fromHash.o" "src/Hash/HashCRC32/o/from.o" "src/Hash/HashED2K/o/value.o" "src/Hash/HashED2K/o/update.o" "src/Hash/HashED2K/o/finalize.o" "src/HashList/o/update.o" "src/HashList/o/finalize.o" "src/HashList/o/destroyMembers.o" "src/MD5File/o/record.o" "src/MetalinkFile/o/finalize.o" "src/MetalinkFile/o/addPath.o" "src/MirrorList/o/MirrorList.o" "src/Mirror/o/asXMLWithFile.o" "src/Mirror/o/Mirror.o" "src/Metalink/o/from.o" "src/o/metalink.o" -lgcrypt -lgpg-error -lboost_regex -lboost_filesystem -lboost_program_options -o "src/metalink" 
 

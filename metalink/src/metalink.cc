@@ -27,14 +27,6 @@
 	
 	As the list of hashes used is still small, we'll just learn to live with it.
 	
-	<pieces length="131072">
-  <hash type="sha1" piece=”0”>example-sha1-hash</hash>
-  <hash type="sha1" piece=”1”>example-sha1-hash</hash>
-</pieces>
-
-	
-	
-	
 */
 
 #include <iostream>
@@ -59,11 +51,12 @@
 #include "Hash/GCrypt/GCrypt.hh"
 #include "Hash/HashED2K/HashED2K.hh"
 #include "Hash/HashGNUnet/HashGNUnet.hh"
+#include "Hash/HashPieces/HashPieces.hh"
 
 #include "Globals/Globals.hh"
 #include "String/String.hh"
-#define DEBUGLEVEL 3
-#include "Preprocessor/Preprocessor.hh"
+//#define DEBUGLEVEL 3
+#include "Preprocessor/debug.hh"
 
 #include <cassert>
 #include <sys/stat.h>	//mkdir(2)
@@ -141,7 +134,7 @@ try
 		cout << "Usage:\n  " << Globals::programName << " [options] (input files or --md5) < (mirror list) > (metalinkfile)\n";
 		cout << helpOptions << "\n";
 		cout << "Supported algorithms are (-d options):\n"
-			<< "  md4 md5 sha1 sha256 sha384 sha512 rmd160 tiger crc32 ed2k gnunet"
+			<< "  md4 md5 sha1 sha256 sha384 sha512 rmd160 tiger crc32 ed2k gnunet sha1pieces"
 			<< "\n";
 		cout << "\nMirror lists are single line definitions according to:\n"
 				 << " [location [preference] [type] % ] <mirror base url>\n";
@@ -286,9 +279,10 @@ try
 			continue;
 		}
 
-	_debugLevel2("string------------------: " << targetFile.string() << '\n'
-	  << "native_directory_string-: " << targetFile.native_directory_string() << '\n'
-  	<< "native_file_string------: " << targetFile.native_file_string() << '\n');
+		_debugLevel2("\nstring------------------: " << targetFile.string()
+	  	<< "\nnative_directory_string-: " << targetFile.native_directory_string()
+  		<< "\nnative_file_string------: " << targetFile.native_file_string()
+  		<< '\n');
   	
 		MetalinkFile record(filename, &mirrorList);
 		cerr << "Hashing '" << filename << "' ... ";
@@ -327,6 +321,10 @@ try
 		//Known hashes: gnunet
 		if(allDigests || digests.count("gnunet") > 0)
 			hl.push_back(new HashGNUnet());
+
+		//Known hashes: pieces
+		if(allDigests || digests.count("sha1pieces") > 0)
+			hl.push_back(new HashPieces());
 
 		//Fill hashes
 		static unsigned const blockSize(10240);
@@ -367,9 +365,10 @@ try
 				record.addPath("gnunet", "gnunet://ecrs/chk/" + (*hp)->value() + "." + record.size());
 				continue;
 			}
-			
+
 			//Either make pieces a special name or add a new system for piece based hashing
-			record.addVerification((*hp)->name(), (*hp)->value());
+			record.addVerification((*hp)->xml());
+//			record.addVerification((*hp)->name(), (*hp)->value());
 			
 			//Add P2P specials
 			if((*hp)->name() == "sha1")
