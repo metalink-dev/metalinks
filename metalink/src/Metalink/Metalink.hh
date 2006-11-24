@@ -28,10 +28,15 @@
 
 namespace bneijt
 {
+
+///Represents the full Metalink file, and is able to create one using it's static from member
 class Metalink
 {
 	public:
-		static std::string from(std::vector< MetalinkFile > files, std::string const headerFile = "", std::string const desc = "");
+		//Generate the Metalink XML from the given MetalinkFile s, the headerFile filename and the optional description
+		static std::string from(std::vector< MetalinkFile > files,
+				std::string const headerFile = "",
+				std::string const desc = "");
 };
 }
 #endif
