@@ -32,6 +32,7 @@ void HashED2K::update(char const *bytes, unsigned numbytes)
 		return;
 
 	//Add bytes till d_count is equal to blockSize
+	//TODO This might be a problem, if the blockSize is enqual to the count, overflow of zero without a following block
 	if(numbytes + d_count < blockSize)
 	{
 		d_md4.update(bytes, numbytes);
