@@ -1,6 +1,6 @@
 0.3.2:
-- Added pieces support for sha1 of 131072 bytes
-- 
+- Added pieces support for sha1 of 131072 bytes (hash named sha1pieces)
+- Pieces are kept below 255 to keep metalink size down, starting at 256*1024 bytes.
 
 0.3.1:
 - Bugfix: Unable to open warning message fixed
