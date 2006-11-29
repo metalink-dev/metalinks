@@ -215,7 +215,7 @@ try
 		readMirrors = variableMap.count("nomirrors") == 0;
 		if(variableMap.count("hashlist"))
 		{
-			cerr << "metalink: Warning: No digests given, probably forgot the -d option."
+			cerr << "metalink: Warning: No digests given, probably forgot the -d option.";
 			readMirrors = false;
 			hashList = true;
 		}
