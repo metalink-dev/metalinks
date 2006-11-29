@@ -70,7 +70,7 @@ int main(int argc, char *argv[])
 try
 {
 	po::variables_map variableMap;
-	bool allDigests(false), readMirrors(true);
+	bool allDigests(false), readMirrors(true), hashList(false);
 	string baseUrl("");
 	string metalinkDescription("");
 	string headerFile("");
@@ -89,6 +89,7 @@ try
 			("addpath", po::value< string >(), "Append a path to the mirrors ('/' is not checked)")
 			("headerfile", po::value< string >(), "Include file after the root element declaration.")
 			("nomirrors", "Don't read mirrors from stdin")
+			("hashlist", "List hashes only (implies nomirrors)")
 			("desc", po::value< string >(), "Add metalink description")
 			;
 
@@ -212,6 +213,12 @@ try
 		//Simple boolean options
 		allDigests = variableMap.count("alldigests") > 0;
 		readMirrors = variableMap.count("nomirrors") == 0;
+		if(variableMap.count("hashlist"))
+		{
+			cerr << "metalink: Warning: No digests given, probably forgot the -d option."
+			readMirrors = false;
+			hashList = true;
+		}
 	}
   catch(exception& e)
   {
@@ -370,6 +377,13 @@ try
 		//Add hashes and P2P paths
 		_foreach(hp, hl)
 		{
+			if(hashList)
+			{
+				String h((*hp)->name());
+				h.toUpper();
+				cout << h << "(" << filename << ")= " << (*hp)->value() << "\n";
+				continue;
+			}
 			//Only P2P link, not verify
 			if((*hp)->name() == "gnunet")
 			{
@@ -395,7 +409,8 @@ try
 		cerr << "\n";
 	}//Foreach
 	
-	cout << Metalink::from(records, headerFile, metalinkDescription);
+	if(!hashList)
+		cout << Metalink::from(records, headerFile, metalinkDescription);
 	
 	return 0;
 }

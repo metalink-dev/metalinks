@@ -21,4 +21,7 @@
 
 #include "../Preprocessor/foreach.hh"
 
+#include <algorithm>
+
 using namespace bneijt;
+using namespace std;
