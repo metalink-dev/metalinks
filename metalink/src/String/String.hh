@@ -64,7 +64,7 @@ class String: public std::string
 					ending
 					) == 0;
 		}
-		
+		void toUpper();
 		
 		std::string translated(char from, char to);
 };

@@ -62,6 +62,7 @@ CLEANFILES += $ConfigurationFilenameForMetalink
 	{ var_DEFINE = $DefineForMetalink}
 	"src/metalink.cc"
 	"src/String/translated.cc"
+	"src/String/toUpper.cc"
 	"src/Globals/statics.cc"
 	"src/Globals/XMLSafe.cc"
 	"src/Globals/XMLQuotedSafe.cc"
