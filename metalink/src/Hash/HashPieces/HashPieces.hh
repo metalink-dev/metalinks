@@ -57,9 +57,8 @@ class HashPieces: public Hash
 				delete d_h;
 		}
 		
-		virtual std::string name() const
-		{return "pieces";}
-		
+		virtual std::string name() const;
+
 		virtual void update(char const *bytes, unsigned numbytes);
 		
 		virtual void finalize();
