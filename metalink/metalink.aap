@@ -69,6 +69,7 @@ CLEANFILES += $ConfigurationFilenameForMetalink
 	"src/Hash/HashPieces/xml.cc"
 	"src/Hash/HashPieces/value.cc"
 	"src/Hash/HashPieces/update.cc"
+	"src/Hash/HashPieces/name.cc"
 	"src/Hash/HashPieces/finalize.cc"
 	"src/Hash/HashPieces/HashPieces.cc"
 	"src/Hash/GCrypt/value.cc"
