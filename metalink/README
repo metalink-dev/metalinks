@@ -7,7 +7,8 @@
 Read INSTALL for installation instructions.
 
 metalink is a small program based on libgcrypt and some boost libraries.
-It generates a metalink record on the stdout for every file given on the commandline.
+It generates a metalink record on the stdout for every file given on the commandline and using the mirror list from the stdin. It is also able to
+create a hash list (see the --hashlist option).
 
 Be patient: the implementation isn't yet optimized and calculating 
  the hashes for 600MB can take up to two minutes on a 1 GHz machine.

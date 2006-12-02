@@ -26,4 +26,6 @@ sudo apt-get install g++ libgcrypt-dev libboost-regex-dev libboost-program-optio
 sudo aap install
 sudo aap cleanALL
 
-More information an newer versions can be found at http://metalinks.sourceforge.net
+(if not mail, please consider posting a bug on the sourceforge page)
+
+More information an newer versions can be found at http://metalinks.sourceforge.net/

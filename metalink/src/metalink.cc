@@ -216,7 +216,7 @@ try
 		if(variableMap.count("hashlist"))
 		{
 			if(not (variableMap.count("digest") || allDigests))
-				cerr << "metalink: Warning: No digests given, probably forgot the -d option." << endl;
+				cerr << "metalink: Warning: No digests given, you probably forgot the -d option." << endl;
 			readMirrors = false;
 			hashList = true;
 		}
