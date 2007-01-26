@@ -1,0 +1,4 @@
+This directory contains a collection of various usefull tools,
+placed in directories according to their dependencies.
+
+Most of these tools are simply to trivial or to small to package seperately.
