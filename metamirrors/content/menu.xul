@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE overlay SYSTEM "chrome://metamirrors/locale/menu.dtd" >
+<overlay id="metamirrors_context_overlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+  <script type="application/x-javascript" src="chrome://metamirrors/content/menu.js" />
+  
+  <popup id="contentAreaContextMenu">
+		<menu
+			image="chrome://metamirrors/skin/metamirrors.png"
+			id="metamirrors-context-menu"
+			label="MetaMirrors"
+			class="menu-iconic"
+			insertafter="context-sep-selectall"
+			accesskey="m"
+			>
+			<menupopup id="metamirrors-menupopup">
+				<menuitem id="metamirrors-download" label="MetaMetalink" accesskey="m" oncommand="MetaMirrors.metalink();"/>
+				<menuitem id="metamirrors-download" label="AutoMetalink" accesskey="m" oncommand="MetaMirrors.autometalink();"/>
+				<menuitem id="metamirrors-upload" label="&metamirrors.reporthashfile;" accesskey="r" oncommand="MetaMirrors.upload();"/>
+			</menupopup>
+		</menu>
+  </popup>
+</overlay>

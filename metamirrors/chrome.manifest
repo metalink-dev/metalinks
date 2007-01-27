@@ -1,0 +1,5 @@
+content	metamirrors	content/
+locale	metamirrors	en-US	locale/en-US/
+locale	metamirrors	nl-NL	locale/nl-NL/
+skin	metamirrors	classic/1.0	skin/
+overlay	chrome://browser/content/browser.xul	chrome://metamirrors/content/menu.xul
