@@ -43,9 +43,18 @@ var MetaMirrors = {
 	  gContextMenu.showItem("metamirrors-context-menu", true);
 	},
 	
+	
 	upload: function()
 	{
-    gContextMenu.linkURL = "http://www.metamirrors.nl/backend/upload_hashfile.php?lnk=" + gContextMenu.linkURL;
+		var prefs = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefService);
+		prefs = prefs.getBranch("extensions.metamirrors.");
+
+		var user = 'guest';
+		try{
+			user = prefs.getCharPref("username");
+		}
+		catch(e){}
+    gContextMenu.linkURL = "http://www.metamirrors.nl/backend/upload_hashfile.php?user=" + escape(user) + "&lnk=" + gContextMenu.linkURL;
 	  gContextMenu.openLinkInTab();
 	},
 	autometalink: function()
