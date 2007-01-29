@@ -37,7 +37,14 @@ public class Test
             SAXParser saxParser = factory.newSAXParser();
             saxParser.parse( new File(argv[0]), handler);
 		        System.out.println(d.toString());
-
+		        //Generate the Magnet link
+						for(int i = 0; i < d.files.size(); ++i)
+						{
+							DMetalink.FileEntry f = (DMetalink.FileEntry) d.files.get(i);
+							if(f.magnet() != null)
+				        System.out.println(f.magnet());
+			      }
+			      
         } catch (Throwable t) {
             t.printStackTrace();
         }

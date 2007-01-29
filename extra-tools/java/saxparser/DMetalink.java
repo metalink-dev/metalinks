@@ -20,9 +20,21 @@ public class DMetalink
 			hashlist = new HashMap();
 			uris = new ArrayList();
 		}
+		public String sha1()
+		{
+			return (String) hashlist.get("sha1");
+		}
+		//magnet:?xt=urn:sha1:YNCKHTQCWBTRNJIV4WNAE52SJUQCZO5C&dn=Great+Speeches+-+Martin+Luther+King+Jr.+-+I+Have+A+Dream.mp3
+		public String magnet()
+		{
+			String dn = filename.replaceAll(" ", "+").replaceAll("&", "&amp;");
+			if(this.sha1() != null)
+				return "matgnet:?xt=urn:sha1:"+this.sha1()+"&dn="+dn;
+			return null;
+		}
 	}
 	
-	ArrayList files;
+	public ArrayList files;
 	
 	public DMetalink()
 	{
