@@ -18,12 +18,42 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 */
 var MetaMirrors = {
-  onLoad: function()
+	prefs: null,
+	username: "",
+	
+  startup: function()
   {
     var cm = document.getElementById("contentAreaContextMenu");
     cm.addEventListener("popupshowing", MetaMirrors.onContextMenuShow, false);
+    
+    this.prefs = Components.classes["@mozilla.org/preferences-service;1"]
+         .getService(Components.interfaces.nsIPrefService)
+         .getBranch("metamirrors.");
+     this.prefs.QueryInterface(Components.interfaces.nsIPrefBranch2);
+     this.prefs.addObserver("", this, false);
+     
+     this.username = this.prefs.getCharPref("username");
   },
-  
+
+  shutdown: function()
+  {
+    this.prefs.removeObserver("", this);
+  },
+
+  observe: function(subject, topic, data)
+   {
+     if (topic != "nsPref:changed")
+       return;
+ 
+     switch(data)
+     {
+       case "username":
+         this.username = this.prefs.getCharPref("username");
+         break;
+     }
+   },
+
+
 	onContextMenuShow: function()
 	{
 	  gContextMenu.showItem("metamirrors-context-menu", false);
@@ -46,15 +76,7 @@ var MetaMirrors = {
 	
 	upload: function()
 	{
-		var prefs = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefService);
-		prefs = prefs.getBranch("extensions.metamirrors.");
-
-		var user = 'guest';
-		try{
-			user = prefs.getCharPref("username");
-		}
-		catch(e){}
-    gContextMenu.linkURL = "http://www.metamirrors.nl/backend/upload_hashfile.php?user=" + escape(user) + "&lnk=" + gContextMenu.linkURL;
+    gContextMenu.linkURL = "http://www.metamirrors.nl/backend/upload_hashfile.php?user=" + escape(this.username) + "&lnk=" + gContextMenu.linkURL;
 	  gContextMenu.openLinkInTab();
 	},
 	autometalink: function()
@@ -69,4 +91,5 @@ var MetaMirrors = {
 	}
 };
 
-window.addEventListener("load", function(e) { MetaMirrors.onLoad(e); }, false); 
+window.addEventListener("load", function(e) { MetaMirrors.startup(); }, false); 
+window.addEventListener("unload", function(e) { MetaMirrors.shutdown(); }, false);

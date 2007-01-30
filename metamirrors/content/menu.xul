@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!DOCTYPE overlay SYSTEM "chrome://metamirrors/locale/menu.dtd" >
+<!DOCTYPE overlay SYSTEM "chrome://metamirrors/locale/metamirrors.dtd" >
 <overlay id="metamirrors_context_overlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
   <script type="application/x-javascript" src="chrome://metamirrors/content/menu.js" />
   
