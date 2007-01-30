@@ -6,14 +6,15 @@
   
     <em:id>info@metamirrors.nl</em:id>
     <em:name>MetaMirrors</em:name>
-    <em:version>1.1</em:version>
+    <em:version>1.2</em:version>
     <em:description>MetaMirrors interface for Firefox</em:description>
     <em:creator>A. Bram Neijt &lt;bneijt@gmail.com&gt;</em:creator>
     
     <!-- optional items -->
     <em:homepageURL>http://prog.infosnel.nl/metalinks/</em:homepageURL>
     <em:iconURL>chrome://metamirrors/skin/metamirrors.png</em:iconURL>
-
+		<em:optionsURL>chrome://metamirrors/content/options.xul</em:optionsURL>
+		
     <!-- Firefox -->
     <em:targetApplication>
       <Description>
