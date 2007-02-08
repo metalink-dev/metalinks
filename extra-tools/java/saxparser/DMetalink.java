@@ -49,7 +49,7 @@ public class DMetalink
 		{
 			String dn = filename.replaceAll(" ", "+").replaceAll("&", "&amp;");
 			if(this.sha1() != null)
-				return "matgnet:?xt=urn:sha1:"+this.sha1()+"&dn="+dn;
+				return "magnet:?xt=urn:sha1:"+this.sha1()+"&dn="+dn;
 			return null;
 		}
 	}
