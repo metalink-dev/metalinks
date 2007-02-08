@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metalink version="3.0"
+  xmlns="http://www.metalinker.org/"
+  generator="http://www.metamirrors.nl/"
+  >
+<files>
+	<file name="ubuntu-6.10-desktop-i386.iso">
+		<verification>
+			<hash type="md5">b950a4d7cf3151e5f213843e2ad77fe3</hash>
+			<hash type="sha1">a1dc38c7314c7309404ba0ed77ea6041a0f3acf0</hash>
+		</verification>
+		<resources>
+			<url location="nl" type="ftp">ftp://ftp.tudelft.nl/pub/Linux/releases.ubuntu.com/edgy/ubuntu-6.10-desktop-i386.iso</url>
+			<url location="fr" type="ftp">ftp://ftp.uvsq.fr/pub/ubuntu/releases/edgy/ubuntu-6.10-desktop-i386.iso</url>
+			<url location="fr" type="ftp">ftp://ubuntu.univ-nantes.fr/ubuntu-cd/edgy/ubuntu-6.10-desktop-i386.iso</url>
+			<url location="nz" type="http">http://ftp.citylink.co.nz/ubuntu-releases/edgy/ubuntu-6.10-desktop-i386.iso</url>
+			<url location="pt" type="http">http://ftp.dei.uc.pt/pub/linux/ubuntu/releases/edgy/ubuntu-6.10-desktop-i386.iso</url>
+			<url location="se" type="http">http://ftp.ds.karen.hj.se/pub/os/linux/ubuntu-iso/edgy/ubuntu-6.10-desktop-i386.iso</url>
+			<url type="http">http://ftp.esat.net/mirrors/releases.ubuntu.com/releases/edgy/ubuntu-6.10-desktop-i386.iso</url>
+			<url type="http">http://ftp.iasi.roedu.net/mirrors/ubuntulinux.org/releases/edgy/ubuntu-6.10-desktop-i386.iso</url>
+			<url location="kr" type="http">http://ftp.kaist.ac.kr/pub/ubuntu-cd/edgy/ubuntu-6.10-desktop-i386.iso</url>
+			<url location="lv" type="http">http://ftp.linux.edu.lv/pub/ubuntu/edgy/ubuntu-6.10-desktop-i386.iso</url>
+			<url type="http">http://ftp.osuosl.org/pub/ubuntu-releases/edgy/ubuntu-6.10-desktop-i386.iso</url>
+			<url type="http">http://ftp.ussg.iu.edu/linux/ubuntu-releases/edgy/ubuntu-6.10-desktop-i386.iso</url>
+			<url location="pl" type="http">http://ftp.vectranet.pl/ubuntu-releases/edgy/ubuntu-6.10-desktop-i386.iso</url>
+			<url type="http">http://ftp.wayne.edu/linux_distributions/ubuntu/edgy/ubuntu-6.10-desktop-i386.iso</url>
+			<url location="jp" type="http">http://ftp.yz.yamagata-u.ac.jp/pub/linux/ubuntu/releases/edgy/ubuntu-6.10-desktop-i386.iso</url>
+			<url type="http">http://mirror.cs.umn.edu/ubuntu-releases/edgy/ubuntu-6.10-desktop-i386.iso</url>
+			<url location="ch" type="http">http://mirror.switch.ch/ftp/mirror/ubuntu-cdimage/edgy/ubuntu-6.10-desktop-i386.iso</url>
+			<url location="no" type="http">http://mirror.trivini.no/ubuntu-iso/edgy/ubuntu-6.10-desktop-i386.iso</url>
+			<url type="http">http://nl.releases.ubuntu.com/releases/edgy/ubuntu-6.10-desktop-i386.iso</url>
+			<url type="http">http://releases.ubuntu.com/edgy/ubuntu-6.10-desktop-i386.iso</url>
+			<url location="nl" type="http">http://sommerville.uvt.nl/ubuntu/edgy/ubuntu-6.10-desktop-i386.iso</url>
+			<url type="http">http://tamago.cs.ucr.edu/ubuntu/releases/edgy/ubuntu-6.10-desktop-i386.iso</url>
+			<url type="http">http://ubuntu-releases.cs.umn.edu/edgy/ubuntu-6.10-desktop-i386.iso</url>
+			<url type="http">http://ubuntu-releases.optus.net/edgy/ubuntu-6.10-desktop-i386.iso</url>
+			<url location="br" type="http">http://ubuntu.c3sl.ufpr.br/releases/edgy/ubuntu-6.10-desktop-i386.iso</url>
+			<url location="hu" type="http">http://ubuntu.elasztik.hu/edgy/ubuntu-6.10-desktop-i386.iso</url>
+			<url location="at" type="http">http://ubuntu.gds.tuwien.ac.at/cdimage/releases/edgy/ubuntu-6.10-desktop-i386.iso</url>
+			<url location="at" type="http">http://ubuntu.inode.at/cdimage/edgy/ubuntu-6.10-desktop-i386.iso</url>
+			<url location="be" type="http">http://ubuntu.mirrors.skynet.be/pub/ubuntu.com/releases/edgy/ubuntu-6.10-desktop-i386.iso</url>
+			<url type="http">http://ubuntu.supp.name/releases/edgy/ubuntu-6.10-desktop-i386.iso</url>
+		</resources>
+	</file>
+</files>
+</metalink>

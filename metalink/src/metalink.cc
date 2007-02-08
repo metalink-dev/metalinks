@@ -75,7 +75,7 @@ try
 	string metalinkDescription("");
 	string headerFile("");
 /////////Program argument handling
-	vector<string> inputFiles, md5Files;
+	vector<string> inputFiles, md5Files, linkFiles;
 	set<string> digests;
 	
 	try
@@ -183,7 +183,14 @@ try
 			_foreach(i, ttmp)
 				md5Files.push_back(*i);
 		}
-
+/*
+		if(variableMap.count("links"))
+		{
+			vector<string> ttmp = variableMap["links"].as< vector<string> >();
+			_foreach(i, ttmp)
+				linkFiles.push_back(*i);
+		}
+*/
 		if(variableMap.count("digest"))
 		{
 			vector<string> ttmp = variableMap["digest"].as< vector<string> >();
@@ -246,7 +253,6 @@ try
 		pair<string, string> r;
 		
 		//Add the records for all paths
-
 		while(file.record(&r))
 		{
 			MetalinkFile record(r.second, &mirrorList);
@@ -293,6 +299,8 @@ try
   		<< '\n');
   	
 		MetalinkFile record(filename, &mirrorList);
+		//Add matching links
+		//foearch(links[filename], link) addpath basename(links)
 		cerr << "Hashing '" << filename << "' ... ";
 		
 		HashList hl;
