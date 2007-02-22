@@ -13,10 +13,10 @@ DefineForMetalink = $?GeneratedDefineForMetalink $?ExtraDefineForMetalink
 
 # Library flags for src/metalink.cc
 GeneratedLibsForMetalink = \
-	"-lgcrypt"
-	"-lgpg-error"
 	"-lboost_filesystem"
 	"-lboost_program_options"
+	"-lgcrypt"
+	"-lgpg-error"
 	"-lboost_regex"
 
 LibsForMetalink = $?GeneratedLibsForMetalink $?ExtraIncludeForMetalink
