@@ -6,6 +6,7 @@ boost/filesystem/operations.hpp		-lboost_filesystem
 boost/filesystem/convenience.hpp	-lboost_filesystem
 boost/lexical_cast.hpp	
 boost/regex.hpp				-lboost_regex	
+fstream	-D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE
 
 #Lib gcrypt
 gcrypt.h	`libgcrypt-config --cflags --libs`
