@@ -46,7 +46,7 @@ class HashPieces: public Hash
 		Hash * d_h;
 		std::string d_value;
 	public:
-		HashPieces(unsigned int size = 256*1024);
+		HashPieces(unsigned long long size = 256*1024);
 		
 		~HashPieces()
 		{
