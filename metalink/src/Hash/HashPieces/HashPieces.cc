@@ -1,5 +1,5 @@
 #include "HashPieces.ih"
-HashPieces::HashPieces(unsigned int size)
+HashPieces::HashPieces(unsigned long long size)
 		:
 		d_size(size),
 		d_count(0),

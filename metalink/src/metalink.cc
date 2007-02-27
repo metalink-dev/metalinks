@@ -344,10 +344,13 @@ try
 			unsigned long long filesize = boost::filesystem::file_size(targetFile);
 			
 			//Small pieces => 256 kB in size.
-			unsigned int psize = 256*1024;
+			unsigned long long psize = 256*1024;
 			
-			//Larger file sizes typically have larger pieces. For example, a 4.37-GB file may have a piece size of 4 MB (4096 kB)
-			while(filesize / psize > 255 && psize < 8192 * 1024)
+			//Larger file sizes typically have larger pieces.
+			// For example, a 4.37-GB file may have a piece size of 4 MB (4096 kB)
+			// To keep this while loop from going mad, we max at 16 loops
+			unsigned i = 0; 
+			while(filesize / psize > 255 && ++i < 16)
 				psize += psize;
 
 			hl.push_back(new HashPieces(psize));
