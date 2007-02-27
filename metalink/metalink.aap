@@ -9,6 +9,11 @@
 
 IncludeForMetalink = $?CcbuildDefaultIncludes $?GeneratedIncludeForMetalink $?ExtraIncludeForMetalink
 
+# Defines for src/metalink.cc
+GeneratedDefineForMetalink = \
+	"-D_FILE_OFFSET_BITS=64"
+	"-D_LARGEFILE_SOURCE"
+
 DefineForMetalink = $?GeneratedDefineForMetalink $?ExtraDefineForMetalink
 
 # Library flags for src/metalink.cc

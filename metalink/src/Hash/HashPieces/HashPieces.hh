@@ -46,7 +46,7 @@ class HashPieces: public Hash
 		Hash * d_h;
 		std::string d_value;
 	public:
-		HashPieces(unsigned int size = 131072);
+		HashPieces(unsigned int size = 256*1024);
 		
 		~HashPieces()
 		{
@@ -55,6 +55,11 @@ class HashPieces: public Hash
 					delete *h;
 			if(d_h)
 				delete d_h;
+		}
+		
+		unsigned long long size() const
+		{
+			return d_size;
 		}
 		
 		virtual std::string name() const;

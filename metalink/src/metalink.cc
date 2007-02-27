@@ -390,6 +390,12 @@ try
 			{
 				String h((*hp)->name());
 				h.toUpper();
+				if(h.endsIn(String("PIECES")))
+				{
+					//Try down cast, exceptions are just wrong, so no try block here to keep them fatal.
+					HashPieces *pieces = dynamic_cast<HashPieces*>(*hp);
+					cout << h << "_SIZE(" << filename << ")= " << pieces->size() << "\n";
+				}
 				cout << h << "(" << filename << ")= " << (*hp)->value() << "\n";
 				continue;
 			}
