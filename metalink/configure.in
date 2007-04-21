@@ -1,0 +1,19 @@
+dnl Process this file with autoconf to produce a configure script.
+
+dnl Boilerplate
+AC_INIT(src/metalink.cc)
+AM_INIT_AUTOMAKE(metalink, 0.3.2)
+
+AC_PROG_CXX
+
+dnl Library tests
+AM_PATH_LIBGCRYPT
+
+AX_BOOST_BASE()
+AX_BOOST_REGEX()
+AX_BOOST_PROGRAM_OPTIONS()
+AX_BOOST_FILESYSTEM()
+
+AC_OUTPUT(Makefile)
+
+
