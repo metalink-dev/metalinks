@@ -12,8 +12,14 @@ Then, if you have A-A-P installed (aap --version) do:
 You can cleanup afterwards with: aap cleanALL
 
 Otherwise use make:
+	./configure
 	make
 	make install (With the right rights)
+	
+If that fails, try the old way:
+	make -f Makefile.ccbuild
+	make -f Makefile.ccbuild install (With the right rights)
+	
 
 All SVN development is done with ccbuild, so entering the source directory and executing ccbuild, should produce a valid binary. (http://ccbuild.sf.net/)
 If you have the autotools archive and all the GNU autotools and ccbuild, you can also run "sh bootstrap". Don't if you havn't.
