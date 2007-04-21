@@ -1,0 +1,23 @@
+#!/bin/sh
+
+## Generate Makefile.am from ccbuild
+PSOURCE=src/metalink.cc
+PNAME=`basename "${PSOURCE}" .cc`
+echo "Generating Makefile.am from ccbuild"
+SOURCES=`ccbuild md5 "${PSOURCE}" | sed  -r 's/^[a-z0-9]+  //; s/ /\\ /' | tr '\n' ' '`
+# |tr '\n' ' '`
+cat > Makefile.am <<EOF
+AUTOMAKE_OPTIONS = subdir-objects
+
+bin_PROGRAMS = ${PNAME}
+
+#Sources, generated list from ccbuild md5 output
+${PNAME}_SOURCES = ${SOURCES}
+${PNAME}_LDFLAGS = @LIBGCRYPT_LIBS@ -l@BOOST_REGEX_LIB@ -l@BOOST_PROGRAM_OPTIONS_LIB@ -l@BOOST_FILESYSTEM_LIB@
+#${PNAME}_CXXFLAGS = @LIBGCRYPT_CFLAGS@
+EOF
+echo "Running autotools"
+##BOOTSTRAP
+aclocal -I /usr/share/autoconf-archive
+autoconf
+automake
