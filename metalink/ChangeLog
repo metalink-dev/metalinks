@@ -1,5 +1,6 @@
-0.3.3svn:
-- Initial autotools support
+0.3.3:
+- Autotools support (./configure;make;make install)
+- Large file supported enabled
 
 0.3.2:
 - Added pieces support for sha1 of 131072 bytes (hash named sha1pieces)

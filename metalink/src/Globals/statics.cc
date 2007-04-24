@@ -22,7 +22,8 @@
 
 std::string const Globals::programName("metalink");
 std::string const Globals::programDescription("Metalink XML generator");
-unsigned const Globals::version[] = {0,3,2};
+unsigned const Globals::version[] = {0,3,3};
 
 std::string Globals::metalinkExtension(".metalinks");
 char const Globals::dirSep('/');
+
