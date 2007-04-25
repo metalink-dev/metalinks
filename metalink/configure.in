@@ -15,6 +15,17 @@ AX_BOOST_REGEX()
 AX_BOOST_PROGRAM_OPTIONS()
 AX_BOOST_FILESYSTEM()
 
+
+dnl Fix the boost m4 macro output
+dnl Case switch thanks to greycat on freenode.net/bash
+for VARNAME in BOOST_FILESYSTEM_LIB BOOST_PROGRAM_OPTIONS_LIB BOOST_REGEX_LIB; do
+case "${!VARNAME}" in
+	-l*) : ;;
+	*)
+${!VARNAME}="-l"${!VARNAME};;
+esac
+done
+
 AC_OUTPUT(Makefile)
 
 
