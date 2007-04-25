@@ -16,15 +16,21 @@ AX_BOOST_PROGRAM_OPTIONS()
 AX_BOOST_FILESYSTEM()
 
 
-dnl Fix the boost m4 macro output
-dnl Case switch thanks to greycat on freenode.net/bash
-for VARNAME in BOOST_FILESYSTEM_LIB BOOST_PROGRAM_OPTIONS_LIB BOOST_REGEX_LIB; do
-case "${!VARNAME}" in
+dnl Fix the boost m4 macro output: on some platforms it prepends -l, other it doesn't
+dnl Case switch trick is thanks to greycat on freenode.net/bash
+case "${BOOST_FILESYSTEM_LIB}" in
 	-l*) : ;;
-	*)
-${!VARNAME}="-l"${!VARNAME};;
+	*) BOOST_FILESYSTEM_LIB="-l"${BOOST_FILESYSTEM_LIB};;
 esac
-done
+case "${BOOST_PROGRAM_OPTIONS_LIB}" in
+	-l*) : ;;
+	*) BOOST_PROGRAM_OPTIONS_LIB="-l"${BOOST_PROGRAM_OPTIONS_LIB};;
+esac
+case "${BOOST_REGEX_LIB}" in
+	-l*) : ;;
+	*) BOOST_REGEX_LIB="-l"${BOOST_REGEX_LIB};;
+esac
+
 
 AC_OUTPUT(Makefile)
 
