@@ -11,11 +11,14 @@ Then, if you have A-A-P installed (aap --version) do:
 
 You can cleanup afterwards with: aap cleanALL
 
-Otherwise use make:
+Otherwise use the autotools:
 	./configure
 	make
 	make install (With the right rights)
-	
+
+with extra options for MingW:
+	./configure --with-boost-program-options=mgw --with-boost-regex=mgw --with-boost-filesystem=mgw
+
 If that fails, try the old way:
 	make -f Makefile.ccbuild
 	make -f Makefile.ccbuild install (With the right rights)
