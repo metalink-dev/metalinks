@@ -17,8 +17,9 @@
 	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
-#include <boost/regex.hpp> 
+#include <glibmm/regex.h>
 #include <iostream>
+#include <vector>
 
 #include "MD5File.hh"
 
@@ -26,5 +27,4 @@
 #include "../Preprocessor/debug.hh"
 
 using namespace std;
-using namespace boost; 
 using namespace bneijt;

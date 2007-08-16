@@ -1,14 +1,14 @@
 #& -l
 #lib BOOST
-boost/program_options.hpp		-lboost_program_options
-boost/filesystem/path.hpp		-lboost_filesystem
-boost/filesystem/operations.hpp		-lboost_filesystem
-boost/filesystem/convenience.hpp	-lboost_filesystem
-boost/lexical_cast.hpp	
-boost/regex.hpp				-lboost_regex	
+boost/program_options.hpp		-lboost_program_options-mt
 fstream	-D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE
 
 #Lib gcrypt
 gcrypt.h	`libgcrypt-config --cflags --libs`
 sys/stat.h	
 sys/types.h	
+glibmm/regex.h	`pkg-config --cflags --libs glibmm-2.4`
+glibmm/options.h	`pkg-config --cflags --libs glibmm-2.4`
+glibmm/optioncontext.h	`pkg-config --cflags --libs glibmm-2.4`
+glibmm/optionentry.h	`pkg-config --cflags --libs glibmm-2.4`
+glibmm/optiongroup.h	`pkg-config --cflags --libs glibmm-2.4`
