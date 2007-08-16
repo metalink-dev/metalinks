@@ -76,17 +76,17 @@ var MetaMirrors = {
 	
 	upload: function()
 	{
-    gContextMenu.linkURL = "http://www.metamirrors.nl/backend/upload_hashfile.php?user=" + escape(this.username) + "&lnk=" + gContextMenu.linkURL;
+    gContextMenu.linkURL = "http://backend.metamirrors.nl/upload_hashfile.php?user=" + escape(this.username) + "&lnk=" + gContextMenu.linkURL;
 	  gContextMenu.openLinkInTab();
 	},
 	autometalink: function()
 	{
-    gContextMenu.linkURL = "http://www.metamirrors.nl/backend/get.php?auto&lnk=" + gContextMenu.linkURL;
+    gContextMenu.linkURL = "http://backend.metamirrors.nl/get.php?auto&lnk=" + gContextMenu.linkURL;
 	  gContextMenu.openLinkInTab();
 	},
 	metalink: function()
 	{
-    gContextMenu.linkURL = "http://www.metamirrors.nl/backend/get.php?lnk=" + gContextMenu.linkURL;
+    gContextMenu.linkURL = "http://backend.metamirrors.nl/get.php?lnk=" + gContextMenu.linkURL;
 	  gContextMenu.openLinkInTab();
 	}
 };
