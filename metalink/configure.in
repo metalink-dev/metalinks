@@ -9,21 +9,16 @@ AC_PROG_CXX
 
 dnl Library tests
 AM_PATH_LIBGCRYPT
+AC_SYS_LARGEFILE
 
-AX_BOOST_BASE()
-AX_BOOST_REGEX()
+PKG_CHECK_MODULES(DEPS, glibmm-2.4)
+AC_SUBST(DEPS_CFLAGS)
+AC_SUBST(DEPS_LIBS)
+
 AX_BOOST_PROGRAM_OPTIONS()
-AX_BOOST_FILESYSTEM()
 
 dnl Fix the boost m4 macro output: on some platforms it prepends -l, other it doesn't
 dnl Case switch trick is thanks to greycat on freenode.net/bash
-if test "x${BOOST_FILESYSTEM_LIB}" != "x"; then
-case "${BOOST_FILESYSTEM_LIB}" in
-	-l*) : ;;
-	*) BOOST_FILESYSTEM_LIB="-l"${BOOST_FILESYSTEM_LIB};;
-esac
-fi
-
 if test "x${BOOST_PROGRAM_OPTIONS_LIB}" != "x"; then
 case "${BOOST_PROGRAM_OPTIONS_LIB}" in
 	-l*) : ;;

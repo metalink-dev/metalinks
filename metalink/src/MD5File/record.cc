@@ -14,15 +14,14 @@ bool MD5File::record(std::pair<std::string, std::string> *val)
 {
 	std::string line;
 	std::getline(*this, line);
-	
+	//http://www.gtkmm.org/docs/glibmm-2.4/docs/reference/html/classGlib_1_1Regex.html
 	//Check for MD5 ( starting point
-	regex md5line("MD5 ?\\(([^)]+)\\) ?= ?([a-fA-F0-9]+)");
-	cmatch match;
-	if(regex_match(line.c_str(), match, md5line))
+	Glib::RefPtr<Glib::Regex> md5line = Glib::Regex::create("MD5 ?\\(([^)]+)\\) ?= ?([a-fA-F0-9]+)");
+	if(md5line->match(line))
 	{
-		_debugLevel2("openssl line");
-		val->first = match[2];
-		val->second = match[1];
+		std::vector<std::string> tokens = md5line->split(line);
+		val->first = tokens[2];
+		val->second = tokens[1];
 	}
 	else
 	{
@@ -35,7 +34,7 @@ bool MD5File::record(std::pair<std::string, std::string> *val)
 		val->first = line.substr(0, sep -1);
 		val->second = line.substr(sep +1, line.size());//double space for md5 sums
 	}
-	_debugLevel2("MD5 (" << val->second << ") '" << val->first << "'");
+	
 	if(val->first.length() != 32)
 	{
 		cerr << "Warning: Unsupported MD5 line: " << line << "\n";

@@ -36,17 +36,19 @@
 #include <algorithm>
 #include <vector>
 #include <set>
+#include <glibmm/optioncontext.h>
 #include <boost/program_options.hpp>
-#include <boost/filesystem/operations.hpp>
-#include <boost/filesystem/convenience.hpp>
+//#include <boost/filesystem/operations.hpp>
+//#include <boost/filesystem/convenience.hpp>
 
+
+#include "Options/Options.hh"
 #include "Mirror/Mirror.hh"
 #include "MirrorList/MirrorList.hh"
 #include "Metalink/Metalink.hh"
 #include "MetalinkFile/MetalinkFile.hh"
 #include "MD5File/MD5File.hh"
 #include "HashList/HashList.hh"
-
 
 #include "Hash/GCrypt/GCrypt.hh"
 #include "Hash/HashED2K/HashED2K.hh"
@@ -65,6 +67,19 @@
 using namespace std;
 using namespace bneijt;
 namespace po = boost::program_options;
+
+namespace {
+unsigned long long file_size(std::string const &fname)
+{
+	struct stat info;
+
+	if(stat(fname.c_str(),&info) == 0)
+		return info.st_size;
+	//Should through error	
+	return 0;
+}
+}
+
 
 int main(int argc, char *argv[])
 try
@@ -270,6 +285,7 @@ try
 		//Silently skip metalink files
 		if(filename.endsIn(Globals::metalinkExtension))
 			continue;
+/*
 
 		boost::filesystem::path targetFile(filename, boost::filesystem::native);
 
@@ -285,7 +301,7 @@ try
 			cerr << "Skipping directory '" << filename << "'\n";
 			continue;
 		}
-		
+*/		
 		ifstream file(filename.c_str(), ios::binary);
 		if(!file.is_open())
 		{
@@ -341,7 +357,7 @@ try
 		//Known hashes: pieces
 		if(allDigests || digests.count("sha1pieces") > 0)
 		{
-			unsigned long long filesize = boost::filesystem::file_size(targetFile);
+			unsigned long long filesize = file_size(filename);
 			
 			//Small pieces => 256 kB in size.
 			unsigned long long psize = 256*1024;
