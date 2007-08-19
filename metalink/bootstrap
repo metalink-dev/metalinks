@@ -10,8 +10,10 @@ fi
 ## Generate Makefile.am from ccbuild
 PSOURCE=src/metalink.cc
 PNAME=`basename "${PSOURCE}" .cc`
-echo "Generating Makefile.am from ccbuild"
-SOURCES=`ccbuild md5 "${PSOURCE}" | sed  -r 's/^[a-z0-9]+  //; s/ /\\ /' | tr '\n' ' '`
+#Update MD5SUMS, if we have the right tools
+which ccbuild && (ccbuild md5 --recursive-include . "${PSOURCE}" > MD5SUMS)
+
+SOURCES=`sed  -r 's/^[a-z0-9]+  //; s/ /\\ /' < MD5SUMS | tr '\n' ' '`
 
 #Overwrite Makefile.am
 cat > Makefile.am <<EOF
