@@ -15,25 +15,6 @@ PKG_CHECK_MODULES(DEPS, glibmm-2.4)
 AC_SUBST(DEPS_CFLAGS)
 AC_SUBST(DEPS_LIBS)
 
-AX_BOOST_PROGRAM_OPTIONS()
-
-dnl Fix the boost m4 macro output: on some platforms it prepends -l, other it doesn't
-dnl Case switch trick is thanks to greycat on freenode.net/bash
-if test "x${BOOST_PROGRAM_OPTIONS_LIB}" != "x"; then
-case "${BOOST_PROGRAM_OPTIONS_LIB}" in
-	-l*) : ;;
-	*) BOOST_PROGRAM_OPTIONS_LIB="-l"${BOOST_PROGRAM_OPTIONS_LIB};;
-esac
-fi
-
-if test "x${BOOST_REGEX_LIB}" != "x"; then
-case "${BOOST_REGEX_LIB}" in
-	-l*) : ;;
-	*) BOOST_REGEX_LIB="-l"${BOOST_REGEX_LIB};;
-esac
-fi
-
-
 AC_OUTPUT(Makefile)
 
 
