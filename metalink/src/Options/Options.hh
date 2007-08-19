@@ -51,11 +51,12 @@ class Options: public Glib::OptionGroup
   
   //These int instances should live as long as the OptionGroup to which they are added, 
   //and as long as the OptionContext to which those OptionGroups are added.
-  int m_arg_foo;
-  std::string m_arg_filename;
-  Glib::ustring m_arg_goo;
-  bool m_arg_boolean;
-  Glib::OptionGroup::vecustrings m_arg_list;
+  struct Values
+  {
+	  bool help, version, nomirrors, hashlist, mindigests, somedigests, alldigests;
+  	Glib::OptionGroup::vecustrings digests, md5files;
+  	Glib::ustring addpath, headerfile, desc;
+	} opt;
 	
 };
 } //Namespace
