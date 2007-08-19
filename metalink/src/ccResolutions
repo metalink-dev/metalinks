@@ -8,6 +8,7 @@ gcrypt.h	`libgcrypt-config --cflags --libs`
 sys/stat.h	
 sys/types.h	
 glibmm/regex.h	`pkg-config --cflags --libs glibmm-2.4`
+glibmm/init.h	`pkg-config --cflags --libs glibmm-2.4`
 glibmm/options.h	`pkg-config --cflags --libs glibmm-2.4`
 glibmm/optioncontext.h	`pkg-config --cflags --libs glibmm-2.4`
 glibmm/optionentry.h	`pkg-config --cflags --libs glibmm-2.4`

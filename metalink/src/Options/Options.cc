@@ -19,47 +19,73 @@
 */
 
 #include "Options.ih"
-
-#define _addOpt(SHORT, LONG, DESC)	Glib::OptionEntry SHORT ## _e; SHORT ## _e.set_long_name(#LONG); SHORT ## _e.set_short_name('SHORT'); SHORT ## _e.set_description(#DESC); add_entry(SHORT ## _e, m_arg_foo)
+#define SEP '
+#define _addOpt(VAR, SHORT, LONG, DESC)	Glib::OptionEntry SHORT ## _e; SHORT ## _e.set_long_name(#LONG); SHORT ## _e.set_short_name( #SHORT[0]); SHORT ## _e.set_description(DESC); add_entry(SHORT ## _e, opt.VAR)
+#define _addLOpt(VAR, LONG, DESC)	Glib::OptionEntry LONG ## _e; LONG ## _e.set_long_name(#LONG); LONG ## _e.set_description(DESC); add_entry(LONG ## _e, opt.VAR)
 
 
 Options::Options()
 	:
-	Glib::OptionGroup("example_group", "description of example group", "help description of example group"),
-  m_arg_foo(0),
-  m_arg_boolean(false)
-{
-  Glib::OptionEntry entry1;
-  entry1.set_long_name("foo");
-  entry1.set_short_name('f');
-  entry1.set_description("The Foo");
-  add_entry(entry1, m_arg_foo);
-      
-  Glib::OptionEntry entry2;
-  entry2.set_long_name("file");
-  entry2.set_short_name('F');
-  entry2.set_description("The Filename");
-  add_entry_filename(entry2, m_arg_filename);
- 
-  Glib::OptionEntry entry3;
-  entry3.set_long_name("goo");
-  entry3.set_short_name('g');
-  entry3.set_description("The Goo");
-  m_arg_goo = "default-goo-value"; //We can choose a default to be used if the user doesn't specify this option.
-  add_entry(entry3, m_arg_goo);
+	Glib::OptionGroup("example_group", "description of example group", "help description of example group")
+{  
+//Usage:
+//  metalink [options] (input files or --md5) < (mirror list) > (metalinkfile)
+
+//General options:
+//  -h [ --help ]         Produce a help message
+  opt.help = false;
+  _addOpt(help, h, help, "Produce a help message");
+
+//  --version             Print out the name and version
+  opt.version = false;
+  _addLOpt(version, version, "Print out the name and version");
+
+//  --md5 arg             Generate metalink from md5sum file(s)
+  _addLOpt(md5files, md5, "Generate metalink from md5sum file(s)");
+
+//  --addpath arg         Append a path to the mirrors ('/' is not checked)
+  _addLOpt(addpath, addpath, "Append a path to the mirrors ('/' is not checked)");
+
+//  --headerfile arg      Include file after the root element declaration.
+  _addLOpt(headerfile, headerfile, "Include file after the root element declaration.");
+
+//  --nomirrors           Don't read mirrors from stdin
+	opt.nomirrors = false;
+  _addLOpt(nomirrors, nomirrors, "Don't read mirrors from stdin");
+
+//  --hashlist            List hashes only (implies nomirrors)
+	opt.hashlist = false;
+  _addLOpt(hashlist, hashlist, "List hashes only (implies nomirrors)");
+
+//  --desc arg            Add metalink description
+  _addLOpt(desc, desc, "Add metalink description");
+
+//Digest options:
+
+//  -d [ --digest ] arg   Include given digest
+  _addOpt(digests, d, digest, "Include given digest");
+
+//  --mindigests          Include: md5 sha1
+	opt.mindigests = false;
+  _addLOpt(mindigests, mindigests, "Include: md5 sha1");
+
+//  --somedigests         Include: md5 sha1 ed2k
+	opt.somedigests = false;
+  _addLOpt(somedigests, somedigests, "Include: md5 sha1 ed2k");
+
+//  --alldigests          Include all possible digests
+	opt.alldigests = false;
+  _addLOpt(alldigests, alldigests, "Include all possible digests");
   
-  Glib::OptionEntry entry4;
-  entry4.set_long_name("activate_something");
-  entry4.set_description("Activate something");
-  add_entry(entry4, m_arg_boolean);
-  
-  Glib::OptionEntry entry5;
+
+
+
+/*  Glib::OptionEntry entry5;
   entry5.set_long_name("list");
   entry5.set_short_name('l');
   entry5.set_description("The List");
-  add_entry(entry5, m_arg_list);
-  
-  _addOpt(list, The List);
+  add_entry_filename(entry5, m_arg_list);
+  */
 }
 
 /*

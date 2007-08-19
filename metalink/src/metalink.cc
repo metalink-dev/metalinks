@@ -36,8 +36,9 @@
 #include <algorithm>
 #include <vector>
 #include <set>
+#include <glibmm/init.h>
 #include <glibmm/optioncontext.h>
-#include <boost/program_options.hpp>
+//#include <boost/program_options.hpp>
 //#include <boost/filesystem/operations.hpp>
 //#include <boost/filesystem/convenience.hpp>
 
@@ -66,7 +67,7 @@
 
 using namespace std;
 using namespace bneijt;
-namespace po = boost::program_options;
+//namespace po = boost::program_options;
 
 namespace {
 unsigned long long file_size(std::string const &fname)
@@ -84,16 +85,148 @@ unsigned long long file_size(std::string const &fname)
 int main(int argc, char *argv[])
 try
 {
+//	po::variables_map variableMap;
+	bool allDigests(false), readMirrors(true), hashList(false);
+	vector<string> inputFiles, linkFiles;
+	set<string> digests;
+
+	//Program option handling
+  Glib::init();
+  Glib::OptionContext context;
+  
+  bneijt::Options options;
+	Glib::OptionGroup::vecustrings &md5Files = options.opt.md5files;
+	Glib::ustring &baseUrl = options.opt.addpath;
+	Glib::ustring &headerFile = options.opt.headerfile;
+	Glib::ustring &metalinkDescription = options.opt.desc;
+	
+  context.set_main_group(options);
+
+
+
+  #ifdef GLIBMM_EXCEPTIONS_ENABLED
+  try
+  {
+    context.parse(argc, argv);
+  }
+  catch(const Glib::Error& ex)
+  {
+    std::cout << "Exception: " << ex.what() << std::endl;
+  }
+  #else
+  std::auto_ptr<Glib::Error> ex;
+  context.parse(argc, argv, ex);
+  if(ex.get())
+  {
+    std::cout << "Exception: " << ex->what() << std::endl;
+  }
+  #endif //GLIBMM_EXCEPTIONS_ENABLED
+
+
+  //Input files
+  for(int i = 1; i < argc; ++ i)
+  	inputFiles.push_back(argv[i]);
+  
+		//Handle options
+		if(options.opt.help)
+		{
+		cout << Globals::programName << " - " << Globals::programDescription << "\n";
+		cout << "Version " << Globals::version[0] << "." << Globals::version[1] << "." << Globals::version[2];
+		cout << ", Copyright (C) 2005 A. Bram Neijt <bneijt@gmail.com>\n";
+		cout << Globals::programName << " comes with ABSOLUTELY NO WARRANTY and is licensed under GPLv2\n";
+		cout << "Usage:\n  " << Globals::programName << " [options] (input files or --md5) < (mirror list) > (metalinkfile)\n";
+///TODO show help		cout << helpOptions << "\n";
+		cout << "Supported algorithms are (-d options):\n"
+			<< "  md4 md5 sha1 sha256 sha384 sha512 rmd160 tiger crc32 ed2k gnunet sha1pieces"
+			<< "\n";
+		cout << "\nMirror lists are single line definitions according to:\n"
+				 << " [location [preference] [type] % ] <mirror base url>\n";
+		cout << "\nExamples:\n";
+		cout << "http://example.com/ as a mirror:\n echo http://example.com | "
+				 << Globals::programName << " -d md5 -d sha1 *\n";
+		cout << "\nhttp://example.com/ as a mirror with preference and location:\n "
+				 << "echo us 10 % http://example.com | " << Globals::programName << " -d md5 -d sha1 *\n";
+		cout << "\nhttp://example.com/ as a mirror with preference only:\n "
+				 << "echo 0 10 % http://example.com | " << Globals::programName << " -d md5 *\n";
+		cout << "\nOnly P2P links:\n "
+				 << Globals::programName << " --nomirrors -d sha1 -d ed2k -d gnunet *\n";
+			return 1;
+		}
+		if(options.opt.version)
+		{
+			cout << Globals::programName << " version "
+					<< Globals::version[0] << "."
+					<< Globals::version[1] << "."
+					<< Globals::version[2] << "\n";
+			return 1;
+		}		
+		//Verify input files
+		if(inputFiles.size() < 1 && md5Files.size() < 0)
+		{
+			cerr << "No input files or md5 flags given\nSee: " << argv[0] << " --help\n";
+			return 1;
+		}
+
+
+/*
+		if(variableMap.count("links"))
+		{
+			vector<string> ttmp = variableMap["links"].as< vector<string> >();
+			_foreach(i, ttmp)
+				linkFiles.push_back(*i);
+		}
+*/
+		
+		_foreach(i, options.opt.digests)
+			digests.insert(*i);
+
+		if(options.opt.mindigests)
+		{
+			digests.insert("md5");
+			digests.insert("sha1");
+		}
+		if(options.opt.somedigests)
+		{
+			digests.insert("md5");
+			digests.insert("sha1");
+			digests.insert("ed2k");
+		}
+		allDigests = options.opt.alldigests;
+		readMirrors = options.opt.nomirrors == false;
+		
+		//Simple boolean options
+		hashList = options.opt.hashlist;
+		if(hashList)
+		{
+			if(digests.size() < 1)
+				cerr << "metalink: Warning: No digests given, you probably forgot the -d option." << endl;
+			readMirrors = false;
+		}
+  
+  
+  
+  
+  
+  //This one shows the results of multiple instance of the same option, such as --list=1 --list=a --list=b
+
+
+///Old code
+/*
 	po::variables_map variableMap;
 	bool allDigests(false), readMirrors(true), hashList(false);
 	string baseUrl("");
 	string metalinkDescription("");
 	string headerFile("");
+*/
+
+
+
+
+
+  
 /////////Program argument handling
-	vector<string> inputFiles, md5Files, linkFiles;
-	set<string> digests;
 	
-	try
+/*	try
 	{
 		//Parse options
 		po::options_description generalOptions("General options");
@@ -198,6 +331,7 @@ try
 			_foreach(i, ttmp)
 				md5Files.push_back(*i);
 		}
+*/
 /*
 		if(variableMap.count("links"))
 		{
@@ -206,6 +340,7 @@ try
 				linkFiles.push_back(*i);
 		}
 */
+/*
 		if(variableMap.count("digest"))
 		{
 			vector<string> ttmp = variableMap["digest"].as< vector<string> >();
@@ -253,7 +388,7 @@ try
   	cerr << "Exception of unknown type??" << endl;
 		throw;
   }
-  
+*/  
 	//Read paths from stdin
 	MirrorList const mirrorList(cin, baseUrl, readMirrors);
 	
@@ -448,10 +583,10 @@ try
 	
 	return 0;
 }
-catch(const boost::program_options::unknown_option &e)
+/*catch(const boost::program_options::unknown_option &e)
 {
 	cerr << e.what() << endl;
-}
+}*/
 catch(std::string const &e)
 {
 	cerr << "Exiting with ERRORS: " << e << endl;	
