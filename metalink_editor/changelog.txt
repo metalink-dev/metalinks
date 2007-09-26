@@ -1,6 +1,10 @@
 Metalink Editor Changelog
 by Hampus Wessman
 
+Version 1.1.1
+* Updated readme.txt.
+* Added a todo.txt file.
+
 Version 1.1.0 (2007-07-29)
 * Fixed typo ("configuarion" => "configuration").
 * Fixed an issue with encodings.
