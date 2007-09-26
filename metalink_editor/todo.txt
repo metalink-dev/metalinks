@@ -1,12 +1,17 @@
-* Checkboxes for different hash types.
-* First argument = file to open.
 * Multi-file metalinks.
-* New GUI (multi-file and easier to maintain).
-* Checking if mirrors support resume.
-* Support for <logo>.
-* Automatically search for things like filename.md5, filename.md5sum, MD5SUMS.
-* Country field => combo box, with all the country codes from ISO 3166-1 alpha-2.
-* Extract chunk checksums from a .torrent file.
-* Drag and drop of URLs (eg dragging a link from a browser into the URL list).
-* Add better validation of data.
 * Clean up source code.
+* Add better validation of data.
+* New GUI (multi-file compatible and easier to maintain).
+* Checkboxes for different hash types, in the settings dialog.
+* First argument = file to open.
+* Checking if mirrors support resume.
+* Search for mirrors on a web site. (they are often listed as links,
+  but sometimes you need to look a few clicks away)
+* Search for things like filename.md5, filename.md5sum, MD5SUMS.
+* Extract chunk checksums from a .torrent file.
+* Create metalink from a MD5SUMS file.
+* Add mirrors from a text file, listing one mirror per line.
+* Country field => combo box, with all the country codes from ISO 3166-1 alpha-2.
+* Drag and drop URLs (eg dragging a link from a browser into the URL list).
+* Add metalink documentation inside the editor (eg info about data fields).
+* Support for <logo> and other metalink features...
