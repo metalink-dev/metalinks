@@ -17,13 +17,13 @@
 import os, os.path, md5, sha, re, xml.dom, math, time
 from xml.dom.minidom import parse, Node
 
-current_version = "1.0.0"
+current_version = "1.1.0"
 
 def get_first(x):
-	try:
-		return x[0]
-	except:
-		return x
+    try:
+        return x[0]
+    except:
+        return x
 
 class Resource:
     def __init__(self, url, type="default", location="", preference="", conns=""):
@@ -105,6 +105,7 @@ class Metalink:
         self.origin = ""
         self.hash_md5 = ""
         self.hash_sha1 = ""
+        self.hash_sha256 = ""
         self.pieces = []
         self.piecelength = 0
         self.piecetype = ""
@@ -136,7 +137,16 @@ class Metalink:
         # Hashes
         fp = open(filename, "rb")
         md5hash = md5.new()
-        shahash = sha.new()
+        sha1hash = sha.new()
+        sha256hash = None
+        # Try to use hashlib
+        try:
+            import hashlib
+            md5hash = hashlib.md5()
+            sha1hash = hashlib.sha1()
+            sha256hash = hashlib.sha256()
+        except:
+            print "Hashlib not available. No support for SHA-256."
         piecehash = sha.new()
         piecenum = 0
         length = 0
@@ -160,8 +170,9 @@ class Metalink:
                         print "Canceling scan!"
                         return False
             # Process the data
-            md5hash.update(data)
-            shahash.update(data)
+            if md5hash != None: md5hash.update(data)
+            if sha1hash != None: sha1hash.update(data)
+            if sha256hash != None: sha256hash.update(data)
             if use_chunks:
                 left = len(data)
                 while left > 0:
@@ -188,7 +199,9 @@ class Metalink:
             print "Total number of pieces:", len(self.pieces)
         fp.close()
         self.hash_md5 = md5hash.hexdigest()
-        self.hash_sha1 = shahash.hexdigest()
+        self.hash_sha1 = sha1hash.hexdigest()
+        if sha256hash != None:
+            self.hash_sha256 = sha256hash.hexdigest()
         if len(self.pieces) < 2: self.pieces = []
         # Convert to strings
         self.size = str(self.size)
@@ -269,7 +282,10 @@ class Metalink:
         text += self.generate_file()
         text += '  </files>\n'
         text += '</metalink>'
-        return text.encode('utf-8')
+        try:
+            return text.encode('utf-8')
+        except:
+            return text.decode('latin1').encode('utf-8')
     
     def generate_file(self):
         if self.filename.strip() != "":
@@ -290,6 +306,8 @@ class Metalink:
                 text += '        <hash type="md5">'+self.hash_md5.lower()+'</hash>\n'
             if self.hash_sha1.strip() != "":
                 text += '        <hash type="sha1">'+self.hash_sha1.lower()+'</hash>\n'
+            if self.hash_sha256.strip() != "":
+                text += '        <hash type="sha256">'+self.hash_sha256.lower()+'</hash>\n'
             if len(self.pieces) > 1:
                 text += '        <pieces type="'+self.piecetype+'" length="'+self.piecelength+'">\n'
                 for id in range(len(self.pieces)):

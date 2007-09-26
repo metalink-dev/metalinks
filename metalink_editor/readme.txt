@@ -10,11 +10,11 @@ be possible for you to just execute the file (make sure the file really is
 "executable", if this would fail). Otherwise you need to run python with
 "metalink_editor.py" as the argument.
 
-The source distribution requires Python (works on 2.4 and 2.5, maybe on earlier
-versions too) and wxPython. I have tested wxPython 2.6 and that works very fine,
-the 2.4 version doesn't work at all and 2.5 have not been tested yet.
+The source distribution requires Python (works with 2.4 and 2.5, maybe with earlier
+versions too) and wxPython. I have tested with wxPython 2.6 and that works.
+The 2.4 version doesn't work at all and 2.5 have not been tested yet.
 
-The interface should be quite easy to use. It works like in most other editors.
+The interface should be quite easy to use. It works like most other editors.
 
 I'll explain a few features in more detail though. One thing that is not very
 obvious is how to edit an already entered URL. To do that simply double click it,
