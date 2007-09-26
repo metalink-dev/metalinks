@@ -1,6 +1,13 @@
 Metalink Editor Changelog
 by Hampus Wessman
 
+Version 1.1.0 (2007-07-29)
+* Fixed typo ("configuarion" => "configuration").
+* Fixed an issue with encodings.
+* Added support for SHA-256. Only available with Python 2.5.
+* Made all text controls selectable, so that you can copy their contents.
+* Fixed a bug with the license combo box.
+
 Version 1.0.0 (2007-05-18)
 * Fixed a status bar message.
 * The editor seems to work fine, so it's time for the 1.0 release!

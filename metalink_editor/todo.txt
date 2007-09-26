@@ -1,0 +1,10 @@
+* Checkboxes for different hash types.
+* First argument = file to open.
+* Multi-file metalinks.
+* Checking if mirrors support resume.
+* Support for <logo>.
+* Automatically search for things like filename.md5, filename.md5sum, MD5SUMS.
+* Country field => combo box, with all the country codes from ISO 3166-1 alpha-2.
+* Validate country code against ISO 3166-1 alpha-2.
+* Extract chunk checksums from a .torrent file.
+* Drag and drop of URLs (eg dragging a link from a browser into the URL list).
