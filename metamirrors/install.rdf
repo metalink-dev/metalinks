@@ -11,7 +11,7 @@
     <em:creator>A. Bram Neijt &lt;bneijt@gmail.com&gt;</em:creator>
     
     <!-- optional items -->
-    <em:homepageURL>http://prog.infosnel.nl/metalinks/</em:homepageURL>
+    <em:homepageURL>http://metamirrors.nl/</em:homepageURL>
     <em:iconURL>chrome://metamirrors/skin/metamirrors.png</em:iconURL>
 		<em:optionsURL>chrome://metamirrors/content/options.xul</em:optionsURL>
 		
