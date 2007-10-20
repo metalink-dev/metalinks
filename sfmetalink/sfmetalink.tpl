@@ -17,10 +17,14 @@
 			<url location="us" type="http">http://superb-west.dl.sourceforge.net/sourceforge/%%PROJECT%%/%%FILENAME%%</url>
 			<url location="uk" type="http">http://kent.dl.sourceforge.net/sourceforge/%%PROJECT%%/%%FILENAME%%</url>
 			<url location="us" type="http">http://easynews.dl.sourceforge.net/sourceforge/%%PROJECT%%/%%FILENAME%%</url>
-			<url location="us" type="http">http://ufpr.dl.sourceforge.net/sourceforge/%%PROJECT%%/%%FILENAME%%</url>
-			<url location="gr" type="http">http://mesh.dl.sourceforge.net/sourceforge/%%PROJECT%%/%%FILENAME%%</url>
+			<url location="br" type="http">http://ufpr.dl.sourceforge.net/sourceforge/%%PROJECT%%/%%FILENAME%%</url>
+			<url location="de" type="http">http://mesh.dl.sourceforge.net/sourceforge/%%PROJECT%%/%%FILENAME%%</url>
 			<url location="be" type="http">http://belnet.dl.sourceforge.net/sourceforge/%%PROJECT%%/%%FILENAME%%</url>
 			<url location="ch" type="http">http://switch.dl.sourceforge.net/sourceforge/%%PROJECT%%/%%FILENAME%%</url>
+			<url location="de" type="http">http://dfn.dl.sourceforge.net/sourceforge/%%PROJECT%%/%%FILENAME%%</url>
+			<url location="fr" type="http">http://ovh.dl.sourceforge.net/sourceforge/%%PROJECT%%/%%FILENAME%%</url>
+			<url location="it" type="http">http://garr.dl.sourceforge.net/sourceforge/%%PROJECT%%/%%FILENAME%%</url>
+			<url location="us" type="http">http://internap.dl.sourceforge.net/sourceforge/%%PROJECT%%/%%FILENAME%%</url>
 		</resources>
 	</file>
 </files>
