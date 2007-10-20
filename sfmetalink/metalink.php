@@ -19,9 +19,9 @@
 */
 
 ///// Start of configuration
-//Alternatively use $downloads = file('filecontainingdownloadlinks.txt');
 $project = 'metalinks';
 $downloads = array('http://downloads.sourceforge.net/metalinks/metalink_editor-1.1.0.exe');
+//Alternatively use $downloads = file('filecontainingdownloadlinks.txt');
 $use_content_disposition = true;
 
 ///// End of configuration
@@ -29,7 +29,7 @@ $use_content_disposition = true;
 $files = array();
 foreach($downloads as $d)
 {
-	$files[] = basename($d);
+	$files[] = basename(trim($d));
 }
 
 $filename = isset($_GET['file']) ? $_GET['file'] : false;
