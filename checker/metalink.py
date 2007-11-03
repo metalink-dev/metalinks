@@ -23,29 +23,27 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
-# Filename: http://www.nabber.org/projects/metalink/metalink.py
-# Last Updated: Thursday, November 1, 2007
-# Version: 1.2
+# Filename: $URL$
+# Last Updated: $Date$
+# Version: $Rev$
 # Author(s): Neil McNab
 #
 # Description:
-#   Command line application that checks metalink files.
+#   Command line application that checks or downloads metalink files.
 #
-# CHANGELOG:
+# Instructions:
+#   1. You need to have Python installed.
+#   2. Run on the command line using: python metalink.py
 #
-# Version 1.2
-# -----------
-# - Added totals output
+#   usage: metalink.py [options]
 #
-# Version 1.1
-# -----------
-# - Bugfixes for FTP handling, bad URL handling
-# - rsync doesn't list as a URL Error
-# - reduced timeout value
-#
-# Version 1.0
-# -----------
-# This is the initial release.
+#   options:
+#     -h, --help            show this help message and exit
+#     -d, --download        Actually download the file(s) in the metalink
+#     -f FILE, --file=FILE  Metalink file to check
+#     -t TIMEOUT, --timeout=TIMEOUT
+#                           Set timeout in seconds to wait for response
+#                           (default=10)
 #
 ########################################################################
 
