@@ -45,6 +45,21 @@
 #                           Set timeout in seconds to wait for response
 #                           (default=10)
 #
+# CHANGELOG:
+#
+# Version 1.2
+# -----------
+# - Added totals output
+#
+# Version 1.1
+# -----------
+# - Bugfixes for FTP handling, bad URL handling
+# - rsync doesn't list as a URL Error
+# - reduced timeout value
+#
+# Version 1.0
+# -----------
+# This is the initial release.
 ########################################################################
 
 import optparse
