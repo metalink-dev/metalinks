@@ -46,6 +46,9 @@
 #                           (default=10)
 #
 # CHANGELOG:
+# Version 1.3
+# -----------
+# - Fixed bug when no "size" attribute is present
 #
 # Version 1.2
 # -----------
@@ -102,7 +105,6 @@ def run():
         progress.download_end()
     else:
         results = check_metalink(options.filevar)
-        #print_summary(results)
         print_totals(results)
 
 def print_totals(results):
@@ -136,15 +138,15 @@ def print_totals(results):
         print "Size check failures: %s/%s" % (size_count, total)
         print "Overall failures: %s/%s" % (error_count, total)
 
-def print_summary(results):
-    for key in results.keys():
-        print "=" * 79
-        print "Summary for:", key
-        print "-" * 79
-        print "Response Code\tSize Check\tURL"
-        print "-" * 79
-        for subkey in results[key].keys():
-            print "%s\t\t%s\t\t%s" % (results[key][subkey][0], results[key][subkey][1], subkey)
+##def print_summary(results):
+##    for key in results.keys():
+##        print "=" * 79
+##        print "Summary for:", key
+##        print "-" * 79
+##        print "Response Code\tSize Check\tURL"
+##        print "-" * 79
+##        for subkey in results[key].keys():
+##            print "%s\t\t%s\t\t%s" % (results[key][subkey][0], results[key][subkey][1], subkey)
 
 ##def confirm_prompt(noprompt):
 ##    invalue = "invalid"
@@ -182,7 +184,10 @@ def check_metalink(src):
 
     results = {}
     for filenode in urllist:
-        size = get_xml_tag_strings(filenode, ["size"])[0]
+        try:
+            size = get_xml_tag_strings(filenode, ["size"])[0]
+        except:
+            size = None
         name = get_attr_from_item(filenode, "name")
         print "=" * 79
         print "File: %s Size: %s" % (name, size)
@@ -194,7 +199,7 @@ def check_process(headers, filesize):
     size = "?"
     sizeheader = get_header(headers, "Content-Length")
 
-    if sizeheader != None:
+    if sizeheader != None and filesize != None:
         if sizeheader == filesize:
             size = "OK"
         else:
@@ -228,7 +233,10 @@ def check_file_node(item):
     Fouth parameter, optional, progress handler callback
     Returns dictionary of file paths with headers
     '''
-    size = get_xml_tag_strings(item, ["size"])[0]
+    try:
+        size = get_xml_tag_strings(item, ["size"])[0]
+    except:
+        size = None
     urllist = get_subnodes(item, ["resources", "url"])
     if len(urllist) == 0:
         print "No urls to download file from."
@@ -392,11 +400,12 @@ def download_file_node(item, path, force = False, handler = None):
     hashes['md5'] = ""
     hashes['sha1'] = ""
     for hashitem in hashlist:
-        for i in range(hashitem.attributes.length):
-            if hashitem.attributes.item(i).name == "type":
-                hashes[hashitem.attributes.item(i).value] = hashitem.firstChild.nodeValue.strip()
+        hashes[get_attr_from_item(hashitem, "type")] = hashitem.firstChild.nodeValue.strip()
+##        for i in range(hashitem.attributes.length):
+##            if hashitem.attributes.item(i).name == "type":
+##                hashes[hashitem.attributes.item(i).value] = hashitem.firstChild.nodeValue.strip()
 
-    local_file = get_localfile_from_item(item)
+    local_file = get_attr_from_item(item, "name")
     localfile = path_join(path, local_file)
     # choose a random url tag to start with
     number = int(random.random() * len(urllist))
@@ -639,37 +648,17 @@ def get_xml_item_strings(items):
         stringlist.append(myitem.firstChild.nodeValue.strip())
     return stringlist
 
-def get_localfile_from_item(item):
-    '''
-    Extract the local name of the downloaded file from the XML node
-    First parameter, item XML node
-    Returns name of the local file (not path)
-    '''
-    local_file = ""
-    #filename = utils.get_subnodes(item, ["metalink", "files", "file"])
-
-    for i in range(item.attributes.length):
-        if item.attributes.item(i).name == "name":
-            local_file = item.attributes.item(i).value
-
-    #local_file = os.path.join(self.CACHE_DIR, local_file)
-            
-    return local_file
-
 def get_attr_from_item(item, name):
     '''
     Extract the attribute from the XML node
     First parameter, item XML node
-    Returns name of the attribute
+    Returns value of the attribute
     '''
     local_file = ""
-    #filename = utils.get_subnodes(item, ["metalink", "files", "file"])
 
     for i in range(item.attributes.length):
         if item.attributes.item(i).name == name:
             local_file = item.attributes.item(i).value
-
-    #local_file = os.path.join(self.CACHE_DIR, local_file)
             
     return local_file
 
