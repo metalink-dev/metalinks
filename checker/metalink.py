@@ -78,13 +78,14 @@ import httplib
 import re
 import socket
 
+VERSION="Metalink Checker version 1.3"
 
 def run():
     '''
     Start a console version of this application.
     '''
     # Command line parser options.
-    parser = optparse.OptionParser()
+    parser = optparse.OptionParser(version=VERSION)
     parser.add_option("--download", "-d", action="store_true", dest="download", help="Actually download the file(s) in the metalink")
     parser.add_option("--file", "-f", dest="filevar", metavar="FILE", help="Metalink file to check")
     parser.add_option("--timeout", "-t", dest="timeout", metavar="TIMEOUT", help="Set timeout in seconds to wait for response (default=10)")

@@ -1,0 +1,22 @@
+Metalink Checker
+
+Metalink Checker is a command line application that checks or downloads(executes) metalink files. It downloads the files, checks their SHA1 or MD5 verification and verifies that the files are working.
+
+It also checks general validity of the metalink (valid XML).
+
+
+
+Instructions:
+  1. You need to have Python installed.
+  2. Run on the command line using: python metalink.py
+
+  usage: metalink.py [options]
+
+  options:
+    -h, --help            show this help message and exit
+    -d, --download        Actually download the file(s) in the metalink
+    -f FILE, --file=FILE  Metalink file to check
+    -t TIMEOUT, --timeout=TIMEOUT
+                          Set timeout in seconds to wait for response
+                          (default=10)
+
