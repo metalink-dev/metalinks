@@ -46,6 +46,10 @@
 #                           (default=10)
 #
 # CHANGELOG:
+# Version 1.3.1
+# -------------
+# - Made error when XML parse fails a little clearer.
+#
 # Version 1.3
 # -----------
 # - Fixed bug when no "size" attribute is present
@@ -78,7 +82,7 @@ import httplib
 import re
 import socket
 
-VERSION="Metalink Checker version 1.3"
+VERSION="Metalink Checker Version 1.3.1"
 
 def run():
     '''
@@ -175,7 +179,11 @@ def check_metalink(src):
     '''
     src = complete_url(src)
     datasource = urllib2.urlopen(src)
-    dom2 = xml.dom.minidom.parse(datasource)   # parse an open file
+    try:
+        dom2 = xml.dom.minidom.parse(datasource)   # parse an open file
+    except:
+        print "ERROR parsing XML."
+        raise
     datasource.close()
     
     urllist = get_subnodes(dom2, ["metalink", "files", "file"])
