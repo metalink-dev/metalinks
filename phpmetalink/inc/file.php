@@ -30,3 +30,17 @@ function mirrorLinks($file)
 		$links[] = $mirror.MIRROR_DIR.$file;
 	return $links;
 }
+
+//Hash discovery
+function hasHash($file, $type)
+{
+	return file_exists(META_DIR.$file.'.'.$type);
+}
+function hasSHA1($file)
+{
+	return hasHash($file, 'sha1');
+}
+function hasMD5($file)
+{
+	return hasHash($file, 'md5');
+}

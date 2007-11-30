@@ -17,6 +17,11 @@ if($_GET['type'] == 'sha1')
 if(!$type)
 	die('could not determine hash');
 
+//$type SAFE now
+
+if(hasHash($file, $type))
+	die('Already have that hash, remove the cache before rerunning this');
+
 if($type == 'md5')
 	$hash = md5_file(MIRROR_DIR.$file);
 if($type == 'sha1')
