@@ -46,6 +46,10 @@
 #                           (default=10)
 #
 # CHANGELOG:
+# Version 1.4
+# -----------
+# - Added support for checking the file size on FTP servers
+#
 # Version 1.3.1
 # -------------
 # - Made error when XML parse fails a little clearer.
@@ -81,6 +85,7 @@ import sys
 import httplib
 import re
 import socket
+import ftplib
 
 VERSION="Metalink Checker Version 1.3.1"
 
@@ -293,7 +298,28 @@ def check_urlretrieve(url):
 		if result.group(1) == "110":
                     code = "timed out"
             return "Response: %s" % code
-    headers = temp.info()
+    headers = ""
+
+    # attempt to get FTP file size
+    if get_transport(temp.geturl()) == "ftp":
+        urlparts = urlparse.urlparse(temp.geturl())
+        username = ""
+        password = ""
+        if urlparts.username == None:
+            username = "anonymous"
+            password = "anonymous"
+
+        try:
+            ftpobj = ftplib.FTP(urlparts.netloc, urlparts.username, urlparts.password)
+            ftpobj.login()
+            size = ftpobj.size(urlparts.path)
+            ftpobj.quit()
+            if size != None:
+                headers += "Content-Length: %s\r\n" % size
+        except:
+            pass
+            
+    headers += "%s" % temp.info()
     temp.close()
 
     return headers
