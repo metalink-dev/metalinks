@@ -87,7 +87,7 @@ import re
 import socket
 import ftplib
 
-VERSION="Metalink Checker Version 1.3.1"
+VERSION="Metalink Checker Version 1.4"
 
 def run():
     '''
