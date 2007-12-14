@@ -87,6 +87,7 @@ import re
 import socket
 import ftplib
 import asyncore
+import mmap
 
 VERSION="Metalink Checker Version 1.4"
 
@@ -357,52 +358,97 @@ def segmented_download(remote_files, local_file, filemd5="", filesha1="", force 
     # need to check if local file already exists and is good
     if os.path.exists(local_file) and (not force) and verify_checksum(local_file, filemd5, filesha1):
         return local_file
-    manager = Segment_Manager(remote_files, local_file, None) 
-    #asyncore.loop()
+    manager = Segment_Manager(remote_files, local_file, 98554909) 
+    asyncore.loop()
 
 class Segment_Manager(asyncore.dispatcher):
     def __init__(self, urls, localfile, size=None, chunk_size = 262144, limit_per_host = 4, host_limit = 5):
         # need to check if file exists and resume download if partial checksums
-        # Open and memory map the file.
-        self.f = open(localfile,'wb+')
-        self.f.write("\0")
-        self.m = mmap(self.f.fileno(),0)
-
+        
         self.chunks = []
         self.hosts = {}
         self.size = size
         if size == None:
-            raise "Size not set!"
+            self.size = 10000000
+            #raise "Size not set!"
             #self.size = 
-        #for url in urls:
-        #   Http_Segment_Download(url, start, end, self.m)
-        pass
+
+        # Open and memory map the file.
+        self.f = open(localfile,'wb+')
+        #print self.f
+        #self.f.write("\0")
+        self.m = mmap.mmap(self.f.fileno(), self.size)
 
     def update(self):
-        #self.hosts[]
         next = self.next_url()
         if next == None:
             return
-        start = (len(self.chunks) + 1) * self.chunk_size
+        start = (len(self.chunks)) * self.chunk_size
         end = start + self.chunk_size
-        self.chunks.append(Http_Segment_Download(next, start, end, self.m))
-        # update self.hosts
+        if (start < self.size):
+            self.chunks.append(Http_Segment_Download(next, start, end, self.m))
+        if all_closed():
+            self.close()
+
+    def all_closed(self):
+        for item in self.chunks:
+            if item.closed == False:
+                return False
+        return True
+        
+    def gen_count_array(self):
+        temp = {}
+        for item in self.chunks:
+            if temp.closed == False:
+                try:
+                    temp[item.url] += 1
+                except KeyError:
+                    temp[item.url] = 1
+        return temp
+
+    def active_count(self):
+        count = 0
+        for item in self.chunks:
+            if item.closed == False:
+                count += 1
+        return count
         
     def write_handler(self):
-        pass
-        #self.chunks
-        #
+        self.update()
+
+    def readable(self):
+        print "in readable"
+        return True
 
     def writable(self):
+        print "in writable"
+        # should check for number of running subprocesses here
         return True
 
     def next_url(self):
-        ''' returns next url to use'''
+        ''' returns next url to use or None if none available'''
+        if (self.active_count() >= (self.host_limit * self.limit_per_host)):
+            return None
+        
+        count = gen_count_array()
         # randomly start with a url index
-        # check against self.hosts
-        # increment if needed
-        # return next url or None if none available
-        pass
+        #number = int(random.random() * len(self.url))
+        number = 0
+        start = number
+
+        # check against limits
+        while (number < len(self.url)):
+            try:
+                tempcount = len(count[self.url[number]])
+            except KeyError:
+                tempcount = 0
+
+            if ((tempcount == 0) and (len(count) < self.host_limit)) or (0 < tempcount < self.limit_per_host):
+                return url
+                    
+            number += 1
+
+        return None
     
     def close_handler(self):
         self.m.close()
@@ -509,6 +555,8 @@ def download_file(remote_file, local_file, filemd5="", filesha1="", force = Fals
         os.makedirs(directory)
                 
     #print "Downloading: %s" % remote_file
+    #segmented_download([remote_file], local_file, filemd5, filesha1, force, handler)
+    #return
     
     try:
         urlretrieve(remote_file, local_file, handler)
