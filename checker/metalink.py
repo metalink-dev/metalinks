@@ -86,6 +86,7 @@ import httplib
 import re
 import socket
 import ftplib
+import asyncore
 
 VERSION="Metalink Checker Version 1.4"
 
@@ -350,6 +351,141 @@ def download(src, path, filemd5="", filesha1="", force = False, handler = None):
         if result:
             return [result]
         return False
+
+def segmented_download(remote_files, local_file, filemd5="", filesha1="", force = False, handler = None):
+    ''' not finished yet!'''
+    # need to check if local file already exists and is good
+    if os.path.exists(local_file) and (not force) and verify_checksum(local_file, filemd5, filesha1):
+        return local_file
+    manager = Segment_Manager(remote_files, local_file, None) 
+    #asyncore.loop()
+
+class Segment_Manager(asyncore.dispatcher):
+    def __init__(self, urls, localfile, size=None, chunk_size = 262144, limit_per_host = 4, host_limit = 5):
+        # need to check if file exists and resume download if partial checksums
+        # Open and memory map the file.
+        self.f = open(localfile,'wb+')
+        self.f.write("\0")
+        self.m = mmap(self.f.fileno(),0)
+
+        self.chunks = []
+        self.hosts = {}
+        self.size = size
+        if size == None:
+            raise "Size not set!"
+            #self.size = 
+        #for url in urls:
+        #   Http_Segment_Download(url, start, end, self.m)
+        pass
+
+    def update(self):
+        #self.hosts[]
+        next = self.next_url()
+        if next == None:
+            return
+        start = (len(self.chunks) + 1) * self.chunk_size
+        end = start + self.chunk_size
+        self.chunks.append(Http_Segment_Download(next, start, end, self.m))
+        # update self.hosts
+        
+    def write_handler(self):
+        pass
+        #self.chunks
+        #
+
+    def writable(self):
+        return True
+
+    def next_url(self):
+        ''' returns next url to use'''
+        # randomly start with a url index
+        # check against self.hosts
+        # increment if needed
+        # return next url or None if none available
+        pass
+    
+    def close_handler(self):
+        self.m.close()
+        self.f.close()
+    #def read():
+
+##class Chunklist(list):
+##    def __init__(self):
+##        pass
+##
+##    def update(self):
+##        pass
+    
+class Http_Segment_Download(asyncore.dispatcher):
+    def __init__(self, url, start, end, memmap):
+        asyncore.dispatcher.__init__(self)
+        urlparts = urlparse.urlparse(url)
+        # need to add port number here
+        # need to check for SSL here
+        self.conn = httplib.HTTPConnection(urlparts.netloc)
+        self.mem = memmap
+        self.start = start
+        self.end = end
+        self.bytes = 0
+        self.start_time = time.time()
+        self.end_time = None
+        self.closed = False
+        self.url = url
+        # check for supported hosts/urls
+        self.buffer = [("GET", urlparts.path, "", {"Range": "bytes=%lu-%lu\r\n\r\n" % (start, end)})]
+        print self.buffer
+
+    def readable(self):
+        status = self.conn.getresponse().status
+        if status == 200:
+            return True
+        else:
+            print "ERROR: Code %s" % status
+            self.close()
+        return False
+    
+    def handle_read(self):
+        # Receive incoming data.
+        data = self.conn.getresponse().read()
+        headerend = find(data, "\r\n\r\n")
+        if headerend != -1:
+            body = data[headerend+4:]
+        else:
+            body = data
+        size = len(body)
+        startwrite = self.start + self.bytes
+        endwrite = startwrite + size
+        # write out body to file
+        print "writing body size %s" % len(body)
+        self.mem[startwrite:endwrite] = body
+        self.bytes += size
+
+    # Check to see if the buffer is clear.
+    def writable(self):
+        return(len(self.buffer) > 0)
+    
+    # Handle transmission of the data.
+    def handle_write(self):
+        self.conn.request(self.buffer[0][0], self.buffer[0][1], self.buffer[0][2], self.buffer[0][3])
+        self.buffer = self.buffer[1:]
+
+    def get_time(self):
+        if self.end_time == None:
+            return time.time() - self.start_time
+        return self.end_time - self.start_time
+
+    def avg_bitrate(self):
+        bits = self.bytes * 8
+        time = self.get_time()
+        return bits/time
+        
+    def handle_close(self):
+        self.end_time = time.time()
+        self.conn.close()
+        self.closed = True
+        
+    def handle_connect(self):
+        pass
 
 def download_file(remote_file, local_file, filemd5="", filesha1="", force = False, handler = None):
     '''
