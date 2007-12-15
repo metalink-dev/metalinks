@@ -91,6 +91,8 @@ import mmap
 import time
 
 VERSION="Metalink Checker Version 1.4"
+LIMIT_PER_HOST = 1
+HOST_LIMIT = 5
 
 def run():
     '''
@@ -354,39 +356,64 @@ def download(src, path, filemd5="", filesha1="", force = False, handler = None):
             return [result]
         return False
 
-def segmented_download(remote_files, local_file, filemd5="", filesha1="", force = False, handler = None):
+def segmented_download(remote_files, local_file, size=None, filemd5="", filesha1="", force = False, handler = None):
     ''' not finished yet!'''
     # need to check if local file already exists and is good
     if os.path.exists(local_file) and (not force) and verify_checksum(local_file, filemd5, filesha1):
         return local_file
-    manager = Segment_Manager(remote_files, local_file, 98554909)
+    
+    manager = Segment_Manager(remote_files, local_file, size, reporthook = handler)
     manager.run()
 
+    if verify_checksum(local_file, filemd5, filesha1):
+        return local_file
+    
+    #print "checksum failed"
+    return False
+
 class Segment_Manager:
-    def __init__(self, urls, localfile, size=None, chunk_size = 262144, limit_per_host = 4, host_limit = 5):
+    def __init__(self, urls, localfile, size=None, chunk_size = 262144, reporthook = None, checksums = None):
+        # if size not defined need to grab from HTTP/FTP headers
+        # ftp support
+        # partial checksum support
         # need to check if file exists and resume download if partial checksums
+        # download priority
+        # switch from memmap which can use a lot of memory to direct file writes?
+        # randomize start url
         
+        self.sockets = []
         self.chunks = []
-        self.limit_per_host = limit_per_host
-        self.host_limit = host_limit
-        self.size = size
+        self.limit_per_host = LIMIT_PER_HOST
+        self.host_limit = HOST_LIMIT
+        self.size = int(size)
         self.urls = urls
         self.chunk_size = chunk_size
-        if size == None:
-            self.size = 10000000
-            #raise "Size not set!"
+        self.reporthook = reporthook
+        self.filter_urls()
+        
+        if size == None or size == "" or size == 0:
+            raise "Size not set!"
             #self.size = 
 
         # Open and memory map the file.
         self.f = open(localfile,'wb+')
-        #print self.f
-        #self.f.write("\0")
         self.m = mmap.mmap(self.f.fileno(), self.size)
-
+        
+    def filter_urls(self):
+        newurls = []
+        for item in self.urls:
+            if (not item.endswith(".torrent")) and (get_transport(item) == "http"):
+                newurls.append(item)
+        self.urls = newurls
+        return newurls
+            
     def run(self):
         while True:
+            #print "tc:", self.active_count(), len(self.sockets)
+            time.sleep(0.1)
             self.update()
-            if self.all_closed():
+            #if self.all_closed():
+            if self.byte_total() >= self.size:
                 self.close_handler()
                 return
 
@@ -394,27 +421,39 @@ class Segment_Manager:
         next = self.next_url()
         if next == None:
             return
-        start = (len(self.chunks)) * self.chunk_size
-        end = start + self.chunk_size
-        if (start < self.size):
-            segment = Http_Segment_Download(next, start, end, self.m)
-            
-            self.chunks.append(segment)
-            #print type(segment)
-            segment.start()
-        #if all_closed():
-        #    self.close()
 
-    def all_closed(self):
-        for item in self.chunks:
-            if item.isAlive() == True:
-                return False
-        return True
+        index = self.get_chunk_index()
+        if index != None:
+            if self.reporthook != None:
+                self.reporthook(int(self.byte_total()/self.chunk_size), self.chunk_size, self.size)
+            
+            start = index * self.chunk_size
+            end = start + self.chunk_size - 1
+            if end > self.size:
+                end = self.size
+            #print next.protocol
+            #print next.url
+            if next.protocol == "http":
+                segment = Http_Host_Segment(next, start, end)
+                self.chunks[index] = segment
+                segment.start()
+
+    def get_chunk_index(self):
+        i = -1
+        for i in range(len(self.chunks)):
+            if self.chunks[i].error != None:
+                return i
+        i += 1
+        if (i * self.chunk_size) < self.size:
+            self.chunks.append(None)
+            return i
+        
+        return None
         
     def gen_count_array(self):
         temp = {}
-        for item in self.chunks:
-            if item.isAlive() == True:
+        for item in self.sockets:
+            #if item.active == True:
                 try:
                     temp[item.url] += 1
                 except KeyError:
@@ -427,25 +466,18 @@ class Segment_Manager:
             if item.isAlive() == True:
                 count += 1
         return count
-        
-##    def write_handler(self):
-##        self.update()
-##
-##    def readable(self):
-##        print "in readable"
-##        return True
-##
-##    def writable(self):
-##        print "in writable"
-##        # should check for number of running subprocesses here
-##        return True
 
     def next_url(self):
-        ''' returns next url to use or None if none available'''
-        if (self.active_count() >= (self.host_limit * self.limit_per_host)):
+        ''' returns next socket to use or None if none available'''
+        self.remove_errors()
+
+        if (len(self.sockets) >= (self.host_limit * self.limit_per_host)) or (len(self.sockets) >= (self.limit_per_host * len(self.urls))):
+            # We can't create any more sockets, but we can see what's available
+            for item in self.sockets:
+                if item.active == False:
+                    return item
             return None
 
-        self.remove_errors()        
         count = self.gen_count_array()
         # randomly start with a url index
         #number = int(random.random() * len(self.url))
@@ -460,7 +492,9 @@ class Segment_Manager:
                 tempcount = 0
 
             if ((tempcount == 0) and (len(count) < self.host_limit)) or (0 < tempcount < self.limit_per_host):
-                return self.urls[number]
+                host = Http_Host(self.urls[number], self.m)
+                self.sockets.append(host)
+                return host
                     
             number += 1
 
@@ -469,97 +503,183 @@ class Segment_Manager:
     def remove_errors(self):
         for item in self.chunks:
             if item.error != None:
+                #print item.error
+                if item.error == 301 or item.error == 302:
+                    #print "location:", item.location
+                    self.urls.append(item.location)
+                    self.filter_urls()
+                    
                 #print "removed %s" % item.url
                 try:
                     self.urls.remove(item.url)
                 except ValueError:
                     pass
+
+        for socketitem in self.sockets:
+            if socketitem.url not in self.urls:
+                socketitem.close()
+                self.sockets.remove(socketitem)
         return
+
+    def byte_total(self):
+        total = 0
+        for item in self.chunks:
+            try:
+                total += item.bytes
+            except AttributeError: pass
+        return total
     
     def close_handler(self):
         self.m.close()
         self.f.close()
-    #def read():
+        for host in self.sockets:
+            host.close()
+        #print "downloaded %s/%s (%s)" % (self.byte_total(), self.size, self.byte_total() * 100/self.size)
 
-##class Chunklist(list):
-##    def __init__(self):
-##        pass
-##
-##    def update(self):
-##        pass
-    
-class Http_Segment_Download(threading.Thread):
-    def __init__(self, url, start, end, memmap):
-        threading.Thread.__init__(self)
+class Host_Base:
+    def __init__(self, url, memmap):
+        self.bytes = 0
+        self.ttime = 0
+        self.start_time = None
+        self.error = None
+        self.conn = None
+        self.active = False
+        
         self.url = url
         self.mem = memmap
-        self.byte_start = start
-        self.byte_end = end
 
-        self.bytes = 0
-        self.start_time = None
-        self.end_time = None
-        self.error = None
+        transport = get_transport(self.url)
+        self.protocol = transport
         
-    def run(self):
+    def import_stats(self, segment):
+        pass
+
+    def set_active(self, value):
+        self.active = value
+
+            
+class Http_Host(Host_Base):
+    def __init__(self, url, memmap):
+        Host_Base.__init__(self, url, memmap)
+        
         urlparts = urlparse.urlparse(self.url)
         # need to add port number here
         # need to check for SSL here
-        self.conn = httplib.HTTPConnection(urlparts.netloc)
+        if self.url.endswith(".torrent"):
+            self.error = "unsupported protocol"
+            return
+        elif self.protocol == "http":
+            try:
+                self.conn = httplib.HTTPConnection(urlparts.netloc)
+            except httplib.InvalidURL:
+                self.error = "invalid url"
+                return
+        else:
+            self.error = "unsupported protocol"
+            return
+        
+    def close(self):
+        if self.conn != None:
+            self.conn.close()
 
+
+        
+class Http_Host_Segment(threading.Thread):
+    def __init__(self, host, start, end):
+        threading.Thread.__init__(self)
+        self.host = host
+        self.host.set_active(True)
+        self.byte_start = start
+        self.byte_end = end
+        self.url = host.url
+        self.mem = host.mem
+        self.error = None        
+        self.ttime = 0
+        self.conn = host.conn
+        self.response = None
+        self.bytes = 0
+
+    def run(self):
         # check for supported hosts/urls
-        self.conn.request("GET", urlparts.path, "", {"Range": "bytes=%lu-%lu\r\n\r\n" % (self.byte_start, self.byte_end)})
+        urlparts = urlparse.urlparse(self.url)
+        if self.conn == None:
+            self.error = "bad socket"
+            self.close()
+            return
+
+        try:
+            self.conn.request("GET", urlparts.path, "", {"Range": "bytes=%lu-%lu\r\n" % (self.byte_start, self.byte_end)})
+        except:
+            self.error = "socket exception"
+            self.close()
+            return
+        
         self.start_time = time.time()
         while True:
             if self.readable():
                 self.handle_read()
             else:
-                self.handle_close()
+                self.ttime += (time.time() - self.start_time)
+                self.close()
                 return
-        
-        self.handle_close()
 
     def readable(self):
-        status = self.conn.getresponse().status
-        if status == 200:
+        if self.response == None:
+            try:
+                self.response = self.conn.getresponse()
+            except socket.timeout:
+                self.error = "timeout"
+                return False
+            # not an error state, connection closed, kicks us out of thread
+            except httplib.ResponseNotReady:
+                return False
+            
+        if self.response.status == 206:
             return True
+        elif self.response.status == 301 or self.response.status == 302:
+            self.location = self.response.getheader("Location")
+            self.error = self.response.status
+            self.response = None
+            return False
         else:
-            print self.getName()
-            print "ERROR: Code %s" % status
-            self.error = status
-            #self.handle_close()
+            self.error = self.response.status
+            self.response = None
             return False
         return False
     
     def handle_read(self):
-        # Receive incoming data.
-        data = self.conn.getresponse().read()
-        headerend = find(data, "\r\n\r\n")
-        if headerend != -1:
-            body = data[headerend+4:]
-        else:
-            body = data
+       
+        try:
+            data = self.response.read()
+        except socket.timeout:
+            self.error = "timeout"
+            self.response = None
+            return
+        except httplib.IncompleteRead:
+            self.error = "incomplete read"
+            self.response = None
+            return
+        if len(data) == 0:
+            return
+
+        body = data
         size = len(body)
-        startwrite = self.start + self.bytes
+        startwrite = self.byte_start + self.bytes
         endwrite = startwrite + size
         # write out body to file
-        print "writing body size %s" % len(body)
+        #print "writing body size %s" % len(body)
         self.mem[startwrite:endwrite] = body
-        self.bytes += size
-
-    def get_time(self):
-        if self.end_time == None:
-            return time.time() - self.start_time
-        return self.end_time - self.start_time
+        self.bytes += len(body)
+        self.response = None
+        #self.close()
 
     def avg_bitrate(self):
         bits = self.bytes * 8
-        time = self.get_time()
-        return bits/time
-        
-    def handle_close(self):
-        self.end_time = time.time()
-        self.conn.close()
+        #time = self.get_time()
+        return bits/self.ttime
+
+    def close(self):
+        self.host.set_active(False)
 
 def download_file(remote_file, local_file, filemd5="", filesha1="", force = False, handler = None):
     '''
@@ -581,11 +701,6 @@ def download_file(remote_file, local_file, filemd5="", filesha1="", force = Fals
     directory = os.path.dirname(local_file)
     if not os.path.isdir(directory):
         os.makedirs(directory)
-                
-    #print "Downloading: %s" % remote_file
-    #print "segmented"
-    #segmented_download([remote_file], local_file, filemd5, filesha1, force, handler)
-    #return
     
     try:
         urlretrieve(remote_file, local_file, handler)
@@ -595,7 +710,7 @@ def download_file(remote_file, local_file, filemd5="", filesha1="", force = Fals
 
     if verify_checksum(local_file, filemd5, filesha1):
         return local_file
-    
+
     return False
 
 def download_metalink(src, path, force = False, handler = None):
@@ -643,6 +758,10 @@ def download_file_node(item, path, force = False, handler = None):
         return False
             
     hashlist = get_subnodes(item, ["verification", "hash"])
+    try:
+        size = get_xml_tag_strings(item, ["size"])[0]
+    except:
+        size = None
     
     hashes = {}
     hashes['md5'] = ""
@@ -655,6 +774,15 @@ def download_file_node(item, path, force = False, handler = None):
 
     local_file = get_attr_from_item(item, "name")
     localfile = path_join(path, local_file)
+
+    if False:
+        #print "===================segmented"
+        newlist = []
+        for item in urllist:
+            newlist.append(item.firstChild.nodeValue.strip())
+        segmented_download(newlist, localfile, size, hashes['md5'], hashes['sha1'], force, handler)
+        return False
+
     # choose a random url tag to start with
     number = int(random.random() * len(urllist))
     
