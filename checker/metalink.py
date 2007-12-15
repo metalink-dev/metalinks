@@ -86,8 +86,9 @@ import httplib
 import re
 import socket
 import ftplib
-import asyncore
+import threading
 import mmap
+import time
 
 VERSION="Metalink Checker Version 1.4"
 
@@ -358,16 +359,19 @@ def segmented_download(remote_files, local_file, filemd5="", filesha1="", force 
     # need to check if local file already exists and is good
     if os.path.exists(local_file) and (not force) and verify_checksum(local_file, filemd5, filesha1):
         return local_file
-    manager = Segment_Manager(remote_files, local_file, 98554909) 
-    asyncore.loop()
+    manager = Segment_Manager(remote_files, local_file, 98554909)
+    manager.run()
 
-class Segment_Manager(asyncore.dispatcher):
+class Segment_Manager:
     def __init__(self, urls, localfile, size=None, chunk_size = 262144, limit_per_host = 4, host_limit = 5):
         # need to check if file exists and resume download if partial checksums
         
         self.chunks = []
-        self.hosts = {}
+        self.limit_per_host = limit_per_host
+        self.host_limit = host_limit
         self.size = size
+        self.urls = urls
+        self.chunk_size = chunk_size
         if size == None:
             self.size = 10000000
             #raise "Size not set!"
@@ -379,6 +383,13 @@ class Segment_Manager(asyncore.dispatcher):
         #self.f.write("\0")
         self.m = mmap.mmap(self.f.fileno(), self.size)
 
+    def run(self):
+        while True:
+            self.update()
+            if self.all_closed():
+                self.close_handler()
+                return
+
     def update(self):
         next = self.next_url()
         if next == None:
@@ -386,20 +397,24 @@ class Segment_Manager(asyncore.dispatcher):
         start = (len(self.chunks)) * self.chunk_size
         end = start + self.chunk_size
         if (start < self.size):
-            self.chunks.append(Http_Segment_Download(next, start, end, self.m))
-        if all_closed():
-            self.close()
+            segment = Http_Segment_Download(next, start, end, self.m)
+            
+            self.chunks.append(segment)
+            #print type(segment)
+            segment.start()
+        #if all_closed():
+        #    self.close()
 
     def all_closed(self):
         for item in self.chunks:
-            if item.closed == False:
+            if item.isAlive() == True:
                 return False
         return True
         
     def gen_count_array(self):
         temp = {}
         for item in self.chunks:
-            if temp.closed == False:
+            if item.isAlive() == True:
                 try:
                     temp[item.url] += 1
                 except KeyError:
@@ -409,46 +424,57 @@ class Segment_Manager(asyncore.dispatcher):
     def active_count(self):
         count = 0
         for item in self.chunks:
-            if item.closed == False:
+            if item.isAlive() == True:
                 count += 1
         return count
         
-    def write_handler(self):
-        self.update()
-
-    def readable(self):
-        print "in readable"
-        return True
-
-    def writable(self):
-        print "in writable"
-        # should check for number of running subprocesses here
-        return True
+##    def write_handler(self):
+##        self.update()
+##
+##    def readable(self):
+##        print "in readable"
+##        return True
+##
+##    def writable(self):
+##        print "in writable"
+##        # should check for number of running subprocesses here
+##        return True
 
     def next_url(self):
         ''' returns next url to use or None if none available'''
         if (self.active_count() >= (self.host_limit * self.limit_per_host)):
             return None
-        
-        count = gen_count_array()
+
+        self.remove_errors()        
+        count = self.gen_count_array()
         # randomly start with a url index
         #number = int(random.random() * len(self.url))
         number = 0
         start = number
 
         # check against limits
-        while (number < len(self.url)):
+        while (number < len(self.urls)):
             try:
-                tempcount = len(count[self.url[number]])
+                tempcount = count[self.urls[number]]
             except KeyError:
                 tempcount = 0
 
             if ((tempcount == 0) and (len(count) < self.host_limit)) or (0 < tempcount < self.limit_per_host):
-                return url
+                return self.urls[number]
                     
             number += 1
 
         return None
+
+    def remove_errors(self):
+        for item in self.chunks:
+            if item.error != None:
+                #print "removed %s" % item.url
+                try:
+                    self.urls.remove(item.url)
+                except ValueError:
+                    pass
+        return
     
     def close_handler(self):
         self.m.close()
@@ -462,32 +488,47 @@ class Segment_Manager(asyncore.dispatcher):
 ##    def update(self):
 ##        pass
     
-class Http_Segment_Download(asyncore.dispatcher):
+class Http_Segment_Download(threading.Thread):
     def __init__(self, url, start, end, memmap):
-        asyncore.dispatcher.__init__(self)
-        urlparts = urlparse.urlparse(url)
+        threading.Thread.__init__(self)
+        self.url = url
+        self.mem = memmap
+        self.byte_start = start
+        self.byte_end = end
+
+        self.bytes = 0
+        self.start_time = None
+        self.end_time = None
+        self.error = None
+        
+    def run(self):
+        urlparts = urlparse.urlparse(self.url)
         # need to add port number here
         # need to check for SSL here
         self.conn = httplib.HTTPConnection(urlparts.netloc)
-        self.mem = memmap
-        self.start = start
-        self.end = end
-        self.bytes = 0
-        self.start_time = time.time()
-        self.end_time = None
-        self.closed = False
-        self.url = url
+
         # check for supported hosts/urls
-        self.buffer = [("GET", urlparts.path, "", {"Range": "bytes=%lu-%lu\r\n\r\n" % (start, end)})]
-        print self.buffer
+        self.conn.request("GET", urlparts.path, "", {"Range": "bytes=%lu-%lu\r\n\r\n" % (self.byte_start, self.byte_end)})
+        self.start_time = time.time()
+        while True:
+            if self.readable():
+                self.handle_read()
+            else:
+                self.handle_close()
+                return
+        
+        self.handle_close()
 
     def readable(self):
         status = self.conn.getresponse().status
         if status == 200:
             return True
         else:
+            print self.getName()
             print "ERROR: Code %s" % status
-            self.close()
+            self.error = status
+            #self.handle_close()
+            return False
         return False
     
     def handle_read(self):
@@ -506,15 +547,6 @@ class Http_Segment_Download(asyncore.dispatcher):
         self.mem[startwrite:endwrite] = body
         self.bytes += size
 
-    # Check to see if the buffer is clear.
-    def writable(self):
-        return(len(self.buffer) > 0)
-    
-    # Handle transmission of the data.
-    def handle_write(self):
-        self.conn.request(self.buffer[0][0], self.buffer[0][1], self.buffer[0][2], self.buffer[0][3])
-        self.buffer = self.buffer[1:]
-
     def get_time(self):
         if self.end_time == None:
             return time.time() - self.start_time
@@ -528,10 +560,6 @@ class Http_Segment_Download(asyncore.dispatcher):
     def handle_close(self):
         self.end_time = time.time()
         self.conn.close()
-        self.closed = True
-        
-    def handle_connect(self):
-        pass
 
 def download_file(remote_file, local_file, filemd5="", filesha1="", force = False, handler = None):
     '''
@@ -555,6 +583,7 @@ def download_file(remote_file, local_file, filemd5="", filesha1="", force = Fals
         os.makedirs(directory)
                 
     #print "Downloading: %s" % remote_file
+    #print "segmented"
     #segmented_download([remote_file], local_file, filemd5, filesha1, force, handler)
     #return
     
