@@ -90,11 +90,13 @@ import threading
 import mmap
 import time
 
-VERSION="Metalink Checker Version 1.4"
-
 SEGMENTED = False
 LIMIT_PER_HOST = 1
 HOST_LIMIT = 5
+
+# DO NOT CHANGE
+VERSION="Metalink Checker Version 1.4"
+PROTOCOLS=("http","https")
 
 def run():
     '''
@@ -309,7 +311,7 @@ def check_urlretrieve(url):
 
     # attempt to get FTP file size
     if get_transport(temp.geturl()) == "ftp":
-        urlparts = urlparse.urlparse(temp.geturl())
+        urlparts = urlparse.urlsplit(temp.geturl())
         username = ""
         password = ""
         if urlparts.username == None:
@@ -335,48 +337,9 @@ def check_urlretrieve(url):
 
 ############# download functions #############
 
-def download(src, path, filemd5="", filesha1="", force = False, handler = None):
-    '''
-    Download a file, decodes metalinks.
-    First parameter, file to download, URL or file path to download from
-    Second parameter, file path to save to
-    Third parameter, optional, expected MD5SUM
-    Fourth parameter, optional, expected SHA1SUM
-    Fifth parameter, optional, force a new download even if a valid copy already exists
-    Sixth parameter, optional, progress handler callback
-    Returns list of file paths if download(s) is successful
-    Returns False otherwise (checksum fails)
-    '''
-
-    if src.endswith(".metalink"):
-        return download_metalink(src, path, force, handler)
-    else:
-        # parse out filename portion here
-        filename = os.path.basename(src)
-        result = download_file(src, os.path.join(path, filename), filemd5, filesha1, force, handler)
-        if result:
-            return [result]
-        return False
-
-def segmented_download(remote_files, local_file, size=None, filemd5="", filesha1="", force = False, handler = None):
-    ''' not finished yet!'''
-    # need to check if local file already exists and is good
-    if os.path.exists(local_file) and (not force) and verify_checksum(local_file, filemd5, filesha1):
-        return local_file
-    
-    manager = Segment_Manager(remote_files, local_file, size, reporthook = handler)
-    manager.run()
-
-    if verify_checksum(local_file, filemd5, filesha1):
-        return local_file
-    
-    #print "checksum failed"
-    return False
-
 class Segment_Manager:
     def __init__(self, urls, localfile, size=0, chunk_size = 262144, reporthook = None, checksums = None):
-        # ftp support
-        # https support
+        # ftp size support
         # partial checksum support
         # need to check if file exists and resume download if partial checksums
         # download priority
@@ -386,6 +349,7 @@ class Segment_Manager:
         self.limit_per_host = LIMIT_PER_HOST
         self.host_limit = HOST_LIMIT
         self.size = int(size)
+        self.orig_urls = urls
         self.urls = urls
         self.chunk_size = chunk_size
         self.reporthook = reporthook
@@ -408,8 +372,8 @@ class Segment_Manager:
             while (status == 301 or status == 302):
                 http = Http_Host(url)
                 if http.conn != None:
-                    urlparts = urlparse.urlparse(url)
-                    http.conn.request("HEAD", urlparts.path)
+                    urlparts = urlparse.urlsplit(url)
+                    http.conn.request("HEAD", urlparts.path + "?" + urlparts.query)
                     response = http.conn.getresponse()
                     status = response.status
                     url = response.getheader("Location")
@@ -433,7 +397,7 @@ class Segment_Manager:
     def filter_urls(self):
         newurls = []
         for item in self.urls:
-            if (not item.endswith(".torrent")) and (get_transport(item) == "http"):
+            if (not item.endswith(".torrent")) and (get_transport(item) in PROTOCOLS):
                 newurls.append(item)
         self.urls = newurls
         return newurls
@@ -443,11 +407,13 @@ class Segment_Manager:
             #print "tc:", self.active_count(), len(self.sockets)
             time.sleep(0.1)
             self.update()
-            #if self.all_closed():
-            #print type(self.byte_total()), type(self.size)
             if self.byte_total() >= self.size:
                 self.close_handler()
-                return
+                return True
+            #crap out and do it the old way
+            if len(self.urls) == 0:
+                return False
+        return False
 
     def update(self):
         next = self.next_url()
@@ -464,8 +430,12 @@ class Segment_Manager:
             if end > self.size:
                 end = self.size
 
-            if next.protocol == "http":
+            if next.protocol == "http" or next.protocol == "https":
                 segment = Http_Host_Segment(next, start, end, self.size)
+                self.chunks[index] = segment
+                segment.start()
+            if next.protocol == "ftp":
+                segment = Ftp_Host_Segment(next, start, end, self.size)
                 self.chunks[index] = segment
                 segment.start()
 
@@ -484,11 +454,10 @@ class Segment_Manager:
     def gen_count_array(self):
         temp = {}
         for item in self.sockets:
-            #if item.active == True:
-                try:
-                    temp[item.url] += 1
-                except KeyError:
-                    temp[item.url] = 1
+            try:
+                temp[item.url] += 1
+            except KeyError:
+                temp[item.url] = 1
         return temp
 
     def active_count(self):
@@ -502,7 +471,6 @@ class Segment_Manager:
         ''' returns next socket to use or None if none available'''
         self.remove_errors()
 
-        #print len(self.urls)
         if (len(self.sockets) >= (self.host_limit * self.limit_per_host)) or (len(self.sockets) >= (self.limit_per_host * len(self.urls))):
             # We can't create any more sockets, but we can see what's available
             for item in self.sockets:
@@ -513,21 +481,25 @@ class Segment_Manager:
         count = self.gen_count_array()
         # randomly start with a url index
         number = int(random.random() * len(self.urls))
-        #start = number
     
         countvar = 1   
         while (countvar <= len(self.urls)):
-        # check against limits
-        #while (number < len(self.urls)):
             try:
                 tempcount = count[self.urls[number]]
             except KeyError:
                 tempcount = 0
-
+            # check against limits
             if ((tempcount == 0) and (len(count) < self.host_limit)) or (0 < tempcount < self.limit_per_host):
-                host = Http_Host(self.urls[number], self.f)
-                self.sockets.append(host)
-                return host
+                # check protocol type here
+                protocol = get_transport(self.urls[number])
+                if (not self.urls[number].endswith(".torrent")) and (protocol == "http" or protocol == "https"):
+                    host = Http_Host(self.urls[number], self.f)
+                    self.sockets.append(host)
+                    return host
+                if (protocol == "ftp"):
+                    host = Ftp_Host(self.urls[number], self.f)
+                    self.sockets.append(host)
+                    return host
                     
             number = (number + 1) % len(self.urls)
             countvar += 1
@@ -552,16 +524,13 @@ class Segment_Manager:
         for socketitem in self.sockets:
             if socketitem.url not in self.urls:
                 socketitem.close()
-                #print "removing socket before:", len(self.sockets)
                 self.sockets.remove(socketitem)
-                #print "after:", len(self.sockets)
         return
 
     def byte_total(self):
         total = 0
         for item in self.chunks:
             try:
-                #print item.bytes
                 total += item.bytes
             except AttributeError: pass
         return total
@@ -570,7 +539,6 @@ class Segment_Manager:
         self.f.close()
         for host in self.sockets:
             host.close()
-        #print "downloaded %s/%s (%s)" % (self.byte_total(), self.size, self.byte_total() * 100/self.size)
 
 class Host_Base:
     def __init__(self, url, memmap):
@@ -593,20 +561,64 @@ class Host_Base:
     def set_active(self, value):
         self.active = value
 
+class Ftp_Host(Host_Base):
+    def __init__(self, url, memmap=None):
+        Host_Base.__init__(self, url, memmap)
+            
+        if self.protocol == "ftp":
+            urlparts = urlparse.urlsplit(self.url)
+            username = urlparts.username
+            password = urlparts.password
+            if username == None:
+                username = "anonymous"
+                password = "anonymous"
+            try:
+                port = urlparts.port
+            except:
+                port = 21
+            if port == None:
+                port = 21
+
+            self.conn = ftplib.FTP()
+            self.conn.connect(urlparts.netloc, port)
+            self.conn.login(username, password)
+        else:
+            self.error = "unsupported protocol"
+            return
+        
+    def close(self):
+        if self.conn != None:
+            self.conn.quit()
             
 class Http_Host(Host_Base):
     def __init__(self, url, memmap=None):
         Host_Base.__init__(self, url, memmap)
         
-        urlparts = urlparse.urlparse(self.url)
-        # need to add port number here
-        # need to check for SSL here
+        urlparts = urlparse.urlsplit(self.url)
         if self.url.endswith(".torrent"):
             self.error = "unsupported protocol"
             return
         elif self.protocol == "http":
             try:
-                self.conn = httplib.HTTPConnection(urlparts.netloc)
+                port = urlparts.port
+            except:
+                port = 80
+            if port == None:
+                port = 80
+            try:
+                self.conn = httplib.HTTPConnection(urlparts.netloc, port)
+            except httplib.InvalidURL:
+                self.error = "invalid url"
+                return
+        elif self.protocol == "https":
+            try:
+                port = urlparts.port
+            except:
+                port = 443
+            if port == None:
+                port = 443
+            try:
+                self.conn = httplib.HTTPSConnection(urlparts.netloc, port)
             except httplib.InvalidURL:
                 self.error = "invalid url"
                 return
@@ -618,6 +630,94 @@ class Http_Host(Host_Base):
         if self.conn != None:
             self.conn.close()
 
+class Ftp_Host_Segment(threading.Thread):
+    def __init__(self, host, start, end, filesize):
+        threading.Thread.__init__(self)
+        self.host = host
+        self.host.set_active(True)
+        self.byte_start = start
+        self.byte_end = end
+        self.byte_count = end - start + 1
+        self.filesize = filesize
+        self.url = host.url
+        self.mem = host.mem
+        self.error = None        
+        self.ttime = 0
+        self.conn = host.conn
+        self.response = None
+        self.bytes = 0
+        self.buffer = ""
+
+    def run(self):
+        # check for supported hosts/urls
+        urlparts = urlparse.urlsplit(self.url)
+        if self.conn == None:
+            self.error = "bad socket"
+            self.close()
+            return
+        
+        size = None
+        try:
+            (self.response, size) = self.conn.ntransfercmd("RETR " + urlparts.path, self.byte_start)
+        except ftplib.error_reply:
+            pass
+            
+        if size != None:
+            if self.filesize != size:
+                self.error = "bad file size"
+                return
+        
+        self.start_time = time.time()
+        while True:
+            if self.readable():
+                self.handle_read()
+            else:
+                self.ttime += (time.time() - self.start_time)
+                self.close()
+                return
+
+    def readable(self):
+        if self.response == None:
+            return False
+        return True
+    
+    def handle_read(self):
+        try:
+            data = self.response.recv(1024)
+        except socket.timeout:
+            self.error = "timeout"
+            self.response = None
+            return
+        
+        if len(data) == 0:
+            return
+
+        self.buffer += data
+
+        if len(self.buffer) >= self.byte_count:
+            #self.response.close()
+            try:
+                self.conn.abort()
+            except: pass
+            
+            tempbuffer = self.buffer[:self.byte_count]
+            self.buffer = ""
+            #self.conn.abort()
+            self.bytes += len(tempbuffer)
+            print "writing body size %s" % len(tempbuffer)
+            self.mem.seek(self.byte_start, 0)
+            self.mem.write(tempbuffer)
+            self.mem.flush()
+        
+            self.response = None
+            #self.close()
+
+    def avg_bitrate(self):
+        bits = self.bytes * 8
+        return bits/self.ttime
+
+    def close(self):
+        self.host.set_active(False)
 
         
 class Http_Host_Segment(threading.Thread):
@@ -638,14 +738,14 @@ class Http_Host_Segment(threading.Thread):
 
     def run(self):
         # check for supported hosts/urls
-        urlparts = urlparse.urlparse(self.url)
+        urlparts = urlparse.urlsplit(self.url)
         if self.conn == None:
             self.error = "bad socket"
             self.close()
             return
 
         try:
-            self.conn.request("GET", urlparts.path, "", {"Range": "bytes=%lu-%lu\r\n" % (self.byte_start, self.byte_end)})
+            self.conn.request("GET", urlparts.path + "?" + urlparts.query, "", {"Range": "bytes=%lu-%lu\r\n" % (self.byte_start, self.byte_end)})
         except:
             self.error = "socket exception"
             self.close()
@@ -711,26 +811,45 @@ class Http_Host_Segment(threading.Thread):
 
         body = data
         size = len(body)
-        startwrite = self.byte_start + self.bytes
-        endwrite = startwrite + size
         # write out body to file
         #print "writing body size %s" % len(body)
-        self.mem.seek(startwrite, 0)
+        self.mem.seek(self.byte_start, 0)
         self.mem.write(body)
         self.mem.flush()
         self.bytes += len(body)
         self.response = None
-        #self.close()
 
     def avg_bitrate(self):
         bits = self.bytes * 8
-        #time = self.get_time()
         return bits/self.ttime
 
     def close(self):
         self.host.set_active(False)
 
-def download_file(remote_file, local_file, filemd5="", filesha1="", force = False, handler = None):
+def download(src, path, filemd5="", filesha1="", force = False, handler = None):
+    '''
+    Download a file, decodes metalinks.
+    First parameter, file to download, URL or file path to download from
+    Second parameter, file path to save to
+    Third parameter, optional, expected MD5SUM
+    Fourth parameter, optional, expected SHA1SUM
+    Fifth parameter, optional, force a new download even if a valid copy already exists
+    Sixth parameter, optional, progress handler callback
+    Returns list of file paths if download(s) is successful
+    Returns False otherwise (checksum fails)
+    '''
+
+    if src.endswith(".metalink"):
+        return download_metalink(src, path, force, handler)
+    else:
+        # parse out filename portion here
+        filename = os.path.basename(src)
+        result = download_file([src], os.path.join(path, filename), 0, filemd5, filesha1, force, handler)
+        if result:
+            return [result]
+        return False
+
+def download_file(urllist, local_file, size=0, filemd5="", filesha1="", force = False, handler = None, segmented = True):
     '''
     Download a file.
     First parameter, file to download, URL or file path to download from
@@ -745,17 +864,31 @@ def download_file(remote_file, local_file, filemd5="", filesha1="", force = Fals
     if os.path.exists(local_file) and (not force) and verify_checksum(local_file, filemd5, filesha1):
         return local_file
 
-    remote_file = complete_url(remote_file)
-
     directory = os.path.dirname(local_file)
     if not os.path.isdir(directory):
         os.makedirs(directory)
-    
-    try:
-        urlretrieve(remote_file, local_file, handler)
-    except:
-        #print "WARNING: Downloading file %s failed." % local_file
-        return False
+
+    seg_result = False
+    if segmented:
+        manager = Segment_Manager(urllist, local_file, size, reporthook = handler)
+        seg_result = manager.run()
+
+    if (not segmented) or (seg_result == False):
+        # do it the old way
+        # choose a random url tag to start with
+        number = int(random.random() * len(urllist))
+        error = True
+        count = 1
+        while (error and (count <= len(urllist))):
+            remote_file = complete_url(urllist[number])
+            result = True
+            try:
+                urlretrieve(remote_file, local_file, handler)
+            except:
+                result = False
+            error = not result
+            number = (number + 1) % len(urllist)
+            count += 1
 
     if verify_checksum(local_file, filemd5, filesha1):
         return local_file
@@ -824,25 +957,10 @@ def download_file_node(item, path, force = False, handler = None):
     local_file = get_attr_from_item(item, "name")
     localfile = path_join(path, local_file)
 
-    if SEGMENTED:
-        #print "===================segmented"
-        newlist = []
-        for item in urllist:
-            newlist.append(item.firstChild.nodeValue.strip())
-        return segmented_download(newlist, localfile, size, hashes['md5'], hashes['sha1'], force, handler)
-
-    # choose a random url tag to start with
-    number = int(random.random() * len(urllist))
-    
-    error = True
-    count = 1   
-    while (error and (count <= len(urllist))):
-        result = download_file(urllist[number].firstChild.nodeValue.strip(), localfile, hashes['md5'], hashes['sha1'], force, handler)
-        error = not result
-        number = (number + 1) % len(urllist)
-        count += 1
-        
-    return result
+    newlist = []
+    for item in urllist:
+        newlist.append(item.firstChild.nodeValue.strip())
+    return download_file(newlist, localfile, size, hashes['md5'], hashes['sha1'], force, handler, SEGMENTED)
 
 def complete_url(url):
     '''
@@ -920,7 +1038,7 @@ def remote_or_local(name):
     First parameter, file path
     Returns "REMOTE" or "LOCAL" based on the file path
     '''
-    #transport = urlparse.urlparse(name).scheme
+    #transport = urlparse.urlsplit(name).scheme
     transport = get_transport(name)
         
     if transport != "":
