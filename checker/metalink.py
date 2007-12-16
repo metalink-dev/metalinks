@@ -46,6 +46,10 @@
 #                           (default=10)
 #
 # CHANGELOG:
+# Version 2.0
+# -----------
+# - Support for segmented downloads! (HTTP urls only, falls back to old method if only FTP urls)
+#
 # Version 1.4
 # -----------
 # - Added support for checking the file size on FTP servers
@@ -90,12 +94,12 @@ import threading
 import mmap
 import time
 
-SEGMENTED = False
+SEGMENTED = True
 LIMIT_PER_HOST = 1
 HOST_LIMIT = 5
 
 # DO NOT CHANGE
-VERSION="Metalink Checker Version 1.4"
+VERSION="Metalink Checker Version 2.0"
 PROTOCOLS=("http","https")
 
 def run():
@@ -338,7 +342,7 @@ def check_urlretrieve(url):
 ############# download functions #############
 
 class Segment_Manager:
-    def __init__(self, urls, localfile, size=0, chunk_size = 262144, reporthook = None, checksums = None):
+    def __init__(self, urls, localfile, size=0, chunk_size = 262144, checksums = None, reporthook = None):
         # ftp size support
         # partial checksum support
         # need to check if file exists and resume download if partial checksums
@@ -657,10 +661,10 @@ class Ftp_Host_Segment(threading.Thread):
             return
         
         size = None
-        try:
-            (self.response, size) = self.conn.ntransfercmd("RETR " + urlparts.path, self.byte_start)
-        except ftplib.error_reply:
-            pass
+        #try:
+        (self.response, size) = self.conn.ntransfercmd("RETR " + urlparts.path, self.byte_start)
+        #except (ftplib.error_reply):
+        #    pass
             
         if size != None:
             if self.filesize != size:
@@ -695,10 +699,11 @@ class Ftp_Host_Segment(threading.Thread):
         self.buffer += data
 
         if len(self.buffer) >= self.byte_count:
+            self.response.shutdown(2)
             #self.response.close()
-            try:
-                self.conn.abort()
-            except: pass
+            #try:
+                #self.conn.abort()
+            #except: pass
             
             tempbuffer = self.buffer[:self.byte_count]
             self.buffer = ""
@@ -849,7 +854,7 @@ def download(src, path, filemd5="", filesha1="", force = False, handler = None):
             return [result]
         return False
 
-def download_file(urllist, local_file, size=0, filemd5="", filesha1="", force = False, handler = None, segmented = True):
+def download_file(urllist, local_file, size=0, filemd5="", filesha1="", force = False, handler = None, segmented = True, checksums = None, chunk_size = 262144):
     '''
     Download a file.
     First parameter, file to download, URL or file path to download from
@@ -870,7 +875,7 @@ def download_file(urllist, local_file, size=0, filemd5="", filesha1="", force = 
 
     seg_result = False
     if segmented:
-        manager = Segment_Manager(urllist, local_file, size, reporthook = handler)
+        manager = Segment_Manager(urllist, local_file, size, chunk_size = chunk_size, reporthook = handler)
         seg_result = manager.run()
 
     if (not segmented) or (seg_result == False):
