@@ -91,7 +91,6 @@ import re
 import socket
 import ftplib
 import threading
-import mmap
 import time
 
 SEGMENTED = True
@@ -344,6 +343,7 @@ def check_urlretrieve(url):
 class Segment_Manager:
     def __init__(self, urls, localfile, size=0, chunk_size = 262144, checksums = None, reporthook = None):
         # ftp size support
+        # extract chunk size from XML
         # partial checksum support
         # need to check if file exists and resume download if partial checksums
         # download priority
