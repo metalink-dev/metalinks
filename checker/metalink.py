@@ -46,6 +46,10 @@
 #                           (default=10)
 #
 # CHANGELOG:
+# Version 2.0.1
+# -------------
+# - Bugfix when doing size check on HTTP servers, more reliable now
+#
 # Version 2.0
 # -----------
 # - Support for segmented downloads! (HTTP urls only, falls back to old method if only FTP urls)
@@ -223,7 +227,7 @@ def check_metalink(src):
 
 def check_process(headers, filesize):
     size = "?"
-    sizeheader = get_header(headers, "Content-Length")
+    sizeheader = get_header(headers, "Content-length")
 
     if sizeheader != None and filesize != None:
         if sizeheader == filesize:
