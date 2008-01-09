@@ -22,16 +22,108 @@ import xml.sax
 import xml.sax.handler
 import xml.sax.saxutils
 
+__version__ = '2.0'
+__author__ = 'Hampus Wessman <hw@vox.nu>'
+__copyright__ = 'Copyright (c) 2008 Hampus Wessman, Sweden.'
+__license__ = 'MIT license (see license.txt).'
+__docformat__ = 'epytext'
+__all__ = ['__version__', '__copyright__', '__license__', '__author__', '__url__',
+'Metalink', 'MetalinkFile', 'MetalinkHash', 'MetalinkUrl', 'load_file',
+'load_string', 'MetalinkException']
+
+__doc__ = """Module for handling metalinks.
+
+This module contains data structures (classes) to represent metalinks
+and functions to  load, save and process these in different ways."""
+
 class MetalinkException(Exception):
+  """Class used for all exceptions in the metalink module."""
   def __init__(self, message):
-    self.msg = message
+    """Initialize exception object and save a message for later.
+    @param message: A message describing why the exception was thrown.
+    @type message: str"""
+    self.message = message
   def __str__(self):
+    """Return a string representation of the exception object.
+    @returns: The message specified when the object was created.
+    @rtype: str"""
     return self.msg
+
+class Metalink:
+  """Data structure representing a metalink.
+  
+  All the variables are initialised to default values. In all cases, except for C{ml_type},
+  these values should be interpreted as \"not specified\".  Some variables begin with C{ml_}.
+  This means that they describe the metalink file itself instead of the data contained in it."""
+  files = []
+  """@ivar: This variable contains a list of L{MetalinkFile} objects, representing the
+  different files described by the metalink."""
+  identity = ''
+  version = ''
+  description = ''
+  releasedate = ''
+  tags = ''
+  publisher_name = ''
+  publisher_url = ''
+  license_name = ''
+  license_url = ''
+  ml_generator = ''
+  ml_version = ''
+  ml_refreshdate = ''
+  ml_pubdate = ''
+  ml_origin = ''
+  ml_type = 'static'
+
+class MetalinkFile:
+  """Data structure representing a file in a metalink.
+  
+  All the variables are initialised to default values. In all cases, except for
+  C{piece_type}, these values should be interpreted as \"not specified\"."""
+  name = ''
+  identity = ''
+  version = ''
+  size = -1
+  description = ''
+  copyright = ''
+  changelog = ''
+  logo = ''
+  tags = ''
+  language = ''
+  os = ''
+  mimetype = ''
+  releasedate = ''
+  upgrade = ''
+  screenshot = ''
+  publisher_name = ''
+  publisher_url = ''
+  license_name = ''
+  license_url = ''
+  hashes = []
+  piece_hashes = []
+  piece_length = -1
+  piece_type = 'sha1'
+  urls = []
+  maxconnections = -1
+
+class MetalinkHash:
+  type = type
+  hash = hash
+
+class MetalinkUrl:
+  url = ''
+  type = ''
+  location = ''
+  preference = -1
+  maxconnections = -1
 
 # This class handles the parsing of metalinks
 class MetalinkHandler(xml.sax.handler.ContentHandler):
-  
+  """A content handler that is used to parse metalinks with SAX."""
   def __init__(self, metalink):
+    """Initialize the content handler.
+    
+    @param metalink: Usually an empty Metalink object. All data that is loaded will be added to this object.
+    @type metalink: L{Metalink}"""
     self.metalink = metalink
   
   def startDocument(self):
@@ -52,12 +144,23 @@ class MetalinkHandler(xml.sax.handler.ContentHandler):
     # Some elements are processed here (most after the end element, see below)
     if self.elements == ['metalink']:
       if not (attrs.has_key('version') and attrs['version'] == '3.0'):
-        raise MetalinkException('Wrong version. The metalink must be of version 3.0.')
+        raise MetalinkException('The metalink must be of version 3.0.')
+      else:
+        self.metalink.ml_version = attrs['version']
+      if attrs.has_key('generator'):
+        self.metalink.ml_generator = attrs['generator']
+      if attrs.has_key('refreshdate'):
+        self.metalink.ml_refreshdate = attrs['refreshdate']
+      if attrs.has_key('pubdate'):
+        self.metalink.ml_pubdate = attrs['pubdate']
+      if attrs.has_key('origin'):
+        self.metalink.ml_origin = attrs['origin']
+      if attrs.has_key('type'):
+        self.metalink.ml_type = attrs['type']
     elif self.elements == ['metalink', 'files', 'file']:
-      if not attrs.has_key('name'):
-        raise MetalinkException('Missing attribute: <file> elements must have an attribute called "name".')
       self.file = MetalinkFile()
-      self.file.name = attrs['name']
+      if attrs.has_key('name'):
+        self.file.name = attrs['name']
     elif self.elements == ['metalink', 'files', 'file', 'resources']:
       if attrs.has_key('maxconnections'):
         try:
@@ -77,10 +180,20 @@ class MetalinkHandler(xml.sax.handler.ContentHandler):
   def endElement(self, name):
     # Collect and update data
     attrs = self.attrs.pop()
-    content = self.content.strip() # Remove unintended white space from the beginning and end.
+    content = xml.sax.saxutils.unescape(self.content.strip()) # Get the data, as unescaped text.
     self.content = '' # Next end element shouldn't see this data
     # Process elements. They can only be processed here if they need the element's content.
-    if self.elements == ['metalink', 'publisher', 'name']:
+    if self.elements == ['metalink', 'identity']:
+      self.metalink.identity = content
+    elif self.elements == ['metalink', 'version']:
+      self.metalink.version = content
+    elif self.elements == ['metalink', 'description']:
+      self.metalink.description = content
+    elif self.elements == ['metalink', 'releasedate']:
+      self.metalink.releasedate = content
+    elif self.elements == ['metalink', 'tags']:
+      self.metalink.tags = content
+    elif self.elements == ['metalink', 'publisher', 'name']:
       self.metalink.publisher_name = content
     elif self.elements == ['metalink', 'publisher', 'url']:
       self.metalink.publisher_url = content
@@ -88,35 +201,23 @@ class MetalinkHandler(xml.sax.handler.ContentHandler):
       self.metalink.license_name = content
     elif self.elements == ['metalink', 'license', 'url']:
       self.metalink.license_url = content
-    elif self.elements == ['metalink', 'identity']:
-      self.metalink.identity = content
-    elif self.elements == ['metalink', 'version']:
-      self.metalink.version = content
-    elif self.elements == ['metalink', 'description']:
-      self.metalink.description = content
-    elif self.elements == ['metalink', 'logo']:
-      self.metalink.logo = content
-    elif self.elements == ['metalink', 'tags']:
-      self.metalink.tags = content
-    elif self.elements == ['metalink', 'relations']:
-      self.metalink.relations = content
-    elif self.elements == ['metalink', 'releasedate']:
-      self.metalink.releasedate = content
-    elif self.elements == ['metalink', 'changelog']:
-      self.metalink.changelog = content
-    elif self.elements == ['metalink', 'copyright']:
-      self.metalink.copyright = content
-    elif self.elements == ['metalink', 'screenshot']:
-      self.metalink.screenshot = content
     elif self.elements == ['metalink', 'files', 'file']:
       self.metalink.files.append(self.file)
     elif self.elements == ['metalink', 'files', 'file', 'resources', 'url']:
       url = MetalinkUrl()
       url.url = content
       if attrs.has_key('type'): url.type = attrs['type']
-      if attrs.has_key('preference'): url.preference = attrs['preference']
       if attrs.has_key('location'): url.location = attrs['location']
-      if attrs.has_key('maxconnections'): url.maxconnections = attrs['maxconnections']
+      if attrs.has_key('maxconnections'):
+        try:
+          url.maxconnections = int(attrs['maxconnections'])
+        except:
+          pass # Ignore this if it's not a number
+      if attrs.has_key('preference'):
+        try:
+          url.preference = int(attrs['preference'])
+        except:
+          pass # Ignore this if it's not a number
       self.file.urls.append(url)
     elif self.elements == ['metalink', 'files', 'file', 'identity']:
       self.file.identity = content
@@ -139,8 +240,6 @@ class MetalinkHandler(xml.sax.handler.ContentHandler):
       self.file.os = content
     elif self.elements == ['metalink', 'files', 'file', 'mimetype']:
       self.file.mimetype = content
-    elif self.elements == ['metalink', 'files', 'file', 'relations']:
-      self.file.relations = content
     elif self.elements == ['metalink', 'files', 'file', 'releasedate']:
       self.file.releasedate = content
     elif self.elements == ['metalink', 'files', 'file', 'changelog']:
@@ -184,6 +283,13 @@ class MetalinkHandler(xml.sax.handler.ContentHandler):
     self.content += content # Save these characters for later
 
 def load_file(filename):
+  """Loads a metalink file.
+  
+  @param filename: the name of the file to be loaded.
+  @type filename: str
+  @returns: Metalink object, with the data from the file.
+  @rtype: L{Metalink}
+  """
   try:
     metalink = Metalink()
     xml.sax.parse(filename, MetalinkHandler(metalink))
@@ -193,68 +299,17 @@ def load_file(filename):
   except IOError:
     raise MetalinkException('Failed to read file.')
 
-class Metalink:
-  def __init__(self):
-    self.files = []
-    # Properties for the whole metalink. These will be the default values
-    # for the files and will be used if they don't specify their own.
-    self.identity = ''
-    self.version = ''
-    self.description = ''
-    self.screenshot = ''
-    self.logo = ''
-    self.tags = ''
-    self.relations = ''
-    self.releasedate = ''
-    self.changelog = ''
-    self.copyright = ''
-    self.publisher_name = ''
-    self.publisher_url = ''
-    self.license_name = ''
-    self.license_url = ''
-
-class MetalinkFile:
-  def __init__(self):
-    self.name = ''
-    self.identity = ''
-    self.version = ''
-    self.size = -1
-    self.description = ''
-    self.logo = ''
-    self.tags = ''
-    self.language = ''
-    self.os = ''
-    self.mimetype = ''
-    self.relations = ''
-    self.releasedate = ''
-    self.changelog = ''
-    self.publisher_name = ''
-    self.publisher_url = ''
-    self.copyright = ''
-    self.license_name = ''
-    self.license_url = ''
-    self.upgrade = ''
-    self.screenshot = ''
-    self.hashes = []
-    self.piece_hashes = []
-    self.piece_length = -1
-    self.piece_type = 'sha1'
-    self.urls = []
-    self.maxconnections = -1
-
-class MetalinkHash:
-  def __init__(self, type='', hash=''):
-    self.type = type
-    self.hash = hash
-  def __str__(self):
-    return self.hash
-
-class MetalinkUrl:
-  def __init__(self):
-    self.url = ''
-    self.type = ''
-    self.location = ''
-    self.preference = ''
-    self.maxconnections = -1
-  def __str__(self):
-    return self.url
+def load_string(text):
+  """Creates a metalink object from a text string.
+  
+  @param text: a text string containing an xml representation of the metalink.
+  @type text: str
+  @returns: Metalink object, with the data from the text string.
+  @rtype: L{Metalink}
+  """
+  try:
+    metalink = Metalink()
+    xml.sax.parseString(text, MetalinkHandler(metalink))
+    return metalink
+  except xml.sax.SAXParseException:
+    raise MetalinkException('Failed to parse xml-data.')

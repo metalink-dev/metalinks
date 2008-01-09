@@ -1,6 +1,9 @@
 Metalink Editor Changelog
 by Hampus Wessman
 
+Version 2.0.0
+* Added epydoc documentation.
+
 Version 1.1.1
 * Updated readme.txt.
 * Added a todo.txt file.

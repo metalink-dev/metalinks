@@ -1,6 +1,7 @@
 * Multi-file metalinks.
 * Clean up source code.
 * Add better validation of data.
+* Add better documentation, both about the source code and the editor.
 * New GUI (multi-file compatible and easier to maintain).
 * Checkboxes for different hash types, in the settings dialog.
 * First argument = file to open.
