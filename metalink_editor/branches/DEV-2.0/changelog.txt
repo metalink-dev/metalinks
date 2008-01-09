@@ -3,6 +3,7 @@ by Hampus Wessman
 
 Version 2.0.0
 * Added epydoc documentation.
+* Added unit tests.
 
 Version 1.1.1
 * Updated readme.txt.
