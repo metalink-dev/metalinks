@@ -333,7 +333,7 @@ class MetalinkHandler(xml.sax.handler.ContentHandler):
     attrs = self._attrs.pop()
     content = xml.sax.saxutils.unescape(self._content.strip()) # Get the data, as unescaped text.
     self._content = '' # Next end element shouldn't see this data
-    # Process elements. They can only be processed here if they need the element's content.
+    # Process elements. They have to be processed here if they need the element's content.
     if self._elements == ['metalink', 'identity']:
       self._metalink.identity = content
     elif self._elements == ['metalink', 'version']:
