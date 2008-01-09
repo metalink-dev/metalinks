@@ -42,7 +42,7 @@ class TestMetalinkLoading(unittest.TestCase):
     import bz2
     ml_data = base64.b64decode(b64_metalink)
     ml_data = bz2.decompress(ml_data)
-    ml = metalink.load_string(ml_data)
+    ml = metalink.parse_string(ml_data)
     self.assertEqual(ml.identity, u'Test identity')
     self.assertEqual(ml.version, u'1.0.0')
     self.assertEqual(ml.description, u'This is my description, with an & in it and some Swedish letters: åäö.')
@@ -94,7 +94,7 @@ class TestMetalinkLoading(unittest.TestCase):
   
   def test_load_empty(self):
     import metalink
-    self.assertRaises(metalink.MetalinkException, metalink.load_string, "")
+    self.assertRaises(metalink.MetalinkException, metalink.parse_string, "")
 
 def run_tests():
   unittest.main()
