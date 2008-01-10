@@ -1,8 +1,5 @@
 <?php
-require '../fileinfo.php';
-
-//Show an index of the files, add metalinks if we have them.
-$files = globDownloadInfoExcluding('./*', array('/.php$/'));
+require 'conf.php';
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -16,7 +13,7 @@ $files = globDownloadInfoExcluding('./*', array('/.php$/'));
 	<meta name="lang" content="en" />
 	<meta name="copyright" content="Copyright (C) <?php echo MM_PROJECTNAME ?>" />
 
-  <title><?php echo MM_PROJECTNAME ?> downloads</title>
+  <title><?php echo MM_PROJECTNAME ?> administration login</title>
 <style type="text/css">
 body {
 	font-family: 'Bitstream Vera Sans', Verdana, sans-serif;
@@ -25,19 +22,10 @@ body {
 }
 </style>
 <body>
-<h1>Minormirror downloads index</h1>
-<?php
-foreach($files as $file)
-{
-	//Show url to file, if no metalink exists, otherwise show metalink
-	if(isset($file['metalinkurl']))
-		echo '<a href="'.htmlentities($file['metalink']).'">';
-	else
-		echo '<a href="'.htmlentities($file['url']).'">';
-	
-	echo htmlentities($file['name']).'</a>';
-	echo '<br>';
-}
-?>
+<form action="admin.php" method="post">
+	Username <input type="text" name="user"> <br />
+	Pass <input type="text" name="pass"> <br />
+	<input type="submit">
+</form>
 </body>
 </html>
