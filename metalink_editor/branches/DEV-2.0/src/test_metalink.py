@@ -1,4 +1,5 @@
-﻿# encoding: utf-8
+﻿#!/usr/bin/python
+# encoding: utf-8
 #
 # Copyright (c) 2008 Hampus Wessman, Sweden.
 # 
@@ -22,7 +23,18 @@
 
 import unittest
 
+__docformat__ = 'epytext'
+__all__ = ['run_tests']
+
+__doc__ = """Unit tests for the L{metalink} module.
+
+The tests are run automatically when the script is executed."""
+
+
 b64_metalink = "QlpoOTFBWSZTWXyucbcAAqXfnFUSUQf//4uHToA/79/wBgABAAgAUAW+uzboE"
+"""This is a base64 encoded version of a bzip2 compressed metalink file. It
+is used in the unit tests. It's here because I don't want the tests to depend
+on an external resource (ie file)."""
 b64_metalink += "3e9urbI0ADhqp+KaYRoSeGptRDag0MRkAGQAIqn40GJKftJpQ0GgAAwmIAAC"
 b64_metalink += "KeATQmJUAaaAyaAAAAAGmikA0ABoAAAAAAD1BJECaCaZAJo0JlNPKeo2k8p6"
 b64_metalink += "jTTT0ygmLJkAqAgOIIB0IEWCAPQdI8+/x8vr8pUREmfc5SzPElgJbJRiAUg7"
@@ -56,8 +68,13 @@ b64_metalink += "tiyFkUlcIxgREMK9ECdpVBEw05DDoZadRCEk45sD+o0IBINt+lMuqjnD8tSF"
 b64_metalink += "ik4OR0V38XckU4UJB8rnG3A"
 
 class TestMetalinkLoading(unittest.TestCase):
-  
+  """Class used to test the loading of metalinks. This class contains unit
+  tests for the L{metalink} module."""
   def test_load_data(self):
+    """Tries to parse the data from L{b64_metalink}. It then examines the
+    returned data to make sure that every single property was parsed
+    correctly.
+    @return: Nothing"""
     import metalink
     import base64
     import bz2
@@ -114,10 +131,17 @@ class TestMetalinkLoading(unittest.TestCase):
     self.assertEqual(file.piece_hashes[17], u'90fc9469cff5493bfc421c7bf268ee6fbbed5086')
   
   def test_load_empty(self):
+    """Tries to parse an empty string. L{metalink.parse_string} must raise a
+    L{metalink.MetalinkException} to pass the test.
+    @return: Nothing"""
     import metalink
     self.assertRaises(metalink.MetalinkException, metalink.parse_string, "")
 
 def run_tests():
+  """Run all unit tests in this module.
+  
+  This function is automatically called if you run the python file.
+  @return: Nothing"""
   unittest.main()
 
 if __name__ == '__main__':
