@@ -83,7 +83,8 @@ class TestMetalinkLoading(unittest.TestCase):
     ml = metalink.parse_string(ml_data)
     self.assertEqual(ml.identity, u'Test identity')
     self.assertEqual(ml.version, u'1.0.0')
-    self.assertEqual(ml.description, u'This is my description, with an & in it and some Swedish letters: åäö.')
+    self.assertEqual(ml.description, u'This is my description, with an & in' +
+                    u' it and some Swedish letters: åäö.')
     self.assertEqual(ml.releasedate, u'2008-01-05')
     self.assertEqual(ml.tags, u'example, metalink, unittest')
     self.assertEqual(ml.publisher_name, u'The publisher')
@@ -107,28 +108,35 @@ class TestMetalinkLoading(unittest.TestCase):
     self.assertEqual(file.upgrade, u'install')
     self.assertEqual(file.screenshot, u'http://test.com/screenshot.php?id=87')
     self.assertEqual(file.publisher_name, u'The file publisher')
-    self.assertEqual(file.publisher_url, u'http://www.the-file-publisher.com/')
+    self.assertEqual(file.publisher_url,
+                    u'http://www.the-file-publisher.com/')
     self.assertEqual(file.license_name, u'My own license')
     self.assertEqual(file.license_url, u'')
     self.assertEqual(file.maxconnections, 7)
     self.assertEqual(len(file.urls), 2)
-    self.assertEqual(file.urls[0].url, u'http://file-server.com/files/test-1.0.0.exe')
+    self.assertEqual(file.urls[0].url,
+                    u'http://file-server.com/files/test-1.0.0.exe')
     self.assertEqual(file.urls[0].location, u'')
     self.assertEqual(file.urls[0].preference, -1)
     self.assertEqual(file.urls[0].maxconnections, 2)
-    self.assertEqual(file.urls[1].url, u'http://file-server.se/pub/test/test-1.0.0.exe')
+    self.assertEqual(file.urls[1].url,
+                    u'http://file-server.se/pub/test/test-1.0.0.exe')
     self.assertEqual(file.urls[1].location, u'se')
     self.assertEqual(file.urls[1].preference, 97)
     self.assertEqual(file.urls[1].maxconnections, 1)
     self.assertEqual(file.hashes[0].type, u'md5')
     self.assertEqual(file.hashes[0].hash, u'1798e7aa4bf190563c6c680a2bd6599e')
     self.assertEqual(file.hashes[1].type, u'sha1')
-    self.assertEqual(file.hashes[1].hash, u'fa721e4157b25de49fca263af7e4b0a866118e51')
+    self.assertEqual(file.hashes[1].hash,
+                    u'fa721e4157b25de49fca263af7e4b0a866118e51')
     self.assertEqual(file.piece_type, u'sha1')
     self.assertEqual(file.piece_length, 262144)
-    self.assertEqual(file.piece_hashes[0], u'c9e34e616c69715020eadd58e58aab14352f2426')
-    self.assertEqual(file.piece_hashes[16], u'4444bc23698ec235cbcc1906092793e7c8ef5863')
-    self.assertEqual(file.piece_hashes[17], u'90fc9469cff5493bfc421c7bf268ee6fbbed5086')
+    self.assertEqual(file.piece_hashes[0],
+                    u'c9e34e616c69715020eadd58e58aab14352f2426')
+    self.assertEqual(file.piece_hashes[16],
+                    u'4444bc23698ec235cbcc1906092793e7c8ef5863')
+    self.assertEqual(file.piece_hashes[17],
+                    u'90fc9469cff5493bfc421c7bf268ee6fbbed5086')
   
   def test_load_empty(self):
     """Tries to parse an empty string. L{metalink.parse_string} must raise a

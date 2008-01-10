@@ -11,7 +11,11 @@ for m in doc_modules:
 
 if build_html:
   print 'Building html docs:'
-  os.system('epydoc.py -v --html --name "Metalink Editor" --url "http://www.metamirrors.nl/metalink_editor" -o ../doc/epydoc/html' + doc_modules_str)
+  os.system('epydoc.py -v --html --name "Metalink Editor" --url \
+    "http://www.metamirrors.nl/metalink_editor" -o ../doc/epydoc/html' +
+    doc_modules_str)
 if build_pdf:
   print 'Building pdf docs:'
-  os.system('epydoc.py -v --pdf --name "Metalink Editor" --url "http://www.metamirrors.nl/metalink_editor" -o ../doc/epydoc/pdf' + doc_modules_str)
+  os.system('epydoc.py -v --pdf --name "Metalink Editor" --url \
+    "http://www.metamirrors.nl/metalink_editor" -o ../doc/epydoc/pdf' +
+    doc_modules_str)
