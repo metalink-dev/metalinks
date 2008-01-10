@@ -11,6 +11,7 @@ foreach(MM_HASHES as $type)
 {
 	if(!hasHash($file, $type))
 	{
+		//TODO Should use metalink library! This is just a "get it to function" hack!!!!
 		//Create the hash
 		$hash = false;
 		if($type == 'md5')
