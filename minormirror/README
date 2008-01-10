@@ -1,0 +1,7 @@
+Minormirror is meant to be a Metalink generating, online mirror administration system for small-project mirroring.
+
+The project administrator uploads files. The files are automatically hashed and when links to the files are added, the files will automatically become available for the public.
+Mirrors can be full mirrors (directory based) or file mirrors (single file), and everything is kept in a single, flat-file database.
+
+This project idea started as phpmetalink and has since been renamed.
+
