@@ -1,3 +1,4 @@
+#!/usr/bin/python
 #    Copyright (c) 2007 Hampus Wessman, Sweden.
 #
 #    This program is free software; you can redistribute it and/or modify
