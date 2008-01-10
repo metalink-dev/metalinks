@@ -27,9 +27,9 @@ __author__ = 'Hampus Wessman <hw@vox.nu>'
 __copyright__ = 'Copyright (c) 2008 Hampus Wessman, Sweden.'
 __license__ = 'MIT license (see license.txt).'
 __docformat__ = 'epytext'
-__all__ = ['__version__', '__copyright__', '__license__', '__author__', '__url__',
-'Metalink', 'MetalinkFile', 'MetalinkHash', 'MetalinkUrl', 'load_file',
-'parse_string', 'MetalinkException']
+__all__ = ['__version__', '__copyright__', '__license__', '__author__',
+'__url__', 'Metalink', 'MetalinkFile', 'MetalinkHash', 'MetalinkUrl',
+'load_file', 'parse_string', 'MetalinkException']
 
 __doc__ = """Module for handling metalinks.
 
@@ -54,72 +54,84 @@ class MetalinkException(Exception):
 class Metalink:
   """Data structure representing a metalink.
   
-  All the variables are initialised to default values. In all cases, except for C{ml_type},
-  these values should be interpreted as "not specified".  Some variables begin with C{ml_}.
-  This means that they describe the metalink file itself instead of the data contained in it."""
+  All the variables are initialised to default values. In all cases, except for
+  C{ml_type}, these values should be interpreted as "not specified".  Some
+  variables begin with C{ml_}. This means that they describe the metalink file
+  itself instead of the data contained in it."""
   files = []
-  """@ivar: This variable contains a list of L{MetalinkFile} objects, representing
-  all the files described by the metalink.
+  """@ivar: This variable contains a list of L{MetalinkFile} objects,
+  representing all the files described by the metalink.
   @type: list"""
   identity = ''
   """@ivar: This is the basic identity of the metalink. For OpenOffice.org 2.0,
   this would be: C{'OpenOffice.org'}.
   @type: str"""
   version = ''
-  """@ivar: This is the version of the files described in the metalink. For OpenOffice.org 2.0, this would be: C{'2.0'}.
+  """@ivar: This is the version of the files described in the metalink. For
+  OpenOffice.org 2.0, this would be: C{'2.0'}.
   @type: str"""
   description = ''
   """@ivar: This is a text description of the file.
   @type: str"""
   releasedate = ''
-  """@ivar: This describes when the files were released (not when the metalink file was created).
+  """@ivar: This describes when the files were released (not when the metalink
+  file was created).
   
-  All Metalink datetimes conform to the Date and Time Specification of RFC 822, with the exception
-  that the year may be expressed with two characters or four characters (four preferred).
-  Example: C{'Mon, 15 May 2006 00:00:01 GMT'}
+  All Metalink datetimes conform to the Date and Time Specification of RFC 822,
+  with the exception that the year may be expressed with two characters or four
+  characters (four preferred). Example: C{'Mon, 15 May 2006 00:00:01 GMT'}
   @type: str"""
   tags = ''
-  """@ivar: Tags that describe the file in a few words. Tags are separated by commas.
+  """@ivar: Tags that describe the file in a few words. Tags are separated by
+  commas.
   @type: str"""
   publisher_name = ''
-  """@ivar: The name of the publisher. This should be the publisher of all the files described in the metalink.
+  """@ivar: The name of the publisher. This should be the publisher of all the
+  files described in the metalink.
   @type: str"""
   publisher_url = ''
-  """@ivar: The URL to the publisher's website. This should be the publisher of all the files described in the metalink.
+  """@ivar: The URL to the publisher's website. This should be the publisher of
+  all the files described in the metalink.
   @type: str"""
   license_name = ''
-  """@ivar: The license the files were released under. Such as: Shareware, Commercial, GNU GPL, BSD, Creative Commons, etc.
+  """@ivar: The license the files were released under. Such as: Shareware,
+  Commercial, GNU GPL, BSD, Creative Commons, etc.
   @type: str"""
   license_url = ''
-  """@ivar: A URL that points to a description of the license. For GNU GPL this would be: C{'http://www.gnu.org/licenses/gpl.html'}.
+  """@ivar: A URL that points to a description of the license. For GNU GPL this
+  would be: C{'http://www.gnu.org/licenses/gpl.html'}.
   @type: str"""
   ml_generator = ''
   """@ivar: The application used to generate the metalink file.
   @type: str"""
   ml_version = ''
-  """@ivar: Specifies which version of the Metalink format a file uses. The current version is C{'3.0'}.
+  """@ivar: Specifies which version of the Metalink format a file uses. The
+  current version is C{'3.0'}.
   @type: str"""
   ml_refreshdate = ''
-  """@ivar: The date and time when a "dynamic" (see L{ml_type}) metalink file has been updated.
+  """@ivar: The date and time when a "dynamic" (see L{ml_type}) metalink file
+  has been updated.
   
-  All Metalink datetimes conform to the Date and Time Specification of RFC 822, with the exception
-  that the year may be expressed with two characters or four characters (four preferred).
-  Example: C{'Mon, 15 May 2006 00:00:01 GMT'}
+  All Metalink datetimes conform to the Date and Time Specification of RFC 822,
+  with the exception that the year may be expressed with two characters or four
+  characters (four preferred). Example: C{'Mon, 15 May 2006 00:00:01 GMT'}
   @type: str"""
   ml_pubdate = ''
   """@ivar: Original date and time of publishing of the metalink file.
   
-  All Metalink datetimes conform to the Date and Time Specification of RFC 822, with the exception
-  that the year may be expressed with two characters or four characters (four preferred).
-  Example: C{'Mon, 15 May 2006 00:00:01 GMT'}
+  All Metalink datetimes conform to the Date and Time Specification of RFC 822,
+  with the exception that the year may be expressed with two characters or four
+  characters (four preferred). Example: C{'Mon, 15 May 2006 00:00:01 GMT'}
   @type: str"""
   ml_origin = ''
-  """@ivar: The original location of this metalink file. If L{ml_type} is "dynamic" then this is the
-  location where an updated version of the metalink file will be found.
+  """@ivar: The original location of this metalink file. If L{ml_type} is
+  "dynamic" then this is the location where an updated version of the metalink
+  file will be found.
   @type: str"""
   ml_type = 'static'
-  """@ivar: "dynamic" or "static". Static metalink files are not updated. Dynamic metalinks can
-  be expected to contain an updated list of mirrors or resources that the file is available from.
+  """@ivar: "dynamic" or "static". Static metalink files are not updated.
+  Dynamic metalinks can be expected to contain an updated list of mirrors or
+  resources that the file is available from.
   @type: str"""
 
 class MetalinkFile:
@@ -141,7 +153,8 @@ class MetalinkFile:
   this would be: C{'OpenOffice.org'}.
   @type: str"""
   version = ''
-  """@ivar: This is the version of the file. For OpenOffice.org 2.0, this would be: C{'2.0'}.
+  """@ivar: This is the version of the file. For OpenOffice.org 2.0, this would
+  be: C{'2.0'}.
   @type: str"""
   size = -1
   """@ivar: This is the size of the file in bytes. If a mirror reports a file
@@ -155,39 +168,53 @@ class MetalinkFile:
   """@ivar: A copyright notice for the file.
   @type: str"""
   changelog = ''
-  """@ivar: This lists the changes between this version of the file and the last.
+  """@ivar: This lists the changes between this version of the file and the
+  last.
   @type: str"""
   logo = ''
   """@ivar: This is a location for a graphic logo for the file or program.
   @type: str"""
   tags = ''
-  """@ivar: Tags that describe the file in a few words. Tags are separated by commas.
+  """@ivar: Tags that describe the file in a few words. Tags are separated by
+  commas.
   @type: str"""
   language = ''
-  """@ivar: Tags that describe the file in a few words. Tags are separated by commas.
+  """@ivar: The language the file is in, per ISO-639/3166. "en-US" for Standard
+  American English, "en-GB" for British English, "fr" for French, "de" for
+  German, "zh-Hans" for Chinese (Simplified), "zh-Hant" for Chinese
+  (Traditional), etc. By default, a client will get all files listed in a
+  metalink. In the future, they should only download files in the user's
+  language (set as an option in the client or detected by it). But, there
+  should be options for advanced users to download other files.
   @type: str"""
   os = ''
-  """@ivar: The language the file is in, per ISO-639/3166. "en-US" for Standard American English,
-  "en-GB" for British English, "fr" for French, "de" for German, "zh-Hans" for Chinese
-  (Simplified), "zh-Hant" for Chinese (Traditional), etc. By default, a client will get all files
-  listed in a metalink. In the future, they should only download files in the user's language
-  (set as an option in the client or detected by it). But, there should be options for advanced
-  users to download other files.
+  """@ivar: This contains information on the required Operating System and
+  architecture, if the file is an application. For example: Source, BSD-x86,
+  BSD-x64, Linux-x86, Linux-x64, Linuxia64, Linux-alpha, Linux-arm, Linux-hppa,
+  Linux-m68k, Linux-mips, Linux-mipsel, Linux-PPC, Linux-PPC64, Linux-s390,
+  Linux-SPARC, MacOSX-PPC, MacOSX-Intel, MacOSX-UB, Solaris-SPARC, Solaris-x86,
+  Windows-x86, Windows-x64, Windowsia64. By default, a client will download all
+  files listed in a .metalink. In the future, they should only download files
+  for the user's Operating System (set as an option in the client or detected
+  by it). There should be options for advanced users to download other files
+  though.
   @type: str"""
   mimetype = ''
   """@ivar: MIME type of the file.
   @type: str"""
   releasedate = ''
-  """@ivar: This describes when the file was released (not when the metalink file was created).
+  """@ivar: This describes when the file was released (not when the metalink
+  file was created).
   
-  All Metalink datetimes conform to the Date and Time Specification of RFC 822, with the exception
-  that the year may be expressed with two characters or four characters (four preferred).
-  Example: C{'Mon, 15 May 2006 00:00:01 GMT'}
+  All Metalink datetimes conform to the Date and Time Specification of RFC 822,
+  with the exception that the year may be expressed with two characters or four
+  characters (four preferred). Example: C{'Mon, 15 May 2006 00:00:01 GMT'}
   @type: str"""
   upgrade = ''
-  """@ivar: The action to be performed when a previous version is already installed. Some programs
-  need older versions uninstalled before installing new ones, and some do not. Could be
-  C{'install'}, C{'uninstall, reboot, install'}, or C{'uninstall, install'}.
+  """@ivar: The action to be performed when a previous version is already
+  installed. Some programs need older versions uninstalled before installing
+  new ones, and some do not. Could be C{'install'}, C{'uninstall, reboot,
+  install'}, or C{'uninstall, install'}.
   @type: str"""
   screenshot = ''
   """@ivar: URL which points to a screenshot of the application.
@@ -199,25 +226,31 @@ class MetalinkFile:
   """@ivar: The URL to the publisher's website.
   @type: str"""
   license_name = ''
-  """@ivar: The license the file was released under. Such as: Shareware, Commercial, GNU GPL, BSD, Creative Commons, etc.
+  """@ivar: The license the file was released under. Such as: Shareware,
+  Commercial, GNU GPL, BSD, Creative Commons, etc.
   @type: str"""
   license_url = ''
-  """@ivar: A URL that points to a description of the license. For GNU GPL this would be: C{'http://www.gnu.org/licenses/gpl.html'}.
+  """@ivar: A URL that points to a description of the license. For GNU GPL this
+  would be: C{'http://www.gnu.org/licenses/gpl.html'}.
   @type: str"""
   hashes = []
-  """@ivar: A list of L{MetalinkHash} objects. These are used to validate the integrity of the whole file.
+  """@ivar: A list of L{MetalinkHash} objects. These are used to validate the
+  integrity of the whole file.
   @type: list"""
   piece_hashes = []
-  """@ivar: A list of piece hashes, as text strings. These are used to validate parts of the file.
-  The first piece hash is used to verify the first L{piece_length} number of bytes in the file, the
-  second piece hash is used to verify the next first L{piece_length} number of bytes and so on.
+  """@ivar: A list of piece hashes, as text strings. These are used to validate
+  parts of the file. The first piece hash is used to verify the first
+  L{piece_length} number of bytes in the file, the second piece hash is used to
+  verify the next first L{piece_length} number of bytes and so on.
   @type: list"""
   piece_length = -1
-  """@ivar: Specifies how large each 'piece' is. Without this piece of informationen we wouldn't
-  know what parts of the file to compare against the piece hashes.
+  """@ivar: Specifies how large each 'piece' is. Without this piece of
+  informationen we wouldn't know what parts of the file to compare against the
+  piece hashes.
   @type: int"""
   piece_type = 'sha1'
-  """@ivar: The hash type of the L{piece_hashes}. 'sha1' is the default type. You should seldomly
+  """@ivar: The hash type of the L{piece_hashes}. 'sha1' is the default type.
+  You should seldomly
   need to change this.
   @type: str"""
   urls = []
@@ -231,8 +264,8 @@ class MetalinkFile:
 class MetalinkHash:
   """Data structure for a hash."""
   type = ''
-  """@ivar: The hash type. Valid types are: 'md4', 'md5', 'sha1', 'sha256', 'sha384',
-  'sha512', 'rmd160', 'tiger', 'crc32'.
+  """@ivar: The hash type. Valid types are: 'md4', 'md5', 'sha1', 'sha256',
+  'sha384', 'sha512', 'rmd160', 'tiger', 'crc32'.
   @type: str"""
   hash = ''
   """@ivar: The actual hash, as a lowercase hexadecimal value.
@@ -241,28 +274,31 @@ class MetalinkHash:
 class MetalinkUrl:
   """Data structure describing a URL in a metalink.
   
-  It's a good idea, in most circumstances, to specify a L{url} and a L{type}. The rest
-  of the variables are completely optional."""
+  It's a good idea, in most circumstances, to specify a L{url} and a L{type}.
+  The rest of the variables are completely optional."""
   url = ''
-  """@ivar: This is a standard URL. Example: C{'http://example-server.com/file.ext'}.
+  """@ivar: This is a standard URL. Example:
+  C{'http://example-server.com/file.ext'}.
   @type: str"""
   type = ''
-  """@ivar: Describes the type of protocol this URL uses. Possible values are: C{'ftp'},
-  C{'ftps'}, C{'http'}, C{'https'}, C{'rsync'}, C{'bittorrent'}, C{'magnet'} and C{'ed2k'}.
+  """@ivar: Describes the type of protocol this URL uses. Possible values are:
+  C{'ftp'}, C{'ftps'}, C{'http'}, C{'https'}, C{'rsync'}, C{'bittorrent'},
+  C{'magnet'} and C{'ed2k'}.
   
-  If no type is specified the client should try to figure it out, by looking at the URL.
-  By scanning the beginning of the URL, it can be determined if it is FTP (ftp://), HTTP
-  (http://), rsync (rsync://), magnet (magnet:), ed2k (ed2k://). By examining the end of
-  the URL, you can tell if it is for BitTorrent (.torrent).
+  If no type is specified the client should try to figure it out, by looking at
+  the URL. By scanning the beginning of the URL, it can be determined if it is
+  FTP (ftp://), HTTP (http://), rsync (rsync://), magnet (magnet:), ed2k
+  (ed2k://). By examining the end of the URL, you can tell if it is for
+  BitTorrent (.torrent).
   @type: str"""
   location = ''
   """@ivar: Two-letter country code for the location of the mirror.
   Example: C{'uk'}.
   @type: str"""
   preference = -1
-  """@ivar: Priority from C{1} to C{100}, with C{100} being used first and C{1} last.
-  Different URLs can have the same preference, i.e. ten mirrors could have C{100} as
-  preference.
+  """@ivar: Priority from C{1} to C{100}, with C{100} being used first and C{1}
+  last. Different URLs can have the same preference, i.e. ten mirrors could
+  have C{100} as preference.
   @type: int"""
   maxconnections = -1
   """@ivar: The maximum number of connections to this URL.
@@ -273,16 +309,27 @@ class MetalinkHandler(xml.sax.handler.ContentHandler):
   def __init__(self, metalink):
     """Initialize the content handler.
     
-    @param metalink: Usually an empty Metalink object. All data that is loaded will be added to this object.
+    @param metalink: Usually an empty Metalink object. All data that is loaded
+    will be added to this object.
     @type metalink: L{Metalink}"""
-    self._metalink = metalink #: The metalink object where all the loaded data will be saved.
-  
+    self._metalink = metalink 
+    """The metalink object where all the loaded data will be saved."""
+
   def startDocument(self):
-    self._elements = [] #: A list of all the elements we are "inside". The root element will be first in the list and the current element last.
-    self._attrs = []    #: The attributes for the elements in the L{elements<self._elements>} list.
-    self._content = ''  #: Temporary storage for the content of the current element.
-    self._file = None  #: The file that is currently being parsing (before it is added to the metalink).
-    self._pieces = {}  #: Temporary storage of piece checksums. When all have been read they are sorted and added to the metalink.
+    self._elements = []
+    """A list of all the elements we are "inside". The root element will be
+    first in the list and the current element last."""
+    self._attrs = []
+    """The attributes for the elements in the L{elements<self._elements>}
+    list."""
+    self._content = ''
+    """Temporary storage for the content of the current element."""
+    self._file = None
+    """The file that is currently being parsing (before it is added to the
+    metalink)."""
+    self._pieces = {}
+    """Temporary storage of piece checksums. When all have been read they are
+    sorted and added to the metalink."""
   
   def endDocument(self):
     pass
@@ -318,7 +365,8 @@ class MetalinkHandler(xml.sax.handler.ContentHandler):
           self._file.maxconnections = int(attrs['maxconnections'])
         except:
           pass # Ignore this if it can't be parsed
-    elif self._elements == ['metalink', 'files', 'file', 'verification', 'pieces']:
+    elif self._elements == ['metalink', 'files', 'file',
+                            'verification', 'pieces']:
       if attrs.has_key('type'):
         self._file.piece_type = attrs['type']
       if attrs.has_key('length'):
@@ -331,9 +379,10 @@ class MetalinkHandler(xml.sax.handler.ContentHandler):
   def endElement(self, name):
     # Collect and update data
     attrs = self._attrs.pop()
-    content = xml.sax.saxutils.unescape(self._content.strip()) # Get the data, as unescaped text.
+    content = xml.sax.saxutils.unescape(self._content.strip())
     self._content = '' # Next end element shouldn't see this data
-    # Process elements. They have to be processed here if they need the element's content.
+    # Process elements. They have to be processed here if they need the
+    # element's content.
     if self._elements == ['metalink', 'identity']:
       self._metalink.identity = content
     elif self._elements == ['metalink', 'version']:
@@ -405,21 +454,25 @@ class MetalinkHandler(xml.sax.handler.ContentHandler):
       self._file.license_name = content
     elif self._elements == ['metalink', 'files', 'file', 'license', 'url']:
       self._file.license_url = content
-    elif self._elements == ['metalink', 'files', 'file', 'publisher', 'name']:
+    elif self._elements == ['metalink', 'files', 'file',
+                            'publisher', 'name']:
       self._file.publisher_name = content
     elif self._elements == ['metalink', 'files', 'file', 'publisher', 'url']:
       self._file.publisher_url = content
-    elif self._elements == ['metalink', 'files', 'file', 'verification', 'hash']:
+    elif self._elements == ['metalink', 'files', 'file',
+                            'verification', 'hash']:
       # The hash must have a type, otherwise it will be ignored.
       if attrs.has_key('type'):
         hash = MetalinkHash()
         hash.type = attrs['type']
         hash.hash = content
         self._file.hashes.append(hash)
-    elif self._elements == ['metalink', 'files', 'file', 'verification', 'pieces', 'hash']:
+    elif self._elements == ['metalink', 'files', 'file', 'verification',
+                            'pieces', 'hash']:
       if attrs.has_key('piece'):
         self._pieces[attrs['piece']] = content
-    elif self._elements == ['metalink', 'files', 'file', 'verification', 'pieces']:
+    elif self._elements == ['metalink', 'files', 'file',
+                            'verification', 'pieces']:
       # Add all the pieces in the right order (starting at index "0")
       for i in range(len(self._pieces)):
         # If this piece is missing, then skip all the pieces
