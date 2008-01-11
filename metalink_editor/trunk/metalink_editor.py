@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#!/usr/bin/python
 #
 #    Copyright (c) 2007 Hampus Wessman, Sweden.
 #
