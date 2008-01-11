@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metalink version="3.0" generator="example generator" type="dynamic" origin="http://test.com/test.metalink" pubdate="test-date32" refreshdate="refresh48" xmlns="http://www.metalinker.org/">
+  <identity>Test identity</identity>
+  <version>1.0.0</version>
+  <description>This is my description, with an &amp; in it and some Swedish letters: åäö.</description>
+  <releasedate>2008-01-05</releasedate>
+  <tags>example, metalink, unittest</tags>
+  <publisher>
+    <name>The publisher</name>
+    <url>http://www.the-publisher.com/</url>
+  </publisher>
+  <license>
+    <name>GNU GPL</name>
+    <url>http://www.gnu.org/licenses/gpl.html</url>
+  </license>
+  <files>
+    <file name="test-1.0.0.exe">
+      <identity>File identity</identity>
+      <version>1.1.0</version>
+      <size>4512266</size>
+      <description>File description.</description>
+      <copyright>Copyright statement</copyright>
+      <changelog>Changelog text...</changelog>
+      <logo>http://test.com/logo.png</logo>
+      <tags>file, metalink, unittest</tags>
+      <language>en-US</language>
+      <os>Windows-x86</os>
+      <mimetype>text/html</mimetype>
+      <releasedate>2007-10-23</releasedate>
+      <upgrade>install</upgrade>
+      <screenshot>http://test.com/screenshot.php?id=87</screenshot>
+      <publisher>
+        <name>The file publisher</name>
+        <url>http://www.the-file-publisher.com/</url>
+      </publisher>
+      <license>
+        <name>My own license</name>
+      </license>
+      <verification>
+        <hash type="md5">1798e7aa4bf190563c6c680a2bd6599e</hash>
+        <hash type="sha1">fa721e4157b25de49fca263af7e4b0a866118e51</hash>
+        <pieces type="sha1" length="262144">
+          <hash piece="0">c9e34e616c69715020eadd58e58aab14352f2426</hash>
+          <hash piece="2">90fc9469cff5493bfc421c7bf268ee6fbbed5086</hash>
+          <hash piece="1">4444bc23698ec235cbcc1906092793e7c8ef5863</hash>
+        </pieces>
+      </verification>
+      <resources maxconnections="7">
+        <url type="http" maxconnections="2">http://file-server.com/files/test-1.0.0.exe</url>
+        <url type="http" maxconnections="1" location="se" preference="97">http://file-server.se/pub/test/test-1.0.0.exe</url>
+      </resources>
+    </file>
+  </files>
+</metalink>

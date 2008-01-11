@@ -22,6 +22,8 @@
 # THE SOFTWARE.
 
 import unittest
+import os
+import os.path
 
 __docformat__ = 'epytext'
 __all__ = ['run_tests']
@@ -30,57 +32,43 @@ __doc__ = """Unit tests for the L{metalink} module.
 
 The tests are run automatically when the script is executed."""
 
-
-b64_metalink = "QlpoOTFBWSZTWXyucbcAAqXfnFUSUQf//4uHToA/79/wBgABAAgAUAW+uzboE"
-"""This is a base64 encoded version of a bzip2 compressed metalink file. It
-is used in the unit tests. It's here because I don't want the tests to depend
-on an external resource (ie file)."""
-b64_metalink += "3e9urbI0ADhqp+KaYRoSeGptRDag0MRkAGQAIqn40GJKftJpQ0GgAAwmIAAC"
-b64_metalink += "KeATQmJUAaaAyaAAAAAGmikA0ABoAAAAAAD1BJECaCaZAJo0JlNPKeo2k8p6"
-b64_metalink += "jTTT0ygmLJkAqAgOIIB0IEWCAPQdI8+/x8vr8pUREmfc5SzPElgJbJRiAUg7"
-b64_metalink += "2+PmJWE0bpKEdz8I4huDc/FsAbFz9jvc0CfNBpzr0eGnQSxRYUmsGwctw4Dk"
-b64_metalink += "WOxtF30nYjhPus0MixMzEKf7zKhNffi0fWXrCJ084HqfIOgZ2yYEVZE4ugzZ"
-b64_metalink += "DsEZTPtFA4ZLPqZ0u7nG+N+3Pm5DieE+gKElpsI1jjURGyiaekKP3sfU9Tjm"
-b64_metalink += "RxnolVlkuNCRlfW2C75InBVG1sge4kZh0s6Y915ko5vFgXTalY2eBOMcKETb"
-b64_metalink += "LLCBrTXZQHGxYzQYUqJimQ4xcGat8qd8JimM3pL2KUBzXajYA3SMWcaOr21P"
-b64_metalink += "DmNVcncYkQ3u1MnLJw6jZrur5cgrhwxdbsGhohYJaoVYHDREtC6qiWnJQGGV"
-b64_metalink += "01aD0tG0Ndpyd6Ru9JxYlOsuzOmpMSV4OkPl9DAIOr3zS28XGipqsrm9sxDv"
-b64_metalink += "SRYDGcmd3C6tmw7wYEh1wo5qjHFYWTSlhDT5RjzTGskpIFqvrZLyM644e4Ex"
-b64_metalink += "XyLbgRIuvhCj3fT7c0rlkE75hMxA7PdbBwySjTJjCvlghJIgYxtrTrrVajWA"
-b64_metalink += "k3m90XTiqgsoVWRGJgZPRSO/RiAyZSHZF0HUCu1EgVtmOq1GKGkb9tOGzp9e"
-b64_metalink += "isqu5rbdMNE95d23DvPI63V3BvMQaCMGZjJpRGd4uMyZgoYlWMewdBQBdasU"
-b64_metalink += "YgTyFLFKNZ4NCKTA02I9fRoJGFhHzEHZqgnBTKCewABGCki0RHP3sCgKgImY"
-b64_metalink += "PnffKyYzD2URB3GYvncpEezw2mbJvtKH1PSSAb9h6ZsIDRfqz8pczNfP1apd"
-b64_metalink += "SmdbtZY2OW2WeQ8bnUsJ7nFOejtJl07p1v8zkkdaD6frzG5dZpBwEbws3LPy"
-b64_metalink += "V8KccJkjBRFCyORiEL5cjeC+hHtJek65V0zUzrlVlSel4o4AAm75sV7Dl78Y"
-b64_metalink += "zXgRzIrm1b0hpsbmcxeUe67r2/c1Y5VvMKiDosFugzTww2GjHx/C7yR0qMe5"
-b64_metalink += "Bep7Ndt8xZF1EKxmM6oXFF71iEpgOoi+e5oMNGLOLRaFzV0Uxyq3QuwwIEUc"
-b64_metalink += "phCIgl9kCnjVdeaRkiDja66Sx8iwW2bFlbbsczFIO9GuLL3/ONnbMnteCpEK"
-b64_metalink += "TplrKhrwg+rHkCOCfWV19OYWfw3YpvZBGS19kPhHPcLit24XI9/FnFs6IGhk"
-b64_metalink += "tRaNc7M1RaD2oB7YImxl+KkuNuXDtdfkVD4ks9cUpRYHZplVjl79KoB+Dtsh"
-b64_metalink += "Wii3NElUjuHx5YeHcEW7uJyHNg6sqt8lTtKBRcOSEMwkffSYAiwEdJMmA7Kv"
-b64_metalink += "YpX/MzQzG86heeooYFoI1o9iwR8Cnv03Cv05jDJmZmGRaL42UoA/fDcUFYOK"
-b64_metalink += "wu0NVoAadPMibByDB0xGTMcwuoBqyopE+dEVueiCcpE99o8fDIawo1aantYS"
-b64_metalink += "lUKhEpTJQxhFQY+RAVRZyQQZLiEOhhMjZIAdMuTmRmY471YZb6CNsvRLItoI"
-b64_metalink += "K242SloFLqIFIM2YZpMwVGtNK1zKEmehAwUxUEQEXMzbWObcDq+rO7lpdEXD"
-b64_metalink += "TRG8Mh74AIkOBBXJVrlakSee3Wy4MYu82IxZqlSopF6NuE0OX8dWjPM2lrMM"
-b64_metalink += "tiyFkUlcIxgREMK9ECdpVBEw05DDoZadRCEk45sD+o0IBINt+lMuqjnD8tSF"
-b64_metalink += "ik4OR0V38XckU4UJB8rnG3A"
-
-class TestMetalinkLoading(unittest.TestCase):
-  """Class used to test the loading of metalinks. This class contains unit
-  tests for the L{metalink} module."""
-  def test_load_data(self):
-    """Tries to parse the data from L{b64_metalink}. It then examines the
-    returned data to make sure that every single property was parsed
-    correctly.
+class TestMetalinkClasses(unittest.TestCase):
+  """Class used to test that the data structures work as expected. This class
+  contains unit tests for the L{metalink} module."""
+  def test_metalink(self):
+    """Tests L{Metalink <metalink.Metalink>}.
     @return: Nothing"""
     import metalink
-    import base64
-    import bz2
-    ml_data = base64.b64decode(b64_metalink)
-    ml_data = bz2.decompress(ml_data)
-    ml = metalink.parse_string(ml_data)
+    a = metalink.Metalink()
+    b = metalink.Metalink()
+    self.assertEqual(a == b, True,
+      'Compared equal objects. Comparison failed!')
+    a.identity = 'Something else'
+    self.assertEqual(a == b, False,
+      'Compared unequal objects. Comparision failed!')
+  def test_metalink_file(self):
+    """Tests L{MetalinkFile <metalink.MetalinkFile>}.
+    @return: Nothing"""
+    import metalink
+    a = metalink.Metalink()
+    b = metalink.Metalink()
+    a.files.append(metalink.MetalinkFile())
+    b.files.append(metalink.MetalinkFile())
+    self.assertEqual(a == b, True,
+      'Compared equal objects. Comparison failed!')
+    a.files[0].identity = 'Something else'
+    self.assertEqual(a == b, False,
+      'Compared unequal objects. Comparision failed!')
+
+class TestMetalinkLoad(unittest.TestCase):
+  """Class used to test the loading of metalinks. This class contains unit
+  tests for the L{metalink} module."""
+  def test_load_file(self):
+    """Tries to load the file 'test.metalink'. It then examines the returned
+    data to make sure that it was parsed correctly.
+    @return: Nothing"""
+    import metalink
+    ml = metalink.load_file('test.metalink')
     self.assertEqual(ml.identity, u'Test identity')
     self.assertEqual(ml.version, u'1.0.0')
     self.assertEqual(ml.description, u'This is my description, with an & in' +
@@ -91,6 +79,12 @@ class TestMetalinkLoading(unittest.TestCase):
     self.assertEqual(ml.publisher_url, u'http://www.the-publisher.com/')
     self.assertEqual(ml.license_name, u'GNU GPL')
     self.assertEqual(ml.license_url, u'http://www.gnu.org/licenses/gpl.html')
+    self.assertEqual(ml.ml_version, u'3.0')
+    self.assertEqual(ml.ml_generator, u'example generator')
+    self.assertEqual(ml.ml_type, u'dynamic')
+    self.assertEqual(ml.ml_origin, u'http://test.com/test.metalink')
+    self.assertEqual(ml.ml_pubdate, u'test-date32')
+    self.assertEqual(ml.ml_refreshdate, u'refresh48')
     self.assertEqual(len(ml.files), 1)
     file = ml.files[0]
     self.assertEqual(file.identity, u'File identity')
@@ -133,17 +127,90 @@ class TestMetalinkLoading(unittest.TestCase):
     self.assertEqual(file.piece_length, 262144)
     self.assertEqual(file.piece_hashes[0],
                     u'c9e34e616c69715020eadd58e58aab14352f2426')
-    self.assertEqual(file.piece_hashes[16],
+    self.assertEqual(file.piece_hashes[1],
                     u'4444bc23698ec235cbcc1906092793e7c8ef5863')
-    self.assertEqual(file.piece_hashes[17],
+    self.assertEqual(file.piece_hashes[2],
                     u'90fc9469cff5493bfc421c7bf268ee6fbbed5086')
   
   def test_load_empty(self):
+    """Tries to load the file ''. L{metalink.load_file} must raise a
+    L{metalink.MetalinkException} to pass the test.
+    @return: Nothing"""
+    import metalink
+    self.assertRaises(metalink.MetalinkException, metalink.load_file, '')
+  
+  def test_parse_empty(self):
     """Tries to parse an empty string. L{metalink.parse_string} must raise a
     L{metalink.MetalinkException} to pass the test.
     @return: Nothing"""
     import metalink
-    self.assertRaises(metalink.MetalinkException, metalink.parse_string, "")
+    self.assertRaises(metalink.MetalinkException, metalink.parse_string, '')
+
+class TestMetalinkSaveLoad(unittest.TestCase):
+  """Class used to test the saving and loading of metalinks. This class
+  contains unit tests for the L{metalink} module."""
+  def tearDown(self):
+    """Cleans up after the tests. Deletes 'test.tmp'."""
+    #if os.path.exists('test.tmp'): os.remove('test.tmp') # Remove tmp file
+  
+  def test_generate_xml(self):
+    """Constructs a L{Metalink} object and then tries to generate xml based on
+    it. Checks that the generated xml is not an empty text string.
+    @return: Nothing"""
+    import metalink
+    ml = metalink.Metalink() # Create empty metalink object
+    xml_data = metalink.generate_xml(ml)
+    self.failIfEqual(xml_data, '', 'The generated xml equals "".')
+  
+  def test_save_load(self):
+    """Constructs a L{Metalink} object, saves it and then loads it again.
+    The loaded metalink and the original metalink are then compared.
+    @return: Nothing"""
+    import metalink
+    # Create metalink
+    ml = metalink.Metalink()
+    ml.identity = u'Test1'
+    ml.version = u'42.2'
+    ml.description = u'Test6993 åäö'
+    ml.releasedate = u'date'
+    ml.tags = u'test, metalink, saving'
+    ml.publisher_name = u'publisher342'
+    ml.publisher_url = u'http://url3386.com/'
+    ml.license_name = u'license8237'
+    ml.license_url = u'http://url7394.com/'
+    # Add a file
+    file = metalink.MetalinkFile()
+    file.name = u'test-1.0.tar.gz'
+    file.identity = u'Test1632'
+    file.version = u'5.2.0'
+    file.size = 5683287
+    file.description = u'Test description... &åäö'
+    file.changelog = u'Changelog45528'
+    file.logo = u'http://test332.com/logo.png'
+    file.tags = u'tag1, tag2, 345'
+    file.language = u'sv-SE'
+    file.os = u'Windows-x86'
+    file.mimetype = u'text/xml'
+    file.releasedate = u'testdate'
+    file.upgrade = u'uninstall, install'
+    file.screenshot = u'http://test.com/screenshot.php?id=37'
+    file.publisher_name = u'publisher32'
+    file.publisher_url = u'http://url336.com/'
+    file.license_name = u'license827'
+    file.license_url = u'http://url794.com/'
+    ml.files.append(file)
+    if os.path.exists('test.tmp'): os.remove('test.tmp') # Remove tmp file
+    metalink.save_file(ml, 'test.tmp')
+    self.failUnless(os.path.exists('test.tmp'),
+      '"test.tmp" was not saved. The file does not exist!')
+    ml2 = metalink.load_file('test.tmp')
+    # Clear some properties, which are modified when the file is saved.
+    ml2.ml_version = ''
+    ml2.ml_generator = ''
+    print ml.get_dict()
+    print ml2.get_dict()
+    self.assertEqual(ml, ml2,
+      'The saved and the loaded metalink is not equal!')
 
 def run_tests():
   """Run all unit tests in this module.
