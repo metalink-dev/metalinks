@@ -46,6 +46,11 @@
 #                           (default=10)
 #
 # CHANGELOG:
+# Version 3.1
+# -----------
+# - Now handles all SHA hash types and MD5
+# - Minor bug fixes
+#
 # Version 3.0
 # -----------
 # - Speed and bandwidth improvements for checking mode
@@ -91,8 +96,9 @@
 import optparse
 import urllib2
 import urlparse
-import sha
-import md5
+#import sha
+#import md5
+import hashlib
 import os.path
 import xml.dom.minidom
 import random
@@ -611,7 +617,7 @@ class URLCheck:
 
 #########################################
 
-############# download functions #############
+############# segmented download functions #############
 
 class Segment_Manager:
     def __init__(self, urls, localfile, size=0, chunk_size = 262144, chunksums = {}, reporthook = None):
@@ -1129,6 +1135,8 @@ class Http_Host_Segment(threading.Thread):
     def close(self):
         self.host.set_active(False)
 
+############# download functions #############
+
 def download(src, path, checksums = {}, force = False, handler = None):
     '''
     Download a file, decodes metalinks.
@@ -1327,30 +1335,55 @@ def verify_chunk_checksum(chunkstring, checksums={}):
     Returns True if no checksums are provided
     Returns False otherwise
     '''
-    sha1check = ""
-    md5check = ""
+
     try:
-        sha1check = checksums["sha1"]
-        md5check = checksums["md5"]
-    except KeyError: pass
-        
-    if sha1check != "":
-        filesha = sha.new()
+        checksums["sha512"]
+        filesha = hashlib.sha512()
         filesha.update(chunkstring)
-        if filesha.hexdigest() == sha1check.lower():
+        if filesha.hexdigest() == checksums["sha512"].lower():
             return True
-    elif md5check != "":
-        filemd5 = sha.new()
-        filemd5.update(chunkstring)
-        if filemd5.hexdigest() == md5check.lower():
+        else:
+            return False
+    except KeyError: pass
+    try:
+        checksums["sha384"]
+        filesha = hashlib.sha384()
+        filesha.update(chunkstring)
+        if filesha.hexdigest() == checksums["sha384"].lower():
             return True
-    else:
-        # No checksum provided, assume OK
-        return True
+        else:
+            return False
+    except KeyError: pass
+    try:
+        checksums["sha256"]
+        filesha = hashlib.sha256()
+        filesha.update(chunkstring)
+        if filesha.hexdigest() == checksums["sha256"].lower():
+            return True
+        else:
+            return False
+    except KeyError: pass
+    try:
+        checksums["sha1"]
+        filesha = hashlib.sha1()
+        filesha.update(chunkstring)
+        if filesha.hexdigest() == checksums["sha1"].lower():
+            return True
+        else:
+            return False
+    except KeyError: pass
+    try:
+        checksums["md5"]
+        filesha = hashlib.md5()
+        filesha.update(chunkstring)
+        if filesha.hexdigest() == checksums["md5"].lower():
+            return True
+        else:
+            return False
+    except KeyError: pass
     
-    # checksum failed here
-    #print "ERROR: checksum failed for chunk."
-    return False
+    # No checksum provided, assume OK
+    return True
 
 def verify_checksum(local_file, checksums={}):
     '''
@@ -1361,26 +1394,50 @@ def verify_checksum(local_file, checksums={}):
     Returns True if no checksums are provided
     Returns False otherwise
     '''
-    sha1check = ""
-    md5check = ""
-    try:
-        sha1check = checksums["sha1"]
-        md5check = checksums["md5"]
-    except KeyError: pass
-        
-    if sha1check != "":
-        if sha1sum(local_file) == sha1check.lower():
-            return True
-    elif md5check != "":
-        if md5sum(local_file) == md5check.lower():
-            return True
-    else:
-        # No checksum provided, assume OK
-        return True
     
-    # checksum failed here
-    print "ERROR: checksum failed for %s." % local_file
-    return False
+    try:
+        checksums["sha512"]
+        if filehash(local_file, hashlib.sha512()) == checksums["sha512"].lower():
+            return True
+        else:
+            print "ERROR: checksum failed for %s." % local_file
+            return False
+    except KeyError: pass
+    try:
+        checksums["sha384"]
+        if filehash(local_file, hashlib.sha384()) == checksums["sha384"].lower():
+            return True
+        else:
+            print "ERROR: checksum failed for %s." % local_file
+            return False
+    except KeyError: pass
+    try:
+        checksums["sha256"]
+        if filehash(local_file, hashlib.sha256()) == checksums["sha256"].lower():
+            return True
+        else:
+            print "ERROR: checksum failed for %s." % local_file
+            return False
+    except KeyError: pass
+    try:
+        checksums["sha1"]
+        if filehash(local_file, hashlib.sha1()) == checksums["sha1"].lower():
+            return True
+        else:
+            print "ERROR: checksum failed for %s." % local_file
+            return False
+    except KeyError: pass
+    try:
+        checksums["md5"]
+        if filehash(local_file, hashlib.md5()) == checksums["md5"].lower():
+            return True
+        else:
+            print "ERROR: checksum failed for %s." % local_file
+            return False
+    except KeyError: pass
+    
+    # No checksum provided, assume OK
+    return True
 
 def remote_or_local(name):
     '''
@@ -1410,13 +1467,12 @@ def get_transport(url):
         transport = result[0]
     return transport
 
-def sha1sum(thisfile):
+def filehash(thisfile, filesha):
     '''
     First parameter, filename
     Returns SHA1 sum as a string of hex digits
     '''
     filehandle = open(thisfile, "rb")
-    filesha = sha.new()
 
     data = filehandle.read()
     while(data != ""):
@@ -1426,21 +1482,37 @@ def sha1sum(thisfile):
     filehandle.close()
     return filesha.hexdigest()
 
-def md5sum(thisfile):
-    '''
-    First parameter, filename
-    Returns MD5 sum as a string of hex digits
-    '''
-    filehandle = open(thisfile, "rb")
-    filemd5 = md5.new()
-
-    data = filehandle.read()
-    while(data != ""):
-        filemd5.update(data)
-        data = filehandle.read()
-
-    filehandle.close()
-    return filemd5.hexdigest()
+##def sha1sum(thisfile):
+##    '''
+##    First parameter, filename
+##    Returns SHA1 sum as a string of hex digits
+##    '''
+##    filehandle = open(thisfile, "rb")
+##    filesha = sha.new()
+##
+##    data = filehandle.read()
+##    while(data != ""):
+##        filesha.update(data)
+##        data = filehandle.read()
+##
+##    filehandle.close()
+##    return filesha.hexdigest()
+##
+##def md5sum(thisfile):
+##    '''
+##    First parameter, filename
+##    Returns MD5 sum as a string of hex digits
+##    '''
+##    filehandle = open(thisfile, "rb")
+##    filemd5 = md5.new()
+##
+##    data = filehandle.read()
+##    while(data != ""):
+##        filemd5.update(data)
+##        data = filehandle.read()
+##
+##    filehandle.close()
+##    return filemd5.hexdigest()
 
 def path_join(first, second):
     '''
