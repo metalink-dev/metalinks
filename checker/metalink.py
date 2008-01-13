@@ -46,6 +46,13 @@
 #                           (default=10)
 #
 # CHANGELOG:
+# Version 3.0
+# -----------
+# - Speed and bandwidth improvements for checking mode
+# - Added checking of chunk checksums
+# - If chunk checksums are present, downloads are resumed
+# - Proxy support (experimental, HTTP should work, FTP and HTTPS not likely)
+#
 # Version 2.0.1
 # -------------
 # - Bugfix when doing size check on HTTP servers, more reliable now
@@ -96,14 +103,150 @@ import socket
 import ftplib
 import threading
 import time
+import base64
 
 SEGMENTED = True
 LIMIT_PER_HOST = 1
 HOST_LIMIT = 5
+MAX_REDIRECTS = 20
+
+# Configure proxies (user and password optional)
+# HTTP_PROXY = http://user:password@myproxy:port
+HTTP_PROXY=""
+HTTPS_PROXY=""
+FTP_PROXY=""
 
 # DO NOT CHANGE
-VERSION="Metalink Checker Version 2.0"
+VERSION="Metalink Checker Version 3.0"
 PROTOCOLS=("http","https")
+
+
+########### PROXYING OBJECTS ########################
+
+class FTP:
+    def __init__(self, host=None, user="", passwd="", acct=""):
+        self.conn = None
+        if host != None:
+            self.connect(host)
+        if user != "":
+            self.login(user, passwd, acct)
+
+    def connect(self, host, port=ftplib.FTP_PORT):
+        if FTP_PROXY != "":
+            # parse proxy URL
+            url = urlparse.urlparse(FTP_PROXY)
+            if url.scheme == "" or url.scheme == "http":
+                port = httplib.HTTP_PORT
+                host = url.hostname
+                if url.port != None:
+                    port = url.port
+                if url.username != None:
+                    self.headers["Proxy-authorization"] = "Basic " + base64.encodestring(url.username+':'+url.password) + "\r\n"
+                self.conn = httplib.HTTPConnection(host, port)
+            else:
+                raise AssertionError, "Transport %s not supported for HTTP_PROXY" % url.scheme
+
+        else:
+            self.conn = ftplib.FTP()
+            self.conn.connect(host, port)
+
+    def login(self, *args):
+        if FTP_PROXY == "":
+            return self.conn.login(*args)
+
+    def size(self, url):
+        if FTP_PROXY != "":
+            result = self.conn.request("HEAD", url)
+            return int(result.getheader("Content-length", None))
+        else:
+            urlparts = urlparse.urlsplit(url)
+            return self.conn.size(urlparts.path)
+
+    def nlst(self, directory, *args):
+        if FTP_PROXY != "":
+            #???
+            #self.conn.request("GET", )
+            return
+        else:
+            urlparts = urlparse.urlsplit(directory)
+            return self.conn.nlst(urlparts.path, *args)
+
+    def quit(self):
+        if FTP_PROXY != "":
+            return self.conn.close()
+        else:
+            return self.conn.quit()
+
+class HTTPConnection:
+    def __init__(self, host, port=httplib.HTTP_PORT):
+        self.headers = {}
+        
+        if HTTP_PROXY != "":
+            # parse proxy URL
+            url = urlparse.urlparse(HTTP_PROXY)
+            if url.scheme == "" or url.scheme == "http":
+                host = url.hostname
+                port = url.port
+                if url.username != None:
+                    self.headers["Proxy-authorization"] = "Basic " + base64.encodestring(url.username+':'+url.password) + "\r\n"
+            else:
+                raise AssertionError, "Transport %s not supported for HTTP_PROXY" % url.scheme
+
+        self.conn = httplib.HTTPConnection(host, port)
+
+    def request(self, method, url, body="", headers={}):
+        headers.update(self.headers)
+        if HTTP_PROXY == "":
+            urlparts = urlparse.urlsplit(url)
+            url = urlparts.path + "?" + urlparts.query
+        return self.conn.request(method, url, body, headers)
+
+    def getresponse(self):
+        return self.conn.getresponse()
+
+    def close(self):
+        self.conn.close()
+
+class HTTPSConnection:
+    def __init__(self, host, port=httplib.HTTPS_PORT):
+        self.headers = {}
+        
+        if HTTPS_PROXY != "":
+            # parse proxy URL
+            url = urlparse.urlparse(HTTPS_PROXY)
+            if url.scheme == "" or url.scheme == "http":
+                port = httplib.HTTP_PORT
+                host = url.hostname
+                if url.port != None:
+                    port = url.port
+                if url.username != None:
+                    self.headers["Proxy-authorization"] = "Basic " + base64.encodestring(url.username+':'+url.password) + "\r\n"
+            else:
+                raise AssertionError, "Transport %s not supported for HTTPS_PROXY" % url.scheme
+
+            self.conn = httplib.HTTPConnection(host, port)
+        else:
+            self.conn = httplib.HTTPSConnection(host, port)
+
+    def request(self, method, url, body="", headers={}):
+        headers.update(self.headers)
+        urlparts = urlparse.urlsplit(url)
+        if HTTPS_PROXY != "":
+            port = httplib.HTTPS_PORT
+            if urlparts.port != None:
+                port = urlparts.port
+            return self.conn.request("CONNECT", urlparts.hostname + ":" + port, body, headers)
+        else:
+            url = urlparts.path + "?" + urlparts.query
+            return self.conn.request("GET", url, body, headers)
+
+    def getresponse(self):
+        return self.conn.getresponse()
+
+    def close(self):
+        return self.conn.close()
+
+#####################################################
 
 def run():
     '''
@@ -122,6 +265,7 @@ def run():
         return
 
     socket.setdefaulttimeout(10)
+    set_proxies()
     if options.timeout != None:
         socket.setdefaulttimeout(int(options.timeout))
     
@@ -132,6 +276,21 @@ def run():
     else:
         results = check_metalink(options.filevar)
         print_totals(results)
+
+def set_proxies():
+    # Set proxies
+    proxies = {}
+    if HTTP_PROXY != "":
+        proxies['http'] = self.HTTP_PROXY
+    if HTTPS_PROXY != "":
+        proxies['https'] = self.HTTPS_PROXY
+    if FTP_PROXY != "":
+        proxies['ftp'] = self.FTP_PROXY
+        
+    proxy_handler = urllib2.ProxyHandler(proxies)
+    opener = urllib2.build_opener(proxy_handler, urllib2.HTTPBasicAuthHandler(), urllib2.HTTPHandler, urllib2.HTTPSHandler, urllib2.FTPHandler)
+    # install this opener
+    urllib2.install_opener(opener)
 
 def print_totals(results):
     for key in results.keys():
@@ -227,7 +386,8 @@ def check_metalink(src):
 
 def check_process(headers, filesize):
     size = "?"
-    sizeheader = get_header(headers, "Content-length")
+    
+    sizeheader = get_header(headers, "Content-Length")
 
     if sizeheader != None and filesize != None:
         if sizeheader == filesize:
@@ -248,8 +408,8 @@ def get_header(textheaders, name):
     headers = textheaders.split("\n")
     for line in headers:
         line = line.strip()
-        if line.startswith(name + ": "):
-            result = line.split(name + ": ")
+        result = line.split(": ")
+        if result[0].lower() == name.lower():
             return result[1]
 
     return None
@@ -281,75 +441,179 @@ def check_file_node(item):
     while (count <= len(urllist)):
         filename = urllist[number].firstChild.nodeValue.strip()
         print "-" *79
-        print "Checking %s..." % filename
-        headers = check_urlretrieve(filename)
-        result[filename] = check_process(headers, size)
-        print "Response Code: %s\tSize Check: %s" % (result[filename][0], result[filename][1])   
+        print "Checking: %s" % filename
+        checker = URLCheck(filename)
+        headers = checker.info()
+        result[checker.geturl()] = check_process(headers, size)
+        print "Response Code: %s\tSize Check: %s" % (result[checker.geturl()][0], result[checker.geturl()][1])   
         #error = not result
         number = (number + 1) % len(urllist)
         count += 1
         
     return result
-
-def check_urlretrieve(url):
-    '''
-    modernized replacement for urllib.urlretrieve() for use with proxy
-    '''
-    try:
-        temp = urllib2.urlopen(url)
-    except urllib2.HTTPError, error:
-        return "Response: %s" % error.code
-    except (urllib2.URLError, httplib.InvalidURL):
-        if url.startswith("rsync://"):
-            return "Response: ?"
-        return "Response: Bad URL"
-    except IOError, error:
-        if error.errno == "ftp error":
-            code = error.strerror
-            result = re.compile("^([0-9]+)").search(str(error.strerror))
-            if result != None:
-		code = result.group(1)
-            result = re.compile("^\(([0-9]+)").search(str(error.strerror))
-            if result != None:
-		if result.group(1) == "110":
-                    code = "timed out"
-            return "Response: %s" % code
-    headers = ""
-
-    # attempt to get FTP file size
-    if get_transport(temp.geturl()) == "ftp":
-        urlparts = urlparse.urlsplit(temp.geturl())
-        username = ""
-        password = ""
-        if urlparts.username == None:
-            username = "anonymous"
-            password = "anonymous"
-
-        try:
-            ftpobj = ftplib.FTP(urlparts.netloc, urlparts.username, urlparts.password)
-            ftpobj.login()
-            size = ftpobj.size(urlparts.path)
-            ftpobj.quit()
-            if size != None:
-                headers += "Content-Length: %s\r\n" % size
-        except:
-            pass
+       
+class URLCheck:    
+    def __init__(self, url):
+        self.infostring = ""
+        self.url = url
+        urlparts = urlparse.urlparse(url)
+        self.scheme = urlparts.scheme
+        
+        if self.scheme == "http":
+            # need to set default port here
+            port = httplib.HTTP_PORT
+            try:
+                if urlparts.port != None:
+                    port = urlparts.port
+            except ValueError:
+                self.infostring += "Response: Bad URL\r\n"
+                return
+    
+            conn = HTTPConnection(urlparts.hostname, port)
+            try:
+                conn.request("HEAD", url)
+            except socket.error, error:
+                #dir(error)
+                self.infostring += "Response: Connection Error\r\n"
+                return
+                
+            resp = conn.getresponse()
             
-    headers += "%s" % temp.info()
-    temp.close()
+            # handle redirects here and set self.url
+            count = 0
+            while (resp.status == httplib.MOVED_PERMANENTLY or resp.status == httplib.FOUND) and count < MAX_REDIRECTS:
+                url = resp.getheader("location")
+                print "Redirected: %s" % url
+                conn.close()
+                urlparts = urlparse.urlparse(url)
+                # need to set default port here
+                port = httplib.HTTP_PORT
+                if urlparts.port != None:
+                    port = urlparts.port
+                
+                conn = HTTPConnection(urlparts.hostname, urlparts.port)
+                conn.request("HEAD", url)
+                resp = conn.getresponse()
+                count += 1
 
-    return headers
+            self.url = url
+            if resp.status == httplib.OK:
+                self.infostring += "Response: OK\r\n"
+            else:
+                self.infostring += "Response: %s %s\r\n" % (resp.status, resp.reason)
+            
+            # need to convert list into string
+            for header in resp.getheaders():
+                self.infostring += header[0] + ": " + header[1] + "\r\n"
+
+            conn.close()
+                
+        elif self.scheme == "https":
+            # need to set default port here
+            port = httplib.HTTPS_PORT
+            try:
+                if urlparts.port != None:
+                    port = urlparts.port
+            except ValueError:
+                self.infostring += "Response: Bad URL\r\n"
+                return
+    
+            conn = HTTPSConnection(urlparts.hostname, port)
+            try:
+                conn.request("HEAD", url)
+            except socket.error, error:
+                #dir(error)
+                self.infostring += "Response: Connection Error\r\n"
+                return
+                
+            resp = conn.getresponse()
+            
+            # handle redirects here and set self.url
+            count = 0
+            while (resp.status == httplib.MOVED_PERMANENTLY or resp.status == httplib.FOUND) and count < MAX_REDIRECTS:
+                url = resp.getheader("location")
+                print "Redirected: %s" % url
+                conn.close()
+                urlparts = urlparse.urlparse(url)
+                # need to set default port here
+                port = httplib.HTTPS_PORT
+                if urlparts.port != None:
+                    port = urlparts.port
+                
+                conn = HTTPSConnection(urlparts.hostname, urlparts.port)
+                conn.request("HEAD", url)
+                resp = conn.getresponse()
+                count += 1
+
+            self.url = url
+            if resp.status == httplib.OK:
+                self.infostring += "Response: OK\r\n"
+            else:
+                self.infostring += "Response: %s %s\r\n" % (resp.status, resp.reason)
+            
+            # need to convert list into string
+            for header in resp.getheaders():
+                self.infostring += header[0] + ": " + header[1] + "\r\n"
+
+            conn.close()
+                
+        elif self.scheme == "ftp":
+            username = ""
+            password = ""
+            if urlparts.username == None:
+                username = "anonymous"
+                password = "anonymous"
+
+            ftpobj = FTP()
+            try:
+                ftpobj.connect(urlparts.netloc)
+            except socket.gaierror:
+                self.infostring += "Response: Bad Hostname\r\n"
+                return
+            except socket.timeout:
+                self.infostring += "Response: timed out\r\n"
+                return
+    
+            ftpobj.login(urlparts.username, urlparts.password)
+            try:
+                files = ftpobj.nlst(os.path.dirname(url))
+            except (ftplib.error_temp, ftplib.error_perm, socket.timeout), error:
+                self.infostring += "Response: %s\r\n" % error.message
+                return
+
+            if urlparts.path in files:
+                self.infostring += "Response: OK\r\n"
+            else:
+                self.infostring += "Response: Not Found\r\n"
+            try:
+                size = ftpobj.size(url)
+            except:
+                size = None
+            try:
+                ftpobj.quit()
+            except: pass
+            
+            if size != None:
+                self.infostring += "Content-Length: %s\r\n" % size   
+
+        else:
+            self.infostring += "Response: ?\r\n"
+            
+    def geturl(self):
+        return self.url
+
+    def info(self):
+        # need response and content-length for HTTP
+        return self.infostring
+            
 
 #########################################
 
 ############# download functions #############
 
 class Segment_Manager:
-    def __init__(self, urls, localfile, size=0, chunk_size = 262144, checksums = None, reporthook = None):
+    def __init__(self, urls, localfile, size=0, chunk_size = 262144, chunksums = {}, reporthook = None):
         # ftp size support
-        # extract chunk size from XML
-        # partial checksum support
-        # need to check if file exists and resume download if partial checksums
         # download priority
         
         self.sockets = []
@@ -359,7 +623,8 @@ class Segment_Manager:
         self.size = int(size)
         self.orig_urls = urls
         self.urls = urls
-        self.chunk_size = chunk_size
+        self.chunk_size = int(chunk_size)
+        self.chunksums = chunksums
         self.reporthook = reporthook
         self.filter_urls()
         
@@ -369,27 +634,38 @@ class Segment_Manager:
                 raise AssertionError, "Cannot set size!"
 
         # Open the file.
-        self.f = open(localfile,'wb+')
+        try:
+            self.f = open(localfile, "rb+")
+        except IOError:
+            self.f = open(localfile, "wb+")
+
+    def get_chunksum(self, index):
+        mylist = {}
+        for key in self.chunksums.keys():
+            mylist[key] = self.chunksums[key][index]
+        return mylist
 
     def get_size(self):
         i = 0
         sizes = []
         while (i < len(self.urls) and (len(sizes) < 3)):
             url = self.urls[i]
-            status = 301
-            while (status == 301 or status == 302):
+            status = httplib.MOVED_PERMANENTLY
+            count = 0
+            while (status == httplib.MOVED_PERMANENTLY or status == httplib.FOUND) and count < MAX_REDIRECTS:
                 http = Http_Host(url)
                 if http.conn != None:
-                    urlparts = urlparse.urlsplit(url)
-                    http.conn.request("HEAD", urlparts.path + "?" + urlparts.query)
+                    #urlparts = urlparse.urlsplit(url)
+                    http.conn.request("HEAD", url)
                     response = http.conn.getresponse()
                     status = response.status
                     url = response.getheader("Location")
                     http.close()
+                count += 1
 
             size = response.getheader("content-length")
 
-            if (status == 200) and (size != None):
+            if (status == httplib.OK) and (size != None):
                 sizes.append(size)
             i += 1
 
@@ -439,11 +715,11 @@ class Segment_Manager:
                 end = self.size
 
             if next.protocol == "http" or next.protocol == "https":
-                segment = Http_Host_Segment(next, start, end, self.size)
+                segment = Http_Host_Segment(next, start, end, self.size, self.get_chunksum(index))
                 self.chunks[index] = segment
                 segment.start()
             if next.protocol == "ftp":
-                segment = Ftp_Host_Segment(next, start, end, self.size)
+                segment = Ftp_Host_Segment(next, start, end, self.size, self.get_chunksum(index))
                 self.chunks[index] = segment
                 segment.start()
 
@@ -453,6 +729,7 @@ class Segment_Manager:
             if self.chunks[i].error != None:
                 return i
         i += 1
+
         if (i * self.chunk_size) < self.size:
             self.chunks.append(None)
             return i
@@ -478,7 +755,7 @@ class Segment_Manager:
     def next_url(self):
         ''' returns next socket to use or None if none available'''
         self.remove_errors()
-
+  
         if (len(self.sockets) >= (self.host_limit * self.limit_per_host)) or (len(self.sockets) >= (self.limit_per_host * len(self.urls))):
             # We can't create any more sockets, but we can see what's available
             for item in self.sockets:
@@ -490,7 +767,7 @@ class Segment_Manager:
         # randomly start with a url index
         number = int(random.random() * len(self.urls))
     
-        countvar = 1   
+        countvar = 1
         while (countvar <= len(self.urls)):
             try:
                 tempcount = count[self.urls[number]]
@@ -518,7 +795,7 @@ class Segment_Manager:
         for item in self.chunks:
             if item.error != None:
                 #print item.error
-                if item.error == 301 or item.error == 302:
+                if item.error == httplib.MOVED_PERMANENTLY or item.error == httplib.FOUND:
                     #print "location:", item.location
                     self.urls.append(item.location)
                     self.filter_urls()
@@ -568,35 +845,35 @@ class Host_Base:
 
     def set_active(self, value):
         self.active = value
-
-class Ftp_Host(Host_Base):
-    def __init__(self, url, memmap=None):
-        Host_Base.__init__(self, url, memmap)
-            
-        if self.protocol == "ftp":
-            urlparts = urlparse.urlsplit(self.url)
-            username = urlparts.username
-            password = urlparts.password
-            if username == None:
-                username = "anonymous"
-                password = "anonymous"
-            try:
-                port = urlparts.port
-            except:
-                port = 21
-            if port == None:
-                port = 21
-
-            self.conn = ftplib.FTP()
-            self.conn.connect(urlparts.netloc, port)
-            self.conn.login(username, password)
-        else:
-            self.error = "unsupported protocol"
-            return
-        
-    def close(self):
-        if self.conn != None:
-            self.conn.quit()
+##
+##class Ftp_Host(Host_Base):
+##    def __init__(self, url, memmap=None):
+##        Host_Base.__init__(self, url, memmap)
+##            
+##        if self.protocol == "ftp":
+##            urlparts = urlparse.urlsplit(self.url)
+##            username = urlparts.username
+##            password = urlparts.password
+##            if username == None:
+##                username = "anonymous"
+##                password = "anonymous"
+##            try:
+##                port = urlparts.port
+##            except:
+##                port = ftplib.FTP_PORT
+##            if port == None:
+##                port = ftplib.FTP_PORT
+##
+##            self.conn = FTP()
+##            self.conn.connect(urlparts.netloc, port)
+##            self.conn.login(username, password)
+##        else:
+##            self.error = "unsupported protocol"
+##            return
+##        
+##    def close(self):
+##        if self.conn != None:
+##            self.conn.quit()
             
 class Http_Host(Host_Base):
     def __init__(self, url, memmap=None):
@@ -610,11 +887,11 @@ class Http_Host(Host_Base):
             try:
                 port = urlparts.port
             except:
-                port = 80
+                port = httplib.HTTP_PORT
             if port == None:
-                port = 80
+                port = httplib.HTTP_PORT
             try:
-                self.conn = httplib.HTTPConnection(urlparts.netloc, port)
+                self.conn = HTTPConnection(urlparts.netloc, port)
             except httplib.InvalidURL:
                 self.error = "invalid url"
                 return
@@ -622,11 +899,11 @@ class Http_Host(Host_Base):
             try:
                 port = urlparts.port
             except:
-                port = 443
+                port = httplib.HTTPS_PORT
             if port == None:
-                port = 443
+                port = httplib.HTTPS_PORT
             try:
-                self.conn = httplib.HTTPSConnection(urlparts.netloc, port)
+                self.conn = HTTPSConnection(urlparts.netloc, port)
             except httplib.InvalidURL:
                 self.error = "invalid url"
                 return
@@ -638,105 +915,106 @@ class Http_Host(Host_Base):
         if self.conn != None:
             self.conn.close()
 
-class Ftp_Host_Segment(threading.Thread):
-    def __init__(self, host, start, end, filesize):
-        threading.Thread.__init__(self)
-        self.host = host
-        self.host.set_active(True)
-        self.byte_start = start
-        self.byte_end = end
-        self.byte_count = end - start + 1
-        self.filesize = filesize
-        self.url = host.url
-        self.mem = host.mem
-        self.error = None        
-        self.ttime = 0
-        self.conn = host.conn
-        self.response = None
-        self.bytes = 0
-        self.buffer = ""
-
-    def run(self):
-        # check for supported hosts/urls
-        urlparts = urlparse.urlsplit(self.url)
-        if self.conn == None:
-            self.error = "bad socket"
-            self.close()
-            return
-        
-        size = None
-        #try:
-        (self.response, size) = self.conn.ntransfercmd("RETR " + urlparts.path, self.byte_start)
-        #except (ftplib.error_reply):
-        #    pass
-            
-        if size != None:
-            if self.filesize != size:
-                self.error = "bad file size"
-                return
-        
-        self.start_time = time.time()
-        while True:
-            if self.readable():
-                self.handle_read()
-            else:
-                self.ttime += (time.time() - self.start_time)
-                self.close()
-                return
-
-    def readable(self):
-        if self.response == None:
-            return False
-        return True
-    
-    def handle_read(self):
-        try:
-            data = self.response.recv(1024)
-        except socket.timeout:
-            self.error = "timeout"
-            self.response = None
-            return
-        
-        if len(data) == 0:
-            return
-
-        self.buffer += data
-
-        if len(self.buffer) >= self.byte_count:
-            self.response.shutdown(2)
-            #self.response.close()
-            #try:
-                #self.conn.abort()
-            #except: pass
-            
-            tempbuffer = self.buffer[:self.byte_count]
-            self.buffer = ""
-            #self.conn.abort()
-            self.bytes += len(tempbuffer)
-            print "writing body size %s" % len(tempbuffer)
-            self.mem.seek(self.byte_start, 0)
-            self.mem.write(tempbuffer)
-            self.mem.flush()
-        
-            self.response = None
-            #self.close()
-
-    def avg_bitrate(self):
-        bits = self.bytes * 8
-        return bits/self.ttime
-
-    def close(self):
-        self.host.set_active(False)
+##class Ftp_Host_Segment(threading.Thread):
+##    def __init__(self, host, start, end, filesize, checksums = {}):
+##        threading.Thread.__init__(self)
+##        self.host = host
+##        self.host.set_active(True)
+##        self.byte_start = start
+##        self.byte_end = end
+##        self.byte_count = end - start + 1
+##        self.filesize = filesize
+##        self.url = host.url
+##        self.mem = host.mem
+##        self.error = None        
+##        self.ttime = 0
+##        self.conn = host.conn
+##        self.response = None
+##        self.bytes = 0
+##        self.buffer = ""
+##
+##    def run(self):
+##        # check for supported hosts/urls
+##        urlparts = urlparse.urlsplit(self.url)
+##        if self.conn == None:
+##            self.error = "bad socket"
+##            self.close()
+##            return
+##        
+##        size = None
+##        #try:
+##        (self.response, size) = self.conn.ntransfercmd("RETR " + urlparts.path, self.byte_start)
+##        #except (ftplib.error_reply):
+##        #    pass
+##            
+##        if size != None:
+##            if self.filesize != size:
+##                self.error = "bad file size"
+##                return
+##        
+##        self.start_time = time.time()
+##        while True:
+##            if self.readable():
+##                self.handle_read()
+##            else:
+##                self.ttime += (time.time() - self.start_time)
+##                self.close()
+##                return
+##
+##    def readable(self):
+##        if self.response == None:
+##            return False
+##        return True
+##    
+##    def handle_read(self):
+##        try:
+##            data = self.response.recv(1024)
+##        except socket.timeout:
+##            self.error = "timeout"
+##            self.response = None
+##            return
+##        
+##        if len(data) == 0:
+##            return
+##
+##        self.buffer += data
+##
+##        if len(self.buffer) >= self.byte_count:
+##            self.response.shutdown(2)
+##            #self.response.close()
+##            #try:
+##                #self.conn.abort()
+##            #except: pass
+##            
+##            tempbuffer = self.buffer[:self.byte_count]
+##            self.buffer = ""
+##            #self.conn.abort()
+##            self.bytes += len(tempbuffer)
+##            print "writing body size %s" % len(tempbuffer)
+##            self.mem.seek(self.byte_start, 0)
+##            self.mem.write(tempbuffer)
+##            self.mem.flush()
+##        
+##            self.response = None
+##            #self.close()
+##
+##    def avg_bitrate(self):
+##        bits = self.bytes * 8
+##        return bits/self.ttime
+##
+##    def close(self):
+##        self.host.set_active(False)
 
         
 class Http_Host_Segment(threading.Thread):
-    def __init__(self, host, start, end, filesize):
+    def __init__(self, host, start, end, filesize, checksums = {}):
         threading.Thread.__init__(self)
         self.host = host
         self.host.set_active(True)
         self.byte_start = start
         self.byte_end = end
         self.filesize = filesize
+        self.checksums = checksums
         self.url = host.url
         self.mem = host.mem
         self.error = None        
@@ -746,6 +1024,12 @@ class Http_Host_Segment(threading.Thread):
         self.bytes = 0
 
     def run(self):
+        # Finish early if checksum is OK
+        if self.checksum() and len(self.checksums) > 0:
+            self.bytes += self.byte_end - self.byte_start + 1
+            self.close()
+            return
+        
         # check for supported hosts/urls
         urlparts = urlparse.urlsplit(self.url)
         if self.conn == None:
@@ -754,7 +1038,7 @@ class Http_Host_Segment(threading.Thread):
             return
 
         try:
-            self.conn.request("GET", urlparts.path + "?" + urlparts.query, "", {"Range": "bytes=%lu-%lu\r\n" % (self.byte_start, self.byte_end)})
+            self.conn.request("GET", self.url, "", {"Range": "bytes=%lu-%lu\r\n" % (self.byte_start, self.byte_end)})
         except:
             self.error = "socket exception"
             self.close()
@@ -766,6 +1050,8 @@ class Http_Host_Segment(threading.Thread):
                 self.handle_read()
             else:
                 self.ttime += (time.time() - self.start_time)
+                if not self.checksum():
+                    self.error = "Chunk checksum failed"
                 self.close()
                 return
 
@@ -783,9 +1069,9 @@ class Http_Host_Segment(threading.Thread):
                 self.error = "response error"
                 return False
             
-        if self.response.status == 206:
+        if self.response.status == httplib.PARTIAL_CONTENT:
             return True
-        elif self.response.status == 301 or self.response.status == 302:
+        elif self.response.status == httplib.MOVED_PERMANENTLY or self.response.status == httplib.FOUND:
             self.location = self.response.getheader("Location")
             self.error = self.response.status
             self.response = None
@@ -832,10 +1118,16 @@ class Http_Host_Segment(threading.Thread):
         bits = self.bytes * 8
         return bits/self.ttime
 
+    def checksum(self):
+        self.mem.seek(self.byte_start, 0)
+        chunkstring = self.mem.read(self.byte_end - self.byte_start + 1)
+        #print len(chunkstring)
+        return verify_chunk_checksum(chunkstring, self.checksums)
+            
     def close(self):
         self.host.set_active(False)
 
-def download(src, path, filemd5="", filesha1="", force = False, handler = None):
+def download(src, path, checksums = {}, force = False, handler = None):
     '''
     Download a file, decodes metalinks.
     First parameter, file to download, URL or file path to download from
@@ -853,12 +1145,12 @@ def download(src, path, filemd5="", filesha1="", force = False, handler = None):
     else:
         # parse out filename portion here
         filename = os.path.basename(src)
-        result = download_file([src], os.path.join(path, filename), 0, filemd5, filesha1, force, handler)
+        result = download_file([src], os.path.join(path, filename), 0, checksums, force, handler)
         if result:
             return [result]
         return False
 
-def download_file(urllist, local_file, size=0, filemd5="", filesha1="", force = False, handler = None, segmented = True, checksums = None, chunk_size = 262144):
+def download_file(urllist, local_file, size=0, checksums={}, force = False, handler = None, segmented = True, chunksums = {}, chunk_size = None):
     '''
     Download a file.
     First parameter, file to download, URL or file path to download from
@@ -870,7 +1162,7 @@ def download_file(urllist, local_file, size=0, filemd5="", filesha1="", force = 
     Returns file path if download is successful
     Returns False otherwise (checksum fails)
     '''
-    if os.path.exists(local_file) and (not force) and verify_checksum(local_file, filemd5, filesha1):
+    if os.path.exists(local_file) and (not force) and verify_checksum(local_file, checksums):
         return local_file
 
     directory = os.path.dirname(local_file)
@@ -879,7 +1171,9 @@ def download_file(urllist, local_file, size=0, filemd5="", filesha1="", force = 
 
     seg_result = False
     if segmented:
-        manager = Segment_Manager(urllist, local_file, size, chunk_size = chunk_size, reporthook = handler)
+        if chunk_size == None:
+            chunk_size = 262144
+        manager = Segment_Manager(urllist, local_file, size, reporthook = handler, chunksums = chunksums, chunk_size = int(chunk_size))
         seg_result = manager.run()
 
     if (not segmented) or (seg_result == False):
@@ -899,7 +1193,7 @@ def download_file(urllist, local_file, size=0, filemd5="", filesha1="", force = 
             number = (number + 1) % len(urllist)
             count += 1
 
-    if verify_checksum(local_file, filemd5, filesha1):
+    if verify_checksum(local_file, checksums):
         return local_file
 
     return False
@@ -943,7 +1237,7 @@ def download_file_node(item, path, force = False, handler = None):
     Returns False otherwise (checksum fails)
     '''
 
-    urllist = get_subnodes(item, ["resources", "url"])
+    urllist = get_xml_tag_strings(item, ["resources", "url"])
     if len(urllist) == 0:
         print "No urls to download file from."
         return False
@@ -955,21 +1249,26 @@ def download_file_node(item, path, force = False, handler = None):
         size = 0
     
     hashes = {}
-    hashes['md5'] = ""
-    hashes['sha1'] = ""
     for hashitem in hashlist:
         hashes[get_attr_from_item(hashitem, "type")] = hashitem.firstChild.nodeValue.strip()
-##        for i in range(hashitem.attributes.length):
-##            if hashitem.attributes.item(i).name == "type":
-##                hashes[hashitem.attributes.item(i).value] = hashitem.firstChild.nodeValue.strip()
 
     local_file = get_attr_from_item(item, "name")
     localfile = path_join(path, local_file)
 
-    newlist = []
-    for item in urllist:
-        newlist.append(item.firstChild.nodeValue.strip())
-    return download_file(newlist, localfile, size, hashes['md5'], hashes['sha1'], force, handler, SEGMENTED)
+    #extract chunk checksum information
+    try:
+        chunksize = int(get_attr_from_item(get_subnodes(item, ["verification", "pieces"])[0], "length"))
+    except IndexError:
+        chunksize = None
+
+    chunksums = {}
+    for piece in get_subnodes(item, ["verification", "pieces"]):
+        hashtype = get_attr_from_item(piece, "type")
+        chunksums[hashtype] = []
+        for chunk in get_xml_tag_strings(piece, ["hash"]):
+            chunksums[hashtype].append(chunk)
+
+    return download_file(urllist, localfile, size, hashes, force, handler, SEGMENTED, chunksums, chunksize)
 
 def complete_url(url):
     '''
@@ -1017,21 +1316,61 @@ def urlretrieve(url, filename, reporthook = None):
 
     return (filename, headers)
 
-def verify_checksum(local_file, filemd5="", filesha1=""):
+def verify_chunk_checksum(chunkstring, checksums={}):
     '''
     Verify the checksum of a file
     First parameter, filename
-    Second parameter, optional, expected MD5SUM
-    Third parameter, optional, expected SHA1SUM
+    Second parameter, optional, expected dictionary of checksums
     Returns True if first checksum provided is valid
     Returns True if no checksums are provided
     Returns False otherwise
     '''
-    if filesha1 != "":
-        if sha1sum(local_file) == filesha1.lower():
+    sha1check = ""
+    md5check = ""
+    try:
+        sha1check = checksums["sha1"]
+        md5check = checksums["md5"]
+    except KeyError: pass
+        
+    if sha1check != "":
+        filesha = sha.new()
+        filesha.update(chunkstring)
+        if filesha.hexdigest() == sha1check.lower():
             return True
-    elif filemd5 != "":
-        if md5sum(local_file) == filemd5.lower():
+    elif md5check != "":
+        filemd5 = sha.new()
+        filemd5.update(chunkstring)
+        if filemd5.hexdigest() == md5check.lower():
+            return True
+    else:
+        # No checksum provided, assume OK
+        return True
+    
+    # checksum failed here
+    #print "ERROR: checksum failed for chunk."
+    return False
+
+def verify_checksum(local_file, checksums={}):
+    '''
+    Verify the checksum of a file
+    First parameter, filename
+    Second parameter, optional, expected dictionary of checksums
+    Returns True if first checksum provided is valid
+    Returns True if no checksums are provided
+    Returns False otherwise
+    '''
+    sha1check = ""
+    md5check = ""
+    try:
+        sha1check = checksums["sha1"]
+        md5check = checksums["md5"]
+    except KeyError: pass
+        
+    if sha1check != "":
+        if sha1sum(local_file) == sha1check.lower():
+            return True
+    elif md5check != "":
+        if md5sum(local_file) == md5check.lower():
             return True
     else:
         # No checksum provided, assume OK
@@ -1061,6 +1400,7 @@ def get_transport(url):
     First parameter, url
     Returns the transport type
     '''
+    url = str(url)
     result = url.split("://", 1)
     if len(result) == 1:
         transport = ""
