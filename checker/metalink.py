@@ -126,6 +126,7 @@ PROTOCOLS=("http","https")
 class FTP:
     def __init__(self, host=None, user="", passwd="", acct=""):
         self.conn = None
+        self.headers = {}
         if host != None:
             self.connect(host)
         if user != "":
@@ -281,11 +282,11 @@ def set_proxies():
     # Set proxies
     proxies = {}
     if HTTP_PROXY != "":
-        proxies['http'] = self.HTTP_PROXY
+        proxies['http'] = HTTP_PROXY
     if HTTPS_PROXY != "":
-        proxies['https'] = self.HTTPS_PROXY
+        proxies['https'] = HTTPS_PROXY
     if FTP_PROXY != "":
-        proxies['ftp'] = self.FTP_PROXY
+        proxies['ftp'] = FTP_PROXY
         
     proxy_handler = urllib2.ProxyHandler(proxies)
     opener = urllib2.build_opener(proxy_handler, urllib2.HTTPBasicAuthHandler(), urllib2.HTTPHandler, urllib2.HTTPSHandler, urllib2.FTPHandler)
@@ -558,9 +559,10 @@ class URLCheck:
             conn.close()
                 
         elif self.scheme == "ftp":
-            username = ""
-            password = ""
-            if urlparts.username == None:
+            username = urlparts.username
+            password = urlparts.password
+
+            if username == None:
                 username = "anonymous"
                 password = "anonymous"
 
@@ -574,7 +576,7 @@ class URLCheck:
                 self.infostring += "Response: timed out\r\n"
                 return
     
-            ftpobj.login(urlparts.username, urlparts.password)
+            ftpobj.login(username, password)
             try:
                 files = ftpobj.nlst(os.path.dirname(url))
             except (ftplib.error_temp, ftplib.error_perm, socket.timeout), error:
@@ -748,7 +750,7 @@ class Segment_Manager:
     def active_count(self):
         count = 0
         for item in self.chunks:
-            if item.isAlive() == True:
+            if item.isAlive():
                 count += 1
         return count
 
@@ -759,7 +761,7 @@ class Segment_Manager:
         if (len(self.sockets) >= (self.host_limit * self.limit_per_host)) or (len(self.sockets) >= (self.limit_per_host * len(self.urls))):
             # We can't create any more sockets, but we can see what's available
             for item in self.sockets:
-                if item.active == False:
+                if not item.active:
                     return item
             return None
 
@@ -1031,7 +1033,7 @@ class Http_Host_Segment(threading.Thread):
             return
         
         # check for supported hosts/urls
-        urlparts = urlparse.urlsplit(self.url)
+        #urlparts = urlparse.urlsplit(self.url)
         if self.conn == None:
             self.error = "bad socket"
             self.close()
@@ -1107,11 +1109,11 @@ class Http_Host_Segment(threading.Thread):
         body = data
         size = len(body)
         # write out body to file
-        #print "writing body size %s" % len(body)
+        #print "writing body size %s" % size
         self.mem.seek(self.byte_start, 0)
         self.mem.write(body)
         self.mem.flush()
-        self.bytes += len(body)
+        self.bytes += size
         self.response = None
 
     def avg_bitrate(self):
@@ -1176,7 +1178,7 @@ def download_file(urllist, local_file, size=0, checksums={}, force = False, hand
         manager = Segment_Manager(urllist, local_file, size, reporthook = handler, chunksums = chunksums, chunk_size = int(chunk_size))
         seg_result = manager.run()
 
-    if (not segmented) or (seg_result == False):
+    if (not segmented) or (not seg_result):
         # do it the old way
         # choose a random url tag to start with
         number = int(random.random() * len(urllist))
