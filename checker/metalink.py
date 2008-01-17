@@ -46,6 +46,10 @@
 #                           (default=10)
 #
 # CHANGELOG:
+# Version 3.2
+# -----------
+# - If type="dynamic", client checks origin location
+#
 # Version 3.1
 # -----------
 # - Now handles all SHA hash types and MD5
@@ -91,13 +95,18 @@
 # Version 1.0
 # -----------
 # This is the initial release.
+#
+# TODO
+# - finish proxy support
+# - segmented download ftp support
+# - segmented download ftp size support
+# - download priority based on "location", "preference", and speed
+# - use maxconnections
 ########################################################################
 
 import optparse
 import urllib2
 import urlparse
-#import sha
-#import md5
 import hashlib
 import os.path
 import xml.dom.minidom
@@ -123,7 +132,7 @@ HTTPS_PROXY=""
 FTP_PROXY=""
 
 # DO NOT CHANGE
-VERSION="Metalink Checker Version 3.1"
+VERSION="Metalink Checker Version 3.2"
 PROTOCOLS=("http","https")
 
 
@@ -376,6 +385,13 @@ def check_metalink(src):
         raise
     datasource.close()
     
+    metalink_node = get_subnodes(dom2, ["metalink"])
+    metalink_type = get_attr_from_item(metalink_node, "type")
+    if metalink_type == "dynamic":
+        origin = get_attr_from_item(metalink_node, "origin")
+        if origin != src:
+            return check_metalink(origin)
+    
     urllist = get_subnodes(dom2, ["metalink", "files", "file"])
     if len(urllist) == 0:
         print "No urls to download file from."
@@ -623,10 +639,7 @@ class URLCheck:
 ############# segmented download functions #############
 
 class Segment_Manager:
-    def __init__(self, urls, localfile, size=0, chunk_size = 262144, chunksums = {}, reporthook = None):
-        # ftp size support
-        # download priority
-        
+    def __init__(self, urls, localfile, size=0, chunk_size = 262144, chunksums = {}, reporthook = None):        
         self.sockets = []
         self.chunks = []
         self.limit_per_host = LIMIT_PER_HOST
@@ -1148,13 +1161,24 @@ class Http_Host_Segment(threading.Thread):
     def checksum(self):
         self.mem.seek(self.byte_start, 0)
         chunkstring = self.mem.read(self.byte_end - self.byte_start + 1)
-        #print len(chunkstring)
         return verify_chunk_checksum(chunkstring, self.checksums)
             
     def close(self):
         self.host.set_active(False)
 
 ############# download functions #############
+
+class URL:
+    def __init__(self, url, location = "", preference = "", maxconnections = ""):
+        if preference == "":
+            preference = 1
+        if maxconnections == "":
+            maxconnections = 1
+        
+        self.url = url
+        self.location = location
+        self.preference = preference
+        self.maxconnections = maxconnections
 
 def download(src, path, checksums = {}, force = False, handler = None):
     '''
@@ -1241,6 +1265,13 @@ def download_metalink(src, path, force = False, handler = None):
     datasource = urllib2.urlopen(src)
     dom2 = xml.dom.minidom.parse(datasource)   # parse an open file
     datasource.close()
+
+    metalink_node = get_subnodes(dom2, ["metalink"])
+    metalink_type = get_attr_from_item(metalink_node, "type")
+    if metalink_type == "dynamic":
+        origin = get_attr_from_item(metalink_node, "origin")
+        if origin != src:
+            return download_metalink(origin, path, force, handler)
     
     urllist = get_subnodes(dom2, ["metalink", "files", "file"])
     if len(urllist) == 0:
@@ -1267,6 +1298,14 @@ def download_file_node(item, path, force = False, handler = None):
     '''
 
     urllist = get_xml_tag_strings(item, ["resources", "url"])
+##    urllist = []
+##    for node in get_subnodes(item, ["resources", "url"]):
+##        url = get_xml_item_strings([node])[0]
+##        location = get_attr_from_item(node, "location")
+##        preference = get_attr_from_item(node, "preference")
+##        maxconnections = get_attr_from_item(node, "maxconnections")
+##        urllist.append(URL(url, location, preference, maxconnections))
+        
     if len(urllist) == 0:
         print "No urls to download file from."
         return False
