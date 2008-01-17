@@ -5,7 +5,7 @@
 # URL: http://www.nabber.org/projects/
 # E-mail: webmaster@nabber.org
 #
-# Copyright: (C) 2007, Neil McNab
+# Copyright: (C) 2007-2008, Neil McNab
 # License: GNU General Public License Version 2
 #   (http://www.gnu.org/copyleft/gpl.html)
 #
@@ -123,7 +123,7 @@ HTTPS_PROXY=""
 FTP_PROXY=""
 
 # DO NOT CHANGE
-VERSION="Metalink Checker Version 3.0"
+VERSION="Metalink Checker Version 3.1"
 PROTOCOLS=("http","https")
 
 
@@ -177,6 +177,9 @@ class FTP:
         else:
             urlparts = urlparse.urlsplit(directory)
             return self.conn.nlst(urlparts.path, *args)
+
+    def ntransfercmd(self, *args):
+        return self.conn.ntransfercmd(*args)
 
     def quit(self):
         if FTP_PROXY != "":
@@ -790,7 +793,12 @@ class Segment_Manager:
                     self.sockets.append(host)
                     return host
                 if (protocol == "ftp"):
-                    host = Ftp_Host(self.urls[number], self.f)
+                    try:
+                        host = Ftp_Host(self.urls[number], self.f)
+                    except (socket.gaierror, socket.timeout, ftplib.error_temp, socket.error):
+                        print "FTP connect failed %s" % self.urls[number]
+                        del(self.urls[number])
+                        return None
                     self.sockets.append(host)
                     return host
                     
@@ -853,35 +861,38 @@ class Host_Base:
 
     def set_active(self, value):
         self.active = value
-##
-##class Ftp_Host(Host_Base):
-##    def __init__(self, url, memmap=None):
-##        Host_Base.__init__(self, url, memmap)
-##            
-##        if self.protocol == "ftp":
-##            urlparts = urlparse.urlsplit(self.url)
-##            username = urlparts.username
-##            password = urlparts.password
-##            if username == None:
-##                username = "anonymous"
-##                password = "anonymous"
-##            try:
-##                port = urlparts.port
-##            except:
-##                port = ftplib.FTP_PORT
-##            if port == None:
-##                port = ftplib.FTP_PORT
-##
-##            self.conn = FTP()
-##            self.conn.connect(urlparts.netloc, port)
-##            self.conn.login(username, password)
-##        else:
-##            self.error = "unsupported protocol"
-##            return
-##        
-##    def close(self):
-##        if self.conn != None:
-##            self.conn.quit()
+
+class Ftp_Host(Host_Base):
+    def __init__(self, url, memmap=None):
+        Host_Base.__init__(self, url, memmap)
+            
+        if self.protocol == "ftp":
+            urlparts = urlparse.urlsplit(self.url)
+            username = urlparts.username
+            password = urlparts.password
+            if username == None:
+                username = "anonymous"
+                password = "anonymous"
+            try:
+                port = urlparts.port
+            except:
+                port = ftplib.FTP_PORT
+            if port == None:
+                port = ftplib.FTP_PORT
+
+            self.conn = FTP()
+            self.conn.connect(urlparts.netloc, port)
+            self.conn.login(username, password)
+        else:
+            self.error = "unsupported protocol"
+            return
+        
+    def close(self):
+        if self.conn != None:
+            try:
+                self.conn.quit()
+            except socket.error:
+                pass
             
 class Http_Host(Host_Base):
     def __init__(self, url, memmap=None):
@@ -923,95 +934,103 @@ class Http_Host(Host_Base):
         if self.conn != None:
             self.conn.close()
 
-##class Ftp_Host_Segment(threading.Thread):
-##    def __init__(self, host, start, end, filesize, checksums = {}):
-##        threading.Thread.__init__(self)
-##        self.host = host
-##        self.host.set_active(True)
-##        self.byte_start = start
-##        self.byte_end = end
-##        self.byte_count = end - start + 1
-##        self.filesize = filesize
-##        self.url = host.url
-##        self.mem = host.mem
-##        self.error = None        
-##        self.ttime = 0
-##        self.conn = host.conn
-##        self.response = None
-##        self.bytes = 0
-##        self.buffer = ""
-##
-##    def run(self):
-##        # check for supported hosts/urls
-##        urlparts = urlparse.urlsplit(self.url)
-##        if self.conn == None:
-##            self.error = "bad socket"
-##            self.close()
-##            return
-##        
-##        size = None
-##        #try:
-##        (self.response, size) = self.conn.ntransfercmd("RETR " + urlparts.path, self.byte_start)
-##        #except (ftplib.error_reply):
-##        #    pass
-##            
-##        if size != None:
-##            if self.filesize != size:
-##                self.error = "bad file size"
-##                return
-##        
-##        self.start_time = time.time()
-##        while True:
-##            if self.readable():
-##                self.handle_read()
-##            else:
-##                self.ttime += (time.time() - self.start_time)
-##                self.close()
-##                return
-##
-##    def readable(self):
-##        if self.response == None:
-##            return False
-##        return True
-##    
-##    def handle_read(self):
-##        try:
-##            data = self.response.recv(1024)
-##        except socket.timeout:
-##            self.error = "timeout"
-##            self.response = None
-##            return
-##        
-##        if len(data) == 0:
-##            return
-##
-##        self.buffer += data
-##
-##        if len(self.buffer) >= self.byte_count:
-##            self.response.shutdown(2)
-##            #self.response.close()
-##            #try:
-##                #self.conn.abort()
-##            #except: pass
-##            
-##            tempbuffer = self.buffer[:self.byte_count]
-##            self.buffer = ""
-##            #self.conn.abort()
-##            self.bytes += len(tempbuffer)
-##            print "writing body size %s" % len(tempbuffer)
-##            self.mem.seek(self.byte_start, 0)
-##            self.mem.write(tempbuffer)
-##            self.mem.flush()
-##        
-##            self.response = None
-##            #self.close()
-##
-##    def avg_bitrate(self):
-##        bits = self.bytes * 8
-##        return bits/self.ttime
-##
-##    def close(self):
-##        self.host.set_active(False)
+class Ftp_Host_Segment(threading.Thread):
+    def __init__(self, host, start, end, filesize, checksums = {}):
+        threading.Thread.__init__(self)
+        self.host = host
+        self.host.set_active(True)
+        self.byte_start = start
+        self.byte_end = end
+        self.byte_count = end - start + 1
+        self.filesize = filesize
+        self.url = host.url
+        self.mem = host.mem
+        self.error = None        
+        self.ttime = 0
+        self.conn = host.conn
+        self.response = None
+        self.bytes = 0
+        self.buffer = ""
+
+    def run(self):
+        # check for supported hosts/urls
+        urlparts = urlparse.urlsplit(self.url)
+        if self.conn == None:
+            self.error = "bad socket"
+            self.close()
+            return
+        
+        size = None
+        try:
+            (self.response, size) = self.conn.ntransfercmd("RETR " + urlparts.path, self.byte_start)
+        except (ftplib.error_perm, socket.gaierror, socket.error, ftplib.error_temp), error:
+            self.error = error.message
+            self.close()
+            return
+        except socket.timeout:
+            self.error = "timeout"
+            self.close()
+            return
+        
+        if size != None:
+            if self.filesize != size:
+                self.error = "bad file size"
+                return
+        
+        self.start_time = time.time()
+        while True:
+            if self.readable():
+                self.handle_read()
+            else:
+                self.ttime += (time.time() - self.start_time)
+                self.close()
+                return
+
+    def readable(self):
+        if self.response == None:
+            return False
+        return True
+    
+    def handle_read(self):
+        try:
+            data = self.response.recv(1024)
+        except socket.timeout:
+            self.error = "timeout"
+            self.response = None
+            return
+        
+        if len(data) == 0:
+            return
+
+        self.buffer += data
+
+        if len(self.buffer) >= self.byte_count:
+            self.response.shutdown(socket.SHUT_RDWR)
+            #self.response.shutdown(socket.SHUT_RD)
+            #self.response.close()
+            #try:
+                #self.conn.abort()
+            #except: pass
+            
+            tempbuffer = self.buffer[:self.byte_count]
+            self.buffer = ""
+            #self.conn.abort()
+            self.bytes += len(tempbuffer)
+            #print "writing body size %s" % len(tempbuffer)
+            self.mem.seek(self.byte_start, 0)
+            self.mem.write(tempbuffer)
+            self.mem.flush()
+        
+            self.response = None
+            #self.close()
+
+    def avg_bitrate(self):
+        bits = self.bytes * 8
+        return bits/self.ttime
+
+    def close(self):
+        print "FTP:", self.error
+        self.host.set_active(False)
 
         
 class Http_Host_Segment(threading.Thread):
