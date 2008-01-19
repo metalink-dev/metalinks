@@ -46,6 +46,11 @@
 #                           (default=10)
 #
 # CHANGELOG:
+# Version 3.3
+# -----------
+# - Bugfix for when type attr not present
+# - Support for FTP segmented downloads
+#
 # Version 3.2
 # -----------
 # - If type="dynamic", client checks origin location
@@ -98,7 +103,6 @@
 #
 # TODO
 # - finish proxy support
-# - segmented download ftp support
 # - segmented download ftp size support
 # - download priority based on "location", "preference", and speed
 # - use maxconnections
@@ -132,8 +136,8 @@ HTTPS_PROXY=""
 FTP_PROXY=""
 
 # DO NOT CHANGE
-VERSION="Metalink Checker Version 3.2"
-PROTOCOLS=("http","https")
+VERSION="Metalink Checker Version 3.3"
+PROTOCOLS=("http","https","ftp")
 
 
 ########### PROXYING OBJECTS ########################
@@ -189,6 +193,12 @@ class FTP:
 
     def ntransfercmd(self, *args):
         return self.conn.ntransfercmd(*args)
+
+    def voidcmd(self, *args):
+        return self.conn.voidcmd(*args)
+    
+    def retrbinary(self, *args):
+        return self.conn.retrbinary(*args)
 
     def quit(self):
         if FTP_PROXY != "":
@@ -386,7 +396,10 @@ def check_metalink(src):
     datasource.close()
     
     metalink_node = get_subnodes(dom2, ["metalink"])
-    metalink_type = get_attr_from_item(metalink_node, "type")
+    try:
+        metalink_type = get_attr_from_item(metalink_node, "type")
+    except:
+        metalink_type = None
     if metalink_type == "dynamic":
         origin = get_attr_from_item(metalink_node, "origin")
         if origin != src:
@@ -460,8 +473,7 @@ def check_file_node(item):
             
     number = 0
     filename = {}
-    
-    #error = True
+
     count = 1
     result = {}
     while (count <= len(urllist)):
@@ -472,7 +484,6 @@ def check_file_node(item):
         headers = checker.info()
         result[checker.geturl()] = check_process(headers, size)
         print "Response Code: %s\tSize Check: %s" % (result[checker.geturl()][0], result[checker.geturl()][1])   
-        #error = not result
         number = (number + 1) % len(urllist)
         count += 1
         
@@ -499,7 +510,6 @@ class URLCheck:
             try:
                 conn.request("HEAD", url)
             except socket.error, error:
-                #dir(error)
                 self.infostring += "Response: Connection Error\r\n"
                 return
                 
@@ -607,6 +617,9 @@ class URLCheck:
             except (ftplib.error_temp, ftplib.error_perm, socket.timeout), error:
                 self.infostring += "Response: %s\r\n" % error.message
                 return
+            except (socket.error), error:
+                self.infostring += "Response: %s\r\n" % error.message
+                return
 
             if urlparts.path in files:
                 self.infostring += "Response: OK\r\n"
@@ -679,7 +692,6 @@ class Segment_Manager:
             while (status == httplib.MOVED_PERMANENTLY or status == httplib.FOUND) and count < MAX_REDIRECTS:
                 http = Http_Host(url)
                 if http.conn != None:
-                    #urlparts = urlparse.urlsplit(url)
                     http.conn.request("HEAD", url)
                     response = http.conn.getresponse()
                     status = response.status
@@ -712,7 +724,7 @@ class Segment_Manager:
             
     def run(self):
         while True:
-            #print "tc:", self.active_count(), len(self.sockets)
+            #print "tc:", self.active_count(), len(self.sockets), len(self.urls)
             time.sleep(0.1)
             self.update()
             if self.byte_total() >= self.size:
@@ -734,7 +746,7 @@ class Segment_Manager:
                 self.reporthook(int(self.byte_total()/self.chunk_size), self.chunk_size, self.size)
             
             start = index * self.chunk_size
-            end = start + self.chunk_size - 1
+            end = start + self.chunk_size
             if end > self.size:
                 end = self.size
 
@@ -743,6 +755,7 @@ class Segment_Manager:
                 self.chunks[index] = segment
                 segment.start()
             if next.protocol == "ftp":
+                #print "allocated to:", index, next.url
                 segment = Ftp_Host_Segment(next, start, end, self.size, self.get_chunksum(index))
                 self.chunks[index] = segment
                 segment.start()
@@ -782,8 +795,10 @@ class Segment_Manager:
   
         if (len(self.sockets) >= (self.host_limit * self.limit_per_host)) or (len(self.sockets) >= (self.limit_per_host * len(self.urls))):
             # We can't create any more sockets, but we can see what's available
+            #print "existing sockets"
             for item in self.sockets:
-                if not item.active:
+                #print item.active, item.url
+                if not item.get_active():
                     return item
             return None
 
@@ -809,8 +824,8 @@ class Segment_Manager:
                     try:
                         host = Ftp_Host(self.urls[number], self.f)
                     except (socket.gaierror, socket.timeout, ftplib.error_temp, socket.error):
-                        print "FTP connect failed %s" % self.urls[number]
-                        del(self.urls[number])
+                        #print "FTP connect failed %s" % self.urls[number]
+                        self.urls.pop(number)
                         return None
                     self.sockets.append(host)
                     return host
@@ -875,10 +890,16 @@ class Host_Base:
     def set_active(self, value):
         self.active = value
 
+    def get_active(self):
+        return self.active
+
 class Ftp_Host(Host_Base):
     def __init__(self, url, memmap=None):
         Host_Base.__init__(self, url, memmap)
-            
+
+        self.connect()
+
+    def connect(self):
         if self.protocol == "ftp":
             urlparts = urlparse.urlsplit(self.url)
             username = urlparts.username
@@ -896,6 +917,7 @@ class Ftp_Host(Host_Base):
             self.conn = FTP()
             self.conn.connect(urlparts.netloc, port)
             self.conn.login(username, password)
+            self.conn.voidcmd("TYPE I")
         else:
             self.error = "unsupported protocol"
             return
@@ -904,8 +926,12 @@ class Ftp_Host(Host_Base):
         if self.conn != None:
             try:
                 self.conn.quit()
-            except socket.error:
+            except:
                 pass
+
+    def reconnect(self):
+        self.close()
+        self.connect()
             
 class Http_Host(Host_Base):
     def __init__(self, url, memmap=None):
@@ -954,37 +980,65 @@ class Ftp_Host_Segment(threading.Thread):
         self.host.set_active(True)
         self.byte_start = start
         self.byte_end = end
-        self.byte_count = end - start + 1
+        self.byte_count = end - start
         self.filesize = filesize
         self.url = host.url
         self.mem = host.mem
+        self.checksums = checksums
         self.error = None        
         self.ttime = 0
-        self.conn = host.conn
         self.response = None
         self.bytes = 0
         self.buffer = ""
 
     def run(self):
+        # Finish early if checksum is OK
+        if self.checksum() and len(self.checksums) > 0:
+            self.bytes += self.byte_count
+            self.close()
+            return
+        
         # check for supported hosts/urls
         urlparts = urlparse.urlsplit(self.url)
-        if self.conn == None:
+        if self.host.conn == None:
+            #print "bad socket"
             self.error = "bad socket"
             self.close()
             return
         
         size = None
-        try:
-            (self.response, size) = self.conn.ntransfercmd("RETR " + urlparts.path, self.byte_start)
-        except (ftplib.error_perm, socket.gaierror, socket.error, ftplib.error_temp), error:
-            self.error = error.message
-            self.close()
-            return
-        except socket.timeout:
-            self.error = "timeout"
-            self.close()
-            return
-        
+        retry = True
+        count = 0
+        while retry and count < 3:
+            retry = False
+            try:
+                (self.response, size) = self.host.conn.ntransfercmd("RETR " + urlparts.path, self.byte_start)
+            except (ftplib.error_perm), error:
+                self.error = error.message
+                self.close()
+                return
+            except (socket.gaierror, socket.timeout), error:
+                self.error = error.args
+                self.close()
+                return
+            except (socket.error), error:
+                #print "reconnect", self.host.url
+                self.host.reconnect()
+                retry = True
+                count += 1
+            except (ftplib.error_temp), error:
+                # this is not an error condition, most likely transfer TCP connection was closed
+                self.close()
+                return
+            except (ftplib.error_reply), error:
+                # this is likely just an extra chatty FTP server, ignore for now
+                pass
+
+            if count >= 3:
+                self.error = "socket reconnect"
+                self.close()
+                return
+    
         if size != None:
             if self.filesize != size:
                 self.error = "bad file size"
@@ -993,9 +1047,12 @@ class Ftp_Host_Segment(threading.Thread):
         self.start_time = time.time()
         while True:
             if self.readable():
+                pass
                 self.handle_read()
             else:
                 self.ttime += (time.time() - self.start_time)
+                if not self.checksum():
+                    self.error = "Chunk checksum failed"
                 self.close()
                 return
 
@@ -1008,41 +1065,41 @@ class Ftp_Host_Segment(threading.Thread):
         try:
             data = self.response.recv(1024)
         except socket.timeout:
-            self.error = "timeout"
+            self.error = "read timeout"
             self.response = None
             return
-        
+
         if len(data) == 0:
             return
 
         self.buffer += data
+        #print "size:", len(self.buffer), self.byte_count
 
         if len(self.buffer) >= self.byte_count:
             self.response.shutdown(socket.SHUT_RDWR)
-            #self.response.shutdown(socket.SHUT_RD)
-            #self.response.close()
-            #try:
-                #self.conn.abort()
-            #except: pass
-            
+
             tempbuffer = self.buffer[:self.byte_count]
             self.buffer = ""
-            #self.conn.abort()
+
             self.bytes += len(tempbuffer)
-            #print "writing body size %s" % len(tempbuffer)
             self.mem.seek(self.byte_start, 0)
             self.mem.write(tempbuffer)
             self.mem.flush()
         
             self.response = None
-            #self.close()
 
     def avg_bitrate(self):
         bits = self.bytes * 8
         return bits/self.ttime
 
+    def checksum(self):
+        self.mem.seek(self.byte_start, 0)
+        chunkstring = self.mem.read(self.byte_count)
+        return verify_chunk_checksum(chunkstring, self.checksums)
+
     def close(self):
-        print "FTP:", self.error
+        #if self.error != None:
+        #    print "FTP:", self.error, self.host.url
         self.host.set_active(False)
 
         
@@ -1053,6 +1110,7 @@ class Http_Host_Segment(threading.Thread):
         self.host.set_active(True)
         self.byte_start = start
         self.byte_end = end
+        self.byte_count = end - start
         self.filesize = filesize
         self.checksums = checksums
         self.url = host.url
@@ -1066,12 +1124,10 @@ class Http_Host_Segment(threading.Thread):
     def run(self):
         # Finish early if checksum is OK
         if self.checksum() and len(self.checksums) > 0:
-            self.bytes += self.byte_end - self.byte_start + 1
+            self.bytes += self.byte_count
             self.close()
             return
         
-        # check for supported hosts/urls
-        #urlparts = urlparse.urlsplit(self.url)
         if self.conn == None:
             self.error = "bad socket"
             self.close()
@@ -1160,7 +1216,7 @@ class Http_Host_Segment(threading.Thread):
 
     def checksum(self):
         self.mem.seek(self.byte_start, 0)
-        chunkstring = self.mem.read(self.byte_end - self.byte_start + 1)
+        chunkstring = self.mem.read(self.byte_count)
         return verify_chunk_checksum(chunkstring, self.checksums)
             
     def close(self):
@@ -1216,6 +1272,7 @@ def download_file(urllist, local_file, size=0, checksums={}, force = False, hand
     Returns False otherwise (checksum fails)
     '''
     if os.path.exists(local_file) and (not force) and verify_checksum(local_file, checksums):
+        handler(1, size, size)
         return local_file
 
     directory = os.path.dirname(local_file)
@@ -1267,10 +1324,14 @@ def download_metalink(src, path, force = False, handler = None):
     datasource.close()
 
     metalink_node = get_subnodes(dom2, ["metalink"])
-    metalink_type = get_attr_from_item(metalink_node, "type")
+    try:
+        metalink_type = get_attr_from_item(metalink_node, "type")
+    except AttributeError:
+        metalink_type = None
     if metalink_type == "dynamic":
         origin = get_attr_from_item(metalink_node, "origin")
         if origin != src:
+            print "Downloading update from", origin
             return download_metalink(origin, path, force, handler)
     
     urllist = get_subnodes(dom2, ["metalink", "files", "file"])
@@ -1396,45 +1457,35 @@ def verify_chunk_checksum(chunkstring, checksums={}):
 
     try:
         checksums["sha512"]
-        filesha = hashlib.sha512()
-        filesha.update(chunkstring)
-        if filesha.hexdigest() == checksums["sha512"].lower():
+        if hashlib.sha512(chunkstring).hexdigest() == checksums["sha512"].lower():
             return True
         else:
             return False
     except KeyError: pass
     try:
         checksums["sha384"]
-        filesha = hashlib.sha384()
-        filesha.update(chunkstring)
-        if filesha.hexdigest() == checksums["sha384"].lower():
+        if hashlib.sha384(chunkstring).hexdigest() == checksums["sha384"].lower():
             return True
         else:
             return False
     except KeyError: pass
     try:
         checksums["sha256"]
-        filesha = hashlib.sha256()
-        filesha.update(chunkstring)
-        if filesha.hexdigest() == checksums["sha256"].lower():
+        if hashlib.sha256(chunkstring).hexdigest() == checksums["sha256"].lower():
             return True
         else:
             return False
     except KeyError: pass
     try:
         checksums["sha1"]
-        filesha = hashlib.sha1()
-        filesha.update(chunkstring)
-        if filesha.hexdigest() == checksums["sha1"].lower():
+        if hashlib.sha1(chunkstring).hexdigest() == checksums["sha1"].lower():
             return True
         else:
             return False
     except KeyError: pass
     try:
         checksums["md5"]
-        filesha = hashlib.md5()
-        filesha.update(chunkstring)
-        if filesha.hexdigest() == checksums["md5"].lower():
+        if hashlib.md5(chunkstring).hexdigest() == checksums["md5"].lower():
             return True
         else:
             return False
@@ -1539,38 +1590,6 @@ def filehash(thisfile, filesha):
 
     filehandle.close()
     return filesha.hexdigest()
-
-##def sha1sum(thisfile):
-##    '''
-##    First parameter, filename
-##    Returns SHA1 sum as a string of hex digits
-##    '''
-##    filehandle = open(thisfile, "rb")
-##    filesha = sha.new()
-##
-##    data = filehandle.read()
-##    while(data != ""):
-##        filesha.update(data)
-##        data = filehandle.read()
-##
-##    filehandle.close()
-##    return filesha.hexdigest()
-##
-##def md5sum(thisfile):
-##    '''
-##    First parameter, filename
-##    Returns MD5 sum as a string of hex digits
-##    '''
-##    filehandle = open(thisfile, "rb")
-##    filemd5 = md5.new()
-##
-##    data = filehandle.read()
-##    while(data != ""):
-##        filemd5.update(data)
-##        data = filehandle.read()
-##
-##    filehandle.close()
-##    return filemd5.hexdigest()
 
 def path_join(first, second):
     '''
