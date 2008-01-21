@@ -150,7 +150,7 @@ import time
 import base64
 import copy
 
-SEGMENTED = False
+SEGMENTED = True
 LIMIT_PER_HOST = 1
 HOST_LIMIT = 5
 MAX_REDIRECTS = 20
