@@ -36,15 +36,19 @@
 #   1. You need to have Python installed.
 #   2. Run on the command line using: python metalink.py
 #
-#   usage: metalink.py [options]
+#   Usage: metalink.py [options]
 #
-#   options:
+#   Options:
 #     -h, --help            show this help message and exit
 #     -d, --download        Actually download the file(s) in the metalink
 #     -f FILE, --file=FILE  Metalink file to check
 #     -t TIMEOUT, --timeout=TIMEOUT
 #                           Set timeout in seconds to wait for response
 #                           (default=10)
+#     -o OS, --os=OS        Operating System preference
+#     -l LANG, --lang=LANG  Language preference (ISO-639/3166)
+#     -c LOC, --country=LOC
+#                           Two letter country preference (ISO 3166-1 alpha-2)
 #
 # Library Instructions:
 #   - Use as expected.
@@ -55,6 +59,11 @@
 # results = metalink.check_metalink("file.metalink")
 #
 # CHANGELOG:
+# Version 3.6
+# -----------
+# - Support for resuming segmented downloads
+# - Modified for better Python 2.4 support
+#
 # Version 3.5
 # -----------
 # - Code cleanup
@@ -124,19 +133,17 @@
 # This is the initial release.
 #
 # TODO
-# - Pass tests for segmented downloads without checksums
 # - Pass test for bad piece checksum (don't hang)
-# - resume download support if no checksums present
+# - resume download support for non-segmented downloads
 # - download priority based on speed
 # - use maxconnections
-# - dumps FTP data chunks directly to file instead of holding in memory
+# - dump FTP data chunks directly to file instead of holding in memory
 # - maybe HTTPS proxy support if people need it
 ########################################################################
 
 import optparse
 import urllib2
 import urlparse
-import hashlib
 import os.path
 import xml.dom.minidom
 import random
@@ -149,6 +156,19 @@ import threading
 import time
 import base64
 import copy
+
+class Dummy:
+    pass
+
+try:
+    import hashlib
+except ImportError:
+    import sha
+    import md5
+
+    hashlib = Dummy()
+    hashlib.sha1 = sha.new
+    hashlib.md5 = md5.new
 
 SEGMENTED = True
 LIMIT_PER_HOST = 1
@@ -171,7 +191,7 @@ PROTOCOLS=("http","https","ftp")
 #PROTOCOLS=("ftp")
 
 # DO NOT CHANGE
-VERSION="Metalink Checker Version 3.5"
+VERSION="Metalink Checker Version 3.6"
 
 def run():
     '''
@@ -505,8 +525,12 @@ class URLCheck:
             conn.close()
                 
         elif self.scheme == "ftp":
-            username = urlparts.username
-            password = urlparts.password
+            try:
+                username = urlparts.username
+                password = urlparts.password
+            except AttributeError:
+                # needed for python < 2.5
+                username = None
 
             if username == None:
                 username = "anonymous"
@@ -514,7 +538,7 @@ class URLCheck:
 
             ftpobj = FTP()
             try:
-                ftpobj.connect(urlparts.netloc)
+                ftpobj.connect(urlparts[1])
             except socket.gaierror:
                 self.infostring += "Response: Bad Hostname\r\n"
                 return
@@ -573,13 +597,20 @@ class FTP:
         if FTP_PROXY != "":
             # parse proxy URL
             url = urlparse.urlparse(FTP_PROXY)
-            if url.scheme == "" or url.scheme == "http":
+            if url[0] == "" or url[0] == "http":
                 port = httplib.HTTP_PORT
-                host = url.hostname
-                if url.port != None:
-                    port = url.port
-                if url.username != None:
-                    self.headers["Proxy-authorization"] = "Basic " + base64.encodestring(url.username+':'+url.password) + "\r\n"
+                if url[1].find("@") != -1:
+                    host = url[1].split("@", 2)[1]
+                else:
+                    host = url[1]
+                    
+                try:
+                    if url.port != None:
+                        port = url.port
+                    if url.username != None:
+                        self.headers["Proxy-authorization"] = "Basic " + base64.encodestring(url.username+':'+url.password) + "\r\n"
+                except AttributeError:
+                    pass
                 self.conn = httplib.HTTPConnection(host, port)
             else:
                 raise AssertionError, "Transport %s not supported for FTP_PROXY" % url.scheme
@@ -736,6 +767,9 @@ class Segment_Manager:
             self.f = open(localfile, "rb+")
         except IOError:
             self.f = open(localfile, "wb+")
+            
+        self.resume = FileResume(localfile + ".temp")
+        self.resume.update_block_size(self.chunk_size)
 
     def get_chunksum(self, index):
         mylist = {}
@@ -815,8 +849,10 @@ class Segment_Manager:
             #print self.byte_total(), self.size
             time.sleep(0.1)
             self.update()
+            self.resume.extend_blocks(self.chunk_list())
             if self.byte_total() >= self.size and self.active_count() == 0:
                 self.close_handler()
+                self.resume.complete()
                 return True
             #crap out and do it the old way
             if len(self.urls) == 0:
@@ -830,12 +866,6 @@ class Segment_Manager:
         
         if next == None:
             return
-
-##        print next.url
-##        print next.error
-##        try:
-##            print next.temp
-##        except: pass
         
         index = self.get_chunk_index()
         if index != None:
@@ -850,12 +880,23 @@ class Segment_Manager:
             if next.protocol == "http" or next.protocol == "https":
                 segment = Http_Host_Segment(next, start, end, self.size, self.get_chunksum(index))
                 self.chunks[index] = segment
-                segment.start()
+                self.segment_init(index)
             if next.protocol == "ftp":
                 #print "allocated to:", index, next.url
                 segment = Ftp_Host_Segment(next, start, end, self.size, self.get_chunksum(index))
                 self.chunks[index] = segment
-                segment.start()
+                self.segment_init(index)
+
+    def segment_init(self, index):
+        segment = self.chunks[index]
+        if str(index) in self.resume.blocks:
+            segment.end()
+            if segment.error == None:
+                segment.bytes = segment.byte_count
+            else:
+                self.resume.remove_block(index)
+        else:
+            segment.start()
 
     def get_chunk_index(self):
         i = -1
@@ -972,6 +1013,17 @@ class Segment_Manager:
             except (AttributeError): pass
             count += 1
         return total
+
+    def chunk_list(self):
+        chunks = []
+        for i in range(len(self.chunks)):
+            #print i, self.chunks[i].bytes
+            try:
+                if self.chunks[i].bytes == self.chunk_size:
+                    chunks.append(i)
+            except (AttributeError): pass
+        #print chunks
+        return chunks
     
     def close_handler(self):
         self.f.close()
@@ -1014,8 +1066,13 @@ class Ftp_Host(Host_Base):
     def connect(self):
         if self.protocol == "ftp":
             urlparts = urlparse.urlsplit(self.url)
-            username = urlparts.username
-            password = urlparts.password
+            try:
+                username = urlparts.username
+                password = urlparts.password
+            except AttributeError:
+                # needed for python < 2.5
+                username = None
+                
             if username == None:
                 username = "anonymous"
                 password = "anonymous"
@@ -1027,7 +1084,7 @@ class Ftp_Host(Host_Base):
                 port = ftplib.FTP_PORT
 
             self.conn = FTP()
-            self.conn.connect(urlparts.netloc, port)
+            self.conn.connect(urlparts[1], port)
             try:
                 self.conn.login(username, password)
             except:
@@ -1068,7 +1125,7 @@ class Http_Host(Host_Base):
             if port == None:
                 port = httplib.HTTP_PORT
             try:
-                self.conn = HTTPConnection(urlparts.netloc, port)
+                self.conn = HTTPConnection(urlparts[1], port)
             except httplib.InvalidURL:
                 self.error = "invalid url"
                 return
@@ -1080,7 +1137,7 @@ class Http_Host(Host_Base):
             if port == None:
                 port = httplib.HTTPS_PORT
             try:
-                self.conn = HTTPSConnection(urlparts.netloc, port)
+                self.conn = HTTPSConnection(urlparts[1], port)
             except httplib.InvalidURL:
                 self.error = "invalid url"
                 return
@@ -1134,6 +1191,11 @@ class Host_Segment:
             self.host.close()
 
         self.host.set_active(False)
+
+    def end(self):
+        if not self.checksum():
+            self.error = "Chunk checksum failed"
+        self.close()
 
 class Ftp_Host_Segment(threading.Thread, Host_Segment):
     def __init__(self, *args):
@@ -1210,10 +1272,7 @@ class Ftp_Host_Segment(threading.Thread, Host_Segment):
                 self.handle_read()
             else:
                 self.ttime += (time.time() - self.start_time)
-                if not self.checksum():
-                    self.error = "Chunk checksum failed"
-                    #print "1.", self.error, self.host.url
-                self.close()
+                self.end()
                 return
 
     def readable(self):
@@ -1323,9 +1382,7 @@ class Http_Host_Segment(threading.Thread, Host_Segment):
                 self.handle_read()
             else:
                 self.ttime += (time.time() - self.start_time)
-                if not self.checksum():
-                    self.error = "Chunk checksum failed"
-                self.close()
+                self.end()
                 return
 
     def readable(self):
@@ -1444,8 +1501,9 @@ def download_file(urllist, local_file, size=0, checksums={}, force = False, hand
     '''
     print ""
     print "Downloading", os.path.basename(local_file)
-    checksum = verify_checksum(local_file, checksums)
-    if os.path.exists(local_file) and (not force):
+
+    if os.path.exists(local_file) and (not force) and len(checksums) > 0:
+        checksum = verify_checksum(local_file, checksums)
         if checksum:
             if size == 0:
                 size = os.stat(local_file).st_size
@@ -1467,6 +1525,7 @@ def download_file(urllist, local_file, size=0, checksums={}, force = False, hand
         seg_result = manager.run()
         
         if not seg_result:
+            #seg_result = verify_checksum(local_file, checksums)
             print "\nCould not download all segments of the file, trying one mirror at a time."
 
     if (not segmented) or (not seg_result):
@@ -1628,20 +1687,150 @@ def urlretrieve(url, filename, reporthook = None):
 
     data = open(filename, 'wb')
     block = True
+
+    ### FIXME need to check contents from previous download here
+    resume = FileResume(filename + ".temp")
+    resume.add_block(0)
     
     while block:
         block = temp.read(block_size)
         data.write(block)
         i += block_size
         counter += 1
+
+        resume.set_block_size(counter * block_size)
+                        
         if reporthook != None:
             #print counter, block_size, size
             reporthook(counter, block_size, size)
+
+    resume.complete()
             
     data.close()
     temp.close()
 
     return (filename, headers)
+
+
+class FileResume:
+    '''
+    Manages the resume data file
+    '''
+    def __init__(self, filename):
+        self.size = 0
+        self.blocks = []
+        self.filename = filename
+        self._read()
+
+    def set_block_size(self, size):
+        '''
+        Set the block size value without recomputing blocks
+        '''
+        self.size = int(size)
+        self._write()
+
+    def update_block_size(self, size):
+        '''
+        Recompute blocks based on new size
+        '''
+        if self.size == size:
+            return
+
+        newblocks = []
+        count = 0
+        total = 0
+        offset = None
+        
+        for value in self.blocks:
+            value = int(value)
+            if value == count:
+                if offset == None:
+                    offset = count
+                total += self.size
+            elif offset != None:
+                start = ((offset * self.size) / size) + 1
+                newblocks.extend(range(start, start + (total / size)))
+                total = 0
+                offset = None
+            count += 1
+
+        if offset != None:
+            start = ((offset * self.size) / size) + 1
+            newblocks.extend(range(start, start + (total / size)))
+
+        self.blocks = newblocks
+        self.set_block_size(size)
+
+    def start_byte(self):
+        '''
+        Returns byte to start at, all previous are OK
+        '''
+        if len(self.blocks) == 0:
+            return 0
+        
+        count = 0
+        for value in self.blocks:
+            if int(value) != count:
+                return (count + 1) * self.size
+            count += 1
+            
+        return None
+
+    def add_block(self, block_id):
+        '''
+        Add a block to list of completed
+        '''
+        if str(block_id) not in self.blocks:
+            self.blocks.append(str(block_id))
+        self._write()
+        
+    def remove_block(self, block_id):
+        '''
+        Remove a block from list of completed
+        '''
+        self.blocks.remove(str(block_id))
+        self._write()
+        
+    def clear_blocks(self):
+        '''
+        Remove all blocks from completed list
+        '''
+        self.blocks = []
+        self._write()
+
+    def extend_blocks(self, blocks):
+        '''
+        Replace the list of block ids
+        '''
+        for block in blocks:
+            if str(block) not in self.blocks:
+                self.blocks.append(str(block))
+        self._write()
+
+    def _write(self):
+        filehandle = open(self.filename, "w")
+        filehandle.write("%s:" % str(self.size))
+        #for block_id in self.blocks:
+            #filehandle.write(str(block_id) + ",")
+        filehandle.write(",".join(self.blocks))
+        filehandle.close()
+
+    def _read(self):
+        try:
+            filehandle = open(self.filename, "r")
+            resumestr = filehandle.readline()
+            (size, blocks) = resumestr.split(":")
+            self.blocks = blocks.split(",")
+            self.size = int(size)
+            filehandle.close()
+        except IOError:
+            pass
+
+    def complete(self):
+        '''
+        Download completed, remove block count file
+        '''
+        os.remove(self.filename)
 
 def verify_chunk_checksum(chunkstring, checksums={}):
     '''
@@ -1659,21 +1848,21 @@ def verify_chunk_checksum(chunkstring, checksums={}):
             return True
         else:
             return False
-    except KeyError: pass
+    except (KeyError, AttributeError): pass
     try:
         checksums["sha384"]
         if hashlib.sha384(chunkstring).hexdigest() == checksums["sha384"].lower():
             return True
         else:
             return False
-    except KeyError: pass
+    except (KeyError, AttributeError): pass
     try:
         checksums["sha256"]
         if hashlib.sha256(chunkstring).hexdigest() == checksums["sha256"].lower():
             return True
         else:
             return False
-    except KeyError: pass
+    except (KeyError, AttributeError): pass
     try:
         checksums["sha1"]
         if hashlib.sha1(chunkstring).hexdigest() == checksums["sha1"].lower():
@@ -1709,7 +1898,7 @@ def verify_checksum(local_file, checksums={}):
         else:
             #print "\nERROR: sha512 checksum failed for %s." % os.path.basename(local_file)
             return False
-    except KeyError: pass
+    except (KeyError, AttributeError): pass
     try:
         checksums["sha384"]
         if filehash(local_file, hashlib.sha384()) == checksums["sha384"].lower():
@@ -1717,7 +1906,7 @@ def verify_checksum(local_file, checksums={}):
         else:
             #print "\nERROR: sha384 checksum failed for %s." % os.path.basename(local_file)
             return False
-    except KeyError: pass
+    except (KeyError, AttributeError): pass
     try:
         checksums["sha256"]
         if filehash(local_file, hashlib.sha256()) == checksums["sha256"].lower():
@@ -1725,7 +1914,7 @@ def verify_checksum(local_file, checksums={}):
         else:
             #print "\nERROR: sha256 checksum failed for %s." % os.path.basename(local_file)
             return False
-    except KeyError: pass
+    except (KeyError, AttributeError): pass
     try:
         checksums["sha1"]
         if filehash(local_file, hashlib.sha1()) == checksums["sha1"].lower():
