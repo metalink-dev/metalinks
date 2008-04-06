@@ -1,5 +1,5 @@
 #main is first
-modules = ['checker', 'xmlutils', 'download']
+modules = ['console', 'xmlutils', 'download', 'checker']
 outputfile = "metalink.py"
 
 readhandle = open("header.txt")

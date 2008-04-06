@@ -1,3 +1,37 @@
+#!/usr/bin/env python
+########################################################################
+#
+# Project: Metalink Checker
+# URL: http://www.nabber.org/projects/
+# E-mail: webmaster@nabber.org
+#
+# Copyright: (C) 2007-2008, Neil McNab
+# License: GNU General Public License Version 2
+#   (http://www.gnu.org/copyleft/gpl.html)
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+#
+# Filename: $URL: https://appupdater.svn.sourceforge.net/svnroot/appupdater/trunk/libappupdater/xmlutils.py $
+# Last Updated: $Date: 2008-01-13 14:51:31 -0800 (Sun, 13 Jan 2008) $
+# Author(s): Neil McNab
+#
+# Description:
+#   Functions for accessing XML formatted data.
+#
+########################################################################
+
 import xml.dom.minidom
 
 def get_child_nodes(rootnode, subtag):
@@ -92,6 +126,3 @@ def get_attr_from_item(item, name):
             local_file = item.attributes.item(i).value
             
     return local_file
-
-###################################################
-
