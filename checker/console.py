@@ -39,6 +39,8 @@
 
 import optparse
 import socket
+import sys
+import os
 
 import download
 import checker
