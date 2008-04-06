@@ -157,6 +157,7 @@ import time
 import base64
 import copy
 import hashlib
+import locale
 
 import download
 import xmlutils
@@ -170,6 +171,11 @@ CONNECT_RETRY_COUNT = 3
 LANG = None
 OS = None
 COUNTRY = None
+
+lang = locale.getdefaultlocale()[0]
+if len(lang) == 5:
+    LANG = lang[:2]
+    COUNTRY = lang[-2:]
 
 # Configure proxies (user and password optional)
 # HTTP_PROXY = http://user:password@myproxy:port
