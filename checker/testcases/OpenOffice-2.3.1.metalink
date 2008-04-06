@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metalink version="3.0" generator="Metalink Editor version 1.1.0" xmlns="http://www.metalinker.org/">
+  <publisher>
+    <name>package resources</name>
+    <url>http://www.packages.ro</url>
+  </publisher>
+  <identity>openoffice</identity>
+  <version>2.3.1</version>
+  <files>
+    <file name="OOo_2.3.1_Win32Intel_install_wJRE_en-US.exe">
+      <size>125892318</size>
+      <os>Windows-x86</os>
+      <verification>
+        <hash type="md5">88a06c470d223e2ef1c43b21580bcff7</hash>
+        <hash type="sha1">ab2aa6b5554cd889b40c921d911d63785c35c5fd</hash>
+        <hash type="sha256">4c2c8749725d6a28d16bde976d6267a2bf103c52f4617a2e5cc3615c422af263</hash>
+        <pieces type="sha1" length="2097152">
+          <hash piece="0">1928e424516e5ea5d7afebfb492bd5392be5f9fb</hash>
+          <hash piece="1">f8d01bc2ab7ca684a9c533de78254978caf9a87b</hash>
+          <hash piece="2">7420cb0202ccf32adaf155d9a4fe551f9fe7fc17</hash>
+          <hash piece="3">ea22c67d00d2b159299b72b7811955e682b62ed3</hash>
+          <hash piece="4">6f3f354cb4f35621241144ab97c941c89f604729</hash>
+          <hash piece="5">e7830945b8852c5253a38e9824ffd1172da8e334</hash>
+          <hash piece="6">739a88c1df849ae07d0a172f04d6faf4983c93e4</hash>
+          <hash piece="7">c7753ae4c94e9b396e0253f7d30375d51a473d12</hash>
+          <hash piece="8">de4d00b9df9ad085a2814c0b0765271bdace1c97</hash>
+          <hash piece="9">405e103dee24b17b0a3af393e8a289310e272250</hash>
+          <hash piece="10">9cc009a135f8022bab8578307342b5a6f9658d12</hash>
+          <hash piece="11">9242965082e7d90ee995020d19dda3736774b312</hash>
+          <hash piece="12">d209828c3b0518a09484143e9c82b0386e954ca8</hash>
+          <hash piece="13">37f01c0ce8f04b6475a96588c4c9e94e4d818a2d</hash>
+          <hash piece="14">0d2f7ae8af07094a8adf80fbc4ea156e461c029c</hash>
+          <hash piece="15">d9a3e2d63b92d86ba952a9abd3127eb8832195f6</hash>
+          <hash piece="16">f959e688c4f2b415ae67f0d8eb7e97a9479fc994</hash>
+          <hash piece="17">8cf52ef09d71716bd9998d3796c1e2a766813165</hash>
+          <hash piece="18">1ec576f5d76ce8ab71bd7f32866fcad78f1da22a</hash>
+          <hash piece="19">65698693365b11fa7d4cc2fddf2a475780a22c5d</hash>
+          <hash piece="20">ae7c282c75ba5c947c5582851afa135625935d5f</hash>
+          <hash piece="21">34fb609fa4a1be27bec5d621405df71342cb2059</hash>
+          <hash piece="22">0d1c35f99aa647c4e202738435f56cca52584a3d</hash>
+          <hash piece="23">8dd21fde36f284c94f68750af058dcac5719917b</hash>
+          <hash piece="24">c672a2d267723bc22334a08a0997535c5c3d4acf</hash>
+          <hash piece="25">563d30efb53ec1b1b45723fe7cbbc651db5f370f</hash>
+          <hash piece="26">62e7a868981da073febb8682a49249f1639a838f</hash>
+          <hash piece="27">60e30e94542b5bb9ae7490003d04dd4618c92159</hash>
+          <hash piece="28">c4ea6a3e2c07967b4042e9467a8a67f2f09f9854</hash>
+          <hash piece="29">d762564c38ff0e876ec82ff32348cb5e363a1795</hash>
+          <hash piece="30">7bbd4f52ebdd498275f2b8384deeaf334896cda8</hash>
+          <hash piece="31">29d71d8c8b8955bd421162ded5cb8b0d9e447464</hash>
+          <hash piece="32">d79a416eef9889c439c0bd5035cd70411471a8e3</hash>
+          <hash piece="33">c4b0f1f7e9b551f2a08ad6cfe499100522345e68</hash>
+          <hash piece="34">ecf9d855653b03bdac39aec75317774359a26d46</hash>
+          <hash piece="35">35d757821296a1fbe5f82056f1268bb4fe7b56f4</hash>
+          <hash piece="36">5dab0221e5f51203278fe44d0d89fc1dcdd83d8a</hash>
+          <hash piece="37">b105df633a4c2954c1f1da92ddf5545f101b932c</hash>
+          <hash piece="38">b0cda5427db3a1dc28581a85ce45b597f46e4749</hash>
+          <hash piece="39">6c95b45bb1268ab2c4268d278a06518bf50c68f5</hash>
+          <hash piece="40">201c147393a0801c458db96a4a3490c8d79fd03d</hash>
+          <hash piece="41">cd76c395ee7b77ca3b03b66c331bb3cc128fb3a1</hash>
+          <hash piece="42">2b81b4f7bfaeaaf17e5c2f5774afb4f0c54eef06</hash>
+          <hash piece="43">cd722cfc582470948b08680538d8c471dc6e24c4</hash>
+          <hash piece="44">f8577f538be32f71f5376cbf58606af57bf47cf8</hash>
+          <hash piece="45">5f150840c22cef03aaa19f5e7c7debb19ba5c607</hash>
+          <hash piece="46">51b9577f5d2a4d88e4ee6a9868aec66c3ff0d53c</hash>
+          <hash piece="47">34187c01b24b4cd45fc3d12fd21e74b3b5e2811e</hash>
+          <hash piece="48">40aac612ada1fd4a79c99741e906118e7f285f09</hash>
+          <hash piece="49">b6ee285da151afadce66f607b0c7bd9bd4956164</hash>
+          <hash piece="50">81dff268c97d2d9cd6e32fb1a73a83504f15e477</hash>
+          <hash piece="51">9b50a9a4ab70dcc3f86492a29b85c5b987f873e8</hash>
+          <hash piece="52">f6ec6fa61c42f9df8688449cd4300b80706b2bf4</hash>
+          <hash piece="53">6337f3b982ec62ee61222bfe28e2eedf027bb961</hash>
+          <hash piece="54">4515262dd11f5b7251429c9657fe9bf1d55402db</hash>
+          <hash piece="55">d1aa91e4ef00e5acedb4d23f09315bd881a1659c</hash>
+          <hash piece="56">7b81503c2f5c5e70c6e6e968f970a7f20f566dea</hash>
+          <hash piece="57">38eb1d6b529490aa4f4395145440f442d600470b</hash>
+          <hash piece="58">2cce7ce8adb6f54d223e8265755b4658d130cab8</hash>
+          <hash piece="59">952bac6a6af9a4ac76fef9af77c11d6e29758376</hash>
+          <hash piece="60">03002e64bcd32527d1b5bc5a19924893cceb8cf5</hash>
+        </pieces>
+      </verification>
+      <resources>
+        <url type="ftp" location="au" preference="30">ftp://mirror.pacific.net.au/OpenOffice/stable/2.3.1/OOo_2.3.1_Win32Intel_install_wJRE_en-US.exe</url>
+        <url type="ftp" location="au" preference="30">ftp://ftp.planetmirror.com/pub/openoffice/stable/2.3.1/OOo_2.3.1_Win32Intel_install_wJRE_en-US.exe</url>
+        <url type="ftp" location="at" preference="30">ftp://gd.tuwien.ac.at/office/openoffice/stable/2.3.1/OOo_2.3.1_Win32Intel_install_wJRE_en-US.exe</url>
+        <url type="ftp" location="be" preference="30">ftp://ftp.scarlet.be/pub/openoffice/stable/2.3.1/OOo_2.3.1_Win32Intel_install_wJRE_en-US.exe</url>
+        <url type="ftp" location="be" preference="30">ftp://ftp.openoffice.skynet.be/pub/ftp.openoffice.org/stable/2.3.1/OOo_2.3.1_Win32Intel_install_wJRE_en-US.exe</url>
+        <url type="ftp" location="br" preference="20">ftp://ftp.pucpr.br/openoffice/stable/2.3.1/OOo_2.3.1_Win32Intel_install_wJRE_en-US.exe</url>
+        <url type="ftp" location="bg" preference="30">ftp://ftp.spnet.net/openoffice/stable/2.3.1/OOo_2.3.1_Win32Intel_install_wJRE_en-US.exe</url>
+        <url type="ftp" location="ca" preference="30">ftp://openoffice.mirror.rafal.ca/pub/openoffice/stable/2.3.1/OOo_2.3.1_Win32Intel_install_wJRE_en-US.exe</url>
+        <url type="ftp" location="dk" preference="30">ftp://mirrors.dotsrc.org/openoffice/stable/2.3.1/OOo_2.3.1_Win32Intel_install_wJRE_en-US.exe</url>
+        <url type="ftp" location="fr" preference="30">ftp://ftp.free.fr/mirrors/ftp.openoffice.org/stable/2.3.1/OOo_2.3.1_Win32Intel_install_wJRE_en-US.exe</url>
+        <url type="ftp" location="fr" preference="20">ftp://openoffice.cict.fr/openoffice/stable/2.3.1/OOo_2.3.1_Win32Intel_install_wJRE_en-US.exe</url>
+        <url type="ftp" location="de" preference="20">ftp://ftp://ftp.tu-chemnitz.de/pub/openoffice/stable/2.3.1/OOo_2.3.1_Win32Intel_install_wJRE_en-US.exe</url>
+        <url type="ftp" location="de" preference="30">ftp://ftp://ftp.gwdg.de/pub/misc/openoffice/stable/2.3.1/OOo_2.3.1_Win32Intel_install_wJRE_en-US.exe</url>
+        <url type="ftp" location="de" preference="30">ftp://sunsite.informatik.rwth-aachen.de/pub/mirror/OpenOffice/stable/2.3.1/OOo_2.3.1_Win32Intel_install_wJRE_en-US.exe</url>
+        <url type="ftp" location="de" preference="30">ftp://ftp://ftp.uni-muenster.de/pub/software/OpenOffice/stable/2.3.1/OOo_2.3.1_Win32Intel_install_wJRE_en-US.exe</url>
+        <url type="ftp" location="de" preference="30">ftp://ftp.rz.tu-bs.de/pub/mirror/OpenOffice.org/stable/2.3.1/OOo_2.3.1_Win32Intel_install_wJRE_en-US.exe</url>
+        <url type="ftp" location="de" preference="20">ftp://ftp://ftp-stud.fht-esslingen.de/pub/tbl_mirrors/ftp.openoffice.org/stable/2.3.1/OOo_2.3.1_Win32Intel_install_wJRE_en-US.exe</url>
+        <url type="ftp" location="de" preference="20">ftp://ftp://ftp.stardiv.de/pub/OpenOffice.org/stable/2.3.1/OOo_2.3.1_Win32Intel_install_wJRE_en-US.exe</url>
+        <url type="ftp" location="gr" preference="30">ftp://ftp.ntua.gr/pub/OpenOffice/stable/2.3.1/OOo_2.3.1_Win32Intel_install_wJRE_en-US.exe</url>
+        <url type="ftp" location="hu" preference="20">ftp://ftp.fsf.hu/OpenOffice.org/stable/2.3.1/OOo_2.3.1_Win32Intel_install_wJRE_en-US.exe</url>
+        <url type="ftp" location="ie" preference="30">ftp://ftp.heanet.ie/mirrors/openoffice.org/stable/2.3.1/OOo_2.3.1_Win32Intel_install_wJRE_en-US.exe</url>
+        <url type="rsync" location="ie" preference="30">rsync://ftp.heanet.ie/mirrors/openoffice.org/stable/2.3.1/OOo_2.3.1_Win32Intel_install_wJRE_en-US.exe</url>
+        <url type="ftp" location="jp" preference="30">ftp://ftp://ftp.ring.gr.jp/pub/misc/openoffice/stable/2.3.1/OOo_2.3.1_Win32Intel_install_wJRE_en-US.exe</url>
+        <url type="ftp" location="jp" preference="30">ftp://ftp.yz.yamagata-u.ac.jp/pub/openoffice/stable/2.3.1/OOo_2.3.1_Win32Intel_install_wJRE_en-US.exe</url>
+        <url type="ftp" location="nl" preference="30">ftp://ftp.nluug.nl/pub/office/openoffice/stable/2.3.1/OOo_2.3.1_Win32Intel_install_wJRE_en-US.exe</url>
+        <url type="ftp" location="nl" preference="30">ftp://ftp.snt.utwente.nl/pub/software/openoffice/stable/2.3.1/OOo_2.3.1_Win32Intel_install_wJRE_en-US.exe</url>
+        <url type="ftp" location="pl" preference="30">ftp://ftp.man.poznan.pl/pub/openoffice/stable/2.3.1/OOo_2.3.1_Win32Intel_install_wJRE_en-US.exe</url>
+        <url type="ftp" location="pl" preference="30">ftp://ftp://ftp.openoffice.pl/OpenOffice.ORG/stable/2.3.1/OOo_2.3.1_Win32Intel_install_wJRE_en-US.exe</url>
+        <url type="ftp" location="pl" preference="30">ftp://ftp.tpnet.pl/d9/OpenOffice/stable/2.3.1/OOo_2.3.1_Win32Intel_install_wJRE_en-US.exe</url>
+        <url type="ftp" location="pt" preference="20">ftp://neacm.fe.up.pt/pub/openoffice/stable/2.3.1/OOo_2.3.1_Win32Intel_install_wJRE_en-US.exe</url>
+        <url type="ftp" location="ro" preference="30">ftp://mirrors.evolva.ro/openoffice.org/stable/2.3.1/OOo_2.3.1_Win32Intel_install_wJRE_en-US.exe</url>
+        <url type="ftp" location="ro" preference="30">ftp://ftp.iasi.roedu.net/pub/mirrors/openoffice.org/stable/2.3.1/OOo_2.3.1_Win32Intel_install_wJRE_en-US.exe</url>
+        <url type="ftp" location="ro" preference="20">ftp://ftp.idilis.ro/mirrors/openoffice.org/stable/2.3.1/OOo_2.3.1_Win32Intel_install_wJRE_en-US.exe</url>
+        <url type="ftp" location="ru" preference="30">ftp://ftp.chg.ru/pub/OpenOffice/stable/2.3.1/OOo_2.3.1_Win32Intel_install_wJRE_en-US.exe</url>
+        <url type="ftp" location="cs" preference="20">ftp://mirror.etf.bg.ac.yu/openoffice.org/stable/2.3.1/OOo_2.3.1_Win32Intel_install_wJRE_en-US.exe</url>
+        <url type="ftp" location="sg" preference="20">ftp://mirror.averse.net/pub/openoffice/stable/2.3.1/OOo_2.3.1_Win32Intel_install_wJRE_en-US.exe</url>
+        <url type="ftp" location="si" preference="10">ftp://ftp.bevc.net/mirrors/openoffice/stable/2.3.1/OOo_2.3.1_Win32Intel_install_wJRE_en-US.exe</url>
+        <url type="ftp" location="za" preference="10">ftp://ftp://ftp.is.co.za/mirrors/OpenOffice/stable/2.3.1/OOo_2.3.1_Win32Intel_install_wJRE_en-US.exe</url>
+        <url type="ftp" location="kr" preference="30">ftp://ftp://ftp.kr.freebsd.org/pub/openoffice/stable/2.3.1/OOo_2.3.1_Win32Intel_install_wJRE_en-US.exe</url>
+        <url type="ftp" location="es" preference="30">ftp://ftp.rediris.es/mirror/openoffice.org/stable/2.3.1/OOo_2.3.1_Win32Intel_install_wJRE_en-US.exe</url>
+        <url type="ftp" location="se" preference="30">ftp://http://ftp.sunet.se/pub/Office/OpenOffice.org/stable/2.3.1/OOo_2.3.1_Win32Intel_install_wJRE_en-US.exe</url>
+        <url type="ftp" location="ch" preference="30">ftp://ftp.solnet.ch/mirror/OpenOffice/stable/2.3.1/OOo_2.3.1_Win32Intel_install_wJRE_en-US.exe</url>
+        <url type="ftp" location="ch" preference="30">ftp://mirror.switch.ch/mirror/OpenOffice/stable/2.3.1/OOo_2.3.1_Win32Intel_install_wJRE_en-US.exe</url>
+        <url type="ftp" location="tw" preference="30">ftp://ftp.isu.edu.tw/pub/OpenOffice/stable/2.3.1/OOo_2.3.1_Win32Intel_install_wJRE_en-US.exe</url>
+        <url type="ftp" location="gb" preference="30">ftp://ftp.mirrorservice.org/sites/ny1.mirror.openoffice.org/stable/2.3.1/OOo_2.3.1_Win32Intel_install_wJRE_en-US.exe</url>
+        <url type="ftp" location="gb" preference="30">ftp://mirrors.blueyonder.co.uk/sites/openoffice.org/stable/2.3.1/OOo_2.3.1_Win32Intel_install_wJRE_en-US.exe</url>
+        <url type="ftp" location="gb" preference="30">ftp://ftp.mirror.ac.uk/mirror/sunsite.dk/openoffice/stable/2.3.1/OOo_2.3.1_Win32Intel_install_wJRE_en-US.exe</url>
+        <url type="ftp" location="us" preference="30">ftp://ftp.ussg.iu.edu/pub/openoffice/stable/2.3.1/OOo_2.3.1_Win32Intel_install_wJRE_en-US.exe</url>
+        <url type="ftp" location="us" preference="30">ftp://openofficeorg.secsup.org/pub/software/openoffice/stable/2.3.1/OOo_2.3.1_Win32Intel_install_wJRE_en-US.exe</url>
+        <url type="ftp" location="us" preference="30">ftp://ftp.osuosl.org/pub/openoffice/stable/2.3.1/OOo_2.3.1_Win32Intel_install_wJRE_en-US.exe</url>
+        <url type="ftp" location="us" preference="30">ftp://mirrors.ibiblio.org/pub/mirrors/openoffice/stable/2.3.1/OOo_2.3.1_Win32Intel_install_wJRE_en-US.exe</url>
+        <url type="ftp" location="us" preference="30">ftp://openoffice.mirrors.pair.com/stable/2.3.1/OOo_2.3.1_Win32Intel_install_wJRE_en-US.exe</url>
+        <url type="ftp" location="us" preference="30">ftp://openoffice.mirrors.tds.net/pub/openoffice/stable/2.3.1/OOo_2.3.1_Win32Intel_install_wJRE_en-US.exe</url>
+      </resources>
+    </file>
+  </files>
+</metalink>
