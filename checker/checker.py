@@ -56,6 +56,31 @@ import hashlib
 import xmlutils
 import download
 
+import locale
+import gettext
+
+def translate():
+    '''
+    Setup translation path
+    '''
+    if __name__=="__main__":
+        try:
+            base = os.path.basename(__file__)[:-3]
+            localedir = os.path.join(os.path.dirname(__file__), "locale")
+        except NameError:
+            base = os.path.basename(sys.executable)[:-4]
+            localedir = os.path.join(os.path.dirname(sys.executable), "locale")
+    else:
+        temp = __name__.split(".")
+        base = temp[-1]
+        localedir = os.path.join("/".join(["%s" % k for k in temp[:-1]]), "locale")
+
+    #print base, localedir
+    t = gettext.translation(base, localedir, [locale.getdefaultlocale()[0]], None, 'en')
+    return t.lgettext
+
+_ = translate()
+
 def check_metalink(src):
     '''
     Decode a metalink file, can be local or remote
@@ -67,7 +92,7 @@ def check_metalink(src):
     try:
         dom2 = xml.dom.minidom.parse(datasource)   # parse an open file
     except:
-        print "ERROR parsing XML."
+        print _("ERROR parsing XML.")
         raise
     datasource.close()
     
@@ -83,7 +108,7 @@ def check_metalink(src):
     
     urllist = xmlutils.get_subnodes(dom2, ["metalink", "files", "file"])
     if len(urllist) == 0:
-        print "No urls to download file from."
+        print _("No urls to download file from.")
         return False
 
     results = {}
@@ -94,7 +119,7 @@ def check_metalink(src):
             size = None
         name = xmlutils.get_attr_from_item(filenode, "name")
         print "=" * 79
-        print "File: %s Size: %s" % (name, size)
+        print _("File") + ": %s " % name + _("Size") + ": %s" % size
         results[name] = check_file_node(filenode)
 
     return results
@@ -106,11 +131,11 @@ def check_process(headers, filesize):
 
     if sizeheader != None and filesize != None:
         if sizeheader == filesize:
-            size = "OK"
+            size = _("OK")
         else:
-            size = "FAIL"
+            size = _("FAIL")
 
-    response_code = "OK"
+    response_code = _("OK")
     temp_code = get_header(headers, "Response")
     if temp_code != None:
         response_code = temp_code
@@ -144,7 +169,7 @@ def check_file_node(item):
         size = None
     urllist = xmlutils.get_subnodes(item, ["resources", "url"])
     if len(urllist) == 0:
-        print "No urls to download file from."
+        print _("No urls to download file from.")
         return False
             
     number = 0
@@ -155,11 +180,11 @@ def check_file_node(item):
     while (count <= len(urllist)):
         filename = urllist[number].firstChild.nodeValue.strip()
         print "-" *79
-        print "Checking: %s" % filename
+        print _("Checking") + ": %s" % filename
         checker = URLCheck(filename)
         headers = checker.info()
         result[checker.geturl()] = check_process(headers, size)
-        print "Response Code: %s\tSize Check: %s" % (result[checker.geturl()][0], result[checker.geturl()][1])   
+        print _("Response Code") + ": %s\t" % result[checker.geturl()][0] + _("Size Check") + ": %s" % result[checker.geturl()][1]
         number = (number + 1) % len(urllist)
         count += 1
         
@@ -179,14 +204,14 @@ class URLCheck:
                 if urlparts.port != None:
                     port = urlparts.port
             except ValueError:
-                self.infostring += "Response: Bad URL\r\n"
+                self.infostring += _("Response") + ": " + _("Bad URL") + "\r\n"
                 return
     
             conn = HTTPConnection(urlparts.hostname, port)
             try:
                 conn.request("HEAD", url)
             except socket.error, error:
-                self.infostring += "Response: Connection Error\r\n"
+                self.infostring += _("Response") + ": " + _("Connection Error") + "\r\n"
                 return
                 
             resp = conn.getresponse()
@@ -195,7 +220,7 @@ class URLCheck:
             count = 0
             while (resp.status == httplib.MOVED_PERMANENTLY or resp.status == httplib.FOUND) and count < MAX_REDIRECTS:
                 url = resp.getheader("location")
-                print "Redirected: %s" % url
+                print _("Redirected") + ": %s" % url
                 conn.close()
                 urlparts = urlparse.urlparse(url)
                 # need to set default port here
@@ -210,9 +235,9 @@ class URLCheck:
 
             self.url = url
             if resp.status == httplib.OK:
-                self.infostring += "Response: OK\r\n"
+                self.infostring += _("Response") + ": " + _("OK") + "\r\n"
             else:
-                self.infostring += "Response: %s %s\r\n" % (resp.status, resp.reason)
+                self.infostring += _("Response") + ": %s %s\r\n" % (resp.status, resp.reason)
             
             # need to convert list into string
             for header in resp.getheaders():
@@ -227,7 +252,7 @@ class URLCheck:
                 if urlparts.port != None:
                     port = urlparts.port
             except ValueError:
-                self.infostring += "Response: Bad URL\r\n"
+                self.infostring += _("Response") + ": " + _("Bad URL") + "\r\n"
                 return
     
             conn = HTTPSConnection(urlparts.hostname, port)
@@ -235,7 +260,7 @@ class URLCheck:
                 conn.request("HEAD", url)
             except socket.error, error:
                 #dir(error)
-                self.infostring += "Response: Connection Error\r\n"
+                self.infostring += _("Response") + ": " + _("Connection Error") + "\r\n"
                 return
                 
             resp = conn.getresponse()
@@ -244,7 +269,7 @@ class URLCheck:
             count = 0
             while (resp.status == httplib.MOVED_PERMANENTLY or resp.status == httplib.FOUND) and count < MAX_REDIRECTS:
                 url = resp.getheader("location")
-                print "Redirected: %s" % url
+                print _("Redirected") + ": %s" % url
                 conn.close()
                 urlparts = urlparse.urlparse(url)
                 # need to set default port here
@@ -259,9 +284,9 @@ class URLCheck:
 
             self.url = url
             if resp.status == httplib.OK:
-                self.infostring += "Response: OK\r\n"
+                self.infostring += _("Response") + ": " + _("OK") + "\r\n"
             else:
-                self.infostring += "Response: %s %s\r\n" % (resp.status, resp.reason)
+                self.infostring += _("Response") + ": %s %s\r\n" % (resp.status, resp.reason)
             
             # need to convert list into string
             for header in resp.getheaders():
@@ -285,24 +310,24 @@ class URLCheck:
             try:
                 ftpobj.connect(urlparts[1])
             except socket.gaierror:
-                self.infostring += "Response: Bad Hostname\r\n"
+                self.infostring += _("Response") + ": " + _("Bad Hostname") + "\r\n"
                 return
             except socket.timeout:
-                self.infostring += "Response: timed out\r\n"
+                self.infostring += _("Response") + ": " + _("timed out") + "\r\n"
                 return
             except socket.error:
-                self.infostring += "Response: Connection refused\r\n"
+                self.infostring += _("Response") + ": " + _("Connection refused") + "\r\n"
                 return
 
             try:
                 ftpobj.login(username, password)
             except (ftplib.error_perm), error:
-                self.infostring += "Response: %s\r\n" % error.message
+                self.infostring += _("Response") + ": %s\r\n" % error.message
                 
             if ftpobj.exist(url):
-                self.infostring += "Response: OK\r\n"
+                self.infostring += _("Response") + ": " + _("OK") + "\r\n"
             else:
-                self.infostring += "Response: Not Found\r\n"
+                self.infostring += _("Response") + ": " + _("Not Found") + "\r\n"
                 
             try:
                 size = ftpobj.size(url)
@@ -314,10 +339,10 @@ class URLCheck:
             except: pass
             
             if size != None:
-                self.infostring += "Content-Length: %s\r\n" % size   
+                self.infostring += _("Content Length") + ": %s\r\n" % size   
 
         else:
-            self.infostring += "Response: ?\r\n"
+            self.infostring += _("Response") + ": ?\r\n"
             
     def geturl(self):
         return self.url

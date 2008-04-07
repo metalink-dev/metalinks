@@ -81,6 +81,32 @@ HTTPS_PROXY=""
 PROTOCOLS=("http","https","ftp")
 #PROTOCOLS=("ftp")
 
+import sys
+import locale
+import gettext
+
+def translate():
+    '''
+    Setup translation path
+    '''
+    if __name__=="__main__":
+        try:
+            base = os.path.basename(__file__)[:-3]
+            localedir = os.path.join(os.path.dirname(__file__), "locale")
+        except NameError:
+            base = os.path.basename(sys.executable)[:-4]
+            localedir = os.path.join(os.path.dirname(sys.executable), "locale")
+    else:
+        temp = __name__.split(".")
+        base = temp[-1]
+        localedir = os.path.join("/".join(["%s" % k for k in temp[:-1]]), "locale")
+
+    #print base, localedir
+    t = gettext.translation(base, localedir, [locale.getdefaultlocale()[0]], None, 'en')
+    return t.lgettext
+
+_ = translate()
+
 class URL:
     def __init__(self, url, location = "", preference = "", maxconnections = ""):
         if preference == "":
@@ -150,7 +176,7 @@ def download_file(urllist, local_file, size=0, checksums={}, force = False, hand
     Returns False otherwise (checksum fails)
     '''
     print ""
-    print "Downloading", os.path.basename(local_file)
+    print _("Downloading"), os.path.basename(local_file)
 
     if os.path.exists(local_file) and (not force) and len(checksums) > 0:
         checksum = verify_checksum(local_file, checksums)
@@ -161,7 +187,7 @@ def download_file(urllist, local_file, size=0, checksums={}, force = False, hand
             #print ""
             return local_file
         else:
-            print "Checksum failed for %s, retrying." % os.path.basename(local_file)
+            print _("Checksum failed, retrying download of") + " %s." % os.path.basename(local_file)
 
     directory = os.path.dirname(local_file)
     if not os.path.isdir(directory):
@@ -176,7 +202,7 @@ def download_file(urllist, local_file, size=0, checksums={}, force = False, hand
         
         if not seg_result:
             #seg_result = verify_checksum(local_file, checksums)
-            print "\nCould not download all segments of the file, trying one mirror at a time."
+            print "\n" + _("Could not download all segments of the file, trying one mirror at a time.")
 
     if (not segmented) or (not seg_result):
         # do it the old way
@@ -206,7 +232,7 @@ def download_file(urllist, local_file, size=0, checksums={}, force = False, hand
         #print ""
         return local_file
     else:
-        print "\nChecksum failed for %s." % os.path.basename(local_file)
+        print "\n" + _("Checksum failed for") + " %s." % os.path.basename(local_file)
 
     return False
 
@@ -236,7 +262,7 @@ def download_metalink(src, path, force = False, handler = None):
     if metalink_type == "dynamic":
         origin = xmlutils.get_attr_from_item(metalink_node, "origin")
         if origin != src:
-            print "Downloading update from", origin
+            print _("Downloading update from"), origin
             return xmlutils.download_metalink(origin, path, force, handler)
     
     urllist = xmlutils.get_subnodes(dom2, ["metalink", "files", "file"])
@@ -278,7 +304,7 @@ def download_file_node(item, path, force = False, handler = None):
         urllist[url] = URL(url, location, preference, maxconnections)
         
     if len(urllist) == 0:
-        print "No urls to download file from."
+        print _("No urls to download file from.")
         return False
             
     hashlist = xmlutils.get_subnodes(item, ["verification", "hash"])
@@ -1029,7 +1055,7 @@ class Ftp_Host(Host_Base):
             # set to binary mode
             self.conn.voidcmd("TYPE I")
         else:
-            self.error = "unsupported protocol"
+            self.error = _("unsupported protocol")
             raise AssertionError
             #return
         
@@ -1050,7 +1076,7 @@ class Http_Host(Host_Base):
         
         urlparts = urlparse.urlsplit(self.url)
         if self.url.endswith(".torrent"):
-            self.error = "unsupported protocol"
+            self.error = _("unsupported protocol")
             return
         elif self.protocol == "http":
             try:
@@ -1062,7 +1088,7 @@ class Http_Host(Host_Base):
             try:
                 self.conn = HTTPConnection(urlparts[1], port)
             except httplib.InvalidURL:
-                self.error = "invalid url"
+                self.error = _("invalid url")
                 return
         elif self.protocol == "https":
             try:
@@ -1074,10 +1100,10 @@ class Http_Host(Host_Base):
             try:
                 self.conn = HTTPSConnection(urlparts[1], port)
             except httplib.InvalidURL:
-                self.error = "invalid url"
+                self.error = _("invalid url")
                 return
         else:
-            self.error = "unsupported protocol"
+            self.error = _("unsupported protocol")
             return
         
     def close(self):
@@ -1129,7 +1155,7 @@ class Host_Segment:
 
     def end(self):
         if not self.checksum():
-            self.error = "Chunk checksum failed"
+            self.error = _("Chunk checksum failed")
         self.close()
 
 class Ftp_Host_Segment(threading.Thread, Host_Segment):
@@ -1148,7 +1174,7 @@ class Ftp_Host_Segment(threading.Thread, Host_Segment):
         urlparts = urlparse.urlsplit(self.url)
         if self.host.conn == None:
             #print "bad socket"
-            self.error = "bad socket"
+            self.error = _("bad socket")
             self.close()
             return
         
@@ -1168,11 +1194,11 @@ class Ftp_Host_Segment(threading.Thread, Host_Segment):
                 self.close()
                 return
             except EOFError:
-                self.error = "EOFError"
+                self.error = _("EOFError")
                 self.close()
                 return
             except AttributeError:
-                self.error = "AttributeError"
+                self.error = _("AttributeError")
                 self.close()
                 return
             except (socket.error), error:
@@ -1192,13 +1218,13 @@ class Ftp_Host_Segment(threading.Thread, Host_Segment):
                 pass
 
             if count >= CONNECT_RETRY_COUNT:
-                self.error = "socket reconnect attempts failed"
+                self.error = _("socket reconnect attempts failed")
                 self.close()
                 return
     
         if size != None:
             if self.filesize != size:
-                self.error = "bad file size"
+                self.error = _("bad file size")
                 return
         
         self.start_time = time.time()
@@ -1219,7 +1245,7 @@ class Ftp_Host_Segment(threading.Thread, Host_Segment):
         try:
             data = self.response.recv(1024)
         except socket.timeout:
-            self.error = "read timeout"
+            self.error = _("read timeout")
             self.response = None
             return
 
@@ -1300,14 +1326,14 @@ class Http_Host_Segment(threading.Thread, Host_Segment):
             return
         
         if self.host.conn == None:
-            self.error = "bad socket"
+            self.error = _("bad socket")
             self.close()
             return
 
         try:
             self.host.conn.request("GET", self.url, "", {"Range": "bytes=%lu-%lu\r\n" % (self.byte_start, self.byte_end - 1)})
         except:
-            self.error = "socket exception"
+            self.error = _("socket exception")
             self.close()
             return
         
@@ -1325,13 +1351,13 @@ class Http_Host_Segment(threading.Thread, Host_Segment):
             try:
                 self.response = self.host.conn.getresponse()
             except socket.timeout:
-                self.error = "timeout"
+                self.error = _("timeout")
                 return False
             # not an error state, connection closed, kicks us out of thread
             except httplib.ResponseNotReady:
                 return False
             except:
-                self.error = "response error"
+                self.error = _("response error")
                 return False
             
         if self.response.status == httplib.PARTIAL_CONTENT:
@@ -1351,11 +1377,11 @@ class Http_Host_Segment(threading.Thread, Host_Segment):
         try:
             data = self.response.read()
         except socket.timeout:
-            self.error = "timeout"
+            self.error = _("timeout")
             self.response = None
             return
         except httplib.IncompleteRead:
-            self.error = "incomplete read"
+            self.error = _("incomplete read")
             self.response = None
             return
         if len(data) == 0:
@@ -1365,7 +1391,7 @@ class Http_Host_Segment(threading.Thread, Host_Segment):
         request_size = int(rangestring.split("/")[1])
 
         if request_size != self.filesize:
-            self.error = "bad file size"
+            self.error = _("bad file size")
             self.response = None
             return
 
@@ -1416,7 +1442,7 @@ class FTP:
                     pass
                 self.conn = httplib.HTTPConnection(host, port)
             else:
-                raise AssertionError, "Transport %s not supported for FTP_PROXY" % url.scheme
+                raise AssertionError, _("Transport not supported for") + " FTP_PROXY, %s" % url.scheme
 
         else:
             self.conn = ftplib.FTP()
@@ -1490,7 +1516,7 @@ class HTTPConnection:
                 if url.username != None:
                     self.headers["Proxy-authorization"] = "Basic " + base64.encodestring(url.username+':'+url.password) + "\r\n"
             else:
-                raise AssertionError, "Transport %s not supported for HTTP_PROXY" % url.scheme
+                raise AssertionError, _("Transport not supported for") + " HTTP_PROXY, %s" % url.scheme
 
         self.conn = httplib.HTTPConnection(host, port)
 

@@ -48,18 +48,44 @@ import checker
 # DO NOT CHANGE
 VERSION="Metalink Checker Version 3.6"
 
+import os.path
+import locale
+import gettext
+
+def translate():
+    '''
+    Setup translation path
+    '''
+    if __name__=="__main__":
+        try:
+            base = os.path.basename(__file__)[:-3]
+            localedir = os.path.join(os.path.dirname(__file__), "locale")
+        except NameError:
+            base = os.path.basename(sys.executable)[:-4]
+            localedir = os.path.join(os.path.dirname(sys.executable), "locale")
+    else:
+        temp = __name__.split(".")
+        base = temp[-1]
+        localedir = os.path.join("/".join(["%s" % k for k in temp[:-1]]), "locale")
+
+    #print base, localedir
+    t = gettext.translation(base, localedir, [locale.getdefaultlocale()[0]], None, 'en')
+    return t.lgettext
+
+_ = translate()
+
 def run():
     '''
     Start a console version of this application.
     '''
     # Command line parser options.
     parser = optparse.OptionParser(version=VERSION)
-    parser.add_option("--download", "-d", action="store_true", dest="download", help="Actually download the file(s) in the metalink")
-    parser.add_option("--file", "-f", dest="filevar", metavar="FILE", help="Metalink file to check")
-    parser.add_option("--timeout", "-t", dest="timeout", metavar="TIMEOUT", help="Set timeout in seconds to wait for response (default=10)")
-    parser.add_option("--os", "-o", dest="os", metavar="OS", help="Operating System preference")
-    parser.add_option("--lang", "-l", dest="language", metavar="LANG", help="Language preference (ISO-639/3166)")
-    parser.add_option("--country", "-c", dest="country", metavar="LOC", help="Two letter country preference (ISO 3166-1 alpha-2)")
+    parser.add_option("--download", "-d", action="store_true", dest="download", help=_("Actually download the file(s) in the metalink"))
+    parser.add_option("--file", "-f", dest="filevar", metavar="FILE", help=_("Metalink file to check"))
+    parser.add_option("--timeout", "-t", dest="timeout", metavar="TIMEOUT", help=_("Set timeout in seconds to wait for response (default=10)"))
+    parser.add_option("--os", "-o", dest="os", metavar="OS", help=_("Operating System preference"))
+    parser.add_option("--lang", "-l", dest="language", metavar="LANG", help=_("Language preference (ISO-639/3166)"))
+    parser.add_option("--country", "-c", dest="country", metavar="LOC", help=_("Two letter country preference (ISO 3166-1 alpha-2)"))
     
     (options, args) = parser.parse_args()
 
@@ -80,7 +106,7 @@ def run():
         socket.setdefaulttimeout(int(options.timeout))
 
     if options.country != None and len(options.country) != 2:
-        print "Invalid country length, must be 2 letter code"
+        print _("Invalid country length, must be 2 letter code")
         return
     
     if options.download:
@@ -94,7 +120,7 @@ def run():
 def print_totals(results):
     for key in results.keys():
         print "=" * 79
-        print "Summary for:", key
+        print _("Summary for") + ":", key
 
         status_count = 0
         size_count = 0
@@ -118,9 +144,9 @@ def print_totals(results):
             if size_bool or status_bool:
                 error_count += 1
 
-        print "Download errors: %s/%s" % (status_count, total)
-        print "Size check failures: %s/%s" % (size_count, total)
-        print "Overall failures: %s/%s" % (error_count, total)
+        print _("Download errors") + ": %s/%s" % (status_count, total)
+        print _("Size check failures") + ": %s/%s" % (size_count, total)
+        print _("Overall failures") + ": %s/%s" % (error_count, total)
 
 ##def print_summary(results):
 ##    for key in results.keys():
