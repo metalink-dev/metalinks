@@ -23,8 +23,8 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
-# Filename: $URL: https://appupdater.svn.sourceforge.net/svnroot/appupdater/trunk/libappupdater/download.py $
-# Last Updated: $Date: 2008-04-04 19:29:26 -0700 (Fri, 04 Apr 2008) $
+# Filename: $URL$
+# Last Updated: $Date$
 # Author(s): Neil McNab
 #
 # Description:
@@ -53,6 +53,8 @@ import copy
 import socket
 import ftplib
 import httplib
+
+USER_AGENT = "Metalink Checker/3.6 +http://www.nabber.org/projects/"
 
 SEGMENTED = True
 LIMIT_PER_HOST = 1
@@ -93,7 +95,7 @@ class URL:
 
 def urlopen(url, data = None):
     url = complete_url(url)
-    req = urllib2.Request(url, data, {'User-agent': "Appupdater/0.9 +http://www.nabber.org/projects/appupdater/"}) 
+    req = urllib2.Request(url, data, {'User-agent': USER_AGENT}) 
     fp = urllib2.urlopen(req)
     return fp
 

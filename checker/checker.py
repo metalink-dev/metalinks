@@ -23,9 +23,9 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
-# Filename: $URL: https://metalinks.svn.sourceforge.net/svnroot/metalinks/checker/metalink.py $
-# Last Updated: $Date: 2008-03-24 00:31:39 -0700 (Mon, 24 Mar 2008) $
-# Version: $Rev: 130 $
+# Filename: $URL$
+# Last Updated: $Date$
+# Version: $Rev$
 # Author(s): Neil McNab
 #
 # Description:
