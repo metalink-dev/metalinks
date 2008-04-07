@@ -23,8 +23,8 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
-# Filename: $URL: https://appupdater.svn.sourceforge.net/svnroot/appupdater/trunk/libappupdater/xmlutils.py $
-# Last Updated: $Date: 2008-01-13 14:51:31 -0800 (Sun, 13 Jan 2008) $
+# Filename: $URL$
+# Last Updated: $Date$
 # Author(s): Neil McNab
 #
 # Description:
