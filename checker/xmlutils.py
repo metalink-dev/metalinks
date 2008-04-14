@@ -71,6 +71,8 @@ def get_texttag_values(xmlfile, tag):
     First parameter, XML file to parse
     Second parameter, tag to search for in XML file
     Returns a list of text values found
+    
+    raise ExpatError if the file cannot be parsed
     '''
     looking_for = []
     try:
@@ -83,6 +85,9 @@ def get_texttag_values(xmlfile, tag):
     return get_xml_tag_strings(dom2, tag)
 
 def get_tags(xmlfile, tag):
+    '''
+    raise ExpatError if the file cannot be parsed
+    '''
     looking_for = []
     try:
         datasource = open(xmlfile)

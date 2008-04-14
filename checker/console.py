@@ -95,11 +95,11 @@ def run():
 
     socket.setdefaulttimeout(10)
     download.set_proxies()
-    if options.os != "":
+    if options.os != None:
         download.OS = options.os
-    if options.os != "":
-        download.LANG = options.language
-    if options.os != "":
+    if options.language != None:
+        download.LANG = [].extend(options.language.lower().split(","))
+    if options.country != None:
         download.COUNTRY = options.country
         
     if options.timeout != None:

@@ -62,13 +62,15 @@ HOST_LIMIT = 5
 MAX_REDIRECTS = 20
 CONNECT_RETRY_COUNT = 3
 
-LANG = None
+LANG = []
 OS = None
 COUNTRY = None
 
 lang = locale.getdefaultlocale()[0]
+lang = lang.replace("_", "-").lower()
+LANG = [lang]
+
 if len(lang) == 5:
-    LANG = lang[:2]
     COUNTRY = lang[-2:]
 
 # Configure proxies (user and password optional)
@@ -121,7 +123,7 @@ class URL:
 
 def urlopen(url, data = None):
     url = complete_url(url)
-    req = urllib2.Request(url, data, {'User-agent': USER_AGENT}) 
+    req = urllib2.Request(url, data, {'User-agent': USER_AGENT})
     fp = urllib2.urlopen(req)
     return fp
 
@@ -140,7 +142,7 @@ def set_proxies():
     # install this opener
     urllib2.install_opener(opener)
 
-def get(src, path, checksums = {}, force = False, handler = None):
+def get(src, path, checksums = {}, force = False, handler = None, segmented = SEGMENTED):
     '''
     Download a file, decodes metalinks.
     First parameter, file to download, URL or file path to download from
@@ -152,40 +154,47 @@ def get(src, path, checksums = {}, force = False, handler = None):
     Returns list of file paths if download(s) is successful
     Returns False otherwise (checksum fails)
     '''
-
     if src.endswith(".metalink"):
         return download_metalink(src, path, force, handler)
     else:
         # parse out filename portion here
         filename = os.path.basename(src)
-        result = download_file([src], os.path.join(path, filename), 0, checksums, force, handler)
+        result = download_file(src, os.path.join(path, filename), 0, checksums, force, handler, segmented = segmented)
         if result:
             return [result]
         return False
-
-def download_file(urllist, local_file, size=0, checksums={}, force = False, handler = None, segmented = True, chunksums = {}, chunk_size = None):
+    
+def download_file(url, local_file, size=0, checksums={}, force = False, handler = None, segmented = SEGMENTED, chunksums = {}, chunk_size = None):
+    # convert string filename into something we can use
+    urllist = {}
+    urllist[url] = URL(url)
+    return download_file_urls(urllist, local_file, size, checksums, force, handler, segmented, chunksums, chunk_size)
+    
+def download_file_urls(urllist, local_file, size=0, checksums={}, force = False, handler = None, segmented = SEGMENTED, chunksums = {}, chunk_size = None):
     '''
     Download a file.
     First parameter, file to download, URL or file path to download from
     Second parameter, file path to save to
-    Third parameter, optional, expected MD5SUM
-    Fourth parameter, optional, expected SHA1SUM
+    Third parameter, optional, expected file size
+    Fourth parameter, optional, expected checksum dictionary
     Fifth parameter, optional, force a new download even if a valid copy already exists
     Sixth parameter, optional, progress handler callback
     Returns file path if download is successful
     Returns False otherwise (checksum fails)
     '''
     print ""
-    print _("Downloading"), os.path.basename(local_file)
-
+    print _("Downloading to"), local_file
+        
     if os.path.exists(local_file) and (not force) and len(checksums) > 0:
         checksum = verify_checksum(local_file, checksums)
         if checksum:
-            if size == 0:
-                size = os.stat(local_file).st_size
-            handler(1, size, size)
-            #print ""
-            return local_file
+            actsize = size
+            if actsize == 0:
+                actsize = os.stat(local_file).st_size
+            if actsize != 0:
+                if handler != None:
+                    handler(1, actsize, actsize)
+                return local_file
         else:
             print _("Checksum failed, retrying download of") + " %s." % os.path.basename(local_file)
 
@@ -226,10 +235,15 @@ def download_file(urllist, local_file, size=0, checksums={}, force = False, hand
             count += 1
 
     if verify_checksum(local_file, checksums):
-        if size == 0:
-            size = os.stat(local_file).st_size
-        handler(1, size, size)
-        #print ""
+        actsize = size
+        if actsize == 0:
+            try:
+                actsize = os.stat(local_file).st_size
+            except: pass
+        if actsize == 0:
+            return False
+        if handler != None:
+            handler(1, actsize, actsize)
         return local_file
     else:
         print "\n" + _("Checksum failed for") + " %s." % os.path.basename(local_file)
@@ -263,7 +277,7 @@ def download_metalink(src, path, force = False, handler = None):
         origin = xmlutils.get_attr_from_item(metalink_node, "origin")
         if origin != src:
             print _("Downloading update from"), origin
-            return xmlutils.download_metalink(origin, path, force, handler)
+            return download_metalink(origin, path, force, handler)
     
     urllist = xmlutils.get_subnodes(dom2, ["metalink", "files", "file"])
     if len(urllist) == 0:
@@ -276,7 +290,7 @@ def download_metalink(src, path, force = False, handler = None):
         langtag = xmlutils.get_xml_tag_strings(filenode, ["language"])
             
         if OS == None or len(ostag) == 0 or ostag[0].lower() == OS.lower():
-            if LANG == None or len(langtag) == 0 or langtag[0].lower() == LANG.lower():
+            if "any" in LANG or len(langtag) == 0 or langtag[0].lower() in LANG:
                 result = download_file_node(filenode, path, force, handler)
                 if result:
                     results.append(result)
@@ -333,7 +347,7 @@ def download_file_node(item, path, force = False, handler = None):
         for chunk in xmlutils.get_xml_tag_strings(piece, ["hash"]):
             chunksums[hashtype].append(chunk)
 
-    return download_file(urllist, localfile, size, hashes, force, handler, SEGMENTED, chunksums, chunksize)
+    return download_file_urls(urllist, localfile, size, hashes, force, handler, SEGMENTED, chunksums, chunksize)
 
 def complete_url(url):
     '''
@@ -614,18 +628,32 @@ def verify_checksum(local_file, checksums={}):
     # No checksum provided, assume OK
     return True
 
-def remote_or_local(name):
-    '''
-    Returns if the file path is a remote file or a local file
-    First parameter, file path
-    Returns "REMOTE" or "LOCAL" based on the file path
-    '''
-    #transport = urlparse.urlsplit(name).scheme
+##def remote_or_local(name):
+##    '''
+##    Returns if the file path is a remote file or a local file
+##    First parameter, file path
+##    Returns "REMOTE" or "LOCAL" based on the file path
+##    '''
+##    #transport = urlparse.urlsplit(name).scheme
+##    transport = get_transport(name)
+##        
+##    if transport != "":
+##        return "REMOTE"
+##    return "LOCAL"
+
+def is_remote(name):
     transport = get_transport(name)
         
     if transport != "":
-        return "REMOTE"
-    return "LOCAL"
+        return True
+    return False
+
+def is_local(name):
+    transport = get_transport(name)
+        
+    if transport == "":
+        return True
+    return False
 
 def get_transport(url):
     '''
@@ -668,11 +696,11 @@ def path_join(first, second):
     '''
     if first == "":
         return second
-    if remote_or_local(second) == "REMOTE":
+    if is_remote(second):
         return second
 
-    if remote_or_local(first) == "REMOTE":
-        if remote_or_local(second) == "LOCAL":
+    if is_remote(first):
+        if is_local(second):
             return urlparse.urljoin(first, second)
         return second
 
@@ -721,6 +749,7 @@ class Segment_Manager:
         self.chunk_size = int(chunk_size)
         self.chunksums = chunksums
         self.reporthook = reporthook
+        self.localfile = localfile
         self.filter_urls()
         
         # Open the file.
@@ -779,6 +808,8 @@ class Segment_Manager:
                 
             i += 1
 
+        if len(sizes) == 0:
+            return None
         if len(sizes) == 1:
             return int(sizes[0])
         if sizes.count(sizes[0]) >= 2:
@@ -789,6 +820,7 @@ class Segment_Manager:
         return None
     
     def filter_urls(self):
+        #print self.urls
         newurls = {}
         for item in self.urls.keys():
             if (not item.endswith(".torrent")) and (get_transport(item) in PROTOCOLS):
@@ -812,8 +844,8 @@ class Segment_Manager:
             self.update()
             self.resume.extend_blocks(self.chunk_list())
             if self.byte_total() >= self.size and self.active_count() == 0:
-                self.close_handler()
                 self.resume.complete()
+                self.close_handler()
                 return True
             #crap out and do it the old way
             if len(self.urls) == 0:
@@ -990,6 +1022,13 @@ class Segment_Manager:
         self.f.close()
         for host in self.sockets:
             host.close()
+
+        #try:
+        size = os.stat(self.localfile).st_size
+        if size == 0:
+            os.remove(self.localfile)
+            os.remove(self.localfile + ".temp")
+        #except: pass
 
 class Host_Base:
     '''
