@@ -331,6 +331,10 @@ def download_file_node(item, path, force = False, handler = None):
     for hashitem in hashlist:
         hashes[xmlutils.get_attr_from_item(hashitem, "type")] = hashitem.firstChild.nodeValue.strip()
 
+    sigs = xmlutils.get_subnodes(item, ["verification", "signature"])
+    for sig in sigs:
+        hashes[xmlutils.get_attr_from_item(sig, "type")] = sig.firstChild.nodeValue.strip()
+
     local_file = xmlutils.get_attr_from_item(item, "name")
     localfile = path_join(path, local_file)
 
@@ -583,7 +587,15 @@ def verify_checksum(local_file, checksums={}):
     Returns True if no checksums are provided
     Returns False otherwise
     '''
-    
+    try:
+        checksums["pgp"]
+        return pgp_verify_sig(local_file, checksums["pgp"])
+##        if filehash(local_file, hashlib.sha512()) == checksums["sha512"].lower():
+##            return True
+##        else:
+##            #print "\nERROR: sha512 checksum failed for %s." % os.path.basename(local_file)
+##            return False
+    except (KeyError, AttributeError): pass
     try:
         checksums["sha512"]
         if filehash(local_file, hashlib.sha512()) == checksums["sha512"].lower():
@@ -627,6 +639,54 @@ def verify_checksum(local_file, checksums={}):
     
     # No checksum provided, assume OK
     return True
+
+def pgp_verify_sig(filename, sig):
+    import pyme.core
+    import pyme.constants
+    #import base64
+    
+    handle = open(filename, "rb")
+    text = handle.read()
+    handle.close()
+    #text = base64.b64encode(text)
+
+    # Create Data with signed text.
+    sig2 = pyme.core.Data(str(sig))
+    bin2 = pyme.core.Data(text)
+    plain2 = pyme.core.Data()
+    
+    # Verify.
+    c = pyme.core.Context()
+    c.op_verify(sig2, bin2, plain2)
+    result = c.op_verify_result()
+
+    # List results for all signatures. Status equal 0 means "Ok".
+    index = 0
+    for sign in result.signatures:
+        index += 1
+        print "signature", index, ":"
+        print "  summary:    ", sign.summary
+        for name in dir(pyme.constants):
+            if name.startswith("SIGSUM_"):
+                value = getattr(pyme.constants, name)
+                if value & sign.summary:
+                    print name
+                
+        print "  status:     ", sign.status
+        for name in dir(pyme.constants):
+            if name.startswith("SIG_STAT_"):
+                value = getattr(pyme.constants, name)
+                if value & sign.status:
+                    print name
+
+        print "  timestamp:  ", sign.timestamp
+        #print "  fingerprint:", sign.fpr
+        #print "  uid:        ", c.get_key(sign.fpr, 0).uids[0].uid
+
+    # Print "unsigned" text. Rewind since verify put plain2 at EOF.
+    #plain2.seek(0,0)
+    #print "\n", plain2.read()
+    return False
 
 ##def remote_or_local(name):
 ##    '''
