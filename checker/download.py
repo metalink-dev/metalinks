@@ -587,15 +587,15 @@ def verify_checksum(local_file, checksums={}):
     Returns True if no checksums are provided
     Returns False otherwise
     '''
-    try:
-        checksums["pgp"]
-        return pgp_verify_sig(local_file, checksums["pgp"])
+    #try:
+    checksums["pgp"]
+    return pgp_verify_sig(local_file, checksums["pgp"])
 ##        if filehash(local_file, hashlib.sha512()) == checksums["sha512"].lower():
 ##            return True
 ##        else:
 ##            #print "\nERROR: sha512 checksum failed for %s." % os.path.basename(local_file)
 ##            return False
-    except (KeyError, AttributeError): pass
+    #except (KeyError, AttributeError): pass
     try:
         checksums["sha512"]
         if filehash(local_file, hashlib.sha512()) == checksums["sha512"].lower():
@@ -640,20 +640,26 @@ def verify_checksum(local_file, checksums={}):
     # No checksum provided, assume OK
     return True
 
+import pyme.core
+import pyme.constants
+#from pyme import core, constants
+#from pyme import callbacks
+#import pyme.errors
+
 def pgp_verify_sig(filename, sig):
-    import pyme.core
-    import pyme.constants
+
     #import base64
     
-    handle = open(filename, "rb")
-    text = handle.read()
-    handle.close()
+    #handle = open(filename, "rb")
+    #text = handle.read()
+    #handle.close()
     #text = base64.b64encode(text)
 
     # Create Data with signed text.
     sig2 = pyme.core.Data(str(sig))
-    bin2 = pyme.core.Data(text)
+    bin2 = pyme.core.Data(file=str(filename))
     plain2 = pyme.core.Data()
+    #print len(text)
     
     # Verify.
     c = pyme.core.Context()
