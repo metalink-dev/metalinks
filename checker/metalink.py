@@ -63,6 +63,11 @@
 # results = metalink.check_metalink("file.metalink")
 #
 # CHANGELOG:
+#
+# Version 3.7.1
+# -------------
+# - Removed missing imports
+#
 # Version 3.7
 # -----------
 # - Added first attempt at PGP signature checking
@@ -160,8 +165,6 @@ import re
 import socket
 import base64
 import hashlib
-import xmlutils
-import download
 import locale
 import gettext
 import urllib2
@@ -170,7 +173,6 @@ import hashlib
 import os.path
 import xml.dom.minidom
 import random
-import xmlutils
 import locale
 import threading
 import time
@@ -190,8 +192,6 @@ import optparse
 import socket
 import sys
 import os
-import download
-import checker
 import os.path
 import locale
 import gettext
@@ -587,7 +587,8 @@ checker.translate = translate
 #
 ########################################################################
 
-USER_AGENT = "Metalink Checker/3.7 +http://www.nabber.org/projects/"
+
+USER_AGENT = "Metalink Checker/3.7.1 +http://www.nabber.org/projects/"
 
 SEGMENTED = True
 LIMIT_PER_HOST = 1
@@ -2441,7 +2442,7 @@ xmlutils.get_xml_tag_strings = get_xml_tag_strings
 
 
 # DO NOT CHANGE
-VERSION="Metalink Checker Version 3.7"
+VERSION="Metalink Checker Version 3.7.1"
 
 
 def translate():
