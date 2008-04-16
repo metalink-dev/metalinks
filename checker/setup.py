@@ -24,7 +24,7 @@ def merge(header, modules, outputfile):
         for stritem in listing:
             item = getattr(moduleobj, stritem)
 
-            if not stritem.startswith("__"):
+            if not stritem.startswith("__") and type(item) != type(sys):
                 try:
                     redef[module] += module + "." + stritem + " = " + stritem + "\n"
                 except KeyError:

@@ -33,6 +33,10 @@
 # Library Instructions:
 #   - Use as expected.
 #
+# Dependencies
+#   - pyme for optional PGP signature checking support
+#     http://pyme.sourceforge.net/
+#
 # import download
 #
 # files = download.get("file.metalink", os.getcwd())
@@ -54,7 +58,12 @@ import socket
 import ftplib
 import httplib
 
-USER_AGENT = "Metalink Checker/3.6 +http://www.nabber.org/projects/"
+try:
+    import pyme.core
+    import pyme.constants
+except: pass
+
+USER_AGENT = "Metalink Checker/3.7 +http://www.nabber.org/projects/"
 
 SEGMENTED = True
 LIMIT_PER_HOST = 1
@@ -72,6 +81,9 @@ LANG = [lang]
 
 if len(lang) == 5:
     COUNTRY = lang[-2:]
+
+PGP_KEY_DIR=""
+PGP_KEY_EXTS = (".gpg", ".asc")
 
 # Configure proxies (user and password optional)
 # HTTP_PROXY = http://user:password@myproxy:port
@@ -587,15 +599,10 @@ def verify_checksum(local_file, checksums={}):
     Returns True if no checksums are provided
     Returns False otherwise
     '''
-    #try:
-    checksums["pgp"]
-    return pgp_verify_sig(local_file, checksums["pgp"])
-##        if filehash(local_file, hashlib.sha512()) == checksums["sha512"].lower():
-##            return True
-##        else:
-##            #print "\nERROR: sha512 checksum failed for %s." % os.path.basename(local_file)
-##            return False
-    #except (KeyError, AttributeError): pass
+    try:
+        checksums["pgp"]
+        return pgp_verify_sig(local_file, checksums["pgp"])
+    except (KeyError, AttributeError, NameError): pass
     try:
         checksums["sha512"]
         if filehash(local_file, hashlib.sha512()) == checksums["sha512"].lower():
@@ -640,83 +647,85 @@ def verify_checksum(local_file, checksums={}):
     # No checksum provided, assume OK
     return True
 
-import pyme.core
-import pyme.constants
-#from pyme import core, constants
-#from pyme import callbacks
-#import pyme.errors
-
 def pgp_verify_sig(filename, sig):
+    c = pyme.core.Context()
 
-    #import base64
-    
-    #handle = open(filename, "rb")
-    #text = handle.read()
-    #handle.close()
-    #text = base64.b64encode(text)
+    for root, dirs, files in os.walk(PGP_KEY_DIR):
+        for thisfile in files:
+            if thisfile[-4:] in PGP_KEY_EXTS:
+                fullpath = os.path.join(root, thisfile)
+                newkey = pyme.core.Data(file=str(fullpath))
+                c.op_import(newkey)
+                result = c.op_import_result()
+
+    # show the import result
+##    if result:
+##        print " - Result of the import - "
+##        for k in dir(result):
+##            if not k in result.__dict__ and not k.startswith("_"):
+##                if k == "imports":
+##                    print k, ":"
+##                    for impkey in result.__getattr__(k):
+##                        print "    fpr=%s result=%d status=%x" % \
+##                              (impkey.fpr, impkey.result, impkey.status)
+##                else:
+##                    print k, ":", result.__getattr__(k)
+    #else:
+    #    print " - No import result - "
 
     # Create Data with signed text.
     sig2 = pyme.core.Data(str(sig))
     bin2 = pyme.core.Data(file=str(filename))
-    plain2 = pyme.core.Data()
-    #print len(text)
     
     # Verify.
-    c = pyme.core.Context()
-    c.op_verify(sig2, bin2, plain2)
+    error = c.op_verify(sig2, bin2, None)
     result = c.op_verify_result()
 
     # List results for all signatures. Status equal 0 means "Ok".
     index = 0
+    print "\n-----" + _("BEGIN PGP SIGNATURE INFORMATION") + "-----"
+    #print dir(result.signatures)
+    retval = True
     for sign in result.signatures:
         index += 1
-        print "signature", index, ":"
-        print "  summary:    ", sign.summary
+        if index > 1:
+            print "-----------------------------------------"
+        #print _("Signature"), str(index) + ""
+        #print "  summary:    ", sign.summary
+        
         for name in dir(pyme.constants):
             if name.startswith("SIGSUM_"):
                 value = getattr(pyme.constants, name)
                 if value & sign.summary:
                     print name
                 
-        print "  status:     ", sign.status
+        #print "  status:     ", sign.status
         for name in dir(pyme.constants):
             if name.startswith("SIG_STAT_"):
                 value = getattr(pyme.constants, name)
                 if value & sign.status:
                     print name
 
-        print "  timestamp:  ", sign.timestamp
-        #print "  fingerprint:", sign.fpr
-        #print "  uid:        ", c.get_key(sign.fpr, 0).uids[0].uid
+        print "" + _("timestamp") + ":", time.strftime("%a, %d %b %Y %H:%M:%S (%Z)",time.localtime(sign.timestamp))
+        print "" + _("fingerprint") + ":", sign.fpr
+        #print "  hash:", pyme.core.hash_algo_name(sign.hash_algo)
+        #print "  sig algo:", pyme.core.pubkey_algo_name(sign.pubkey_algo)
+        print "" + _("uid") + ":", c.get_key(sign.fpr, 0).uids[0].uid
 
-    # Print "unsigned" text. Rewind since verify put plain2 at EOF.
-    #plain2.seek(0,0)
-    #print "\n", plain2.read()
-    return False
+        if sign.summary != 0 or sign.status != 0:
+            retval = False
+    print "-----" + _("END PGP SIGNATURE INFORMATION") + "-----\n"
 
-##def remote_or_local(name):
-##    '''
-##    Returns if the file path is a remote file or a local file
-##    First parameter, file path
-##    Returns "REMOTE" or "LOCAL" based on the file path
-##    '''
-##    #transport = urlparse.urlsplit(name).scheme
-##    transport = get_transport(name)
-##        
-##    if transport != "":
-##        return "REMOTE"
-##    return "LOCAL"
+    return retval
 
 def is_remote(name):
-    transport = get_transport(name)
-        
+    transport = get_transport(name)   
     if transport != "":
         return True
     return False
 
 def is_local(name):
-    transport = get_transport(name)
-        
+    transport = get_transport(name) 
     if transport == "":
         return True
     return False

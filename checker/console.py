@@ -36,6 +36,7 @@
 #   1. You need to have Python installed.
 #   2. Run on the command line using: python checker.py
 #
+########################################################################
 
 import optparse
 import socket
@@ -46,7 +47,7 @@ import download
 import checker
 
 # DO NOT CHANGE
-VERSION="Metalink Checker Version 3.6"
+VERSION="Metalink Checker Version 3.7"
 
 import os.path
 import locale
@@ -86,7 +87,7 @@ def run():
     parser.add_option("--os", "-o", dest="os", metavar="OS", help=_("Operating System preference"))
     parser.add_option("--lang", "-l", dest="language", metavar="LANG", help=_("Language preference (ISO-639/3166)"))
     parser.add_option("--country", "-c", dest="country", metavar="LOC", help=_("Two letter country preference (ISO 3166-1 alpha-2)"))
-    
+    parser.add_option("--pgp-keys", "-k", dest="pgpdir", metavar="DIR", help=_("Directory with the PGP keys that you trust (default: working directory)"))
     (options, args) = parser.parse_args()
 
     if options.filevar == None:
@@ -101,6 +102,8 @@ def run():
         download.LANG = [].extend(options.language.lower().split(","))
     if options.country != None:
         download.COUNTRY = options.country
+    if options.pgpdir != None:
+        download.PGP_KEY_DIR = options.pgpdir
         
     if options.timeout != None:
         socket.setdefaulttimeout(int(options.timeout))

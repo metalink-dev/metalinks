@@ -34,7 +34,8 @@
 #
 # Instructions:
 #   1. You need to have Python installed.
-#   2. Run on the command line using: python metalink.py
+#   2. To check PGP signatures you need to install pyme (optional, http://pyme.sourceforge.net/)
+#   3. Run on the command line using: python metalink.py
 #
 #   Usage: metalink.py [options]
 #
@@ -49,6 +50,9 @@
 #     -l LANG, --lang=LANG  Language preference (ISO-639/3166)
 #     -c LOC, --country=LOC
 #                           Two letter country preference (ISO 3166-1 alpha-2)
+#     -k DIR, --pgp-keys=DIR
+#                           Directory with the PGP keys that you trust (default:
+#                           working directory)
 #
 # Library Instructions:
 #   - Use as expected.
@@ -59,6 +63,11 @@
 # results = metalink.check_metalink("file.metalink")
 #
 # CHANGELOG:
+# Version 3.7
+# -----------
+# - Added first attempt at PGP signature checking
+# - Minor bugfixes
+#
 # Version 3.6
 # -----------
 # - Support for resuming segmented downloads
