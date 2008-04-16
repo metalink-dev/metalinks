@@ -16,7 +16,7 @@ def merge(header, modules, outputfile):
     redef = {}
 
     for module in modules:
-        imports += readfile(module, True)
+        imports += readfile(module, True, modules)
 
         exec("import " + module)
         moduleobj = eval(module)
@@ -43,12 +43,12 @@ def merge(header, modules, outputfile):
     writehandle.close()
     return
 
-def readfile(modulename, imports=False):
+def readfile(modulename, imports=False, ignore=[]):
     filestring = ""
     filehandle = open(modulename + ".py")
     line = filehandle.readline()
     while line:
-        if imports == line.strip().startswith("import "):
+        if imports == line.strip().startswith("import ") and line.strip()[7:] not in ignore:
             filestring += line
         line = filehandle.readline()
     filehandle.close()

@@ -63,7 +63,7 @@ try:
     import pyme.constants
 except: pass
 
-USER_AGENT = "Metalink Checker/3.7 +http://www.nabber.org/projects/"
+USER_AGENT = "Metalink Checker/3.7.1 +http://www.nabber.org/projects/"
 
 SEGMENTED = True
 LIMIT_PER_HOST = 1

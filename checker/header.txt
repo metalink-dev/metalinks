@@ -63,6 +63,11 @@
 # results = metalink.check_metalink("file.metalink")
 #
 # CHANGELOG:
+#
+# Version 3.7.1
+# -------------
+# - Removed missing imports
+#
 # Version 3.7
 # -----------
 # - Added first attempt at PGP signature checking
