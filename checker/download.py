@@ -60,7 +60,7 @@ import GPG
 ##    import pyme.constants
 ##except: pass
 
-USER_AGENT = "Metalink Checker/3.7.2 +http://www.nabber.org/projects/"
+USER_AGENT = "Metalink Checker/3.7.3 +http://www.nabber.org/projects/"
 
 SEGMENTED = True
 LIMIT_PER_HOST = 1
