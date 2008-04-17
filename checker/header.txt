@@ -67,6 +67,11 @@
 #
 # CHANGELOG:
 #
+# Version 3.7.3
+# -------------
+# - Fixes for use with UNIX/Linux
+# - bugfixes in checker code
+#
 # Version 3.7.2
 # -------------
 # - Modified to remove the pyme dependency

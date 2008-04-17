@@ -34,7 +34,7 @@
 #
 # Instructions:
 #   1. You need to have Python installed.
-#   2. To check PGP signatures you need to install gpg or gpg4win (http://www.gpg4win.org/)
+#   2. To check PGP signatures you need to install gpg (http://www.gnupg.org) or gpg4win (http://www.gpg4win.org/)
 #   3. Run on the command line using: python metalink.py
 #
 #   Usage: metalink.py [options]
@@ -66,6 +66,11 @@
 # results = metalink.check_metalink("file.metalink")
 #
 # CHANGELOG:
+#
+# Version 3.7.3
+# -------------
+# - Fixes for use with UNIX/Linux
+# - bugfixes in checker code
 #
 # Version 3.7.2
 # -------------
@@ -172,6 +177,7 @@ import re
 import socket
 import base64
 import hashlib
+import httplib
 import locale
 import gettext
 import urllib2
@@ -248,6 +254,8 @@ class Dummy:
 
 
 
+
+MAX_REDIRECTS = 20
 
 def translate():
     '''
@@ -397,7 +405,7 @@ class URLCheck:
                 self.infostring += _("Response") + ": " + _("Bad URL") + "\r\n"
                 return
     
-            conn = HTTPConnection(urlparts.hostname, port)
+            conn = download.HTTPConnection(urlparts.hostname, port)
             try:
                 conn.request("HEAD", url)
             except socket.error, error:
@@ -418,7 +426,7 @@ class URLCheck:
                 if urlparts.port != None:
                     port = urlparts.port
                 
-                conn = HTTPConnection(urlparts.hostname, urlparts.port)
+                conn = download.HTTPConnection(urlparts.hostname, urlparts.port)
                 conn.request("HEAD", url)
                 resp = conn.getresponse()
                 count += 1
@@ -445,7 +453,7 @@ class URLCheck:
                 self.infostring += _("Response") + ": " + _("Bad URL") + "\r\n"
                 return
     
-            conn = HTTPSConnection(urlparts.hostname, port)
+            conn = download.HTTPSConnection(urlparts.hostname, port)
             try:
                 conn.request("HEAD", url)
             except socket.error, error:
@@ -467,7 +475,7 @@ class URLCheck:
                 if urlparts.port != None:
                     port = urlparts.port
                 
-                conn = HTTPSConnection(urlparts.hostname, urlparts.port)
+                conn = download.HTTPSConnection(urlparts.hostname, urlparts.port)
                 conn.request("HEAD", url)
                 resp = conn.getresponse()
                 count += 1
@@ -541,6 +549,7 @@ class URLCheck:
         # need response and content-length for HTTP
         return self.infostring
 checker = Dummy()
+checker.MAX_REDIRECTS = MAX_REDIRECTS
 checker.URLCheck = URLCheck
 checker._ = _
 checker.check_file_node = check_file_node
@@ -583,10 +592,6 @@ checker.translate = translate
 # Library Instructions:
 #   - Use as expected.
 #
-# Dependencies
-#   - pyme for optional PGP signature checking support
-#     http://pyme.sourceforge.net/
-#
 # import download
 #
 # files = download.get("file.metalink", os.getcwd())
@@ -599,7 +604,7 @@ checker.translate = translate
 ##    import pyme.constants
 ##except: pass
 
-USER_AGENT = "Metalink Checker/3.7.2 +http://www.nabber.org/projects/"
+USER_AGENT = "Metalink Checker/3.7.3 +http://www.nabber.org/projects/"
 
 SEGMENTED = True
 LIMIT_PER_HOST = 1
@@ -2316,6 +2321,11 @@ Code for running GnuPG from Python and dealing with the results.
 
 Detailed info about the format of data to/from gpg may be obtained from the
 file DETAILS in the gnupg source.
+
+Dependencies
+   - GPG must be installed
+   - http://www.gnupg.org
+   - http://www.gpg4win.org
 '''
 
 __rcsid__ = '$Id: GPG.py,v 1.3 2003/11/23 15:03:15 akuchling Exp $'
@@ -2516,8 +2526,10 @@ class GPGSubprocess:
         cmd = ' '.join(cmd)
 
         #print cmd
-
-        process = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        shell = True
+        if os.name == 'nt':
+            shell = False
+        process = subprocess.Popen(cmd, shell=shell, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         #child_stdout, child_stdin, child_stderr =  #popen2.popen3(cmd)
         #return child_stdout, child_stdin, child_stderr
         #print process.stderr
@@ -2867,7 +2879,7 @@ xmlutils.get_xml_tag_strings = get_xml_tag_strings
 
 
 # DO NOT CHANGE
-VERSION="Metalink Checker Version 3.7.2"
+VERSION="Metalink Checker Version 3.7.3"
 
 
 def translate():
@@ -3056,11 +3068,11 @@ class ProgressBar:
         
     def end(self):
         self.update(1, 1)
-        #print ""
+        print ""
 
     def download_end(self):
         self.download_update(1, self.total_size, self.total_size)
-        #print ""
+        print ""
 
 if __name__ == "__main__":
     run()
