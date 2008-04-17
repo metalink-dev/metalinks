@@ -239,11 +239,11 @@ class ProgressBar:
         
     def end(self):
         self.update(1, 1)
-        #print ""
+        print ""
 
     def download_end(self):
         self.download_update(1, self.total_size, self.total_size)
-        #print ""
+        print ""
 
 if __name__ == "__main__":
     run()
