@@ -157,8 +157,10 @@ class GPGSubprocess:
 
     # Default path used for searching for the GPG binary, when the
     # PATH environment variable isn't set.
-    #DEFAULT_PATH = ['/bin', '/usr/bin', '/usr/local/bin', '${PROGRAMFILES}\\GNU\\GnuPG', '${PROGRAMFILES(X86)}\\GNU\\GnuPG']
-    DEFAULT_PATH = []
+    DEFAULT_PATH = ['/bin', '/usr/bin', '/usr/local/bin', \
+                    '${PROGRAMFILES}\\GNU\\GnuPG', '${PROGRAMFILES(X86)}\\GNU\\GnuPG',\
+                    '${SYSTEMDRIVE}\\cygwin\\bin', '${SYSTEMDRIVE}\\cygwin\\usr\\bin', '${SYSTEMDRIVE}\\cygwin\\usr\\local\\bin']
+    #DEFAULT_PATH = []
     
     def __init__(self, gpg_binary=None, keyring=None):
         """Initialize an object instance.  Options are:
