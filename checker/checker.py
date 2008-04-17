@@ -52,12 +52,15 @@ import re
 import socket
 import base64
 import hashlib
+import httplib
 
 import xmlutils
 import download
 
 import locale
 import gettext
+
+MAX_REDIRECTS = 20
 
 def translate():
     '''
@@ -207,7 +210,7 @@ class URLCheck:
                 self.infostring += _("Response") + ": " + _("Bad URL") + "\r\n"
                 return
     
-            conn = HTTPConnection(urlparts.hostname, port)
+            conn = download.HTTPConnection(urlparts.hostname, port)
             try:
                 conn.request("HEAD", url)
             except socket.error, error:
@@ -228,7 +231,7 @@ class URLCheck:
                 if urlparts.port != None:
                     port = urlparts.port
                 
-                conn = HTTPConnection(urlparts.hostname, urlparts.port)
+                conn = download.HTTPConnection(urlparts.hostname, urlparts.port)
                 conn.request("HEAD", url)
                 resp = conn.getresponse()
                 count += 1
@@ -255,7 +258,7 @@ class URLCheck:
                 self.infostring += _("Response") + ": " + _("Bad URL") + "\r\n"
                 return
     
-            conn = HTTPSConnection(urlparts.hostname, port)
+            conn = download.HTTPSConnection(urlparts.hostname, port)
             try:
                 conn.request("HEAD", url)
             except socket.error, error:
@@ -277,7 +280,7 @@ class URLCheck:
                 if urlparts.port != None:
                     port = urlparts.port
                 
-                conn = HTTPSConnection(urlparts.hostname, urlparts.port)
+                conn = download.HTTPSConnection(urlparts.hostname, urlparts.port)
                 conn.request("HEAD", url)
                 resp = conn.getresponse()
                 count += 1
