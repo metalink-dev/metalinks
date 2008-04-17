@@ -47,7 +47,7 @@ import download
 import checker
 
 # DO NOT CHANGE
-VERSION="Metalink Checker Version 3.7.1"
+VERSION="Metalink Checker Version 3.7.2"
 
 import os.path
 import locale
@@ -88,6 +88,7 @@ def run():
     parser.add_option("--lang", "-l", dest="language", metavar="LANG", help=_("Language preference (ISO-639/3166)"))
     parser.add_option("--country", "-c", dest="country", metavar="LOC", help=_("Two letter country preference (ISO 3166-1 alpha-2)"))
     parser.add_option("--pgp-keys", "-k", dest="pgpdir", metavar="DIR", help=_("Directory with the PGP keys that you trust (default: working directory)"))
+    parser.add_option("--pgp-store", "-p", dest="pgpstore", metavar="FILE", help=_("File with the PGP keys that you trust (default: ~/.gnupg/pubring.gpg)"))
     (options, args) = parser.parse_args()
 
     if options.filevar == None:
@@ -104,6 +105,8 @@ def run():
         download.COUNTRY = options.country
     if options.pgpdir != None:
         download.PGP_KEY_DIR = options.pgpdir
+    if options.pgpstore != None:
+        download.PGP_KEY_STORE = options.pgpstore
         
     if options.timeout != None:
         socket.setdefaulttimeout(int(options.timeout))

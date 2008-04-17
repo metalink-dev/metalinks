@@ -57,13 +57,14 @@ import copy
 import socket
 import ftplib
 import httplib
+import GPG
 
-try:
-    import pyme.core
-    import pyme.constants
-except: pass
+##try:
+##    import pyme.core
+##    import pyme.constants
+##except: pass
 
-USER_AGENT = "Metalink Checker/3.7.1 +http://www.nabber.org/projects/"
+USER_AGENT = "Metalink Checker/3.7.2 +http://www.nabber.org/projects/"
 
 SEGMENTED = True
 LIMIT_PER_HOST = 1
@@ -84,6 +85,7 @@ if len(lang) == 5:
 
 PGP_KEY_DIR=""
 PGP_KEY_EXTS = (".gpg", ".asc")
+PGP_KEY_STORE=None
 
 # Configure proxies (user and password optional)
 # HTTP_PROXY = http://user:password@myproxy:port
@@ -293,7 +295,7 @@ def download_metalink(src, path, force = False, handler = None):
     
     urllist = xmlutils.get_subnodes(dom2, ["metalink", "files", "file"])
     if len(urllist) == 0:
-        #print _("No urls to download file from.")
+        print _("No urls to download file from.")
         return False
 
     results = []
@@ -602,7 +604,7 @@ def verify_checksum(local_file, checksums={}):
     try:
         checksums["pgp"]
         return pgp_verify_sig(local_file, checksums["pgp"])
-    except (KeyError, AttributeError, NameError): pass
+    except (KeyError, AttributeError, ValueError, AssertionError): pass
     try:
         checksums["sha512"]
         if filehash(local_file, hashlib.sha512()) == checksums["sha512"].lower():
@@ -648,6 +650,38 @@ def verify_checksum(local_file, checksums={}):
     return True
 
 def pgp_verify_sig(filename, sig):
+    gpg = GPG.GPGSubprocess(keyring=PGP_KEY_STORE)
+
+    for root, dirs, files in os.walk(PGP_KEY_DIR):
+        for thisfile in files:
+            if thisfile[-4:] in PGP_KEY_EXTS:
+                gpg.import_key(open(thisfile).read())
+    
+    sign = gpg.verify_file_detached(filename, sig)
+
+    print "\n-----" + _("BEGIN PGP SIGNATURE INFORMATION") + "-----"
+    if sign.error != None:
+        print sign.error
+    else:
+        #print sig.creation_date
+        try:
+            print "" + _("timestamp") + ":", time.strftime("%a, %d %b %Y %H:%M:%S (%Z)", time.localtime(float(sign.timestamp)))
+        except TypeError: pass
+        print "" + _("fingerprint") + ":", sign.fingerprint
+        #print sig.signature_id
+        #print sign.key_id
+        print "" + _("uid") + ":", sign.username
+    print "-----" + _("END PGP SIGNATURE INFORMATION") + "-----\n"
+
+    if sign.error != None:
+        raise AssertionError, sign.error
+    
+    if sign.is_valid():
+        return True
+    
+    return False
+
+def old_pgp_verify_sig(filename, sig):
     c = pyme.core.Context()
 
     for root, dirs, files in os.walk(PGP_KEY_DIR):
@@ -710,8 +744,11 @@ def pgp_verify_sig(filename, sig):
         print "" + _("fingerprint") + ":", sign.fpr
         #print "  hash:", pyme.core.hash_algo_name(sign.hash_algo)
         #print "  sig algo:", pyme.core.pubkey_algo_name(sign.pubkey_algo)
-        print "" + _("uid") + ":", c.get_key(sign.fpr, 0).uids[0].uid
-
+        try:
+            print "" + _("uid") + ":", c.get_key(sign.fpr, 0).uids[0].uid
+        except:
+            print _("ERROR") + ": " + _("Could not find signing key.")
+        
         if sign.summary != 0 or sign.status != 0:
             retval = False
     print "-----" + _("END PGP SIGNATURE INFORMATION") + "-----\n"
@@ -926,7 +963,7 @@ class Segment_Manager:
             if len(self.urls) == 0:
                 self.close_handler()
                 return False
-            
+
         return False
 
     def update(self):

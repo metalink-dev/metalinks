@@ -34,7 +34,7 @@
 #
 # Instructions:
 #   1. You need to have Python installed.
-#   2. To check PGP signatures you need to install pyme (optional, http://pyme.sourceforge.net/)
+#   2. To check PGP signatures you need to install gpg or gpg4win (http://www.gpg4win.org/)
 #   3. Run on the command line using: python metalink.py
 #
 #   Usage: metalink.py [options]
@@ -53,6 +53,9 @@
 #     -k DIR, --pgp-keys=DIR
 #                           Directory with the PGP keys that you trust (default:
 #                           working directory)
+#     -p FILE, --pgp-store=FILE
+#                           File with the PGP keys that you trust (default:
+#                           ~/.gnupg/pubring.gpg)
 #
 # Library Instructions:
 #   - Use as expected.
@@ -63,6 +66,10 @@
 # results = metalink.check_metalink("file.metalink")
 #
 # CHANGELOG:
+#
+# Version 3.7.2
+# -------------
+# - Modified to remove the pyme dependency
 #
 # Version 3.7.1
 # -------------
