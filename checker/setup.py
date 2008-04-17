@@ -2,7 +2,7 @@ import sys
 import os.path
 
 #main is first
-modules = ['console', 'xmlutils', 'download', 'checker']
+modules = ['console', 'xmlutils', 'GPG', 'download', 'checker']
 outputfile = "metalink.py"
 
 readhandle = open("header.txt")
