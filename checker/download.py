@@ -33,10 +33,6 @@
 # Library Instructions:
 #   - Use as expected.
 #
-# Dependencies
-#   - pyme for optional PGP signature checking support
-#     http://pyme.sourceforge.net/
-#
 # import download
 #
 # files = download.get("file.metalink", os.getcwd())

@@ -6,6 +6,11 @@ Code for running GnuPG from Python and dealing with the results.
 
 Detailed info about the format of data to/from gpg may be obtained from the
 file DETAILS in the gnupg source.
+
+Dependencies
+   - GPG must be installed
+   - http://www.gnupg.org
+   - http://www.gpg4win.org
 '''
 
 __rcsid__ = '$Id: GPG.py,v 1.3 2003/11/23 15:03:15 akuchling Exp $'
@@ -209,8 +214,10 @@ class GPGSubprocess:
         cmd = ' '.join(cmd)
 
         #print cmd
-
-        process = subprocess.Popen(cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        shell = True
+        if os.name == 'nt':
+            shell = False
+        process = subprocess.Popen(cmd, shell=shell, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         #child_stdout, child_stdin, child_stderr =  #popen2.popen3(cmd)
         #return child_stdout, child_stdin, child_stderr
         #print process.stderr
