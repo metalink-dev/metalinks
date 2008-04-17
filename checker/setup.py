@@ -58,6 +58,8 @@ def clean():
     filelist = []
     filelist.extend(rec_search(".pyc"))
     filelist.extend(rec_search(".pyo"))
+    filelist.extend(rec_search(".mo"))
+    filelist.extend(rec_search(".pot"))
     
     for filename in filelist:
         try:
@@ -113,3 +115,6 @@ if sys.argv[1] == 'merge':
 elif sys.argv[1] == 'translate':
     localegen()
     localecompile()
+
+elif sys.argv[1] == 'clean':
+    clean()
