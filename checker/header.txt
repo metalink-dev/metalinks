@@ -67,6 +67,10 @@
 #
 # CHANGELOG:
 #
+# Version 3.7.4
+# -------------
+# - Fixed default key import directory
+#
 # Version 3.7.3
 # -------------
 # - Fixes for use with UNIX/Linux

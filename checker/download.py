@@ -60,7 +60,7 @@ import GPG
 ##    import pyme.constants
 ##except: pass
 
-USER_AGENT = "Metalink Checker/3.7.3 +http://www.nabber.org/projects/"
+USER_AGENT = "Metalink Checker/3.7.4 +http://www.nabber.org/projects/"
 
 SEGMENTED = True
 LIMIT_PER_HOST = 1
@@ -79,7 +79,7 @@ LANG = [lang]
 if len(lang) == 5:
     COUNTRY = lang[-2:]
 
-PGP_KEY_DIR=""
+PGP_KEY_DIR="."
 PGP_KEY_EXTS = (".gpg", ".asc")
 PGP_KEY_STORE=None
 
