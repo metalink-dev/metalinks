@@ -47,7 +47,7 @@ import download
 import checker
 
 # DO NOT CHANGE
-VERSION="Metalink Checker Version 3.7.3"
+VERSION="Metalink Checker Version 3.7.4"
 
 import os.path
 import locale
