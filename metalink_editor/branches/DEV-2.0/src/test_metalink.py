@@ -198,6 +198,11 @@ class TestMetalinkSaveLoad(unittest.TestCase):
     file.publisher_url = u'http://url336.com/'
     file.license_name = u'license827'
     file.license_url = u'http://url794.com/'
+    hash = metalink.MetalinkHash('md5', '1798e7aa4bf190563c6c680a2bd6599e')
+    file.hashes.append(hash)
+    file.piece_length = 124430
+    file.piece_type = 'sha1'
+    file.piece_hashes.append('c9e34e616c69715020eadd58e58aab14352f2426')
     ml.files.append(file)
     if os.path.exists('test.tmp'): os.remove('test.tmp') # Remove tmp file
     metalink.save_file(ml, 'test.tmp')
@@ -207,8 +212,8 @@ class TestMetalinkSaveLoad(unittest.TestCase):
     # Clear some properties, which are modified when the file is saved.
     ml2.ml_version = ''
     ml2.ml_generator = ''
-    print ml.get_dict()
-    print ml2.get_dict()
+    #print ml.get_dict()
+    #print ml2.get_dict()
     self.assertEqual(ml, ml2,
       'The saved and the loaded metalink is not equal!')
 

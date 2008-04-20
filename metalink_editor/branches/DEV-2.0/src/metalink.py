@@ -27,7 +27,7 @@ from xml.sax.saxutils import escape, unescape
 __version__ = '2.0'
 __author__ = 'Hampus Wessman <hw@vox.nu>'
 __copyright__ = 'Copyright (c) 2008 Hampus Wessman, Sweden.'
-__license__ = 'MIT license (see license.txt).'
+__license__ = 'MIT license (see license.txt)'
 __docformat__ = 'epytext'
 __all__ = ['__version__', '__copyright__', '__license__', '__author__',
 '__url__', 'MetalinkException', 'Metalink', 'MetalinkFile', 'MetalinkHash',
@@ -275,7 +275,8 @@ class MetalinkFile:
     need to change this.
     @type: str"""
     self.urls = []
-    """@ivar: A list of URLs (L{MetalinkUrl} from which the file can be retrieved.
+    """@ivar: A list of URLs (L{MetalinkUrl} from which the file can be
+    retrieved.
     @type: list"""
     self.maxconnections = -1
     """@ivar: The maximum number of connections that are allowed at once for the
@@ -303,12 +304,12 @@ class MetalinkFile:
 
 class MetalinkHash:
   """Data structure for a hash."""
-  def __init__(self):
-    self.type = ''
+  def __init__(self, type='', hash=''):
+    self.type = type
     """@ivar: The hash type. Valid types are: 'md4', 'md5', 'sha1', 'sha256',
     'sha384', 'sha512', 'rmd160', 'tiger', 'crc32'.
     @type: str"""
-    self.hash = ''
+    self.hash = hash
     """@ivar: The actual hash, as a lowercase hexadecimal value.
     @type: str"""
   def get_dict(self):
@@ -327,12 +328,12 @@ class MetalinkUrl:
   
   It's a good idea, in most circumstances, to specify a L{url} and a L{type}.
   The rest of the variables are completely optional."""
-  def __init__(self):
-    self.url = ''
+  def __init__(self, url='', type=''):
+    self.url = url
     """@ivar: This is a standard URL. Example:
     C{'http://example-server.com/file.ext'}.
     @type: str"""
-    self.type = ''
+    self.type = type
     """@ivar: Describes the type of protocol this URL uses. Possible values are:
     C{'ftp'}, C{'ftps'}, C{'http'}, C{'https'}, C{'rsync'}, C{'bittorrent'},
     C{'magnet'} and C{'ed2k'}.
@@ -693,6 +694,22 @@ def generate_xml(metalink):
       if file.license_url:
         xml_data += '        <url>'+escape(file.license_url)+'</url>\n'
       xml_data += '      </license>\n'
+    # Verification
+    if len(file.hashes) > 0 or len(file.piece_hashes) > 0:
+      xml_data += '      <verification>\n'
+      for hash in file.hashes:
+        xml_data += '        <hash type="%s">' % hash.type
+        xml_data += escape(hash.hash)
+        xml_data += '</hash>\n'
+      if len(file.piece_hashes) > 0:
+        xml_data += '        <pieces type="%s" length="%d">\n' % \
+            (file.piece_type, file.piece_length)
+        for i in range(len(file.piece_hashes)):
+          xml_data += '          <hash piece="%d">' % i
+          xml_data += escape(file.piece_hashes[i])
+          xml_data += '</hash>\n'
+        xml_data += '        </pieces>\n'
+      xml_data += '      </verification>\n'
     xml_data += '    </file>\n'
   xml_data += '  </files>\n'
   xml_data += '</metalink>'
