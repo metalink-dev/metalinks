@@ -1,5 +1,16 @@
+from distutils.core import setup
 import sys
 import os.path
+import shutil
+import glob
+
+APP_NAME = 'Metalink Checker'
+VERSION = '0.7.4'
+LICENSE = 'GPL'
+DESC = 'A metalink checker and download client.'
+AUTHOR_NAME = 'Neil McNab'
+EMAIL = 'webmaster@nabber.org'
+URL = 'http://www.nabber.org/projects/'
 
 #main is first
 modules = ['console', 'xmlutils', 'GPG', 'download', 'checker']
@@ -54,17 +65,37 @@ def readfile(modulename, imports=False, ignore=[]):
     filehandle.close()
     return filestring
 
-def clean():    
+def clean():
+    ignore = []
+    
     filelist = []
+    filelist.extend(glob.glob("*metalink*.txt"))
+    filelist.extend(rec_search(".exe"))
+    filelist.extend(rec_search(".zip"))
     filelist.extend(rec_search(".pyc"))
     filelist.extend(rec_search(".pyo"))
     filelist.extend(rec_search(".mo"))
     filelist.extend(rec_search(".pot"))
     
+    try:
+        shutil.rmtree("build")
+    except WindowsError: pass
+    try:
+        shutil.rmtree("dist")
+    except WindowsError: pass
+    try:
+        shutil.rmtree("buildMetalink")
+    except WindowsError: pass
+
+    try:
+        shutil.rmtree("tests_temp")
+    except WindowsError: pass
+    
     for filename in filelist:
-        try:
-            os.remove(filename)
-        except WindowsError: pass
+        if filename not in ignore:
+            try:
+                os.remove(filename)
+            except WindowsError: pass
 
 def localegen():
     localedir = "locale"
@@ -118,3 +149,22 @@ elif sys.argv[1] == 'translate':
 
 elif sys.argv[1] == 'clean':
     clean()
+
+elif sys.argv[1] == 'py2exe':
+    merge(header, modules, outputfile)
+        
+    import py2exe
+
+    #localegen()
+    #localecompile()
+    
+    setup(console = ["metalink.py"],
+        zipfile = None,
+      name = APP_NAME,
+      version = VERSION,
+      license = LICENSE,
+      description = DESC,
+      author = AUTHOR_NAME,
+      author_email = EMAIL,
+      url = URL
+      )
