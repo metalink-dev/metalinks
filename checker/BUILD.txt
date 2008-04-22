@@ -1,0 +1,17 @@
+How to build Metalink Checker
+
+You will need the following:
+
+Python 2.5.2 - http://www.python.org
+
+py2exe 0.6.6 - http://www.py2exe.org
+ -OR-
+pyinstaller 1.3 - http://pyinstaller.python-hosting.com/
+
+The program can be run as a normal Python script if Python is present.  
+Pyinstaller and py2exe are not required, these are included only for 
+supporting distribution to the masses without Python.
+
+Building on Windows
+-------------------
+pyinstexe.bat - calls pyinstaller to make executable files for windows and .zip package
