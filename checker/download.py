@@ -55,11 +55,6 @@ import ftplib
 import httplib
 import GPG
 
-##try:
-##    import pyme.core
-##    import pyme.constants
-##except: pass
-
 USER_AGENT = "Metalink Checker/3.7.4 +http://www.nabber.org/projects/"
 
 SEGMENTED = True
@@ -196,18 +191,9 @@ def download_file_urls(urllist, local_file, size=0, checksums={}, force = False,
     print _("Downloading to"), local_file
         
     if os.path.exists(local_file) and (not force) and len(checksums) > 0:
-        checksum = verify_checksum(local_file, checksums)
-        if checksum:
-            actsize = size
-            if actsize == 0:
-                actsize = os.stat(local_file).st_size
-            if actsize != 0:
-                if handler != None:
-                    handler(1, actsize, actsize)
-                return local_file
-        else:
-            print _("Checksum failed, retrying download of") + " %s." % os.path.basename(local_file)
-
+        if filecheck(local_file, checksums, size, handler):
+            return local_file
+                
     directory = os.path.dirname(local_file)
     if not os.path.isdir(directory):
         os.makedirs(directory)
@@ -218,7 +204,6 @@ def download_file_urls(urllist, local_file, size=0, checksums={}, force = False,
             chunk_size = 262144
         manager = Segment_Manager(urllist, local_file, size, reporthook = handler, chunksums = chunksums, chunk_size = int(chunk_size))
         seg_result = manager.run()
-        
         if not seg_result:
             #seg_result = verify_checksum(local_file, checksums)
             print "\n" + _("Could not download all segments of the file, trying one mirror at a time.")
@@ -231,10 +216,11 @@ def download_file_urls(urllist, local_file, size=0, checksums={}, force = False,
         urllist = start_sort(urllist)
         number = 0
         
-        error = True
         count = 1
-        while (error and (count <= len(urllist))):
+        while (count <= len(urllist)):
+            error = False
             remote_file = complete_url(urllist[number])
+            #print remote_file
             result = True
             try:
                 urlretrieve(remote_file, local_file, handler)
@@ -244,20 +230,46 @@ def download_file_urls(urllist, local_file, size=0, checksums={}, force = False,
             number = (number + 1) % len(urllist)
             count += 1
 
-    if verify_checksum(local_file, checksums):
-        actsize = size
-        if actsize == 0:
-            try:
-                actsize = os.stat(local_file).st_size
-            except: pass
-        if actsize == 0:
-            return False
-        if handler != None:
-            handler(1, actsize, actsize)
-        return local_file
-    else:
-        print "\n" + _("Checksum failed for") + " %s." % os.path.basename(local_file)
+            if filecheck(local_file, checksums, size, handler) and not error:
+                return local_file
+##            if verify_checksum(local_file, checksums):
+##                actsize = 0
+##                try:
+##                    actsize = os.stat(local_file).st_size
+##                except: pass
+##                    
+##                if handler != None:
+##                    tempsize = size
+##                    if size == 0:
+##                        tempsize = actsize
+##                    handler(1, actsize, tempsize)
+##
+##                if (int(actsize) == int(size) or size == 0) and not error:
+##                    return local_file
+##            else:
+##                print "\n" + _("Checksum failed for") + " %s." % os.path.basename(local_file)
 
+    if filecheck(local_file, checksums, size, handler):
+        return local_file
+    return False
+
+def filecheck(local_file, checksums, size, handler = None):
+    if verify_checksum(local_file, checksums):
+        actsize = 0
+        try:
+            actsize = os.stat(local_file).st_size
+        except: pass
+            
+        if handler != None:
+            tempsize = size
+            if size == 0:
+                tempsize = actsize
+            handler(1, actsize, tempsize)
+
+        if (int(actsize) == int(size) or size == 0):
+            return True
+    
+    print "\n" + _("Checksum failed for") + " %s." % os.path.basename(local_file)
     return False
 
 def download_metalink(src, path, force = False, handler = None):
@@ -280,12 +292,13 @@ def download_metalink(src, path, force = False, handler = None):
 
     metalink_node = xmlutils.get_subnodes(dom2, ["metalink"])
     try:
-        metalink_type = xmlutils.get_attr_from_item(metalink_node, "type")
+        metalink_type = xmlutils.get_attr_from_item(metalink_node[0], "type")
     except AttributeError:
         metalink_type = None
+
     if metalink_type == "dynamic":
-        origin = xmlutils.get_attr_from_item(metalink_node, "origin")
-        if origin != src:
+        origin = xmlutils.get_attr_from_item(metalink_node[0], "origin")
+        if origin != src and origin != "":
             print _("Downloading update from"), origin
             return download_metalink(origin, path, force, handler)
     
@@ -304,7 +317,10 @@ def download_metalink(src, path, force = False, handler = None):
                 result = download_file_node(filenode, path, force, handler)
                 if result:
                     results.append(result)
-
+                    
+    if len(results) == 0:
+        return False
+    
     return results
 
 def download_file_node(item, path, force = False, handler = None):
@@ -317,8 +333,8 @@ def download_file_node(item, path, force = False, handler = None):
     Returns list of file paths if download(s) is successful
     Returns False otherwise (checksum fails)
     '''
-
-    urllist = xmlutils.get_xml_tag_strings(item, ["resources", "url"])
+    
+    #urllist = xmlutils.get_xml_tag_strings(item, ["resources", "url"])
     urllist = {}
     for node in xmlutils.get_subnodes(item, ["resources", "url"]):
         url = xmlutils.get_xml_item_strings([node])[0]
@@ -530,8 +546,9 @@ class FileResume:
             self.blocks = blocks.split(",")
             self.size = int(size)
             filehandle.close()
-        except IOError:
-            pass
+        except (IOError, ValueError):
+            self.blocks = []
+            self.size = 0
 
     def complete(self):
         '''
@@ -935,7 +952,7 @@ class Segment_Manager:
                 newurls[item] = self.urls[item]
         self.urls = newurls
         return newurls
-            
+
     def run(self):
         if self.size == "" or self.size == 0:
             self.size = self.get_size()
