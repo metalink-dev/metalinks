@@ -85,6 +85,7 @@ def run():
     parser.add_option("--file", "-f", dest="filevar", metavar="FILE", help=_("Metalink file to check"))
     parser.add_option("--timeout", "-t", dest="timeout", metavar="TIMEOUT", help=_("Set timeout in seconds to wait for response (default=10)"))
     parser.add_option("--os", "-o", dest="os", metavar="OS", help=_("Operating System preference"))
+    parser.add_option("--no-segmented", "-s", action="store_true", dest="nosegmented", help=_("Do not use the segmented download method"))
     parser.add_option("--lang", "-l", dest="language", metavar="LANG", help=_("Language preference (ISO-639/3166)"))
     parser.add_option("--country", "-c", dest="country", metavar="LOC", help=_("Two letter country preference (ISO 3166-1 alpha-2)"))
     parser.add_option("--pgp-keys", "-k", dest="pgpdir", metavar="DIR", help=_("Directory with the PGP keys that you trust (default: working directory)"))
@@ -116,8 +117,13 @@ def run():
         return
     
     if options.download:
+        download.SEGMENTED = True
+        if options.nosegmented:
+            download.SEGMENTED = False
+
         progress = ProgressBar(55)
-        result = download.download_metalink(options.filevar, os.getcwd(), handler=progress.download_update)
+        result = download.get(options.filevar, os.getcwd(), handler=progress.download_update)
+        #result = download.download_metalink(options.filevar, os.getcwd(), handler=progress.download_update)
         progress.download_end()
         if not result:
             sys.exit(-1)
