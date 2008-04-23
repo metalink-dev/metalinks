@@ -45,6 +45,7 @@ import sys
 import optparse
 import time
 import subprocess
+import shutil
 
 # Metalink Checker
 CMD = "\"" + sys.executable + "\" ../console.py -d -f %s"
@@ -53,6 +54,7 @@ CMD = "\"" + sys.executable + "\" ../console.py -d -f %s"
 
 OUTDIR = os.getcwd()
 TIMEOUT = 600
+SUBDIR = "subdir"
 
 IGNORE_TESTS = [] #["3_metalink-bad-piece1and2-without-torrent.metalink",
                 #"3_metalink-bad-piece2-without-torrent.metalink"]
@@ -82,10 +84,11 @@ def run_tests(level=3):
     for filename in filenames:
         if filename.endswith(".metalink") and filename not in IGNORE_TESTS:
             mysplit = filename.split("_")
-            if IsInt(mysplit[0]):
-                if int(mysplit[0]) <= level:
-                    summary[filename] = run_test(filename)
-                    print "-" * 79
+            myint = IsInt(mysplit[0])
+            if not myint or int(mysplit[0]) <= level:
+                summary[filename] = run_test(filename)
+                print "-" * 79
+         
 
     clean()
 
@@ -120,50 +123,52 @@ def run_tests(level=3):
         print "Level %s: %s (%s/%s)" % (i, result, levels[i], totallevels[i])
 
 def run_test(filename):
-        clean()
-        subdir = "."
-        if filename.find("subdir") != -1:
-            subdir = "curl"
-            
-        print "Running:", filename
+    clean()
+    subdir = "."
+    if filename.find("subdir") != -1:
+        subdir = SUBDIR
+        
+    print "Running:", filename
 
-        #print CMD % filename
-        try:
-            retcode = system(CMD % filename, TIMEOUT)
-        except AssertionError:
-            print "FAIL: Test timed out"
+    try:
+        retcode = system(CMD % filename, TIMEOUT)
+    except AssertionError:
+        print "FAIL: Test timed out"
+        return False
+    
+    if retcode != 0:
+        print "Program exited with error code: %s" % retcode
+        if filename.find("fail") != -1:
+            print "PASS"
+            return True
+        else:
+            print "FAIL: Error code returned"
+            return False
+    elif filename.find("fail") != -1:
+        print "FAIL: Error code expected but not returned"
+        return False
+
+    checklist = [0]
+    if filename.find("three") != -1:
+        checklist = [0,1,2]
+    elif filename.startswith("4"):
+        checklist = [3]
+        
+    for checkindex in checklist:
+        temp = FILELIST[checkindex]
+        tempname = os.path.join(OUTDIR, subdir, temp["filename"])
+        if not os.access(tempname, os.F_OK):
+            print "FAIL: File does not exist", tempname
+            return False
+        elif os.stat(tempname).st_size != temp["size"]:
+            print "FAIL: Wrong file size", tempname
+            return False
+        elif filehash(tempname, hashlib.sha1()) != temp["checksums"]["sha1"]:
+            print "FAIL: Bad file checksum", tempname
             return False
         
-        if retcode != 0:
-            print "Program exited with error code: %s" % retcode
-            if filename.find("fail") != -1:
-                print "PASS"
-                return True
-            else:
-                print "FAIL: Error code returned"
-                return False
-
-        checklist = [0]
-        if filename.find("three") != -1:
-            checklist = [0,1,2]
-        elif filename.startswith("4"):
-            checklist = [3]
-            
-        for checkindex in checklist:
-            temp = FILELIST[checkindex]
-            tempname = os.path.join(OUTDIR, subdir, temp["filename"])
-            if not os.access(tempname, os.F_OK):
-                print "FAIL: File does not exist", tempname
-                return False
-            elif os.stat(tempname).st_size != temp["size"]:
-                print "FAIL: Wrong file size", tempname
-                return False
-            elif filehash(tempname, hashlib.sha1()) != temp["checksums"]["sha1"]:
-                print "FAIL: Bad file checksum", tempname
-                return False
-            
-        print "PASS"
-        return True
+    print "PASS"
+    return True
 
 def clean():
     print "Running cleanup..."
@@ -172,9 +177,9 @@ def clean():
             os.remove(os.path.join(OUTDIR, fileitem["filename"]))
         except: pass
         try:
-            os.remove(os.path.join(OUTDIR, "curl", fileitem["filename"]))
+            os.remove(os.path.join(OUTDIR, SUBDIR, fileitem["filename"]))
         except: pass
-
+        shutil.rmtree(os.path.join(OUTDIR, SUBDIR), True)
 
 def filehash(thisfile, filesha):
     '''
@@ -244,6 +249,8 @@ def run():
     parser.add_option("--outdir", "-o", dest="outdir", help="Directory where the metalink client will output the downloaded files")
     parser.add_option("--timeout", "-t", dest="timeout", help="Sets the amount of time a test can run until it times out (default: 600 s)")
     parser.add_option("--testcase", "-f", dest="testcase", help="Run a single test case")
+    parser.add_option("--clean", dest="clean", action="store_true", help="Clear out any temporary files from testing")
+
     (options, args) = parser.parse_args()
 
     if options.outdir != None:
@@ -255,6 +262,10 @@ def run():
 
     if options.testcase != None:
         run_test(options.testcase)
+        return
+
+    if options.clean != None:
+        clean()
         return
 
     if options.level != None:

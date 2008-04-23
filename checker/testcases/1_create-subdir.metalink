@@ -6,7 +6,7 @@ type="dynamic" refreshdate="Wed, 23 Apr 2008 03:25:45 GMT">
 <url>http://curl.haxx.se/</url>
 </publisher>
 <description>curl Generic source tar, bzip2</description>
-<files><file name="curl/curl-7.18.1.tar.bz2">
+<files><file name="subdir/curl-7.18.1.tar.bz2">
 <version>7.18.1</version>
 <size>1700966</size>
 <verification>
