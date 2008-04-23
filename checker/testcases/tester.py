@@ -35,6 +35,7 @@
 # Instructions:
 #   1. You need to have Python installed.
 #   2. Run on the command line using: python tester.py
+#   3. The program you are testing needs to return failure codes on exit.
 #
 ########################################################################
 
@@ -42,12 +43,19 @@ import os
 import hashlib
 import sys
 import optparse
+import time
+import subprocess
 
+# Metalink Checker
 CMD = "\"" + sys.executable + "\" ../console.py -d -f %s"
-OUTDIR = os.getcwd()
+# Aria2
+# CMD = "\"c:\\program files\\aria2\\aria2c.exe\" -M %s"
 
-IGNORE_TESTS = ["3_metalink-bad-piece1and2-without-torrent.metalink",
-                "3_metalink-bad-piece2-without-torrent.metalink"]
+OUTDIR = os.getcwd()
+TIMEOUT = 600
+
+IGNORE_TESTS = [] #["3_metalink-bad-piece1and2-without-torrent.metalink",
+                #"3_metalink-bad-piece2-without-torrent.metalink"]
 
 FILELIST = [
     {"filename": "curl-7.18.1.tar.bz2",
@@ -58,7 +66,10 @@ FILELIST = [
     "checksums": {"sha1": "5d72f9fbf3eab6474a8dc22192056119030087f6"}},
     {"filename": "curl-7.18.1.zip",
     "size": 2787188,
-    "checksums": {"sha1": "87de05976acb909c7edbed8ba0935f0a51332195"}}
+    "checksums": {"sha1": "87de05976acb909c7edbed8ba0935f0a51332195"}},
+    {"filename": "OOo_2.3.1_Win32Intel_install_en-US.exe",
+    "size": 112341981,
+    "checksums": {"sha1": "2c2849d173b1a5e6f8a3dc986383ee897bf4364d"}}
 ]
 
 def run_tests(level=3):
@@ -116,8 +127,13 @@ def run_test(filename):
             
         print "Running:", filename
 
-        print CMD % filename
-        retcode = os.system(CMD % filename)
+        #print CMD % filename
+        try:
+            retcode = system(CMD % filename, TIMEOUT)
+        except AssertionError:
+            print "FAIL: Test timed out"
+            return False
+        
         if retcode != 0:
             print "Program exited with error code: %s" % retcode
             if filename.find("fail") != -1:
@@ -130,6 +146,8 @@ def run_test(filename):
         checklist = [0]
         if filename.find("three") != -1:
             checklist = [0,1,2]
+        elif filename.startswith("4"):
+            checklist = [3]
             
         for checkindex in checklist:
             temp = FILELIST[checkindex]
@@ -185,22 +203,59 @@ def IsInt(str):
 		ok = False
 	return ok
 
+def system(command, timeout=600, cwd=None):
+    '''
+    Alternative to os.system(), adds optional parameter to kill process
+    after a given amount of time.
+    First parameter, command to run on the local system
+    Second parameter, optional, timeout command after this many seconds
+    cwd string working directory or None
+    Returns command exit code
+    '''
+    endtime = time.time() + timeout
+
+    print command
+    process = subprocess.Popen(command, shell=True, env=os.environ, cwd=cwd)
+    while(True):
+        time.sleep(1)
+        #print "check:", process.poll()
+        if process.poll() != None:
+            return process.poll()
+        if endtime <= time.time():
+            # kill process here
+            if os.name == 'nt':
+                command = "taskkill /F /PID %s /T" % process.pid
+            else:
+                command = "kill -9 %s" % process.pid
+            os.system(command)
+            #print "Test timed out.  Process killed."
+            raise AssertionError
+            #return process.poll()
+
 def run():
     '''
     Start a console version of this application.
     '''
-    global OUTDIR, CMD
+    global OUTDIR, CMD, TIMEOUT
     # Command line parser options.
     parser = optparse.OptionParser()
     parser.add_option("--level", "-l", dest="level", help="Set the level to test up to (default: 3)")
     parser.add_option("--command", "-c", dest="command", help="Command to run (use quotes as needed), %%s=metalink file")
     parser.add_option("--outdir", "-o", dest="outdir", help="Directory where the metalink client will output the downloaded files")
+    parser.add_option("--timeout", "-t", dest="timeout", help="Sets the amount of time a test can run until it times out (default: 600 s)")
+    parser.add_option("--testcase", "-f", dest="testcase", help="Run a single test case")
     (options, args) = parser.parse_args()
 
     if options.outdir != None:
         OUTDIR = options.outdir
     if options.command != None:
         CMD = options.command
+    if options.timeout != None:
+        TIMEOUT = int(options.timeout)
+
+    if options.testcase != None:
+        run_test(options.testcase)
+        return
 
     if options.level != None:
         run_tests(options.level)
