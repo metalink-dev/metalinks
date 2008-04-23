@@ -43,7 +43,7 @@ import hashlib
 import sys
 import optparse
 
-CMD = sys.executable + " ../console.py -d -f %s"
+CMD = "\"" + sys.executable + "\" ../console.py -d -f %s"
 OUTDIR = os.getcwd()
 
 IGNORE_TESTS = ["3_metalink-bad-piece1and2-without-torrent.metalink",
