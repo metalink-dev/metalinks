@@ -10,13 +10,14 @@ type="dynamic" refreshdate="Wed, 23 Apr 2008 03:25:45 GMT">
 <version>7.18.1</version>
 <size>1700966</size>
 <verification>
-<hash type="md5">885834fc1136ff7600d2179bc0386c5a</hash>
-<hash type="sha1">665b9388ee9e646158a83cd435f7be664816ad78</hash>
+<hash type="sha256">aaf0ecc8be56b30eebcc39e4787dc86f8f0b1d95313f6d85118f36bd48beae6c</hash>
+<hash type="sha384">aa90ddc31cdf3565303a56331ae745130e2ddf34b99b9eed94b70cad3e637006782aeac34d37412870feb02c22804a4a</hash>
+<hash type="sha512">aaf7594da9e8ccdd360436062429ed015f46e9cef8610da713db93b2a2f35b7c2b8572ecd5089727ae22d6112a3c1caa849d0bbe43ea6a82eddf693055bdf11b</hash>
 <signature type="pgp" file="curl-7.18.1.tar.bz2.asc">
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v1.4.6 (GNU/Linux)
 
-iD8DBQBH71kEeOEcayedXJERAqpKAJ9ZryJkF2uSC8fpdiMaU4q5rsSi9wCfVYHs
+DD8DBQBH71kEeOEcayedXJERAqpKAJ9ZryJkF2uSC8fpdiMaU4q5rsSi9wCfVYHs
 fcdDe3KH9+pgasNhji64pj0=
 =+Aqk
 -----END PGP SIGNATURE-----

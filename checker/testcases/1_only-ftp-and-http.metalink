@@ -12,15 +12,6 @@ type="dynamic" refreshdate="Wed, 23 Apr 2008 03:25:45 GMT">
 <verification>
 <hash type="md5">805834fc1136ff7600d2179bc0386c5a</hash>
 <hash type="sha1">685b9388ee9e646158a83cd435f7be664816ad78</hash>
-<signature type="pgp" file="curl-7.18.1.tar.bz2.asc">
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.4.6 (GNU/Linux)
-
-iD8DBQBH71kEeOEcayedXJERAqpKAJ9ZryJkF2uSC8fpdiMaU4q5rsSi9wCfVYHs
-fcdDe3KH9+pgasNhji64pj0=
-=+Aqk
------END PGP SIGNATURE-----
-</signature>
 </verification>
 <!-- resource preferences are for use in an unknown location -->
 <resources>
