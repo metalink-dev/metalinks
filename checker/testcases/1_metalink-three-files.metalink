@@ -6,21 +6,71 @@ type="dynamic" refreshdate="Wed, 23 Apr 2008 03:25:45 GMT">
 <url>http://curl.haxx.se/</url>
 </publisher>
 <description>curl Generic source tar, bzip2</description>
-<files><file name="curl-7.18.1.tar.bz2">
+<files>
+
+<file name="curl-7.18.1.tar.gz">
+<version>7.18.1</version>
+<size>2225578</size>
+<verification>
+<hash type="md5">6315db7c4373b586bac5f528322ba10e</hash>
+<hash type="sha1">5d72f9fbf3eab6474a8dc22192056119030087f6</hash>
+</verification>
+<!-- resource preferences are for use in an unknown location -->
+<resources>
+<url type="ftp" location="au" preference="30">ftp://ftp.planetmirror.com/pub/curl/curl-7.18.1.tar.gz</url>
+<url type="http" location="at" preference="30">http://gd.tuwien.ac.at/utils/archivers/curl/curl-7.18.1.tar.gz</url>
+<url type="ftp" location="at" preference="30">ftp://gd.tuwien.ac.at/utils/archivers/curl/curl-7.18.1.tar.gz</url>
+<url type="http" location="be" preference="30">http://curl.spegulo.be/download/curl-7.18.1.tar.gz</url>
+<url type="ftp" location="be" preference="30">ftp://ftp.spegulo.be/pub/curl/curl-7.18.1.tar.gz</url>
+<url type="http" location="cl" preference="30">http://curl.freeby.pctools.cl/download/curl-7.18.1.tar.gz</url>
+<url type="http" location="dk" preference="30">http://curl.cofman.dk/download/curl-7.18.1.tar.gz</url>
+<url type="ftp" location="fr" preference="30">ftp://miroir-francais.fr/pub/curl/download/curl-7.18.1.tar.gz</url>
+<url type="http" location="fr" preference="30">http://curl.miroir-francais.fr/download/curl-7.18.1.tar.gz</url>
+<url type="http" location="de" preference="30">http://curl.de-mirror.de/download/curl-7.18.1.tar.gz</url>
+<url type="http" location="de" preference="30">http://curl.mirroarrr.de/download/curl-7.18.1.tar.gz</url>
+<url type="http" location="de" preference="30">http://curl.online-mirror.de/download/curl-7.18.1.tar.gz</url>
+<url type="http" location="de" preference="30">http://curl.linux-mirror.org/download/curl-7.18.1.tar.gz</url>
+<url type="http" location="de" preference="30">http://curl.freemirror.de/download/curl-7.18.1.tar.gz</url>
+<url type="http" location="de" preference="30">http://dl.ambiweb.de/mirrors/curl.haxx.se/curl-7.18.1.tar.gz</url>
+<url type="http" location="de" preference="30">http://curl.oslevel.de/download/curl-7.18.1.tar.gz</url>
+<url type="http" location="de" preference="30">http://curl.mirror.at.stealer.net/download/curl-7.18.1.tar.gz</url>
+<url type="http" location="de" preference="30">http://curl.wetzlmayr.at/download/curl-7.18.1.tar.gz</url>
+<url type="http" location="de" preference="30">http://curl.very-clever.com/download/curl-7.18.1.tar.gz</url>
+<url type="http" location="de" preference="30">http://curl.mirror-server.net/download/curl-7.18.1.tar.gz</url>
+<url type="http" location="hk" preference="30">http://www.execve.net/curl/curl-7.18.1.tar.gz</url>
+<url type="http" location="hk" preference="30">http://curl.hkmirror.org/download/curl-7.18.1.tar.gz</url>
+<url type="ftp" location="hk" preference="30">ftp://ftp.hkmirror.org/pub/curl/download/curl-7.18.1.tar.gz</url>
+<url type="http" location="il" preference="30">http://curl.cheap.co.il/download/curl-7.18.1.tar.gz</url>
+<url type="http" location="jp" preference="30">http://curl.s-lines.net/download/curl-7.18.1.tar.gz</url>
+<url type="http" location="nl" preference="30">http://curl.dsmirror.nl/download/curl-7.18.1.tar.gz</url>
+<url type="http" location="nl" preference="30">http://curl.digimirror.nl/download/curl-7.18.1.tar.gz</url>
+<url type="http" location="nl" preference="30">http://curl.nedmirror.nl/download/curl-7.18.1.tar.gz</url>
+<url type="http" location="nl" preference="30">http://curl.osmirror.nl/download/curl-7.18.1.tar.gz</url>
+<url type="http" location="nl" preference="30">http://curl.xxtracker.org/download/curl-7.18.1.tar.gz</url>
+<url type="http" location="pl" preference="30">http://curl.piotrkosoft.net/download/curl-7.18.1.tar.gz</url>
+<url type="http" location="pt" preference="30">http://curl.gominet.net/download/curl-7.18.1.tar.gz</url>
+<url type="http" location="se" preference="30">http://curl.haxx.se/download/curl-7.18.1.tar.gz</url>
+<url type="http" location="se" preference="30">http://cool.haxx.se/curl/curl-7.18.1.tar.gz</url>
+<url type="http" location="se" preference="30">http://curl2.haxx.se/download/curl-7.18.1.tar.gz</url>
+<url type="ftp" location="se" preference="30">ftp://ftp.sunet.se/pub/www/utilities/curl/curl-7.18.1.tar.gz</url>
+<url type="http" location="tw" preference="30">http://curl.cs.pu.edu.tw/download/curl-7.18.1.tar.gz</url>
+<url type="http" location="us" preference="30">http://curl.download.nextag.com/download/curl-7.18.1.tar.gz</url>
+<url type="http" location="us" preference="30">http://curl.tolix.org/download/curl-7.18.1.tar.gz</url>
+<url type="http" location="us" preference="30">http://curl.signal42.com/download/curl-7.18.1.tar.gz</url>
+<url type="http" location="us" preference="30">http://curl.mirrors.redwire.net/download/curl-7.18.1.tar.gz</url>
+<url type="http" location="us" preference="30">http://curl.hoxt.com/download/curl-7.18.1.tar.gz</url>
+<url type="http" location="us" preference="30">http://curl.askapache.com/download/curl-7.18.1.tar.gz</url>
+<url type="http" location="gb" preference="30">http://curl.internet.bs/download/curl-7.18.1.tar.gz</url>
+<url type="http" location="gb" preference="30">http://curl.smudge-it.co.uk/download/curl-7.18.1.tar.gz</url>
+</resources>
+</file>
+
+<file name="curl-7.18.1.tar.bz2">
 <version>7.18.1</version>
 <size>1700966</size>
 <verification>
 <hash type="md5">805834fc1136ff7600d2179bc0386c5a</hash>
 <hash type="sha1">685b9388ee9e646158a83cd435f7be664816ad78</hash>
-<signature type="pgp" file="curl-7.18.1.tar.bz2.asc">
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.4.6 (GNU/Linux)
-
-iD8DBQBH71kEeOEcayedXJERAqpKAJ9ZryJkF2uSC8fpdiMaU4q5rsSi9wCfVYHs
-fcdDe3KH9+pgasNhji64pj0=
-=+Aqk
------END PGP SIGNATURE-----
-</signature>
 </verification>
 <!-- resource preferences are for use in an unknown location -->
 <resources>
@@ -78,15 +128,6 @@ fcdDe3KH9+pgasNhji64pj0=
 <verification>
 <hash type="md5">cb68f6b3735f3fb91b11e6e774d396c0</hash>
 <hash type="sha1">87de05976acb909c7edbed8ba0935f0a51332195</hash>
-<signature type="pgp" file="curl-7.18.1.zip.asc">
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.4.6 (GNU/Linux)
-
-iD8DBQBH71kFeOEcayedXJERAmS1AJwO4xlCkbSKt29JegDiVn68oK+n7gCfacYn
-5jv7TQKHYeVluOdr7TrHfP8=
-=UxZX
------END PGP SIGNATURE-----
-</signature>
 </verification>
 <!-- resource preferences are for use in an unknown location -->
 <resources>
@@ -135,72 +176,6 @@ iD8DBQBH71kFeOEcayedXJERAmS1AJwO4xlCkbSKt29JegDiVn68oK+n7gCfacYn
 <url type="http" location="us" preference="30">http://curl.askapache.com/download/curl-7.18.1.zip</url>
 <url type="http" location="gb" preference="30">http://curl.internet.bs/download/curl-7.18.1.zip</url>
 <url type="http" location="gb" preference="30">http://curl.smudge-it.co.uk/download/curl-7.18.1.zip</url>
-</resources>
-</file>
-
-<file name="curl-7.18.1.tar.gz">
-<version>7.18.1</version>
-<size>2225578</size>
-<verification>
-<hash type="md5">6315db7c4373b586bac5f528322ba10e</hash>
-<hash type="sha1">5d72f9fbf3eab6474a8dc22192056119030087f6</hash>
-<signature type="pgp" file="curl-7.18.1.tar.gz.asc">
------BEGIN PGP SIGNATURE-----
-Version: GnuPG v1.4.6 (GNU/Linux)
-
-iD8DBQBH71kDeOEcayedXJERAmfWAJ0bsBFUJ6ooykT2qPeegvIH4KIVqACfRtt5
-Rv6MJSuz/b6NItnG7zoYGFw=
-=GKuk
------END PGP SIGNATURE-----
-</signature>
-</verification>
-<!-- resource preferences are for use in an unknown location -->
-<resources>
-<url type="ftp" location="au" preference="30">ftp://ftp.planetmirror.com/pub/curl/curl-7.18.1.tar.gz</url>
-<url type="http" location="at" preference="30">http://gd.tuwien.ac.at/utils/archivers/curl/curl-7.18.1.tar.gz</url>
-<url type="ftp" location="at" preference="30">ftp://gd.tuwien.ac.at/utils/archivers/curl/curl-7.18.1.tar.gz</url>
-<url type="http" location="be" preference="30">http://curl.spegulo.be/download/curl-7.18.1.tar.gz</url>
-<url type="ftp" location="be" preference="30">ftp://ftp.spegulo.be/pub/curl/curl-7.18.1.tar.gz</url>
-<url type="http" location="cl" preference="30">http://curl.freeby.pctools.cl/download/curl-7.18.1.tar.gz</url>
-<url type="http" location="dk" preference="30">http://curl.cofman.dk/download/curl-7.18.1.tar.gz</url>
-<url type="ftp" location="fr" preference="30">ftp://miroir-francais.fr/pub/curl/download/curl-7.18.1.tar.gz</url>
-<url type="http" location="fr" preference="30">http://curl.miroir-francais.fr/download/curl-7.18.1.tar.gz</url>
-<url type="http" location="de" preference="30">http://curl.de-mirror.de/download/curl-7.18.1.tar.gz</url>
-<url type="http" location="de" preference="30">http://curl.mirroarrr.de/download/curl-7.18.1.tar.gz</url>
-<url type="http" location="de" preference="30">http://curl.online-mirror.de/download/curl-7.18.1.tar.gz</url>
-<url type="http" location="de" preference="30">http://curl.linux-mirror.org/download/curl-7.18.1.tar.gz</url>
-<url type="http" location="de" preference="30">http://curl.freemirror.de/download/curl-7.18.1.tar.gz</url>
-<url type="http" location="de" preference="30">http://dl.ambiweb.de/mirrors/curl.haxx.se/curl-7.18.1.tar.gz</url>
-<url type="http" location="de" preference="30">http://curl.oslevel.de/download/curl-7.18.1.tar.gz</url>
-<url type="http" location="de" preference="30">http://curl.mirror.at.stealer.net/download/curl-7.18.1.tar.gz</url>
-<url type="http" location="de" preference="30">http://curl.wetzlmayr.at/download/curl-7.18.1.tar.gz</url>
-<url type="http" location="de" preference="30">http://curl.very-clever.com/download/curl-7.18.1.tar.gz</url>
-<url type="http" location="de" preference="30">http://curl.mirror-server.net/download/curl-7.18.1.tar.gz</url>
-<url type="http" location="hk" preference="30">http://www.execve.net/curl/curl-7.18.1.tar.gz</url>
-<url type="http" location="hk" preference="30">http://curl.hkmirror.org/download/curl-7.18.1.tar.gz</url>
-<url type="ftp" location="hk" preference="30">ftp://ftp.hkmirror.org/pub/curl/download/curl-7.18.1.tar.gz</url>
-<url type="http" location="il" preference="30">http://curl.cheap.co.il/download/curl-7.18.1.tar.gz</url>
-<url type="http" location="jp" preference="30">http://curl.s-lines.net/download/curl-7.18.1.tar.gz</url>
-<url type="http" location="nl" preference="30">http://curl.dsmirror.nl/download/curl-7.18.1.tar.gz</url>
-<url type="http" location="nl" preference="30">http://curl.digimirror.nl/download/curl-7.18.1.tar.gz</url>
-<url type="http" location="nl" preference="30">http://curl.nedmirror.nl/download/curl-7.18.1.tar.gz</url>
-<url type="http" location="nl" preference="30">http://curl.osmirror.nl/download/curl-7.18.1.tar.gz</url>
-<url type="http" location="nl" preference="30">http://curl.xxtracker.org/download/curl-7.18.1.tar.gz</url>
-<url type="http" location="pl" preference="30">http://curl.piotrkosoft.net/download/curl-7.18.1.tar.gz</url>
-<url type="http" location="pt" preference="30">http://curl.gominet.net/download/curl-7.18.1.tar.gz</url>
-<url type="http" location="se" preference="30">http://curl.haxx.se/download/curl-7.18.1.tar.gz</url>
-<url type="http" location="se" preference="30">http://cool.haxx.se/curl/curl-7.18.1.tar.gz</url>
-<url type="http" location="se" preference="30">http://curl2.haxx.se/download/curl-7.18.1.tar.gz</url>
-<url type="ftp" location="se" preference="30">ftp://ftp.sunet.se/pub/www/utilities/curl/curl-7.18.1.tar.gz</url>
-<url type="http" location="tw" preference="30">http://curl.cs.pu.edu.tw/download/curl-7.18.1.tar.gz</url>
-<url type="http" location="us" preference="30">http://curl.download.nextag.com/download/curl-7.18.1.tar.gz</url>
-<url type="http" location="us" preference="30">http://curl.tolix.org/download/curl-7.18.1.tar.gz</url>
-<url type="http" location="us" preference="30">http://curl.signal42.com/download/curl-7.18.1.tar.gz</url>
-<url type="http" location="us" preference="30">http://curl.mirrors.redwire.net/download/curl-7.18.1.tar.gz</url>
-<url type="http" location="us" preference="30">http://curl.hoxt.com/download/curl-7.18.1.tar.gz</url>
-<url type="http" location="us" preference="30">http://curl.askapache.com/download/curl-7.18.1.tar.gz</url>
-<url type="http" location="gb" preference="30">http://curl.internet.bs/download/curl-7.18.1.tar.gz</url>
-<url type="http" location="gb" preference="30">http://curl.smudge-it.co.uk/download/curl-7.18.1.tar.gz</url>
 </resources>
 </file>
 

@@ -117,8 +117,10 @@ def run():
     
     if options.download:
         progress = ProgressBar(55)
-        download.download_metalink(options.filevar, os.getcwd(), handler=progress.download_update)
+        result = download.download_metalink(options.filevar, os.getcwd(), handler=progress.download_update)
         progress.download_end()
+        if not result:
+            sys.exit(-1)
     else:
         results = checker.check_metalink(options.filevar)
         print_totals(results)
