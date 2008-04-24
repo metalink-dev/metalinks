@@ -118,8 +118,11 @@ def run_tests(level=3):
     templist.sort()
     for i in templist:
         result = "FAIL"
-        if levels[i] == totallevels[i]:
-            result = "PASS"
+        try:
+            if levels[i] == totallevels[i]:
+                result = "PASS"
+        except KeyError:
+            levels[i] = 0
         print "Level %s: %s (%s/%s)" % (i, result, levels[i], totallevels[i])
 
 def run_test(filename):
