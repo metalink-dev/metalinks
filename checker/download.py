@@ -208,7 +208,7 @@ def download_file_urls(urllist, local_file, size=0, checksums={}, force = False,
     assert isinstance(urllist, dict)
     
     print ""
-    print _("Downloading to"), local_file
+    print _("Downloading to %s.") % local_file
         
     if os.path.exists(local_file) and (not force) and len(checksums) > 0:
         checksum = verify_checksum(local_file, checksums)
@@ -221,7 +221,7 @@ def download_file_urls(urllist, local_file, size=0, checksums={}, force = False,
                     handler(1, actsize, actsize)
                 return local_file
         else:
-            print _("Checksum failed, retrying download of") + " %s." % os.path.basename(local_file)
+            print _("Checksum failed, retrying download of %s.") % os.path.basename(local_file)
 
     directory = os.path.dirname(local_file)
     if not os.path.isdir(directory):
@@ -278,7 +278,7 @@ def download_file_urls(urllist, local_file, size=0, checksums={}, force = False,
 ##                if (int(actsize) == int(size) or size == 0) and not error:
 ##                    return local_file
 ##            else:
-##                print "\n" + _("Checksum failed for") + " %s." % os.path.basename(local_file)
+##                print "\n" + _("Checksum failed for %s.") % os.path.basename(local_file)
 
     if filecheck(local_file, checksums, size, handler):
         return local_file
@@ -300,7 +300,7 @@ def filecheck(local_file, checksums, size, handler = None):
         if (int(actsize) == int(size) or size == 0):
             return True
     
-    print "\n" + _("Checksum failed for") + " %s." % os.path.basename(local_file)
+    print "\n" + _("Checksum failed for %s.") % os.path.basename(local_file)
     return False
 
 def download_metalink(src, path, force = False, handler = None):
@@ -330,7 +330,7 @@ def download_metalink(src, path, force = False, handler = None):
     if metalink_type == "dynamic":
         origin = xmlutils.get_attr_from_item(metalink_node[0], "origin")
         if origin != src and origin != "":
-            print _("Downloading update from"), origin
+            print _("Downloading update from %s") % origin
             return download_metalink(origin, path, force, handler)
     
     urllist = xmlutils.get_subnodes(dom2, ["metalink", "files", "file"])
@@ -1583,7 +1583,7 @@ class FTP:
                     pass
                 self.conn = httplib.HTTPConnection(host, port)
             else:
-                raise AssertionError, _("Transport not supported for") + " FTP_PROXY, %s" % url.scheme
+                raise AssertionError, _("Transport not supported for FTP_PROXY, %s") % url.scheme
 
         else:
             self.conn = ftplib.FTP()
@@ -1657,7 +1657,7 @@ class HTTPConnection:
                 if url.username != None:
                     self.headers["Proxy-authorization"] = "Basic " + base64.encodestring(url.username+':'+url.password) + "\r\n"
             else:
-                raise AssertionError, _("Transport not supported for") + " HTTP_PROXY, %s" % url.scheme
+                raise AssertionError, _("Transport not supported for HTTP_PROXY, %s") % url.scheme
 
         self.conn = httplib.HTTPConnection(host, port)
 
