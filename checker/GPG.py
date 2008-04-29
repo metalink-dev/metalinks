@@ -19,6 +19,31 @@ import os
 import StringIO
 import os.path
 import subprocess
+import gettext
+import sys
+import locale
+
+def translate():
+    '''
+    Setup translation path
+    '''
+    if __name__=="__main__":
+        try:
+            base = os.path.basename(__file__)[:-3]
+            localedir = os.path.join(os.path.dirname(__file__), "locale")
+        except NameError:
+            base = os.path.basename(sys.executable)[:-4]
+            localedir = os.path.join(os.path.dirname(sys.executable), "locale")
+    else:
+        temp = __name__.split(".")
+        base = temp[-1]
+        localedir = os.path.join("/".join(["%s" % k for k in temp[:-1]]), "locale")
+
+    #print base, localedir
+    t = gettext.translation(base, localedir, [locale.getdefaultlocale()[0]], None, 'en')
+    return t.lgettext
+
+_ = translate()
 
 # Default path used for searching for the GPG binary
 DEFAULT_PATH = ['/bin', '/usr/bin', '/usr/local/bin', \
@@ -47,13 +72,13 @@ class Signature:
     def SIG_ID(self, value):
         self.signature_id, self.creation_date, self.timestamp = value.split(" ", 2)
     def NODATA(self, value):
-        self.error = "File not properly loaded for signature."
+        self.error = _("File not properly loaded for signature.")
     def ERRSIG(self, value):
         #print value
-        self.error = "Signature error."
+        self.error = _("Signature error.")
     def NO_PUBKEY(self, value):
         #print value
-        self.error = "Signature error, missing public key with id 0x%s." % value[-8:]
+        self.error = _("Signature error, missing public key with id 0x%s.") % value[-8:]
     def TRUST_UNDEFINED(self, value):
         pass
         #print value.split()
@@ -195,8 +220,8 @@ class GPGSubprocess:
                     gpg_binary = fullname + ".exe"
                     break
             else:
-                raise ValueError, ("Couldn't find 'gpg' binary on path"
-                                   + repr(path) )
+                raise ValueError, (_("Couldn't find 'gpg' binary on path %s.")
+                                   % repr(path) )
 
         self.gpg_binary = "\"" + gpg_binary + "\""
         self.keyring = keyring
