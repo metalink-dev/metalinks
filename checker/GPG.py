@@ -15,9 +15,15 @@ Dependencies
 
 __rcsid__ = '$Id: GPG.py,v 1.3 2003/11/23 15:03:15 akuchling Exp $'
 
-import os, StringIO #, popen2
+import os
+import StringIO
 import os.path
 import subprocess
+
+# Default path used for searching for the GPG binary
+DEFAULT_PATH = ['/bin', '/usr/bin', '/usr/local/bin', \
+                    '${PROGRAMFILES}\\GNU\\GnuPG', '${PROGRAMFILES(X86)}\\GNU\\GnuPG',\
+                    '${SYSTEMDRIVE}\\cygwin\\bin', '${SYSTEMDRIVE}\\cygwin\\usr\\bin', '${SYSTEMDRIVE}\\cygwin\\usr\\local\\bin']
 
 class Signature:
     "Used to hold information about a signature result"
@@ -158,15 +164,7 @@ class EncryptedMessage:
     def END_ENCRYPTION(self, value):
         pass
 
-class GPGSubprocess:
-
-    # Default path used for searching for the GPG binary, when the
-    # PATH environment variable isn't set.
-    DEFAULT_PATH = ['/bin', '/usr/bin', '/usr/local/bin', \
-                    '${PROGRAMFILES}\\GNU\\GnuPG', '${PROGRAMFILES(X86)}\\GNU\\GnuPG',\
-                    '${SYSTEMDRIVE}\\cygwin\\bin', '${SYSTEMDRIVE}\\cygwin\\usr\\bin', '${SYSTEMDRIVE}\\cygwin\\usr\\local\\bin']
-    #DEFAULT_PATH = []
-    
+class GPGSubprocess:    
     def __init__(self, gpg_binary=None, keyring=None):
         """Initialize an object instance.  Options are:
 
@@ -179,7 +177,7 @@ class GPGSubprocess:
         """
         # If needed, look for the gpg binary along the path
         if gpg_binary is None:
-            path = self.DEFAULT_PATH
+            path = DEFAULT_PATH
             if os.environ.has_key('PATH'):
                 temppath = os.environ['PATH']
                 path.extend(temppath.split(os.pathsep))

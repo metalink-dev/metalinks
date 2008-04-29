@@ -39,12 +39,12 @@
 #
 ########################################################################
 
+#import utils
 import urllib2
 import urlparse
 import hashlib
 import os.path
 import xml.dom.minidom
-import random
 import xmlutils
 import locale
 import threading
@@ -54,6 +54,10 @@ import socket
 import ftplib
 import httplib
 import GPG
+import logging
+import base64
+import sys
+import gettext
 
 USER_AGENT = "Metalink Checker/3.7.4 +http://www.nabber.org/projects/"
 
@@ -87,10 +91,6 @@ HTTPS_PROXY=""
 # Protocols to use for segmented downloads
 PROTOCOLS=("http","https","ftp")
 #PROTOCOLS=("ftp")
-
-import sys
-import locale
-import gettext
 
 def translate():
     '''
@@ -143,7 +143,8 @@ def set_proxies():
         proxies['ftp'] = FTP_PROXY
         
     proxy_handler = urllib2.ProxyHandler(proxies)
-    opener = urllib2.build_opener(proxy_handler, urllib2.HTTPBasicAuthHandler(), urllib2.HTTPHandler, urllib2.HTTPSHandler, urllib2.FTPHandler)
+    opener = urllib2.build_opener(proxy_handler, urllib2.HTTPBasicAuthHandler(), 
+            urllib2.HTTPHandler, urllib2.HTTPSHandler, urllib2.FTPHandler)
     # install this opener
     urllib2.install_opener(opener)
 
@@ -158,42 +159,70 @@ def get(src, path, checksums = {}, force = False, handler = None, segmented = SE
     Sixth parameter, optional, progress handler callback
     Returns list of file paths if download(s) is successful
     Returns False otherwise (checksum fails)
+    raise socket.error e.g. "Operation timed out"
     '''
     if src.endswith(".metalink"):
         return download_metalink(src, path, force, handler)
     else:
         # parse out filename portion here
         filename = os.path.basename(src)
-        result = download_file(src, os.path.join(path, filename), 0, checksums, force, handler, segmented = segmented)
+        result = download_file(src, os.path.join(path, filename), 
+                0, checksums, force, handler, segmented = segmented)
         if result:
             return [result]
         return False
     
-def download_file(url, local_file, size=0, checksums={}, force = False, handler = None, segmented = SEGMENTED, chunksums = {}, chunk_size = None):
+def download_file(url, local_file, size=0, checksums={}, force = False, 
+        handler = None, segmented = SEGMENTED, chunksums = {}, chunk_size = None):
+    '''
+    url {string->URL} locations of the file
+    local_file string local file name to save to
+    checksums ?
+    force ?
+    handler ?
+    segmented ?
+    chunksums ?
+    chunk_size ?
+    returns ? 
+    unicode Returns file path if download is successful.
+        Returns False otherwise (checksum fails).    
+    '''
     # convert string filename into something we can use
     urllist = {}
     urllist[url] = URL(url)
     return download_file_urls(urllist, local_file, size, checksums, force, handler, segmented, chunksums, chunk_size)
     
-def download_file_urls(urllist, local_file, size=0, checksums={}, force = False, handler = None, segmented = SEGMENTED, chunksums = {}, chunk_size = None):
+def download_file_urls(urllist, local_file, size=0, checksums={}, force = False, 
+            handler = None, segmented = SEGMENTED, chunksums = {}, chunk_size = None):
     '''
     Download a file.
-    First parameter, file to download, URL or file path to download from
+    urllist {string->URL} file to download, URL or file path to download from
     Second parameter, file path to save to
     Third parameter, optional, expected file size
     Fourth parameter, optional, expected checksum dictionary
     Fifth parameter, optional, force a new download even if a valid copy already exists
     Sixth parameter, optional, progress handler callback
     Returns file path if download is successful
-    Returns False otherwise (checksum fails)
+    Returns False otherwise (checksum fails)    
     '''
+    assert isinstance(urllist, dict)
+    
     print ""
     print _("Downloading to"), local_file
         
     if os.path.exists(local_file) and (not force) and len(checksums) > 0:
-        if filecheck(local_file, checksums, size, handler):
-            return local_file
-                
+        checksum = verify_checksum(local_file, checksums)
+        if checksum:
+            actsize = size
+            if actsize == 0:
+                actsize = os.stat(local_file).st_size
+            if actsize != 0:
+                if handler != None:
+                    handler(1, actsize, actsize)
+                return local_file
+        else:
+            print _("Checksum failed, retrying download of") + " %s." % os.path.basename(local_file)
+
     directory = os.path.dirname(local_file)
     if not os.path.isdir(directory):
         os.makedirs(directory)
@@ -202,8 +231,10 @@ def download_file_urls(urllist, local_file, size=0, checksums={}, force = False,
     if segmented:
         if chunk_size == None:
             chunk_size = 262144
-        manager = Segment_Manager(urllist, local_file, size, reporthook = handler, chunksums = chunksums, chunk_size = int(chunk_size))
+        manager = Segment_Manager(urllist, local_file, size, reporthook = handler, 
+                chunksums = chunksums, chunk_size = int(chunk_size))
         seg_result = manager.run()
+        
         if not seg_result:
             #seg_result = verify_checksum(local_file, checksums)
             print "\n" + _("Could not download all segments of the file, trying one mirror at a time.")
@@ -332,9 +363,10 @@ def download_file_node(item, path, force = False, handler = None):
     Fouth parameter, optional, progress handler callback
     Returns list of file paths if download(s) is successful
     Returns False otherwise (checksum fails)
+    raise socket.error e.g. "Operation timed out"
     '''
-    
-    #urllist = xmlutils.get_xml_tag_strings(item, ["resources", "url"])
+
+    # unused: urllist = xmlutils.get_xml_tag_strings(item, ["resources", "url"])
     urllist = {}
     for node in xmlutils.get_subnodes(item, ["resources", "url"]):
         url = xmlutils.get_xml_item_strings([node])[0]
@@ -614,8 +646,8 @@ def verify_checksum(local_file, checksums={}):
     Returns True if no checksums are provided
     Returns False otherwise
     '''
+    
     try:
-        checksums["pgp"]
         return pgp_verify_sig(local_file, checksums["pgp"])
     except (KeyError, AttributeError, ValueError, AssertionError): pass
     try:
@@ -693,89 +725,16 @@ def pgp_verify_sig(filename, sig):
         return True
     
     return False
-
-def old_pgp_verify_sig(filename, sig):
-    c = pyme.core.Context()
-
-    for root, dirs, files in os.walk(PGP_KEY_DIR):
-        for thisfile in files:
-            if thisfile[-4:] in PGP_KEY_EXTS:
-                fullpath = os.path.join(root, thisfile)
-                newkey = pyme.core.Data(file=str(fullpath))
-                c.op_import(newkey)
-                result = c.op_import_result()
-
-    # show the import result
-##    if result:
-##        print " - Result of the import - "
-##        for k in dir(result):
-##            if not k in result.__dict__ and not k.startswith("_"):
-##                if k == "imports":
-##                    print k, ":"
-##                    for impkey in result.__getattr__(k):
-##                        print "    fpr=%s result=%d status=%x" % \
-##                              (impkey.fpr, impkey.result, impkey.status)
-##                else:
-##                    print k, ":", result.__getattr__(k)
-    #else:
-    #    print " - No import result - "
-
-    # Create Data with signed text.
-    sig2 = pyme.core.Data(str(sig))
-    bin2 = pyme.core.Data(file=str(filename))
-    
-    # Verify.
-    error = c.op_verify(sig2, bin2, None)
-    result = c.op_verify_result()
-
-    # List results for all signatures. Status equal 0 means "Ok".
-    index = 0
-    print "\n-----" + _("BEGIN PGP SIGNATURE INFORMATION") + "-----"
-    #print dir(result.signatures)
-    retval = True
-    for sign in result.signatures:
-        index += 1
-        if index > 1:
-            print "-----------------------------------------"
-        #print _("Signature"), str(index) + ""
-        #print "  summary:    ", sign.summary
-        
-        for name in dir(pyme.constants):
-            if name.startswith("SIGSUM_"):
-                value = getattr(pyme.constants, name)
-                if value & sign.summary:
-                    print name
-                
-        #print "  status:     ", sign.status
-        for name in dir(pyme.constants):
-            if name.startswith("SIG_STAT_"):
-                value = getattr(pyme.constants, name)
-                if value & sign.status:
-                    print name
-
-        print "" + _("timestamp") + ":", time.strftime("%a, %d %b %Y %H:%M:%S (%Z)",time.localtime(sign.timestamp))
-        print "" + _("fingerprint") + ":", sign.fpr
-        #print "  hash:", pyme.core.hash_algo_name(sign.hash_algo)
-        #print "  sig algo:", pyme.core.pubkey_algo_name(sign.pubkey_algo)
-        try:
-            print "" + _("uid") + ":", c.get_key(sign.fpr, 0).uids[0].uid
-        except:
-            print _("ERROR") + ": " + _("Could not find signing key.")
-        
-        if sign.summary != 0 or sign.status != 0:
-            retval = False
-    print "-----" + _("END PGP SIGNATURE INFORMATION") + "-----\n"
-
-    return retval
-
 def is_remote(name):
-    transport = get_transport(name)   
+    transport = get_transport(name)
+        
     if transport != "":
         return True
     return False
 
 def is_local(name):
-    transport = get_transport(name) 
+    transport = get_transport(name)
+        
     if transport == "":
         return True
     return False
@@ -863,7 +822,9 @@ def sort_prefs(mydict):
 ############# segmented download functions #############
 
 class Segment_Manager:
-    def __init__(self, urls, localfile, size=0, chunk_size = 262144, chunksums = {}, reporthook = None):        
+    def __init__(self, urls, localfile, size=0, chunk_size = 262144, chunksums = {}, reporthook = None):
+        assert isinstance(urls, dict)
+                
         self.sockets = []
         self.chunks = []
         self.limit_per_host = LIMIT_PER_HOST
@@ -899,6 +860,8 @@ class Segment_Manager:
     def get_size(self):
         '''
         Take a best guess at size based on first 3 matching servers
+        
+        raise socket.error e.g. "Operation timed out"
         '''
         i = 0
         sizes = []
@@ -952,32 +915,39 @@ class Segment_Manager:
                 newurls[item] = self.urls[item]
         self.urls = newurls
         return newurls
-
+            
     def run(self):
-        if self.size == "" or self.size == 0:
-            self.size = self.get_size()
-            if self.size == None:
+        '''
+        ?
+        '''
+        try:
+            if self.size == "" or self.size == 0:
+                self.size = self.get_size()
+                if self.size == None:
+                    #crap out and do it the old way
+                    self.close_handler()
+                    return False
+            
+            while True:
+                #print "\ntc:", self.active_count(), len(self.sockets), len(self.urls)
+                #if self.active_count() == 0:
+                #print self.byte_total(), self.size
+                time.sleep(0.1)
+                self.update()
+                self.resume.extend_blocks(self.chunk_list())
+                if self.byte_total() >= self.size and self.active_count() == 0:
+                    self.resume.complete()
+                    self.close_handler()
+                    return True
                 #crap out and do it the old way
-                self.close_handler()
-                return False
-        
-        while True:
-            #print "\ntc:", self.active_count(), len(self.sockets), len(self.urls)
-            #if self.active_count() == 0:
-            #print self.byte_total(), self.size
-            time.sleep(0.1)
-            self.update()
-            self.resume.extend_blocks(self.chunk_list())
-            if self.byte_total() >= self.size and self.active_count() == 0:
-                self.resume.complete()
-                self.close_handler()
-                return True
-            #crap out and do it the old way
-            if len(self.urls) == 0:
-                self.close_handler()
-                return False
-
-        return False
+                if len(self.urls) == 0:
+                    self.close_handler()
+                    return False
+                
+            return False
+        except BaseException, e:
+            logging.warning(unicode(e))
+            return False
 
     def update(self):
         next = self.next_url()
@@ -1483,32 +1453,35 @@ class Http_Host_Segment(threading.Thread, Host_Segment):
         Host_Segment.__init__(self, *args)
         
     def run(self):
-        # Finish early if checksum is OK
-        if self.checksum() and len(self.checksums) > 0:
-            self.bytes += self.byte_count
-            self.close()
-            return
-        
-        if self.host.conn == None:
-            self.error = _("bad socket")
-            self.close()
-            return
-
-        try:
-            self.host.conn.request("GET", self.url, "", {"Range": "bytes=%lu-%lu\r\n" % (self.byte_start, self.byte_end - 1)})
-        except:
-            self.error = _("socket exception")
-            self.close()
-            return
-        
-        self.start_time = time.time()
-        while True:
-            if self.readable():
-                self.handle_read()
-            else:
-                self.ttime += (time.time() - self.start_time)
-                self.end()
+        #try:
+            # Finish early if checksum is OK
+            if self.checksum() and len(self.checksums) > 0:
+                self.bytes += self.byte_count
+                self.close()
                 return
+            
+            if self.host.conn == None:
+                self.error = _("bad socket")
+                self.close()
+                return
+    
+            try:
+                self.host.conn.request("GET", self.url, "", {"Range": "bytes=%lu-%lu\r\n" % (self.byte_start, self.byte_end - 1)})
+            except:
+                self.error = _("socket exception")
+                self.close()
+                return
+            
+            self.start_time = time.time()
+            while True:
+                if self.readable():
+                    self.handle_read()
+                else:
+                    self.ttime += (time.time() - self.start_time)
+                    self.end()
+                    return
+        #except BaseException, e:
+        #    self.error = utils.get_exception_message(e)
 
     def readable(self):
         if self.response == None:
@@ -1546,6 +1519,10 @@ class Http_Host_Segment(threading.Thread, Host_Segment):
             return
         except httplib.IncompleteRead:
             self.error = _("incomplete read")
+            self.response = None
+            return
+        except socket.error:
+            self.error = _("socket error")
             self.response = None
             return
         if len(data) == 0:
@@ -1685,6 +1662,9 @@ class HTTPConnection:
         self.conn = httplib.HTTPConnection(host, port)
 
     def request(self, method, url, body="", headers={}):
+        '''
+        raise socket.error e.g. "Operation timed out"
+        '''
         headers.update(self.headers)
         if HTTP_PROXY == "":
             urlparts = urlparse.urlsplit(url)

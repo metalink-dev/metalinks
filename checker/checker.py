@@ -53,6 +53,7 @@ import socket
 import base64
 import hashlib
 import httplib
+import ftplib
 
 import xmlutils
 import download
