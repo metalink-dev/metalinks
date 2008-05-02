@@ -92,6 +92,7 @@ HTTPS_PROXY=""
 PROTOCOLS=("http","https","ftp")
 #PROTOCOLS=("ftp")
 
+# See http://www.poeml.de/transmetalink-test/README
 MIME_TYPE = "application/metalink+xml"
 
 def translate():
@@ -128,16 +129,22 @@ class URL:
         self.preference = int(preference)
         self.maxconnections = int(maxconnections)
 
-def urlopen(url, data = None):
+def urlopen(url, data = None, metalink=False):
     url = complete_url(url)
-    req = urllib2.Request(url, data, {'User-agent': USER_AGENT, 'Accept': MIME_TYPE + ", */*"})
+    headers = {'User-agent': USER_AGENT}
+    if metalink:
+        headers['Accept'] = MIME_TYPE + ", */*"
+    req = urllib2.Request(url, data, headers)
     fp = urllib2.urlopen(req)
     #print fp.read()
     return fp
 
-def urlhead(url):
+def urlhead(url, metalink=False):
     url = complete_url(url)
-    req = urllib2.Request(url, None, {'User-agent': USER_AGENT, 'Accept': MIME_TYPE + ", */*"})
+    headers = {'User-agent': USER_AGENT}
+    if metalink:
+        headers['Accept'] = MIME_TYPE + ", */*"
+    req = urllib2.Request(url, None, headers)
     req.get_method = lambda: "HEAD"
     fp = urllib2.urlopen(req)
     headers = fp.headers
@@ -177,7 +184,8 @@ def get(src, path, checksums = {}, force = False, handler = None, segmented = SE
     if src.endswith(".metalink"):
         return download_metalink(src, path, force, handler)
     # add head check for metalink type, if MIME_TYPE or application/xml? treat as metalink
-    elif urlhead(src)["content-type"].startswith(MIME_TYPE):
+    elif urlhead(src, metalink=True)["content-type"].startswith(MIME_TYPE):
+        print _("Metalink content-type detected.")
         return download_metalink(src, path, force, handler)
     # assume normal file download here
     else:
@@ -332,7 +340,7 @@ def download_metalink(src, path, force = False, handler = None):
     '''
     src = complete_url(src)
     try:
-        datasource = urlopen(src)
+        datasource = urlopen(src, metalink=True)
     except:
         return False
     dom2 = xml.dom.minidom.parse(datasource)   # parse an open file
