@@ -92,6 +92,8 @@ HTTPS_PROXY=""
 PROTOCOLS=("http","https","ftp")
 #PROTOCOLS=("ftp")
 
+MIME_TYPE = "application/metalink+xml"
+
 def translate():
     '''
     Setup translation path
@@ -128,9 +130,19 @@ class URL:
 
 def urlopen(url, data = None):
     url = complete_url(url)
-    req = urllib2.Request(url, data, {'User-agent': USER_AGENT})
+    req = urllib2.Request(url, data, {'User-agent': USER_AGENT, 'Accept': MIME_TYPE + ", */*"})
     fp = urllib2.urlopen(req)
+    #print fp.read()
     return fp
+
+def urlhead(url):
+    url = complete_url(url)
+    req = urllib2.Request(url, None, {'User-agent': USER_AGENT, 'Accept': MIME_TYPE + ", */*"})
+    req.get_method = lambda: "HEAD"
+    fp = urllib2.urlopen(req)
+    headers = fp.headers
+    fp.close()
+    return headers
 
 def set_proxies():
     # Set proxies
@@ -164,6 +176,9 @@ def get(src, path, checksums = {}, force = False, handler = None, segmented = SE
     if src.endswith(".metalink"):
         return download_metalink(src, path, force, handler)
     else:
+        # add head check for metalink type, if MIME_TYPE or application/xml? treat as metalink
+        if urlhead(src)["content-type"].startswith(MIME_TYPE):
+            return download_metalink(src, path, force, handler)
         # parse out filename portion here
         filename = os.path.basename(src)
         result = download_file(src, os.path.join(path, filename), 
