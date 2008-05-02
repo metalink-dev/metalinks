@@ -173,12 +173,14 @@ def get(src, path, checksums = {}, force = False, handler = None, segmented = SE
     Returns False otherwise (checksum fails)
     raise socket.error e.g. "Operation timed out"
     '''
+    # assume metalink if ends with .metalink
     if src.endswith(".metalink"):
         return download_metalink(src, path, force, handler)
+    # add head check for metalink type, if MIME_TYPE or application/xml? treat as metalink
+    elif urlhead(src)["content-type"].startswith(MIME_TYPE):
+        return download_metalink(src, path, force, handler)
+    # assume normal file download here
     else:
-        # add head check for metalink type, if MIME_TYPE or application/xml? treat as metalink
-        if urlhead(src)["content-type"].startswith(MIME_TYPE):
-            return download_metalink(src, path, force, handler)
         # parse out filename portion here
         filename = os.path.basename(src)
         result = download_file(src, os.path.join(path, filename), 
