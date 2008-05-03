@@ -48,7 +48,7 @@ import checker
 import GPG
 
 # DO NOT CHANGE
-VERSION="Metalink Checker Version 3.7.4"
+VERSION="Metalink Checker Version 3.8"
 
 import os.path
 import locale

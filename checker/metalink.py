@@ -67,6 +67,12 @@
 #
 # CHANGELOG:
 #
+# Version 3.8
+# -----------
+# - Will now download any file type and auto-detect metalink files
+# - Added option to disable segmented downloads to command line
+# - Added support for metalink "Accept" HTTP header
+#
 # Version 3.7.4
 # -------------
 # - Fixed default key import directory
@@ -163,7 +169,6 @@
 # This is the initial release.
 #
 # TODO
-# - Pass test for bad piece checksum (don't hang)
 # - resume download support for non-segmented downloads
 # - download priority based on speed
 # - use maxconnections
@@ -182,6 +187,7 @@ import socket
 import base64
 import hashlib
 import httplib
+import ftplib
 import locale
 import gettext
 import urllib2
@@ -189,7 +195,6 @@ import urlparse
 import hashlib
 import os.path
 import xml.dom.minidom
-import random
 import locale
 import threading
 import time
@@ -197,12 +202,17 @@ import copy
 import socket
 import ftplib
 import httplib
+import logging
+import base64
 import sys
-import locale
 import gettext
-import os, StringIO #, popen2
+import os
+import StringIO
 import os.path
 import subprocess
+import gettext
+import sys
+import locale
 import xml.dom.minidom
 import optparse
 import socket
@@ -602,13 +612,9 @@ checker.translate = translate
 #
 ########################################################################
 
+#import utils
 
-##try:
-##    import pyme.core
-##    import pyme.constants
-##except: pass
-
-USER_AGENT = "Metalink Checker/3.7.4 +http://www.nabber.org/projects/"
+USER_AGENT = "Metalink Checker/3.8 +http://www.nabber.org/projects/"
 
 SEGMENTED = True
 LIMIT_PER_HOST = 1
@@ -641,6 +647,8 @@ HTTPS_PROXY=""
 PROTOCOLS=("http","https","ftp")
 #PROTOCOLS=("ftp")
 
+# See http://www.poeml.de/transmetalink-test/README
+MIME_TYPE = "application/metalink+xml"
 
 def translate():
     '''
@@ -676,11 +684,27 @@ class URL:
         self.preference = int(preference)
         self.maxconnections = int(maxconnections)
 
-def urlopen(url, data = None):
+def urlopen(url, data = None, metalink=False):
     url = complete_url(url)
-    req = urllib2.Request(url, data, {'User-agent': USER_AGENT})
+    headers = {'User-agent': USER_AGENT}
+    if metalink:
+        headers['Accept'] = MIME_TYPE + ", */*"
+    req = urllib2.Request(url, data, headers)
     fp = urllib2.urlopen(req)
+    #print fp.read()
     return fp
+
+def urlhead(url, metalink=False):
+    url = complete_url(url)
+    headers = {'User-agent': USER_AGENT}
+    if metalink:
+        headers['Accept'] = MIME_TYPE + ", */*"
+    req = urllib2.Request(url, None, headers)
+    req.get_method = lambda: "HEAD"
+    fp = urllib2.urlopen(req)
+    headers = fp.headers
+    fp.close()
+    return headers
 
 def set_proxies():
     # Set proxies
@@ -693,7 +717,8 @@ def set_proxies():
         proxies['ftp'] = FTP_PROXY
         
     proxy_handler = urllib2.ProxyHandler(proxies)
-    opener = urllib2.build_opener(proxy_handler, urllib2.HTTPBasicAuthHandler(), urllib2.HTTPHandler, urllib2.HTTPSHandler, urllib2.FTPHandler)
+    opener = urllib2.build_opener(proxy_handler, urllib2.HTTPBasicAuthHandler(), 
+            urllib2.HTTPHandler, urllib2.HTTPSHandler, urllib2.FTPHandler)
     # install this opener
     urllib2.install_opener(opener)
 
@@ -708,37 +733,62 @@ def get(src, path, checksums = {}, force = False, handler = None, segmented = SE
     Sixth parameter, optional, progress handler callback
     Returns list of file paths if download(s) is successful
     Returns False otherwise (checksum fails)
+    raise socket.error e.g. "Operation timed out"
     '''
+    # assume metalink if ends with .metalink
     if src.endswith(".metalink"):
         return download_metalink(src, path, force, handler)
+    # add head check for metalink type, if MIME_TYPE or application/xml? treat as metalink
+    elif urlhead(src, metalink=True)["content-type"].startswith(MIME_TYPE):
+        print _("Metalink content-type detected.")
+        return download_metalink(src, path, force, handler)
+    # assume normal file download here
     else:
         # parse out filename portion here
         filename = os.path.basename(src)
-        result = download_file(src, os.path.join(path, filename), 0, checksums, force, handler, segmented = segmented)
+        result = download_file(src, os.path.join(path, filename), 
+                0, checksums, force, handler, segmented = segmented)
         if result:
             return [result]
         return False
     
-def download_file(url, local_file, size=0, checksums={}, force = False, handler = None, segmented = SEGMENTED, chunksums = {}, chunk_size = None):
+def download_file(url, local_file, size=0, checksums={}, force = False, 
+        handler = None, segmented = SEGMENTED, chunksums = {}, chunk_size = None):
+    '''
+    url {string->URL} locations of the file
+    local_file string local file name to save to
+    checksums ?
+    force ?
+    handler ?
+    segmented ?
+    chunksums ?
+    chunk_size ?
+    returns ? 
+    unicode Returns file path if download is successful.
+        Returns False otherwise (checksum fails).    
+    '''
     # convert string filename into something we can use
     urllist = {}
     urllist[url] = URL(url)
     return download_file_urls(urllist, local_file, size, checksums, force, handler, segmented, chunksums, chunk_size)
     
-def download_file_urls(urllist, local_file, size=0, checksums={}, force = False, handler = None, segmented = SEGMENTED, chunksums = {}, chunk_size = None):
+def download_file_urls(urllist, local_file, size=0, checksums={}, force = False, 
+            handler = None, segmented = SEGMENTED, chunksums = {}, chunk_size = None):
     '''
     Download a file.
-    First parameter, file to download, URL or file path to download from
+    urllist {string->URL} file to download, URL or file path to download from
     Second parameter, file path to save to
     Third parameter, optional, expected file size
     Fourth parameter, optional, expected checksum dictionary
     Fifth parameter, optional, force a new download even if a valid copy already exists
     Sixth parameter, optional, progress handler callback
     Returns file path if download is successful
-    Returns False otherwise (checksum fails)
+    Returns False otherwise (checksum fails)    
     '''
+    assert isinstance(urllist, dict)
+    
     print ""
-    print _("Downloading to"), local_file
+    print _("Downloading to %s.") % local_file
         
     if os.path.exists(local_file) and (not force) and len(checksums) > 0:
         checksum = verify_checksum(local_file, checksums)
@@ -751,7 +801,7 @@ def download_file_urls(urllist, local_file, size=0, checksums={}, force = False,
                     handler(1, actsize, actsize)
                 return local_file
         else:
-            print _("Checksum failed, retrying download of") + " %s." % os.path.basename(local_file)
+            print _("Checksum failed, retrying download of %s.") % os.path.basename(local_file)
 
     directory = os.path.dirname(local_file)
     if not os.path.isdir(directory):
@@ -761,7 +811,8 @@ def download_file_urls(urllist, local_file, size=0, checksums={}, force = False,
     if segmented:
         if chunk_size == None:
             chunk_size = 262144
-        manager = Segment_Manager(urllist, local_file, size, reporthook = handler, chunksums = chunksums, chunk_size = int(chunk_size))
+        manager = Segment_Manager(urllist, local_file, size, reporthook = handler, 
+                chunksums = chunksums, chunk_size = int(chunk_size))
         seg_result = manager.run()
         
         if not seg_result:
@@ -776,10 +827,11 @@ def download_file_urls(urllist, local_file, size=0, checksums={}, force = False,
         urllist = start_sort(urllist)
         number = 0
         
-        error = True
         count = 1
-        while (error and (count <= len(urllist))):
+        while (count <= len(urllist)):
+            error = False
             remote_file = complete_url(urllist[number])
+            #print remote_file
             result = True
             try:
                 urlretrieve(remote_file, local_file, handler)
@@ -789,20 +841,46 @@ def download_file_urls(urllist, local_file, size=0, checksums={}, force = False,
             number = (number + 1) % len(urllist)
             count += 1
 
-    if verify_checksum(local_file, checksums):
-        actsize = size
-        if actsize == 0:
-            try:
-                actsize = os.stat(local_file).st_size
-            except: pass
-        if actsize == 0:
-            return False
-        if handler != None:
-            handler(1, actsize, actsize)
-        return local_file
-    else:
-        print "\n" + _("Checksum failed for") + " %s." % os.path.basename(local_file)
+            if filecheck(local_file, checksums, size, handler) and not error:
+                return local_file
+##            if verify_checksum(local_file, checksums):
+##                actsize = 0
+##                try:
+##                    actsize = os.stat(local_file).st_size
+##                except: pass
+##                    
+##                if handler != None:
+##                    tempsize = size
+##                    if size == 0:
+##                        tempsize = actsize
+##                    handler(1, actsize, tempsize)
+##
+##                if (int(actsize) == int(size) or size == 0) and not error:
+##                    return local_file
+##            else:
+##                print "\n" + _("Checksum failed for %s.") % os.path.basename(local_file)
 
+    if filecheck(local_file, checksums, size, handler):
+        return local_file
+    return False
+
+def filecheck(local_file, checksums, size, handler = None):
+    if verify_checksum(local_file, checksums):
+        actsize = 0
+        try:
+            actsize = os.stat(local_file).st_size
+        except: pass
+            
+        if handler != None:
+            tempsize = size
+            if size == 0:
+                tempsize = actsize
+            handler(1, actsize, tempsize)
+
+        if (int(actsize) == int(size) or size == 0):
+            return True
+    
+    print "\n" + _("Checksum failed for %s.") % os.path.basename(local_file)
     return False
 
 def download_metalink(src, path, force = False, handler = None):
@@ -817,7 +895,7 @@ def download_metalink(src, path, force = False, handler = None):
     '''
     src = complete_url(src)
     try:
-        datasource = urlopen(src)
+        datasource = urlopen(src, metalink=True)
     except:
         return False
     dom2 = xml.dom.minidom.parse(datasource)   # parse an open file
@@ -825,13 +903,14 @@ def download_metalink(src, path, force = False, handler = None):
 
     metalink_node = xmlutils.get_subnodes(dom2, ["metalink"])
     try:
-        metalink_type = xmlutils.get_attr_from_item(metalink_node, "type")
+        metalink_type = xmlutils.get_attr_from_item(metalink_node[0], "type")
     except AttributeError:
         metalink_type = None
+
     if metalink_type == "dynamic":
-        origin = xmlutils.get_attr_from_item(metalink_node, "origin")
-        if origin != src:
-            print _("Downloading update from"), origin
+        origin = xmlutils.get_attr_from_item(metalink_node[0], "origin")
+        if origin != src and origin != "":
+            print _("Downloading update from %s") % origin
             return download_metalink(origin, path, force, handler)
     
     urllist = xmlutils.get_subnodes(dom2, ["metalink", "files", "file"])
@@ -849,7 +928,10 @@ def download_metalink(src, path, force = False, handler = None):
                 result = download_file_node(filenode, path, force, handler)
                 if result:
                     results.append(result)
-
+                    
+    if len(results) == 0:
+        return False
+    
     return results
 
 def download_file_node(item, path, force = False, handler = None):
@@ -861,9 +943,10 @@ def download_file_node(item, path, force = False, handler = None):
     Fouth parameter, optional, progress handler callback
     Returns list of file paths if download(s) is successful
     Returns False otherwise (checksum fails)
+    raise socket.error e.g. "Operation timed out"
     '''
 
-    urllist = xmlutils.get_xml_tag_strings(item, ["resources", "url"])
+    # unused: urllist = xmlutils.get_xml_tag_strings(item, ["resources", "url"])
     urllist = {}
     for node in xmlutils.get_subnodes(item, ["resources", "url"]):
         url = xmlutils.get_xml_item_strings([node])[0]
@@ -1075,8 +1158,9 @@ class FileResume:
             self.blocks = blocks.split(",")
             self.size = int(size)
             filehandle.close()
-        except IOError:
-            pass
+        except (IOError, ValueError):
+            self.blocks = []
+            self.size = 0
 
     def complete(self):
         '''
@@ -1142,8 +1226,8 @@ def verify_checksum(local_file, checksums={}):
     Returns True if no checksums are provided
     Returns False otherwise
     '''
+    
     try:
-        checksums["pgp"]
         return pgp_verify_sig(local_file, checksums["pgp"])
     except (KeyError, AttributeError, ValueError, AssertionError): pass
     try:
@@ -1221,89 +1305,16 @@ def pgp_verify_sig(filename, sig):
         return True
     
     return False
-
-def old_pgp_verify_sig(filename, sig):
-    c = pyme.core.Context()
-
-    for root, dirs, files in os.walk(PGP_KEY_DIR):
-        for thisfile in files:
-            if thisfile[-4:] in PGP_KEY_EXTS:
-                fullpath = os.path.join(root, thisfile)
-                newkey = pyme.core.Data(file=str(fullpath))
-                c.op_import(newkey)
-                result = c.op_import_result()
-
-    # show the import result
-##    if result:
-##        print " - Result of the import - "
-##        for k in dir(result):
-##            if not k in result.__dict__ and not k.startswith("_"):
-##                if k == "imports":
-##                    print k, ":"
-##                    for impkey in result.__getattr__(k):
-##                        print "    fpr=%s result=%d status=%x" % \
-##                              (impkey.fpr, impkey.result, impkey.status)
-##                else:
-##                    print k, ":", result.__getattr__(k)
-    #else:
-    #    print " - No import result - "
-
-    # Create Data with signed text.
-    sig2 = pyme.core.Data(str(sig))
-    bin2 = pyme.core.Data(file=str(filename))
-    
-    # Verify.
-    error = c.op_verify(sig2, bin2, None)
-    result = c.op_verify_result()
-
-    # List results for all signatures. Status equal 0 means "Ok".
-    index = 0
-    print "\n-----" + _("BEGIN PGP SIGNATURE INFORMATION") + "-----"
-    #print dir(result.signatures)
-    retval = True
-    for sign in result.signatures:
-        index += 1
-        if index > 1:
-            print "-----------------------------------------"
-        #print _("Signature"), str(index) + ""
-        #print "  summary:    ", sign.summary
-        
-        for name in dir(pyme.constants):
-            if name.startswith("SIGSUM_"):
-                value = getattr(pyme.constants, name)
-                if value & sign.summary:
-                    print name
-                
-        #print "  status:     ", sign.status
-        for name in dir(pyme.constants):
-            if name.startswith("SIG_STAT_"):
-                value = getattr(pyme.constants, name)
-                if value & sign.status:
-                    print name
-
-        print "" + _("timestamp") + ":", time.strftime("%a, %d %b %Y %H:%M:%S (%Z)",time.localtime(sign.timestamp))
-        print "" + _("fingerprint") + ":", sign.fpr
-        #print "  hash:", pyme.core.hash_algo_name(sign.hash_algo)
-        #print "  sig algo:", pyme.core.pubkey_algo_name(sign.pubkey_algo)
-        try:
-            print "" + _("uid") + ":", c.get_key(sign.fpr, 0).uids[0].uid
-        except:
-            print _("ERROR") + ": " + _("Could not find signing key.")
-        
-        if sign.summary != 0 or sign.status != 0:
-            retval = False
-    print "-----" + _("END PGP SIGNATURE INFORMATION") + "-----\n"
-
-    return retval
-
 def is_remote(name):
-    transport = get_transport(name)   
+    transport = get_transport(name)
+        
     if transport != "":
         return True
     return False
 
 def is_local(name):
-    transport = get_transport(name) 
+    transport = get_transport(name)
+        
     if transport == "":
         return True
     return False
@@ -1391,7 +1402,9 @@ def sort_prefs(mydict):
 ############# segmented download functions #############
 
 class Segment_Manager:
-    def __init__(self, urls, localfile, size=0, chunk_size = 262144, chunksums = {}, reporthook = None):        
+    def __init__(self, urls, localfile, size=0, chunk_size = 262144, chunksums = {}, reporthook = None):
+        assert isinstance(urls, dict)
+                
         self.sockets = []
         self.chunks = []
         self.limit_per_host = LIMIT_PER_HOST
@@ -1427,6 +1440,8 @@ class Segment_Manager:
     def get_size(self):
         '''
         Take a best guess at size based on first 3 matching servers
+        
+        raise socket.error e.g. "Operation timed out"
         '''
         i = 0
         sizes = []
@@ -1482,30 +1497,37 @@ class Segment_Manager:
         return newurls
             
     def run(self):
-        if self.size == "" or self.size == 0:
-            self.size = self.get_size()
-            if self.size == None:
+        '''
+        ?
+        '''
+        try:
+            if self.size == "" or self.size == 0:
+                self.size = self.get_size()
+                if self.size == None:
+                    #crap out and do it the old way
+                    self.close_handler()
+                    return False
+            
+            while True:
+                #print "\ntc:", self.active_count(), len(self.sockets), len(self.urls)
+                #if self.active_count() == 0:
+                #print self.byte_total(), self.size
+                time.sleep(0.1)
+                self.update()
+                self.resume.extend_blocks(self.chunk_list())
+                if self.byte_total() >= self.size and self.active_count() == 0:
+                    self.resume.complete()
+                    self.close_handler()
+                    return True
                 #crap out and do it the old way
-                self.close_handler()
-                return False
-        
-        while True:
-            #print "\ntc:", self.active_count(), len(self.sockets), len(self.urls)
-            #if self.active_count() == 0:
-            #print self.byte_total(), self.size
-            time.sleep(0.1)
-            self.update()
-            self.resume.extend_blocks(self.chunk_list())
-            if self.byte_total() >= self.size and self.active_count() == 0:
-                self.resume.complete()
-                self.close_handler()
-                return True
-            #crap out and do it the old way
-            if len(self.urls) == 0:
-                self.close_handler()
-                return False
-
-        return False
+                if len(self.urls) == 0:
+                    self.close_handler()
+                    return False
+                
+            return False
+        except BaseException, e:
+            logging.warning(unicode(e))
+            return False
 
     def update(self):
         next = self.next_url()
@@ -2011,32 +2033,35 @@ class Http_Host_Segment(threading.Thread, Host_Segment):
         Host_Segment.__init__(self, *args)
         
     def run(self):
-        # Finish early if checksum is OK
-        if self.checksum() and len(self.checksums) > 0:
-            self.bytes += self.byte_count
-            self.close()
-            return
-        
-        if self.host.conn == None:
-            self.error = _("bad socket")
-            self.close()
-            return
-
-        try:
-            self.host.conn.request("GET", self.url, "", {"Range": "bytes=%lu-%lu\r\n" % (self.byte_start, self.byte_end - 1)})
-        except:
-            self.error = _("socket exception")
-            self.close()
-            return
-        
-        self.start_time = time.time()
-        while True:
-            if self.readable():
-                self.handle_read()
-            else:
-                self.ttime += (time.time() - self.start_time)
-                self.end()
+        #try:
+            # Finish early if checksum is OK
+            if self.checksum() and len(self.checksums) > 0:
+                self.bytes += self.byte_count
+                self.close()
                 return
+            
+            if self.host.conn == None:
+                self.error = _("bad socket")
+                self.close()
+                return
+    
+            try:
+                self.host.conn.request("GET", self.url, "", {"Range": "bytes=%lu-%lu\r\n" % (self.byte_start, self.byte_end - 1)})
+            except:
+                self.error = _("socket exception")
+                self.close()
+                return
+            
+            self.start_time = time.time()
+            while True:
+                if self.readable():
+                    self.handle_read()
+                else:
+                    self.ttime += (time.time() - self.start_time)
+                    self.end()
+                    return
+        #except BaseException, e:
+        #    self.error = utils.get_exception_message(e)
 
     def readable(self):
         if self.response == None:
@@ -2074,6 +2099,10 @@ class Http_Host_Segment(threading.Thread, Host_Segment):
             return
         except httplib.IncompleteRead:
             self.error = _("incomplete read")
+            self.response = None
+            return
+        except socket.error:
+            self.error = _("socket error")
             self.response = None
             return
         if len(data) == 0:
@@ -2134,7 +2163,7 @@ class FTP:
                     pass
                 self.conn = httplib.HTTPConnection(host, port)
             else:
-                raise AssertionError, _("Transport not supported for") + " FTP_PROXY, %s" % url.scheme
+                raise AssertionError, _("Transport not supported for FTP_PROXY, %s") % url.scheme
 
         else:
             self.conn = ftplib.FTP()
@@ -2208,11 +2237,14 @@ class HTTPConnection:
                 if url.username != None:
                     self.headers["Proxy-authorization"] = "Basic " + base64.encodestring(url.username+':'+url.password) + "\r\n"
             else:
-                raise AssertionError, _("Transport not supported for") + " HTTP_PROXY, %s" % url.scheme
+                raise AssertionError, _("Transport not supported for HTTP_PROXY, %s") % url.scheme
 
         self.conn = httplib.HTTPConnection(host, port)
 
     def request(self, method, url, body="", headers={}):
+        '''
+        raise socket.error e.g. "Operation timed out"
+        '''
         headers.update(self.headers)
         if HTTP_PROXY == "":
             urlparts = urlparse.urlsplit(url)
@@ -2285,6 +2317,7 @@ download.Http_Host_Segment = Http_Host_Segment
 download.LANG = LANG
 download.LIMIT_PER_HOST = LIMIT_PER_HOST
 download.MAX_REDIRECTS = MAX_REDIRECTS
+download.MIME_TYPE = MIME_TYPE
 download.OS = OS
 download.PGP_KEY_DIR = PGP_KEY_DIR
 download.PGP_KEY_EXTS = PGP_KEY_EXTS
@@ -2300,19 +2333,20 @@ download.download_file = download_file
 download.download_file_node = download_file_node
 download.download_file_urls = download_file_urls
 download.download_metalink = download_metalink
+download.filecheck = filecheck
 download.filehash = filehash
 download.get = get
 download.get_transport = get_transport
 download.is_local = is_local
 download.is_remote = is_remote
 download.lang = lang
-download.old_pgp_verify_sig = old_pgp_verify_sig
 download.path_join = path_join
 download.pgp_verify_sig = pgp_verify_sig
 download.set_proxies = set_proxies
 download.sort_prefs = sort_prefs
 download.start_sort = start_sort
 download.translate = translate
+download.urlhead = urlhead
 download.urlopen = urlopen
 download.urlretrieve = urlretrieve
 download.verify_checksum = verify_checksum
@@ -2334,6 +2368,33 @@ Dependencies
 
 __rcsid__ = '$Id: GPG.py,v 1.3 2003/11/23 15:03:15 akuchling Exp $'
 
+
+def translate():
+    '''
+    Setup translation path
+    '''
+    if __name__=="__main__":
+        try:
+            base = os.path.basename(__file__)[:-3]
+            localedir = os.path.join(os.path.dirname(__file__), "locale")
+        except NameError:
+            base = os.path.basename(sys.executable)[:-4]
+            localedir = os.path.join(os.path.dirname(sys.executable), "locale")
+    else:
+        temp = __name__.split(".")
+        base = temp[-1]
+        localedir = os.path.join("/".join(["%s" % k for k in temp[:-1]]), "locale")
+
+    #print base, localedir
+    t = gettext.translation(base, localedir, [locale.getdefaultlocale()[0]], None, 'en')
+    return t.lgettext
+
+_ = translate()
+
+# Default path used for searching for the GPG binary
+DEFAULT_PATH = ['/bin', '/usr/bin', '/usr/local/bin', \
+                    '${PROGRAMFILES}\\GNU\\GnuPG', '${PROGRAMFILES(X86)}\\GNU\\GnuPG',\
+                    '${SYSTEMDRIVE}\\cygwin\\bin', '${SYSTEMDRIVE}\\cygwin\\usr\\bin', '${SYSTEMDRIVE}\\cygwin\\usr\\local\\bin']
 
 class Signature:
     "Used to hold information about a signature result"
@@ -2357,13 +2418,13 @@ class Signature:
     def SIG_ID(self, value):
         self.signature_id, self.creation_date, self.timestamp = value.split(" ", 2)
     def NODATA(self, value):
-        self.error = "File not properly loaded for signature."
+        self.error = _("File not properly loaded for signature.")
     def ERRSIG(self, value):
         #print value
-        self.error = "Signature error."
+        self.error = _("Signature error.")
     def NO_PUBKEY(self, value):
         #print value
-        self.error = "Signature error, missing public key with id 0x%s." % value[-8:]
+        self.error = _("Signature error, missing public key with id 0x%s.") % value[-8:]
     def TRUST_UNDEFINED(self, value):
         pass
         #print value.split()
@@ -2474,15 +2535,7 @@ class EncryptedMessage:
     def END_ENCRYPTION(self, value):
         pass
 
-class GPGSubprocess:
-
-    # Default path used for searching for the GPG binary, when the
-    # PATH environment variable isn't set.
-    DEFAULT_PATH = ['/bin', '/usr/bin', '/usr/local/bin', \
-                    '${PROGRAMFILES}\\GNU\\GnuPG', '${PROGRAMFILES(X86)}\\GNU\\GnuPG',\
-                    '${SYSTEMDRIVE}\\cygwin\\bin', '${SYSTEMDRIVE}\\cygwin\\usr\\bin', '${SYSTEMDRIVE}\\cygwin\\usr\\local\\bin']
-    #DEFAULT_PATH = []
-    
+class GPGSubprocess:    
     def __init__(self, gpg_binary=None, keyring=None):
         """Initialize an object instance.  Options are:
 
@@ -2495,7 +2548,7 @@ class GPGSubprocess:
         """
         # If needed, look for the gpg binary along the path
         if gpg_binary is None:
-            path = self.DEFAULT_PATH
+            path = DEFAULT_PATH
             if os.environ.has_key('PATH'):
                 temppath = os.environ['PATH']
                 path.extend(temppath.split(os.pathsep))
@@ -2513,8 +2566,8 @@ class GPGSubprocess:
                     gpg_binary = fullname + ".exe"
                     break
             else:
-                raise ValueError, ("Couldn't find 'gpg' binary on path"
-                                   + repr(path) )
+                raise ValueError, (_("Couldn't find 'gpg' binary on path %s.")
+                                   % repr(path) )
 
         self.gpg_binary = "\"" + gpg_binary + "\""
         self.keyring = keyring
@@ -2695,11 +2748,14 @@ class GPGSubprocess:
 ##    sig = obj.verify_file( file )
 ##    print sig.__dict__
 GPG = Dummy()
+GPG.DEFAULT_PATH = DEFAULT_PATH
 GPG.EncryptedMessage = EncryptedMessage
 GPG.GPGSubprocess = GPGSubprocess
 GPG.ImportResult = ImportResult
 GPG.ListResult = ListResult
 GPG.Signature = Signature
+GPG._ = _
+GPG.translate = translate
 #!/usr/bin/env python
 ########################################################################
 #
@@ -2883,7 +2939,7 @@ xmlutils.get_xml_tag_strings = get_xml_tag_strings
 
 
 # DO NOT CHANGE
-VERSION="Metalink Checker Version 3.7.4"
+VERSION="Metalink Checker Version 3.8"
 
 
 def translate():
@@ -2918,10 +2974,12 @@ def run():
     parser.add_option("--file", "-f", dest="filevar", metavar="FILE", help=_("Metalink file to check"))
     parser.add_option("--timeout", "-t", dest="timeout", metavar="TIMEOUT", help=_("Set timeout in seconds to wait for response (default=10)"))
     parser.add_option("--os", "-o", dest="os", metavar="OS", help=_("Operating System preference"))
+    parser.add_option("--no-segmented", "-s", action="store_true", dest="nosegmented", help=_("Do not use the segmented download method"))
     parser.add_option("--lang", "-l", dest="language", metavar="LANG", help=_("Language preference (ISO-639/3166)"))
     parser.add_option("--country", "-c", dest="country", metavar="LOC", help=_("Two letter country preference (ISO 3166-1 alpha-2)"))
     parser.add_option("--pgp-keys", "-k", dest="pgpdir", metavar="DIR", help=_("Directory with the PGP keys that you trust (default: working directory)"))
     parser.add_option("--pgp-store", "-p", dest="pgpstore", metavar="FILE", help=_("File with the PGP keys that you trust (default: ~/.gnupg/pubring.gpg)"))
+    parser.add_option("--gpg-binary", "-g", dest="gpg", help=_("(optional) Location of gpg binary path if not in the default search path"))
     (options, args) = parser.parse_args()
 
     if options.filevar == None:
@@ -2940,6 +2998,8 @@ def run():
         download.PGP_KEY_DIR = options.pgpdir
     if options.pgpstore != None:
         download.PGP_KEY_STORE = options.pgpstore
+    if options.gpg != None:
+        GPG.DEFAULT_PATH.insert(0, options.gpg)
         
     if options.timeout != None:
         socket.setdefaulttimeout(int(options.timeout))
@@ -2949,9 +3009,16 @@ def run():
         return
     
     if options.download:
+        download.SEGMENTED = True
+        if options.nosegmented:
+            download.SEGMENTED = False
+
         progress = ProgressBar(55)
-        download.download_metalink(options.filevar, os.getcwd(), handler=progress.download_update)
+        result = download.get(options.filevar, os.getcwd(), handler=progress.download_update)
+        #result = download.download_metalink(options.filevar, os.getcwd(), handler=progress.download_update)
         progress.download_end()
+        if not result:
+            sys.exit(-1)
     else:
         results = checker.check_metalink(options.filevar)
         print_totals(results)

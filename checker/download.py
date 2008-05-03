@@ -59,7 +59,7 @@ import base64
 import sys
 import gettext
 
-USER_AGENT = "Metalink Checker/3.7.4 +http://www.nabber.org/projects/"
+USER_AGENT = "Metalink Checker/3.8 +http://www.nabber.org/projects/"
 
 SEGMENTED = True
 LIMIT_PER_HOST = 1

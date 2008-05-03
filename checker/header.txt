@@ -67,6 +67,12 @@
 #
 # CHANGELOG:
 #
+# Version 3.8
+# -----------
+# - Will now download any file type and auto-detect metalink files
+# - Added option to disable segmented downloads to command line
+# - Added support for metalink "Accept" HTTP header
+#
 # Version 3.7.4
 # -------------
 # - Fixed default key import directory
@@ -163,7 +169,6 @@
 # This is the initial release.
 #
 # TODO
-# - Pass test for bad piece checksum (don't hang)
 # - resume download support for non-segmented downloads
 # - download priority based on speed
 # - use maxconnections
