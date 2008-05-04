@@ -59,6 +59,7 @@ class Signature:
         self.signature_id = self.key_id = None
         self.username = None
         self.error = None
+        self.nopubkey = True
 
     def BADSIG(self, value):
         self.valid = 0
@@ -77,7 +78,8 @@ class Signature:
         #print value
         self.error = _("Signature error.")
     def NO_PUBKEY(self, value):
-        #print value
+        self.key_id = value
+        self.nopubkey = True
         self.error = _("Signature error, missing public key with id 0x%s.") % value[-8:]
     def TRUST_UNDEFINED(self, value):
         pass
@@ -231,7 +233,7 @@ class GPGSubprocess:
         # the file objects for communicating with it.
         cmd = [self.gpg_binary, '--status-fd 2']
         if self.keyring:
-            cmd.append('--keyring "%s" --no-default-keyring'%self.keyring)
+            cmd.append('--keyring "%s" --no-default-keyring'% self.keyring)
 
         cmd.extend(args)
         cmd = ' '.join(cmd)
