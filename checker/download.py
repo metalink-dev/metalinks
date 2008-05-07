@@ -113,7 +113,7 @@ def translate():
 
     #print base, localedir
     t = gettext.translation(base, localedir, [locale.getdefaultlocale()[0]], None, 'en')
-    return t.lgettext
+    return t.ugettext
 
 _ = translate()
 
