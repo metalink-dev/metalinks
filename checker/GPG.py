@@ -41,7 +41,7 @@ def translate():
 
     #print base, localedir
     t = gettext.translation(base, localedir, [locale.getdefaultlocale()[0]], None, 'en')
-    return t.lgettext
+    return t.ugettext
 
 _ = translate()
 
@@ -59,7 +59,7 @@ class Signature:
         self.signature_id = self.key_id = None
         self.username = None
         self.error = None
-        self.nopubkey = True
+        self.nopubkey = False
 
     def BADSIG(self, value):
         self.valid = 0
