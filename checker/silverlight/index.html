@@ -1,0 +1,60 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" >
+
+<head>
+  <title>Minimal IronPython Silverlight Example</title>
+
+  <style type="text/css">
+    #silverlightControlHost {
+        margin: 20px;
+    }
+  </style>
+
+  <!-- Formatting for DLR error handling -->
+  <link type="text/css" rel="stylesheet" href="assets/stylesheets/error.css" />
+
+  <!-- 
+    Error handling for when DLR errors are disabled (with 
+    reportErrors=false, or not defined at all)
+  -->
+  <script type="text/javascript">
+    function onSilverlightError(sender, args) {
+      if (args.errorType == "InitializeError")  {
+        var errorDiv = document.getElementById("errorLocation");
+        if (errorDiv != null)
+          errorDiv.innerHTML = args.errorType + "- " + args.errorMessage;
+      }
+    }
+  </script>
+</head>
+
+<body>
+	<h1>Minimal IronPython and Silverlight Example 2</h1>
+	<p>Part of the <a href="http://www.voidspace.org.uk/ironpython/silverlight/">Voidspace IronPython and Silverlight Tutorials</a>.</p>
+  <!-- 
+    Syntax/Runtime errors from Silverlight will be displayed here.
+    This will contain debugging information and should be removed 
+    or hidden when debugging is completed 
+  -->
+  <div id='errorLocation' style="font-size: small;color: Gray;"></div>
+
+  <div id="silverlightControlHost" width="480" height="320">
+    
+    <object data="data:application/x-silverlight," type="application/x-silverlight-2-b1" width="480" height="320">
+      <param name="source" value="app.xap"/>
+      <param name="onerror" value="onSilverlightError" />
+      <param name="background" value="#00000000" />
+      <param name="initParams" value="reportErrors=errorLocation" />
+      <param name="windowless" value="true" />
+      
+      <a href="http://go.microsoft.com/fwlink/?LinkID=108182" style="text-decoration: none;">
+          <img src="http://go.microsoft.com/fwlink/?LinkId=108181" alt="Get Microsoft Silverlight" style="border-style: none"/>
+      </a>
+    </object>
+    <iframe style='visibility:hidden;height:0;width:0;border:0px'></iframe>
+     
+  </div>
+
+</body>
+
+</html>
