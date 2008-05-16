@@ -129,13 +129,43 @@ class URL:
         self.preference = int(preference)
         self.maxconnections = int(maxconnections)
 
+import StringIO
+import gzip
+
+class DecompressFile:
+    def __init__(self, fp):
+        self.fp = fp
+        self.info = fp.info
+
+        compressed = StringIO.StringIO(fp.read())
+
+        #self.size =
+        print "init"
+        print fp
+        print dir(self)
+        gzip.GzipFile.__init__(fileobj=compressed)
+    
+    def info(self):
+        info = self.fp.info()
+        info["Content-Length"] = newsize
+        return info
+
 def urlopen(url, data = None, metalink=False):
     url = complete_url(url)
-    headers = {'User-agent': USER_AGENT}
+    req = urllib2.Request(url, data)
+    req.add_header('User-agent', USER_AGENT)
+    #req.add_header('Accept-Encoding', 'gzip')
     if metalink:
-        headers['Accept'] = MIME_TYPE + ", */*"
-    req = urllib2.Request(url, data, headers)
+        req.add_header('Accept', MIME_TYPE + ", */*")
+
     fp = urllib2.urlopen(req)
+    if fp.info()['Content-Encoding'] == "gzip":
+        print "COMPRESSED"
+        #print uncompressed.read()
+        #uncompressed.info = fp.info
+        #uncompressed.geturl = fp.geturl
+        uncompressed = DecompressFile()
+        return uncompressed
     #print fp.read()
     return fp
 
