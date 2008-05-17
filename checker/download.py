@@ -132,21 +132,23 @@ class URL:
 import StringIO
 import gzip
 
-class DecompressFile:
+class DecompressFile(gzip.GzipFile):
     def __init__(self, fp):
         self.fp = fp
-        self.info = fp.info
+        self.geturl = fp.geturl
 
         compressed = StringIO.StringIO(fp.read())
-
-        #self.size =
-        print "init"
-        print fp
-        print dir(self)
-        gzip.GzipFile.__init__(fileobj=compressed)
+        gzip.GzipFile.__init__(self, fileobj=compressed)
     
     def info(self):
         info = self.fp.info()
+        # store current position, must reset if in middle of read operation
+        reset = self.tell()
+        # reset to start
+        self.seek(0)
+        newsize = str(len(self.read()))
+        # reset to original position
+        self.seek(reset)
         info["Content-Length"] = newsize
         return info
 
@@ -154,27 +156,25 @@ def urlopen(url, data = None, metalink=False):
     url = complete_url(url)
     req = urllib2.Request(url, data)
     req.add_header('User-agent', USER_AGENT)
-    #req.add_header('Accept-Encoding', 'gzip')
+    req.add_header('Accept-Encoding', 'gzip')
     if metalink:
         req.add_header('Accept', MIME_TYPE + ", */*")
 
     fp = urllib2.urlopen(req)
-    if fp.info()['Content-Encoding'] == "gzip":
-        print "COMPRESSED"
-        #print uncompressed.read()
-        #uncompressed.info = fp.info
-        #uncompressed.geturl = fp.geturl
-        uncompressed = DecompressFile()
-        return uncompressed
+    try:
+        if fp.headers['Content-Encoding'] == "gzip":
+            #print "DECOMPRESSING", url
+            return DecompressFile(fp)
+    except KeyError: pass
     #print fp.read()
     return fp
 
 def urlhead(url, metalink=False):
     url = complete_url(url)
-    headers = {'User-agent': USER_AGENT}
+    req = urllib2.Request(url, None)
+    req.add_header('User-agent', USER_AGENT)
     if metalink:
-        headers['Accept'] = MIME_TYPE + ", */*"
-    req = urllib2.Request(url, None, headers)
+        req.add_header('Accept', MIME_TYPE + ", */*")
     req.get_method = lambda: "HEAD"
     fp = urllib2.urlopen(req)
     headers = fp.headers
@@ -403,7 +403,6 @@ def download_metalink(src, path, force = False, handler = None):
                 result = download_file_node(filenode, path, force, handler)
                 if result:
                     results.append(result)
-                    
     if len(results) == 0:
         return False
     
@@ -501,7 +500,7 @@ def urlretrieve(url, filename, reporthook = None):
     ### FIXME need to check contents from previous download here
     resume = FileResume(filename + ".temp")
     resume.add_block(0)
-    
+
     while block:
         block = temp.read(block_size)
         data.write(block)
@@ -780,6 +779,7 @@ def pgp_verify_sig(filename, sig):
         return True
     
     return False
+
 def is_remote(name):
     transport = get_transport(name)
         
