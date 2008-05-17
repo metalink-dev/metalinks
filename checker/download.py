@@ -54,7 +54,7 @@ import socket
 import ftplib
 import httplib
 import GPG
-import logging
+#import logging
 import base64
 import sys
 import gettext
@@ -557,15 +557,15 @@ class FileResume:
                     offset = count
                 total += self.size
             elif offset != None:
-                start = ((offset * self.size) / size) + 1
-                newblocks.extend(range(start, start + (total / size)))
+                start = ((offset * self.size) / size)
+                newblocks.extend(map(str, range(start, start + (total / size))))
                 total = 0
                 offset = None
             count += 1
 
         if offset != None:
-            start = ((offset * self.size) / size) + 1
-            newblocks.extend(range(start, start + (total / size)))
+            start = ((offset * self.size) / size)
+            newblocks.extend(map(str, range(start, start + (total / size))))
 
         self.blocks = newblocks
         self.set_block_size(size)
@@ -621,6 +621,7 @@ class FileResume:
         filehandle.write("%s:" % str(self.size))
         #for block_id in self.blocks:
             #filehandle.write(str(block_id) + ",")
+        #print self.blocks
         filehandle.write(",".join(self.blocks))
         filehandle.close()
 
@@ -975,34 +976,34 @@ class Segment_Manager:
         '''
         ?
         '''
-        try:
-            if self.size == "" or self.size == 0:
-                self.size = self.get_size()
-                if self.size == None:
-                    #crap out and do it the old way
-                    self.close_handler()
-                    return False
-            
-            while True:
-                #print "\ntc:", self.active_count(), len(self.sockets), len(self.urls)
-                #if self.active_count() == 0:
-                #print self.byte_total(), self.size
-                time.sleep(0.1)
-                self.update()
-                self.resume.extend_blocks(self.chunk_list())
-                if self.byte_total() >= self.size and self.active_count() == 0:
-                    self.resume.complete()
-                    self.close_handler()
-                    return True
+        #try:
+        if self.size == "" or self.size == 0:
+            self.size = self.get_size()
+            if self.size == None:
                 #crap out and do it the old way
-                if len(self.urls) == 0:
-                    self.close_handler()
-                    return False
-                
-            return False
-        except BaseException, e:
-            logging.warning(unicode(e))
-            return False
+                self.close_handler()
+                return False
+        
+        while True:
+            #print "\ntc:", self.active_count(), len(self.sockets), len(self.urls)
+            #if self.active_count() == 0:
+            #print self.byte_total(), self.size
+            time.sleep(0.1)
+            self.update()
+            self.resume.extend_blocks(self.chunk_list())
+            if self.byte_total() >= self.size and self.active_count() == 0:
+                self.resume.complete()
+                self.close_handler()
+                return True
+            #crap out and do it the old way
+            if len(self.urls) == 0:
+                self.close_handler()
+                return False
+            
+        return False
+##        except BaseException, e:
+##            logging.warning(unicode(e))
+##            return False
 
     def update(self):
         next = self.next_url()
