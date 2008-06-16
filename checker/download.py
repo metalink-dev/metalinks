@@ -820,10 +820,11 @@ def filehash(thisfile, filesha):
     except:
         return ""
 
-    data = filehandle.read()
+    chunksize = 1024*1024
+    data = filehandle.read(chunksize)
     while(data != ""):
         filesha.update(data)
-        data = filehandle.read()
+        data = filehandle.read(chunksize)
 
     filehandle.close()
     return filesha.hexdigest()
