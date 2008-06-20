@@ -29,12 +29,13 @@ manifestVersion="1.0">
 """
 
 setup(
-    windows = [
-        {
-            "script": "metalink_editor.py",
-            "icon_resources": [(1, "metalink.ico")],
-            "other_resources": [(24,1,manifest)]
-        }
-    ],
+##    windows = [
+##        #{
+##        #    "script": "metalink_editor.py",
+##        #    "icon_resources": [(1, "metalink.ico")],
+##        #    "other_resources": [(24,1,manifest)]
+##        #},
+##    ],
+    console = ["meditor.py"],
     data_files=[('', ["metalink_small.png", "metalink_small.ico", "metalink.png", "license.txt", "changelog.txt", "readme.txt"])],
 )
