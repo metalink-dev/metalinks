@@ -48,7 +48,7 @@ import checker
 import GPG
 
 # DO NOT CHANGE
-VERSION="Metalink Checker Version 3.8"
+VERSION="Metalink Checker Version 4.0"
 
 import os.path
 import locale
@@ -83,7 +83,7 @@ def run():
     # Command line parser options.
     parser = optparse.OptionParser(version=VERSION)
     parser.add_option("--download", "-d", action="store_true", dest="download", help=_("Actually download the file(s) in the metalink"))
-    parser.add_option("--file", "-f", dest="filevar", metavar="FILE", help=_("Metalink file to check"))
+    parser.add_option("--file", "-f", dest="filevar", metavar="FILE", help=_("Metalink file to check or file to download"))
     parser.add_option("--timeout", "-t", dest="timeout", metavar="TIMEOUT", help=_("Set timeout in seconds to wait for response (default=10)"))
     parser.add_option("--os", "-o", dest="os", metavar="OS", help=_("Operating System preference"))
     parser.add_option("--no-segmented", "-s", action="store_true", dest="nosegmented", help=_("Do not use the segmented download method"))
@@ -121,13 +121,9 @@ def run():
         return
     
     if options.download:
-        download.SEGMENTED = True
-        if options.nosegmented:
-            download.SEGMENTED = False
 
         progress = ProgressBar(55)
-        result = download.get(options.filevar, os.getcwd(), handler=progress.download_update)
-        #result = download.download_metalink(options.filevar, os.getcwd(), handler=progress.download_update)
+        result = download.get(options.filevar, os.getcwd(), handler=progress.download_update, segmented = not options.nosegmented)
         progress.download_end()
         if not result:
             sys.exit(-1)

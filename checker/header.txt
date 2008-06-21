@@ -67,6 +67,10 @@
 #
 # CHANGELOG:
 #
+# Version 4.0
+# -----------
+# - Bugfixes
+#
 # Version 3.8
 # -----------
 # - Will now download any file type and auto-detect metalink files

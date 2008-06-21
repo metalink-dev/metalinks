@@ -67,6 +67,10 @@
 #
 # CHANGELOG:
 #
+# Version 4.0
+# -----------
+# - Bugfixes
+#
 # Version 3.8
 # -----------
 # - Will now download any file type and auto-detect metalink files
@@ -190,6 +194,7 @@ import httplib
 import ftplib
 import locale
 import gettext
+import logging
 import urllib2
 import urlparse
 import hashlib
@@ -202,10 +207,11 @@ import copy
 import socket
 import ftplib
 import httplib
-import logging
 import base64
 import sys
 import gettext
+import StringIO
+import gzip
 import os
 import StringIO
 import os.path
@@ -213,6 +219,11 @@ import subprocess
 import gettext
 import sys
 import locale
+
+try:
+    import win32process
+except ImportError: pass
+
 import xml.dom.minidom
 import optparse
 import socket
@@ -289,7 +300,7 @@ def translate():
 
     #print base, localedir
     t = gettext.translation(base, localedir, [locale.getdefaultlocale()[0]], None, 'en')
-    return t.lgettext
+    return t.ugettext
 
 _ = translate()
 
@@ -613,8 +624,9 @@ checker.translate = translate
 ########################################################################
 
 #import utils
+#import logging
 
-USER_AGENT = "Metalink Checker/3.8 +http://www.nabber.org/projects/"
+USER_AGENT = "Metalink Checker/4.0 +http://www.nabber.org/projects/"
 
 SEGMENTED = True
 LIMIT_PER_HOST = 1
@@ -668,7 +680,7 @@ def translate():
 
     #print base, localedir
     t = gettext.translation(base, localedir, [locale.getdefaultlocale()[0]], None, 'en')
-    return t.lgettext
+    return t.ugettext
 
 _ = translate()
 
@@ -684,23 +696,61 @@ class URL:
         self.preference = int(preference)
         self.maxconnections = int(maxconnections)
 
+
+class DecompressFile(gzip.GzipFile):
+    def __init__(self, fp):
+        self.fp = fp
+        self.geturl = fp.geturl
+
+        compressed = StringIO.StringIO(fp.read())
+        gzip.GzipFile.__init__(self, fileobj=compressed)
+    
+    def info(self):
+        info = self.fp.info()
+        # store current position, must reset if in middle of read operation
+        reset = self.tell()
+        # reset to start
+        self.seek(0)
+        newsize = str(len(self.read()))
+        # reset to original position
+        self.seek(reset)
+        info["Content-Length"] = newsize
+        return info
+    
 def urlopen(url, data = None, metalink=False):
+    #print "URLOPEN:", url
     url = complete_url(url)
-    headers = {'User-agent': USER_AGENT}
+    req = urllib2.Request(url, data)
+    req.add_header('User-agent', USER_AGENT)
+    req.add_header('Cache-Control', "no-cache")
+    req.add_header('Pragma', "no-cache")
+    req.add_header('Accept-Encoding', 'gzip')
     if metalink:
-        headers['Accept'] = MIME_TYPE + ", */*"
-    req = urllib2.Request(url, data, headers)
+        req.add_header('Accept', MIME_TYPE + ", */*")
+
     fp = urllib2.urlopen(req)
+    try:
+        if fp.headers['Content-Encoding'] == "gzip":
+            return DecompressFile(fp)
+    except KeyError: pass
+    #print fp.info()
     #print fp.read()
     return fp
 
 def urlhead(url, metalink=False):
+    '''
+    raise IOError for example if the URL does not exist
+    '''
     url = complete_url(url)
-    headers = {'User-agent': USER_AGENT}
+    req = urllib2.Request(url, None)
+    req.add_header('User-agent', USER_AGENT)
+    req.add_header('Cache-Control', "no-cache")
+    req.add_header('Pragma', "no-cache")
     if metalink:
-        headers['Accept'] = MIME_TYPE + ", */*"
-    req = urllib2.Request(url, None, headers)
+        req.add_header('Accept', MIME_TYPE + ", */*")
+
     req.get_method = lambda: "HEAD"
+    logging.debug(url)
     fp = urllib2.urlopen(req)
     headers = fp.headers
     fp.close()
@@ -738,19 +788,27 @@ def get(src, path, checksums = {}, force = False, handler = None, segmented = SE
     # assume metalink if ends with .metalink
     if src.endswith(".metalink"):
         return download_metalink(src, path, force, handler)
-    # add head check for metalink type, if MIME_TYPE or application/xml? treat as metalink
-    elif urlhead(src, metalink=True)["content-type"].startswith(MIME_TYPE):
-        print _("Metalink content-type detected.")
-        return download_metalink(src, path, force, handler)
-    # assume normal file download here
     else:
-        # parse out filename portion here
-        filename = os.path.basename(src)
-        result = download_file(src, os.path.join(path, filename), 
-                0, checksums, force, handler, segmented = segmented)
-        if result:
-            return [result]
-        return False
+        # not all servers support HEAD where GET is also supported
+        # also a WindowsError is thrown if a local file does not exist
+        try:
+            # add head check for metalink type, if MIME_TYPE or application/xml? treat as metalink
+            if urlhead(src, metalink=True)["content-type"].startswith(MIME_TYPE):
+                print _("Metalink content-type detected.")
+                return download_metalink(src, path, force, handler)
+        except IOError, e:
+            pass
+        except WindowsError, e:
+            pass
+            
+    # assume normal file download here
+    # parse out filename portion here
+    filename = os.path.basename(src)
+    result = download_file(src, os.path.join(path, filename), 
+            0, checksums, force, handler, segmented = segmented)
+    if result:
+        return [result]
+    return False
     
 def download_file(url, local_file, size=0, checksums={}, force = False, 
         handler = None, segmented = SEGMENTED, chunksums = {}, chunk_size = None):
@@ -928,7 +986,6 @@ def download_metalink(src, path, force = False, handler = None):
                 result = download_file_node(filenode, path, force, handler)
                 if result:
                     results.append(result)
-                    
     if len(results) == 0:
         return False
     
@@ -1026,7 +1083,7 @@ def urlretrieve(url, filename, reporthook = None):
     ### FIXME need to check contents from previous download here
     resume = FileResume(filename + ".temp")
     resume.add_block(0)
-    
+
     while block:
         block = temp.read(block_size)
         data.write(block)
@@ -1083,15 +1140,15 @@ class FileResume:
                     offset = count
                 total += self.size
             elif offset != None:
-                start = ((offset * self.size) / size) + 1
-                newblocks.extend(range(start, start + (total / size)))
+                start = ((offset * self.size) / size)
+                newblocks.extend(map(str, range(start, start + (total / size))))
                 total = 0
                 offset = None
             count += 1
 
         if offset != None:
-            start = ((offset * self.size) / size) + 1
-            newblocks.extend(range(start, start + (total / size)))
+            start = ((offset * self.size) / size)
+            newblocks.extend(map(str, range(start, start + (total / size))))
 
         self.blocks = newblocks
         self.set_block_size(size)
@@ -1147,6 +1204,7 @@ class FileResume:
         filehandle.write("%s:" % str(self.size))
         #for block_id in self.blocks:
             #filehandle.write(str(block_id) + ",")
+        #print self.blocks
         filehandle.write(",".join(self.blocks))
         filehandle.close()
 
@@ -1305,6 +1363,7 @@ def pgp_verify_sig(filename, sig):
         return True
     
     return False
+
 def is_remote(name):
     transport = get_transport(name)
         
@@ -1344,10 +1403,11 @@ def filehash(thisfile, filesha):
     except:
         return ""
 
-    data = filehandle.read()
+    chunksize = 1024*1024
+    data = filehandle.read(chunksize)
     while(data != ""):
         filesha.update(data)
-        data = filehandle.read()
+        data = filehandle.read(chunksize)
 
     filehandle.close()
     return filesha.hexdigest()
@@ -1500,34 +1560,34 @@ class Segment_Manager:
         '''
         ?
         '''
-        try:
-            if self.size == "" or self.size == 0:
-                self.size = self.get_size()
-                if self.size == None:
-                    #crap out and do it the old way
-                    self.close_handler()
-                    return False
-            
-            while True:
-                #print "\ntc:", self.active_count(), len(self.sockets), len(self.urls)
-                #if self.active_count() == 0:
-                #print self.byte_total(), self.size
-                time.sleep(0.1)
-                self.update()
-                self.resume.extend_blocks(self.chunk_list())
-                if self.byte_total() >= self.size and self.active_count() == 0:
-                    self.resume.complete()
-                    self.close_handler()
-                    return True
+        #try:
+        if self.size == "" or self.size == 0:
+            self.size = self.get_size()
+            if self.size == None:
                 #crap out and do it the old way
-                if len(self.urls) == 0:
-                    self.close_handler()
-                    return False
-                
-            return False
-        except BaseException, e:
-            logging.warning(unicode(e))
-            return False
+                self.close_handler()
+                return False
+        
+        while True:
+            #print "\ntc:", self.active_count(), len(self.sockets), len(self.urls)
+            #if self.active_count() == 0:
+            #print self.byte_total(), self.size
+            time.sleep(0.1)
+            self.update()
+            self.resume.extend_blocks(self.chunk_list())
+            if self.byte_total() >= self.size and self.active_count() == 0:
+                self.resume.complete()
+                self.close_handler()
+                return True
+            #crap out and do it the old way
+            if len(self.urls) == 0:
+                self.close_handler()
+                return False
+            
+        return False
+##        except BaseException, e:
+##            logging.warning(unicode(e))
+##            return False
 
     def update(self):
         next = self.next_url()
@@ -2300,6 +2360,7 @@ class HTTPSConnection:
 download = Dummy()
 download.CONNECT_RETRY_COUNT = CONNECT_RETRY_COUNT
 download.COUNTRY = COUNTRY
+download.DecompressFile = DecompressFile
 download.FTP = FTP
 download.FTP_PROXY = FTP_PROXY
 download.FileResume = FileResume
@@ -2387,7 +2448,7 @@ def translate():
 
     #print base, localedir
     t = gettext.translation(base, localedir, [locale.getdefaultlocale()[0]], None, 'en')
-    return t.lgettext
+    return t.ugettext
 
 _ = translate()
 
@@ -2405,17 +2466,23 @@ class Signature:
         self.signature_id = self.key_id = None
         self.username = None
         self.error = None
+        self.nopubkey = False
 
     def BADSIG(self, value):
+        self.error = "BADSIG"
         self.valid = 0
         self.key_id, self.username = value.split(None, 1)
     def GOODSIG(self, value):
         self.valid = 1
+        #self.error = "GOODSIG"
         self.key_id, self.username = value.split(None, 1)
     def VALIDSIG(self, value):
         #print value
+        #self.valid = 1
+        #self.error = "VALID_SIG"
         self.fingerprint, self.creation_date, self.timestamp, other = value.split(" ", 3)
     def SIG_ID(self, value):
+        #self.error = "SIG_ID"
         self.signature_id, self.creation_date, self.timestamp = value.split(" ", 2)
     def NODATA(self, value):
         self.error = _("File not properly loaded for signature.")
@@ -2423,10 +2490,19 @@ class Signature:
         #print value
         self.error = _("Signature error.")
     def NO_PUBKEY(self, value):
-        #print value
+        self.key_id = value
+        self.nopubkey = True
         self.error = _("Signature error, missing public key with id 0x%s.") % value[-8:]
+        
+    def TRUST_ULTIMATE(self, value):
+        '''
+        see http://cvs.gnupg.org/cgi-bin/viewcvs.cgi/trunk/doc/DETAILS?rev=289
+        Trust settings do NOT determine if a signature is good or not!  That is reserved for GOOD_SIG!
+        '''
+        return
+        
     def TRUST_UNDEFINED(self, value):
-        pass
+        self.error = _("Trust undefined")
         #print value.split()
         #raise AssertionError, "File not properly loaded for signature."
     
@@ -2577,7 +2653,7 @@ class GPGSubprocess:
         # the file objects for communicating with it.
         cmd = [self.gpg_binary, '--status-fd 2']
         if self.keyring:
-            cmd.append('--keyring "%s" --no-default-keyring'%self.keyring)
+            cmd.append('--keyring "%s" --no-default-keyring'% self.keyring)
 
         cmd.extend(args)
         cmd = ' '.join(cmd)
@@ -2586,7 +2662,14 @@ class GPGSubprocess:
         shell = True
         if os.name == 'nt':
             shell = False
-        process = subprocess.Popen(cmd, shell=shell, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+        # From: http://www.py2exe.org/index.cgi/Py2ExeSubprocessInteractions
+        creationflags = 0
+        try:
+            creationflags = win32process.CREATE_NO_WINDOW
+        except NameError: pass
+            
+        process = subprocess.Popen(cmd, shell=shell, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, creationflags = creationflags)
         #child_stdout, child_stdin, child_stderr =  #popen2.popen3(cmd)
         #return child_stdout, child_stdin, child_stderr
         #print process.stderr
@@ -2939,7 +3022,7 @@ xmlutils.get_xml_tag_strings = get_xml_tag_strings
 
 
 # DO NOT CHANGE
-VERSION="Metalink Checker Version 3.8"
+VERSION="Metalink Checker Version 4.0"
 
 
 def translate():
@@ -2960,7 +3043,7 @@ def translate():
 
     #print base, localedir
     t = gettext.translation(base, localedir, [locale.getdefaultlocale()[0]], None, 'en')
-    return t.lgettext
+    return t.ugettext
 
 _ = translate()
 
@@ -2971,7 +3054,7 @@ def run():
     # Command line parser options.
     parser = optparse.OptionParser(version=VERSION)
     parser.add_option("--download", "-d", action="store_true", dest="download", help=_("Actually download the file(s) in the metalink"))
-    parser.add_option("--file", "-f", dest="filevar", metavar="FILE", help=_("Metalink file to check"))
+    parser.add_option("--file", "-f", dest="filevar", metavar="FILE", help=_("Metalink file to check or file to download"))
     parser.add_option("--timeout", "-t", dest="timeout", metavar="TIMEOUT", help=_("Set timeout in seconds to wait for response (default=10)"))
     parser.add_option("--os", "-o", dest="os", metavar="OS", help=_("Operating System preference"))
     parser.add_option("--no-segmented", "-s", action="store_true", dest="nosegmented", help=_("Do not use the segmented download method"))
@@ -3009,13 +3092,9 @@ def run():
         return
     
     if options.download:
-        download.SEGMENTED = True
-        if options.nosegmented:
-            download.SEGMENTED = False
 
         progress = ProgressBar(55)
-        result = download.get(options.filevar, os.getcwd(), handler=progress.download_update)
-        #result = download.download_metalink(options.filevar, os.getcwd(), handler=progress.download_update)
+        result = download.get(options.filevar, os.getcwd(), handler=progress.download_update, segmented = not options.nosegmented)
         progress.download_end()
         if not result:
             sys.exit(-1)
