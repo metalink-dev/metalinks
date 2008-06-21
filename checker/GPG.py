@@ -23,6 +23,10 @@ import gettext
 import sys
 import locale
 
+try:
+    import win32process
+except ImportError: pass
+
 def translate():
     '''
     Setup translation path
@@ -62,15 +66,20 @@ class Signature:
         self.nopubkey = False
 
     def BADSIG(self, value):
+        self.error = "BADSIG"
         self.valid = 0
         self.key_id, self.username = value.split(None, 1)
     def GOODSIG(self, value):
         self.valid = 1
+        #self.error = "GOODSIG"
         self.key_id, self.username = value.split(None, 1)
     def VALIDSIG(self, value):
         #print value
+        #self.valid = 1
+        #self.error = "VALID_SIG"
         self.fingerprint, self.creation_date, self.timestamp, other = value.split(" ", 3)
     def SIG_ID(self, value):
+        #self.error = "SIG_ID"
         self.signature_id, self.creation_date, self.timestamp = value.split(" ", 2)
     def NODATA(self, value):
         self.error = _("File not properly loaded for signature.")
@@ -81,8 +90,16 @@ class Signature:
         self.key_id = value
         self.nopubkey = True
         self.error = _("Signature error, missing public key with id 0x%s.") % value[-8:]
+        
+    def TRUST_ULTIMATE(self, value):
+        '''
+        see http://cvs.gnupg.org/cgi-bin/viewcvs.cgi/trunk/doc/DETAILS?rev=289
+        Trust settings do NOT determine if a signature is good or not!  That is reserved for GOOD_SIG!
+        '''
+        return
+        
     def TRUST_UNDEFINED(self, value):
-        pass
+        self.error = _("Trust undefined")
         #print value.split()
         #raise AssertionError, "File not properly loaded for signature."
     
@@ -242,7 +259,14 @@ class GPGSubprocess:
         shell = True
         if os.name == 'nt':
             shell = False
-        process = subprocess.Popen(cmd, shell=shell, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+        # From: http://www.py2exe.org/index.cgi/Py2ExeSubprocessInteractions
+        creationflags = 0
+        try:
+            creationflags = win32process.CREATE_NO_WINDOW
+        except NameError: pass
+            
+        process = subprocess.Popen(cmd, shell=shell, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, creationflags = creationflags)
         #child_stdout, child_stdin, child_stderr =  #popen2.popen3(cmd)
         #return child_stdout, child_stdin, child_stderr
         #print process.stderr

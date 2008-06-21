@@ -38,6 +38,7 @@
 # files = download.get("file.metalink", os.getcwd())
 #
 ########################################################################
+import logging
 
 #import utils
 import urllib2
@@ -59,7 +60,7 @@ import base64
 import sys
 import gettext
 
-USER_AGENT = "Metalink Checker/3.8 +http://www.nabber.org/projects/"
+USER_AGENT = "Metalink Checker/4.0 +http://www.nabber.org/projects/"
 
 SEGMENTED = True
 LIMIT_PER_HOST = 1
@@ -151,11 +152,14 @@ class DecompressFile(gzip.GzipFile):
         self.seek(reset)
         info["Content-Length"] = newsize
         return info
-
+    
 def urlopen(url, data = None, metalink=False):
+    #print "URLOPEN:", url
     url = complete_url(url)
     req = urllib2.Request(url, data)
     req.add_header('User-agent', USER_AGENT)
+    req.add_header('Cache-Control', "no-cache")
+    req.add_header('Pragma', "no-cache")
     req.add_header('Accept-Encoding', 'gzip')
     if metalink:
         req.add_header('Accept', MIME_TYPE + ", */*")
@@ -163,19 +167,26 @@ def urlopen(url, data = None, metalink=False):
     fp = urllib2.urlopen(req)
     try:
         if fp.headers['Content-Encoding'] == "gzip":
-            #print "DECOMPRESSING", url
             return DecompressFile(fp)
     except KeyError: pass
+    #print fp.info()
     #print fp.read()
     return fp
 
 def urlhead(url, metalink=False):
+    '''
+    raise IOError for example if the URL does not exist
+    '''
     url = complete_url(url)
     req = urllib2.Request(url, None)
     req.add_header('User-agent', USER_AGENT)
+    req.add_header('Cache-Control', "no-cache")
+    req.add_header('Pragma', "no-cache")
     if metalink:
         req.add_header('Accept', MIME_TYPE + ", */*")
+
     req.get_method = lambda: "HEAD"
+    logging.debug(url)
     fp = urllib2.urlopen(req)
     headers = fp.headers
     fp.close()
@@ -213,19 +224,27 @@ def get(src, path, checksums = {}, force = False, handler = None, segmented = SE
     # assume metalink if ends with .metalink
     if src.endswith(".metalink"):
         return download_metalink(src, path, force, handler)
-    # add head check for metalink type, if MIME_TYPE or application/xml? treat as metalink
-    elif urlhead(src, metalink=True)["content-type"].startswith(MIME_TYPE):
-        print _("Metalink content-type detected.")
-        return download_metalink(src, path, force, handler)
-    # assume normal file download here
     else:
-        # parse out filename portion here
-        filename = os.path.basename(src)
-        result = download_file(src, os.path.join(path, filename), 
-                0, checksums, force, handler, segmented = segmented)
-        if result:
-            return [result]
-        return False
+        # not all servers support HEAD where GET is also supported
+        # also a WindowsError is thrown if a local file does not exist
+        try:
+            # add head check for metalink type, if MIME_TYPE or application/xml? treat as metalink
+            if urlhead(src, metalink=True)["content-type"].startswith(MIME_TYPE):
+                print _("Metalink content-type detected.")
+                return download_metalink(src, path, force, handler)
+        except IOError, e:
+            pass
+        except WindowsError, e:
+            pass
+            
+    # assume normal file download here
+    # parse out filename portion here
+    filename = os.path.basename(src)
+    result = download_file(src, os.path.join(path, filename), 
+            0, checksums, force, handler, segmented = segmented)
+    if result:
+        return [result]
+    return False
     
 def download_file(url, local_file, size=0, checksums={}, force = False, 
         handler = None, segmented = SEGMENTED, chunksums = {}, chunk_size = None):
