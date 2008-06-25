@@ -99,6 +99,13 @@ PROTOCOLS=("http","https","ftp")
 # See http://www.poeml.de/transmetalink-test/README
 MIME_TYPE = "application/metalink+xml"
 
+if os.environ.has_key('http_proxy') and HTTP_PROXY == "":
+    HTTP_PROXY=os.environ['http_proxy']
+if os.environ.has_key('ftp_proxy') and FTP_PROXY == "":
+    HTTP_PROXY=os.environ['ftp_proxy']
+if os.environ.has_key('https_proxy') and HTTPS_PROXY == "":
+    HTTP_PROXY=os.environ['https_proxy']
+
 def translate():
     '''
     Setup translation path
