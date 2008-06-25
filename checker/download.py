@@ -68,6 +68,9 @@ HOST_LIMIT = 5
 MAX_REDIRECTS = 20
 CONNECT_RETRY_COUNT = 3
 
+MAX_CHUNKS = 256
+DEFAULT_CHUNK_SIZE = 262144
+
 LANG = []
 OS = None
 COUNTRY = None
@@ -304,7 +307,7 @@ def download_file_urls(urllist, local_file, size=0, checksums={}, force = False,
     seg_result = False
     if segmented:
         if chunk_size == None:
-            chunk_size = 262144
+            chunk_size = DEFAULT_CHUNK_SIZE
         manager = Segment_Manager(urllist, local_file, size, reporthook = handler, 
                 chunksums = chunksums, chunk_size = int(chunk_size))
         seg_result = manager.run()
@@ -909,7 +912,7 @@ class ThreadSafeFile(file):
         return self.lock.release()
     
 class Segment_Manager:
-    def __init__(self, urls, localfile, size=0, chunk_size = 262144, chunksums = {}, reporthook = None):
+    def __init__(self, urls, localfile, size=0, chunk_size = DEFAULT_CHUNK_SIZE, chunksums = {}, reporthook = None):
         assert isinstance(urls, dict)
                 
         self.sockets = []
@@ -932,7 +935,6 @@ class Segment_Manager:
             self.f = ThreadSafeFile(localfile, "wb+")
             
         self.resume = FileResume(localfile + ".temp")
-        self.resume.update_block_size(self.chunk_size)
 
     def get_chunksum(self, index):
         mylist = {}
@@ -1014,6 +1016,11 @@ class Segment_Manager:
                 #crap out and do it the old way
                 self.close_handler()
                 return False
+
+        if self.size/self.chunk_size > MAX_CHUNKS:
+            self.chunk_size = self.size/MAX_CHUNKS
+            #print "Set chunk size to %s." % self.chunk_size
+        self.resume.update_block_size(self.chunk_size)
         
         while True:
             #print "\ntc:", self.active_count(), len(self.sockets), len(self.urls)
