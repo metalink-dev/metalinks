@@ -897,6 +897,17 @@ def sort_prefs(mydict):
 
 ############# segmented download functions #############
 
+class ThreadSafeFile(file):
+    def __init__(self, *args):
+        file.__init__(self, *args)
+        self.lock = threading.Lock()
+
+    def acquire(self):
+        return self.lock.acquire()
+    
+    def release(self):
+        return self.lock.release()
+    
 class Segment_Manager:
     def __init__(self, urls, localfile, size=0, chunk_size = 262144, chunksums = {}, reporthook = None):
         assert isinstance(urls, dict)
@@ -916,9 +927,9 @@ class Segment_Manager:
         
         # Open the file.
         try:
-            self.f = open(localfile, "rb+")
+            self.f = ThreadSafeFile(localfile, "rb+")
         except IOError:
-            self.f = open(localfile, "wb+")
+            self.f = ThreadSafeFile(localfile, "wb+")
             
         self.resume = FileResume(localfile + ".temp")
         self.resume.update_block_size(self.chunk_size)
@@ -1347,13 +1358,13 @@ class Host_Segment:
         return bits/self.ttime
 
     def checksum(self):
-        lock = threading.Lock()
-        lock.acquire()
-        
+        #lock = threading.Lock()
+        #lock.acquire()
+
+        self.mem.acquire()
         self.mem.seek(self.byte_start, 0)
         chunkstring = self.mem.read(self.byte_count)
-        
-        lock.release()
+        self.mem.release()
 
         return verify_chunk_checksum(chunkstring, self.checksums)
 
@@ -1476,14 +1487,14 @@ class Ftp_Host_Segment(threading.Thread, Host_Segment):
 
             self.bytes += len(tempbuffer)
 
-            lock = threading.Lock()
-            lock.acquire()
-            
+            #lock = threading.Lock()
+            #lock.acquire()
+            self.mem.acquire()
             self.mem.seek(self.byte_start, 0)
             self.mem.write(tempbuffer)
             self.mem.flush()
 
-            lock.release()
+            self.mem.release()
         
             self.response = None
             
@@ -1616,14 +1627,12 @@ class Http_Host_Segment(threading.Thread, Host_Segment):
         size = len(body)
         # write out body to file
 
-        lock = threading.Lock()
-        lock.acquire()
-        
+        #lock = threading.Lock()
+        self.mem.acquire()
         self.mem.seek(self.byte_start, 0)
         self.mem.write(body)
         self.mem.flush()
-
-        lock.release()
+        self.mem.release()
         
         self.bytes += size
         self.response = None
