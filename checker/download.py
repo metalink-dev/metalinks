@@ -334,50 +334,10 @@ def download_file_urls(urllist, local_file, size=0, checksums={}, force = False,
             print "\n" + _("Could not download all segments of the file, trying one mirror at a time.")
 
     if (not segmented) or (not seg_result):
-        # do it the old way
-        # choose a random url tag to start with
-        #urllist = list(urllist)
-        #number = int(random.random() * len(urllist))
         manager = NormalManager(urllist, local_file, size, checksums = checksums, chunksums = chunksums, chunk_size = int(chunk_size))
         manager.set_status_callback(handler)
         manager.run()
         
-        #urllist = start_sort(urllist)
-        #number = 0
-        
-        #count = 1
-        #while (count <= len(urllist)):
-            #error = False
-            #remote_file = complete_url(urllist[number])
-            ##print remote_file
-            #result = True
-            #try:
-                #urlretrieve(remote_file, local_file, handler)
-            #except:
-                #result = False
-            #error = not result
-            #number = (number + 1) % len(urllist)
-            #count += 1
-
-  #          if filecheck(local_file, checksums, size, handler) and not error:
- #               return local_file
-##            if verify_checksum(local_file, checksums):
-##                actsize = 0
-##                try:
-##                    actsize = os.stat(local_file).st_size
-##                except: pass
-##                    
-##                if handler != None:
-##                    tempsize = size
-##                    if size == 0:
-##                        tempsize = actsize
-##                    handler(1, actsize, tempsize)
-##
-##                if (int(actsize) == int(size) or size == 0) and not error:
-##                    return local_file
-##            else:
-##                print "\n" + _("Checksum failed for %s.") % os.path.basename(local_file)
-
     if manager.get_status():
         return local_file
     return False
@@ -388,6 +348,7 @@ class Manager:
         self.pause_handler = None
         self.status_handler = None
         self.status = True
+        self.end_bitrate()
         
     def set_cancel_callback(self, handler):
         self.cancel_handler = handler
@@ -402,6 +363,7 @@ class Manager:
         result = True
         while result:
             if self.pause_handler != None and self.pause_handler():
+                self.end_bitrate()
                 time.sleep(1)
             else:
                 if wait != None:
@@ -409,12 +371,31 @@ class Manager:
                 result = self.cycle()
             
         return self.get_status()
-            
+         
     def get_status(self):
         return self.status
     
     def close_handler(self):
         return
+
+    def start_bitrate(self, bytes):
+        '''
+        Pass in current byte count
+        '''
+        self.oldsize = bytes
+        self.oldtime = time.time()
+
+    def end_bitrate(self):
+        self.oldsize = 0
+        self.oldtime = None
+        
+    def get_bitrate(self, bytes):
+        '''
+        Pass in current byte count
+        '''
+        if self.oldtime != None:
+            return ((bytes - self.oldsize) * 8 / 1024)/(time.time() - self.oldtime)
+        return None
             
 class NormalManager(Manager):
     def __init__(self, urllist, local_file, size, checksums, chunksums, chunk_size):
@@ -427,26 +408,27 @@ class NormalManager(Manager):
         self.start_number = 0
         self.number = 0
         self.count = 1
-    
+
+    def random_start(self):
+        # do it the old way
+        # choose a random url tag to start with
+        #urllist = list(urllist)
+        #number = int(random.random() * len(urllist))
+        self.start_number = int(random.random() * len(self.urllist))
+        self.number = self.start_number
+        
     def cycle(self):
         try:
-            #error = False
             self.status = True
             remote_file = complete_url(self.urllist[self.number])
-            #print remote_file
-            #result = True
-            #try:
+
             manager = URLManager(remote_file, self.local_file, self.checksums)
             manager.set_status_callback(self.status_handler)
             manager.set_cancel_callback(self.cancel_handler)
             manager.set_pause_callback(self.pause_handler)
+            self.get_bitrate = manager.get_bitrate
             self.status = manager.run()
-            #if self.status:
-            #    return False
-            #except:
-            #    self.status = False
-            
-            #error = not result
+
             self.number = (self.number + 1) % len(self.urllist)
             self.count += 1
             
@@ -466,8 +448,7 @@ class URLManager(Manager):
         Manager.__init__(self)
         self.filename = filename
         self.checksums = checksums
-        self.block_size = 4096
-        #i = 0
+        self.block_size = 1024
         self.counter = 0
         self.temp = urlopen(remote_file)
         headers = self.temp.info()
@@ -482,7 +463,6 @@ class URLManager(Manager):
     ### FIXME need to check contents from previous download here
         self.resume = FileResume(filename + ".temp")
         self.resume.add_block(0)
-
         
     def close_handler(self):
         self.resume.complete()
@@ -492,24 +472,25 @@ class URLManager(Manager):
             self.status = filecheck(self.filename, self.checksums, self.size)
             
     def cycle(self):
+        if self.oldtime == None:
+            self.start_bitrate(self.counter * self.block_size)
         if self.cancel_handler != None and self.cancel_handler():
             self.close_handler()
             return False
         
         block = self.temp.read(self.block_size)
         self.data.write(block)
-        #i += block_size
         self.counter += 1
 
         self.resume.set_block_size(self.counter * self.block_size)
                         
         if self.status_handler != None:
-            #print counter, block_size, size
             self.status_handler(self.counter, self.block_size, self.size)
 
         if not block:
             self.close_handler()
-            
+
+        #print self.get_bitrate(self.counter * self.block_size)
         return bool(block)
     
 def filecheck(local_file, checksums, size, handler = None):
@@ -656,7 +637,7 @@ def urlretrieve(url, filename, reporthook = None):
     '''
     modernized replacement for urllib.urlretrieve() for use with proxy
     '''
-    block_size = 4096
+    block_size = 1024
     i = 0
     counter = 0
     temp = urlopen(url)
@@ -1093,7 +1074,6 @@ class Segment_Manager(Manager):
 
     def get_chunksum(self, index):
         mylist = {}
-        
         try:
             for key in self.chunksums.keys():
                 mylist[key] = self.chunksums[key][index]
@@ -1174,7 +1154,7 @@ class Segment_Manager(Manager):
                 return False
 
         # can't adjust chunk size if it has chunk hashes tied to that size
-        if len(chunksums) == 0 and self.size/self.chunk_size > MAX_CHUNKS:
+        if len(self.chunksums) == 0 and self.size/self.chunk_size > MAX_CHUNKS:
             self.chunk_size = self.size/MAX_CHUNKS
             #print "Set chunk size to %s." % self.chunk_size
         self.resume.update_block_size(self.chunk_size)
@@ -1188,6 +1168,10 @@ class Segment_Manager(Manager):
         Returns True if still downloading, False otherwise
         '''
         try:
+            bytes = self.byte_total()
+            if self.oldtime == None:
+                self.start_bitrate(bytes)
+                
             # cancel was pressed here
             if self.cancel_callback != None and self.cancel_callback():
                 self.status = False
@@ -1196,7 +1180,7 @@ class Segment_Manager(Manager):
             
             self.update()
             self.resume.extend_blocks(self.chunk_list())
-            if self.byte_total() >= self.size and self.active_count() == 0:
+            if bytes >= self.size and self.active_count() == 0:
                 self.resume.complete()
                 self.close_handler()
                 return False
@@ -1634,8 +1618,8 @@ class Ftp_Host_Segment(threading.Thread, Host_Segment):
         while True:
             if self.readable():
                 self.handle_read()
-            else:
                 self.ttime += (time.time() - self.start_time)
+            else:
                 self.end()
                 return
 
@@ -1692,14 +1676,12 @@ class Ftp_Host_Segment(threading.Thread, Host_Segment):
 ##
 ##            writedata = data[:index]
 ##
-##            lock = threading.Lock()
-##            lock.acquire()
-##            
+##            self.mem.acquire()
 ##            self.mem.seek(self.byte_start + self.bytes, 0)
 ##            self.mem.write(writedata)
 ##            self.mem.flush()
 ##            
-##            lock.release()
+##            self.mem.release()
 ##
 ##            self.response = None
 ##        else:
@@ -1745,8 +1727,8 @@ class Http_Host_Segment(threading.Thread, Host_Segment):
             while True:
                 if self.readable():
                     self.handle_read()
-                else:
                     self.ttime += (time.time() - self.start_time)
+                else:
                     self.end()
                     return
         #except BaseException, e:
@@ -1809,15 +1791,16 @@ class Http_Host_Segment(threading.Thread, Host_Segment):
         size = len(body)
         # write out body to file
 
-        #lock = threading.Lock()
         self.mem.acquire()
-        self.mem.seek(self.byte_start, 0)
+        self.mem.seek(self.byte_start + self.bytes, 0)
         self.mem.write(body)
         self.mem.flush()
         self.mem.release()
         
         self.bytes += size
-        self.response = None
+        #print self.bytes, self.byte_count
+        if self.bytes >= self.byte_count:
+            self.response = None
 
 ########### PROXYING OBJECTS ########################
 
