@@ -233,7 +233,7 @@ def get(src, path, checksums = {}, force = False, handler = None, segmented = SE
     '''
     # assume metalink if ends with .metalink
     if src.endswith(".metalink"):
-        return download_metalink(src, path, force, handler)
+        return download_metalink(src, path, force, handler, segmented)
     else:
         # not all servers support HEAD where GET is also supported
         # also a WindowsError is thrown if a local file does not exist
@@ -241,7 +241,7 @@ def get(src, path, checksums = {}, force = False, handler = None, segmented = SE
             # add head check for metalink type, if MIME_TYPE or application/xml? treat as metalink
             if urlhead(src, metalink=True)["content-type"].startswith(MIME_TYPE):
                 print _("Metalink content-type detected.")
-                return download_metalink(src, path, force, handler)
+                return download_metalink(src, path, force, handler, segmented)
         except IOError, e:
             pass
         except WindowsError, e:
@@ -275,6 +275,15 @@ def download_file(url, local_file, size=0, checksums={}, force = False,
     urllist = {}
     urllist[url] = URL(url)
     return download_file_urls(urllist, local_file, size, checksums, force, handler, segmented, chunksums, chunk_size)
+    
+    
+#class Download:
+    #def __init__(self, urllist, local_file, size=0, checksums={}, force = False, 
+            #handler = None, segmented = SEGMENTED, chunksums = {}, chunk_size = None):
+        #pass
+    
+    #def set_cancel_callback(self, callback):
+        #self.cancel_callback(self, 
     
 def download_file_urls(urllist, local_file, size=0, checksums={}, force = False, 
             handler = None, segmented = SEGMENTED, chunksums = {}, chunk_size = None):
@@ -311,12 +320,13 @@ def download_file_urls(urllist, local_file, size=0, checksums={}, force = False,
     if not os.path.isdir(directory):
         os.makedirs(directory)
 
+    if chunk_size == None:
+        chunk_size = DEFAULT_CHUNK_SIZE
+
     seg_result = False
     if segmented:
-        if chunk_size == None:
-            chunk_size = DEFAULT_CHUNK_SIZE
-        manager = Segment_Manager(urllist, local_file, size, reporthook = handler, 
-                chunksums = chunksums, chunk_size = int(chunk_size))
+        manager = Segment_Manager(urllist, local_file, size, checksums = checksums, chunksums = chunksums, chunk_size = int(chunk_size))
+        manager.set_status_callback(handler)
         seg_result = manager.run()
         
         if not seg_result:
@@ -328,25 +338,29 @@ def download_file_urls(urllist, local_file, size=0, checksums={}, force = False,
         # choose a random url tag to start with
         #urllist = list(urllist)
         #number = int(random.random() * len(urllist))
-        urllist = start_sort(urllist)
-        number = 0
+        manager = NormalManager(urllist, local_file, size, checksums = checksums, chunksums = chunksums, chunk_size = int(chunk_size))
+        manager.set_status_callback(handler)
+        manager.run()
         
-        count = 1
-        while (count <= len(urllist)):
-            error = False
-            remote_file = complete_url(urllist[number])
-            #print remote_file
-            result = True
-            try:
-                urlretrieve(remote_file, local_file, handler)
-            except:
-                result = False
-            error = not result
-            number = (number + 1) % len(urllist)
-            count += 1
+        #urllist = start_sort(urllist)
+        #number = 0
+        
+        #count = 1
+        #while (count <= len(urllist)):
+            #error = False
+            #remote_file = complete_url(urllist[number])
+            ##print remote_file
+            #result = True
+            #try:
+                #urlretrieve(remote_file, local_file, handler)
+            #except:
+                #result = False
+            #error = not result
+            #number = (number + 1) % len(urllist)
+            #count += 1
 
-            if filecheck(local_file, checksums, size, handler) and not error:
-                return local_file
+  #          if filecheck(local_file, checksums, size, handler) and not error:
+ #               return local_file
 ##            if verify_checksum(local_file, checksums):
 ##                actsize = 0
 ##                try:
@@ -364,10 +378,140 @@ def download_file_urls(urllist, local_file, size=0, checksums={}, force = False,
 ##            else:
 ##                print "\n" + _("Checksum failed for %s.") % os.path.basename(local_file)
 
-    if filecheck(local_file, checksums, size, handler):
+    if manager.get_status():
         return local_file
     return False
+            
+class Manager:
+    def __init__(self):
+        self.cancel_handler = None
+        self.pause_handler = None
+        self.status_handler = None
+        self.status = True
+        
+    def set_cancel_callback(self, handler):
+        self.cancel_handler = handler
+        
+    def set_pause_callback(self, handler):
+        self.pause_handler = handler
+        
+    def set_status_callback(self, handler):
+        self.status_handler = handler
 
+    def run(self, wait=None):
+        result = True
+        while result:
+            if self.pause_handler != None and self.pause_handler():
+                time.sleep(1)
+            else:
+                if wait != None:
+                    time.sleep(wait)
+                result = self.cycle()
+            
+        return self.get_status()
+            
+    def get_status(self):
+        return self.status
+    
+    def close_handler(self):
+        return
+            
+class NormalManager(Manager):
+    def __init__(self, urllist, local_file, size, checksums, chunksums, chunk_size):
+        Manager.__init__(self)
+        self.local_file = local_file
+        self.size = size
+        self.chunksums = chunksums
+        self.checksums = checksums
+        self.urllist = start_sort(urllist)
+        self.start_number = 0
+        self.number = 0
+        self.count = 1
+    
+    def cycle(self):
+        try:
+            #error = False
+            self.status = True
+            remote_file = complete_url(self.urllist[self.number])
+            #print remote_file
+            #result = True
+            #try:
+            manager = URLManager(remote_file, self.local_file, self.checksums)
+            manager.set_status_callback(self.status_handler)
+            manager.set_cancel_callback(self.cancel_handler)
+            manager.set_pause_callback(self.pause_handler)
+            self.status = manager.run()
+            #if self.status:
+            #    return False
+            #except:
+            #    self.status = False
+            
+            #error = not result
+            self.number = (self.number + 1) % len(self.urllist)
+            self.count += 1
+            
+            return self.count <= len(self.urllist)
+        except KeyboardInterrupt:
+            print "Download Interrupted!"
+            try:
+                manager.close_handler()
+            except: pass
+            return False
+    
+class URLManager(Manager):
+    def __init__(self, remote_file, filename, checksums = {}):
+        '''
+        modernized replacement for urllib.urlretrieve() for use with proxy
+        '''
+        Manager.__init__(self)
+        self.filename = filename
+        self.checksums = checksums
+        self.block_size = 4096
+        #i = 0
+        self.counter = 0
+        self.temp = urlopen(remote_file)
+        headers = self.temp.info()
+        
+        try:
+            self.size = int(headers['Content-Length'])
+        except KeyError:
+            self.size = 0
+    
+        self.data = open(filename, 'wb')
+
+    ### FIXME need to check contents from previous download here
+        self.resume = FileResume(filename + ".temp")
+        self.resume.add_block(0)
+
+        
+    def close_handler(self):
+        self.resume.complete()
+        self.data.close()
+        self.temp.close()
+        if self.status:
+            self.status = filecheck(self.filename, self.checksums, self.size)
+            
+    def cycle(self):
+        if self.cancel_handler != None and self.cancel_handler():
+            self.close_handler()
+            return False
+        
+        block = self.temp.read(self.block_size)
+        self.data.write(block)
+        #i += block_size
+        self.counter += 1
+
+        self.resume.set_block_size(self.counter * self.block_size)
+                        
+        if self.status_handler != None:
+            #print counter, block_size, size
+            self.status_handler(self.counter, self.block_size, self.size)
+
+        if not block:
+            self.close_handler()
+            
+        return bool(block)
+    
 def filecheck(local_file, checksums, size, handler = None):
     if verify_checksum(local_file, checksums):
         actsize = 0
@@ -387,7 +531,7 @@ def filecheck(local_file, checksums, size, handler = None):
     print "\n" + _("Checksum failed for %s.") % os.path.basename(local_file)
     return False
 
-def download_metalink(src, path, force = False, handler = None):
+def download_metalink(src, path, force = False, handler = None, segmented = SEGMENTED):
     '''
     Decode a metalink file, can be local or remote
     First parameter, file to download, URL or file path to download from
@@ -415,7 +559,7 @@ def download_metalink(src, path, force = False, handler = None):
         origin = xmlutils.get_attr_from_item(metalink_node[0], "origin")
         if origin != src and origin != "":
             print _("Downloading update from %s") % origin
-            return download_metalink(origin, path, force, handler)
+            return download_metalink(origin, path, force, handler, segmented)
     
     urllist = xmlutils.get_subnodes(dom2, ["metalink", "files", "file"])
     if len(urllist) == 0:
@@ -429,7 +573,7 @@ def download_metalink(src, path, force = False, handler = None):
             
         if OS == None or len(ostag) == 0 or ostag[0].lower() == OS.lower():
             if "any" in LANG or len(langtag) == 0 or langtag[0].lower() in LANG:
-                result = download_file_node(filenode, path, force, handler)
+                result = download_file_node(filenode, path, force, handler, segmented)
                 if result:
                     results.append(result)
     if len(results) == 0:
@@ -437,7 +581,7 @@ def download_metalink(src, path, force = False, handler = None):
     
     return results
 
-def download_file_node(item, path, force = False, handler = None):
+def download_file_node(item, path, force = False, handler = None, segmented=SEGMENTED):
     '''
     Downloads a specific version of a program
     First parameter, file XML node
@@ -492,7 +636,7 @@ def download_file_node(item, path, force = False, handler = None):
         for chunk in xmlutils.get_xml_tag_strings(piece, ["hash"]):
             chunksums[hashtype].append(chunk)
 
-    return download_file_urls(urllist, localfile, size, hashes, force, handler, SEGMENTED, chunksums, chunksize)
+    return download_file_urls(urllist, localfile, size, hashes, force, handler, segmented, chunksums, chunksize)
 
 def complete_url(url):
     '''
@@ -918,9 +1062,10 @@ class ThreadSafeFile(file):
     def release(self):
         return self.lock.release()
     
-class Segment_Manager:
-    def __init__(self, urls, localfile, size=0, chunk_size = DEFAULT_CHUNK_SIZE, chunksums = {}, reporthook = None):
+class Segment_Manager(Manager):
+    def __init__(self, urls, localfile, size=0, checksums = {}, chunk_size = DEFAULT_CHUNK_SIZE, chunksums = {}):
         assert isinstance(urls, dict)
+        Manager.__init__(self)
                 
         self.sockets = []
         self.chunks = []
@@ -931,9 +1076,12 @@ class Segment_Manager:
         self.urls = urls
         self.chunk_size = int(chunk_size)
         self.chunksums = chunksums
-        self.reporthook = reporthook
+        self.checksums = checksums
         self.localfile = localfile
         self.filter_urls()
+        
+        self.status = True
+        self.cancel_callback = None
         
         # Open the file.
         try:
@@ -1022,33 +1170,50 @@ class Segment_Manager:
             if self.size == None:
                 #crap out and do it the old way
                 self.close_handler()
+                self.status = False
                 return False
 
-        if self.size/self.chunk_size > MAX_CHUNKS:
+        # can't adjust chunk size if it has chunk hashes tied to that size
+        if len(chunksums) == 0 and self.size/self.chunk_size > MAX_CHUNKS:
             self.chunk_size = self.size/MAX_CHUNKS
             #print "Set chunk size to %s." % self.chunk_size
         self.resume.update_block_size(self.chunk_size)
+            
+        return Manager.run(self, 0.1)
         
-        while True:
-            #print "\ntc:", self.active_count(), len(self.sockets), len(self.urls)
-            #if self.active_count() == 0:
-            #print self.byte_total(), self.size
-            time.sleep(0.1)
+
+    def cycle(self):
+        '''
+        Runs one cycle
+        Returns True if still downloading, False otherwise
+        '''
+        try:
+            # cancel was pressed here
+            if self.cancel_callback != None and self.cancel_callback():
+                self.status = False
+                self.close_handler()
+                return False
+            
             self.update()
             self.resume.extend_blocks(self.chunk_list())
             if self.byte_total() >= self.size and self.active_count() == 0:
                 self.resume.complete()
                 self.close_handler()
-                return True
+                return False
+            
             #crap out and do it the old way
             if len(self.urls) == 0:
+                self.status = False
                 self.close_handler()
                 return False
             
-        return False
-##        except BaseException, e:
-##            logging.warning(unicode(e))
-##            return False
+            return True
+        
+        except KeyboardInterrupt:
+            print "Download Interrupted!"
+            self.close_handler()
+            return False
+            
 
     def update(self):
         next = self.next_url()
@@ -1058,8 +1223,8 @@ class Segment_Manager:
         
         index = self.get_chunk_index()
         if index != None:
-            if self.reporthook != None:
-                self.reporthook(int(self.byte_total()/self.chunk_size), self.chunk_size, self.size)
+            if self.status_handler != None:
+                self.status_handler(int(self.byte_total()/self.chunk_size), self.chunk_size, self.size)
             
             start = index * self.chunk_size
             end = start + self.chunk_size
@@ -1224,6 +1389,9 @@ class Segment_Manager:
         if size == 0:
             os.remove(self.localfile)
             os.remove(self.localfile + ".temp")
+            self.status = False
+        elif self.status:
+            self.status = filecheck(self.localfile, self.checksums, size)
         #except: pass
 
 class Host_Base:
