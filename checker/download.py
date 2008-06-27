@@ -60,6 +60,10 @@ import base64
 import sys
 import gettext
 
+try:
+    import win32api
+except: pass
+
 USER_AGENT = "Metalink Checker/4.0 +http://www.nabber.org/projects/"
 
 SEGMENTED = True
@@ -99,12 +103,92 @@ PROTOCOLS=("http","https","ftp")
 # See http://www.poeml.de/transmetalink-test/README
 MIME_TYPE = "application/metalink+xml"
 
-if os.environ.has_key('http_proxy') and HTTP_PROXY == "":
-    HTTP_PROXY=os.environ['http_proxy']
-if os.environ.has_key('ftp_proxy') and FTP_PROXY == "":
-    HTTP_PROXY=os.environ['ftp_proxy']
-if os.environ.has_key('https_proxy') and HTTPS_PROXY == "":
-    HTTP_PROXY=os.environ['https_proxy']
+##### PROXY SETUP #########
+
+def reg_query(keyname, value=None):
+    blanklines = 1
+    
+    if value == None:
+        tempresult = os.popen2("reg query \"%s\"" % keyname)
+    else:
+        tempresult = os.popen2("reg query \"%s\" /v \"%s\"" % (keyname, value))
+    stdout = tempresult[1]
+    stdout = stdout.readlines()
+
+    # For Windows XP, this was changed in Vista!
+    if stdout[1].startswith("! REG.EXE"):
+        blanklines += 2
+        if value == None:
+            blanklines += 2
+    stdout = stdout[blanklines:]
+    
+    return stdout
+
+def get_key_value(key, value):
+    '''
+    Probes registry for uninstall information
+    First parameter, key to look in
+    Second parameter, value name to extract
+    Returns the uninstall command as a string
+    '''
+    # does not handle non-paths yet
+    result = u""
+    try:
+        keyid = win32api.RegOpenKeyEx(win32con.HKEY_CURRENT_USER, key)
+        tempvalue = win32api.RegQueryValueEx(keyid, value)
+        win32api.RegCloseKey(keyid)
+        result = unicode(tempvalue[0])
+    except NameError:
+        # alternate method if win32api is not available, probably only works on Windows NT variants
+        stdout = reg_query(u"HKCU\\" + key, value)
+        
+        try:
+            # XP vs. Vista
+            if stdout[1].find(u"\t") != -1:
+                lines = stdout[1].split(u"\t")
+                index = 2
+            else:
+                lines = stdout[1].split(u"    ")
+                index = 3
+            result = lines[index].strip()
+        except IndexError:
+            result = u""
+    except: pass
+
+    result = unicode(os.path.expandvars(result))
+    return result
+
+def get_proxy_info():
+    global HTTP_PROXY
+    global FTP_PROXY
+    global HTTPS_PROXY
+
+    # from environment variables
+    if os.environ.has_key('http_proxy') and HTTP_PROXY == "":
+        HTTP_PROXY=os.environ['http_proxy']
+    if os.environ.has_key('ftp_proxy') and FTP_PROXY == "":
+        FTP_PROXY=os.environ['ftp_proxy']
+    if os.environ.has_key('https_proxy') and HTTPS_PROXY == "":
+        HTTPS_PROXY=os.environ['https_proxy']
+
+    # from IE in registry
+    proxy_enable = get_key_value("Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings", "ProxyEnable")
+    proxy_enable = int(proxy_enable[-1])
+    if proxy_enable:
+        proxy_string = get_key_value("Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings", "ProxyServer")
+        if proxy_string.find("=") == -1:
+            # if all use the same settings
+            for proxy in ("HTTP_PROXY", "FTP_PROXY", "HTTPS_PROXY"):
+                if getattr(sys.modules[__name__], proxy) == "":
+                    setattr(sys.modules[__name__], proxy, "http://" + str(proxy_string))
+        else:
+            proxies = proxy_string.split(";")
+            for proxy in proxies:
+                name, value = proxy.split("=")
+                if getattr(sys.modules[__name__], name.upper() + "_PROXY") == "":
+                    setattr(sys.modules[__name__], name.upper() + "_PROXY", "http://" + value)
+
+get_proxy_info()
 
 def translate():
     '''
@@ -1966,4 +2050,3 @@ class HTTPSConnection:
 
     def close(self):
         return self.conn.close()
-
