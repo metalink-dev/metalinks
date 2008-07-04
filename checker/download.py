@@ -45,7 +45,7 @@ import urllib2
 import urlparse
 import hashlib
 import os.path
-import xml.dom.minidom
+#import xml.dom.minidom
 import xmlutils
 import locale
 import threading
@@ -212,17 +212,17 @@ def translate():
 
 _ = translate()
 
-class URL:
-    def __init__(self, url, location = "", preference = "", maxconnections = ""):
-        if preference == "":
-            preference = 1
-        if maxconnections == "":
-            maxconnections = 1
-        
-        self.url = url
-        self.location = location
-        self.preference = int(preference)
-        self.maxconnections = int(maxconnections)
+##class URL:
+##    def __init__(self, url, location = "", preference = "", maxconnections = ""):
+##        if preference == "":
+##            preference = 1
+##        if maxconnections == "":
+##            maxconnections = 1
+##        
+##        self.url = url
+##        self.location = location
+##        self.preference = int(preference)
+##        self.maxconnections = int(maxconnections)
 
 import StringIO
 import gzip
@@ -307,10 +307,10 @@ def get(src, path, checksums = {}, force = False, handler = None, segmented = SE
     Download a file, decodes metalinks.
     First parameter, file to download, URL or file path to download from
     Second parameter, file path to save to
-    Third parameter, optional, expected MD5SUM
-    Fourth parameter, optional, expected SHA1SUM
-    Fifth parameter, optional, force a new download even if a valid copy already exists
-    Sixth parameter, optional, progress handler callback
+    Third parameter, optional, expected dictionary of checksums
+    Fourth parameter, optional, force a new download even if a valid copy already exists
+    Fifth parameter, optional, progress handler callback
+    Sixth parameter, optional, boolean to try using segmented downloads
     Returns list of file paths if download(s) is successful
     Returns False otherwise (checksum fails)
     raise socket.error e.g. "Operation timed out"
@@ -356,9 +356,18 @@ def download_file(url, local_file, size=0, checksums={}, force = False,
         Returns False otherwise (checksum fails).    
     '''
     # convert string filename into something we can use
-    urllist = {}
-    urllist[url] = URL(url)
-    return download_file_urls(urllist, local_file, size, checksums, force, handler, segmented, chunksums, chunk_size)
+    #urllist = {}
+    #urllist[url] = URL(url)
+
+    #metalink = xmlutils.Metalink()
+    fileobj = xmlutils.MetalinkFile(local_file)
+    fileobj.set_size(size)
+    fileobj.hashlist = checksums
+    fileobj.pieces = chunksums
+    fileobj.piecelength = chunk_size
+    fileobj.add_url(url)
+    #metalink.files.append(fileobj)
+    return download_file_urls(fileobj, force, handler, segmented)
     
     
 #class Download:
@@ -369,47 +378,44 @@ def download_file(url, local_file, size=0, checksums={}, force = False,
     #def set_cancel_callback(self, callback):
         #self.cancel_callback(self, 
     
-def download_file_urls(urllist, local_file, size=0, checksums={}, force = False, 
-            handler = None, segmented = SEGMENTED, chunksums = {}, chunk_size = None):
+def download_file_urls(metalinkfile, force = False, handler = None, segmented = SEGMENTED):
     '''
     Download a file.
-    urllist {string->URL} file to download, URL or file path to download from
-    Second parameter, file path to save to
-    Third parameter, optional, expected file size
-    Fourth parameter, optional, expected checksum dictionary
-    Fifth parameter, optional, force a new download even if a valid copy already exists
-    Sixth parameter, optional, progress handler callback
+    MetalinkFile object to download
+    Second parameter, optional, force a new download even if a valid copy already exists
+    Third parameter, optional, progress handler callback
+    Fourth parameter, optional, try to use segmented downloading
     Returns file path if download is successful
     Returns False otherwise (checksum fails)    
     '''
-    assert isinstance(urllist, dict)
+    #assert isinstance(urllist, dict)
     
     print ""
-    print _("Downloading to %s.") % local_file
+    print _("Downloading to %s.") % metalinkfile.filename
         
-    if os.path.exists(local_file) and (not force) and len(checksums) > 0:
-        checksum = verify_checksum(local_file, checksums)
+    if os.path.exists(metalinkfile.filename) and (not force) and len(metalinkfile.hashlist) > 0:
+        checksum = verify_checksum(metalinkfile.filename, metalinkfile.hashlist)
         if checksum:
-            actsize = size
+            actsize = metalinkfile.size
             if actsize == 0:
                 actsize = os.stat(local_file).st_size
             if actsize != 0:
                 if handler != None:
                     handler(1, actsize, actsize)
-                return local_file
+                return metalinkfile.filename
         else:
-            print _("Checksum failed, retrying download of %s.") % os.path.basename(local_file)
+            print _("Checksum failed, retrying download of %s.") % os.path.basename(metalinkfile.filename)
 
-    directory = os.path.dirname(local_file)
+    directory = os.path.dirname(metalinkfile.filename)
     if not os.path.isdir(directory):
         os.makedirs(directory)
 
-    if chunk_size == None:
-        chunk_size = DEFAULT_CHUNK_SIZE
+    if metalinkfile.piecelength == 0:
+        metalinkfile.piecelength = DEFAULT_CHUNK_SIZE
 
     seg_result = False
     if segmented:
-        manager = Segment_Manager(urllist, local_file, size, checksums = checksums, chunksums = chunksums, chunk_size = int(chunk_size))
+        manager = Segment_Manager(metalinkfile)
         manager.set_status_callback(handler)
         seg_result = manager.run()
         
@@ -418,12 +424,12 @@ def download_file_urls(urllist, local_file, size=0, checksums={}, force = False,
             print "\n" + _("Could not download all segments of the file, trying one mirror at a time.")
 
     if (not segmented) or (not seg_result):
-        manager = NormalManager(urllist, local_file, size, checksums = checksums, chunksums = chunksums, chunk_size = int(chunk_size))
+        manager = NormalManager(metalinkfile)
         manager.set_status_callback(handler)
         manager.run()
         
     if manager.get_status():
-        return local_file
+        return metalinkfile.filename
     return False
             
 class Manager:
@@ -482,13 +488,13 @@ class Manager:
         return None
             
 class NormalManager(Manager):
-    def __init__(self, urllist, local_file, size, checksums, chunksums, chunk_size):
+    def __init__(self, metalinkfile):
         Manager.__init__(self)
-        self.local_file = local_file
-        self.size = size
-        self.chunksums = chunksums
-        self.checksums = checksums
-        self.urllist = start_sort(urllist)
+        self.local_file = metalinkfile.filename
+        self.size = metalinkfile.size
+        self.chunksums = metalinkfile.get_piece_dict()
+        self.checksums = metalinkfile.hashlist
+        self.urllist = start_sort(metalinkfile.get_url_dict())
         self.start_number = 0
         self.number = 0
         self.count = 1
@@ -611,30 +617,36 @@ def download_metalink(src, path, force = False, handler = None, segmented = SEGM
         datasource = urlopen(src, metalink=True)
     except:
         return False
-    dom2 = xml.dom.minidom.parse(datasource)   # parse an open file
+    #dom2 = xml.dom.minidom.parse(datasource)   # parse an open file
+    metalink = xmlutils.Metalink()
+    metalink.parsehandle(datasource)
     datasource.close()
 
-    metalink_node = xmlutils.get_subnodes(dom2, ["metalink"])
-    try:
-        metalink_type = xmlutils.get_attr_from_item(metalink_node[0], "type")
-    except AttributeError:
-        metalink_type = None
+##    metalink_node = xmlutils.get_subnodes(dom2, ["metalink"])
+##    try:
+##        metalink_type = xmlutils.get_attr_from_item(metalink_node[0], "type")
+##    except AttributeError:
+##        metalink_type = None
 
-    if metalink_type == "dynamic":
-        origin = xmlutils.get_attr_from_item(metalink_node[0], "origin")
+    if metalink.type == "dynamic":
+        origin = metalink.origin
+        #origin = xmlutils.get_attr_from_item(metalink_node[0], "origin")
         if origin != src and origin != "":
             print _("Downloading update from %s") % origin
             return download_metalink(origin, path, force, handler, segmented)
     
-    urllist = xmlutils.get_subnodes(dom2, ["metalink", "files", "file"])
+    #urllist = xmlutils.get_subnodes(dom2, ["metalink", "files", "file"])
+    urllist = metalink.files
     if len(urllist) == 0:
         print _("No urls to download file from.")
         return False
 
     results = []
     for filenode in urllist:
-        ostag = xmlutils.get_xml_tag_strings(filenode, ["os"])
-        langtag = xmlutils.get_xml_tag_strings(filenode, ["language"])
+        #ostag = xmlutils.get_xml_tag_strings(filenode, ["os"])
+        #langtag = xmlutils.get_xml_tag_strings(filenode, ["language"])
+        ostag = filenode.os
+        langtag = filenode.language
             
         if OS == None or len(ostag) == 0 or ostag[0].lower() == OS.lower():
             if "any" in LANG or len(langtag) == 0 or langtag[0].lower() in LANG:
@@ -660,48 +672,60 @@ def download_file_node(item, path, force = False, handler = None, segmented=SEGM
 
     # unused: urllist = xmlutils.get_xml_tag_strings(item, ["resources", "url"])
     urllist = {}
-    for node in xmlutils.get_subnodes(item, ["resources", "url"]):
-        url = xmlutils.get_xml_item_strings([node])[0]
-        location = xmlutils.get_attr_from_item(node, "location")
-        preference = xmlutils.get_attr_from_item(node, "preference")
-        maxconnections = xmlutils.get_attr_from_item(node, "maxconnections")
-        urllist[url] = URL(url, location, preference, maxconnections)
+##    for node in xmlutils.get_subnodes(item, ["resources", "url"]):
+##        url = xmlutils.get_xml_item_strings([node])[0]
+##        location = xmlutils.get_attr_from_item(node, "location")
+##        preference = xmlutils.get_attr_from_item(node, "preference")
+##        maxconnections = xmlutils.get_attr_from_item(node, "maxconnections")
+##        urllist[url] = URL(url, location, preference, maxconnections)
+
+    for node in item.resources:
+        urllist[node.url] = node
         
     if len(urllist) == 0:
         print _("No urls to download file from.")
         return False
             
-    hashlist = xmlutils.get_subnodes(item, ["verification", "hash"])
-    try:
-        size = xmlutils.get_xml_tag_strings(item, ["size"])[0]
-    except:
-        size = 0
+##    hashlist = xmlutils.get_subnodes(item, ["verification", "hash"])
+##    try:
+##        size = xmlutils.get_xml_tag_strings(item, ["size"])[0]
+##    except:
+##        size = 0
+
+    hashes = item.hashlist
+    size = item.size
     
-    hashes = {}
-    for hashitem in hashlist:
-        hashes[xmlutils.get_attr_from_item(hashitem, "type")] = hashitem.firstChild.nodeValue.strip()
+##    hashes = {}
+##    for hashitem in hashlist.keys():
+##        hashes[hashitem] = hashitem.firstChild.nodeValue.strip()
 
-    sigs = xmlutils.get_subnodes(item, ["verification", "signature"])
-    for sig in sigs:
-        hashes[xmlutils.get_attr_from_item(sig, "type")] = sig.firstChild.nodeValue.strip()
+##    sigs = xmlutils.get_subnodes(item, ["verification", "signature"])
+##    for sig in sigs:
+##        hashes[xmlutils.get_attr_from_item(sig, "type")] = sig.firstChild.nodeValue.strip()
 
-    local_file = xmlutils.get_attr_from_item(item, "name")
-    localfile = path_join(path, local_file)
+    #local_file = xmlutils.get_attr_from_item(item, "name")
+    local_file = item.filename
+    #localfile = path_join(path, local_file)
+    item.filename = path_join(path, local_file)
 
     #extract chunk checksum information
-    try:
-        chunksize = int(xmlutils.get_attr_from_item(xmlutils.get_subnodes(item, ["verification", "pieces"])[0], "length"))
-    except IndexError:
-        chunksize = None
-
+##    try:
+##        chunksize = int(xmlutils.get_attr_from_item(xmlutils.get_subnodes(item, ["verification", "pieces"])[0], "length"))
+##    except IndexError:
+##        chunksize = None
+    chunksize = item.piecelength
+    
     chunksums = {}
-    for piece in xmlutils.get_subnodes(item, ["verification", "pieces"]):
-        hashtype = xmlutils.get_attr_from_item(piece, "type")
-        chunksums[hashtype] = []
-        for chunk in xmlutils.get_xml_tag_strings(piece, ["hash"]):
-            chunksums[hashtype].append(chunk)
+##    for piece in xmlutils.get_subnodes(item, ["verification", "pieces"]):
+##        hashtype = xmlutils.get_attr_from_item(piece, "type")
+##        chunksums[hashtype] = []
+##        for chunk in xmlutils.get_xml_tag_strings(piece, ["hash"]):
+##            chunksums[hashtype].append(chunk)
 
-    return download_file_urls(urllist, localfile, size, hashes, force, handler, segmented, chunksums, chunksize)
+    #for piece in item.pieces:
+    chunksums[item.piecetype] = item.pieces
+
+    return download_file_urls(item, force, handler, segmented)
 
 def complete_url(url):
     '''
@@ -1128,21 +1152,20 @@ class ThreadSafeFile(file):
         return self.lock.release()
     
 class Segment_Manager(Manager):
-    def __init__(self, urls, localfile, size=0, checksums = {}, chunk_size = DEFAULT_CHUNK_SIZE, chunksums = {}):
-        assert isinstance(urls, dict)
+    def __init__(self, metalinkfile):
         Manager.__init__(self)
                 
         self.sockets = []
         self.chunks = []
         self.limit_per_host = LIMIT_PER_HOST
         self.host_limit = HOST_LIMIT
-        self.size = int(size)
-        self.orig_urls = urls
-        self.urls = urls
-        self.chunk_size = int(chunk_size)
-        self.chunksums = chunksums
-        self.checksums = checksums
-        self.localfile = localfile
+        self.size = int(metalinkfile.size)
+        self.orig_urls = metalinkfile.get_url_dict()
+        self.urls = self.orig_urls
+        self.chunk_size = int(metalinkfile.piecelength)
+        self.chunksums = metalinkfile.get_piece_dict()
+        self.checksums = metalinkfile.hashlist
+        self.localfile = metalinkfile.filename
         self.filter_urls()
         
         self.status = True
@@ -1150,11 +1173,11 @@ class Segment_Manager(Manager):
         
         # Open the file.
         try:
-            self.f = ThreadSafeFile(localfile, "rb+")
+            self.f = ThreadSafeFile(self.localfile, "rb+")
         except IOError:
-            self.f = ThreadSafeFile(localfile, "wb+")
+            self.f = ThreadSafeFile(self.localfile, "wb+")
             
-        self.resume = FileResume(localfile + ".temp")
+        self.resume = FileResume(self.localfile + ".temp")
 
     def get_chunksum(self, index):
         mylist = {}

@@ -45,7 +45,7 @@ import optparse
 import urllib2
 import urlparse
 import os.path
-import xml.dom.minidom
+#import xml.dom.minidom
 import random
 import sys
 import re
@@ -94,34 +94,41 @@ def check_metalink(src):
     src = download.complete_url(src)
     datasource = urllib2.urlopen(src)
     try:
-        dom2 = xml.dom.minidom.parse(datasource)   # parse an open file
+        #dom2 = xml.dom.minidom.parse(datasource)   # parse an open file
+        metalink = xmlutils.Metalink()
+        metalink.parsehandle(datasource)
     except:
         print _("ERROR parsing XML.")
         raise
     datasource.close()
     
-    metalink_node = xmlutils.get_subnodes(dom2, ["metalink"])
-    try:
-        metalink_type = get_attr_from_item(metalink_node, "type")
-    except:
-        metalink_type = None
-    if metalink_type == "dynamic":
-        origin = get_attr_from_item(metalink_node, "origin")
+##    metalink_node = xmlutils.get_subnodes(dom2, ["metalink"])
+##    try:
+##        metalink_type = get_attr_from_item(metalink_node, "type")
+##    except:
+##        metalink_type = None
+
+    if metalink.type == "dynamic":
+        #origin = get_attr_from_item(metalink_node, "origin")
+        origin = metalink.origin
         if origin != src:
             return check_metalink(origin)
     
-    urllist = xmlutils.get_subnodes(dom2, ["metalink", "files", "file"])
+    #urllist = xmlutils.get_subnodes(dom2, ["metalink", "files", "file"])
+    urllist = metalink.files
     if len(urllist) == 0:
         print _("No urls to download file from.")
         return False
 
     results = {}
     for filenode in urllist:
-        try:
-            size = xmlutils.get_xml_tag_strings(filenode, ["size"])[0]
-        except:
-            size = None
-        name = xmlutils.get_attr_from_item(filenode, "name")
+        size = filenode.size
+##        try:
+##            size = xmlutils.get_xml_tag_strings(filenode, ["size"])[0]
+##        except:
+##            size = None
+        #name = xmlutils.get_attr_from_item(filenode, "name")
+        name = filenode.filename
         print "=" * 79
         print _("File") + ": %s " % name + _("Size") + ": %s" % size
         results[name] = check_file_node(filenode)
@@ -167,11 +174,13 @@ def check_file_node(item):
     Fouth parameter, optional, progress handler callback
     Returns dictionary of file paths with headers
     '''
-    try:
-        size = get_xml_tag_strings(item, ["size"])[0]
-    except:
-        size = None
-    urllist = xmlutils.get_subnodes(item, ["resources", "url"])
+##    try:
+##        size = get_xml_tag_strings(item, ["size"])[0]
+##    except:
+##        size = None
+    size = item.size
+    #urllist = xmlutils.get_subnodes(item, ["resources", "url"])
+    urllist = item.resources
     if len(urllist) == 0:
         print _("No urls to download file from.")
         return False
@@ -182,7 +191,7 @@ def check_file_node(item):
     count = 1
     result = {}
     while (count <= len(urllist)):
-        filename = urllist[number].firstChild.nodeValue.strip()
+        filename = urllist[number].url
         print "-" *79
         print _("Checking") + ": %s" % filename
         checker = URLCheck(filename)
