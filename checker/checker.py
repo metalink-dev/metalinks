@@ -45,7 +45,6 @@ import optparse
 import urllib2
 import urlparse
 import os.path
-#import xml.dom.minidom
 import random
 import sys
 import re
@@ -54,6 +53,7 @@ import base64
 import hashlib
 import httplib
 import ftplib
+import threading
 
 import xmlutils
 import download
@@ -62,6 +62,7 @@ import locale
 import gettext
 
 MAX_REDIRECTS = 20
+MAX_THREADS = 10
 
 def translate():
     '''
@@ -157,6 +158,7 @@ def get_header(textheaders, name):
     textheaders = str(textheaders)
     
     headers = textheaders.split("\n")
+    headers.reverse()
     for line in headers:
         line = line.strip()
         result = line.split(": ")
@@ -184,23 +186,41 @@ def check_file_node(item):
     if len(urllist) == 0:
         print _("No urls to download file from.")
         return False
+
+    def thread(filename):
+        checker = URLCheck(filename)
+        headers = checker.info()
+        result[checker.geturl()] = check_process(headers, size)
+        redir = get_header(headers, "Redirected")
+        print "-" *79
+        print _("Checked") + ": %s" % filename
+        if redir != None:
+            print _("Redirected") + ": %s" % redir
+        print _("Response Code") + ": %s\t" % result[checker.geturl()][0] + _("Size Check") + ": %s" % result[checker.geturl()][1]
             
     number = 0
     filename = {}
 
+    print len(urllist)
+    for url in urllist:
+        print url.url
+        
     count = 1
     result = {}
     while (count <= len(urllist)):
         filename = urllist[number].url
-        print "-" *79
-        print _("Checking") + ": %s" % filename
-        checker = URLCheck(filename)
-        headers = checker.info()
-        result[checker.geturl()] = check_process(headers, size)
-        print _("Response Code") + ": %s\t" % result[checker.geturl()][0] + _("Size Check") + ": %s" % result[checker.geturl()][1]
+        #don't start too many threads at once
+        while threading.activeCount() > MAX_THREADS:
+            pass
+        mythread = threading.Thread(target = thread, args = [filename])
+        mythread.start()
+        #thread(filename)
         number = (number + 1) % len(urllist)
         count += 1
-        
+
+    # don't return until all threads are finished (except the one main thread)
+    while threading.activeCount() > 1:
+        pass
     return result
        
 class URLCheck:    
@@ -226,14 +246,19 @@ class URLCheck:
             except socket.error, error:
                 self.infostring += _("Response") + ": " + _("Connection Error") + "\r\n"
                 return
-                
-            resp = conn.getresponse()
+
+            try:
+                resp = conn.getresponse()
+            except socket.timeout:
+                self.infostring += _("Response") + ": " + _("Timeout") + "\r\n"
+                return
             
             # handle redirects here and set self.url
             count = 0
             while (resp.status == httplib.MOVED_PERMANENTLY or resp.status == httplib.FOUND) and count < MAX_REDIRECTS:
                 url = resp.getheader("location")
-                print _("Redirected") + ": %s" % url
+                #print _("Redirected from ") + self.url + " to %s." % url
+                self.infostring += _("Redirected") + ": %s\r\n" % url
                 conn.close()
                 urlparts = urlparse.urlparse(url)
                 # need to set default port here
@@ -282,7 +307,8 @@ class URLCheck:
             count = 0
             while (resp.status == httplib.MOVED_PERMANENTLY or resp.status == httplib.FOUND) and count < MAX_REDIRECTS:
                 url = resp.getheader("location")
-                print _("Redirected") + ": %s" % url
+                #print _("Redirected") + ": %s" % url
+                self.infostring += _("Redirected") + ": %s\r\n" % url
                 conn.close()
                 urlparts = urlparse.urlparse(url)
                 # need to set default port here

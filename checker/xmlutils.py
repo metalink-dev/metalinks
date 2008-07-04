@@ -530,6 +530,7 @@ class Metalink:
 
     # 3 handler functions
     def start_element(self, name, attrs):
+        self.data = ""
         self.parent.append(XMLTag(name, attrs))
         if name == "file":
             fileobj = MetalinkFile(attrs["name"], attrs)
@@ -574,7 +575,7 @@ class Metalink:
             setattr(fileobj, name, self.data)
             
     def char_data(self, data):
-        self.data = data.strip()
+        self.data += data.strip()
 
     def parsefile(self, filename):
         handle = open(filename, "rb")
