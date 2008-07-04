@@ -23,11 +23,11 @@ readhandle.close()
 def merge(header, modules, outputfile):
     modules.reverse()
     modulelist = []
-    imports = ""
+    imports = []
     redef = {}
 
     for module in modules:
-        imports += readfile(module, True, modules)
+        imports.extend(readfile(module, True, modules))
 
         exec("import " + module)
         moduleobj = eval(module)
@@ -43,27 +43,47 @@ def merge(header, modules, outputfile):
 
     writehandle = open(outputfile, "w")
     writehandle.write(header)
-    
-    writehandle.write(imports + "class Dummy:\n    pass\n")
+
+    importdict = {}
+    newimports = []
+    for importline in imports:
+        if importline.startswith("import "):
+            importdict[importline] = 1
+        else:
+            newimports.append(importline)
+    newimports.extend(importdict.keys())
+    imports = newimports
+    #    writehandle.write(importline + "\n")
+    writehandle.writelines(imports)
+    writehandle.write("class Dummy:\n    pass\n")
     
     for modulename in modules:
-        filestring = readfile(modulename)
-        writehandle.write(filestring)
+        filelist = readfile(modulename)
+        writehandle.writelines(filelist)
         writehandle.write(modulename + " = Dummy()\n" + redef[modulename])
         
     writehandle.close()
     return
 
 def readfile(modulename, imports=False, ignore=[]):
-    filestring = ""
+    filelist = []
+    prevline = ""
     filehandle = open(modulename + ".py")
     line = filehandle.readline()
     while line:
-        if imports == line.strip().startswith("import ") and line.strip()[7:] not in ignore:
-            filestring += line
+        if line.strip().startswith("import "):
+            if imports and line.strip()[7:] not in ignore:
+                filelist.append(line.strip(" \t"))
+        elif prevline.strip().startswith("try: import "):
+            if imports and prevline.strip()[11:] not in ignore:
+                filelist.append(prevline.strip(" \t"))
+                filelist.append(line.strip(" \t"))
+        elif not imports and not line.strip().startswith("try: import "):
+            filelist.append(line)
+        prevline = line
         line = filehandle.readline()
     filehandle.close()
-    return filestring
+    return filelist
 
 def clean():
     ignore = []

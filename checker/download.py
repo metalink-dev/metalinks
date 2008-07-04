@@ -60,8 +60,7 @@ import base64
 import sys
 import gettext
 
-try:
-    import win32api
+try: import win32api
 except: pass
 
 USER_AGENT = "Metalink Checker/4.0 +http://www.nabber.org/projects/"

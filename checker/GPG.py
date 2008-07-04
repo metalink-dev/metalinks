@@ -23,8 +23,7 @@ import gettext
 import sys
 import locale
 
-try:
-    import win32process
+try: import win32process
 except ImportError: pass
 
 def translate():
