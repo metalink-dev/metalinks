@@ -55,6 +55,7 @@ def xml_encode(data):
     return tempstr
 
 def build(xml, urls, output=None, localfile=None, download=True):
+
     if len(urls) > 0:
         url = urls[0]
 
@@ -68,11 +69,11 @@ def build(xml, urls, output=None, localfile=None, download=True):
             #print url, localfile
             urllib.urlretrieve(url, localfile, progress.download_update)
             progress.download_end()
-        
-        for item in urls:
-            xml.add_url(urllib.quote(item, ":/?"))
 
     xml.scan_file(localfile)
+    for item in urls:
+        xml.add_url(urllib.quote(item, ":/?"))
+
     if not xml.validate():
         for line in xml.errors:
             print line
@@ -84,6 +85,7 @@ def build(xml, urls, output=None, localfile=None, download=True):
     handle = open(output, "wb")
     handle.write(xml.generate())
     handle.close()
+    #print xml.generate()
 
 def run():
     # Command line parser options.
@@ -95,20 +97,20 @@ def run():
     
     parser.add_option("-i", dest="identity", help="Identity")
     parser.add_option("-v", dest="version", help="Version Number")
-    parser.add_option("--os", dest="os", help="Operating System")
+    #parser.add_option("--os", dest="os", help="Operating System")
     parser.add_option("--publisher-name", dest="publisher_name", help="Publisher Name")
     parser.add_option("--publisher-url", dest="publisher_url", help="Publisher URL")
     parser.add_option("-c", "--copyright", dest="copyright", help="Copyright")
     parser.add_option("--description", dest="description", help="Description")
     parser.add_option("--license-name", dest="license_name", help="License Name")
     parser.add_option("--license-url", dest="license_url", help="License URL")
-    parser.add_option("-l", "--language", dest="language", help="The language the file is in, per ISO-639/3166. \"en-US\" for Standard American English")
-    parser.add_option("--maxconn", dest="maxconn_total", help="Maximum number of connections for downloading")    
+    #parser.add_option("-l", "--language", dest="language", help="The language the file is in, per ISO-639/3166. \"en-US\" for Standard American English")
+    #parser.add_option("--maxconn", dest="maxconn_total", help="Maximum number of connections for downloading")    
     parser.add_option("--origin", dest="origin", help="URL for the finished metalink file to check for updates")
     
     #parser.add_option("-s", "--size", dest="size", help="File size")
 
-    parser.set_defaults(identity="",version="",os="",publisher_name="",publisher_url="",copyright="",description="",license_name="",license_url="",language="",maxconn_total="",origin="")
+    parser.set_defaults(identity=None,version=None,os=None,publisher_name=None,publisher_url=None,copyright=None,description=None,license_name=None,license_url=None,language=None,maxconn_total=None,origin=None)
     (options, args) = parser.parse_args()
     if len(args) <= 0:
         print "ERROR: Specify a URL."
@@ -116,13 +118,14 @@ def run():
         return
 
     xml = metalink.Metalink()
+
     if options.open != None:
         xml.load_file(options.open)
         if options.clear_urls:
             xml.clear_res()
 
     for option in dir(options):
-        if not option.startswith("_"):
+        if not option.startswith("_") and getattr(options, option) != None:
             try:
                 getattr(xml, option)
             except AttributeError: continue
