@@ -200,10 +200,6 @@ def check_file_node(item):
             
     number = 0
     filename = {}
-
-    print len(urllist)
-    for url in urllist:
-        print url.url
         
     count = 1
     result = {}

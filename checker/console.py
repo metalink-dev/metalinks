@@ -121,9 +121,8 @@ def run():
         return
     
     if options.download:
-
-        progress = ProgressBar(55)
-        result = download.get(options.filevar, os.getcwd(), handler=progress.download_update, segmented = not options.nosegmented)
+        progress = ProgressBar()
+        result = download.get(options.filevar, os.getcwd(), handlers={"status": progress.download_update, "bitrate": progress.set_bitrate}, segmented = not options.nosegmented)
         progress.download_end()
         if not result:
             sys.exit(-1)
@@ -191,8 +190,12 @@ def print_totals(results):
 
 
 class ProgressBar:
-    def __init__(self, length = 68):
+    def __init__(self, length = 79):
         self.length = length
+        self.bitrate = None
+        self.show_bitrate = True
+        self.show_bytes = True
+        self.show_percent = True
         #print ""
         #self.update(0, 0)
         self.total_size = 0
@@ -214,12 +217,31 @@ class ProgressBar:
         if total_bytes < 0:
             return
 
-        size = int(percent * self.length / 100)
-        bar = ("#" * size) + ("-" * (self.length - size))
-        output = "[%s] %.0f%% %.2f/%.2f MB" % (bar, percent, current_bytes, total_bytes)
+
+        percenttxt = ""
+        if self.show_percent:
+            percenttxt = " %.0f%%" % percent
+
+        bytes = ""
+        if self.show_bytes:
+            bytes = " %.2f/%.2f MB" % (current_bytes, total_bytes)
+            
+        bitinfo = ""
+        if self.bitrate != None and self.show_bitrate:
+            bitinfo = " %.0f kbps" % self.bitrate
+
+        length = self.length - 2 - len(percenttxt) - len(bytes) - len(bitinfo)
+
+        size = int(percent * length / 100)            
+        bar = ("#" * size) + ("-" * (length - size))
+        output = "[%s]" % bar
+        output += percenttxt + bytes + bitinfo
         
         self.line_reset()
         sys.stdout.write(output)
+
+    def set_bitrate(self, bitrate):
+        self.bitrate = bitrate
 
     def update(self, count, total):
         if count > total:
@@ -233,9 +255,16 @@ class ProgressBar:
         if total < 0:
             return
 
-        size = int(percent * self.length / 100)
-        bar = ("#" * size) + ("-" * (self.length - size))
-        output = "[%s] %.0f%%" % (bar, percent)
+        percenttxt = ""
+        if self.show_percent:
+            percenttxt = " %.0f%%" % percent
+
+        length = self.length - 2 - len(percenttxt)
+
+        size = int(percent * length / 100)
+        bar = ("#" * size) + ("-" * (length - size))
+        output = "[%s]" % bar
+        output += percenttxt
         
         self.line_reset()
         sys.stdout.write(output)
