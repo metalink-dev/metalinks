@@ -37,6 +37,19 @@
 #
 # files = download.get("file.metalink", os.getcwd())
 #
+# Callback Definitions:
+# def cancel():
+#   Returns True to cancel, False otherwise
+# def pause():
+#   Returns True to pause, False to continue/resume
+# def status(block_count, block_size, total_size):
+#   Same format as urllib.urlretrieve reporthook
+#   block_count - a count of blocks transferred so far
+#   block_size - a block size in bytes
+#   total_size - the total size of the file in bytes
+# def bitrate(bitrate):
+#   bitrate - kilobits per second (float)
+#
 ########################################################################
 import logging
 
@@ -301,7 +314,7 @@ def set_proxies():
     # install this opener
     urllib2.install_opener(opener)
 
-def get(src, path, checksums = {}, force = False, handler = None, segmented = SEGMENTED):
+def get(src, path, checksums = {}, force = False, handlers = {}, segmented = SEGMENTED):
     '''
     Download a file, decodes metalinks.
     First parameter, file to download, URL or file path to download from
@@ -316,7 +329,7 @@ def get(src, path, checksums = {}, force = False, handler = None, segmented = SE
     '''
     # assume metalink if ends with .metalink
     if src.endswith(".metalink"):
-        return download_metalink(src, path, force, handler, segmented)
+        return download_metalink(src, path, force, handlers, segmented)
     else:
         # not all servers support HEAD where GET is also supported
         # also a WindowsError is thrown if a local file does not exist
@@ -324,7 +337,7 @@ def get(src, path, checksums = {}, force = False, handler = None, segmented = SE
             # add head check for metalink type, if MIME_TYPE or application/xml? treat as metalink
             if urlhead(src, metalink=True)["content-type"].startswith(MIME_TYPE):
                 print _("Metalink content-type detected.")
-                return download_metalink(src, path, force, handler, segmented)
+                return download_metalink(src, path, force, handlers, segmented)
         except IOError, e:
             pass
         except WindowsError, e:
@@ -334,13 +347,13 @@ def get(src, path, checksums = {}, force = False, handler = None, segmented = SE
     # parse out filename portion here
     filename = os.path.basename(src)
     result = download_file(src, os.path.join(path, filename), 
-            0, checksums, force, handler, segmented = segmented)
+            0, checksums, force, handlers, segmented = segmented)
     if result:
         return [result]
     return False
     
 def download_file(url, local_file, size=0, checksums={}, force = False, 
-        handler = None, segmented = SEGMENTED, chunksums = {}, chunk_size = None):
+        handlers = {}, segmented = SEGMENTED, chunksums = {}, chunk_size = None):
     '''
     url {string->URL} locations of the file
     local_file string local file name to save to
@@ -366,7 +379,7 @@ def download_file(url, local_file, size=0, checksums={}, force = False,
     fileobj.piecelength = chunk_size
     fileobj.add_url(url)
     #metalink.files.append(fileobj)
-    return download_file_urls(fileobj, force, handler, segmented)
+    return download_file_urls(fileobj, force, handlers, segmented)
     
     
 #class Download:
@@ -377,7 +390,7 @@ def download_file(url, local_file, size=0, checksums={}, force = False,
     #def set_cancel_callback(self, callback):
         #self.cancel_callback(self, 
     
-def download_file_urls(metalinkfile, force = False, handler = None, segmented = SEGMENTED):
+def download_file_urls(metalinkfile, force = False, handlers = {}, segmented = SEGMENTED):
     '''
     Download a file.
     MetalinkFile object to download
@@ -399,8 +412,8 @@ def download_file_urls(metalinkfile, force = False, handler = None, segmented = 
             if actsize == 0:
                 actsize = os.stat(local_file).st_size
             if actsize != 0:
-                if handler != None:
-                    handler(1, actsize, actsize)
+                #if handler != None:
+                handlers["status"](1, actsize, actsize)
                 return metalinkfile.filename
         else:
             print _("Checksum failed, retrying download of %s.") % os.path.basename(metalinkfile.filename)
@@ -415,7 +428,7 @@ def download_file_urls(metalinkfile, force = False, handler = None, segmented = 
     seg_result = False
     if segmented:
         manager = Segment_Manager(metalinkfile)
-        manager.set_status_callback(handler)
+        manager.set_callbacks(handlers)
         seg_result = manager.run()
         
         if not seg_result:
@@ -424,18 +437,22 @@ def download_file_urls(metalinkfile, force = False, handler = None, segmented = 
 
     if (not segmented) or (not seg_result):
         manager = NormalManager(metalinkfile)
-        manager.set_status_callback(handler)
+        manager.set_callbacks(handlers)
         manager.run()
         
     if manager.get_status():
         return metalinkfile.filename
     return False
+
+def print_bitrate(bitrate):
+    print "bitrate: %.2f kbps" % bitrate
             
 class Manager:
     def __init__(self):
         self.cancel_handler = None
         self.pause_handler = None
         self.status_handler = None
+        self.bitrate_handler = None
         self.status = True
         self.end_bitrate()
         
@@ -447,6 +464,13 @@ class Manager:
         
     def set_status_callback(self, handler):
         self.status_handler = handler
+
+    def set_bitrate_callback(self, handler):
+        self.bitrate_handler = handler
+
+    def set_callbacks(self, callbackdict):
+        for key in callbackdict.keys():
+            setattr(self, key + "_handler", callbackdict[key])
 
     def run(self, wait=None):
         result = True
@@ -482,9 +506,9 @@ class Manager:
         '''
         Pass in current byte count
         '''
-        if self.oldtime != None:
+        if self.oldtime != None and (time.time() - self.oldtime) != 0:
             return ((bytes - self.oldsize) * 8 / 1024)/(time.time() - self.oldtime)
-        return None
+        return 0
             
 class NormalManager(Manager):
     def __init__(self, metalinkfile):
@@ -515,6 +539,7 @@ class NormalManager(Manager):
             manager.set_status_callback(self.status_handler)
             manager.set_cancel_callback(self.cancel_handler)
             manager.set_pause_callback(self.pause_handler)
+            manager.set_bitrate_callback(self.bitrate_handler)
             self.get_bitrate = manager.get_bitrate
             self.status = manager.run()
 
@@ -576,6 +601,9 @@ class URLManager(Manager):
         if self.status_handler != None:
             self.status_handler(self.counter, self.block_size, self.size)
 
+        if self.bitrate_handler != None:
+            self.bitrate_handler(self.get_bitrate(self.counter * self.block_size))
+
         if not block:
             self.close_handler()
 
@@ -601,7 +629,7 @@ def filecheck(local_file, checksums, size, handler = None):
     print "\n" + _("Checksum failed for %s.") % os.path.basename(local_file)
     return False
 
-def download_metalink(src, path, force = False, handler = None, segmented = SEGMENTED):
+def download_metalink(src, path, force = False, handlers = {}, segmented = SEGMENTED):
     '''
     Decode a metalink file, can be local or remote
     First parameter, file to download, URL or file path to download from
@@ -632,7 +660,7 @@ def download_metalink(src, path, force = False, handler = None, segmented = SEGM
         #origin = xmlutils.get_attr_from_item(metalink_node[0], "origin")
         if origin != src and origin != "":
             print _("Downloading update from %s") % origin
-            return download_metalink(origin, path, force, handler, segmented)
+            return download_metalink(origin, path, force, handlers, segmented)
     
     #urllist = xmlutils.get_subnodes(dom2, ["metalink", "files", "file"])
     urllist = metalink.files
@@ -649,7 +677,7 @@ def download_metalink(src, path, force = False, handler = None, segmented = SEGM
             
         if OS == None or len(ostag) == 0 or ostag[0].lower() == OS.lower():
             if "any" in LANG or len(langtag) == 0 or langtag[0].lower() in LANG:
-                result = download_file_node(filenode, path, force, handler, segmented)
+                result = download_file_node(filenode, path, force, handlers, segmented)
                 if result:
                     results.append(result)
     if len(results) == 0:
@@ -1315,6 +1343,9 @@ class Segment_Manager(Manager):
         if index != None:
             if self.status_handler != None:
                 self.status_handler(int(self.byte_total()/self.chunk_size), self.chunk_size, self.size)
+                
+            if self.bitrate_handler != None:
+                self.bitrate_handler(self.get_bitrate(self.byte_total()))
             
             start = index * self.chunk_size
             end = start + self.chunk_size
