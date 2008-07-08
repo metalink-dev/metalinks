@@ -118,6 +118,9 @@ MIME_TYPE = "application/metalink+xml"
 ##### PROXY SETUP #########
 
 def reg_query(keyname, value=None):
+    if os.name != "nt":
+        return []
+
     blanklines = 1
     
     if value == None:
@@ -145,6 +148,7 @@ def get_key_value(key, value):
     '''
     # does not handle non-paths yet
     result = u""
+
     try:
         keyid = win32api.RegOpenKeyEx(win32con.HKEY_CURRENT_USER, key)
         tempvalue = win32api.RegQueryValueEx(keyid, value)
@@ -185,7 +189,11 @@ def get_proxy_info():
 
     # from IE in registry
     proxy_enable = get_key_value("Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings", "ProxyEnable")
-    proxy_enable = int(proxy_enable[-1])
+    try:
+    	proxy_enable = int(proxy_enable[-1])
+    except IndexError:
+        proxy_enable = False
+
     if proxy_enable:
         proxy_string = get_key_value("Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings", "ProxyServer")
         if proxy_string.find("=") == -1:
