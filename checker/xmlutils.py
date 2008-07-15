@@ -42,6 +42,11 @@
 ##    Returns a list of child nodes
 ##    '''
 ##    children = []
+##
+##    try:
+##        rootnode.childNodes
+##    except AttributeError: return children
+##
 ##    for childnode in rootnode.childNodes:
 ##        if childnode.nodeName == subtag:
 ##            children.append(childnode)
@@ -248,6 +253,26 @@ class MetalinkFile:
         for attr in attrs:
             setattr(self, attr, attrs[attr])
 
+    def get_filename(self):
+        return self.filename
+
+    def get_checksums(self):
+        return self.hashlist
+
+    def add_checksum(self, name, value):
+        self.hashlist[name] = value
+
+    def set_checksums(self, hashlist):
+        self.hashlist = hashlist
+
+    def compare_checksums(self, checksums):
+        for key in ("sha512","sha384","sha256","sha1","md5"):
+            try:
+                if self.hashlist[key].lower() == checksums[key].lower():
+                    return True
+            except KeyError: pass
+        return False
+
     def get_piece_dict(self):
         temp = {}
         temp[self.piecetype] = self.pieces
@@ -261,6 +286,9 @@ class MetalinkFile:
 
     def set_size(self, size):
         self.size = int(size)
+
+    def get_size(self):
+        return int(self.size)
     
     def clear_res(self):
         self.resources = []
@@ -420,21 +448,24 @@ class MetalinkFile:
         else:
             text = '    <file>\n'
         # File info
-        if self.size.strip() != "":
-            text += '      <size>'+self.size+'</size>\n'
+        if self.size != 0:
+            text += '      <size>'+str(self.size)+'</size>\n'
         if self.language.strip() != "":
             text += '      <language>'+self.language+'</language>\n'
         if self.os.strip() != "":
             text += '      <os>'+self.os+'</os>\n'
         # Verification
-        if self.hashlist["md5"].strip() != "" or self.hashlist["sha1"].strip() != "":
+#        if self.hashlist["md5"].strip() != "" or self.hashlist["sha1"].strip() != "":
+        if len(self.hashlist) > 0 or len(self.pieces) > 0:
             text += '      <verification>\n'
-            if self.hashlist["md5"].strip() != "":
-                text += '        <hash type="md5">'+self.hashlist["md5"].lower()+'</hash>\n'
-            if self.hashlist["sha1"].strip() != "":
-                text += '        <hash type="sha1">'+self.hashlist["sha1"].lower()+'</hash>\n'
-            if self.self.hashlist["sha256"].strip() != "":
-                text += '        <hash type="sha256">'+self.hashlist["sha256"].lower()+'</hash>\n'
+            for key in self.hashlist.keys():
+                text += '        <hash type="%s">' % key + self.hashlist[key].lower() + '</hash>\n'
+            #if self.hashlist["md5"].strip() != "":
+            #    text += '        <hash type="md5">'+self.hashlist["md5"].lower()+'</hash>\n'
+            #if self.hashlist["sha1"].strip() != "":
+            #    text += '        <hash type="sha1">'+self.hashlist["sha1"].lower()+'</hash>\n'
+            #if self.self.hashlist["sha256"].strip() != "":
+            #    text += '        <hash type="sha256">'+self.hashlist["sha256"].lower()+'</hash>\n'
             if len(self.pieces) > 1:
                 text += '        <pieces type="'+self.piecetype+'" length="'+self.piecelength+'">\n'
                 for id in range(len(self.pieces)):
@@ -463,6 +494,9 @@ class XMLTag:
         self.name = name
         self.attrs = attrs
 
+    def get_attr(self, name):
+        return self.attrs[name]
+
 class Metalink:
     def __init__(self):
         self.errors = []
@@ -477,6 +511,8 @@ class Metalink:
         self.version = ""
         self.origin = ""
         self.type = ""
+        self.upgrade = ""
+        self.tags = ""
 
         self.p = xml.parsers.expat.ParserCreate()
         self.parent = []
@@ -532,6 +568,8 @@ class Metalink:
             text += '  <copyright>'+self.copyright+'</copyright>\n'
         if self.description.strip() != "":
             text += '  <description>'+self.description+'</description>\n'
+        if self.upgrade.strip() != "":
+            text += '  <upgrade>'+self.upgrade+'</upgrade>\n'
         return text
 
     # 3 handler functions
@@ -552,33 +590,38 @@ class Metalink:
         
     def end_element(self, name):
         tag = self.parent.pop()
-        if name == "url" and self.parent[-1].name == "resources":
-            fileobj = self.files[-1]
-            fileobj.add_url(self.data, attrs=tag.attrs)
-        elif name in ("name", "url"):
-            setattr(self, self.parent[-1].name + "_" + name, self.data)
-        elif name in ("identity", "copyright", "description", "version"):
-            setattr(self, name, self.data)
-        elif name == "hash" and self.parent[-1].name == "verification":
-            hashtype = tag.attrs["type"]
-            fileobj = self.files[-1]
-            #setattr(fileobj, "hash_" + hashtype, self.data)
-            fileobj.hashlist[hashtype] = self.data
-        elif name == "signature" and self.parent[-1].name == "verification":
-            hashtype = tag.attrs["type"]
-            fileobj = self.files[-1]
-            #setattr(fileobj, "hash_" + hashtype, self.data)
-            fileobj.hashlist[hashtype] = self.data
-        elif name == "pieces":
-            fileobj = self.files[-1]
-            fileobj.piecetype = tag.attrs["type"]
-            fileobj.piecelength = tag.attrs["length"]
-        elif name == "hash" and self.parent[-1].name == "pieces":
-            fileobj = self.files[-1]
-            fileobj.pieces.append(self.data)
-        elif name in ("os", "size", "language"):
-            fileobj = self.files[-1]
-            setattr(fileobj, name, self.data)
+
+        try:
+            if name == "url" and self.parent[-1].name == "resources":
+                fileobj = self.files[-1]
+                fileobj.add_url(self.data, attrs=tag.attrs)
+            elif name == "tags" and self.parent[-1].name != "file":
+                setattr(self, "tags", self.data)
+            elif name in ("name", "url"):
+                setattr(self, self.parent[-1].name + "_" + name, self.data)
+            elif name in ("identity", "copyright", "description", "version", "upgrade"):
+                setattr(self, name, self.data)
+            elif name == "hash" and self.parent[-1].name == "verification":
+                hashtype = tag.attrs["type"]
+                fileobj = self.files[-1]
+                #setattr(fileobj, "hash_" + hashtype, self.data)
+                fileobj.hashlist[hashtype] = self.data
+            elif name == "signature" and self.parent[-1].name == "verification":
+                hashtype = tag.attrs["type"]
+                fileobj = self.files[-1]
+                #setattr(fileobj, "hash_" + hashtype, self.data)
+                fileobj.hashlist[hashtype] = self.data
+            elif name == "pieces":
+                fileobj = self.files[-1]
+                fileobj.piecetype = tag.attrs["type"]
+                fileobj.piecelength = tag.attrs["length"]
+            elif name == "hash" and self.parent[-1].name == "pieces":
+                fileobj = self.files[-1]
+                fileobj.pieces.append(self.data)
+            elif name in ("os", "size", "language", "tags"):
+                fileobj = self.files[-1]
+                setattr(fileobj, name, self.data)
+        except IndexError: pass
             
     def char_data(self, data):
         self.data += data.strip()
@@ -610,3 +653,9 @@ class Metalink:
             valid = valid and result
             self.errors.extend(fileobj.errors)
         return valid
+
+    def download_size(self):
+        total = 0
+        for fileobj in self.files:
+            total += fileobj.get_size()
+        return total
