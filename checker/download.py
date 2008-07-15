@@ -451,9 +451,6 @@ def download_file_urls(metalinkfile, force = False, handlers = {}, segmented = S
     if manager.get_status():
         return metalinkfile.filename
     return False
-
-def print_bitrate(bitrate):
-    print "bitrate: %.2f kbps" % bitrate
             
 class Manager:
     def __init__(self):
@@ -1204,7 +1201,6 @@ class Segment_Manager(Manager):
         self.filter_urls()
         
         self.status = True
-        self.cancel_callback = None
         
         # Open the file.
         try:
@@ -1315,7 +1311,7 @@ class Segment_Manager(Manager):
                 self.start_bitrate(bytes)
                 
             # cancel was pressed here
-            if self.cancel_callback != None and self.cancel_callback():
+            if self.cancel_handler != None and self.cancel_handler():
                 self.status = False
                 self.close_handler()
                 return False
