@@ -361,7 +361,7 @@ def get(src, path, checksums = {}, force = False, handlers = {}, segmented = SEG
     return False
     
 def download_file(url, local_file, size=0, checksums={}, force = False, 
-        handlers = {}, segmented = SEGMENTED, chunksums = {}, chunk_size = None):
+        handlers = {}, segmented = SEGMENTED, chunksums = {}, chunk_size = 0):
     '''
     url {string->URL} locations of the file
     local_file string local file name to save to
@@ -536,6 +536,8 @@ class NormalManager(Manager):
         self.number = self.start_number
         
     def cycle(self):
+        if self.cancel_handler != None and self.cancel_handler():
+            return False
         try:
             self.status = True
             remote_file = complete_url(self.urllist[self.number])
@@ -1358,11 +1360,13 @@ class Segment_Manager(Manager):
 
             if next.protocol == "http" or next.protocol == "https":
                 segment = Http_Host_Segment(next, start, end, self.size, self.get_chunksum(index))
+                segment.set_cancel_callback(self.cancel_handler)
                 self.chunks[index] = segment
                 self.segment_init(index)
             if next.protocol == "ftp":
                 #print "allocated to:", index, next.url
                 segment = Ftp_Host_Segment(next, start, end, self.size, self.get_chunksum(index))
+                segment.set_cancel_callback(self.cancel_handler)
                 self.chunks[index] = segment
                 self.segment_init(index)
 
@@ -1659,19 +1663,31 @@ class Host_Segment:
         self.bytes = 0
         self.buffer = ""
         self.temp = ""
+        self.cancel_handler = None
+        
+    def set_cancel_callback(self, handler):
+        self.cancel_handler = handler
 
+    def check_cancel(self):
+        if self.cancel_handler == None:
+            return False
+        return self.cancel_handler()
+        
     def avg_bitrate(self):
         bits = self.bytes * 8
         return bits/self.ttime
 
     def checksum(self):
-        #lock = threading.Lock()
-        #lock.acquire()
-
-        self.mem.acquire()
-        self.mem.seek(self.byte_start, 0)
-        chunkstring = self.mem.read(self.byte_count)
-        self.mem.release()
+        if self.check_cancel():
+            return False
+        
+        try:
+            self.mem.acquire()
+            self.mem.seek(self.byte_start, 0)
+            chunkstring = self.mem.read(self.byte_count)
+            self.mem.release()
+        except ValueError:
+            return False
 
         return verify_chunk_checksum(chunkstring, self.checksums)
 
@@ -1765,6 +1781,9 @@ class Ftp_Host_Segment(threading.Thread, Host_Segment):
                 return
 
     def readable(self):
+        if self.check_cancel():
+            return False
+
         if self.response == None:
             return False
         return True
@@ -1794,14 +1813,14 @@ class Ftp_Host_Segment(threading.Thread, Host_Segment):
 
             self.bytes += len(tempbuffer)
 
-            #lock = threading.Lock()
-            #lock.acquire()
-            self.mem.acquire()
-            self.mem.seek(self.byte_start, 0)
-            self.mem.write(tempbuffer)
-            self.mem.flush()
-
-            self.mem.release()
+            try:
+                self.mem.acquire()
+                self.mem.seek(self.byte_start, 0)
+                self.mem.write(tempbuffer)
+                self.mem.flush()
+                self.mem.release()
+            except ValueError:
+                self.error = _("bad file handle")            
         
             self.response = None
             
@@ -1876,6 +1895,9 @@ class Http_Host_Segment(threading.Thread, Host_Segment):
         #    self.error = utils.get_exception_message(e)
 
     def readable(self):
+        if self.check_cancel():
+            return False
+
         if self.response == None:
             try:
                 self.response = self.host.conn.getresponse()
@@ -1930,13 +1952,18 @@ class Http_Host_Segment(threading.Thread, Host_Segment):
 
         body = data
         size = len(body)
+        
         # write out body to file
-
-        self.mem.acquire()
-        self.mem.seek(self.byte_start + self.bytes, 0)
-        self.mem.write(body)
-        self.mem.flush()
-        self.mem.release()
+        try:
+            self.mem.acquire()
+            self.mem.seek(self.byte_start + self.bytes, 0)
+            self.mem.write(body)
+            self.mem.flush()
+            self.mem.release()
+        except ValueError:
+            self.error = _("bad file handle")
+            self.response = None
+            return
         
         self.bytes += size
         #print self.bytes, self.byte_count
