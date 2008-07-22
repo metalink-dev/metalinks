@@ -228,7 +228,10 @@ class ProgressBar:
             
         bitinfo = ""
         if self.bitrate != None and self.show_bitrate:
-            bitinfo = " %.0f kbps" % self.bitrate
+            if self.bitrate > 1000:
+                bitinfo = " %.2f Mbps" % (float(self.bitrate) / float(1000))
+            else:
+                bitinfo = " %.0f kbps" % self.bitrate
 
         length = self.length - 2 - len(percenttxt) - len(bytes) - len(bitinfo)
 
