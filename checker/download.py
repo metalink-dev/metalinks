@@ -1300,7 +1300,6 @@ class Segment_Manager(Manager):
         self.resume.update_block_size(self.chunk_size)
             
         return Manager.run(self, 0.1)
-        
 
     def cycle(self):
         '''
@@ -1340,6 +1339,15 @@ class Segment_Manager(Manager):
             
 
     def update(self):
+        if self.status_handler != None:
+            #count = int(self.byte_total()/self.chunk_size)
+            #if self.byte_total() % self.chunk_size:
+            #    count += 1
+            #self.status_handler(count, self.chunk_size, self.size)
+            self.status_handler(self.byte_total(), 1, self.size)    
+        if self.bitrate_handler != None:
+            self.bitrate_handler(self.get_bitrate(self.byte_total()))
+        
         next = self.next_url()
         
         if next == None:
@@ -1347,12 +1355,6 @@ class Segment_Manager(Manager):
         
         index = self.get_chunk_index()
         if index != None:
-            if self.status_handler != None:
-                self.status_handler(int(self.byte_total()/self.chunk_size), self.chunk_size, self.size)
-                
-            if self.bitrate_handler != None:
-                self.bitrate_handler(self.get_bitrate(self.byte_total()))
-            
             start = index * self.chunk_size
             end = start + self.chunk_size
             if end > self.size:
@@ -1512,6 +1514,8 @@ class Segment_Manager(Manager):
         self.f.close()
         for host in self.sockets:
             host.close()
+
+        self.update()
 
         #try:
         size = os.stat(self.localfile).st_size
@@ -1964,7 +1968,7 @@ class Http_Host_Segment(threading.Thread, Host_Segment):
             self.error = _("bad file handle")
             self.response = None
             return
-        
+
         self.bytes += size
         #print self.bytes, self.byte_count
         if self.bytes >= self.byte_count:
