@@ -571,6 +571,7 @@ class URLManager(Manager):
         self.checksums = checksums
         self.block_size = 1024
         self.counter = 0
+        self.total = 0
         self.temp = urlopen(remote_file)
         headers = self.temp.info()
         
@@ -602,11 +603,12 @@ class URLManager(Manager):
         block = self.temp.read(self.block_size)
         self.data.write(block)
         self.counter += 1
+        self.total += len(block)
 
         self.resume.set_block_size(self.counter * self.block_size)
                         
         if self.status_handler != None:
-            self.status_handler(self.counter, self.block_size, self.size)
+            self.status_handler(self.total, 1, self.size)
 
         if self.bitrate_handler != None:
             self.bitrate_handler(self.get_bitrate(self.counter * self.block_size))
