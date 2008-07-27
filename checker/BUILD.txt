@@ -15,3 +15,4 @@ supporting distribution to the masses without Python.
 Building on Windows
 -------------------
 pyinstexe.bat - calls pyinstaller to make executable files for windows and .zip package
+setup.py merge - generates a single metalink.py script from the library

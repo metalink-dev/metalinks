@@ -48,7 +48,7 @@ import checker
 import GPG
 
 # DO NOT CHANGE
-VERSION="Metalink Checker Version 4.0"
+VERSION="Metalink Checker Version 4.1"
 
 import os.path
 import locale
@@ -81,20 +81,22 @@ def run():
     Start a console version of this application.
     '''
     # Command line parser options.
-    parser = optparse.OptionParser(version=VERSION)
+    usage = "usage: %prog [-c|-d] [options] arg1 arg2 ..."
+    parser = optparse.OptionParser(version=VERSION, usage=usage)
     parser.add_option("--download", "-d", action="store_true", dest="download", help=_("Actually download the file(s) in the metalink"))
+    parser.add_option("--check", "-c", action="store_true", dest="check", help=_("Check the metalink file URLs"))
     parser.add_option("--file", "-f", dest="filevar", metavar="FILE", help=_("Metalink file to check or file to download"))
     parser.add_option("--timeout", "-t", dest="timeout", metavar="TIMEOUT", help=_("Set timeout in seconds to wait for response (default=10)"))
     parser.add_option("--os", "-o", dest="os", metavar="OS", help=_("Operating System preference"))
     parser.add_option("--no-segmented", "-s", action="store_true", dest="nosegmented", help=_("Do not use the segmented download method"))
     parser.add_option("--lang", "-l", dest="language", metavar="LANG", help=_("Language preference (ISO-639/3166)"))
-    parser.add_option("--country", "-c", dest="country", metavar="LOC", help=_("Two letter country preference (ISO 3166-1 alpha-2)"))
+    parser.add_option("--country", dest="country", metavar="LOC", help=_("Two letter country preference (ISO 3166-1 alpha-2)"))
     parser.add_option("--pgp-keys", "-k", dest="pgpdir", metavar="DIR", help=_("Directory with the PGP keys that you trust (default: working directory)"))
     parser.add_option("--pgp-store", "-p", dest="pgpstore", metavar="FILE", help=_("File with the PGP keys that you trust (default: ~/.gnupg/pubring.gpg)"))
     parser.add_option("--gpg-binary", "-g", dest="gpg", help=_("(optional) Location of gpg binary path if not in the default search path"))
     (options, args) = parser.parse_args()
 
-    if options.filevar == None:
+    if options.filevar == None and len(args) == 0:
         parser.print_help()
         return
 
@@ -119,16 +121,40 @@ def run():
     if options.country != None and len(options.country) != 2:
         print _("Invalid country length, must be 2 letter code")
         return
-    
-    if options.download:
-        progress = ProgressBar()
-        result = download.get(options.filevar, os.getcwd(), handlers={"status": progress.download_update, "bitrate": progress.set_bitrate}, segmented = not options.nosegmented)
-        progress.download_end()
-        if not result:
-            sys.exit(-1)
-    else:
+
+
+    if options.check:
+        # remove filevar eventually
         results = checker.check_metalink(options.filevar)
         print_totals(results)
+        for item in args:
+            results = checker.check_metalink(item)
+            print_totals(results)
+            
+    if options.download:
+        # remove filevar eventually
+        if options.filevar != None:
+            progress = ProgressBar()
+            result = download.get(options.filevar, os.getcwd(), handlers={"status": progress.download_update, "bitrate": progress.set_bitrate}, segmented = not options.nosegmented)
+            progress.download_end()
+            if not result:
+                sys.exit(-1)
+
+        for item in args:
+            progress = ProgressBar()
+            result = download.get(item, os.getcwd(), handlers={"status": progress.download_update, "bitrate": progress.set_bitrate}, segmented = not options.nosegmented)
+            progress.download_end()
+            if not result:
+                sys.exit(-1)
+                
+    # remove eventually
+    elif not options.check:
+        if options.filevar != None:
+            results = checker.check_metalink(options.filevar)
+            print_totals(results)
+        for item in args:
+            results = checker.check_metalink(item)
+            print_totals(results)            
 
 def print_totals(results):
     for key in results.keys():
