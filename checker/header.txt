@@ -67,9 +67,20 @@
 #
 # CHANGELOG:
 #
+# Version 4.1
+# -----------
+# - Start of transition of how command line options are used
+# - XML parsing speed and memory improvements
+# - Checking function is now multithreaded for speed improvements
+# - Displays download bitrates
+# - Grabs proxy info from environment variables and Windows registry
+# - Fix for faulty file locking, this causes corrupted downloads
+#
 # Version 4.0
 # -----------
-# - Bugfixes
+# - Uses gzip compression when available on server (non-segmented downloads only)
+# - Fixed memory leak when computing a checksum
+# - Bugfixes for download resuming
 #
 # Version 3.8
 # -----------

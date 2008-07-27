@@ -95,7 +95,6 @@ def check_metalink(src):
     src = download.complete_url(src)
     datasource = urllib2.urlopen(src)
     try:
-        #dom2 = xml.dom.minidom.parse(datasource)   # parse an open file
         metalink = xmlutils.Metalink()
         metalink.parsehandle(datasource)
     except:
@@ -103,19 +102,14 @@ def check_metalink(src):
         raise
     datasource.close()
     
-##    metalink_node = xmlutils.get_subnodes(dom2, ["metalink"])
-##    try:
-##        metalink_type = get_attr_from_item(metalink_node, "type")
-##    except:
-##        metalink_type = None
-
     if metalink.type == "dynamic":
-        #origin = get_attr_from_item(metalink_node, "origin")
         origin = metalink.origin
         if origin != src:
-            return check_metalink(origin)
+            try:
+                return check_metalink(origin)
+            except:
+                print "Error downloading from origin %s, not using." % origin
     
-    #urllist = xmlutils.get_subnodes(dom2, ["metalink", "files", "file"])
     urllist = metalink.files
     if len(urllist) == 0:
         print _("No urls to download file from.")
@@ -124,11 +118,6 @@ def check_metalink(src):
     results = {}
     for filenode in urllist:
         size = filenode.size
-##        try:
-##            size = xmlutils.get_xml_tag_strings(filenode, ["size"])[0]
-##        except:
-##            size = None
-        #name = xmlutils.get_attr_from_item(filenode, "name")
         name = filenode.filename
         print "=" * 79
         print _("File") + ": %s " % name + _("Size") + ": %s" % size
@@ -176,12 +165,8 @@ def check_file_node(item):
     Fouth parameter, optional, progress handler callback
     Returns dictionary of file paths with headers
     '''
-##    try:
-##        size = get_xml_tag_strings(item, ["size"])[0]
-##    except:
-##        size = None
+
     size = item.size
-    #urllist = xmlutils.get_subnodes(item, ["resources", "url"])
     urllist = item.resources
     if len(urllist) == 0:
         print _("No urls to download file from.")
