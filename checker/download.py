@@ -246,7 +246,7 @@ def urlopen(url, data = None, metalink=False):
     fp = urllib2.urlopen(req) 
     try:
         if fp.headers['Content-Encoding'] == "gzip":
-            return xmlutils.DecompressFile(fp)
+            return xmlutils.open_compressed(fp)
     except KeyError: pass
 
     return fp
@@ -671,8 +671,7 @@ def download_jigdo(src, path, force = False, handlers = {}, segmented = SEGMENTE
     jigdo.parsehandle(datasource)
     datasource.close()
 
-    #print os.path.dirname(src) + "/" + jigdo.template
-    template = get(os.path.dirname(src) + "/" + jigdo.template, path, {"md5": jigdo.template_md5}, force, handlers, segmented)
+    template = get(path_join(os.path.dirname(src), jigdo.template), path, {"md5": jigdo.template_md5}, force, handlers, segmented)
     if not template:
         print _("Could not download template file!")
         return False
@@ -685,10 +684,9 @@ def download_jigdo(src, path, force = False, handlers = {}, segmented = SEGMENTE
     results = []
     results.extend(template)
     for filenode in urllist:
-        pass
-        #result = download_file_node(filenode, path, force, handlers, segmented)
-        #if result:
-        #      results.append(result)
+        result = download_file_node(filenode, path, force, handlers, segmented)
+        if result:
+              results.append(result)
     if len(results) == 0:
         return False
 
@@ -1261,9 +1259,11 @@ class Segment_Manager(Manager):
                     http = Http_Host(url)
                     if http.conn != None:
                         http.conn.request("HEAD", url)
-                        response = http.conn.getresponse()
-                        status = response.status
-                        url = response.getheader("Location")
+                        try:
+                            response = http.conn.getresponse()
+                            status = response.status
+                            url = response.getheader("Location")
+                        except: pass
                         http.close()
                     count += 1
 
@@ -1543,7 +1543,7 @@ class Segment_Manager(Manager):
             try:
                 os.remove(self.localfile)
                 os.remove(self.localfile + ".temp")
-            except WindowsError: pass
+            except: pass
             self.status = False
         elif self.status:
             self.status = filecheck(self.localfile, self.checksums, size)

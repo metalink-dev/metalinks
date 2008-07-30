@@ -549,6 +549,12 @@ class Metalink:
             total += fileobj.get_size()
         return total
 
+    def get_file_by_hash(self, hashtype, value):
+        for index in range(len(self.files)):
+            if self.files[index].hashlist[hashtype] == value:
+                return index
+        return None
+
 ############### Jigdo ######################
 
 class DecompressFile(gzip.GzipFile):
@@ -556,9 +562,8 @@ class DecompressFile(gzip.GzipFile):
         self.fp = fp
         self.geturl = fp.geturl
 
-        compressed = StringIO.StringIO(fp.read())
-        gzip.GzipFile.__init__(self, fileobj=compressed)
-    
+        gzip.GzipFile.__init__(self, fileobj=fp)
+
     def info(self):
         info = self.fp.info()
         # store current position, must reset if in middle of read operation
@@ -571,12 +576,44 @@ class DecompressFile(gzip.GzipFile):
         info["Content-Length"] = newsize
         return info
 
+class URLInfo(StringIO.StringIO):
+    def __init__(self, fp):
+        self.fp = fp
+        self.geturl = fp.geturl
+
+        StringIO.StringIO.__init__(self)
+        self.write(fp.read())
+        self.seek(0)
+
+    def info(self):
+        info = self.fp.info()
+        # store current position, must reset if in middle of read operation
+        reset = self.tell()
+        # reset to start
+        self.seek(0)
+        newsize = str(len(self.read()))
+        # reset to original position
+        self.seek(reset)
+        info["Content-Length"] = newsize
+        return info
+
+def open_compressed(fp):
+    compressedfp = URLInfo(fp)
+    newfp = DecompressFile(compressedfp)
+
+    try:
+    	newfp.info()
+    	return newfp
+    except IOError:
+        compressedfp.seek(0)
+        return compressedfp
 
 class Jigdo(Metalink):
     def __init__(self):
         self.template = ""
         self.template_md5 = ""
         self.filename = ""
+        self.mirrordict = {}
         Metalink.__init__(self)
         self.p = ParseINI()
 
@@ -586,13 +623,9 @@ class Jigdo(Metalink):
         handle.close()
 
     def parsehandle(self, handle):
-        # need to gunzip here
-        try:
-            newhandle = DecompressFile(handle)
-            self.p.readfp(newhandle)
-        except IOError:
-            # file not gzipped
-            self.p.readfp(handle)
+        # need to gunzip here if needed
+        newhandle = open_compressed(handle)
+        self.p.readfp(newhandle)
 
         self.decode(self.p)
 
@@ -602,7 +635,10 @@ class Jigdo(Metalink):
     def decode(self, configobj):
         serverdict = {}
         for item in configobj.items("Servers"):
-            serverdict[item[0]] = item[1].split(" ")[0]
+            serverdict[item[0]] = item[1].split(" ")[0].strip()
+
+        #for item in configobj.items("Mirrorlists"):
+        #    self.mirrordict[item[0]] = item[1].split(" ")[0]
         
         for item in configobj.items("Image"):
             if item[0].lower() == "template":
@@ -619,6 +655,7 @@ class Jigdo(Metalink):
         for item in configobj.items("Parts"):
             base64hash = item[0]
             binaryhash = self.base64hash2bin(base64hash)
+            hexhash = self.bin2hex(binaryhash)
             url = item[1]
             parts = url.split(":", 1)
             if len(parts) == 1:
@@ -627,11 +664,16 @@ class Jigdo(Metalink):
             else:
                 url = serverdict[parts[0]] + parts[1]
                 local = parts[1]
-            myfile = MetalinkFile(local)
-            myfile.add_url(url)
-            #print self.bin2hex(binaryhash)
-            myfile.add_checksum("md5", self.bin2hex(binaryhash))
-            self.files.append(myfile)
+
+
+            index = self.get_file_by_hash("md5", hexhash)
+            if index == None:
+                myfile = MetalinkFile(local)
+                myfile.add_checksum("md5", hexhash)
+                self.files.append(myfile)
+                index = -1
+
+            self.files[index].add_url(url)
 
     def base64hash2bin(self, base64hash):
         # need to pad hash out to multiple of both 6 (base 64) and 8 bits (1 byte characters)
@@ -644,6 +686,9 @@ class Jigdo(Metalink):
         return text
 
 class ParseINI(dict):
+    '''
+    Similiar to what is available in ConfigParser, but case sensitive
+    '''
     def __init__(self):
         pass
 
@@ -657,7 +702,7 @@ class ParseINI(dict):
                     self[section] = []
                 else:
                     parts = line.split("=", 1)
-                    self[section].append((parts[0], parts[1]))
+                    self[section].append((parts[0], parts[1].strip()))
             line = fp.readline()
 
     def items(self, section):
