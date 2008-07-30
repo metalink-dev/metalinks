@@ -41,6 +41,12 @@ import math
 import time
 import xml.parsers.expat
 
+# for jigdo only
+import gzip
+#import ConfigParser
+import base64
+import StringIO
+
 current_version = "1.1.0"
 
 def get_first(x):
@@ -167,7 +173,7 @@ class MetalinkFile:
         self.size = int(size)
 
     def get_size(self):
-        return int(self.size)
+        return self.size
     
     def clear_res(self):
         self.resources = []
@@ -182,7 +188,7 @@ class MetalinkFile:
         print "\nScanning file..."
         # Filename and size
         self.filename = os.path.basename(filename)
-        self.size = os.stat(filename).st_size
+        self.size = int(os.stat(filename).st_size)
         # Calculate piece length
         if use_chunks:
             minlength = chunk_size*1024
@@ -542,3 +548,117 @@ class Metalink:
         for fileobj in self.files:
             total += fileobj.get_size()
         return total
+
+############### Jigdo ######################
+
+class DecompressFile(gzip.GzipFile):
+    def __init__(self, fp):
+        self.fp = fp
+        self.geturl = fp.geturl
+
+        compressed = StringIO.StringIO(fp.read())
+        gzip.GzipFile.__init__(self, fileobj=compressed)
+    
+    def info(self):
+        info = self.fp.info()
+        # store current position, must reset if in middle of read operation
+        reset = self.tell()
+        # reset to start
+        self.seek(0)
+        newsize = str(len(self.read()))
+        # reset to original position
+        self.seek(reset)
+        info["Content-Length"] = newsize
+        return info
+
+
+class Jigdo(Metalink):
+    def __init__(self):
+        self.template = ""
+        self.template_md5 = ""
+        self.filename = ""
+        Metalink.__init__(self)
+        self.p = ParseINI()
+
+    def parsefile(self, filename):
+        handle = gzip.open(filename, "rb")
+        self.parsehandle(handle)
+        handle.close()
+
+    def parsehandle(self, handle):
+        # need to gunzip here
+        try:
+            newhandle = DecompressFile(handle)
+            self.p.readfp(newhandle)
+        except IOError:
+            # file not gzipped
+            self.p.readfp(handle)
+
+        self.decode(self.p)
+
+    def parse(self, text):
+        raise AssertionError, "Not implemented"
+
+    def decode(self, configobj):
+        serverdict = {}
+        for item in configobj.items("Servers"):
+            serverdict[item[0]] = item[1].split(" ")[0]
+        
+        for item in configobj.items("Image"):
+            if item[0].lower() == "template":
+                self.template = item[1]
+            if item[0].lower() == "template-md5sum":
+                self.template_md5 = self.bin2hex(self.base64hash2bin(item[1]))
+            if item[0].lower() == "filename":
+                self.filename = item[1]
+            if item[0].lower() == "shortinfo":
+                self.identity = item[1]
+            if item[0].lower() == "info":
+                self.description = item[1]
+                
+        for item in configobj.items("Parts"):
+            base64hash = item[0]
+            binaryhash = self.base64hash2bin(base64hash)
+            url = item[1]
+            parts = url.split(":", 1)
+            if len(parts) == 1:
+                url = parts[0]
+                local = parts[0]
+            else:
+                url = serverdict[parts[0]] + parts[1]
+                local = parts[1]
+            myfile = MetalinkFile(local)
+            myfile.add_url(url)
+            #print self.bin2hex(binaryhash)
+            myfile.add_checksum("md5", self.bin2hex(binaryhash))
+            self.files.append(myfile)
+
+    def base64hash2bin(self, base64hash):
+        # need to pad hash out to multiple of both 6 (base 64) and 8 bits (1 byte characters)
+        return base64.b64decode(base64hash + "AA", "-_")[:-2]
+    
+    def bin2hex(self, string):
+        text = ""
+        for char in string:
+            text += "%.2x" % ord(char)
+        return text
+
+class ParseINI(dict):
+    def __init__(self):
+        pass
+
+    def readfp(self, fp):
+        line = fp.readline()
+        section = None
+        while line:
+            if not line.startswith("#") and line.strip() != "":
+                if line.startswith("["):
+                    section = line[1:-2]
+                    self[section] = []
+                else:
+                    parts = line.split("=", 1)
+                    self[section].append((parts[0], parts[1]))
+            line = fp.readline()
+
+    def items(self, section):
+        return self[section]

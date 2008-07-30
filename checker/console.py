@@ -81,7 +81,7 @@ def run():
     Start a console version of this application.
     '''
     # Command line parser options.
-    usage = "usage: %prog [-c|-d] [options] arg1 arg2 ..."
+    usage = "usage: %prog [-c|-d|-j] [options] arg1 arg2 ..."
     parser = optparse.OptionParser(version=VERSION, usage=usage)
     parser.add_option("--download", "-d", action="store_true", dest="download", help=_("Actually download the file(s) in the metalink"))
     parser.add_option("--check", "-c", action="store_true", dest="check", help=_("Check the metalink file URLs"))
@@ -94,6 +94,7 @@ def run():
     parser.add_option("--pgp-keys", "-k", dest="pgpdir", metavar="DIR", help=_("Directory with the PGP keys that you trust (default: working directory)"))
     parser.add_option("--pgp-store", "-p", dest="pgpstore", metavar="FILE", help=_("File with the PGP keys that you trust (default: ~/.gnupg/pubring.gpg)"))
     parser.add_option("--gpg-binary", "-g", dest="gpg", help=_("(optional) Location of gpg binary path if not in the default search path"))
+    parser.add_option("--convert-jigdo", "-j", action="store_true", dest="jigdo", help=_("Convert Jigdo format file to Metalink"))
     (options, args) = parser.parse_args()
 
     if options.filevar == None and len(args) == 0:
@@ -122,6 +123,9 @@ def run():
         print _("Invalid country length, must be 2 letter code")
         return
 
+    if options.jigdo and len(args) >= 1:
+        print download.convert_jigdo(args[0])
+        return
 
     if options.check:
         # remove filevar eventually

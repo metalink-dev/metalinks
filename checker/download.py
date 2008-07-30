@@ -71,8 +71,7 @@ import GPG
 import base64
 import sys
 import gettext
-import StringIO
-import gzip
+import bz2
 
 try: import win32api
 except: pass
@@ -232,26 +231,6 @@ def translate():
     return t.ugettext
 
 _ = translate()
-
-class DecompressFile(gzip.GzipFile):
-    def __init__(self, fp):
-        self.fp = fp
-        self.geturl = fp.geturl
-
-        compressed = StringIO.StringIO(fp.read())
-        gzip.GzipFile.__init__(self, fileobj=compressed)
-    
-    def info(self):
-        info = self.fp.info()
-        # store current position, must reset if in middle of read operation
-        reset = self.tell()
-        # reset to start
-        self.seek(0)
-        newsize = str(len(self.read()))
-        # reset to original position
-        self.seek(reset)
-        info["Content-Length"] = newsize
-        return info
     
 def urlopen(url, data = None, metalink=False):
     #print "URLOPEN:", url
@@ -264,10 +243,10 @@ def urlopen(url, data = None, metalink=False):
     if metalink:
         req.add_header('Accept', MIME_TYPE + ", */*")
 
-    fp = urllib2.urlopen(req)
+    fp = urllib2.urlopen(req) 
     try:
         if fp.headers['Content-Encoding'] == "gzip":
-            return DecompressFile(fp)
+            return xmlutils.DecompressFile(fp)
     except KeyError: pass
 
     return fp
@@ -320,6 +299,8 @@ def get(src, path, checksums = {}, force = False, handlers = {}, segmented = SEG
     Returns False otherwise (checksum fails)
     raise socket.error e.g. "Operation timed out"
     '''
+    if src.endswith(".jigdo"):
+        return download_jigdo(src, path, force, handlers, segmented)
     # assume metalink if ends with .metalink
     if src.endswith(".metalink"):
         return download_metalink(src, path, force, handlers, segmented)
@@ -668,6 +649,99 @@ def download_metalink(src, path, force = False, handlers = {}, segmented = SEGME
         return False
     
     return results
+
+
+def download_jigdo(src, path, force = False, handlers = {}, segmented = SEGMENTED):
+    '''
+    Decode a jigdo file, can be local or remote
+    First parameter, file to download, URL or file path to download from
+    Second parameter, file path to save to
+    Third parameter, optional, force a new download even if a valid copy already exists
+    Fouth parameter, optional, progress handler callback
+    Returns list of file paths if download(s) is successful
+    Returns False otherwise (checksum fails)
+    '''
+    newsrc = complete_url(src)
+    try:
+        datasource = urlopen(newsrc, metalink=True)
+    except:
+        return False
+
+    jigdo = xmlutils.Jigdo()
+    jigdo.parsehandle(datasource)
+    datasource.close()
+
+    #print os.path.dirname(src) + "/" + jigdo.template
+    template = get(os.path.dirname(src) + "/" + jigdo.template, path, {"md5": jigdo.template_md5}, force, handlers, segmented)
+    if not template:
+        print _("Could not download template file!")
+        return False
+
+    urllist = jigdo.files
+    if len(urllist) == 0:
+        print _("No urls to download file from.")
+        return False
+
+    results = []
+    results.extend(template)
+    for filenode in urllist:
+        pass
+        #result = download_file_node(filenode, path, force, handlers, segmented)
+        #if result:
+        #      results.append(result)
+    if len(results) == 0:
+        return False
+
+    handle = open(template[0], "rb")
+    data = handle.readline()
+    newhandle = open(jigdo.filename, "wb+")
+    decompress = bz2.BZ2Decompressor()
+    bzip = False
+    while data:
+        if bzip:
+            newdata = decompress.decompress(data)
+            newhandle.write(newdata)
+            data = handle.read(1024)
+        else:
+            if data.startswith("BZIP"):
+                bzip = True
+            data = handle.readline()
+    handle.close()
+    newhandle.seek(0, 0)
+    
+    newhandle.close()
+    
+    return results
+
+def convert_jigdo(src):
+    '''
+    Decode a jigdo file, can be local or remote
+    First parameter, file to download, URL or file path to download from
+    Returns metalink xml text, False on error
+    '''
+    
+    newsrc = complete_url(src)
+    try:
+        datasource = urlopen(newsrc, metalink=True)
+    except:
+        return False
+
+    jigdo = xmlutils.Jigdo()
+    jigdo.parsehandle(datasource)
+    datasource.close()
+
+    fileobj = xmlutils.MetalinkFile(jigdo.template)
+    fileobj.add_url(os.path.dirname(src) + "/" + jigdo.template)
+    fileobj.add_checksum("md5", jigdo.template_md5)
+    jigdo.files.insert(0, fileobj)
+
+    urllist = jigdo.files
+    if len(urllist) == 0:
+        print _("No Jigdo data files!")
+        return False
+    
+    return jigdo.generate()
+
 
 def download_file_node(item, path, force = False, handler = None, segmented=SEGMENTED):
     '''
@@ -1139,7 +1213,7 @@ class Segment_Manager(Manager):
         self.host_limit = HOST_LIMIT
         #self.size = 0
         #if metalinkfile.size != "":
-        self.size = metalinkfile.size
+        self.size = metalinkfile.get_size()
         self.orig_urls = metalinkfile.get_url_dict()
         self.urls = self.orig_urls
         self.chunk_size = int(metalinkfile.piecelength)
@@ -1285,7 +1359,7 @@ class Segment_Manager(Manager):
             
 
     def update(self):
-        if self.status_handler != None:
+        if self.status_handler != None and self.size != None:
             #count = int(self.byte_total()/self.chunk_size)
             #if self.byte_total() % self.chunk_size:
             #    count += 1
@@ -1464,10 +1538,12 @@ class Segment_Manager(Manager):
         self.update()
 
         #try:
-        size = os.stat(self.localfile).st_size
+        size = int(os.stat(self.localfile).st_size)
         if size == 0:
-            os.remove(self.localfile)
-            os.remove(self.localfile + ".temp")
+            try:
+                os.remove(self.localfile)
+                os.remove(self.localfile + ".temp")
+            except WindowsError: pass
             self.status = False
         elif self.status:
             self.status = filecheck(self.localfile, self.checksums, size)
