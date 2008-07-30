@@ -635,10 +635,21 @@ class Jigdo(Metalink):
     def decode(self, configobj):
         serverdict = {}
         for item in configobj.items("Servers"):
-            serverdict[item[0]] = item[1].split(" ")[0].strip()
+            serverdict[item[0]] = [item[1].split(" ")[0].strip()]
 
-        #for item in configobj.items("Mirrorlists"):
-        #    self.mirrordict[item[0]] = item[1].split(" ")[0]
+        for item in configobj.items("Mirrorlists"):
+            self.mirrordict[item[0]] = item[1].split(" ")[0]
+            try:
+                import download
+                temp = []
+                fp = download.urlopen(self.mirrordict[item[0]])
+                line = fp.readline()
+                while line:
+                    if not line.startswith("#"):
+                        temp.append(line.strip())
+                    line = fp.readline()
+                serverdict[item[0]] = temp
+            except ImportError: pass
         
         for item in configobj.items("Image"):
             if item[0].lower() == "template":
@@ -658,13 +669,14 @@ class Jigdo(Metalink):
             hexhash = self.bin2hex(binaryhash)
             url = item[1]
             parts = url.split(":", 1)
+            urls = []
             if len(parts) == 1:
-                url = parts[0]
+                urls = [parts[0]]
                 local = parts[0]
             else:
-                url = serverdict[parts[0]] + parts[1]
+                for server in serverdict[parts[0]]:
+                    urls.append(server + parts[1])
                 local = parts[1]
-
 
             index = self.get_file_by_hash("md5", hexhash)
             if index == None:
@@ -673,7 +685,8 @@ class Jigdo(Metalink):
                 self.files.append(myfile)
                 index = -1
 
-            self.files[index].add_url(url)
+            for url in urls:
+                self.files[index].add_url(url)
 
     def base64hash2bin(self, base64hash):
         # need to pad hash out to multiple of both 6 (base 64) and 8 bits (1 byte characters)
