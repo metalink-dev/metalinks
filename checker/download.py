@@ -312,9 +312,7 @@ def get(src, path, checksums = {}, force = False, handlers = {}, segmented = SEG
             if urlhead(src, metalink=True)["content-type"].startswith(MIME_TYPE):
                 print _("Metalink content-type detected.")
                 return download_metalink(src, path, force, handlers, segmented)
-        except IOError, e:
-            pass
-        except WindowsError, e:
+        except:
             pass
             
     # assume normal file download here
@@ -683,10 +681,10 @@ def download_jigdo(src, path, force = False, handlers = {}, segmented = SEGMENTE
 
     results = []
     results.extend(template)
-    for filenode in urllist:
-        result = download_file_node(filenode, path, force, handlers, segmented)
-        if result:
-              results.append(result)
+    #for filenode in urllist:
+    #    result = download_file_node(filenode, path, force, handlers, segmented)
+    #    if result:
+    #          results.append(result)
     if len(results) == 0:
         return False
 
@@ -695,14 +693,20 @@ def download_jigdo(src, path, force = False, handlers = {}, segmented = SEGMENTE
     newhandle = open(jigdo.filename, "wb+")
     decompress = bz2.BZ2Decompressor()
     bzip = False
+    raw = False
     while data:
         if bzip:
             newdata = decompress.decompress(data)
             newhandle.write(newdata)
             data = handle.read(1024)
+        elif raw:
+            newhandle.write(data)
+            data = handle.read(1024)
         else:
             if data.startswith("BZIP"):
                 bzip = True
+            if data.startswith("DATA"):
+                raw = True
             data = handle.readline()
     handle.close()
     newhandle.seek(0, 0)
