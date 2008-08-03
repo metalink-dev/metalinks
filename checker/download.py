@@ -688,30 +688,8 @@ def download_jigdo(src, path, force = False, handlers = {}, segmented = SEGMENTE
     if len(results) == 0:
         return False
 
-    handle = open(template[0], "rb")
-    data = handle.readline()
-    newhandle = open(jigdo.filename, "wb+")
-    decompress = bz2.BZ2Decompressor()
-    bzip = False
-    raw = False
-    while data:
-        if bzip:
-            newdata = decompress.decompress(data)
-            newhandle.write(newdata)
-            data = handle.read(1024)
-        elif raw:
-            newhandle.write(data)
-            data = handle.read(1024)
-        else:
-            if data.startswith("BZIP"):
-                bzip = True
-            if data.startswith("DATA"):
-                raw = True
-            data = handle.readline()
-    handle.close()
-    newhandle.seek(0, 0)
-    
-    newhandle.close()
+    print _("Reconsitiuting file...")
+    jigdo.mkiso()
     
     return results
 

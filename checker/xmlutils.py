@@ -43,9 +43,10 @@ import xml.parsers.expat
 
 # for jigdo only
 import gzip
-#import ConfigParser
+import bz2
 import base64
 import StringIO
+import binascii
 
 current_version = "1.1.0"
 
@@ -693,10 +694,54 @@ class Jigdo(Metalink):
         return base64.b64decode(base64hash + "AA", "-_")[:-2]
     
     def bin2hex(self, string):
+        return binascii.hexlify(string)
+
+    def hex2bin(self, hexstring):
+        return binascii.unhexlify(hexstring)
+
+    def temp2iso(self):
+        '''
+        load template into string in memory
+        '''
+        handle = open(os.path.basename(self.template), "rb")
+        data = handle.readline()
         text = ""
-        for char in string:
-            text += "%.2x" % ord(char)
+
+        decompress = bz2.BZ2Decompressor()
+        bzip = False
+        raw = False
+        while data:
+            if data.startswith("BZIP"):
+                bzip = True
+                data = data[4:]
+            if data.startswith("DATA"):
+                raw = True
+                data = data[4:]
+
+            if bzip:
+                newdata = decompress.decompress(data)
+                text += newdata
+                data = handle.read(1024)
+            elif raw:
+                text += data
+                data = handle.read(1024)
+            else:
+                data = handle.readline()
+        handle.close()
+        #print text
         return text
+
+    def mkiso(self):
+        text = self.temp2iso()
+        handle = open(self.filename, "wb")
+
+        for fileobj in self.files:
+            hexhash = fileobj.get_checksums()["md5"]
+            loc = text.find(self.hex2bin(hexhash))
+            handle.write(text[:loc] + open(fileobj.filename, "rb").read())
+            text = text[loc+16:]
+
+        handle.close()
 
 class ParseINI(dict):
     '''
