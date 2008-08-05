@@ -681,10 +681,10 @@ def download_jigdo(src, path, force = False, handlers = {}, segmented = SEGMENTE
 
     results = []
     results.extend(template)
-    #for filenode in urllist:
-    #    result = download_file_node(filenode, path, force, handlers, segmented)
-    #    if result:
-    #          results.append(result)
+    for filenode in urllist:
+        result = download_file_node(filenode, path, force, handlers, segmented)
+        if result:
+              results.append(result)
     if len(results) == 0:
         return False
 

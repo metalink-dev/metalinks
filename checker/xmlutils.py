@@ -47,6 +47,7 @@ import bz2
 import base64
 import StringIO
 import binascii
+import zlib
 
 current_version = "1.1.0"
 
@@ -615,6 +616,7 @@ class Jigdo(Metalink):
         self.template_md5 = ""
         self.filename = ""
         self.mirrordict = {}
+        self.compression_type = None
         Metalink.__init__(self)
         self.p = ParseINI()
 
@@ -704,25 +706,34 @@ class Jigdo(Metalink):
         load template into string in memory
         '''
         handle = open(os.path.basename(self.template), "rb")
+        
+        # read text comments first, then switch to binary data
         data = handle.readline()
+        while data.strip() != "":
+            data = handle.readline()
+        #data = handle.readline()
+        data = handle.read(1024)
         text = ""
 
-        decompress = bz2.BZ2Decompressor()
+        #decompress = bz2.BZ2Decompressor()
+        #zdecompress = zlib.decompressobj()
         bzip = False
-        raw = False
+        gzip = False
         while data:
             if data.startswith("BZIP"):
                 bzip = True
-                data = data[4:]
+                self.compression_type = "BZIP"
+                data = data[16:]
             if data.startswith("DATA"):
-                raw = True
-                data = data[4:]
+                gzip = True
+                self.compression_type = "GZIP"
+                data = data[16:]
+            if data.startswith("DESC"):
+                gzip = False
+                bzip = False
 
-            if bzip:
-                newdata = decompress.decompress(data)
-                text += newdata
-                data = handle.read(1024)
-            elif raw:
+            if bzip or gzip:
+                #newdata = decompress.decompress(data)
                 text += data
                 data = handle.read(1024)
             else:
@@ -731,15 +742,41 @@ class Jigdo(Metalink):
         #print text
         return text
 
+    def get_size(self, string):
+        total = 0
+        for i in range(len(string)):
+            temp = ord(string[i]) << (8 * i)
+            total += temp
+        return total
+
     def mkiso(self):
         text = self.temp2iso()
-        handle = open(self.filename, "wb")
 
+        found = {}
         for fileobj in self.files:
             hexhash = fileobj.get_checksums()["md5"]
             loc = text.find(self.hex2bin(hexhash))
-            handle.write(text[:loc] + open(fileobj.filename, "rb").read())
-            text = text[loc+16:]
+            if loc != -1:
+                #print "FOUND:", fileobj.filename
+                found[loc] = fileobj
+
+        decompressor = None
+        if self.compression_type == "BZIP":
+            decompressor = bz2.BZ2Decompressor()
+        elif self.compression_type == "GZIP":
+            decompressor = zlib.decompressobj()
+
+        handle = open(self.filename, "wb")
+
+        keys = found.keys()
+        keys.sort()
+        start = 0
+        for loc in keys:
+            print start, loc, found[loc].filename
+            lead = decompressor.decompress(text[start:loc])
+            filedata = open(found[loc].filename, "rb").read()
+            handle.write(lead + filedata)
+            start = loc+16
 
         handle.close()
 
