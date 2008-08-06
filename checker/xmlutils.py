@@ -711,7 +711,7 @@ class Jigdo(Metalink):
         data = handle.readline()
         while data.strip() != "":
             data = handle.readline()
-        #data = handle.readline()
+
         data = handle.read(1024)
         text = ""
 
@@ -727,6 +727,8 @@ class Jigdo(Metalink):
             if data.startswith("DATA"):
                 gzip = True
                 self.compression_type = "GZIP"
+                #print self.get_size(data[4:10])
+                #print self.get_size(data[10:16])
                 data = data[16:]
             if data.startswith("DESC"):
                 gzip = False
@@ -758,7 +760,7 @@ class Jigdo(Metalink):
             loc = text.find(self.hex2bin(hexhash))
             if loc != -1:
                 #print "FOUND:", fileobj.filename
-                found[loc] = fileobj
+                found[loc] = fileobj.filename
 
         decompressor = None
         if self.compression_type == "BZIP":
@@ -772,11 +774,13 @@ class Jigdo(Metalink):
         keys.sort()
         start = 0
         for loc in keys:
-            print start, loc, found[loc].filename
+            #print start, loc, found[loc].filename
+            print "Adding %s to image..." % found[loc]
+            #sys.stdout.write(".")
             lead = decompressor.decompress(text[start:loc])
-            filedata = open(found[loc].filename, "rb").read()
+            filedata = open(found[loc], "rb").read()
             handle.write(lead + filedata)
-            start = loc+16
+            start = loc + 16
 
         handle.close()
 
@@ -801,4 +805,7 @@ class ParseINI(dict):
             line = fp.readline()
 
     def items(self, section):
-        return self[section]
+        try:
+            return self[section]
+        except KeyError:
+            return []

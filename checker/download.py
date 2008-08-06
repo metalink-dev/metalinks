@@ -669,7 +669,8 @@ def download_jigdo(src, path, force = False, handlers = {}, segmented = SEGMENTE
     jigdo.parsehandle(datasource)
     datasource.close()
 
-    template = get(path_join(os.path.dirname(src), jigdo.template), path, {"md5": jigdo.template_md5}, force, handlers, segmented)
+    #print path_join(src, jigdo.template)
+    template = get(path_join(src, jigdo.template), path, {"md5": jigdo.template_md5}, force, handlers, segmented)
     if not template:
         print _("Could not download template file!")
         return False
