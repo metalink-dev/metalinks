@@ -19,7 +19,6 @@
 */
 
 #include "Options.ih"
-#define SEP '
 #define _addOpt(VAR, SHORT, LONG, DESC)	Glib::OptionEntry SHORT ## _e; SHORT ## _e.set_long_name(#LONG); SHORT ## _e.set_short_name( #SHORT[0]); SHORT ## _e.set_description(DESC); add_entry(SHORT ## _e, opt.VAR)
 #define _addLOpt(VAR, LONG, DESC)	Glib::OptionEntry LONG ## _e; LONG ## _e.set_long_name(#LONG); LONG ## _e.set_description(DESC); add_entry(LONG ## _e, opt.VAR)
 
