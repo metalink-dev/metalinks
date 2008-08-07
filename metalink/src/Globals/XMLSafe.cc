@@ -3,24 +3,24 @@
 std::string Globals::XMLSafe(std::string value)
 {
 	//Entities
-	char *froma[] = {
+	string froma[] = {
 		"&",
 		"<",
 		">",
-		0
+		""
 	};
 	
-	char *tob[] = {
+	string tob[] = {
 		"&amp;",
 		"&lt;",
 		"&gt;"
 	};
 	
 	
-	for(unsigned i(0); froma[i]; ++i)
+	for(unsigned i(0); froma[i].size(); ++i)
 	{
-		string const from(froma[i]);
-		string const to(tob[i]);
+		string const &from(froma[i]);
+		string const &to(tob[i]);
 		string::size_type offset(0);
 		
 		while(true)

@@ -1,4 +1,4 @@
-#& -l
+#& -l --args "-Wall -g -Werror -ansi "
 #lib BOOST
 boost/program_options.hpp		-lboost_program_options-mt
 fstream	-D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE
