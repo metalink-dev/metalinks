@@ -658,7 +658,7 @@ class Jigdo(Metalink):
             if item[0].lower() == "template":
                 self.template = item[1]
             if item[0].lower() == "template-md5sum":
-                self.template_md5 = self.bin2hex(self.base64hash2bin(item[1]))
+                self.template_md5 = binascii.hexlify(self.base64hash2bin(item[1]))
             if item[0].lower() == "filename":
                 self.filename = item[1]
             if item[0].lower() == "shortinfo":
@@ -669,7 +669,7 @@ class Jigdo(Metalink):
         for item in configobj.items("Parts"):
             base64hash = item[0]
             binaryhash = self.base64hash2bin(base64hash)
-            hexhash = self.bin2hex(binaryhash)
+            hexhash = binascii.hexlify(binaryhash)
             url = item[1]
             parts = url.split(":", 1)
             urls = []
@@ -694,12 +694,6 @@ class Jigdo(Metalink):
     def base64hash2bin(self, base64hash):
         # need to pad hash out to multiple of both 6 (base 64) and 8 bits (1 byte characters)
         return base64.b64decode(base64hash + "AA", "-_")[:-2]
-    
-    def bin2hex(self, string):
-        return binascii.hexlify(string)
-
-    def hex2bin(self, hexstring):
-        return binascii.unhexlify(hexstring)
 
     def temp2iso(self):
         '''
@@ -757,7 +751,7 @@ class Jigdo(Metalink):
         found = {}
         for fileobj in self.files:
             hexhash = fileobj.get_checksums()["md5"]
-            loc = text.find(self.hex2bin(hexhash))
+            loc = text.find(binascii.unhexlify(hexhash))
             if loc != -1:
                 #print "FOUND:", fileobj.filename
                 found[loc] = fileobj.filename
@@ -774,8 +768,8 @@ class Jigdo(Metalink):
         keys.sort()
         start = 0
         for loc in keys:
-            #print start, loc, found[loc].filename
-            print "Adding %s to image..." % found[loc]
+            #print start, loc, found[loc]
+            #print "Adding %s to image..." % found[loc]
             #sys.stdout.write(".")
             lead = decompressor.decompress(text[start:loc])
             filedata = open(found[loc], "rb").read()

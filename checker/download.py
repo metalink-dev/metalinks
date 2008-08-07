@@ -689,7 +689,7 @@ def download_jigdo(src, path, force = False, handlers = {}, segmented = SEGMENTE
     if len(results) == 0:
         return False
 
-    print _("Reconsitiuting file...")
+    print _("Reconstituting file...")
     jigdo.mkiso()
     
     return results
