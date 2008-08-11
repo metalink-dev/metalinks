@@ -1,0 +1,9 @@
+Import('env')
+
+objs = []
+objs += SConscript('win32/SConscript', exports=['env'])
+objs += SConscript('metalink/SConscript', exports=['env'])
+objs += SConscript('downloader/SConscript', exports=['env'])
+objs += SConscript('util/SConscript', exports=['env'])
+
+Return('objs')
