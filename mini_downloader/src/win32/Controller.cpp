@@ -35,7 +35,7 @@ void launch_installer()
     si.cb = sizeof(si);
     ZeroMemory( &pi, sizeof(pi) );
 
-    tstring filename = TSTR("OOo_2.4.1_Win32Intel_install_wJRE_en-US.exe");
+    tstring filename = custom::get_launch_filename().c_str();
     
     // Start the child process. 
     if( !CreateProcess(filename.c_str(),   // No module name (use command line)

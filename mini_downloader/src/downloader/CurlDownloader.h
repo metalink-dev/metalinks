@@ -65,6 +65,7 @@ private:
     double _sha1_bytes; // The number of bytes hashed in the current piece.
     SHA1Gen _sha1; // The hash generator used to generate piece hashes.
     tstr::tstring _country;
+    tstr::tstring _remaining; // ETA message.
     int _state;
     enum {
     STATE_READY,

@@ -17,6 +17,8 @@ tstr::tstring get_title();
 bool get_launch();
 // Launch button msg.
 tstr::tstring get_launch_button_msg();
+// The filename of the file to launch
+tstr::tstring get_launch_filename();
 
 }
 

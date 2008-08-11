@@ -245,6 +245,7 @@ void CurlDownloader::_curl_download()
     _last_progress = ptime(microsec_clock::local_time());
     _last_downloaded = 0;
     _speed = 0;
+    _remaining = TSTR("");
     // Init the download (if possible resuming an old download).
     _downloaded = 0;
     double file_size = 0;
@@ -653,7 +654,6 @@ bool CurlDownloader::curl_progress(double dltotal, double dlnow)
         _last_downloaded = dlnow;
     }
     // Calculate ETA
-    tstring remaining;
     if(_file.size > 0 && _speed > 0 && _speed_time > 5000.0) { // Only if 5 secs of speed data is available.
         double secs_remaining = (_file.size - _start_size - dlnow) / _speed;
         double hours = floor(secs_remaining/3600.0);
@@ -664,12 +664,12 @@ bool CurlDownloader::curl_progress(double dltotal, double dlnow)
         if(hours > 0) {
             boost::format fmt(" (%d:%02d:%02d remaining)");
             fmt % hours % mins % secs;
-            remaining = s2t(fmt.str());
+            _remaining = s2t(fmt.str());
         }
         else {
             boost::format fmt(" (%d:%02d remaining)");
             fmt % mins % secs;
-            remaining = s2t(fmt.str());
+            _remaining = s2t(fmt.str());
         }
     }
     // Format status message
@@ -680,7 +680,7 @@ bool CurlDownloader::curl_progress(double dltotal, double dlnow)
     ss << boost::format(" (%.0f%%)") % (100.0*progress);
     ss << " of " << represent_size(static_cast<double>(_file.size));
     ss << " @ "<< represent_speed(_speed);
-    ss << t2s(remaining);
+    ss << t2s(_remaining);
     // Send status and progress to _listener
     _listener.download_status(s2t(ss.str()));
     _listener.download_progress(static_cast<int>(1000*progress));

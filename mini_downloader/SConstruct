@@ -5,7 +5,7 @@ def build_project(toolset=['default'], debug=False):
     build_dir = 'build/'
     exe_filename = 'bin/downloader'
     env = Environment(tools = toolset, ENV = os.environ)
-    # other defines: 'ENABLE_LOGGING'
+    # other defines: 'ENABLE_LOGGING', 'CUSTOM_STRINGS'
     env.Append(CPPDEFINES = ['UNICODE', '_UNICODE', '_WIN32_IE=0x0400', 'CURL_STATICLIB', 'XML_STATIC'])
     env.Append(CPPPATH = ['#/include'])
     env.Append(LIBS = 'kernel32 user32 gdi32 comctl32 libcurl wsock32 wldap32'.split())
