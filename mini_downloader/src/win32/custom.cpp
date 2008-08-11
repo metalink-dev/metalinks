@@ -54,9 +54,9 @@ tstr::tstring get_title()
 #ifdef CUSTOM_STRINGS
     // 100 chars long
     char text[] = "#TITLE#                                                                                            #";
-    return TSTR("Metalink Downloader - ") + s2t(text);
+    return TSTR("Mini Downloader - ") + s2t(text);
 #else
-    return TSTR("Metalink Downloader - OpenOffice.org 2.4.1");
+    return TSTR("Mini Downloader - OpenOffice.org 2.4.1");
 #endif
 }
 

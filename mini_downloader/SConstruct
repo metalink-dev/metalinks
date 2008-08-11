@@ -24,7 +24,6 @@ def build_project(toolset=['default'], debug=False):
         env.Append(CXXFLAGS = '/EHsc /W3 /MT'.split())
         env.Append(LINKFLAGS = '/MANIFEST:NO'.split())
         env.Append(LIBS = 'libexpatwMT')
-        #env.Append(CPPDEFINES = ['_CRT_SECURE_CPP_OVERLOAD_STANDARD_NAMES'])
         if debug:
             env.Append(CXXFLAGS = '/Od /ZI /RTC1'.split())
             env.Append(LINKFLAGS = '/DEBUG'.split())
