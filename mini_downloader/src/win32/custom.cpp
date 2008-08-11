@@ -2,6 +2,11 @@
 #include "util/tstr.h"
 #include <string>
 
+/*
+This file let you customize a few text strings, which are used in the downloader. If CUSTOM_STRINGS are defined it will
+create c-style strings, which can easily be modified after the file has been compiled by searching for and replace them.
+*/
+
 using namespace std;
 using namespace tstr;
 
