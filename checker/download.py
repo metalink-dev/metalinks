@@ -1948,6 +1948,10 @@ class Http_Host_Segment(threading.Thread, Host_Segment):
             self.error = _("socket error")
             self.response = None
             return
+        except:
+            self.response = None
+            return
+
         if len(data) == 0:
             return
 
