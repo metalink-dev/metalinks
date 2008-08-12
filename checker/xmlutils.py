@@ -481,18 +481,18 @@ class Metalink:
         try:
             if name == "url" and self.parent[-1].name == "resources":
                 fileobj = self.files[-1]
-                fileobj.add_url(self.data, attrs=tag.attrs)
+                fileobj.add_url(self.data.strip(), attrs=tag.attrs)
             elif name == "tags" and self.parent[-1].name != "file":
-                setattr(self, "tags", self.data)
+                setattr(self, "tags", self.data.strip())
             elif name in ("name", "url"):
-                setattr(self, self.parent[-1].name + "_" + name, self.data)
+                setattr(self, self.parent[-1].name + "_" + name, self.data.strip())
             elif name in ("identity", "copyright", "description", "version", "upgrade"):
-                setattr(self, name, self.data)
+                setattr(self, name, self.data.strip())
             elif name == "hash" and self.parent[-1].name == "verification":
                 hashtype = tag.attrs["type"]
                 fileobj = self.files[-1]
                 #setattr(fileobj, "hash_" + hashtype, self.data)
-                fileobj.hashlist[hashtype] = self.data
+                fileobj.hashlist[hashtype] = self.data.strip()
             elif name == "signature" and self.parent[-1].name == "verification":
                 hashtype = tag.attrs["type"]
                 fileobj = self.files[-1]
@@ -504,18 +504,18 @@ class Metalink:
                 fileobj.piecelength = tag.attrs["length"]
             elif name == "hash" and self.parent[-1].name == "pieces":
                 fileobj = self.files[-1]
-                fileobj.pieces.append(self.data)
+                fileobj.pieces.append(self.data.strip())
             elif name in ("os", "language", "tags"):
                 fileobj = self.files[-1]
-                setattr(fileobj, name, self.data)
+                setattr(fileobj, name, self.data.strip())
             elif name in ("size"):
                 fileobj = self.files[-1]
-                if self.data != "":
-                    setattr(fileobj, name, int(self.data))
+                if self.data.strip() != "":
+                    setattr(fileobj, name, int(self.data.strip()))
         except IndexError: pass
             
     def char_data(self, data):
-        self.data += data.strip()
+        self.data += data #.strip()
 
     def parsefile(self, filename):
         handle = open(filename, "rb")
