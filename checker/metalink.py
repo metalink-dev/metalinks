@@ -67,6 +67,12 @@
 #
 # CHANGELOG:
 #
+# Version 4.2
+# -----------
+# - PGP bugfix
+# - Jigdo to Metalink convertor
+# - Other bugfixes
+#
 # Version 4.1
 # -----------
 # - Start of transition of how command line options are used
@@ -197,8 +203,10 @@ except ImportError: pass
 import copy
 import md5
 import sha
-import xml.parsers.expat
+import bz2
+import gzip
 import httplib
+import binascii
 import urllib2
 import sys
 import gettext
@@ -206,10 +214,11 @@ import socket
 import locale
 import optparse
 import threading
+import zlib
 import os.path
 import ftplib
 import os
-import gzip
+import xml.parsers.expat
 import math
 import logging
 import re
@@ -800,26 +809,6 @@ def translate():
     return t.ugettext
 
 _ = translate()
-
-class DecompressFile(gzip.GzipFile):
-    def __init__(self, fp):
-        self.fp = fp
-        self.geturl = fp.geturl
-
-        compressed = StringIO.StringIO(fp.read())
-        gzip.GzipFile.__init__(self, fileobj=compressed)
-    
-    def info(self):
-        info = self.fp.info()
-        # store current position, must reset if in middle of read operation
-        reset = self.tell()
-        # reset to start
-        self.seek(0)
-        newsize = str(len(self.read()))
-        # reset to original position
-        self.seek(reset)
-        info["Content-Length"] = newsize
-        return info
     
 def urlopen(url, data = None, metalink=False):
     #print "URLOPEN:", url
@@ -832,10 +821,10 @@ def urlopen(url, data = None, metalink=False):
     if metalink:
         req.add_header('Accept', MIME_TYPE + ", */*")
 
-    fp = urllib2.urlopen(req)
+    fp = urllib2.urlopen(req) 
     try:
         if fp.headers['Content-Encoding'] == "gzip":
-            return DecompressFile(fp)
+            return xmlutils.open_compressed(fp)
     except KeyError: pass
 
     return fp
@@ -888,6 +877,8 @@ def get(src, path, checksums = {}, force = False, handlers = {}, segmented = SEG
     Returns False otherwise (checksum fails)
     raise socket.error e.g. "Operation timed out"
     '''
+    if src.endswith(".jigdo"):
+        return download_jigdo(src, path, force, handlers, segmented)
     # assume metalink if ends with .metalink
     if src.endswith(".metalink"):
         return download_metalink(src, path, force, handlers, segmented)
@@ -899,9 +890,7 @@ def get(src, path, checksums = {}, force = False, handlers = {}, segmented = SEG
             if urlhead(src, metalink=True)["content-type"].startswith(MIME_TYPE):
                 print _("Metalink content-type detected.")
                 return download_metalink(src, path, force, handlers, segmented)
-        except IOError, e:
-            pass
-        except WindowsError, e:
+        except:
             pass
             
     # assume normal file download here
@@ -1236,6 +1225,82 @@ def download_metalink(src, path, force = False, handlers = {}, segmented = SEGME
         return False
     
     return results
+
+
+def download_jigdo(src, path, force = False, handlers = {}, segmented = SEGMENTED):
+    '''
+    Decode a jigdo file, can be local or remote
+    First parameter, file to download, URL or file path to download from
+    Second parameter, file path to save to
+    Third parameter, optional, force a new download even if a valid copy already exists
+    Fouth parameter, optional, progress handler callback
+    Returns list of file paths if download(s) is successful
+    Returns False otherwise (checksum fails)
+    '''
+    newsrc = complete_url(src)
+    try:
+        datasource = urlopen(newsrc, metalink=True)
+    except:
+        return False
+
+    jigdo = xmlutils.Jigdo()
+    jigdo.parsehandle(datasource)
+    datasource.close()
+
+    #print path_join(src, jigdo.template)
+    template = get(path_join(src, jigdo.template), path, {"md5": jigdo.template_md5}, force, handlers, segmented)
+    if not template:
+        print _("Could not download template file!")
+        return False
+
+    urllist = jigdo.files
+    if len(urllist) == 0:
+        print _("No urls to download file from.")
+        return False
+
+    results = []
+    results.extend(template)
+    for filenode in urllist:
+        result = download_file_node(filenode, path, force, handlers, segmented)
+        if result:
+              results.append(result)
+    if len(results) == 0:
+        return False
+
+    print _("Reconstituting file...")
+    jigdo.mkiso()
+    
+    return results
+
+def convert_jigdo(src):
+    '''
+    Decode a jigdo file, can be local or remote
+    First parameter, file to download, URL or file path to download from
+    Returns metalink xml text, False on error
+    '''
+    
+    newsrc = complete_url(src)
+    try:
+        datasource = urlopen(newsrc, metalink=True)
+    except:
+        return False
+
+    jigdo = xmlutils.Jigdo()
+    jigdo.parsehandle(datasource)
+    datasource.close()
+
+    fileobj = xmlutils.MetalinkFile(jigdo.template)
+    fileobj.add_url(os.path.dirname(src) + "/" + jigdo.template)
+    fileobj.add_checksum("md5", jigdo.template_md5)
+    jigdo.files.insert(0, fileobj)
+
+    urllist = jigdo.files
+    if len(urllist) == 0:
+        print _("No Jigdo data files!")
+        return False
+    
+    return jigdo.generate()
+
 
 def download_file_node(item, path, force = False, handler = None, segmented=SEGMENTED):
     '''
@@ -1707,7 +1772,7 @@ class Segment_Manager(Manager):
         self.host_limit = HOST_LIMIT
         #self.size = 0
         #if metalinkfile.size != "":
-        self.size = metalinkfile.size
+        self.size = metalinkfile.get_size()
         self.orig_urls = metalinkfile.get_url_dict()
         self.urls = self.orig_urls
         self.chunk_size = int(metalinkfile.piecelength)
@@ -1755,9 +1820,11 @@ class Segment_Manager(Manager):
                     http = Http_Host(url)
                     if http.conn != None:
                         http.conn.request("HEAD", url)
-                        response = http.conn.getresponse()
-                        status = response.status
-                        url = response.getheader("Location")
+                        try:
+                            response = http.conn.getresponse()
+                            status = response.status
+                            url = response.getheader("Location")
+                        except: pass
                         http.close()
                     count += 1
 
@@ -1853,7 +1920,7 @@ class Segment_Manager(Manager):
             
 
     def update(self):
-        if self.status_handler != None:
+        if self.status_handler != None and self.size != None:
             #count = int(self.byte_total()/self.chunk_size)
             #if self.byte_total() % self.chunk_size:
             #    count += 1
@@ -2032,10 +2099,12 @@ class Segment_Manager(Manager):
         self.update()
 
         #try:
-        size = os.stat(self.localfile).st_size
+        size = int(os.stat(self.localfile).st_size)
         if size == 0:
-            os.remove(self.localfile)
-            os.remove(self.localfile + ".temp")
+            try:
+                os.remove(self.localfile)
+                os.remove(self.localfile + ".temp")
+            except: pass
             self.status = False
         elif self.status:
             self.status = filecheck(self.localfile, self.checksums, size)
@@ -2457,6 +2526,10 @@ class Http_Host_Segment(threading.Thread, Host_Segment):
             self.error = _("socket error")
             self.response = None
             return
+        except TypeError:
+            self.response = None
+            return
+
         if len(data) == 0:
             return
 
@@ -2656,7 +2729,6 @@ download = Dummy()
 download.CONNECT_RETRY_COUNT = CONNECT_RETRY_COUNT
 download.COUNTRY = COUNTRY
 download.DEFAULT_CHUNK_SIZE = DEFAULT_CHUNK_SIZE
-download.DecompressFile = DecompressFile
 download.FTP = FTP
 download.FTP_PROXY = FTP_PROXY
 download.FileResume = FileResume
@@ -2690,9 +2762,11 @@ download.URLManager = URLManager
 download.USER_AGENT = USER_AGENT
 download._ = _
 download.complete_url = complete_url
+download.convert_jigdo = convert_jigdo
 download.download_file = download_file
 download.download_file_node = download_file_node
 download.download_file_urls = download_file_urls
+download.download_jigdo = download_jigdo
 download.download_metalink = download_metalink
 download.filecheck = filecheck
 download.filehash = filehash
@@ -3178,6 +3252,8 @@ GPG.translate = translate
 ########################################################################
 
 
+# for jigdo only
+
 current_version = "1.1.0"
 
 def get_first(x):
@@ -3304,7 +3380,7 @@ class MetalinkFile:
         self.size = int(size)
 
     def get_size(self):
-        return int(self.size)
+        return self.size
     
     def clear_res(self):
         self.resources = []
@@ -3319,7 +3395,7 @@ class MetalinkFile:
         print "\nScanning file..."
         # Filename and size
         self.filename = os.path.basename(filename)
-        self.size = os.stat(filename).st_size
+        self.size = int(os.stat(filename).st_size)
         # Calculate piece length
         if use_chunks:
             minlength = chunk_size*1024
@@ -3609,18 +3685,18 @@ class Metalink:
         try:
             if name == "url" and self.parent[-1].name == "resources":
                 fileobj = self.files[-1]
-                fileobj.add_url(self.data, attrs=tag.attrs)
+                fileobj.add_url(self.data.strip(), attrs=tag.attrs)
             elif name == "tags" and self.parent[-1].name != "file":
-                setattr(self, "tags", self.data)
+                setattr(self, "tags", self.data.strip())
             elif name in ("name", "url"):
-                setattr(self, self.parent[-1].name + "_" + name, self.data)
+                setattr(self, self.parent[-1].name + "_" + name, self.data.strip())
             elif name in ("identity", "copyright", "description", "version", "upgrade"):
-                setattr(self, name, self.data)
+                setattr(self, name, self.data.strip())
             elif name == "hash" and self.parent[-1].name == "verification":
                 hashtype = tag.attrs["type"]
                 fileobj = self.files[-1]
                 #setattr(fileobj, "hash_" + hashtype, self.data)
-                fileobj.hashlist[hashtype] = self.data
+                fileobj.hashlist[hashtype] = self.data.strip()
             elif name == "signature" and self.parent[-1].name == "verification":
                 hashtype = tag.attrs["type"]
                 fileobj = self.files[-1]
@@ -3632,18 +3708,18 @@ class Metalink:
                 fileobj.piecelength = tag.attrs["length"]
             elif name == "hash" and self.parent[-1].name == "pieces":
                 fileobj = self.files[-1]
-                fileobj.pieces.append(self.data)
+                fileobj.pieces.append(self.data.strip())
             elif name in ("os", "language", "tags"):
                 fileobj = self.files[-1]
-                setattr(fileobj, name, self.data)
+                setattr(fileobj, name, self.data.strip())
             elif name in ("size"):
                 fileobj = self.files[-1]
-                if self.data != "":
-                    setattr(fileobj, name, int(self.data))
+                if self.data.strip() != "":
+                    setattr(fileobj, name, int(self.data.strip()))
         except IndexError: pass
             
     def char_data(self, data):
-        self.data += data.strip()
+        self.data += data #.strip()
 
     def parsefile(self, filename):
         handle = open(filename, "rb")
@@ -3678,13 +3754,273 @@ class Metalink:
         for fileobj in self.files:
             total += fileobj.get_size()
         return total
+
+    def get_file_by_hash(self, hashtype, value):
+        for index in range(len(self.files)):
+            if self.files[index].hashlist[hashtype] == value:
+                return index
+        return None
+
+############### Jigdo ######################
+
+class DecompressFile(gzip.GzipFile):
+    def __init__(self, fp):
+        self.fp = fp
+        self.geturl = fp.geturl
+
+        gzip.GzipFile.__init__(self, fileobj=fp)
+
+    def info(self):
+        info = self.fp.info()
+        # store current position, must reset if in middle of read operation
+        reset = self.tell()
+        # reset to start
+        self.seek(0)
+        newsize = str(len(self.read()))
+        # reset to original position
+        self.seek(reset)
+        info["Content-Length"] = newsize
+        return info
+
+class URLInfo(StringIO.StringIO):
+    def __init__(self, fp):
+        self.fp = fp
+        self.geturl = fp.geturl
+
+        StringIO.StringIO.__init__(self)
+        self.write(fp.read())
+        self.seek(0)
+
+    def info(self):
+        info = self.fp.info()
+        # store current position, must reset if in middle of read operation
+        reset = self.tell()
+        # reset to start
+        self.seek(0)
+        newsize = str(len(self.read()))
+        # reset to original position
+        self.seek(reset)
+        info["Content-Length"] = newsize
+        return info
+
+def open_compressed(fp):
+    compressedfp = URLInfo(fp)
+    newfp = DecompressFile(compressedfp)
+
+    try:
+    	newfp.info()
+    	return newfp
+    except IOError:
+        compressedfp.seek(0)
+        return compressedfp
+
+class Jigdo(Metalink):
+    def __init__(self):
+        self.template = ""
+        self.template_md5 = ""
+        self.filename = ""
+        self.mirrordict = {}
+        self.compression_type = None
+        Metalink.__init__(self)
+        self.p = ParseINI()
+
+    def parsefile(self, filename):
+        handle = gzip.open(filename, "rb")
+        self.parsehandle(handle)
+        handle.close()
+
+    def parsehandle(self, handle):
+        # need to gunzip here if needed
+        newhandle = open_compressed(handle)
+        self.p.readfp(newhandle)
+
+        self.decode(self.p)
+
+    def parse(self, text):
+        raise AssertionError, "Not implemented"
+
+    def decode(self, configobj):
+        serverdict = {}
+        for item in configobj.items("Servers"):
+            serverdict[item[0]] = [item[1].split(" ")[0].strip()]
+
+        for item in configobj.items("Mirrorlists"):
+            self.mirrordict[item[0]] = item[1].split(" ")[0]
+            try:
+                temp = []
+                fp = download.urlopen(self.mirrordict[item[0]])
+                line = fp.readline()
+                while line:
+                    if not line.startswith("#"):
+                        temp.append(line.strip())
+                    line = fp.readline()
+                serverdict[item[0]] = temp
+            except ImportError: pass
+        
+        for item in configobj.items("Image"):
+            if item[0].lower() == "template":
+                self.template = item[1]
+            if item[0].lower() == "template-md5sum":
+                self.template_md5 = binascii.hexlify(self.base64hash2bin(item[1]))
+            if item[0].lower() == "filename":
+                self.filename = item[1]
+            if item[0].lower() == "shortinfo":
+                self.identity = item[1]
+            if item[0].lower() == "info":
+                self.description = item[1]
+                
+        for item in configobj.items("Parts"):
+            base64hash = item[0]
+            binaryhash = self.base64hash2bin(base64hash)
+            hexhash = binascii.hexlify(binaryhash)
+            url = item[1]
+            parts = url.split(":", 1)
+            urls = []
+            if len(parts) == 1:
+                urls = [parts[0]]
+                local = parts[0]
+            else:
+                for server in serverdict[parts[0]]:
+                    urls.append(server + parts[1])
+                local = parts[1]
+
+            index = self.get_file_by_hash("md5", hexhash)
+            if index == None:
+                myfile = MetalinkFile(local)
+                myfile.add_checksum("md5", hexhash)
+                self.files.append(myfile)
+                index = -1
+
+            for url in urls:
+                self.files[index].add_url(url)
+
+    def base64hash2bin(self, base64hash):
+        # need to pad hash out to multiple of both 6 (base 64) and 8 bits (1 byte characters)
+        return base64.b64decode(base64hash + "AA", "-_")[:-2]
+
+    def temp2iso(self):
+        '''
+        load template into string in memory
+        '''
+        handle = open(os.path.basename(self.template), "rb")
+        
+        # read text comments first, then switch to binary data
+        data = handle.readline()
+        while data.strip() != "":
+            data = handle.readline()
+
+        data = handle.read(1024*1024)
+        text = ""
+
+        #decompress = bz2.BZ2Decompressor()
+        #zdecompress = zlib.decompressobj()
+        bzip = False
+        gzip = False
+        while data:
+            if data.startswith("BZIP"):
+                bzip = True
+                self.compression_type = "BZIP"
+                data = data[16:]
+            if data.startswith("DATA"):
+                gzip = True
+                self.compression_type = "GZIP"
+                #print self.get_size(data[4:10])
+                #print self.get_size(data[10:16])
+                data = data[16:]
+            if data.startswith("DESC"):
+                gzip = False
+                bzip = False
+
+            if bzip or gzip:
+                #newdata = decompress.decompress(data)
+                text += data
+                data = handle.read(1024*1024)
+            else:
+                data = handle.readline()
+        handle.close()
+        #print text
+        return text
+
+    def get_size(self, string):
+        total = 0
+        for i in range(len(string)):
+            temp = ord(string[i]) << (8 * i)
+            total += temp
+        return total
+
+    def mkiso(self):
+        text = self.temp2iso()
+
+        found = {}
+        for fileobj in self.files:
+            hexhash = fileobj.get_checksums()["md5"]
+            loc = text.find(binascii.unhexlify(hexhash))
+            if loc != -1:
+                if fileobj.filename.find("dists") != -1:
+                    print "FOUND:", fileobj.filename
+                found[loc] = fileobj.filename
+
+        decompressor = None
+        if self.compression_type == "BZIP":
+            decompressor = bz2.BZ2Decompressor()
+        elif self.compression_type == "GZIP":
+            decompressor = zlib.decompressobj()
+
+        handle = open(self.filename, "wb")
+
+        keys = found.keys()
+        keys.sort()
+        start = 0
+        for loc in keys:
+            #print start, loc, found[loc]
+            #print "Adding %s to image..." % found[loc]
+            #sys.stdout.write(".")
+            lead = decompressor.decompress(text[start:loc])
+            if found[loc].find("dists") != -1:
+                print "Writing:", found[loc]
+            filedata = open(found[loc], "rb").read()
+            handle.write(lead + filedata)
+            start = loc + 16
+
+        handle.close()
+
+class ParseINI(dict):
+    '''
+    Similiar to what is available in ConfigParser, but case sensitive
+    '''
+    def __init__(self):
+        pass
+
+    def readfp(self, fp):
+        line = fp.readline()
+        section = None
+        while line:
+            if not line.startswith("#") and line.strip() != "":
+                if line.startswith("["):
+                    section = line[1:-2]
+                    self[section] = []
+                else:
+                    parts = line.split("=", 1)
+                    self[section].append((parts[0], parts[1].strip()))
+            line = fp.readline()
+
+    def items(self, section):
+        try:
+            return self[section]
+        except KeyError:
+            return []
 xmlutils = Dummy()
+xmlutils.DecompressFile = DecompressFile
+xmlutils.Jigdo = Jigdo
 xmlutils.Metalink = Metalink
 xmlutils.MetalinkFile = MetalinkFile
+xmlutils.ParseINI = ParseINI
 xmlutils.Resource = Resource
+xmlutils.URLInfo = URLInfo
 xmlutils.XMLTag = XMLTag
 xmlutils.current_version = current_version
 xmlutils.get_first = get_first
+xmlutils.open_compressed = open_compressed
 #!/usr/bin/env python
 ########################################################################
 #
@@ -3758,7 +4094,7 @@ def run():
     Start a console version of this application.
     '''
     # Command line parser options.
-    usage = "usage: %prog [-c|-d] [options] arg1 arg2 ..."
+    usage = "usage: %prog [-c|-d|-j] [options] arg1 arg2 ..."
     parser = optparse.OptionParser(version=VERSION, usage=usage)
     parser.add_option("--download", "-d", action="store_true", dest="download", help=_("Actually download the file(s) in the metalink"))
     parser.add_option("--check", "-c", action="store_true", dest="check", help=_("Check the metalink file URLs"))
@@ -3771,6 +4107,7 @@ def run():
     parser.add_option("--pgp-keys", "-k", dest="pgpdir", metavar="DIR", help=_("Directory with the PGP keys that you trust (default: working directory)"))
     parser.add_option("--pgp-store", "-p", dest="pgpstore", metavar="FILE", help=_("File with the PGP keys that you trust (default: ~/.gnupg/pubring.gpg)"))
     parser.add_option("--gpg-binary", "-g", dest="gpg", help=_("(optional) Location of gpg binary path if not in the default search path"))
+    parser.add_option("--convert-jigdo", "-j", action="store_true", dest="jigdo", help=_("Convert Jigdo format file to Metalink"))
     (options, args) = parser.parse_args()
 
     if options.filevar == None and len(args) == 0:
@@ -3799,6 +4136,9 @@ def run():
         print _("Invalid country length, must be 2 letter code")
         return
 
+    if options.jigdo and len(args) >= 1:
+        print download.convert_jigdo(args[0])
+        return
 
     if options.check:
         # remove filevar eventually

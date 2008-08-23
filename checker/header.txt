@@ -67,6 +67,12 @@
 #
 # CHANGELOG:
 #
+# Version 4.2
+# -----------
+# - PGP bugfix
+# - Jigdo to Metalink convertor
+# - Other bugfixes
+#
 # Version 4.1
 # -----------
 # - Start of transition of how command line options are used
