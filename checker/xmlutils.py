@@ -706,7 +706,7 @@ class Jigdo(Metalink):
         while data.strip() != "":
             data = handle.readline()
 
-        data = handle.read(1024)
+        data = handle.read(1024*1024)
         text = ""
 
         #decompress = bz2.BZ2Decompressor()
@@ -731,7 +731,7 @@ class Jigdo(Metalink):
             if bzip or gzip:
                 #newdata = decompress.decompress(data)
                 text += data
-                data = handle.read(1024)
+                data = handle.read(1024*1024)
             else:
                 data = handle.readline()
         handle.close()
@@ -753,7 +753,8 @@ class Jigdo(Metalink):
             hexhash = fileobj.get_checksums()["md5"]
             loc = text.find(binascii.unhexlify(hexhash))
             if loc != -1:
-                #print "FOUND:", fileobj.filename
+                if fileobj.filename.find("dists") != -1:
+                    print "FOUND:", fileobj.filename
                 found[loc] = fileobj.filename
 
         decompressor = None
@@ -772,6 +773,8 @@ class Jigdo(Metalink):
             #print "Adding %s to image..." % found[loc]
             #sys.stdout.write(".")
             lead = decompressor.decompress(text[start:loc])
+            if found[loc].find("dists") != -1:
+                print "Writing:", found[loc]
             filedata = open(found[loc], "rb").read()
             handle.write(lead + filedata)
             start = loc + 16
