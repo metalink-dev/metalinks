@@ -464,7 +464,6 @@ class Metalink:
 def compute_ed2k(filename):
     '''
     Generates an ed2k link for a file on the local filesystem.
-    Not fully tested yet!
     '''
     try:
         import hashlib
@@ -481,19 +480,19 @@ def compute_ed2k(filename):
     while data:
         md4 = hashlib.new('md4')
         md4.update(data)
-        hashes += md4.hexdigest()
+        hashes += md4.digest()
         data = handle.read(blocksize)
+        
+    outputhash = md4.hexdigest()
 
     if size % blocksize == 0:
         md4 = hashlib.new('md4')
         md4.update("")
         hashes += md4.hexdigest()
 
-    if size < blocksize:
-        outputhash = hashes
-    else:
+    if size >= blocksize:
         md4 = hashlib.new('md4')
         md4.update(hashes)
         outputhash = md4.hexdigest()
 
-    return "ed2k://|file|%s|%s|%s|/" % (os.path.basename(filename), size, outputhash)    
+    return "ed2k://|file|%s|%s|%s|/" % (os.path.basename(filename), size, outputhash)
