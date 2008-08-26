@@ -202,6 +202,12 @@ class Metalink:
         self.hash_sha1 = sha1hash.hexdigest()
         if sha256hash != None:
             self.hash_sha256 = sha256hash.hexdigest()
+
+        # automatically add an ed2k url here
+        #ed2k = compute_ed2k(filename)
+        #if ed2k != None:
+        #    self.add_url(ed2k)
+            
         if len(self.pieces) < 2: self.pieces = []
         # Convert to strings
         self.size = str(self.size)
@@ -454,3 +460,40 @@ class Metalink:
             if n.nodeType == Node.TEXT_NODE:
                 text += n.data
         return text.strip()
+
+def compute_ed2k(filename):
+    '''
+    Generates an ed2k link for a file on the local filesystem.
+    Not fully tested yet!
+    '''
+    try:
+        import hashlib
+    except ImportError:
+        return None
+    
+    blocksize = 9728000
+    size = os.path.getsize(filename)
+
+    handle = open(filename, "rb")
+    data = handle.read(blocksize)
+    hashes = ""
+    
+    while data:
+        md4 = hashlib.new('md4')
+        md4.update(data)
+        hashes += md4.hexdigest()
+        data = handle.read(blocksize)
+
+    if size % blocksize == 0:
+        md4 = hashlib.new('md4')
+        md4.update("")
+        hashes += md4.hexdigest()
+
+    if size < blocksize:
+        outputhash = hashes
+    else:
+        md4 = hashlib.new('md4')
+        md4.update(hashes)
+        outputhash = md4.hexdigest()
+
+    return "ed2k://|file|%s|%s|%s|/" % (os.path.basename(filename), size, outputhash)    
