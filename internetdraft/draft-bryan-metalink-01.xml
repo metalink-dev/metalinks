@@ -1188,7 +1188,7 @@ metalinkURL =
 
 		<t>The value "rsync" signifies that the IRI is accessed via rsync.</t>
 
-		<t>The value "bittorrent" signifies that the IRI leads to a BitTorrent .torrent file as specified in <xref target="BITTORRENT"/>. Metalink Processors that do not support BitTorrent should ignore this type and also ignore <xref target="element.url" format="none">metalink:url</xref> elements which retrieve files that end with the extension ".torrent".</t>
+		<t>The value "bittorrent" signifies that the IRI leads to a BitTorrent .torrent file as specified in <xref target="BITTORRENT"/>. Metalink Processors that do not support BitTorrent MUST ignore this type and also ignore <xref target="element.url" format="none">metalink:url</xref> elements which retrieve files that end with the extension ".torrent".</t>
 
 		<t>The value "magnet" signifies that the IRI is accessed via Magnet Link.</t>
 
