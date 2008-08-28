@@ -14,7 +14,7 @@
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-import os, os.path, md5, sha, re, xml.dom, math, time
+import os, os.path, md5, sha, re, xml.dom, math, time, binascii
 from xml.dom.minidom import parse, Node
 
 current_version = "1.1.0"
@@ -106,6 +106,7 @@ class Metalink:
         self.hash_md5 = ""
         self.hash_sha1 = ""
         self.hash_sha256 = ""
+        self.sig = ""
         self.pieces = []
         self.piecelength = 0
         self.piecetype = ""
@@ -207,6 +208,8 @@ class Metalink:
         #ed2k = compute_ed2k(filename)
         #if ed2k != None:
         #    self.add_url(ed2k)
+
+        self.sig = read_sig(filename)
             
         if len(self.pieces) < 2: self.pieces = []
         # Convert to strings
@@ -308,6 +311,8 @@ class Metalink:
         # Verification
         if self.hash_md5.strip() != "" or self.hash_sha1.strip() != "":
             text += '      <verification>\n'
+            if self.sig.strip() != "":
+                text += '        <signature type="pgp">\n'+self.sig+'        </signature>\n'
             if self.hash_md5.strip() != "":
                 text += '        <hash type="md5">'+self.hash_md5.lower()+'</hash>\n'
             if self.hash_sha1.strip() != "":
@@ -460,6 +465,44 @@ class Metalink:
             if n.nodeType == Node.TEXT_NODE:
                 text += n.data
         return text.strip()
+
+
+def read_sig(filename):
+    '''
+    Checks for signatures for the file.
+    '''
+    sig = read_asc_sig(filename)
+    if sig != "":
+        return sig
+    return read_bin_sig(filename)
+
+def read_bin_sig(filename):
+    '''
+    Converts a binary signature to ASCII, needs testing
+    '''
+    header = "-----BEGIN PGP SIGNATURE-----\n\n"
+    footer = "-----END PGP SIGNATURE-----\n"
+    filename = filename + ".sig"
+    if os.access(filename, os.R_OK):
+        handle = open(filename, "rb")
+        text = binascii.b2a_base64(handle.read())
+        handle.close()
+        text = header + text + footer
+        return text    
+    return ""
+
+def read_asc_sig(filename):
+    '''
+    Reads a detached ASCII PGP signature from a file.
+    '''
+    filename = filename + ".asc"
+    if os.access(filename, os.R_OK):
+        handle = open(filename, "rb")
+        text = handle.read()
+        handle.close()
+        return text
+    return ""
+
 
 def compute_ed2k(filename):
     '''
