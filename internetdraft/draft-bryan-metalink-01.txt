@@ -1111,7 +1111,7 @@ Internet-Draft    Metalink Download Description Format       August 2008
    5.  The value "rsync" signifies that the IRI is accessed via rsync.
    6.  The value "bittorrent" signifies that the IRI leads to a
        BitTorrent .torrent file as specified in [BITTORRENT].  Metalink
-       Processors that do not support BitTorrent should ignore this type
+       Processors that do not support BitTorrent MUST ignore this type
        and also ignore metalink:url elements which retrieve files that
 
 
