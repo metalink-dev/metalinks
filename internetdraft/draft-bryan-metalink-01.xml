@@ -54,43 +54,47 @@
 	  <preamble>A brief, single file Metalink Document:</preamble>
 	  
 	  <artwork type="example">
-&lt;?xml version="1.0" encoding="UTF-8" ?&gt;
- &lt;metalink version="3.0" xmlns="http://metalinker.org"&gt;
-   &lt;files&gt;
-     &lt;file name="example.ext"&gt;
-     &lt;resources&gt;
-       &lt;url&gt;ftp://ftp.example.com/example.ext&lt;/url&gt;
-       &lt;url&gt;http://example.com/example.ext&lt;/url&gt; 
-       &lt;url&gt;http://example.com/example.ext.torrent&lt;/url&gt;
-     &lt;/resources&gt;
-     &lt;/file&gt;
-   &lt;/files&gt;
- &lt;/metalink&gt;
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;metalink version="3.0" xmlns="http://metalinker.org"&gt;
+  &lt;files&gt;
+    &lt;file name="example.ext"&gt;
+      &lt;resources&gt;
+        &lt;url&gt;ftp://ftp.example.com/example.ext&lt;/url&gt;
+        &lt;url&gt;http://example.com/example.ext&lt;/url&gt; 
+        &lt;url type="bittorrent"&gt;http://example.com/example.ext.torrent
+        &lt;/url&gt;
+      &lt;/resources&gt;
+    &lt;/file&gt;
+  &lt;/files&gt;
+&lt;/metalink&gt;
 </artwork></figure></t>
       <t>
 	<figure>
 	  <preamble>A more extensive, single file Metalink Document:</preamble>
 	  <artwork type="example">
-&lt;?xml version="1.0" encoding="UTF-8" ?&gt;
- &lt;metalink version="3.0" xmlns="http://metalinker.org"&gt;
-   &lt;published&gt;2008-05-15T12:23:23Z&lt;/published&gt;
-   &lt;files&gt;
-     &lt;file name="example.ext"&gt;
-     &lt;description&gt;A description of the example file for 
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;metalink version="3.0" xmlns="http://metalinker.org"&gt;
+  &lt;published&gt;2008-05-15T12:23:23Z&lt;/published&gt;
+  &lt;files&gt;
+    &lt;file name="example.ext"&gt;
+      &lt;identity&gt;Example&lt;/identity&gt;
+      &lt;version&gt;1.0&lt;/version&gt;
+      &lt;description&gt;A description of the example file for 
 download.&lt;/description&gt;
-     &lt;verification&gt;
-       &lt;hash type="md5"&gt;83b1a04f18d6782cfe0407edadac377f&lt;/hash&gt;
-       &lt;hash type="sha1"&gt;80bc95fd391772fa61c91ed68567f0980bb45fd9
-       &lt;/hash&gt;
-     &lt;/verification&gt;
-     &lt;resources&gt;
-       &lt;url&gt;ftp://ftp.example.com/example.ext&lt;/url&gt;
-       &lt;url&gt;http://example.com/example.ext&lt;/url&gt; 
-       &lt;url&gt;http://example.com/example.ext.torrent&lt;/url&gt;
-     &lt;/resources&gt;
-     &lt;/file&gt;
-   &lt;/files&gt;
- &lt;/metalink&gt;</artwork>
+      &lt;verification&gt;
+        &lt;hash type="md5"&gt;83b1a04f18d6782cfe0407edadac377f&lt;/hash&gt;
+        &lt;hash type="sha1"&gt;80bc95fd391772fa61c91ed68567f0980bb45fd9
+        &lt;/hash&gt;
+      &lt;/verification&gt;
+      &lt;resources&gt;
+        &lt;url&gt;ftp://ftp.example.com/example.ext&lt;/url&gt;
+        &lt;url&gt;http://example.com/example.ext&lt;/url&gt; 
+        &lt;url type="bittorrent"&gt;http://example.com/example.ext.torrent
+        &lt;/url&gt;
+      &lt;/resources&gt;
+    &lt;/file&gt;
+  &lt;/files&gt;
+&lt;/metalink&gt;</artwork>
 	</figure>
       </t>
       </section>
@@ -547,9 +551,14 @@ metalinkFile =
 	  <artwork type="example">
 &lt;file name="debian-amd64/sarge/Contents-amd64.gz"&gt;
 </artwork></figure></t>
-        <t>In this example, a subdirectory debian-amd64/sarge/ will be created and
-a file named Contents-amd64.gz will be created inside it. The path
-MUST be relative. The path MUST NOT begin with a "/" or contain "../" or "./" Metalink Processors MUST NOT allow directory traversal.</t>
+        <t>In this example, a subdirectory debian-amd64/sarge/ will be created
+           and a file named Contents-amd64.gz will be created inside it.  The
+           path MUST be relative.  The path MUST NOT begin with a "/", "./" or
+           "../", contain "/../", or end with "/..". Metalink Processors MUST NOT allow
+           directory traversal.</t>
+        <t>A Metalink Processor MAY alter the name of the subdirectory or file
+if they contain characters which are invalid in the destination
+filesystem.</t>
 	  </section> 
 
 
@@ -810,7 +819,8 @@ metalinkHash =
 
 	    <t><xref target="element.hash" format="none">metalink:hash</xref> elements MUST have a "type" attribute or a "piece" attribute. <xref target="element.hash" format="none">metalink:hash</xref> elements
         with a "type" attribute contain a hash of the whole file. <xref target="element.hash" format="none">metalink:hash</xref> elements with a "piece" attribute contain a hash for that specific piece or chunk of the file. All hashes are in lowercase hexadecimal format.</t>
-    
+
+        <t>When multiple hash types methods are provided, a Metalink Processor MAY verify using more than one of these hash types. Metalink Processors are encouraged to check all hash types given which they are able to process</t>
 
 	    <t>This document defines nine initial values for hash types. It may be useful to extend Metalink documents with new verification
 methods, so unknown types are allowed.
@@ -1168,13 +1178,23 @@ metalinkURL =
 		for priority, with 100 used first and 1 used last. Multiple <xref target="element.url" format="none">metalink:url</xref> elements can have the same
 		preference, i.e. ten mirrors could have preference="100". A Metalink Processor MAY download different segments of a file from more than one IRI simultaneously, and when doing so SHOULD first use the highest priority IRIs and then use lower ones.</t>
 
+
+		<t>When one or more <xref target="element.url" format="none">metalink:url</xref> elements have a preference attribute value of "100", other <xref target="element.url" format="none">metalink:url</xref> elements
+SHOULD NOT be used, unless these cannot be processed (e.g. are "bittorrent"
+etc, and this is not supported by the Metalink Processor, or the servers are down).</t>
+
+<t>Any <xref target="element.url" format="none">metalink:url</xref> elements with a preference attribute value of "1" SHOULD NOT be used unless all
+other <xref target="element.url" format="none">metalink:url</xref> elements cannot be processed (e.g. are "bittorrent" etc and this
+is not supported by the Metalink Processor, or the servers are down).</t>
+
 	  </section> 
 
 	  <section title="The &#34;type&#34; Attribute"> 
 
 	    <t><xref target="element.url" format="none">metalink:url</xref> elements MAY have a "type" attribute that indicates
-	    the IRI type. The "type" attribute overrides any file extension sniffing specified above.</t>
-	     
+	    the IRI type, except in the case of BitTorrent, where the value "bittorrent" is required. The "type" attribute overrides any file extension sniffing specified above.</t>
+
+		<t>Metalink Processors that do not support a specified type of resource MUST ignore that resource.</t>
 	    <t>This document defines eight initial values for IRI types:
 	      <list style="numbers">
 
@@ -1188,7 +1208,11 @@ metalinkURL =
 
 		<t>The value "rsync" signifies that the IRI is accessed via rsync.</t>
 
-		<t>The value "bittorrent" signifies that the IRI leads to a BitTorrent .torrent file as specified in <xref target="BITTORRENT"/>. Metalink Processors that do not support BitTorrent MUST ignore this type and also ignore <xref target="element.url" format="none">metalink:url</xref> elements which retrieve files that end with the extension ".torrent".</t>
+		<t>The value "bittorrent" signifies that the IRI (which can be accessed via various URI schemes) leads to a BitTorrent .torrent
+        file as specified in <xref target="BITTORRENT"/>. Metalink Processors that do not support BitTorrent MUST ignore this 
+        type and also ignore <xref target="element.url" format="none">metalink:url</xref> elements which retrieve files that 
+        end with the extension ".torrent", unless the <xref target="element.url" format="none">metalink:url</xref> element has 
+        a type attribute which the Metalink Processor supports</t>
 
 		<t>The value "magnet" signifies that the IRI is accessed via Magnet Link.</t>
 
