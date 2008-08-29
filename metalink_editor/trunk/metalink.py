@@ -107,6 +107,7 @@ class Metalink:
         self.hash_sha1 = ""
         self.hash_sha256 = ""
         self.sig = ""
+        self.ed2k = ""
         self.pieces = []
         self.piecelength = 0
         self.piecetype = ""
@@ -205,9 +206,9 @@ class Metalink:
             self.hash_sha256 = sha256hash.hexdigest()
 
         # automatically add an ed2k url here
-        #ed2k = compute_ed2k(filename)
-        #if ed2k != None:
-        #    self.add_url(ed2k)
+        self.ed2k = compute_ed2k(filename)
+        if self.ed2k != "":
+            self.add_url(self.ed2k)
 
         self.sig = read_sig(filename)
             
@@ -511,7 +512,7 @@ def compute_ed2k(filename):
     try:
         import hashlib
     except ImportError:
-        return None
+        return ""
     
     blocksize = 9728000
     size = os.path.getsize(filename)
