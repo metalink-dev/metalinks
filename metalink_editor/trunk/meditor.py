@@ -87,12 +87,35 @@ def build(xml, urls, output=None, localfile=None, download=True):
     handle.close()
     #print xml.generate()
 
+def merge(output, args):
+    '''
+    Pass in output file first, followed by a list of files to merge together.
+    '''
+    xmlfiles = ""
+    for item in args:
+        xml = metalink.Metalink()
+        xml.load_file(item)
+        xmlfiles += xml.generate_file()
+
+    text = '<?xml version="1.0" encoding="utf-8"?>\n'
+    text += '<metalink version="3.0" '+'generator="Metalink Editor version '+metalink.current_version+'" xmlns="http://www.metalinker.org/">\n'
+    text += '  <files>\n'
+    text += xmlfiles
+    text += '  </files>\n'
+    text += '</metalink>'
+
+    print "Writing output to %s." % output
+    handle = open(output, "wb")
+    handle.write(text)
+    handle.close()
+
 def run():
     # Command line parser options.
     parser = optparse.OptionParser(usage = "usage: %prog [options] urls")
     parser.add_option("--open", dest="open", help="Metalink file to open and modify")
     parser.add_option("-o", dest="output", help="Binary file name")
     parser.add_option("-d", dest="download", action="store_true", help="Don't download the file again")
+    parser.add_option("--merge", "-m", dest="merge", action="store_true", help="Use merge mode, urls are .metalink files to merge")
     parser.add_option("--clear_urls", dest="clear_urls", action="store_true", help="Remove any existing urls when opening a file")
     
     parser.add_option("-i", dest="identity", help="Identity")
@@ -116,6 +139,16 @@ def run():
         print "ERROR: Specify a URL."
         parser.print_help()
         return
+
+    if options.merge != None:
+        if options.open == None:
+            print "ERROR: Specify a file to write to with --open."
+            parser.print_help()
+            return
+
+        merge(options.open, args)
+        return    
+        
 
     xml = metalink.Metalink()
 
