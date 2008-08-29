@@ -87,9 +87,9 @@ def build(xml, urls, output=None, localfile=None, download=True):
     handle.close()
     #print xml.generate()
 
-def merge(args):
+def merge(master, args):
     '''
-    A list of files to merge together.
+    A master Metalink object with non <files> information and a list of files to merge together.
     '''
     xmlfiles = ""
     for item in args:
@@ -98,16 +98,16 @@ def merge(args):
         xmlfiles += xml.generate_file()
 
     text = '<?xml version="1.0" encoding="utf-8"?>\n'
-    text += '<metalink version="3.0" '+'generator="Metalink Editor version '+metalink.current_version+'" xmlns="http://www.metalinker.org/">\n'
+    origin = ""
+    if master.origin.strip() != "":
+        origin = 'origin="'+master.origin+'" '
+    text += '<metalink version="3.0" '+origin+'generator="Metalink Editor version '+metalink.current_version+'" xmlns="http://www.metalinker.org/">\n'
+    text += master.generate_info()
     text += '  <files>\n'
     text += xmlfiles
     text += '  </files>\n'
     text += '</metalink>'
 
-    #print "Writing output to %s." % output
-    #handle = open(output, "wb")
-    #handle.write(text)
-    #handle.close()
     return text
 
 def run():
@@ -141,16 +141,6 @@ def run():
         parser.print_help()
         return
 
-    if options.merge != None:
-        if len(args) < 2:
-            print "ERROR: You should specify at least two files to merge."
-            parser.print_help()
-            return
-
-        print merge(args)
-        return    
-        
-
     xml = metalink.Metalink()
 
     if options.open != None:
@@ -164,6 +154,15 @@ def run():
                 getattr(xml, option)
             except AttributeError: continue
             setattr(xml, option, getattr(options, option))
+
+    if options.merge != None:
+        if len(args) < 2:
+            print "ERROR: You should specify at least two files to merge."
+            parser.print_help()
+            return
+
+        print merge(xml, args)
+        return
 
     download = True
     if options.download:
