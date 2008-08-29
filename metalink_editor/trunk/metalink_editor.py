@@ -451,15 +451,28 @@ class MainFrame(wx.Frame):
                         if item == -1: break
                         url = self.filelist.GetItem(item, 0).GetText()
 
-                        if old_filename == "":
-                            url = os.path.dirname(url) + "/" + new_filename
-                            self.filelist.SetStringItem(item, 0, url)
-                        else:
-                            pos = url.rfind(old_filename)
-                            if pos != -1:
-                                print "Updated", url
-                                url = url[:pos] + new_filename
-                                self.filelist.SetStringItem(item, 0, url)
+                        #if old_filename == "":
+                        url = os.path.dirname(url) + "/" + new_filename
+                        self.filelist.SetStringItem(item, 0, url)
+                        #else:
+                        #    pos = url.rfind(old_filename)
+                        #    if pos != -1:
+                        #        print "Updated", url
+                        #        url = url[:pos] + new_filename
+                        #        self.filelist.SetStringItem(item, 0, url)
+
+            item = -1
+            while True:
+                item = self.filelist.GetNextItem(item, wx.LIST_NEXT_ALL, wx.LIST_STATE_DONTCARE)
+                if item == -1: break
+                url = self.filelist.GetItem(item, 0).GetText()
+                if url.startswith("ed2k://"):
+                    # remove ed2k links, they add themselves back in later
+                    self.filelist.DeleteItem(item)
+                                
+            # add ed2k link to GUI for this file
+            self.addurl(metalink.Resource(self.ml.ed2k))
+            
             self.filename = filename + ".metalink"
             self.new_file = True
             self.locked = True
@@ -471,7 +484,9 @@ class MainFrame(wx.Frame):
             loc = self.txtctrl_loc.GetValue()
             pref = self.txtctrl_pref.GetValue()
             conns = self.combo_maxconn.GetValue()
-            res = metalink.Resource(url, "", loc, pref, conns)
+            self.addurl(metalink.Resource(url, "", loc, pref, conns))
+            
+    def addurl(self, res):
             if not res.validate():
                 for e in res.errors:
                     answer = wx.MessageBox(e + " Add it anyway?", "Confirm", wx.ICON_ERROR | wx.OK | wx.CANCEL, self)
