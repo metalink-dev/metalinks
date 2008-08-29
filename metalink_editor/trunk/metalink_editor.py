@@ -450,10 +450,16 @@ class MainFrame(wx.Frame):
                         item = self.filelist.GetNextItem(item, wx.LIST_NEXT_ALL, wx.LIST_STATE_DONTCARE)
                         if item == -1: break
                         url = self.filelist.GetItem(item, 0).GetText()
-                        if url.find(old_filename) != -1:
-                            print "Updated", url
-                        url = url.replace(old_filename, new_filename)
-                        self.filelist.SetStringItem(item, 0, url)
+
+                        if old_filename == "":
+                            url = os.path.dirname(url) + "/" + new_filename
+                            self.filelist.SetStringItem(item, 0, url)
+                        else:
+                            pos = url.rfind(old_filename)
+                            if pos != -1:
+                                print "Updated", url
+                                url = url[:pos] + new_filename
+                                self.filelist.SetStringItem(item, 0, url)
             self.filename = filename + ".metalink"
             self.new_file = True
             self.locked = True
