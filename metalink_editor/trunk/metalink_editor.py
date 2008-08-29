@@ -692,6 +692,7 @@ class MainFrame(wx.Frame):
             self.ml.hash_md5 = ""
             self.ml.hash_sha1 = ""
             self.ml.hash_sha256 = ""
+            self.ml.sig = ""
             self.ml.size = ""
             #self.ml.filename = ""
             #self.txtctrl_filename.Clear()
