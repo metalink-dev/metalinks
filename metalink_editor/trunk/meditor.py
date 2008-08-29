@@ -87,9 +87,9 @@ def build(xml, urls, output=None, localfile=None, download=True):
     handle.close()
     #print xml.generate()
 
-def merge(output, args):
+def merge(args):
     '''
-    Pass in output file first, followed by a list of files to merge together.
+    A list of files to merge together.
     '''
     xmlfiles = ""
     for item in args:
@@ -104,10 +104,11 @@ def merge(output, args):
     text += '  </files>\n'
     text += '</metalink>'
 
-    print "Writing output to %s." % output
-    handle = open(output, "wb")
-    handle.write(text)
-    handle.close()
+    #print "Writing output to %s." % output
+    #handle = open(output, "wb")
+    #handle.write(text)
+    #handle.close()
+    return text
 
 def run():
     # Command line parser options.
@@ -141,12 +142,12 @@ def run():
         return
 
     if options.merge != None:
-        if options.open == None:
-            print "ERROR: Specify a file to write to with --open."
+        if len(args) < 2:
+            print "ERROR: You should specify at least two files to merge."
             parser.print_help()
             return
 
-        merge(options.open, args)
+        print merge(args)
         return    
         
 
