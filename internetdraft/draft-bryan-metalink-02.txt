@@ -1102,14 +1102,14 @@ Internet-Draft    Metalink Download Description Format       August 2008
 
    When one or more metalink:url elements have a preference attribute
    value of "100", other metalink:url elements SHOULD NOT be used,
-   unless these cannot be processed (e.g. are "bittorrent" etc, and this
-   is not supported by the Metalink Processor, or the servers are down).
+   unless the elements with a preference of 100 cannot be processed
+   (e.g. if they are of a type which is not supported by the Metalink
+   Processor, such as bittorrent, or if the servers are unavailable).
 
    Any metalink:url elements with a preference attribute value of "1"
    SHOULD NOT be used unless all other metalink:url elements cannot be
    processed (e.g. are "bittorrent" etc and this is not supported by the
    Metalink Processor, or the servers are down).
-
 
 
 

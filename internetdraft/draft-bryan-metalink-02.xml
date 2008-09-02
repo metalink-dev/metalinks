@@ -681,7 +681,7 @@ metalinkPieces =
 
 		<t>The value "md5" signifies that the hash information is MD5, as specified in <xref target="RFC1321"/>.</t>
 
-		<t>The value "sha-1" signifies that the hash information is SHA1, as specified in <xref target="RFC3174"/>.</t>
+		<t>The value "sha-1" signifies that the hash information is SHA-1, as specified in <xref target="RFC3174"/>.</t>
 		
         <t>The value "sha-224" signifies that the hash information is SHA-224, as specified in <xref target="RFC4634"/>.</t>
 		
@@ -821,7 +821,7 @@ metalinkHash =
 
 		<t>The value "md5" signifies that the hash information is MD5, as specified in <xref target="RFC1321"/>.</t>
 
-		<t>The value "sha-1" signifies that the hash information is SHA1, as specified in <xref target="RFC3174"/>.</t>
+		<t>The value "sha-1" signifies that the hash information is SHA-1, as specified in <xref target="RFC3174"/>.</t>
 
         <t>The value "sha-224" signifies that the hash information is SHA-224, as specified in <xref target="RFC4634"/>.</t>
 		
@@ -1168,8 +1168,9 @@ metalinkURL =
 
 
 		<t>When one or more <xref target="element.url" format="none">metalink:url</xref> elements have a preference attribute value of "100", other <xref target="element.url" format="none">metalink:url</xref> elements
-SHOULD NOT be used, unless these cannot be processed (e.g. are "bittorrent"
-etc, and this is not supported by the Metalink Processor, or the servers are down).</t>
+SHOULD NOT be used, unless the elements with a preference of 100 cannot be processed (e.g. if
+they are of a type which is not supported by the Metalink Processor,
+such as bittorrent, or if the servers are unavailable).</t>
 
 <t>Any <xref target="element.url" format="none">metalink:url</xref> elements with a preference attribute value of "1" SHOULD NOT be used unless all
 other <xref target="element.url" format="none">metalink:url</xref> elements cannot be processed (e.g. are "bittorrent" etc and this
