@@ -595,8 +595,7 @@ metalinkResources =
 	    
 	    <list style="symbols">     
 	  
-	      <t><xref target="element.resources" format="none">metalink:resources</xref> element MUST contain at least one <xref target="element.url" format="none">metalink:url</xref> element and SHOULD contain more than one
-	      <xref target="element.url" format="none">metalink:url</xref> elements.</t>
+	      <t><xref target="element.resources" format="none">metalink:resources</xref> element MUST contain at least one <xref target="element.url" format="none">metalink:url</xref> element. Typically, such elements contain more than one <xref target="element.url" format="none">metalink:url</xref> element to provide multiple download sources.</t>
 
 	    </list></t> 
 
@@ -665,8 +664,7 @@ metalinkVerification =
 metalinkPieces =
    element metalink:pieces {
       attribute length { metalinkTextConstruct },
-      attribute type { "md5" | "sha-1" |
-      "sha-224" | "sha-256" | "sha-384" | "sha-512" },
+      attribute type { metalinkTextConstruct },
       hash+
    }+,</artwork></figure></t>
    
@@ -676,22 +674,7 @@ metalinkPieces =
 		</t>
     
 
-	    <t>The IANA registry named "Hash Function Textual Names" defines values for hash types.
-	      <list style="numbers">
-
-		<t>The value "md5" signifies that the hash information is MD5, as specified in <xref target="RFC1321"/>.</t>
-
-		<t>The value "sha-1" signifies that the hash information is SHA-1, as specified in <xref target="RFC3174"/>.</t>
-		
-        <t>The value "sha-224" signifies that the hash information is SHA-224, as specified in <xref target="RFC4634"/>.</t>
-		
-		<t>The value "sha-256" signifies that the hash information is SHA-256, as specified in <xref target="RFC4634"/>.</t>
-
-		<t>The value "sha-384" signifies that the hash information is SHA-384, as specified in <xref target="RFC4634"/>.</t>
-
-		<t>The value "sha-512" signifies that the hash information is SHA-512, as specified in <xref target="RFC4634"/>.</t>
-
-	      </list></t>
+	    <t>The IANA registry named "Hash Function Textual Names" defines values for hash types.</t>
 		
 	  </section>
 
@@ -804,8 +787,7 @@ metalinkGenerator = element metalink:generator {
 metalinkHash =
    element metalink:hash {
    attribute piece { xsd:integer }?,
-   attribute type { "md5" | "sha-1" | "sha-224" |
-       "sha-256" | "sha-384" | "sha-512" },
+   attribute type { metalinkTextConstruct },
    text
    }</artwork></figure></t>
 
@@ -816,22 +798,7 @@ metalinkHash =
 
         <t>When multiple hash types methods are provided, a Metalink Processor MAY verify using more than one of these hash types. Metalink Processors are encouraged to check all hash types given which they are able to process.</t>
 
-	    <t>The IANA registry named "Hash Function Textual Names" defines values for hash types.
-	      <list style="numbers">
-
-		<t>The value "md5" signifies that the hash information is MD5, as specified in <xref target="RFC1321"/>.</t>
-
-		<t>The value "sha-1" signifies that the hash information is SHA-1, as specified in <xref target="RFC3174"/>.</t>
-
-        <t>The value "sha-224" signifies that the hash information is SHA-224, as specified in <xref target="RFC4634"/>.</t>
-		
-		<t>The value "sha-256" signifies that the hash information is SHA-256, as specified in <xref target="RFC4634"/>.</t>
-
-		<t>The value "sha-384" signifies that the hash information is SHA-384, as specified in <xref target="RFC4634"/>.</t>
-
-		<t>The value "sha-512" signifies that the hash information is SHA-512, as specified in <xref target="RFC4634"/>.</t>
-
-	      </list></t>
+	    <t>The IANA registry named "Hash Function Textual Names" defines values for hash types.</t>
 		
 	  </section>
 
@@ -1622,18 +1589,6 @@ structuredExtensionElement =
 </reference> 		  
 	    
 
-<reference anchor="RFC1321">
-
-<front>
-<title>The MD5 Message-Digest Algorithm</title>
-<author initials="R." surname="Rivest" fullname="R. Rivest">
-<organization/></author>
-<date year="1992" month="April"/></front>
-
-<seriesInfo name="RFC" value="1321"/>
-</reference> 
-	  
-
 <reference anchor="RFC2119">
 
 <front>
@@ -1774,19 +1729,6 @@ structuredExtensionElement =
 <seriesInfo name="RFC" value="2818"></seriesInfo>
 </reference>
 
-<reference anchor="RFC3174">
-
-<front>
-<title>US Secure Hash Algorithm 1 (SHA1)</title>
-<author initials="D." surname="Eastlake" fullname="D. Eastlake">
-<organization/></author>
-<author initials="P." surname="Jones" fullname="P. Jones">
-<organization/></author>
-<date year="2001" month="September"/></front>
-
-<seriesInfo name="RFC" value="3174"/>
-</reference> 
-
 <reference anchor="RFC3023">
 
 <front>
@@ -1864,19 +1806,6 @@ structuredExtensionElement =
 <date year="2005" month="October"/></front>
 
 <seriesInfo name="RFC" value="4217"/>
-</reference> 
-
-<reference anchor="RFC4634">
-
-<front>
-<title>US Secure Hash Algorithms (SHA and HMAC-SHA)</title>
-<author initials="D." surname="Eastlake" fullname="D. Eastlake">
-<organization/></author>
-<author initials="P." surname="Jones" fullname="P. Jones">
-<organization/></author>
-<date year="2006" month="July"/></front>
-
-<seriesInfo name="RFC" value="4634"/>
 </reference> 
  
 
@@ -2248,51 +2177,50 @@ structuredExtensionElement =
 
 
 start =
-  element metalink {
-    element generator {
+  element metalink:metalink {
+    element metalink:generator {
       attribute uri { metalinkUri }?,
       attribute version { text }?,
       metalinkTextConstruct
     }
-    element origin { metalinkUri }?,
-    element type { "static" | "dynamic"  }?,
-    element published { metalinkDateConstruct }?,
-    element updated { metalinkDateConstruct }?,
-    element files {
-      element file {
+    element metalink:origin { metalinkUri }?,
+    element metalink:type { "static" | "dynamic"  }?,
+    element metalink:published { metalinkDateConstruct }?,
+    element metalink:updated { metalinkDateConstruct }?,
+    element metalink:files {
+      element metalink:file {
         attribute name { metalinkTextConstruct },
-        element identity { metalinkTextConstruct }?,
-        element version { metalinkTextConstruct }?,
-        element size { xsd:integer }?,
-        element description { metalinkTextConstruct }?,
-        element license {
+        element metalink:identity { metalinkTextConstruct }?,
+        element metalink:version { metalinkTextConstruct }?,
+        element metalink:size { xsd:integer }?,
+        element metalink:description { metalinkTextConstruct }?,
+        element metalink:license {
           attribute uri { metalinkUri }?,
           attribute name { metalinkTextConstruct }?,
         }?,
-        element logo { metalinkUri }?,
-        element publisher {
+        element metalink:logo { metalinkUri }?,
+        element metalink:publisher {
           attribute uri { metalinkUri }?,
           attribute name { metalinkTextConstruct }?,
         }?,
-        element language { metalinkTextConstruct }?,
-        element copyright { metalinkTextConstruct }?,
-        element license { metalinkTextConstruct }?,
-        element os { metalinkTextConstruct }?,
-        element verification {
+        element metalink:language { metalinkTextConstruct }?,
+        element metalink:copyright { metalinkTextConstruct }?,
+        element metalink:license { metalinkTextConstruct }?,
+        element metalink:os { metalinkTextConstruct }?,
+        element metalink:verification {
           hash+,
-          element pieces {
+          element metalink:pieces {
             attribute length { metalinkTextConstruct },
-            attribute type { "md5" | "sha-1" |
-            "sha-256" | "sha-384" | "sha-512" },
+            attribute type { metalinkTextConstruct },
             hash+
           }+,
-          element signature {
+          element metalink:signature {
            attribute type { "pgp" },
            text
            }
         }?,
-        element resources {
-          element url {
+        element metalink:resources {
+          element metalink:url {
             attribute location { xsd:string { 
             minLength = "2"  maxLength="2"} 
             }?,
@@ -2306,10 +2234,9 @@ start =
     }
   }
 hash =
-  element hash {
+  element metalink:hash {
     attribute piece { metalinkTextConstruct }?,
-    attribute type { "md5" | "sha-1" |
-    "sha-256" | "sha-384" | "sha-512" },
+    attribute type { metalinkTextConstruct },
     text
   }
 
