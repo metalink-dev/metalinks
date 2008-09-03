@@ -61,8 +61,9 @@
       &lt;resources&gt;
         &lt;url&gt;ftp://ftp.example.com/example.ext&lt;/url&gt;
         &lt;url&gt;http://example.com/example.ext&lt;/url&gt; 
-        &lt;url type="bittorrent"&gt;http://example.com/example.ext.torrent
-        &lt;/url&gt;
+        &lt;metadata type="torrent"&gt;
+        http://example.com/example.ext.torrent
+        &lt;/metadata&gt;
       &lt;/resources&gt;
     &lt;/file&gt;
   &lt;/files&gt;
@@ -89,8 +90,9 @@ download.&lt;/description&gt;
       &lt;resources&gt;
         &lt;url&gt;ftp://ftp.example.com/example.ext&lt;/url&gt;
         &lt;url&gt;http://example.com/example.ext&lt;/url&gt; 
-        &lt;url type="bittorrent"&gt;http://example.com/example.ext.torrent
-        &lt;/url&gt;
+        &lt;metadata type="torrent"&gt;
+        http://example.com/example.ext.torrent
+        &lt;/metadata&gt;
       &lt;/resources&gt;
     &lt;/file&gt;
   &lt;/files&gt;
@@ -594,7 +596,9 @@ metalinkResources =
 	  <t> 
 	    
 	    <list style="symbols">     
-	  
+
+	      <t><xref target="element.resources" format="none">metalink:resources</xref> element MAY contain at least one <xref target="element.metadata" format="none">metalink:metadata</xref> element.</t>
+		
 	      <t><xref target="element.resources" format="none">metalink:resources</xref> element MUST contain at least one <xref target="element.url" format="none">metalink:url</xref> element. Typically, such elements contain more than one <xref target="element.url" format="none">metalink:url</xref> element to provide multiple download sources.</t>
 
 	    </list></t> 
@@ -905,6 +909,44 @@ metalinkLogo = element metalink:logo {
 	  to one (vertical) and SHOULD be suitable for presentation
 	  at a small size.</t>
 	</section>
+
+	<section anchor="element.metadata" title="The &#34;metalink:metadata&#34; Element">
+    
+    
+    <iref item="XML Elements" subitem="metadata" primary="true"/>
+    <iref item="metadata XML element" primary="true"/> 
+	  
+	  <t>The "<xref target="element.metadata" format="none">metalink:metadata</xref>" element contains the IRI of metadata about a resource to download. For example, this could be the IRI of a BitTorrent .torrent file or a Metalink Document.
+
+	    <figure>
+        <iref item="metalinkURL grammar production" primary="true"/>
+        <iref item="Grammar" subitem="metalinkURL" primary="true"/>
+	      <artwork type="rnc">
+metalinkMetadata =
+   element metalink:metadata {
+      metalinkCommonAttributes,
+      attribute preference { xsd:integer }?,
+      attribute type { metalinkTextConstruct },
+      metalinkUri
+   }+</artwork></figure></t> 
+
+	  <section title="The &#34;preference&#34; Attribute"> 
+
+	    <t><xref target="element.metadata" format="none">metalink:metadata</xref>
+	    elements MAY have a preference attribute, whose value MUST be a number from 1 to 100
+		for priority, with 100 used first and 1 used last. See the "preference" attribute of the <xref target="element.url" format="none">metalink:url</xref> element for more information.</t>
+
+	  </section> 
+
+	  <section title="The &#34;type&#34; Attribute"> 
+
+	    <t><xref target="element.metadata" format="none">metalink:metadata</xref> elements MUST have a "type" attribute that indicates
+	    the MIME type of the metadata available at the IRI. In the case of BitTorrent as specified in <xref target="BITTORRENT"/>, the value "torrent" is required.</t>
+
+		<t>Metalink Processors that do not support a specified type of metadata about a resource to download MUST ignore that metadata.</t>
+
+	  </section> 
+	</section>
 	
 	<section anchor="element.origin" title="The &#34;metalink:origin&#34; Element">
     
@@ -1107,8 +1149,7 @@ metalinkUpdated =
     <iref item="XML Elements" subitem="url" primary="true"/>
     <iref item="url XML element" primary="true"/> 
 	  
-	  <t>The "<xref target="element.url" format="none">metalink:url</xref>" element contains the IRI of a file. All IRIs should lead to identical files, except in the
-      case of type "bittorrent" where the IRI should lead to a .torrent file.
+	  <t>The "<xref target="element.url" format="none">metalink:url</xref>" element contains the IRI of a file. All IRIs MUST lead to identical files.
 
 	    <figure>
         <iref item="metalinkURL grammar production" primary="true"/>
@@ -1121,8 +1162,6 @@ metalinkURL =
         minLength = "2"  maxLength="2"}
         }?,
       attribute preference { xsd:integer }?,
-      attribute type { "ftp" | "ftps" | "http" | "https" |
-         "rsync" | "bittorrent" |  "magnet" | "ed2k" }?,
       metalinkUri
    }+</artwork></figure></t> 
 
@@ -1136,44 +1175,12 @@ metalinkURL =
 
 		<t>When one or more <xref target="element.url" format="none">metalink:url</xref> elements have a preference attribute value of "100", other <xref target="element.url" format="none">metalink:url</xref> elements
 SHOULD NOT be used, unless the elements with a preference of 100 cannot be processed (e.g. if
-they are of a type which is not supported by the Metalink Processor,
-such as bittorrent, or if the servers are unavailable).</t>
+they are of a <xref target="element.metadata" format="none">metalink:metadata</xref> element type which is not supported by the Metalink Processor,
+such as BitTorrent, or if the servers are unavailable).</t>
 
 <t>Any <xref target="element.url" format="none">metalink:url</xref> elements with a preference attribute value of "1" SHOULD NOT be used unless all
 other <xref target="element.url" format="none">metalink:url</xref> elements cannot be processed (e.g. are "bittorrent" etc and this
 is not supported by the Metalink Processor, or the servers are down).</t>
-
-	  </section> 
-
-	  <section title="The &#34;type&#34; Attribute"> 
-
-	    <t><xref target="element.url" format="none">metalink:url</xref> elements MAY have a "type" attribute that indicates
-	    the IRI type, except in the case of BitTorrent, where the value "bittorrent" is required. The "type" attribute overrides any file extension sniffing specified above.</t>
-
-		<t>Metalink Processors that do not support a specified type of resource MUST ignore that resource.</t>
-	    <t>This document defines eight initial values for IRI types:
-	      <list style="numbers">
-
-		<t>The value "ftp" signifies that the IRI is accessed via FTP as specified in <xref target="RFC959"/>.</t>
-		
-		<t>The value "ftps" signifies that the IRI is accessed via FTPS as specified in <xref target="RFC4217"/>.</t>
-
-		<t>The value "http" signifies that the IRI is accessed via HTTP as specified in <xref target="RFC2616"/>.</t>
-
-		<t>The value "https" signifies that the IRI is accessed via HTTPS as specified in <xref target="RFC2818"/>.</t>
-
-		<t>The value "rsync" signifies that the IRI is accessed via rsync.</t>
-
-		<t>The value "bittorrent" signifies that the IRI (which can be accessed via various URI schemes) leads to a BitTorrent .torrent
-        file as specified in <xref target="BITTORRENT"/>. Metalink Processors that do not support BitTorrent MUST ignore this 
-        type and also ignore <xref target="element.url" format="none">metalink:url</xref> elements which retrieve files that 
-        end with the extension ".torrent", unless the <xref target="element.url" format="none">metalink:url</xref> element has 
-        a type attribute which the Metalink Processor supports</t>
-
-		<t>The value "magnet" signifies that the IRI is accessed via Magnet Link.</t>
-
-		<t>The value "ed2k" signifies that the IRI is accessed via ED2K network.</t>		
-	      </list></t>
 
 	  </section> 
 
@@ -1517,7 +1524,7 @@ structuredExtensionElement =
 	  </section> 
 
 	  <section title="Security Considerations">
-	    <t>Publishers are encouraged to offer Metalink documents via authenticated HTTP under TLS. Publishers are also encouraged to include digital signatures of the files within the Metalink Documents if they are available.</t>
+	    <t>Publishers are encouraged to offer Metalink documents via authenticated HTTP under TLS as specified in <xref target="RFC2818"/>.. Publishers are also encouraged to include digital signatures of the files within the Metalink Documents if they are available.</t>
 
 
 
@@ -1575,19 +1582,6 @@ structuredExtensionElement =
 <seriesInfo name="BITTORRENT" value="11031"/>
 </reference>	  
 
-<reference anchor="RFC959">
-
-<front>
-<title>FILE TRANSFER PROTOCOL (FTP)</title>
-<author initials="J." surname="Postel" fullname="J. Postel">
-<organization/></author>
-<author initials="J." surname="Reynolds" fullname="J. Reynolds">
-<organization/></author>
-<date year="1985" month="October"/></front>
-
-<seriesInfo name="RFC" value="959"/>
-</reference> 		  
-	    
 
 <reference anchor="RFC2119">
 
@@ -1629,94 +1623,6 @@ structuredExtensionElement =
 <seriesInfo name="RFC" value="2119"/>
 </reference>
  
-<reference anchor="RFC2616">
-
-<front>
-<title abbrev="HTTP/1.1">Hypertext Transfer Protocol -- HTTP/1.1</title>
-<author fullname="Roy T. Fielding" surname="Fielding" initials="R.">
-<organization abbrev="UC Irvine">Department of Information and Computer Science</organization>
-<address>
-<postal>
-<street>University of California, Irvine</street>
-
-<city>Irvine</city>
-<region>CA</region>
-<code>92697-3425</code></postal>
-<facsimile>+1(949)824-1715</facsimile>
-<email>fielding@ics.uci.edu</email></address></author>
-<author fullname="James Gettys" surname="Gettys" initials="J.">
-<organization abbrev="Compaq/W3C">World Wide Web Consortium</organization>
-<address>
-<postal>
-<street>MIT Laboratory for Computer Science, NE43-356</street>
-
-<street>545 Technology Square</street>
-<city>Cambridge</city>
-<region>MA</region>
-<code>02139</code></postal>
-<facsimile>+1(617)258-8682</facsimile>
-<email>jg@w3.org</email></address></author>
-<author fullname="Jeffrey C. Mogul" surname="Mogul" initials="J.">
-<organization abbrev="Compaq">Compaq Computer Corporation</organization>
-<address>
-<postal>
-
-<street>Western Research Laboratory</street>
-<street>250 University Avenue</street>
-<city>Palo Alto</city>
-<region>CA</region>
-<code>94305</code></postal>
-<email>mogul@wrl.dec.com</email></address></author>
-<author fullname="Henrik Frystyk Nielsen" surname="Frystyk" initials="H.">
-<organization abbrev="MIT/LCS">World Wide Web Consortium</organization>
-<address>
-<postal>
-
-<street>MIT Laboratory for Computer Science, NE43-356</street>
-<street>545 Technology Square</street>
-<city>Cambridge</city>
-<region>MA</region>
-<code>02139</code></postal>
-<facsimile>+1(617)258-8682</facsimile>
-<email>frystyk@w3.org</email></address></author>
-<author fullname="Larry Masinter" surname="Masinter" initials="L.">
-<organization abbrev="Xerox">Xerox Corporation</organization>
-
-<address>
-<postal>
-<street>MIT Laboratory for Computer Science, NE43-356</street>
-<street>3333 Coyote Hill Road</street>
-<city>Palo Alto</city>
-<region>CA</region>
-<code>94034</code></postal>
-<email>masinter@parc.xerox.com</email></address></author>
-<author fullname="Paul J. Leach" surname="Leach" initials="P.">
-<organization abbrev="Microsoft">Microsoft Corporation</organization>
-
-<address>
-<postal>
-<street>1 Microsoft Way</street>
-<city>Redmond</city>
-<region>WA</region>
-<code>98052</code></postal>
-<email>paulle@microsoft.com</email></address></author>
-<author fullname="Tim Berners-Lee" surname="Berners-Lee" initials="T.">
-<organization abbrev="MIT/LCS">World Wide Web Consortium</organization>
-<address>
-<postal>
-
-<street>MIT Laboratory for Computer Science, NE43-356</street>
-<street>545 Technology Square</street>
-<city>Cambridge</city>
-<region>MA</region>
-<code>02139</code></postal>
-<facsimile>+1(617)258-8682</facsimile>
-<email>timbl@w3.org</email></address></author>
-<date month="June" year="1999"></date>
-</front>
-<seriesInfo name="RFC" value="2616"></seriesInfo>
-
-</reference>
  
 <reference anchor="RFC2818">
 <front>
@@ -1796,17 +1702,6 @@ structuredExtensionElement =
 
 <seriesInfo name="RFC" value="3987"/>
 </reference>
-
-<reference anchor="RFC4217">
-
-<front>
-<title>Securing FTP with TLS</title>
-<author initials="P." surname="Ford-Hutchinson" fullname="P. Ford-Hutchinson">
-<organization/></author>
-<date year="2005" month="October"/></front>
-
-<seriesInfo name="RFC" value="4217"/>
-</reference> 
  
 
 <reference anchor="REC-xml-infoset" target="http://www.w3.org/TR/2004/REC-xml-infoset-20040204">
@@ -2120,7 +2015,7 @@ structuredExtensionElement =
           <t>Nicolas Alvarez, Patrick Ruckstuhl, Mike Wells, Sebastien Willemijns, Micah Cowan, Dan Fandrich, Francis Giannaros, Yazsoft, Lukas Appelhans, KGet developers, FDM Team, Orbit Team, Arne Babenhauserheide, Mathias Berchtold, 
           Xienzhenyu and TheWorld Browser Team, Xi Software, Bridget and Ethan Fletcher, Ruben Kerkhof, Agostino Russo,  
           Gervase Markham, Salvatore and Robin Musumeci, Steve and Rachel Eshelman, 
-          Lucas and Rachel Hewett, Ryan and Darren Cronin, Dave Winquist, Bob Denison,
+          Lucas Hewett, Ryan and Darren Cronin, Dave Winquist, Bob Denison,
           Wes Shelton, Kees Cook, Josh Colbert, Steve Kleisath, Chad Neptune, Nick Carrabba, Chris
           Carrabba, Erin Solari, Derick Cordoba, Ryan Alexander, John Sowder, Sandra Amisano,
           Tom Mainville, Janie Wargo, Jason Hansen, Tim Bray, Dan Brickley, Markus Hofmann, 
@@ -2220,13 +2115,15 @@ start =
            }
         }?,
         element metalink:resources {
+          element metalink:metadata {
+            attribute preference { xsd:integer }?,
+            attribute type { metalinkTextConstruct },
+            metalinkUri
           element metalink:url {
             attribute location { xsd:string { 
             minLength = "2"  maxLength="2"} 
             }?,
             attribute preference { xsd:integer }?,
-            attribute type { "ftp" | "ftps" | "http" | "https" |
-            "rsync" | "bittorrent" |  "magnet" | "ed2k" }?,
             metalinkUri
           }+
         }
