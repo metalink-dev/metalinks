@@ -8,7 +8,7 @@ Expires: March 8, 2009
 
 
                 The Metalink Download Description Format
-                        draft-bryan-metalink-02
+                        draft-bryan-metalink-03
 
 Status of this Memo
 
