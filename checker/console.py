@@ -129,7 +129,9 @@ def run():
 
     if options.check:
         # remove filevar eventually
-        results = checker.check_metalink(options.filevar)
+        mcheck = checker.Checker()
+        mcheck.check_metalink(options.filevar)
+        results = mcheck.get_results()
         print_totals(results)
         for item in args:
             results = checker.check_metalink(item)
@@ -154,10 +156,14 @@ def run():
     # remove eventually
     elif not options.check:
         if options.filevar != None:
-            results = checker.check_metalink(options.filevar)
+            mcheck = checker.Checker()
+            mcheck.check_metalink(options.filevar)
+            results = mcheck.get_results()
             print_totals(results)
         for item in args:
-            results = checker.check_metalink(item)
+            mcheck = checker.Checker()
+            mcheck.check_metalink(item)
+            results = mcheck.get_results()
             print_totals(results)            
 
 def print_totals(results):
