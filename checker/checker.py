@@ -54,6 +54,7 @@ import hashlib
 import httplib
 import ftplib
 import threading
+import time
 
 import xmlutils
 import download
@@ -90,6 +91,7 @@ class Checker:
     def __init__(self):
         self.threadlist = []
         self.clear_results()
+        self.cancel = False
         
     def check_metalink(self, src):
         '''
@@ -145,12 +147,13 @@ class Checker:
 
     def get_results(self, block=True):
         while block and self.isAlive():
-            pass
+            time.sleep(0.1)
         return self.results
 
     def clear_results(self):
+        self.cancel = True
         while self.isAlive():
-            pass
+            time.sleep(0.1)
         self.threadlist = []
         self.results = {}
         
@@ -216,8 +219,8 @@ class Checker:
         while (count <= len(urllist)):
             filename = urllist[number].url
             #don't start too many threads at once
-            while self.activeCount() > MAX_THREADS:
-                pass
+            while self.activeCount() > MAX_THREADS and not self.cancel:
+                time.sleep(0.1)
             mythread = threading.Thread(target = thread, args = [filename])
             mythread.start()
             self.threadlist.append(mythread)
