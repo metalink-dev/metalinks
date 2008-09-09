@@ -221,7 +221,7 @@ class Checker:
             #don't start too many threads at once
             while self.activeCount() > MAX_THREADS and not self.cancel:
                 time.sleep(0.1)
-            mythread = threading.Thread(target = thread, args = [filename])
+            mythread = threading.Thread(target = thread, args = [filename], name = filename)
             mythread.start()
             self.threadlist.append(mythread)
             #thread(filename)
@@ -268,7 +268,7 @@ class URLCheck:
             
             # handle redirects here and set self.url
             count = 0
-            while (resp.status == httplib.MOVED_PERMANENTLY or resp.status == httplib.FOUND) and count < MAX_REDIRECTS:
+            while (resp != None and (resp.status == httplib.MOVED_PERMANENTLY or resp.status == httplib.FOUND) and count < MAX_REDIRECTS):
                 url = resp.getheader("location")
                 #print _("Redirected from ") + self.url + " to %s." % url
                 self.infostring += _("Redirected") + ": %s\r\n" % url
@@ -280,19 +280,26 @@ class URLCheck:
                     port = urlparts.port
                 
                 conn = download.HTTPConnection(urlparts.hostname, urlparts.port)
-                conn.request("HEAD", url)
-                resp = conn.getresponse()
+                try:
+                    conn.request("HEAD", url)
+                    resp = conn.getresponse()
+                except socket.gaierror:
+                    resp = None
+                
                 count += 1
 
             self.url = url
-            if resp.status == httplib.OK:
+            if resp == None:
+                self.infostring += _("Response") + ": socket error\r\n"
+            elif resp.status == httplib.OK:
                 self.infostring += _("Response") + ": " + _("OK") + "\r\n"
             else:
                 self.infostring += _("Response") + ": %s %s\r\n" % (resp.status, resp.reason)
             
             # need to convert list into string
-            for header in resp.getheaders():
-                self.infostring += header[0] + ": " + header[1] + "\r\n"
+            if resp != None:
+                for header in resp.getheaders():
+                    self.infostring += header[0] + ": " + header[1] + "\r\n"
 
             conn.close()
                 
@@ -373,7 +380,7 @@ class URLCheck:
 
             try:
                 ftpobj.login(username, password)
-            except (ftplib.error_perm), error:
+            except (ftplib.error_perm, ftplib.error_temp), error:
                 self.infostring += _("Response") + ": %s\r\n" % error.message
                 
             if ftpobj.exist(url):
