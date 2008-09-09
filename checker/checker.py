@@ -262,6 +262,9 @@ class URLCheck:
             except socket.timeout:
                 self.infostring += _("Response") + ": " + _("Timeout") + "\r\n"
                 return
+            except socket.error, error:
+                self.infostring += _("Response") + ": " + _("Connection Error") + "\r\n"
+                return
             
             # handle redirects here and set self.url
             count = 0
