@@ -1,34 +1,24 @@
 /*
 	This file is part of the metalink program
-	Copyright (C) 2005  A. Bram Neijt <bneijt@gmail.com>
+	Copyright (C) 2008  A. Bram Neijt <bneijt@gmail.com>
 
-	This program is free software; you can redistribute it and/or
-	modify it under the terms of the GNU General Public License
-	as published by the Free Software Foundation; either version 2
-	of the License, or (at your option) any later version.
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
 
-	This program is distributed in the hope that it will be useful,
-	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	GNU General Public License for more details.
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
 
-	You should have received a copy of the GNU General Public License
-	along with this program; if not, write to the Free Software
-	Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-	Algorithm implementation has been partially copied and restructured
-	from the GNUnetd source tree, version 0.7.0.
-	Due to the translation from C to C++, the code has been intermixed.
-	Although lines of the original may remain, most has been rewritten.
-	
-	Among the GNUnet code used are the following:
-	GNUnet-0.7.0/src/applications/fs/ecrs/uri.c
-		Copyright (C) 2003, 2004, 2005 Christian Grothoff (and other contributing authors)
-	GNUnet-0.7.0/src/applications/fs/ecrs/upload.c
-		Copyright (C) 2003, 2004, 2005 Christian Grothoff (and other contributing authors)
-	
-	For information on other authors, please refer to: http://www.gnunet.org
 */
+
+
+
 #ifndef _HashGNUnet_HH_INCLUDED_
 #define	_HashGNUnet_HH_INCLUDED_
 
