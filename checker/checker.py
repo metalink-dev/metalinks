@@ -62,6 +62,12 @@ import download
 import locale
 import gettext
 
+NAME="Metalink Checker"
+VERSION="4.2"
+
+#WEBSITE="http://www.metalinker.org"
+WEBSITE="http://www.nabber.org/projects/checker/"
+
 MAX_REDIRECTS = 20
 MAX_THREADS = 10
 
@@ -87,6 +93,12 @@ def translate():
 
 _ = translate()
 
+ABOUT = NAME + "\n" + _("Version") + ": " + VERSION + "\n" + \
+                     _("Website") + ": " + WEBSITE + "\n\n" + \
+                     _("Copyright") + ": 2008 Neil McNab\n" + \
+                     _("License") + ": " + _("GNU General Public License, Version 2") + "\n\n" + \
+                     NAME + _(" comes with ABSOLUTELY NO WARRANTY.  This is free software, and you are welcome to redistribute it under certain conditions, see LICENSE.txt for details.")
+
 class Checker:
     def __init__(self):
         self.threadlist = []
@@ -111,7 +123,7 @@ class Checker:
         
         if metalink.type == "dynamic":
             origin = metalink.origin
-            if origin != src:
+            if origin != src and origin != "":
                 try:
                     return self.check_metalink(origin)
                 except:
@@ -377,7 +389,10 @@ class URLCheck:
             except socket.error:
                 self.infostring += _("Response") + ": " + _("Connection refused") + "\r\n"
                 return
-
+            except (ftplib.error_perm, ftplib.error_temp), error:
+                self.infostring += _("Response") + ": %s\r\n" % error.message
+                return
+            
             try:
                 ftpobj.login(username, password)
             except (ftplib.error_perm, ftplib.error_temp), error:

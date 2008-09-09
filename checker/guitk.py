@@ -6,13 +6,9 @@ import gettext
 import locale
 import time
 import webbrowser
+import threading
 
 import checker
-
-NAME="Metalink Checker"
-ABOUT=""
-#WEBSITE="http://www.metalinker.org"
-WEBSITE="http://www.nabber.org/projects/checker"
 
 def translate():
     '''
@@ -53,7 +49,7 @@ class Table(Tkinter.Frame):
             column = 1
             for datacolumn in datarow:
                 label = Tkinter.Label(self, text=datacolumn)
-                label.grid(column=column, row=row)
+                label.grid(column=column, row=row, sticky="W")
                 self.subelements.append(label)
                 column += 1
             row += 1
@@ -99,10 +95,10 @@ class Application:
         self.filename_txt = Tkinter.Entry(self.main_frame, width=longtext)
         self.filename_txt.grid(row=row_index, column=1)
         Tkinter.Button(self.main_frame, text=_("Browse") + "...", command=self.open).grid(row=row_index, column=2)
-        self.check_button = Tkinter.Button(self.main_frame, text=_("Check"), command=self.do_check)
+        self.check_button = Tkinter.Button(self.main_frame, text=_("Check"), command=ThreadCallback(self.do_check))
         self.check_button.grid(row=row_index, column=3)
         
-        self.cancel_button = Tkinter.Button(self.main_frame, text=_("Cancel"), command=self.do_cancel)
+        self.cancel_button = Tkinter.Button(self.main_frame, text=_("Cancel"), command=ThreadCallback(self.do_cancel))
         self.cancel_button.grid(row=row_index, column=4)
         self.cancel_button.configure(state="disabled")
  
@@ -111,14 +107,17 @@ class Application:
         row_index += 1
 
         self.tableframe = Table(self.main_frame)
-        self.tableframe.grid(column=1, row=row_index, sticky="NW")
+        self.tableframe.grid(column=1, row=row_index, sticky="NEWS")
         
 
     def do_check(self):
         self.check_button.configure(state="disabled")
         self.cancel_button.configure(state="active")
         # should start new thread here
-        self.checker.check_metalink(self.filename_txt.get())
+        if self.filename_txt.get() != "":
+            #self.checker.check_metalink(self.filename_txt.get())
+            mythread = threading.Thread(target=self.checker.check_metalink, args = [self.filename_txt.get()])
+            mythread.start()
         # wait and do updates here
         #if self.checker.isAlive():
         self.update()
@@ -126,10 +125,11 @@ class Application:
         self.do_cancel()
 
     def do_cancel(self):
-        # should start new thread here
-        self.checker.clear_results()
-        # wait for thread here
         self.cancel_button.configure(state="disabled")
+        mythread = threading.Thread(target=self.checker.clear_results)
+        mythread.start()
+        while mythread.isAlive():
+            time.sleep(1)
         self.check_button.configure(state="active")
 
     def update(self):
@@ -137,9 +137,10 @@ class Application:
         active = 1
         while active:
             active = self.checker.activeCount()
+            #print active, count
             if active != count:
                 # do update stuff here
-
+                #print "do update"
                 result = self.format_table(self.checker.get_results())
                 self.tableframe.data(result)
 
@@ -169,27 +170,58 @@ class Application:
             self.filename_txt.insert(0, result)
             
     def about(self):
-        tkMessageBox.showinfo(_("About") + " " + NAME, ABOUT)
+        tkMessageBox.showinfo(_("About") + " " + checker.NAME, checker.ABOUT)
 
     def website(self):
-        webbrowser.open_new_tab(WEBSITE)
+        webbrowser.open_new_tab(checker.WEBSITE)
 
     def exit(self):
+        mythread = threading.Thread(target = self.do_cancel)
+        mythread.start()
         self.master.quit()
         
 def run():
     root = Tkinter.Tk()
-    root.title(NAME)
+    root.title(checker.NAME)
     root.geometry("850x500")
-    #try:
+
     app = Application(master=root)
-    #app.periodic_task()
-    #except:
-    #    return
-    
 
     root.protocol("WM_DELETE_WINDOW", app.exit)
     root.mainloop()
+
+##def call_thread(self, *args):
+##    mythread = threading.Thread(target = SimpleCallback(*args))
+##    mythread.setDaemon(True)
+##    mythread.start()
+
+##class SimpleCallback:
+##	"""Create a callback shim. Based on code by Scott David Daniels
+##	(which also handles keyword arguments).
+##	"""
+##	def __init__(self, callback, *firstArgs):
+##		self.__callback = callback
+##		self.__firstArgs = firstArgs
+##	
+##	def __call__(self, *args):
+##		return self.__callback (*(self.__firstArgs + args))
+	    
+class ThreadCallback:
+	"""Create a callback shim. Based on code by Scott David Daniels
+	(which also handles keyword arguments).
+	"""
+	def __init__(self, callback, firstArgs=[]):
+		self.__callback = callback
+		self.__firstArgs = firstArgs
+
+	def isAlive(self):
+            return self.__thread.isAlive() 
+	
+	def __call__(self, *args):
+                __thread = threading.Thread(target=self.__callback, args = self.__firstArgs)
+                __thread.start()
+		return __thread
+	    
 
 if __name__=="__main__":
     run()

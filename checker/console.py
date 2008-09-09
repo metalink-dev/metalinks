@@ -47,9 +47,6 @@ import download
 import checker
 import GPG
 
-# DO NOT CHANGE
-VERSION="Metalink Checker Version 4.1"
-
 import os.path
 import locale
 import gettext
@@ -82,7 +79,7 @@ def run():
     '''
     # Command line parser options.
     usage = "usage: %prog [-c|-d|-j] [options] arg1 arg2 ..."
-    parser = optparse.OptionParser(version=VERSION, usage=usage)
+    parser = optparse.OptionParser(version=checker.ABOUT, usage=usage)
     parser.add_option("--download", "-d", action="store_true", dest="download", help=_("Actually download the file(s) in the metalink"))
     parser.add_option("--check", "-c", action="store_true", dest="check", help=_("Check the metalink file URLs"))
     parser.add_option("--file", "-f", dest="filevar", metavar="FILE", help=_("Metalink file to check or file to download"))
