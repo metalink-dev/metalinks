@@ -55,7 +55,7 @@
 	  
 	  <artwork type="example">
 &lt;?xml version="1.0" encoding="UTF-8"?&gt;
-&lt;metalink xmlns="http://www.metalinker.org"&gt;
+&lt;metalink xmlns="urn:ietf:params:xml:ns:metalink"&gt;
   &lt;files&gt;
     &lt;file name="example.ext"&gt;
       &lt;resources&gt;
@@ -74,7 +74,7 @@
 	  <preamble>A more extensive, single file Metalink Document:</preamble>
 	  <artwork type="example">
 &lt;?xml version="1.0" encoding="UTF-8"?&gt;
-&lt;metalink xmlns="http://www.metalinker.org"&gt;
+&lt;metalink xmlns="urn:ietf:params:xml:ns:metalink"&gt;
   &lt;published&gt;2008-05-15T12:23:23Z&lt;/published&gt;
   &lt;files&gt;
     &lt;file name="example.ext"&gt;
@@ -108,7 +108,7 @@ download.&lt;/description&gt;
 	<t>The XML Namespaces URI <xref target="REC-xml-names"/> for the XML data
 	format described in this specification is:</t>
 
-	<t>http://www.metalinker.org/</t>
+	<t>urn:ietf:params:xml:ns:metalink</t>
 	 
 	<t>For convenience, this data format may be referred to as
 	"Metalink", which this specification uses internally.</t>
@@ -159,7 +159,7 @@ download.&lt;/description&gt;
 
       <figure>
 	<artwork type="rnc">
-namespace metalink = "http://www.metalinker.org"	 		
+namespace metalink = "urn:ietf:params:xml:ns:metalink"	 		
 start = metalinkMetalink</artwork>
       </figure> 
       
@@ -2047,7 +2047,7 @@ structuredExtensionElement =
 # RELAX NG Compact Syntax Grammar for the
 # Metalink Format Specification Version 1
 
-   namespace metalink = "http://www.metalinker.org"
+   namespace metalink = "urn:ietf:params:xml:ns:metalink"
    namespace xsd = "http://www.w3.org/2001/XMLSchema"
 
 
