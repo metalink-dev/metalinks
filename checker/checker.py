@@ -102,6 +102,7 @@ ABOUT = NAME + "\n" + _("Version") + ": " + VERSION + "\n" + \
 class Checker:
     def __init__(self):
         self.threadlist = []
+        self.running = False
         self.clear_results()
         self.cancel = False
         
@@ -111,6 +112,8 @@ class Checker:
         First parameter, file to download, URL or file path to download from
         Returns the results of the check in a dictonary
         '''
+        self.running = True
+        
         src = download.complete_url(src)
         datasource = urllib2.urlopen(src)
         try:
@@ -125,13 +128,16 @@ class Checker:
             origin = metalink.origin
             if origin != src and origin != "":
                 try:
-                    return self.check_metalink(origin)
+                    result = self.check_metalink(origin)
+                    self.running = True
+                    return result
                 except:
                     print "Error downloading from origin %s, not using." % origin
         
         urllist = metalink.files
         if len(urllist) == 0:
             print _("No urls to download file from.")
+            self.running = False
             return False
 
         #results = {}
@@ -142,9 +148,12 @@ class Checker:
             print _("File") + ": %s " % name + _("Size") + ": %s" % size
             self.check_file_node(filenode)
 
+        self.running = False
         #return results
 
     def isAlive(self):
+        if self.running:
+            return True
         for threadobj in self.threadlist:
             if threadobj.isAlive():
                 return True
@@ -160,12 +169,16 @@ class Checker:
     def get_results(self, block=True):
         while block and self.isAlive():
             time.sleep(0.1)
+
         return self.results
 
-    def clear_results(self):
+    def stop(self):
         self.cancel = True
         while self.isAlive():
-            time.sleep(0.1)
+            time.sleep(0.1)        
+
+    def clear_results(self):
+        self.stop()
         self.threadlist = []
         self.results = {}
         
@@ -205,11 +218,13 @@ class Checker:
         First parameter, file object
         Returns dictionary of file paths with headers
         '''
+        self.running = True
         self.results[item.name] = {}
         size = item.size
         urllist = item.resources
         if len(urllist) == 0:
             print _("No urls to download file from.")
+            self.running = False
             return False
 
         def thread(filename):
@@ -244,6 +259,7 @@ class Checker:
         #while threading.activeCount() > 1:
         #    pass
         #return result
+        self.running = False
        
 class URLCheck:    
     def __init__(self, url):
