@@ -39,7 +39,32 @@ _ = translate()
 class Table(Tkinter.Frame):
     def __init__(self, *args):
         Tkinter.Frame.__init__(self, *args)
+        Tkinter.Frame.grid_rowconfigure(self, 0, weight=1)
+        Tkinter.Frame.grid_columnconfigure(self, 0, weight=1)
+        
+        self.vscrollbar = AutoScrollbar(self, orient=Tkinter.VERTICAL)
+        self.vscrollbar.grid(row=0, column=1, sticky="NS")
+
+        self.hscrollbar = AutoScrollbar(self, orient=Tkinter.HORIZONTAL)
+        self.hscrollbar.grid(row=1, column=0, sticky="WE")
+        
+        self.canvas = Tkinter.Canvas(self, yscrollcommand=self.vscrollbar.set, xscrollcommand=self.hscrollbar.set)
+        self.canvas.grid(row=0, column=0, sticky="NEWS")
+
+        self.vscrollbar.config(command=self.canvas.yview)
+        self.hscrollbar.config(command=self.canvas.xview)
+        
+        self.container = Tkinter.Frame(self.canvas)
+        self.container.grid(sticky="NEWS")
+
+        self.update(0)
+
+        self.canvas.create_window(0,0,window=self.container, anchor=Tkinter.NW)
+        
         self.subelements = []
+
+    def update(self, height=1000, width=650):
+        self.canvas["scrollregion"] = (0, 0, width, height)
 
     def data(self, datalist):
         self.clear()
@@ -48,16 +73,35 @@ class Table(Tkinter.Frame):
         for datarow in datalist:
             column = 1
             for datacolumn in datarow:
-                label = Tkinter.Label(self, text=datacolumn)
+                label = Tkinter.Label(self.container, text=datacolumn)
                 label.grid(column=column, row=row, sticky="W")
                 self.subelements.append(label)
                 column += 1
             row += 1
 
+        self.update(len(self.subelements) * 5)
+
     def clear(self):
+        self.update(0)
         for element in self.subelements:
             del(element)
         self.subelements = []
+
+class AutoScrollbar(Tkinter.Scrollbar):
+       # a scrollbar that hides itself if it's not needed.  only
+       # works if you use the grid geometry manager.
+       def set(self, lo, hi):
+           if float(lo) <= 0.0 and float(hi) >= 1.0:
+               # grid_remove is currently missing from Tkinter!
+               self.tk.call("grid", "remove", self)
+           else:
+               self.grid()
+           Tkinter.Scrollbar.set(self, lo, hi)
+       def pack(self, **kw):
+           raise TclError, "cannot use pack with this widget"
+       def place(self, **kw):
+           raise TclError, "cannot use place with this widget"
+
         
 class Application:
     def __init__(self, master):
@@ -72,6 +116,8 @@ class Application:
         # create menu
         menu = Tkinter.Menu(self.master)
         self.master.config(menu=menu)
+        self.master.grid_columnconfigure(0,weight=1)
+        self.master.grid_rowconfigure(0,weight=1)
 
         Filemenu = Tkinter.Menu(menu)
         menu.add_cascade(label=_("File"), menu=Filemenu, underline=0)
@@ -86,19 +132,29 @@ class Application:
 
         # main frame
         self.main_frame = Tkinter.Frame(self.master)
-        self.main_frame.pack(expand=1, fill=Tkinter.BOTH)
+        #self.main_frame.pack(expand=1, fill=Tkinter.BOTH)
+        self.main_frame.grid(sticky="NEWS")
+        self.main_frame.grid_rowconfigure(1,weight=1)
+        self.main_frame.grid_columnconfigure(0,weight=1)
 
         longtext = 100
 
-        row_index = 1
-        Tkinter.Label(self.main_frame, text=_("File") + ":").grid(row=row_index, sticky="NW")
-        self.filename_txt = Tkinter.Entry(self.main_frame, width=longtext)
+        row_index = 0
+
+        self.control_frame = Tkinter.Frame(self.main_frame)
+        self.control_frame.grid(row=row_index, column=0, sticky="NW")
+        #self.main_frame.pack(expand=1, fill=Tkinter.BOTH)
+        #self.main_frame.grid(sticky="NEWS")
+        #self.control_frame.grid_rowconfigure(1,weight=1)
+        
+        Tkinter.Label(self.control_frame, text=_("File") + ":").grid(row=row_index)
+        self.filename_txt = Tkinter.Entry(self.control_frame, width=longtext)
         self.filename_txt.grid(row=row_index, column=1)
-        Tkinter.Button(self.main_frame, text=_("Browse") + "...", command=self.open).grid(row=row_index, column=2)
-        self.check_button = Tkinter.Button(self.main_frame, text=_("Check"), command=ThreadCallback(self.do_check))
+        Tkinter.Button(self.control_frame, text=_("Browse") + "...", command=self.open).grid(row=row_index, column=2)
+        self.check_button = Tkinter.Button(self.control_frame, text=_("Check"), command=ThreadCallback(self.do_check))
         self.check_button.grid(row=row_index, column=3)
         
-        self.cancel_button = Tkinter.Button(self.main_frame, text=_("Cancel"), command=ThreadCallback(self.do_cancel))
+        self.cancel_button = Tkinter.Button(self.control_frame, text=_("Cancel"), command=ThreadCallback(self.do_cancel))
         self.cancel_button.grid(row=row_index, column=4)
         self.cancel_button.configure(state="disabled")
  
@@ -107,10 +163,10 @@ class Application:
         row_index += 1
 
         self.tableframe = Table(self.main_frame)
-        self.tableframe.grid(column=1, row=row_index, sticky="NEWS")
+        self.tableframe.grid(column=0, row=row_index, columnspan=5, sticky="NEWS")
         
-
     def do_check(self):
+        self.update()
         self.check_button.configure(state="disabled")
         self.cancel_button.configure(state="active")
         # should start new thread here
@@ -119,13 +175,25 @@ class Application:
             mythread = threading.Thread(target=self.checker.check_metalink, args = [self.filename_txt.get()])
             mythread.start()
         # wait and do updates here
-        #if self.checker.isAlive():
-        self.update()
-
+        value = self.checker.isAlive()
+        while value:
+            self.update()
+            time.sleep(1)
+            value = self.checker.isAlive()
+            print value
+            
         self.do_cancel()
 
     def do_cancel(self):
+        print "cancel"
         self.cancel_button.configure(state="disabled")
+
+        mythread = threading.Thread(target=self.checker.stop)
+        mythread.start()
+        while mythread.isAlive():
+            time.sleep(1)
+            
+        self.update()
         mythread = threading.Thread(target=self.checker.clear_results)
         mythread.start()
         while mythread.isAlive():
@@ -133,19 +201,22 @@ class Application:
         self.check_button.configure(state="active")
 
     def update(self):
-        count = 0
-        active = 1
-        while active:
-            active = self.checker.activeCount()
-            #print active, count
-            if active != count:
-                # do update stuff here
-                #print "do update"
-                result = self.format_table(self.checker.get_results())
-                self.tableframe.data(result)
+        print "update"
+        #count = 0
+        #active = 1
+        #while self.checker.isAlive():
+        #print "in loop"
+        #print self.checker.isAlive()
+        #active = self.checker.activeCount()
+        #print active, count
+        #if active != count:
+            # do update stuff here
+            #print "do update"
+        result = self.format_table(self.checker.get_results())
+        self.tableframe.data(result)
 
-                count = active
-            time.sleep(1)
+            #count = active
+
 
     def format_table(self, datadict):
         datalist = [[_("Filename"), _("URL"), _("Response Code"), _("Size Check")]]
@@ -215,7 +286,7 @@ class ThreadCallback:
 		self.__firstArgs = firstArgs
 
 	def isAlive(self):
-            return self.__thread.isAlive() 
+                return self.__thread.isAlive() 
 	
 	def __call__(self, *args):
                 __thread = threading.Thread(target=self.__callback, args = self.__firstArgs)
