@@ -166,7 +166,7 @@ def run():
 def print_totals(results):
     for key in results.keys():
         print "=" * 79
-        print _("Summary for") + ":", key
+        print _("Summary for file") + ":", key
 
         status_count = 0
         size_count = 0
@@ -183,6 +183,14 @@ def print_totals(results):
             if size == "FAIL":
                 size_bool = True
 
+            redir = results[key][subkey][2]
+
+            print "-" * 79
+            print _("Checked") + ": %s" % key
+            if redir != None:
+                print _("Redirected") + ": %s" % redir
+            print _("Response Code") + ": %s\t" % status + _("Size Check") + ": %s" % size
+                
             if size_bool:
                 size_count += 1
             if status_bool:

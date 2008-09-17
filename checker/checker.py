@@ -144,8 +144,8 @@ class Checker:
         for filenode in urllist:
             size = filenode.size
             name = filenode.filename
-            print "=" * 79
-            print _("File") + ": %s " % name + _("Size") + ": %s" % size
+            #print "=" * 79
+            #print _("File") + ": %s " % name + _("Size") + ": %s" % size
             self.check_file_node(filenode)
 
         self.running = False
@@ -166,11 +166,30 @@ class Checker:
                 count += 1
         return count
 
+    def _add_result(self, key1, key2, value):
+        try:
+            self.results[key1]
+        except KeyError:
+            self.results[key1] = {}
+
+        try:
+            self.new_results[key1]
+        except KeyError:
+            self.new_results[key1] = {}
+            
+        self.results[key1][key2] = value
+        self.new_results[key1][key2] = value
+
     def get_results(self, block=True):
         while block and self.isAlive():
             time.sleep(0.1)
 
         return self.results
+
+    def get_new_results(self):
+        temp = self.new_results
+        self.new_results = {}
+        return temp
 
     def stop(self):
         self.cancel = True
@@ -181,6 +200,7 @@ class Checker:
         self.stop()
         self.threadlist = []
         self.results = {}
+        self.new_results = {}
         
     def _check_process(self, headers, filesize):
         size = "?"
@@ -190,7 +210,7 @@ class Checker:
         if sizeheader != None and filesize != None:
             if int(sizeheader) == int(filesize):
                 size = _("OK")
-            else:
+            elif int(filesize) != 0:
                 size = _("FAIL")
 
         response_code = _("OK")
@@ -198,7 +218,7 @@ class Checker:
         if temp_code != None:
             response_code = temp_code
             
-        return (response_code, size)
+        return [response_code, size]
 
     def _get_header(self, textheaders, name):
         textheaders = str(textheaders)
@@ -219,7 +239,7 @@ class Checker:
         Returns dictionary of file paths with headers
         '''
         self.running = True
-        self.results[item.name] = {}
+        #self.results[item.name] = {}
         size = item.size
         urllist = item.resources
         if len(urllist) == 0:
@@ -230,13 +250,16 @@ class Checker:
         def thread(filename):
             checker = URLCheck(filename)
             headers = checker.info()
-            self.results[item.name][checker.geturl()] = self._check_process(headers, size)
             redir = self._get_header(headers, "Redirected")
-            print "-" *79
-            print _("Checked") + ": %s" % filename
-            if redir != None:
-                print _("Redirected") + ": %s" % redir
-            print _("Response Code") + ": %s\t" % self.results[item.name][checker.geturl()][0] + _("Size Check") + ": %s" % self.results[item.name][checker.geturl()][1]
+            result = self._check_process(headers, size)
+            result.append(redir)
+            #self.results[item.name][checker.geturl()] = result
+            self._add_result(item.name, filename, result)
+            #print "-" *79
+            #print _("Checked") + ": %s" % filename
+            #if redir != None:
+            #    print _("Redirected") + ": %s" % redir
+            #print _("Response Code") + ": %s\t" % self.results[item.name][filename][0] + _("Size Check") + ": %s" % self.results[item.name][filename][1]
                 
         number = 0
         filename = {}

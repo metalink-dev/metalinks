@@ -277,6 +277,12 @@ class Dummy:
 
 
 
+NAME="Metalink Checker"
+VERSION="4.2"
+
+#WEBSITE="http://www.metalinker.org"
+WEBSITE="http://www.nabber.org/projects/checker/"
+
 MAX_REDIRECTS = 20
 MAX_THREADS = 10
 
@@ -302,123 +308,196 @@ def translate():
 
 _ = translate()
 
-def check_metalink(src):
-    '''
-    Decode a metalink file, can be local or remote
-    First parameter, file to download, URL or file path to download from
-    Returns the results of the check in a dictonary
-    '''
-    src = download.complete_url(src)
-    datasource = urllib2.urlopen(src)
-    try:
-        metalink = xmlutils.Metalink()
-        metalink.parsehandle(datasource)
-    except:
-        print _("ERROR parsing XML.")
-        raise
-    datasource.close()
-    
-    if metalink.type == "dynamic":
-        origin = metalink.origin
-        if origin != src:
-            try:
-                return check_metalink(origin)
-            except:
-                print "Error downloading from origin %s, not using." % origin
-    
-    urllist = metalink.files
-    if len(urllist) == 0:
-        print _("No urls to download file from.")
-        return False
+ABOUT = NAME + "\n" + _("Version") + ": " + VERSION + "\n" + \
+                     _("Website") + ": " + WEBSITE + "\n\n" + \
+                     _("Copyright") + ": 2008 Neil McNab\n" + \
+                     _("License") + ": " + _("GNU General Public License, Version 2") + "\n\n" + \
+                     NAME + _(" comes with ABSOLUTELY NO WARRANTY.  This is free software, and you are welcome to redistribute it under certain conditions, see LICENSE.txt for details.")
 
-    results = {}
-    for filenode in urllist:
-        size = filenode.size
-        name = filenode.filename
-        print "=" * 79
-        print _("File") + ": %s " % name + _("Size") + ": %s" % size
-        results[name] = check_file_node(filenode)
-
-    return results
-
-def check_process(headers, filesize):
-    size = "?"
-    
-    sizeheader = get_header(headers, "Content-Length")
-
-    if sizeheader != None and filesize != None:
-        if sizeheader == filesize:
-            size = _("OK")
-        else:
-            size = _("FAIL")
-
-    response_code = _("OK")
-    temp_code = get_header(headers, "Response")
-    if temp_code != None:
-        response_code = temp_code
+class Checker:
+    def __init__(self):
+        self.threadlist = []
+        self.running = False
+        self.clear_results()
+        self.cancel = False
         
-    return (response_code, size)
+    def check_metalink(self, src):
+        '''
+        Decode a metalink file, can be local or remote
+        First parameter, file to download, URL or file path to download from
+        Returns the results of the check in a dictonary
+        '''
+        self.running = True
+        
+        src = download.complete_url(src)
+        datasource = urllib2.urlopen(src)
+        try:
+            metalink = xmlutils.Metalink()
+            metalink.parsehandle(datasource)
+        except:
+            print _("ERROR parsing XML.")
+            raise
+        datasource.close()
+        
+        if metalink.type == "dynamic":
+            origin = metalink.origin
+            if origin != src and origin != "":
+                try:
+                    result = self.check_metalink(origin)
+                    self.running = True
+                    return result
+                except:
+                    print "Error downloading from origin %s, not using." % origin
+        
+        urllist = metalink.files
+        if len(urllist) == 0:
+            print _("No urls to download file from.")
+            self.running = False
+            return False
 
-def get_header(textheaders, name):
-    textheaders = str(textheaders)
-    
-    headers = textheaders.split("\n")
-    headers.reverse()
-    for line in headers:
-        line = line.strip()
-        result = line.split(": ")
-        if result[0].lower() == name.lower():
-            return result[1]
+        #results = {}
+        for filenode in urllist:
+            size = filenode.size
+            name = filenode.filename
+            #print "=" * 79
+            #print _("File") + ": %s " % name + _("Size") + ": %s" % size
+            self.check_file_node(filenode)
 
-    return None
+        self.running = False
+        #return results
 
-def check_file_node(item):
-    '''
-    Downloads a specific version of a program
-    First parameter, file XML node
-    Second parameter, file path to save to
-    Third parameter, optional, force a new download even if a valid copy already exists
-    Fouth parameter, optional, progress handler callback
-    Returns dictionary of file paths with headers
-    '''
-
-    size = item.size
-    urllist = item.resources
-    if len(urllist) == 0:
-        print _("No urls to download file from.")
+    def isAlive(self):
+        if self.running:
+            return True
+        for threadobj in self.threadlist:
+            if threadobj.isAlive():
+                return True
         return False
 
-    def thread(filename):
-        checker = URLCheck(filename)
-        headers = checker.info()
-        result[checker.geturl()] = check_process(headers, size)
-        redir = get_header(headers, "Redirected")
-        print "-" *79
-        print _("Checked") + ": %s" % filename
-        if redir != None:
-            print _("Redirected") + ": %s" % redir
-        print _("Response Code") + ": %s\t" % result[checker.geturl()][0] + _("Size Check") + ": %s" % result[checker.geturl()][1]
+    def activeCount(self):
+        count = 0
+        for threadobj in self.threadlist:
+            if threadobj.isAlive():
+                count += 1
+        return count
+
+    def _add_result(self, key1, key2, value):
+        try:
+            self.results[key1]
+        except KeyError:
+            self.results[key1] = {}
+
+        try:
+            self.new_results[key1]
+        except KeyError:
+            self.new_results[key1] = {}
             
-    number = 0
-    filename = {}
-        
-    count = 1
-    result = {}
-    while (count <= len(urllist)):
-        filename = urllist[number].url
-        #don't start too many threads at once
-        while threading.activeCount() > MAX_THREADS:
-            pass
-        mythread = threading.Thread(target = thread, args = [filename])
-        mythread.start()
-        #thread(filename)
-        number = (number + 1) % len(urllist)
-        count += 1
+        self.results[key1][key2] = value
+        self.new_results[key1][key2] = value
 
-    # don't return until all threads are finished (except the one main thread)
-    while threading.activeCount() > 1:
-        pass
-    return result
+    def get_results(self, block=True):
+        while block and self.isAlive():
+            time.sleep(0.1)
+
+        return self.results
+
+    def get_new_results(self):
+        temp = self.new_results
+        self.new_results = {}
+        return temp
+
+    def stop(self):
+        self.cancel = True
+        while self.isAlive():
+            time.sleep(0.1)        
+
+    def clear_results(self):
+        self.stop()
+        self.threadlist = []
+        self.results = {}
+        self.new_results = {}
+        
+    def _check_process(self, headers, filesize):
+        size = "?"
+        
+        sizeheader = self._get_header(headers, "Content-Length")
+
+        if sizeheader != None and filesize != None:
+            if int(sizeheader) == int(filesize):
+                size = _("OK")
+            elif int(filesize) != 0:
+                size = _("FAIL")
+
+        response_code = _("OK")
+        temp_code = self._get_header(headers, "Response")
+        if temp_code != None:
+            response_code = temp_code
+            
+        return [response_code, size]
+
+    def _get_header(self, textheaders, name):
+        textheaders = str(textheaders)
+        
+        headers = textheaders.split("\n")
+        headers.reverse()
+        for line in headers:
+            line = line.strip()
+            result = line.split(": ")
+            if result[0].lower() == name.lower():
+                return result[1]
+
+        return None
+
+    def check_file_node(self, item):
+        '''
+        First parameter, file object
+        Returns dictionary of file paths with headers
+        '''
+        self.running = True
+        #self.results[item.name] = {}
+        size = item.size
+        urllist = item.resources
+        if len(urllist) == 0:
+            print _("No urls to download file from.")
+            self.running = False
+            return False
+
+        def thread(filename):
+            checker = URLCheck(filename)
+            headers = checker.info()
+            redir = self._get_header(headers, "Redirected")
+            result = self._check_process(headers, size)
+            result.append(redir)
+            #self.results[item.name][checker.geturl()] = result
+            self._add_result(item.name, filename, result)
+            #print "-" *79
+            #print _("Checked") + ": %s" % filename
+            #if redir != None:
+            #    print _("Redirected") + ": %s" % redir
+            #print _("Response Code") + ": %s\t" % self.results[item.name][filename][0] + _("Size Check") + ": %s" % self.results[item.name][filename][1]
+                
+        number = 0
+        filename = {}
+            
+        count = 1
+        result = {}
+        while (count <= len(urllist)):
+            filename = urllist[number].url
+            #don't start too many threads at once
+            while self.activeCount() > MAX_THREADS and not self.cancel:
+                time.sleep(0.1)
+            mythread = threading.Thread(target = thread, args = [filename], name = filename)
+            mythread.start()
+            self.threadlist.append(mythread)
+            #thread(filename)
+            number = (number + 1) % len(urllist)
+            count += 1
+
+        # don't return until all threads are finished (except the one main thread)
+        #while threading.activeCount() > 1:
+        #    pass
+        #return result
+        self.running = False
        
 class URLCheck:    
     def __init__(self, url):
@@ -449,10 +528,13 @@ class URLCheck:
             except socket.timeout:
                 self.infostring += _("Response") + ": " + _("Timeout") + "\r\n"
                 return
+            except socket.error, error:
+                self.infostring += _("Response") + ": " + _("Connection Error") + "\r\n"
+                return
             
             # handle redirects here and set self.url
             count = 0
-            while (resp.status == httplib.MOVED_PERMANENTLY or resp.status == httplib.FOUND) and count < MAX_REDIRECTS:
+            while (resp != None and (resp.status == httplib.MOVED_PERMANENTLY or resp.status == httplib.FOUND) and count < MAX_REDIRECTS):
                 url = resp.getheader("location")
                 #print _("Redirected from ") + self.url + " to %s." % url
                 self.infostring += _("Redirected") + ": %s\r\n" % url
@@ -464,19 +546,26 @@ class URLCheck:
                     port = urlparts.port
                 
                 conn = download.HTTPConnection(urlparts.hostname, urlparts.port)
-                conn.request("HEAD", url)
-                resp = conn.getresponse()
+                try:
+                    conn.request("HEAD", url)
+                    resp = conn.getresponse()
+                except socket.gaierror:
+                    resp = None
+                
                 count += 1
 
             self.url = url
-            if resp.status == httplib.OK:
+            if resp == None:
+                self.infostring += _("Response") + ": socket error\r\n"
+            elif resp.status == httplib.OK:
                 self.infostring += _("Response") + ": " + _("OK") + "\r\n"
             else:
                 self.infostring += _("Response") + ": %s %s\r\n" % (resp.status, resp.reason)
             
             # need to convert list into string
-            for header in resp.getheaders():
-                self.infostring += header[0] + ": " + header[1] + "\r\n"
+            if resp != None:
+                for header in resp.getheaders():
+                    self.infostring += header[0] + ": " + header[1] + "\r\n"
 
             conn.close()
                 
@@ -554,10 +643,13 @@ class URLCheck:
             except socket.error:
                 self.infostring += _("Response") + ": " + _("Connection refused") + "\r\n"
                 return
-
+            except (ftplib.error_perm, ftplib.error_temp), error:
+                self.infostring += _("Response") + ": %s\r\n" % error.message
+                return
+            
             try:
                 ftpobj.login(username, password)
-            except (ftplib.error_perm), error:
+            except (ftplib.error_perm, ftplib.error_temp), error:
                 self.infostring += _("Response") + ": %s\r\n" % error.message
                 
             if ftpobj.exist(url):
@@ -587,14 +679,15 @@ class URLCheck:
         # need response and content-length for HTTP
         return self.infostring
 checker = Dummy()
+checker.ABOUT = ABOUT
+checker.Checker = Checker
 checker.MAX_REDIRECTS = MAX_REDIRECTS
 checker.MAX_THREADS = MAX_THREADS
+checker.NAME = NAME
 checker.URLCheck = URLCheck
+checker.VERSION = VERSION
+checker.WEBSITE = WEBSITE
 checker._ = _
-checker.check_file_node = check_file_node
-checker.check_metalink = check_metalink
-checker.check_process = check_process
-checker.get_header = get_header
 checker.translate = translate
 #!/usr/bin/env python
 ########################################################################
@@ -4063,9 +4156,6 @@ xmlutils.open_compressed = open_compressed
 
 
 
-# DO NOT CHANGE
-VERSION="Metalink Checker Version 4.1"
-
 
 def translate():
     '''
@@ -4095,7 +4185,7 @@ def run():
     '''
     # Command line parser options.
     usage = "usage: %prog [-c|-d|-j] [options] arg1 arg2 ..."
-    parser = optparse.OptionParser(version=VERSION, usage=usage)
+    parser = optparse.OptionParser(version=checker.ABOUT, usage=usage)
     parser.add_option("--download", "-d", action="store_true", dest="download", help=_("Actually download the file(s) in the metalink"))
     parser.add_option("--check", "-c", action="store_true", dest="check", help=_("Check the metalink file URLs"))
     parser.add_option("--file", "-f", dest="filevar", metavar="FILE", help=_("Metalink file to check or file to download"))
@@ -4142,7 +4232,9 @@ def run():
 
     if options.check:
         # remove filevar eventually
-        results = checker.check_metalink(options.filevar)
+        mcheck = checker.Checker()
+        mcheck.check_metalink(options.filevar)
+        results = mcheck.get_results()
         print_totals(results)
         for item in args:
             results = checker.check_metalink(item)
@@ -4167,16 +4259,20 @@ def run():
     # remove eventually
     elif not options.check:
         if options.filevar != None:
-            results = checker.check_metalink(options.filevar)
+            mcheck = checker.Checker()
+            mcheck.check_metalink(options.filevar)
+            results = mcheck.get_results()
             print_totals(results)
         for item in args:
-            results = checker.check_metalink(item)
+            mcheck = checker.Checker()
+            mcheck.check_metalink(item)
+            results = mcheck.get_results()
             print_totals(results)            
 
 def print_totals(results):
     for key in results.keys():
         print "=" * 79
-        print _("Summary for") + ":", key
+        print _("Summary for file") + ":", key
 
         status_count = 0
         size_count = 0
@@ -4193,6 +4289,14 @@ def print_totals(results):
             if size == "FAIL":
                 size_bool = True
 
+            redir = results[key][subkey][2]
+
+            print "-" * 79
+            print _("Checked") + ": %s" % key
+            if redir != None:
+                print _("Redirected") + ": %s" % redir
+            print _("Response Code") + ": %s\t" % status + _("Size Check") + ": %s" % size
+                
             if size_bool:
                 size_count += 1
             if status_bool:
@@ -4333,7 +4437,6 @@ if __name__ == "__main__":
     run()
 console = Dummy()
 console.ProgressBar = ProgressBar
-console.VERSION = VERSION
 console._ = _
 console.print_totals = print_totals
 console.run = run
