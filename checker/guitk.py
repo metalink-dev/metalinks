@@ -63,7 +63,7 @@ class Table(Tkinter.Frame):
         
         self.subelements = []
 
-    def update(self, height=1000, width=650):
+    def update(self, height=1000, width=1000):
         self.canvas["scrollregion"] = (0, 0, width, height)
 
     def data(self, datalist):
@@ -74,7 +74,8 @@ class Table(Tkinter.Frame):
             column = 1
             for datacolumn in datarow:
                 label = Tkinter.Label(self.container, text=datacolumn)
-                label.grid(column=column, row=row, sticky="W")
+                label.config(anchor="w")
+                label.grid(column=column, row=row, sticky="NEWS")
                 self.subelements.append(label)
                 column += 1
             row += 1
@@ -83,8 +84,14 @@ class Table(Tkinter.Frame):
 
     def clear(self):
         self.update(0)
+
+        #self.container = Tkinter.Frame(self.canvas)
+        #self.container.grid(sticky="NEWS")
+        
         for element in self.subelements:
-            del(element)
+            #element.grid_remove()
+            element.config(text="")
+            #del(element)
         self.subelements = []
 
 class AutoScrollbar(Tkinter.Scrollbar):
@@ -132,7 +139,6 @@ class Application:
 
         # main frame
         self.main_frame = Tkinter.Frame(self.master)
-        #self.main_frame.pack(expand=1, fill=Tkinter.BOTH)
         self.main_frame.grid(sticky="NEWS")
         self.main_frame.grid_rowconfigure(1,weight=1)
         self.main_frame.grid_columnconfigure(0,weight=1)
@@ -143,13 +149,13 @@ class Application:
 
         self.control_frame = Tkinter.Frame(self.main_frame)
         self.control_frame.grid(row=row_index, column=0, sticky="NW")
-        #self.main_frame.pack(expand=1, fill=Tkinter.BOTH)
-        #self.main_frame.grid(sticky="NEWS")
-        #self.control_frame.grid_rowconfigure(1,weight=1)
         
         Tkinter.Label(self.control_frame, text=_("File") + ":").grid(row=row_index)
         self.filename_txt = Tkinter.Entry(self.control_frame, width=longtext)
         self.filename_txt.grid(row=row_index, column=1)
+        self.filename_txt.bind("<Return>", ThreadCallback(self.do_check))
+
+        
         Tkinter.Button(self.control_frame, text=_("Browse") + "...", command=self.open).grid(row=row_index, column=2)
         self.check_button = Tkinter.Button(self.control_frame, text=_("Check"), command=ThreadCallback(self.do_check))
         self.check_button.grid(row=row_index, column=3)
@@ -166,9 +172,11 @@ class Application:
         self.tableframe.grid(column=0, row=row_index, columnspan=5, sticky="NEWS")
         
     def do_check(self):
+        #self.tableframe.clear()
         self.update()
         self.check_button.configure(state="disabled")
         self.cancel_button.configure(state="active")
+
         # should start new thread here
         if self.filename_txt.get() != "":
             #self.checker.check_metalink(self.filename_txt.get())
@@ -177,15 +185,15 @@ class Application:
         # wait and do updates here
         value = self.checker.isAlive()
         while value:
-            self.update()
+            #self.update()
             time.sleep(1)
             value = self.checker.isAlive()
-            print value
+            #print value
             
         self.do_cancel()
 
     def do_cancel(self):
-        print "cancel"
+#        print "cancel"
         self.cancel_button.configure(state="disabled")
 
         mythread = threading.Thread(target=self.checker.stop)
@@ -201,30 +209,22 @@ class Application:
         self.check_button.configure(state="active")
 
     def update(self):
-        print "update"
-        #count = 0
-        #active = 1
-        #while self.checker.isAlive():
-        #print "in loop"
-        #print self.checker.isAlive()
-        #active = self.checker.activeCount()
-        #print active, count
-        #if active != count:
-            # do update stuff here
-            #print "do update"
+#        print "update"
+
         result = self.format_table(self.checker.get_results())
         self.tableframe.data(result)
 
             #count = active
 
-
     def format_table(self, datadict):
-        datalist = [[_("Filename"), _("URL"), _("Response Code"), _("Size Check")]]
+        datalist = [[_("Filename"), _("URL"), _("Response Code"), _("Size Check"), _("Redirect")]]
         for filename in datadict.keys():
             datalist.append([filename])
             urls = datadict[filename].keys()
             for url in urls:
                 add = ["", url]
+                #print filename, url, datadict[filename][url]
+                #if datadict[filename][url] is not None:
                 for item in datadict[filename][url]:
                     add.append(item)
                 datalist.append(add)
