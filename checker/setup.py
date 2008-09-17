@@ -106,7 +106,10 @@ def clean():
     try:
         shutil.rmtree("buildMetalink")
     except WindowsError: pass
-
+    try:
+        shutil.rmtree("buildmetalinkw")
+    except WindowsError: pass
+    
     try:
         shutil.rmtree("tests_temp")
     except WindowsError: pass
