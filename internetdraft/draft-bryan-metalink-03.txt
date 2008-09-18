@@ -66,10 +66,10 @@ Table of Contents
    2.  Metalink Documents . . . . . . . . . . . . . . . . . . . . . .  6
    3.  Common Metalink Constructs . . . . . . . . . . . . . . . . . .  7
      3.1.  Text Constructs  . . . . . . . . . . . . . . . . . . . . .  7
-       3.1.1.  Text . . . . . . . . . . . . . . . . . . . . . . . . .  7
+       3.1.1.  Text . . . . . . . . . . . . . . . . . . . . . . . . .  8
      3.2.  Date Constructs  . . . . . . . . . . . . . . . . . . . . .  8
-   4.  Metalink Element Definitions . . . . . . . . . . . . . . . . .  8
-     4.1.  Container Elements . . . . . . . . . . . . . . . . . . . .  8
+   4.  Metalink Element Definitions . . . . . . . . . . . . . . . . .  9
+     4.1.  Container Elements . . . . . . . . . . . . . . . . . . . .  9
        4.1.1.  The "metalink:metalink" Element  . . . . . . . . . . .  9
        4.1.2.  The "metalink:files" Element . . . . . . . . . . . . . 10
        4.1.3.  The "metalink:file" Element  . . . . . . . . . . . . . 11
@@ -312,13 +312,31 @@ Internet-Draft    Metalink Download Description Format    September 2008
 
    Metalink Documents are specified in terms of the XML Information Set,
    serialized as XML 1.0 [REC-xml] and identified with the "application/
-   metalink+xml" media type.  Metalink Documents MUST be well-formed
-   XML.  This specification does not define a DTD for Metalink
-   Documents, and hence does not require them to be valid (in the sense
-   used by XML).
+   metalink+xml" media type.  Transparent content negotiation with HTTP
+   [RFC2295] is accomplished by adding the Metalink media type to the
+   Accept request header.  Metalink Processors MUST check the returned
+   content type, and if the Metalink media type is used, it MUST process
+   the Metalink.  If the content type does not match, then Metalink
+   Processors MUST handle the response as a normal response.  Metalink
+   Processors MUST NOT add the Metalink media type to Accept when
+   requesting a URI from a metalink:url element, thus avoiding loops.
+   Metalink Processors MUST handle external redirects that might lead to
+   a Metalink.
+
+   Metalink Documents MUST be well-formed XML.  This specification does
+   not define a DTD for Metalink Documents, and hence does not require
+   them to be valid (in the sense used by XML).
 
    Metalink allows the use of IRIs [RFC3987].  Every URI [RFC3986] is
    also an IRI, so a URI may be used wherever below an IRI is named.
+
+
+
+Bryan                    Expires March 22, 2009                 [Page 6]
+
+Internet-Draft    Metalink Download Description Format    September 2008
+
+
    There is one special consideration: when an IRI that is not also a
    URI is given for dereferencing, it MUST be mapped to a URI using the
    steps in Section 3.1 of [RFC3987].
@@ -329,13 +347,6 @@ Internet-Draft    Metalink Download Description Format    September 2008
    [RFC3986], establishing the base URI (or IRI) for resolving any
    relative references found within the effective scope of the xml:base
    attribute.
-
-
-
-Bryan                    Expires March 22, 2009                 [Page 6]
-
-Internet-Draft    Metalink Download Description Format    September 2008
-
 
    Any element defined by this specification MAY have an xml:lang
    attribute, whose content indicates the natural language for the
@@ -374,17 +385,6 @@ Internet-Draft    Metalink Download Description Format    September 2008
    A Text construct contains human-readable text, usually in small
    quantities.  The content of Text constructs is Language-Sensitive.
 
-   metalinkTextConstruct =
-      metalinkCommonAttributes,
-      text
-
-3.1.1.  Text
-
-   Example metalink:description with text content:
-
-
-
-
 
 
 
@@ -392,6 +392,14 @@ Bryan                    Expires March 22, 2009                 [Page 7]
 
 Internet-Draft    Metalink Download Description Format    September 2008
 
+
+   metalinkTextConstruct =
+      metalinkCommonAttributes,
+      text
+
+3.1.1.  Text
+
+   Example metalink:description with text content:
 
    ...
    <description>
@@ -434,20 +442,16 @@ Internet-Draft    Metalink Download Description Format    September 2008
    a single day.
 
 
-4.  Metalink Element Definitions
-
-4.1.  Container Elements
-
-
-
-
-
 
 
 Bryan                    Expires March 22, 2009                 [Page 8]
 
 Internet-Draft    Metalink Download Description Format    September 2008
 
+
+4.  Metalink Element Definitions
+
+4.1.  Container Elements
 
 4.1.1.  The "metalink:metalink" Element
 
@@ -493,10 +497,6 @@ Internet-Draft    Metalink Download Description Format    September 2008
    example is full-text indexers) require a minimum amount of text to
    function reliably and predictably.  Metalink publishers should be
    aware of these issues.  It is advisable that each metalink:file
-   element contain a non-empty metalink:description element, a non-empty
-   metalink:identity element when that element is present, and a non-
-   empty metalink:version element, and a non-empty metalink:publisher
-   element.  However, the absence of metalink:description is not an
 
 
 
@@ -505,6 +505,10 @@ Bryan                    Expires March 22, 2009                 [Page 9]
 Internet-Draft    Metalink Download Description Format    September 2008
 
 
+   element contain a non-empty metalink:description element, a non-empty
+   metalink:identity element when that element is present, and a non-
+   empty metalink:version element, and a non-empty metalink:publisher
+   element.  However, the absence of metalink:description is not an
    error, and Metalink Processors MUST NOT fail to function correctly as
    a consequence of such an absence.
 
@@ -548,10 +552,6 @@ Internet-Draft    Metalink Download Description Format    September 2008
       element.
    o  metalink:files elements MAY contain exactly one metalink:logo
       element.
-   o  metalink:files elements MAY contain exactly one metalink:language
-      element.
-   o  metalink:files elements MAY contain exactly one metalink:publisher
-      element.
 
 
 
@@ -561,6 +561,10 @@ Bryan                    Expires March 22, 2009                [Page 10]
 Internet-Draft    Metalink Download Description Format    September 2008
 
 
+   o  metalink:files elements MAY contain exactly one metalink:language
+      element.
+   o  metalink:files elements MAY contain exactly one metalink:publisher
+      element.
    o  metalink:files elements MAY contain exactly one metalink:copyright
       element.
    o  metalink:files elements MAY contain exactly one metalink:license
@@ -604,10 +608,6 @@ Internet-Draft    Metalink Download Description Format    September 2008
       identity element.
    o  metalink:file elements SHOULD contain exactly one metalink:version
       element.
-   o  metalink:file elements MAY contain exactly one metalink:
-      description element.
-   o  metalink:file elements SHOULD contain exactly one metalink:size
-      element.
 
 
 
@@ -617,6 +617,10 @@ Bryan                    Expires March 22, 2009                [Page 11]
 Internet-Draft    Metalink Download Description Format    September 2008
 
 
+   o  metalink:file elements MAY contain exactly one metalink:
+      description element.
+   o  metalink:file elements SHOULD contain exactly one metalink:size
+      element.
    o  metalink:file elements MAY contain exactly one metalink:os
       element.
    o  metalink:file elements MAY contain exactly one metalink:logo
@@ -661,10 +665,6 @@ Internet-Draft    Metalink Download Description Format    September 2008
          metalinkCommonAttributes,
          extensionElement*
          metalinkURL*
-      }
-
-   This specification assigns no significance to the order of metalink:
-   url elements.  Significance is determined by the value of the
 
 
 
@@ -673,6 +673,10 @@ Bryan                    Expires March 22, 2009                [Page 12]
 Internet-Draft    Metalink Download Description Format    September 2008
 
 
+      }
+
+   This specification assigns no significance to the order of metalink:
+   url elements.  Significance is determined by the value of the
    "preference" attribute of the metalink:url elements.
 
    The following child elements are defined by this specification (note
@@ -717,10 +721,6 @@ Internet-Draft    Metalink Download Description Format    September 2008
 
    The "metalink:pieces" element is a Text construct that conveys a
    human-readable piece information for a file.
-
-
-
-
 
 
 
@@ -967,7 +967,8 @@ Internet-Draft    Metalink Download Description Format    September 2008
 4.2.11.  The "metalink:os" Element
 
    The "metalink:os" element is a Text construct that conveys a human-
-   readable Operating System for a file.
+   readable Operating System for a file.  The IANA registry named
+   "Operating System Names" defines values for OS types.
 
    metalinkOS =
       element metalink:os {
@@ -1000,7 +1001,6 @@ Internet-Draft    Metalink Download Description Format    September 2008
       attribute name { metalinkTextConstruct }?,
    }
 
-   The metalink:publisher element MAY have a "uri" attribute whose value
 
 
 
@@ -1009,6 +1009,7 @@ Bryan                    Expires March 22, 2009                [Page 18]
 Internet-Draft    Metalink Download Description Format    September 2008
 
 
+   The metalink:publisher element MAY have a "uri" attribute whose value
    MUST be an IRI reference [RFC3987].  When dereferenced, the resulting
    URI (mapped from an IRI, if necessary) SHOULD produce a
    representation that is relevant to that agent.
@@ -1054,7 +1055,6 @@ Internet-Draft    Metalink Download Description Format    September 2008
    The "metalink:type" element is a Text construct that describes
    whether the IRI from "metalink:origin" a Metalink will contain
    dynamic updated Metalinks or static content that is not updated.
-
 
 
 
@@ -1548,6 +1548,9 @@ Internet-Draft    Metalink Download Description Format    September 2008
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119, March 1997.
 
+   [RFC2295]  Holtman, K. and A. Mutz, "Transparent Content Negotiation
+              in HTTP", RFC 2295, March 1998.
+
    [RFC2818]  Rescorla, E., "HTTP Over TLS", RFC 2818, May 2000.
 
    [RFC3023]  Murata, M., St. Laurent, S., and D. Kohn, "XML Media
@@ -1559,9 +1562,6 @@ Internet-Draft    Metalink Download Description Format    September 2008
    [RFC3688]  Mealling, M., "The IETF XML Registry", BCP 81, RFC 3688,
               January 2004.
 
-   [RFC3986]  Berners-Lee, T., Fielding, R., and L. Masinter, "Uniform
-              Resource Identifier (URI): Generic Syntax", STD 66,
-
 
 
 Bryan                    Expires March 22, 2009                [Page 28]
@@ -1569,6 +1569,8 @@ Bryan                    Expires March 22, 2009                [Page 28]
 Internet-Draft    Metalink Download Description Format    September 2008
 
 
+   [RFC3986]  Berners-Lee, T., Fielding, R., and L. Masinter, "Uniform
+              Resource Identifier (URI): Generic Syntax", STD 66,
               RFC 3986, January 2005.
 
    [RFC3987]  Duerst, M. and M. Suignard, "Internationalized Resource
@@ -1615,8 +1617,6 @@ Appendix A.  Contributors
    Nick Dominguez, Rene Leonhardt, Per Oyvind Karlsen, Gary Zellerbach,
    James Clark, Daniel Stenberg, Peter Poeml, Matt Domsch, Chris Newman,
    Lisa Dusseault, Ian Macfarlane, Dave Cridland, and Julian Reschke.
-   The content and concepts within are a product of the Metalink
-   community.
 
 
 
@@ -1624,6 +1624,9 @@ Bryan                    Expires March 22, 2009                [Page 29]
 
 Internet-Draft    Metalink Download Description Format    September 2008
 
+
+   The content and concepts within are a product of the Metalink
+   community.
 
    The Metalink community has dozens of very active contributors who
    proposed ideas and wording for this document, including:
@@ -1670,9 +1673,6 @@ Appendix B.  RELAX NG Compact Schema
 
       # Common attributes
 
-      metalinkCommonAttributes =
-         attribute xml:base { metalinkUri }?,
-         attribute xml:lang { metalinkLanguageTag }?,
 
 
 
@@ -1681,6 +1681,9 @@ Bryan                    Expires March 22, 2009                [Page 30]
 Internet-Draft    Metalink Download Description Format    September 2008
 
 
+      metalinkCommonAttributes =
+         attribute xml:base { metalinkUri }?,
+         attribute xml:lang { metalinkLanguageTag }?,
          undefinedAttribute*
 
       # Text Constructs
@@ -1726,9 +1729,6 @@ Internet-Draft    Metalink Download Description Format    September 2008
            element metalink:language { metalinkTextConstruct }?,
            element metalink:copyright { metalinkTextConstruct }?,
            element metalink:license { metalinkTextConstruct }?,
-           element metalink:os { metalinkTextConstruct }?,
-           element metalink:verification {
-             hash+,
 
 
 
@@ -1737,6 +1737,9 @@ Bryan                    Expires March 22, 2009                [Page 31]
 Internet-Draft    Metalink Download Description Format    September 2008
 
 
+           element metalink:os { metalinkTextConstruct }?,
+           element metalink:verification {
+             hash+,
              element metalink:pieces {
                attribute length { metalinkTextConstruct },
                attribute type { metalinkTextConstruct },
@@ -1782,9 +1785,6 @@ Internet-Draft    Metalink Download Description Format    September 2008
    # Simple Extension
 
    simpleExtensionElement =
-      element * - metalink:* {
-         text
-      }
 
 
 
@@ -1792,6 +1792,10 @@ Bryan                    Expires March 22, 2009                [Page 32]
 
 Internet-Draft    Metalink Download Description Format    September 2008
 
+
+      element * - metalink:* {
+         text
+      }
 
    # Structured Extension
 
@@ -1838,16 +1842,15 @@ Index
    C
       copyright XML element  14
 
-   D
-      description XML element  14
-
-
 
 
 Bryan                    Expires March 22, 2009                [Page 33]
 
 Internet-Draft    Metalink Download Description Format    September 2008
 
+
+   D
+      description XML element  14
 
    F
       file XML element  11
@@ -1877,7 +1880,7 @@ Internet-Draft    Metalink Download Description Format    September 2008
          metalinkResources  12
          metalinkSignature  19
          metalinkSize  19
-         metalinkTextConstruct  7
+         metalinkTextConstruct  8
          metalinkType  20
          metalinkUpdated  20
          metalinkURL  17, 20
@@ -1894,9 +1897,6 @@ Internet-Draft    Metalink Download Description Format    September 2008
 
    L
       language XML element  16
-      license XML element  16
-      logo XML element  17
-
 
 
 
@@ -1904,6 +1904,9 @@ Bryan                    Expires March 22, 2009                [Page 34]
 
 Internet-Draft    Metalink Download Description Format    September 2008
 
+
+      license XML element  16
+      logo XML element  17
 
    M
       Media Type
@@ -1931,7 +1934,7 @@ Internet-Draft    Metalink Download Description Format    September 2008
       metalinkResources grammar production  12
       metalinkSignature grammar production  19
       metalinkSize grammar production  19
-      metalinkTextConstruct grammar production  7
+      metalinkTextConstruct grammar production  8
       metalinkType grammar production  20
       metalinkUpdated grammar production  20
       metalinkURL grammar production  17, 20
@@ -1950,9 +1953,6 @@ Internet-Draft    Metalink Download Description Format    September 2008
    R
       resources XML element  12
 
-   S
-      signature XML element  19
-      simpleExtensionElement grammar production  24
 
 
 
@@ -1961,6 +1961,9 @@ Bryan                    Expires March 22, 2009                [Page 35]
 Internet-Draft    Metalink Download Description Format    September 2008
 
 
+   S
+      signature XML element  19
+      simpleExtensionElement grammar production  24
       size XML element  19
       structuredExtensionElement grammar production  24
 
@@ -2002,9 +2005,6 @@ Internet-Draft    Metalink Download Description Format    September 2008
          url  20
          verification  13
          version  21
-
-
-
 
 
 
