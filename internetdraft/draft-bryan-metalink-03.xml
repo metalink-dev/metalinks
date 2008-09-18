@@ -165,7 +165,12 @@ start = metalinkMetalink</artwork>
       
       <t>Metalink Documents are specified in terms of the
       XML Information Set, serialized as XML 1.0 <xref target="REC-xml"/> and identified with the
-      "application/metalink+xml" media type. Metalink Documents MUST be
+      "application/metalink+xml" media type. Transparent content negotiation with HTTP <xref target="RFC2295"/> is accomplished
+      by adding the Metalink media type to the Accept request header. Metalink Processors MUST check the returned content type, and if the Metalink media type is used, it MUST process the Metalink.
+      If the content type does not match, then Metalink Processors MUST handle the response as a normal response. Metalink Processors MUST NOT add the Metalink media type to Accept when requesting
+      a URI from a <xref target="element.url" format="none">metalink:url</xref> element, thus avoiding loops. Metalink Processors MUST handle external redirects that might lead to a Metalink.</t>
+	  
+      <t>Metalink Documents MUST be
       well-formed XML. This specification does not define a DTD for
       Metalink Documents, and hence does not require them to be valid (in
       the sense used by XML).</t>
@@ -975,7 +980,7 @@ metalinkOrigin = element metalink:origin {
     <iref item="os XML element" primary="true"/> 
 	      
 	  <t>The "<xref target="element.os" format="none">metalink:os</xref>" element is a Text construct that conveys a
-	  human-readable Operating System for a file.
+	  human-readable Operating System for a file. The IANA registry named "Operating System Names" defines values for OS types.
 	  
 	    <figure>
         <iref item="metalinkOS grammar production" primary="true"/>
@@ -1639,6 +1644,20 @@ structuredExtensionElement =
 <seriesInfo name="BCP" value="14"/>
 <seriesInfo name="RFC" value="2119"/>
 </reference>
+ 
+<reference anchor="RFC2295">
+
+<front>
+<title>Transparent Content Negotiation in HTTP</title>
+<author initials="K." surname="Holtman" fullname="K. Holtman">
+<organization/></author>
+<author initials="A." surname="Mutz" fullname="A. Mutz">
+<organization/></author>
+<date year="1998" month="March"/></front>
+
+<seriesInfo name="RFC" value="2295"/>
+</reference>
+
  
  
 <reference anchor="RFC2818">
