@@ -165,10 +165,7 @@ start = metalinkMetalink</artwork>
       
       <t>Metalink Documents are specified in terms of the
       XML Information Set, serialized as XML 1.0 <xref target="REC-xml"/> and identified with the
-      "application/metalink+xml" media type. Transparent content negotiation with HTTP <xref target="RFC2295"/> is accomplished
-      by adding the Metalink media type to the Accept request header. Metalink Processors MUST check the returned content type, and if the Metalink media type is used, it MUST process the Metalink.
-      If the content type does not match, then Metalink Processors MUST handle the response as a normal response. Metalink Processors MUST NOT add the Metalink media type to Accept when requesting
-      a URI from a <xref target="element.url" format="none">metalink:url</xref> element, thus avoiding loops. Metalink Processors MUST handle external redirects that might lead to a Metalink.</t>
+      "application/metalink+xml" media type.</t>
 	  
       <t>Metalink Documents MUST be
       well-formed XML. This specification does not define a DTD for
@@ -1227,6 +1224,13 @@ metalinkVersion =
 
     </section>
 
+	  <section title="Client Implementation Considerations">
+        <t>Transparent content negotiation with HTTP <xref target="RFC2295"/> is accomplished
+      by adding the Metalink media type to the Accept request header. Metalink Processors MUST check the returned content type, and if the Metalink media type is used, it MUST process the Metalink.
+      If the content type does not match, then Metalink Processors MUST handle the response as a normal response. Metalink Processors MUST NOT add the Metalink media type to Accept when requesting
+      a URI from a <xref target="element.url" format="none">metalink:url</xref> element, thus avoiding loops. Metalink Processors MUST handle external redirects that might lead to a Metalink.</t>
+	  </section>
+	
       <section title="Securing Metalink Documents"> 
 
 	    <t>Because Metalink is an XML-based format, existing XML security
@@ -1546,18 +1550,15 @@ structuredExtensionElement =
 	  </section> 
 
 	  <section title="Security Considerations">
-	    <t>Publishers are encouraged to offer Metalink documents via authenticated HTTP under TLS as specified in <xref target="RFC2818"/>.. Publishers are also encouraged to include digital signatures of the files within the Metalink Documents if they are available.</t>
+	    <t>Publishers are encouraged to offer Metalink documents via authenticated HTTP under TLS as specified in <xref target="RFC2818"/>. Publishers are also encouraged to include digital signatures of the files within the Metalink Documents if they are available.</t>
 
 
 
-	    <section title="URIs">
+	    <section title="URIs and IRIs">
 
-	      <t>Metalink Processors handle URIs. See Section 7 of <xref target="RFC3986"/>.</t>
+	      <t>Metalink Processors handle URIs and IRIs. See Section 7 of <xref target="RFC3986"/> and Section 8 of <xref target="RFC3987"/> for security
+          considerations related to their handling and use.</t>
 
-	    </section>
-
-	    <section title="IRIs">
-	      <t>Metalink Processors handle IRIs. See Section 8 of <xref target="RFC3987"/>.</t>
 	    </section>
 
 	    <section title="Spoofing">
