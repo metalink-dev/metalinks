@@ -1,0 +1,60 @@
+import os
+
+def build_project(toolset=['default'], debug=False):
+    # Setup environment
+    build_dir = 'build/'
+    exe_filename = 'bin/downloader'
+    env = Environment(tools = toolset, ENV = os.environ)
+    # other defines: 'ENABLE_LOGGING', 'CUSTOM_STRINGS'
+    env.Append(CPPDEFINES = ['UNICODE', '_UNICODE', '_WIN32_IE=0x0400', 'CURL_STATICLIB', 'XML_STATIC'])
+    env.Append(CPPPATH = ['#/include'])
+    env.Append(LIBS = 'kernel32 user32 gdi32 comctl32 libcurl wsock32 wldap32'.split())
+    if 'msvc' not in env['TOOLS']:
+        env.Append(LIBS = 'libexpatw')
+    
+    if debug:
+        build_dir += 'debug'
+        exe_filename += '_d'
+        env.Append(CPPDEFINES = ['DEBUG'])
+    else:
+        build_dir += 'release'
+    
+    # Set compiler specific flags
+    if 'msvc' in env['TOOLS']:
+        env.Append(CXXFLAGS = '/EHsc /W3 /MT'.split())
+        env.Append(LINKFLAGS = '/MANIFEST:NO'.split())
+        env.Append(LIBS = 'libexpatwMT')
+        if debug:
+            env.Append(CXXFLAGS = '/Od /ZI /RTC1'.split())
+            env.Append(LINKFLAGS = '/DEBUG'.split())
+        else:
+            env.Append(CXXFLAGS = '/Os'.split())
+            env.Append(LINKFLAGS = '/OPT:REF /OPT:ICF'.split())
+    elif 'mingw' in env['TOOLS']:
+        env.Append(CXXFLAGS = '-mthreads -Wall -ansi -pedantic'.split())
+        env.Append(LINKFLAGS = '-mthreads -static -mwindows'.split())
+        env.Append(LIBS = 'libboost_date_time-mgw34-mt libboost_filesystem-mgw34-mt libboost_system-mgw34-mt'.split())
+        if debug:
+            env.Append(CXXFLAGS = '-g'.split())
+        else:
+            env.Append(CXXFLAGS = '-Wno-uninitialized -Os -march=i386'.split())
+            env.Append(LINKFLAGS = '-s'.split())
+    
+    # Build the project
+    objs = SConscript('src/SConscript', variant_dir=build_dir, duplicate=0, exports=['env'])
+    build = env.Program(exe_filename, objs)
+
+def build_all(toolset=['default']):
+    build_project(toolset, debug=True)
+    build_project(toolset, debug=False)
+    
+# Parse options
+opts = Options('custom.py')
+opts.Add('mingw', 'Set to 1 to build with mingw', '0')
+opts_env = Environment(options=opts)
+
+# Build the project!
+if opts_env['mingw'] == '1':
+    build_project(['mingw'])
+else:
+    build_project()

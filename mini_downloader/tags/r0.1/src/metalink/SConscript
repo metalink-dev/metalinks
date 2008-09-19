@@ -1,0 +1,9 @@
+Import('env')
+
+sources = 'metalink.cpp'
+
+objs = []
+for x in sources.split():
+    objs.append(env.Object(x))
+
+Return('objs')
