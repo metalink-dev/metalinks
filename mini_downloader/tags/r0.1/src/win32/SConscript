@@ -1,0 +1,10 @@
+Import('env')
+
+sources = 'main.cpp Controller.cpp DownloadThread.cpp sys.cpp custom.cpp'
+
+objs = []
+for x in sources.split():
+    objs.append(env.Object(x))
+objs.append(env.RES('resources.rc'))
+
+Return('objs')

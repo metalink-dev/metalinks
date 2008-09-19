@@ -1,0 +1,9 @@
+Import('env')
+
+sources = 'tstr.cpp sha1.cpp'
+
+objs = []
+for x in sources.split():
+    objs.append(env.Object(x))
+
+Return('objs')

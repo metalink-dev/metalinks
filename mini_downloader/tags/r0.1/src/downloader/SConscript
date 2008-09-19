@@ -1,0 +1,9 @@
+Import('env')
+
+sources = 'downloader.cpp CurlDownloader.cpp'
+
+objs = []
+for x in sources.split():
+    objs.append(env.Object(x))
+
+Return('objs')
