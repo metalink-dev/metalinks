@@ -1,8 +1,0 @@
-PHPMetalink is a serverside hashing and metalink generating collection of scripts.
-The idea is to allow small projects to create mirroring systems with metalinks easily with minimal installation.
-
-TODO
-- Rename the project?
-- Include the metalink-library PHP code
-- Finish up the initial system
-- Run an online test-case
