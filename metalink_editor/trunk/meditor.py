@@ -85,6 +85,7 @@ def build(xml, urls, output=None, localfile=None, download=True):
     handle = open(output, "wb")
     handle.write(xml.generate())
     handle.close()
+    return xml
     #print xml.generate()
 
 def merge(master, args):

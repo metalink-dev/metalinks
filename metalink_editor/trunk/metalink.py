@@ -479,7 +479,7 @@ def read_sig(filename):
 
 def read_bin_sig(filename):
     '''
-    Converts a binary signature to ASCII, needs testing
+    Converts a binary signature to ASCII
     '''
     header = "-----BEGIN PGP SIGNATURE-----\n\n"
     footer = "-----END PGP SIGNATURE-----\n"
