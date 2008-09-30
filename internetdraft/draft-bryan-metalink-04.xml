@@ -359,7 +359,7 @@ metalinkMetalink =
 
 	      <t><xref target="element.metalink" format="none">metalink:metalink</xref> elements MUST contain exactly one <xref target="element.files" format="none">metalink:files</xref> element.</t>
 
-	      <t><xref target="element.metalink" format="none">metalink:metalink</xref> elements MAY contain exactly one <xref target="element.origin" format="none">metalink:origin</xref> element. If <xref target="element.type" format="none">metalink:type</xref> is "dynamic", <xref target="element.metalink" format="none">metalink:metalink</xref> elements MUST contain exactly one <xref target="element.origin" format="none">metalink:origin</xref> element.</t>
+	      <t><xref target="element.metalink" format="none">metalink:metalink</xref> elements MAY contain exactly one <xref target="element.origin" format="none">metalink:origin</xref> element. If <xref target="element.type" format="none">metalink:type</xref> is "dynamic", <xref target="element.metalink" format="none">metalink:metalink</xref> elements MAY contain exactly one <xref target="element.origin" format="none">metalink:origin</xref> element.</t>
 
 	      <t><xref target="element.metalink" format="none">metalink:metalink</xref> elements MAY contain exactly one <xref target="element.type" format="none">metalink:type</xref> element.</t>
 
@@ -367,7 +367,7 @@ metalinkMetalink =
 
 	      <t><xref target="element.metalink" format="none">metalink:metalink</xref> elements MAY contain exactly one <xref target="element.published" format="none">metalink:published</xref> element.</t>
 
-	      <t><xref target="element.metalink" format="none">metalink:metalink</xref> elements MAY contain exactly one <xref target="element.updated" format="none">metalink:updated</xref> element. If <xref target="element.type" format="none">metalink:type</xref> is "dynamic", <xref target="element.metalink" format="none">metalink:metalink</xref> elements MUST contain exactly one <xref target="element.updated" format="none">metalink:updated</xref> element.</t>
+	      <t><xref target="element.metalink" format="none">metalink:metalink</xref> elements MAY contain exactly one <xref target="element.updated" format="none">metalink:updated</xref> element. If <xref target="element.type" format="none">metalink:type</xref> is "dynamic", <xref target="element.metalink" format="none">metalink:metalink</xref> elements MAY contain exactly one <xref target="element.updated" format="none">metalink:updated</xref> element.</t>
 		  
 	    </list></t> 
 
@@ -2073,7 +2073,7 @@ structuredExtensionElement =
           Alexander Lazic, Mayank Sharma, Robin Heggelund Hansen, Steve Langasek, Federico
           Parodi, Stefano Verna, Jason Green, James Linden,
           Matt Nederlanden, Aren Olsen, Dag Odenhall,  Troy
-          Sobotka, Corey Farwell, Ed Lee, Shawn Wilsher, Mike Connor, Anand Muttagi, Debi
+          Sobotka, Corey Farwell, Ed Lee, Shawn Wilsher, Mike Connor, Anand Muttagi, Dedric Carter, Debi
           Goulding, the Anthony Family, the Bryan Family, Juanita Anthony and Zimmy Bryan.</t>
 
 	    </section> 
