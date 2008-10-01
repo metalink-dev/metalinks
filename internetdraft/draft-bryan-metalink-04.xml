@@ -660,8 +660,8 @@ metalinkVerification =
     <iref item="XML Elements" subitem="pieces" primary="true"/>
     <iref item="pieces XML element" primary="true"/> 
 	      
-	  <t>The "<xref target="element.pieces" format="none">metalink:pieces</xref>" element is a Text construct that conveys a
-	  human-readable piece information for a file.
+	  <t>The "<xref target="element.pieces" format="none">metalink:pieces</xref>" element is a Text construct that conveys
+	  piece information for a file.
 	  
 	    <figure>
         <iref item="metalinkPieces grammar production" primary="true"/>
@@ -784,7 +784,7 @@ metalinkGenerator = element metalink:generator {
     <iref item="hash XML element" primary="true"/> 
 	      
 	  <t>The "<xref target="element.hash" format="none">metalink:hash</xref>" element is a Text construct that conveys a
-	  human-readable hash for a file.
+	  hash for a file. Hashes are in lowercase hexadecimal format.
 	  
 	    <figure>
         <iref item="metalinkHash grammar production" primary="true"/>
@@ -796,7 +796,38 @@ metalinkHash =
    attribute type { metalinkTextConstruct },
    text
    }</artwork></figure></t>
+      <t>Metalinks can contain multiples hashes for a complete file, for example both MD5 and SHA-1.
+	  
+	      <figure>
+		<artwork type="example">
+...
+&lt;verification&gt;
+  &lt;hash type="md5">0a6cc894a02bfb5869e9ce29870dd83e&lt;/hash&gt;
+  &lt;hash type="sha1">a97fcf6ba9358f8a6f62beee4421863d3e52b080&lt;/hash&gt;
+&lt;/verification&gt;
+...</artwork>
+	      </figure>
+      </t>
+      <t>Metalinks can also contain hashes for individual pieces of a file.
+	  
+	      <figure>
+		<artwork type="example">
+...
+&lt;verification&gt;
+  &lt;hash type="md5">0a6cc894a02bfb5869e9ce29870dd83e&lt;/hash&gt;
+  &lt;hash type="sha1">a97fcf6ba9358f8a6f62beee4421863d3e52b080&lt;/hash&gt;
+  &lt;pieces length="1048576" type="sha1"&gt;
+    &lt;hash piece="0"&gt;d96b9a4b92a899c2099b7b31bddb5ca423bb9b30&lt;/hash&gt;
+    &lt;hash piece="1"&gt;10d68f4b1119014c123da2a0a6baf5c8a6d5ba1e&lt;/hash&gt;
+    &lt;hash piece="2"&gt;3e84219096435c34e092b17b70a011771c52d87a&lt;/hash&gt;
+    &lt;hash piece="3"&gt;67183e4c3ab892d3ebe8326b7d79eb62d077f487&lt;/hash&gt;
+  &lt;/pieces&gt;
+&lt;/verification&gt;
+...</artwork>
+	      </figure>
+      </t>
 
+	  
 	  <section title="The &#34;type&#34; Attribute"> 
 
 	    <t><xref target="element.hash" format="none">metalink:hash</xref> elements MUST have a "type" attribute or a "piece" attribute. <xref target="element.hash" format="none">metalink:hash</xref> elements
