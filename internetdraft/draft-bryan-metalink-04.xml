@@ -617,7 +617,7 @@ metalinkResources =
 
 	  <t>The "metalink:verification" element acts as a container for metadata and
 	  data associated with verifying the listed files. This information is in the form of checksums and digital signatures.
-	  Checksums are used to verify the integrity of a file or portion of a file to determine if the files have been transferred without any errors.
+	  Checksums are used to verify the integrity of a complete file or portion of a file to determine if the files have been transferred without any errors.
 	  Digital signatures verify that a file is from the entity that has signed it.
 	  
 	  <figure> 
@@ -660,8 +660,8 @@ metalinkVerification =
     <iref item="XML Elements" subitem="pieces" primary="true"/>
     <iref item="pieces XML element" primary="true"/> 
 	      
-	  <t>The "<xref target="element.pieces" format="none">metalink:pieces</xref>" element is a Text construct that conveys
-	  piece information for a file.
+	  <t>The "<xref target="element.pieces" format="none">metalink:pieces</xref>" element acts as a container for metadata
+   and data associated with verifying the listed files.  This information is in the form of checksums for a portion of a file.
 	  
 	    <figure>
         <iref item="metalinkPieces grammar production" primary="true"/>
