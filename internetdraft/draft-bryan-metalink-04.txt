@@ -689,10 +689,10 @@ Internet-Draft    Metalink Download Description Format    September 2008
    The "metalink:verification" element acts as a container for metadata
    and data associated with verifying the listed files.  This
    information is in the form of checksums and digital signatures.
-   Checksums are used to verify the integrity of a file or portion of a
-   file to determine if the files have been transferred without any
-   errors.  Digital signatures verify that a file is from the entity
-   that has signed it.
+   Checksums are used to verify the integrity of a complete file or
+   portion of a file to determine if the files have been transferred
+   without any errors.  Digital signatures verify that a file is from
+   the entity that has signed it.
 
    metalinkVerification =
       element metalink:verification {
@@ -715,9 +715,9 @@ Internet-Draft    Metalink Download Description Format    September 2008
 
 4.1.6.  The "metalink:pieces" Element
 
-   The "metalink:pieces" element is a Text construct that conveys piece
-   information for a file.
-
+   The "metalink:pieces" element acts as a container for metadata and
+   data associated with verifying the listed files.  This information is
+   in the form of checksums for a portion of a file.
 
 
 
