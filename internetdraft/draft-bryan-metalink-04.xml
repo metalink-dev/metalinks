@@ -1256,7 +1256,7 @@ metalinkVersion =
     </section>
 
 	  <section title="Client Implementation Considerations">
-        <t>Transparent content negotiation with HTTP <xref target="RFC2295"/> is accomplished
+        <t>Metalink Processors that support HTTP MUST support transparent content negotiation with HTTP <xref target="RFC2295"/>. Transparent content negotiation is accomplished
       by adding the Metalink media type to the Accept request header. Metalink Processors MUST check the returned content type, and if the Metalink media type is used, it MUST process the Metalink.
       If the content type does not match the Metalink media type, then Metalink Processors SHOULD handle the response as a normal response. Metalink Processors MUST NOT add the Metalink media type to Accept when requesting
       a URI from a <xref target="element.url" format="none">metalink:url</xref> element, thus avoiding loops. Metalink Processors SHOULD handle external redirects that might lead to a Metalink.</t>

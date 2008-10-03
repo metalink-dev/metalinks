@@ -1185,16 +1185,17 @@ Internet-Draft    Metalink Download Description Format    September 2008
 
 5.  Client Implementation Considerations
 
-   Transparent content negotiation with HTTP [RFC2295] is accomplished
-   by adding the Metalink media type to the Accept request header.
-   Metalink Processors MUST check the returned content type, and if the
-   Metalink media type is used, it MUST process the Metalink.  If the
-   content type does not match the Metalink media type, then Metalink
-   Processors SHOULD handle the response as a normal response.  Metalink
-   Processors MUST NOT add the Metalink media type to Accept when
-   requesting a URI from a metalink:url element, thus avoiding loops.
-   Metalink Processors SHOULD handle external redirects that might lead
-   to a Metalink.
+   Metalink Processors that support HTTP MUST support transparent
+   content negotiation with HTTP [RFC2295].  Transparent content
+   negotiation is accomplished by adding the Metalink media type to the
+   Accept request header.  Metalink Processors MUST check the returned
+   content type, and if the Metalink media type is used, it MUST process
+   the Metalink.  If the content type does not match the Metalink media
+   type, then Metalink Processors SHOULD handle the response as a normal
+   response.  Metalink Processors MUST NOT add the Metalink media type
+   to Accept when requesting a URI from a metalink:url element, thus
+   avoiding loops.  Metalink Processors SHOULD handle external redirects
+   that might lead to a Metalink.
 
 
 6.  Securing Metalink Documents
@@ -1224,7 +1225,6 @@ Internet-Draft    Metalink Download Description Format    September 2008
    Metalink Processors MUST NOT reject an Metalink Document containing
    such a signature because they are not capable of verifying it; they
    MUST continue processing and MAY inform the user of their failure to
-   validate the signature.
 
 
 
@@ -1232,6 +1232,8 @@ Bryan                     Expires March 5, 2009                [Page 22]
 
 Internet-Draft    Metalink Download Description Format    September 2008
 
+
+   validate the signature.
 
    In other words, the presence of an element with the namespace URI
    "http://www.w3.org/2000/09/xmldsig#" and a local name of "Signature"
@@ -1279,8 +1281,6 @@ Internet-Draft    Metalink Download Description Format    September 2008
    Documents SHOULD check the integrity of the decrypted document by
    verifying the hash in the signature (if any) in the document, or by
    verifying a hash of the document within the document (if any).
-
-
 
 
 
