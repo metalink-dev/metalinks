@@ -13,6 +13,9 @@
 
 namespace logger {
 
+/**
+  Write a log message to the file "log.txt"
+*/
 inline void write_log_message(int line, const char* file, tstr::tstring msg)
 {
     std::ofstream fout("log.txt", std::ios_base::app | std::ios_base::binary);

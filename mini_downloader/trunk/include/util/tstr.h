@@ -15,8 +15,9 @@ namespace tstr {
     typedef char tchar;
     typedef std::string tstring;
 #endif
-
+///String to wide string (UNICODE)
 std::wstring s2ws(std::string str_from);
+
 std::string ws2s(std::wstring str_from);
 tstring ws2t(std::wstring str_from);
 tstring s2t(std::string str_from);

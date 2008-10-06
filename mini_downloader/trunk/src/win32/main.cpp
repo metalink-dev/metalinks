@@ -1,3 +1,31 @@
+/** \mainpage Metalink mini downloader
+
+  The mini downloader is a small metalink downloader.
+  
+  This metalink downloader has been created with the
+  error-robustness in mind. The downloader does not
+  use multiple connections to increase speed. Instead
+  it focussus on increasing availablility to the user
+  by automatically switching servers when needed and
+  verifying data integrity.
+  
+  By keeping the downloader small, it can be sent to the
+  user as a small download utility for every download.
+  This will allow the user to benefit from a more secure
+  and fail-proof download without having to install
+  any special application.
+
+  The documentation you are currently reading is meant for
+  developers and does not contain information on the
+  general use of the application. Please refer to http://metalinks.sf.net
+  for more information.
+  
+  The windows frontend starts at: WinMain()
+  
+  There is currently no Linux version.
+*/
+
+
 #include "resources.h"
 #include "Controller.h"
 #include "downloader/downloader.h"
@@ -50,6 +78,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
     return 0;
 }
 
+///The root of all... good stuff.
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
     LPSTR lpCmdLine, int nCmdShow)
 {
