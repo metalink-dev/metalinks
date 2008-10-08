@@ -32,7 +32,7 @@
 	</address>	
       </author>		
       
-      <date month="September" year="2008"/>        
+      <date month="October" year="2008"/>        
 
       <abstract>
 	<t>This document specifies Metalink Documents, an XML-based download description format.</t>
@@ -49,7 +49,10 @@
       
       <t>The primary use case that Metalink addresses is the description of downloadable content in a format so download agents can act intelligently and
 	  recover from common errors with little or no user interaction necessary. These errors can include multiple servers going down and data corrupted in transmission.</t>
-      
+
+      <t>Discussion of this draft should take place on discuss@apps.ietf.org or the Metalink discussion mailing list
+   located at metalink-discussion@googlegroups.com. To join the list, visit
+   http://groups.google.com/group/metalink-discussion .</t>
       <section title="Examples"><t><figure> 
 	  <preamble>A brief, single file Metalink Document:</preamble>
 	  
@@ -1603,9 +1606,9 @@ structuredExtensionElement =
 
 	    <section title="Encryption and Signing">
 
-	      <t>Metalink Documents can be encrypted and signed using <xref target="REC-xmlenc-core"/> and <xref target="REC-xmldsig-core"/>, respectively, and are
+	      <t>Metalink Documents SHOULD be encrypted and signed using <xref target="REC-xmlenc-core"/> and <xref target="REC-xmldsig-core"/>, respectively, and are
 	      subject to the security considerations implied by their
-	      use. </t>
+	      use. This addresses the issue of spoofing.</t>
 
 	      <t>Digital signatures provide authentication, message
 	      integrity, and non-repudiation with proof of
@@ -2083,7 +2086,7 @@ structuredExtensionElement =
           Tsujikawa, A. Bram Neijt, Max Velasques, Manolo Valdes, Urs Wolfer,
           Frederick Cheung, Nils Maier, Hampus Wessman, Neil McNab, Hayden
           Legendre, Danny Ayers, Nick Dominguez, Rene Leonhardt, Per Oyvind Karlsen, Gary Zellerbach, James Clark, Daniel
-          Stenberg, Peter Poeml, Matt Domsch, Chris Newman, Lisa Dusseault, Ian Macfarlane, Dave Cridland, and Julian Reschke. The content and concepts within are a product of the Metalink
+          Stenberg, Peter Poeml, Matt Domsch, Chris Newman, Lisa Dusseault, Ian Macfarlane, Dave Cridland, Julian Reschke, Barry Leiba, and Uri Blumenthal. The content and concepts within are a product of the Metalink
 	      community.</t>
 
 	      <t>The Metalink community has dozens of very active
@@ -2099,8 +2102,8 @@ structuredExtensionElement =
           Tom Mainville, Janie Wargo, Jason Hansen, Tim Bray, Dan Brickley, Markus Hofmann, 
           Dan Connolly, Tim Berners-Lee, Harry Chen, Adrien Macneil, Louis Suarez-Potts,  Ross Smith, Rahul
           Sundaram, Jesse Keating, Michal Bentkowski, Andrew Pantyukhin, Judd Vinet, Charles
-          Landemaine,  Pascal Bleser, Jeff@BLAG, Yuichiro Nakada,  Jereme
-          Hancock, Marcel Hauser, Jeff Covey, Doug Lang,   Seth Brown,
+          Landemaine,  Pascal Bleser, Jeff@BLAG, Yuichiro Nakada, Jereme
+          Hancock, Marcel Hauser, Jeff Covey, Doug Lang, Seth Brown,
           Alexander Lazic, Mayank Sharma, Robin Heggelund Hansen, Steve Langasek, Federico
           Parodi, Stefano Verna, Jason Green, James Linden,
           Matt Nederlanden, Aren Olsen, Dag Odenhall,  Troy
