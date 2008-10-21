@@ -4,7 +4,7 @@ import os.path
 import shutil
 import glob
 
-APP_NAME = 'Metalink Checker'
+APP_NAME = 'metalink-checker'
 VERSION = '4.2'
 LICENSE = 'GPL'
 DESC = 'A metalink checker and download client.'
@@ -163,7 +163,24 @@ def rec_search(end, abspath = True):
                     
     return mylist
 
-if sys.argv[1] == 'merge':
+if sys.argv[1] == 'sdist':
+    scripts = rec_search(".py")
+
+    localegen()
+
+    setup(scripts = scripts,
+	#packages = packages,
+      #data_files = data,
+      name = APP_NAME,
+      version = VERSION,
+      license = LICENSE,
+      description = DESC,
+      author = AUTHOR_NAME,
+      author_email = EMAIL,
+      url = URL
+      )
+
+elif sys.argv[1] == 'merge':
     merge(header, modules, outputfile)
 
 elif sys.argv[1] == 'translate':
