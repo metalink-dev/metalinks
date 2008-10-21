@@ -37,7 +37,7 @@ clean:
 	rm -f build-stamp configure-stamp
 
 	# Add here commands to clean up after the build process.
-	-$(MAKE) clean
+	#$(MAKE) clean
 
 	dh_clean 
 
@@ -49,7 +49,7 @@ install: build
 
 	# Add here commands to install the package into debian/metalink-checker.
 	#$(MAKE) DESTDIR=$(CURDIR)/debian/metalink-checker install
-	cp $(CURDIR)/metalink.py $(DESTDIR)/bin
+	cp $(CURDIR)/metalink.py $(CURDIR)/debian/metalink-checker/usr/bin/metalink
 
 
 # Build architecture-independent files here.
