@@ -6,7 +6,9 @@ Build-Depends: debhelper (>= 5)
 Standards-Version: 3.7.2
 
 Package: metalink-checker
-Architecture: all
+XS-Python-Version: >= 2.5
 Depends: python (>=2.5)
+Recommends: gnupg
+Architecture: all
 Description: Check and download metalink files.
  A Python script to check metalink files and complete a basic download.
