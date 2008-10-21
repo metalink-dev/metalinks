@@ -1,0 +1,17 @@
+include *.txt
+include *.ini
+
+include *.bat
+include *.nsi
+include *.nsh
+include *.in
+include *.spec
+include *.pot
+include *.po
+include *.ts
+
+prune cache
+prune jython
+prune silverlight
+prune testcases
+prune debian
