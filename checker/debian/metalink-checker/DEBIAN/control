@@ -1,0 +1,10 @@
+Package: metalink-checker
+Version: 1.4-1
+Architecture: i386
+Maintainer: Neil McNab <webmaster@nabber.org>
+Installed-Size: 52
+Depends: python (>= 2.4)
+Section: web
+Priority: extra
+Description: Check and download metalink files.
+ A Python script to check metalink files and complete a basic download.
