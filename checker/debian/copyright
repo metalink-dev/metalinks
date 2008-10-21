@@ -1,0 +1,22 @@
+This package was debianized by Neil McNab <webmaster@nabber.org> on
+Mon, 20 Oct 2008 16:26:02 -0700.
+
+It was downloaded from <http://www.nabber.org/projects/checker/>
+
+Upstream Author(s): 
+
+    Neil McNab <webmaster@nabber.org>
+
+Copyright: 
+
+    <Copyright (C) 2008 Neil McNab>
+
+License:
+
+    GPL
+
+The Debian packaging is (C) 2008, Neil McNab <webmaster@nabber.org> and
+is licensed under the GPL, see `/usr/share/common-licenses/GPL'.
+
+# Please also look if there are files or directories which have a
+# different copyright/license attached and list them here.
