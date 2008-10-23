@@ -92,6 +92,7 @@ def run():
     parser.add_option("--pgp-store", "-p", dest="pgpstore", metavar="FILE", help=_("File with the PGP keys that you trust (default: ~/.gnupg/pubring.gpg)"))
     parser.add_option("--gpg-binary", "-g", dest="gpg", help=_("(optional) Location of gpg binary path if not in the default search path"))
     parser.add_option("--convert-jigdo", "-j", action="store_true", dest="jigdo", help=_("Convert Jigdo format file to Metalink"))
+    parser.add_option("--port", dest="port", help=_("Streaming server port to use (default: No streaming server)"))
     (options, args) = parser.parse_args()
 
     if options.filevar == None and len(args) == 0:
@@ -110,6 +111,8 @@ def run():
         download.PGP_KEY_DIR = options.pgpdir
     if options.pgpstore != None:
         download.PGP_KEY_STORE = options.pgpstore
+    if options.port != None:
+        download.PORT = int(options.port)
     if options.gpg != None:
         GPG.DEFAULT_PATH.insert(0, options.gpg)
         
@@ -133,6 +136,7 @@ def run():
         for item in args:
             results = checker.check_metalink(item)
             print_totals(results)
+        return
             
     if options.download:
         # remove filevar eventually
@@ -161,8 +165,8 @@ def run():
             mcheck = checker.Checker()
             mcheck.check_metalink(item)
             results = mcheck.get_results()
-            print_totals(results)            
-
+            print_totals(results)
+    
 def print_totals(results):
     for key in results.keys():
         print "=" * 79
