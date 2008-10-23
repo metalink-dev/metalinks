@@ -551,6 +551,7 @@ class URLManager(Manager):
         except KeyError:
             self.size = 0
 
+        self.streamserver = None
         if PORT != None:
             self.streamserver = StreamServer((HOST, PORT), StreamRequest)
             self.streamserver.set_stream(self.data)
@@ -585,8 +586,9 @@ class URLManager(Manager):
         self.total += len(block)
 
         self.resume.set_block_size(self.counter * self.block_size)
-        
-        self.streamserver.set_length(self.counter * self.block_size)
+
+        if self.streamserver != None:        
+            self.streamserver.set_length(self.counter * self.block_size)
                         
         if self.status_handler != None:
             self.status_handler(self.total, 1, self.size)
@@ -1232,6 +1234,7 @@ class Segment_Manager(Manager):
             
         self.resume = FileResume(self.localfile + ".temp")
 
+        self.streamserver = None
         if PORT != None:
             self.streamserver = StreamServer((HOST, PORT), StreamRequest)
             self.streamserver.set_stream(self.f)
@@ -1340,7 +1343,7 @@ class Segment_Manager(Manager):
             bytes = self.byte_total()
 
             index = self.get_chunk_index()
-            if index != None and index > 0:
+            if index != None and index > 0 and self.streamserver != None:
                 self.streamserver.set_length((index - 1) * self.chunk_size)
             
             if self.oldtime == None:
