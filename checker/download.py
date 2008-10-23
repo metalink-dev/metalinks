@@ -61,6 +61,7 @@ import os.path
 import xmlutils
 import locale
 import threading
+#import thread
 import time
 import copy
 import socket
@@ -72,11 +73,12 @@ import base64
 import sys
 import gettext
 import bz2
+import BaseHTTPServer
 
 try: import win32api
 except: pass
 
-USER_AGENT = "Metalink Checker/4.1 +http://www.nabber.org/projects/"
+USER_AGENT = "Metalink Checker/4.2 +http://www.nabber.org/projects/"
 
 SEGMENTED = True
 LIMIT_PER_HOST = 1
@@ -107,6 +109,10 @@ PGP_KEY_STORE=None
 HTTP_PROXY=""
 FTP_PROXY=""
 HTTPS_PROXY=""
+
+# Streaming server setings to use
+HOST = "localhost"
+PORT = None
 
 # Protocols to use for segmented downloads
 PROTOCOLS=("http","https","ftp")
@@ -530,7 +536,7 @@ class URLManager(Manager):
         self.resume = FileResume(filename + ".temp")
         self.resume.add_block(0)
     
-        self.data = open(filename, 'wb')
+        self.data = ThreadSafeFile(filename, 'wb+')
         
         try:
             self.temp = urlopen(remote_file)
@@ -544,11 +550,20 @@ class URLManager(Manager):
             self.size = int(headers['Content-Length'])
         except KeyError:
             self.size = 0
+
+        if PORT != None:
+            self.streamserver = StreamServer((HOST, PORT), StreamRequest)
+            self.streamserver.set_stream(self.data)
         
+            #thread.start_new_thread(self.streamserver.serve, ())
+            mythread = threading.Thread(target=self.streamserver.serve)
+            mythread.start()
+ 
     def close_handler(self):
         self.resume.complete()
         try:
-            self.data.close()
+            if PORT == None:
+                self.data.close()
             self.temp.close()
         except: pass
         
@@ -563,11 +578,15 @@ class URLManager(Manager):
             return False
         
         block = self.temp.read(self.block_size)
+        self.data.acquire()
         self.data.write(block)
+        self.data.release()
         self.counter += 1
         self.total += len(block)
 
         self.resume.set_block_size(self.counter * self.block_size)
+        
+        self.streamserver.set_length(self.counter * self.block_size)
                         
         if self.status_handler != None:
             self.status_handler(self.total, 1, self.size)
@@ -1213,6 +1232,14 @@ class Segment_Manager(Manager):
             
         self.resume = FileResume(self.localfile + ".temp")
 
+        if PORT != None:
+            self.streamserver = StreamServer((HOST, PORT), StreamRequest)
+            self.streamserver.set_stream(self.f)
+        
+            #thread.start_new_thread(self.streamserver.serve, ())
+            mythread = threading.Thread(target=self.streamserver.serve)
+            mythread.start()
+
     def get_chunksum(self, index):
         mylist = {}
         try:
@@ -1311,6 +1338,11 @@ class Segment_Manager(Manager):
         '''
         try:
             bytes = self.byte_total()
+
+            index = self.get_chunk_index()
+            if index != None and index > 0:
+                self.streamserver.set_length((index - 1) * self.chunk_size)
+            
             if self.oldtime == None:
                 self.start_bitrate(bytes)
                 
@@ -1322,6 +1354,7 @@ class Segment_Manager(Manager):
             
             self.update()
             self.resume.extend_blocks(self.chunk_list())
+
             if bytes >= self.size and self.active_count() == 0:
                 self.resume.complete()
                 self.close_handler()
@@ -1389,7 +1422,7 @@ class Segment_Manager(Manager):
     def get_chunk_index(self):
         i = -1
         for i in range(len(self.chunks)):
-            if (self.chunks[i].error != None):
+            if (self.chunks[i] == None or self.chunks[i].error != None):
                 return i
             # weed out dead segments that have temp errors and reassign
             if (not self.chunks[i].isAlive() and self.chunks[i].bytes == 0):
@@ -1469,7 +1502,7 @@ class Segment_Manager(Manager):
 
     def remove_errors(self):
         for item in self.chunks:
-            if item.error != None:
+            if item != None and item.error != None:
                 #print item.error
                 if item.error == httplib.MOVED_PERMANENTLY or item.error == httplib.FOUND:
                     #print "location:", item.location
@@ -1514,7 +1547,8 @@ class Segment_Manager(Manager):
         return chunks
     
     def close_handler(self):
-        self.f.close()
+        if PORT == None:
+            self.f.close()
         for host in self.sockets:
             host.close()
 
@@ -1531,6 +1565,8 @@ class Segment_Manager(Manager):
         elif self.status:
             self.status = filecheck(self.localfile, self.checksums, size)
         #except: pass
+
+        #self.streamserver.stop()
 
 class Host_Base:
     '''
@@ -2147,3 +2183,77 @@ class HTTPSConnection:
 
     def close(self):
         return self.conn.close()
+
+class StreamRequest(BaseHTTPServer.BaseHTTPRequestHandler):
+    def do_GET(self):
+        self.send_response(200)
+        self.send_header("Content-Type", "application/octet-stream")
+        self.send_header("Cache-Control", "no-cache")
+        self.end_headers()
+
+        start = 0
+        while True:
+            if self.server.fileobj != None and (self.server.length - start) > 0:
+                try:
+                    self.server.fileobj.acquire()
+                    loc = self.server.fileobj.tell()
+                    self.server.fileobj.seek(start, 0)
+                    size = self.server.length - start
+                    
+                    data = self.server.fileobj.read(size)
+                    if len(data) > 0:
+                        self.wfile.write(data)
+
+                    self.server.fileobj.seek(loc, 0)
+                    self.server.fileobj.release()
+                    start += len(data)
+                except ValueError:
+                    break
+            time.sleep(.1)
+
+class StreamServer(BaseHTTPServer.HTTPServer):
+    def __init__(self, *args):
+        BaseHTTPServer.HTTPServer.__init__(self, *args)
+        self.fileobj = None
+        self.length = 0
+
+    # based on: http://code.activestate.com/recipes/425210/
+    def server_bind(self):
+        BaseHTTPServer.HTTPServer.server_bind(self)
+        self.socket.settimeout(1)
+        self.run = True
+
+    def get_request(self):
+        while self.run:
+            try:
+                sock, addr = self.socket.accept()
+                sock.settimeout(30)
+                return (sock, addr)
+            except socket.timeout:
+                pass
+
+    def stop(self):
+        self.run = False
+
+    def serve(self):
+        while self.run:
+            #try:
+            self.handle_request()
+        self.fileobj.close()
+            #except KeyboardInterrupt:
+            #    print "Server Interrupted!"
+            #    self.stop()
+
+    def set_stream(self, fileobj):
+        self.fileobj = fileobj
+
+    def set_length(self, length):
+        self.length = int(length)
+
+##myserver = StreamServer(("localhost", 8080), StreamRequest)
+##myserver.set_stream(ThreadSafeFile("C:\\library\\avril\\Avril Lavigne - Complicated.mpg", "rb"))
+##myserver.set_length(50000000)
+##serverthread = threading.Thread(target=myserver.serve_forever)
+##serverthread.start()
+
+#myserver.serve_forever()
