@@ -46,6 +46,7 @@ import optparse
 import time
 import subprocess
 import shutil
+import unittest
 
 # Metalink Checker
 CMD = "\"" + sys.executable + "\" ../console.py -d -f %s"
@@ -56,8 +57,8 @@ OUTDIR = os.getcwd()
 TIMEOUT = 600
 SUBDIR = "subdir"
 
-IGNORE_TESTS = [] #["3_metalink-bad-piece1and2-without-torrent.metalink",
-                #"3_metalink-bad-piece2-without-torrent.metalink"]
+IGNORE_TESTS = [] #["3_metalink-bad-piece1and2-without-torrent",
+                #"3_metalink-bad-piece2-without-torrent"]
 
 FILELIST = [
     {"filename": "curl-7.18.1.tar.bz2",
@@ -74,104 +75,97 @@ FILELIST = [
     "checksums": {"sha1": "2c2849d173b1a5e6f8a3dc986383ee897bf4364d"}}
 ]
 
-def run_tests(level=3):
+class TestMetalink(unittest.TestCase):
+    
+    def setUp(self):
+        clean()
+
+    def test_1_create_subdir(self):
+        self.run_test("1_create_subdir.metalink")
+    def test_1_empty_size(self):
+        self.run_test("1_empty_size.metalink")
+    def test_1_fail_bad_directory_and_network_errors(self):
+        self.run_test("1_fail_bad_directory_and_network_errors.metalink")
+    def test_1_http_redirect(self):
+        self.run_test("1_http_redirect.metalink")
+    def test_1_metalink_one_file(self):
+        self.run_test("1_metalink_one_file.metalink")
+    def test_1_metalink_three_files(self):
+        self.run_test("1_metalink_three_files.metalink")
+    def test_1_no_checksums(self):
+        self.run_test("1_no_checksums.metalink")
+    def test_1_only_ftp_and_http(self):
+        self.run_test("1_only_ftp_and_http.metalink")
+    def test_2_fail_metalink_one_file_bad_main_crc(self):
+        self.run_test("2_fail_metalink_one_file_bad_main_crc.metalink")
+    def test_2_only_ftp(self):
+        self.run_test("2_only_ftp.metalink")
+    def test_2_only_http(self):
+        self.run_test("2_only_http.metalink")
+    def test_3_fail_bad_only_advanced_checksums(self):
+        self.run_test("3_fail_bad_only_advanced_checksums.metalink")
+    def test_3_metalink_bad_piece1and2(self):
+        self.run_test("3_metalink_bad_piece1and2.metalink")
+    def test_3_metalink_bad_piece2(self):
+        self.run_test("3_metalink_bad_piece2.metalink")
+    def test_3_only_advanced_checksums(self):
+        self.run_test("3_only_advanced_checksums.metalink")
+    def test_4_empty_size_only_p2p(self):
+        self.run_test("4_empty_size_only_p2p.metalink")
+    def test_4_fail_metalink_bad_piece1and2_only_p2p(self):
+        self.run_test("4_fail_metalink_bad_piece1and2_only_p2p.metalink")
+    def test_4_fail_metalink_bad_piece2_only_p2p(self):
+        self.run_test("4_fail_metalink_bad_piece2_only_p2p.metalink")
+    def test_4_fail_metalink_one_file_bad_main_crc_only_p2p(self):
+        self.run_test("4_fail_metalink_one_file_bad_main_crc_only_p2p.metalink")
+    def test_4_no_checksums_only_p2p(self):
+        self.run_test("4_no_checksums_only_p2p.metalink")
+    def test_4_only_p2p(self):
+        self.run_test("4_only_p2p.metalink")
+
+    def run_test(self, filename):
+        subdir = "."
+        if filename.find("subdir") != -1:
+            subdir = SUBDIR
+            
+        retcode = system(CMD % filename, TIMEOUT)
+
+        if filename.find("fail") != -1:
+            self.assertEqual(retcode, 0) # Expected return code of zero.
+        else:
+            self.assertNotEqual(retcode, 0) # Expected non zero return code.
+
+        checklist = [0]
+        if filename.find("three") != -1:
+            checklist = [0,1,2]
+        elif filename.startswith("4"):
+            checklist = [3]
+            
+        for checkindex in checklist:
+            temp = FILELIST[checkindex]
+            tempname = os.path.join(OUTDIR, subdir, temp["filename"])
+            assert os.access(tempname, os.F_OK), "File does not exist %s." % tempname
+            self.assertEqual(os.stat(tempname).st_size, temp["size"]) # Wrong file size.
+            self.assertEqual(filehash(tempname, hashlib.sha1()), temp["checksums"]["sha1"]) # Bad file checksum.
+
+        return True
+
+
+def suite(level = 3):
+    suiteobj = unittest.TestSuite()
+
     filedir = "./"
     filenames = os.listdir(filedir)
-    filenames.sort()
-
-    summary = {}
 
     for filename in filenames:
-        if filename.endswith(".metalink") and filename not in IGNORE_TESTS:
-            mysplit = filename.split("_")
+        if filename.endswith(".metalink") and filename[:-9] not in IGNORE_TESTS:
+            mysplit = filename.split("_", 1)
             myint = IsInt(mysplit[0])
-            if not myint or int(mysplit[0]) <= level:
-                summary[filename] = run_test(filename)
-                print "-" * 79
-         
+            if myint and (int(mysplit[0]) <= int(level)):
+                suiteobj.addTest(TestMetalink("test_" + filename[:-9]))
+  
+    return suiteobj
 
-    clean()
-
-    levels = {}
-    totallevels = {}
-
-    print "PASS\tTest File Name"
-    print "===================="
-    templist = summary.keys()
-    templist.sort()
-    for item in templist:
-        print "%s: %s" % (summary[item], item)
-        mysplit = item.split("_")
-        if IsInt(mysplit[0]):
-            num = int(mysplit[0])
-            try:
-                totallevels[num] += 1
-            except KeyError:
-                totallevels[num] = 1
-            if summary[item]:
-                try:
-                    levels[num] += 1
-                except KeyError:
-                    levels[num] = 1
-
-    templist = totallevels.keys()
-    templist.sort()
-    for i in templist:
-        result = "FAIL"
-        try:
-            if levels[i] == totallevels[i]:
-                result = "PASS"
-        except KeyError:
-            levels[i] = 0
-        print "Level %s: %s (%s/%s)" % (i, result, levels[i], totallevels[i])
-
-def run_test(filename):
-    clean()
-    subdir = "."
-    if filename.find("subdir") != -1:
-        subdir = SUBDIR
-        
-    print "Running:", filename
-
-    try:
-        retcode = system(CMD % filename, TIMEOUT)
-    except AssertionError:
-        print "FAIL: Test timed out"
-        return False
-    
-    if retcode != 0:
-        print "Program exited with error code: %s" % retcode
-        if filename.find("fail") != -1:
-            print "PASS"
-            return True
-        else:
-            print "FAIL: Error code returned"
-            return False
-    elif filename.find("fail") != -1:
-        print "FAIL: Error code expected but not returned"
-        return False
-
-    checklist = [0]
-    if filename.find("three") != -1:
-        checklist = [0,1,2]
-    elif filename.startswith("4"):
-        checklist = [3]
-        
-    for checkindex in checklist:
-        temp = FILELIST[checkindex]
-        tempname = os.path.join(OUTDIR, subdir, temp["filename"])
-        if not os.access(tempname, os.F_OK):
-            print "FAIL: File does not exist", tempname
-            return False
-        elif os.stat(tempname).st_size != temp["size"]:
-            print "FAIL: Wrong file size", tempname
-            return False
-        elif filehash(tempname, hashlib.sha1()) != temp["checksums"]["sha1"]:
-            print "FAIL: Bad file checksum", tempname
-            return False
-        
-    print "PASS"
-    return True
 
 def clean():
     print "Running cleanup..."
@@ -237,9 +231,9 @@ def system(command, timeout=600, cwd=None):
                 command = "kill -9 %s" % process.pid
             os.system(command)
             #print "Test timed out.  Process killed."
-            raise AssertionError
+            raise AssertionError, "Test timed out.  Process killed."
             #return process.poll()
-
+        
 def run():
     '''
     Start a console version of this application.
@@ -251,7 +245,7 @@ def run():
     parser.add_option("--command", "-c", dest="command", help="Command to run (use quotes as needed), %%s=metalink file")
     parser.add_option("--outdir", "-o", dest="outdir", help="Directory where the metalink client will output the downloaded files")
     parser.add_option("--timeout", "-t", dest="timeout", help="Sets the amount of time a test can run until it times out (default: 600 s)")
-    parser.add_option("--testcase", "-f", dest="testcase", help="Run a single test case")
+##    parser.add_option("--testcase", "-f", dest="testcase", help="Run a single test case")
     parser.add_option("--clean", dest="clean", action="store_true", help="Clear out any temporary files from testing")
 
     (options, args) = parser.parse_args()
@@ -263,18 +257,24 @@ def run():
     if options.timeout != None:
         TIMEOUT = int(options.timeout)
 
-    if options.testcase != None:
-        run_test(options.testcase)
-        return
-
     if options.clean != None:
         clean()
         return
-
-    if options.level != None:
-        run_tests(options.level)
+    
+    if len(args) != 0:
+        suiteobj = unittest.TestSuite()
+        for arg in args:
+            suiteobj.addTest(TestMetalink(arg))
     else:
-        run_tests(3)
+        if options.level != None:
+            suiteobj = suite(options.level)
+        else:
+            suiteobj = suite(3)
+    runner = unittest.TextTestRunner()
+    results = runner.run(suiteobj)
+
+    print dir(suiteobj._tests)
+    
 
 if __name__=="__main__":
     run()
