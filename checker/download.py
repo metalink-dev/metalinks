@@ -130,17 +130,27 @@ def reg_query(keyname, value=None):
     blanklines = 1
     
     if value == None:
-        tempresult = os.popen2("reg query \"%s\"" % keyname)
+        tempresult = os.popen2("reg.exe query \"%s\"" % keyname)
     else:
-        tempresult = os.popen2("reg query \"%s\" /v \"%s\"" % (keyname, value))
+        tempresult = os.popen2("reg.exe query \"%s\" /v \"%s\"" % (keyname, value))
     stdout = tempresult[1]
     stdout = stdout.readlines()
 
+    # handle case when reg.exe isn't in path
+    if len(stdout) == 0:
+        if value == None:
+            tempresult = os.popen2(os.environ["WINDIR"] + "\\system32\\reg.exe query \"%s\"" % keyname)
+        else:
+            tempresult = os.popen2(os.environ["WINDIR"] + "\\system32\\reg.exe query \"%s\" /v \"%s\"" % (keyname, value))
+        stdout = tempresult[1]
+        stdout = stdout.readlines()
+
     # For Windows XP, this was changed in Vista!
-    if stdout[1].startswith("! REG.EXE"):
+    if len(stdout) > 0 and stdout[1].startswith("! REG.EXE"):
         blanklines += 2
         if value == None:
             blanklines += 2
+
     stdout = stdout[blanklines:]
     
     return stdout
@@ -1569,8 +1579,6 @@ class Segment_Manager(Manager):
             self.status = filecheck(self.localfile, self.checksums, size)
         #except: pass
 
-        #self.streamserver.stop()
-
 class Host_Base:
     '''
     Base class for various host protocol types.  Not to be used directly.
@@ -2223,6 +2231,7 @@ class StreamServer(BaseHTTPServer.HTTPServer):
     # based on: http://code.activestate.com/recipes/425210/
     def server_bind(self):
         BaseHTTPServer.HTTPServer.server_bind(self)
+        self.socket.setblocking(0)
         self.socket.settimeout(1)
         self.run = True
 
@@ -2230,6 +2239,7 @@ class StreamServer(BaseHTTPServer.HTTPServer):
         while self.run:
             try:
                 sock, addr = self.socket.accept()
+                sock.setblocking(0)
                 sock.settimeout(30)
                 return (sock, addr)
             except socket.timeout:
@@ -2239,14 +2249,14 @@ class StreamServer(BaseHTTPServer.HTTPServer):
         self.run = False
 
     def serve(self):
-        while self.run:
-            #try:
-            self.handle_request()
-        self.fileobj.close()
-            #except KeyboardInterrupt:
-            #    print "Server Interrupted!"
-            #    self.stop()
-
+        try:
+            while self.run:
+                self.handle_request()
+        except KeyboardInterrupt:
+            print "Server Interrupted!"
+            self.fileobj.close()
+            self.stop()
+        
     def set_stream(self, fileobj):
         self.fileobj = fileobj
 
