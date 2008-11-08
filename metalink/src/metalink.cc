@@ -63,6 +63,7 @@
 #include "Preprocessor/debug.hh"
 #include "Preprocessor/os_win.hh"
 
+#include <typeinfo>
 #include <cassert>
 #include <sys/stat.h>	//mkdir(2)
 #include <sys/types.h> //mkdir(2)
