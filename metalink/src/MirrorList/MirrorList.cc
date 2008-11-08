@@ -38,7 +38,7 @@ MirrorList::MirrorList(std::istream &s, std::string const &baseUrl, bool run)
 		if(path.length() == 0)
 		{
 			path = line;
-			cerr << "Warning: No ' % ' in mirror list line " << mlLine << ", using path: " << path << "\n";
+			//cerr << "Warning: No ' % ' in mirror list line " << mlLine << ", using path: " << path << "\n";
 		}
 		
 		path.strip();

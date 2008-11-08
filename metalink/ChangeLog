@@ -1,3 +1,11 @@
+0.3.4:
+- Removed mirrorlist missing % warning
+- Patched transform problem (Peter Poeml)
+- GPLv3 for metalink tool
+- Untested windows path translation patch
+- Moved char* to string, cleanup.
+- bootstrap.sh can now do without ccbuild
+
 0.3.3:
 - Autotools support (./configure;make;make install)
 - Large file supported enabled
