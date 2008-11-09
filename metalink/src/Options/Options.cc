@@ -26,8 +26,9 @@
 
 Options::Options()
 	:
-	Glib::OptionGroup("example_group", "description of example group", "help description of example group")
-{  
+	Glib::OptionGroup("main_group", "Main options", "General commandline options")
+{
+
 //Usage:
 //  metalink [options] (input files or --md5) < (mirror list) > (metalinkfile)
 
@@ -88,47 +89,3 @@ Options::Options()
   */
 }
 
-/*
-metalink - Metalink XML generator
-Version 0.3.3, Copyright (C) 2005 A. Bram Neijt <bneijt@gmail.com>
-metalink comes with ABSOLUTELY NO WARRANTY and is licensed under GPLv2
-Usage:
-  metalink [options] (input files or --md5) < (mirror list) > (metalinkfile)
-
-General options:
-  -h [ --help ]         Produce a help message
-  --version             Print out the name and version
-  --md5 arg             Generate metalink from md5sum file(s)
-  --addpath arg         Append a path to the mirrors ('/' is not checked)
-  --headerfile arg      Include file after the root element declaration.
-  --nomirrors           Don't read mirrors from stdin
-  --hashlist            List hashes only (implies nomirrors)
-  --desc arg            Add metalink description
-
-Digest options:
-  -d [ --digest ] arg   Include given digest
-  --mindigests          Include: md5 sha1
-  --somedigests         Include: md5 sha1 ed2k
-  --alldigests          Include all possible digests
-
-Supported algorithms are (-d options):
-  md4 md5 sha1 sha256 sha384 sha512 rmd160 tiger crc32 ed2k gnunet sha1pieces
-
-Mirror lists are single line definitions according to:
- [location [preference] [type] % ] <mirror base url>
-
-Examples:
-http://example.com/ as a mirror:
- echo http://example.com | metalink -d md5 -d sha1 *
-
-http://example.com/ as a mirror with preference and location:
- echo us 10 % http://example.com | metalink -d md5 -d sha1 *
-
-http://example.com/ as a mirror with preference only:
- echo 0 10 % http://example.com | metalink -d md5 *
-
-Only P2P links:
- metalink --nomirrors -d sha1 -d ed2k -d gnunet *
-
-
-*/

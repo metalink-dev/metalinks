@@ -96,7 +96,7 @@ try
 	//Program option handling
   Glib::init();
   Glib::OptionContext context;
-  
+  context.set_help_enabled(false);
   bneijt::Options options;
 	Glib::OptionGroup::vecustrings &md5Files = options.opt.md5files;
 	Glib::ustring &baseUrl = options.opt.addpath;
@@ -139,6 +139,7 @@ try
 		cout << Globals::programName << " comes with ABSOLUTELY NO WARRANTY and is licensed under GPLv2\n";
 		cout << "Usage:\n  " << Globals::programName << " [options] (input files or --md5) < (mirror list) > (metalinkfile)\n";
 ///TODO show help		cout << helpOptions << "\n";
+    cout << context.get_help();
 		cout << "Supported algorithms are (-d options):\n"
 			<< "  md4 md5 sha1 sha256 sha384 sha512 rmd160 tiger crc32 ed2k gnunet sha1pieces"
 			<< "\n";
