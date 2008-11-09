@@ -5,6 +5,7 @@
 - Untested windows path translation patch
 - Moved char* to string, cleanup.
 - bootstrap.sh can now do without ccbuild
+- Added manual page in doc
 
 0.3.3:
 - Autotools support (./configure;make;make install)
