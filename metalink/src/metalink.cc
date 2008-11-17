@@ -19,6 +19,10 @@
 
 
 
+
+
+
+
 /** \file The main program
 
 	The main program creates the hashes, interprets the commandline, fills the bneijt::Globals class

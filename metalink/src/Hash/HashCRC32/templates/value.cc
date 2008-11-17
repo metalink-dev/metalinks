@@ -19,6 +19,10 @@
 
 
 
+
+
+
+
 #include "HashCRC32.ih"
 
 std::string const &HashCRC32::value() const

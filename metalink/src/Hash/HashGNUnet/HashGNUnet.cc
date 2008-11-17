@@ -19,6 +19,10 @@
 
 
 
+
+
+
+
 #include "HashGNUnet.ih"
 HashGNUnet::HashGNUnet()
 	:

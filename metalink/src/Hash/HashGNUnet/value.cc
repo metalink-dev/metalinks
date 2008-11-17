@@ -19,6 +19,10 @@
 
 
 
+
+
+
+
 #include "HashGNUnet.ih"
 
 std::string const &HashGNUnet::value() const

@@ -19,6 +19,10 @@
 
 
 
+
+
+
+
 #include "HashGNUnet.ih"
 
 void HashGNUnet::update(char const *bytes, unsigned numbytes)

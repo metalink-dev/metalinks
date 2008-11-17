@@ -17,6 +17,10 @@
 
 */
 
+
+
+
+
 #include "Hash.ih"
 
 std::string Hash::xml() const
