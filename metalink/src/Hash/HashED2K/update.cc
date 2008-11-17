@@ -19,6 +19,10 @@
 
 
 
+
+
+
+
 #include "HashED2K.ih"
 
 void HashED2K::update(char const *bytes, unsigned numbytes)

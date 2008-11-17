@@ -19,6 +19,10 @@
 
 
 
+
+
+
+
 #include "HashED2K.ih"
 
 std::string const &HashED2K::value() const

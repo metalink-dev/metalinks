@@ -18,6 +18,7 @@
 */
 
 
+
 ///\file
 ///\brief Preprosessor macro to define a STL iterator for loop: _foreach(iterator, container)
 

@@ -19,6 +19,10 @@
 
 
 
+
+
+
+
 #include "Globals.ih"
 
 std::string const Globals::programName("metalink");

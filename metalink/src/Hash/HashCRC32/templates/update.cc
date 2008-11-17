@@ -19,6 +19,10 @@
 
 
 
+
+
+
+
 #include "HashCRC32.ih"
 
 void HashCRC32::update(char const *bytes, unsigned numbytes)
