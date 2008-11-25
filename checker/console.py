@@ -190,7 +190,7 @@ def print_totals(results):
             redir = results[key][subkey][2]
 
             print "-" * 79
-            print _("Checked") + ": %s" % key
+            print _("Checked") + ": %s" % subkey
             if redir != None:
                 print _("Redirected") + ": %s" % redir
             print _("Response Code") + ": %s\t" % status + _("Size Check") + ": %s" % size
