@@ -37,6 +37,7 @@ import urllib
 import optparse
 import os.path
 import sys
+import time
 
 # This value is used by the ProgressBar class. Set it to False if the
 # current console doesn't support \b
@@ -132,7 +133,9 @@ def run():
     #parser.add_option("-l", "--language", dest="language", help="The language the file is in, per ISO-639/3166. \"en-US\" for Standard American English")
     #parser.add_option("--maxconn", dest="maxconn_total", help="Maximum number of connections for downloading")    
     parser.add_option("--origin", dest="origin", help="URL for the finished metalink file to check for updates")
-    
+    #parser.add_option("--logo", dest="logo", help="URL for a related logo")
+    #parser.add_option("-d", dest="pubdate", action="store_true", help="Set publication date to now")
+        
     #parser.add_option("-s", "--size", dest="size", help="File size")
 
     parser.set_defaults(identity=None,version=None,os=None,publisher_name=None,publisher_url=None,copyright=None,description=None,license_name=None,license_url=None,language=None,maxconn_total=None,origin=None)
@@ -141,6 +144,10 @@ def run():
         print "ERROR: Specify a URL."
         parser.print_help()
         return
+
+    #if options.pubdate:
+        # RFC 822 format
+    #    options.pubdate = time.strftime("%a, %d %b %Y %H:%M:%S +0000", time.gmtime())
 
     xml = metalink.Metalink()
 
