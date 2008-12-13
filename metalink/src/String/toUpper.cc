@@ -19,6 +19,7 @@
 
 
 
+
 #include "String.ih"
 void String::toUpper()
 {

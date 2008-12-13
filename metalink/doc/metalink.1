@@ -1,0 +1,79 @@
+.TH "METALINK" "1" 
+.SH "NAME" 
+metalink \(em commandline metalink generator 
+.SH "SYNOPSIS" 
+.PP 
+\fBmetalink\fR [\fB\fIinput files\fR\fP]  [ < \fB\fImirror list\fR\fP]  
+.SH "DESCRIPTION" 
+.PP 
+This manual page documents briefly the 
+\fBmetalink\fR command. 
+.PP 
+This manual page was written for the \fBDebian\fP distribution 
+because the original program does not have a manual page. 
+.PP 
+\fBmetalink\fR allows you to generate metalinks from a list 
+of mirrors and a collection of files. The files are hashed and the resulting 
+metalink is generated on the stdout. 
+.SH "OPTIONS" 
+.PP 
+These programs follow the usual GNU command line syntax, 
+with long options starting with two dashes (`\-').  A summary of 
+options is included below. 
+.IP "\fB-h\fP           \fB\-\-help\fP         " 10 
+Produce a help message 
+.IP "          \fB\-\-version\fP         " 10 
+Print out the name and version. 
+.IP "          \fB\-\-md5\fP         " 10 
+Generate metalink from md5sum file(s). 
+.IP "          \fB\-\-addpath path\fP         " 10 
+Append a path to the mirrors ('/' is not checked) 
+.IP "          \fB\-\-headerfile arg\fP         " 10 
+Include file after the root element declaration. 
+.IP "          \fB\-\-nomirrors\fP         " 10 
+Don't read mirrors from stdin 
+.IP "          \fB\-\-hashlist\fP         " 10 
+List hashes only (implies nomirrors) 
+.IP "          \fB\-\-desc arg\fP         " 10 
+Add metalink description 
+.IP "          \fB-d arg\fP         " 10 
+Include given digest 
+.IP "          \fB\-\-mindigests\fP         " 10 
+Include: md5 sha1 
+.IP "          \fB\-\-somedigests\fP         " 10 
+Include: md5 sha1 ed2k 
+.IP "          \fB\-\-alldigests\fP         " 10 
+Include all possible digests 
+.IP "          \fB\fP         " 10 
+.IP "          \fB\fP         " 10 
+.IP "          \fB\fP         " 10 
+.PP 
+Supported algorithms are (\-d options): 
+md4 md5 sha1 sha256 sha384 sha512 rmd160 tiger crc32 ed2k gnunet sha1pieces 
+.PP 
+Mirror lists are single line definitions according to: 
+[location [preference] [type] % ] mirror base url 
+.SH "EXAMPLES" 
+.PP 
+http://example.com/ as a mirror: 
+echo http://example.com | metalink \-d md5 \-d sha1 * 
+ 
+.PP 
+http://example.com/ as a mirror with preference and location: 
+echo us 10 % http://example.com | metalink \-d md5 \-d sha1 * 
+.PP 
+http://example.com/ as a mirror with preference only: 
+echo 0 10 % http://example.com | metalink \-d md5 * 
+.SH "AUTHOR" 
+.PP 
+This manual page was written by A. Bram Neijt bneijt@gmail.com for 
+the \fBDebian\fP system (but may be used by others).  Permission is 
+granted to copy, distribute and/or modify this document under 
+the terms of the GNU General Public License, Version 2 any 
+later version published by the Free Software Foundation. 
+ 
+.PP 
+On Debian systems, the complete text of the GNU General Public 
+License can be found in /usr/share/common-licenses/GPL. 
+ 
+.\" created by instant / docbook-to-man, Fri 28 Nov 2008, 16:14 

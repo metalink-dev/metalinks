@@ -19,6 +19,7 @@
 
 
 
+
 #include "Mirror.ih"
 
 std::string Mirror::asXMLWithFile(std::string const &file) const

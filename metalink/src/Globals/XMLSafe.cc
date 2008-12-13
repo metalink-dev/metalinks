@@ -18,6 +18,7 @@
 */
 
 
+
 #include "Globals.ih"
 
 std::string Globals::XMLSafe(std::string value)

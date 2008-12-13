@@ -23,6 +23,7 @@
 
 
 
+
 #include "HashCRC32.ih"
 
 void HashCRC32::finalize()

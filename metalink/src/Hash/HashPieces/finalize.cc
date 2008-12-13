@@ -18,6 +18,7 @@
 */
 
 
+
 #include "HashPieces.ih"
 void HashPieces::finalize()
 	{

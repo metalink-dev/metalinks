@@ -23,6 +23,7 @@
 
 
 
+
 #include "HashED2K.ih"
 namespace {
 unsigned char hex(char c)

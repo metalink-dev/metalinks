@@ -3,5 +3,6 @@
 - Work out platform dependecy kinks (win paths -> normal paths)
 - when using a md5sum file: option for whether to list all the files in one metalink, or make
 	separate metalinks for each line. (Currently an ugly separate script, see example/separatemd5.sh)
-
+- Add a --no-size option
+- Add a --no-hash option
 Also see `sh todo.sh`

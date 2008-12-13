@@ -19,6 +19,7 @@
 
 
 
+
 #include "Mirror.ih"
 
 Mirror::Mirror(std::string const &path,
