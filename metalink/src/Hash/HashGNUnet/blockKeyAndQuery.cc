@@ -23,6 +23,7 @@
 
 
 
+
 #include "HashGNUnet.ih"
 
 void HashGNUnet::blockKeyAndQuery(char const *data, unsigned len, CHK *chk)

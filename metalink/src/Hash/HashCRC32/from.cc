@@ -23,6 +23,7 @@
 
 
 
+
 #include "HashCRC32.ih"
 
 int HashCRC32::from(unsigned char const *data, unsigned len)

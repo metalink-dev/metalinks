@@ -23,6 +23,7 @@
 
 
 
+
 #include "GCrypt.ih"
 
 void GCrypt::from(char const *data, unsigned len, unsigned char* key) const

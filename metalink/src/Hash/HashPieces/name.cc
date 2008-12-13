@@ -18,6 +18,7 @@
 */
 
 
+
 #include "HashPieces.ih"
 std::string HashPieces::name() const
 {

@@ -18,6 +18,7 @@
 */
 
 
+
 #include "HashPieces.ih"
 HashPieces::HashPieces(unsigned long long size)
 		:

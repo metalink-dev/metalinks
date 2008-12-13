@@ -23,6 +23,7 @@
 
 
 
+
 #include "HashGNUnet.ih"
 namespace {
 static char const * encTable("0123456789ABCDEFGHIJKLMNOPQRSTUV");

@@ -17,6 +17,7 @@
 
 */
 
+
 #include "Globals.ih"
 
 std::string Globals::XMLQuotedSafe(std::string value)

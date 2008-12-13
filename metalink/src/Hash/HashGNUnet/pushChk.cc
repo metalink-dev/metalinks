@@ -23,6 +23,7 @@
 
 
 
+
 #include "HashGNUnet.ih"
 
 void HashGNUnet::pushChk(CHK const *chk, unsigned level)

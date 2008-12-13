@@ -23,6 +23,7 @@
 
 
 
+
 /** \file The main program
 
 	The main program creates the hashes, interprets the commandline, fills the bneijt::Globals class
@@ -140,7 +141,7 @@ try
 		cout << Globals::programName << " - " << Globals::programDescription << "\n";
 		cout << "Version " << Globals::version[0] << "." << Globals::version[1] << "." << Globals::version[2];
 		cout << ", Copyright (C) 2005 A. Bram Neijt <bneijt@gmail.com>\n";
-		cout << Globals::programName << " comes with ABSOLUTELY NO WARRANTY and is licensed under GPLv2\n";
+		cout << Globals::programName << " comes with ABSOLUTELY NO WARRANTY and is licensed under GPLv3+\n";
 		cout << "Usage:\n  " << Globals::programName << " [options] (input files or --md5) < (mirror list) > (metalinkfile)\n";
 ///TODO show help		cout << helpOptions << "\n";
     cout << context.get_help();

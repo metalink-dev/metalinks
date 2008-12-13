@@ -19,6 +19,7 @@
 
 
 
+
 #include "HashPieces.ih"
 std::string HashPieces::xml() const
 	{

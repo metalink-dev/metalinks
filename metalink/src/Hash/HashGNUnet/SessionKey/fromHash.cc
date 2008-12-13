@@ -23,6 +23,7 @@
 
 
 
+
 #include "SessionKey.ih"
 
 void SessionKey::fromHash(unsigned char const*sha512hash)

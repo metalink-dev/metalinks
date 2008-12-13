@@ -19,6 +19,7 @@
 
 
 
+
 #include "String.ih"
 std::string String::translated(char from, char to)
 {
