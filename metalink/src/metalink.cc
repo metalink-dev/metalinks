@@ -18,12 +18,6 @@
 */
 
 
-
-
-
-
-
-
 /** \file The main program
 
 	The main program creates the hashes, interprets the commandline, fills the bneijt::Globals class
@@ -172,11 +166,11 @@ try
 		//Verify input files
 		if(inputFiles.size() < 1 && md5Files.size() < 0)
 		{
-			cerr << "No input files or md5 flags given\nSee: " << argv[0] << " --help\n";
+			cerr << "No input files or md5 flag given\nSee: " << argv[0] << " --help\n";
 			return 1;
 		}
 		
-		_foreach(i, options.opt.digests)
+		__foreach(i, options.opt.digests)
 			digests.insert(*i);
 
 		if(options.opt.mindigests)
