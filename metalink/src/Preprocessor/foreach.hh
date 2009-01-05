@@ -41,7 +41,7 @@
 ///\code
 ///vector<usnigned> numbers;
 ///numbers.push_back(10);
-///_foreach(number, numbers)
+///__foreach(number, numbers)
 ///  cout << *number << "\n";
 ///\endcode
 ///
@@ -53,6 +53,13 @@
 #endif
 
 #define _foreach( iter, cont) for( __typeof__((cont).begin()) iter = (cont).begin(); iter != (cont).end(); ++iter)
+
+//New C++ standards do not permit single underscore macro's, those are now system macros
+#ifdef __foreach
+#error __foreach already defined! This macro may have gone wild!
+#endif
+
+#define __foreach( iter, cont) for( __typeof__((cont).begin()) iter = (cont).begin(); iter != (cont).end(); ++iter)
 
 //_INCLUDED
 #endif

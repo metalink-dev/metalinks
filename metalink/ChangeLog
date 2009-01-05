@@ -1,3 +1,6 @@
+0.3.6:
+- Fix further licensing bugs (it should all be GPLv3+ now)
+
 0.3.5:
 - Set licensing for packaging
 

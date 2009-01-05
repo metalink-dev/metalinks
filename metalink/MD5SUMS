@@ -1,13 +1,13 @@
-92d465ea4ac402329f850dd05dd0699f  src/metalink.cc
+48d61163af6d59c3234f23815e8e8730  src/metalink.cc
 f018d91ac9bbbc7976150bbbbee73942  src/Preprocessor/os_win.hh
 21db5740287192ffd44d09a5c542250a  src/Preprocessor/debug.hh
 069227bd2ee768e33c51e17f78a190c3  src/String/String.hh
 ea5d85b1aa19da9591a353333981743c  src/String/translated.cc
 0a6376b19d57f6726c66a4e344e4a279  src/String/String.ih
 5ffb2898b3f514784895a9af123a6302  src/String/toUpper.cc
-f7661d2d39d17c28bc28ab7846afd702  src/Preprocessor/foreach.hh
+3ba8a0a5f50e50e1240a8fb736514b52  src/Preprocessor/foreach.hh
 153bdef334a1d5cf9ac367ad26cc8979  src/Globals/Globals.hh
-44ad5e040c963bbc88a88040cd489df6  src/Globals/statics.cc
+2ebe51808d0f5f091e8e7610deea8fe0  src/Globals/statics.cc
 ae2706d3a8b3a8088c164624c81f6a23  src/Globals/Globals.ih
 a4e78427f50339dd66394fa8442109df  src/Globals/XMLSafe.cc
 9bff4f7c2c35f99b1ac36de29bcfe453  src/Globals/XMLQuotedSafe.cc
