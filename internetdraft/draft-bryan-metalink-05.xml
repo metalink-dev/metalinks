@@ -402,7 +402,8 @@ metalinkMetalink =
 	  data associated with the listed files.  It contains one or more <xref target="element.file" format="none">metalink:file</xref> child
 	  elements. Certain elements can be listed either under <xref target="element.files" format="none">metalink:files</xref> or <xref target="element.file" format="none">metalink:file</xref>.
       If under <xref target="element.files" format="none">metalink:files</xref>, they apply to all files listed in each <xref target="element.file" format="none">metalink:file</xref>. If under <xref target="element.file" format="none">metalink:file</xref>, then they apply to just that specific file.
-
+	  If an element is listed both under <xref target="element.files" format="none">metalink:files</xref> and <xref target="element.file" format="none">metalink:file</xref>, then the element under <xref target="element.file" format="none">metalink:file</xref> has precedence and the <xref target="element.files" format="none">metalink:files</xref> element does not apply to that particular file.
+	  
 	    <figure> 
         <iref item="metalinkFiles grammar production" primary="true"/>
         <iref item="Grammar" subitem="metalinkFiles" primary="true"/>
