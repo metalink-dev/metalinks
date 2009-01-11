@@ -654,17 +654,17 @@ Internet-Draft    Metalink Download Description Format     December 2008
 
    The "metalink:resources" element acts as a container for metadata and
    data associated with the listed files.  It contains one or more
-   metalink:url child elements.
+   metalink:url child elements.  It can also contain one or more
+   metalink:metadata child elements.
 
    metalinkResources =
       element metalink:resources {
          metalinkCommonAttributes,
          extensionElement*
          metalinkURL*
+         metalinkMetadata*
       }
 
-   This specification assigns no significance to the order of metalink:
-   url elements.  Significance is determined by the value of the
 
 
 
@@ -673,6 +673,8 @@ Bryan                     Expires June 4, 2009                 [Page 12]
 Internet-Draft    Metalink Download Description Format     December 2008
 
 
+   This specification assigns no significance to the order of metalink:
+   url elements.  Significance is determined by the value of the
    "preference" attribute of the metalink:url elements.
 
    The following child elements are defined by this specification (note
@@ -698,18 +700,17 @@ Internet-Draft    Metalink Download Description Format     December 2008
          metalinkCommonAttributes,
         (metalinkHash*
          & metalinkPieces*
-         & metalinkSignature
+         & metalinkSignature?
          & extensionElement*)
       }
 
-   The following child elements are defined by this specification (note
-   that the presence of some of these elements is required):
+   The following child elements are defined by this specification:
 
    o  metalink:verification element MAY contain one or more metalink:
       hash elements.
    o  metalink:verification element MAY contain one or more metalink:
       pieces elements.
-   o  metalink:verification element MAY contain exactly one metalink:
+   o  metalink:verification element MAY contain one or more metalink:
       signature elements.
 
 4.1.6.  The "metalink:pieces" Element
@@ -717,7 +718,6 @@ Internet-Draft    Metalink Download Description Format     December 2008
    The "metalink:pieces" element acts as a container for metadata and
    data associated with verifying the listed files.  This information is
    in the form of checksums for a portion of a file.
-
 
 
 
@@ -1648,7 +1648,7 @@ Appendix B.  RELAX NG Compact Schema
 
    # -*- rnc -*-
    # RELAX NG Compact Syntax Grammar for the
-   # Metalink Format Specification Version 1
+   # Metalink Format Specification Version 2
 
       namespace metalink = "urn:ietf:params:xml:ns:metalink"
       namespace xsd = "http://www.w3.org/2001/XMLSchema"
@@ -1722,7 +1722,7 @@ Internet-Draft    Metalink Download Description Format     December 2008
              element metalink:signature {
               attribute type { "pgp" },
               text
-              }
+              }+
            }?,
            element metalink:resources {
              element metalink:metadata {

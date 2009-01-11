@@ -579,7 +579,8 @@ filesystem.</t>
 
 	  <t>The "metalink:resources" element acts as a container for metadata and
 	  data associated with the listed files.  It contains one or more <xref target="element.url" format="none">metalink:url</xref> child
-	  elements.	    
+	  elements. It can also contain one or more <xref target="element.metadata" format="none">metalink:metadata</xref> child
+	  elements.
 	  
 	  <figure> 
         <iref item="metalinkResources grammar production" primary="true"/>
@@ -590,6 +591,7 @@ metalinkResources =
       metalinkCommonAttributes,
       extensionElement*
       metalinkURL*
+      metalinkMetadata*
    }</artwork></figure></t>
 	  
 	  <t>This specification assigns no significance to the order of
@@ -630,12 +632,11 @@ metalinkVerification =
       metalinkCommonAttributes,
      (metalinkHash*
       &amp; metalinkPieces*
-      &amp; metalinkSignature
+      &amp; metalinkSignature?
       &amp; extensionElement*)
    }</artwork></figure></t>
 	
-	  <t>The following child elements are defined by this specification
-	  (note that the presence of some of these elements is required):</t>
+	  <t>The following child elements are defined by this specification:</t>
 
 	  <t> 
 	    
@@ -647,7 +648,7 @@ metalinkVerification =
 	      <t><xref target="element.verification" format="none">metalink:verification</xref> element MAY contain one or more 
 	      <xref target="element.pieces" format="none">metalink:pieces</xref> elements.</t>
 
-	      <t><xref target="element.verification" format="none">metalink:verification</xref> element MAY contain exactly one 
+	      <t><xref target="element.verification" format="none">metalink:verification</xref> element MAY contain one or more
 	      <xref target="element.signature" format="none">metalink:signature</xref> elements.</t>
 		  
 		  
@@ -2010,7 +2011,7 @@ structuredExtensionElement =
 		<artwork type="rnc">
 # -*- rnc -*-
 # RELAX NG Compact Syntax Grammar for the
-# Metalink Format Specification Version 1
+# Metalink Format Specification Version 2
 
    namespace metalink = "urn:ietf:params:xml:ns:metalink"
    namespace xsd = "http://www.w3.org/2001/XMLSchema"
@@ -2077,7 +2078,7 @@ start =
           element metalink:signature {
            attribute type { "pgp" },
            text
-           }
+           }+
         }?,
         element metalink:resources {
           element metalink:metadata {
