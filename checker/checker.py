@@ -99,6 +99,31 @@ ABOUT = NAME + "\n" + _("Version") + ": " + VERSION + "\n" + \
                      _("License") + ": " + _("GNU General Public License, Version 2") + "\n\n" + \
                      NAME + _(" comes with ABSOLUTELY NO WARRANTY.  This is free software, and you are welcome to redistribute it under certain conditions, see LICENSE.txt for details.")
 
+import HTMLParser
+
+class Webpage(HTMLParser.HTMLParser):
+
+    def __init__(self, *args):
+        self.urls = []
+        self.url = ""
+        HTMLParser.HTMLParser.__init__(self, *args)
+
+    def set_url(self, url):
+        self.url = url
+
+    def handle_starttag(self, tag, attrs):
+        if tag == "a":
+            for item in attrs:
+                if item[0] == "href":
+                    url = item[1]
+                    if not download.is_remote(item):
+                        #fix relative links
+                        url = download.path_join(self.url, url)
+                    if not url.startswith("mailto:"):
+                        self.urls.append(url)
+                        #print url
+
+
 class Checker:
     def __init__(self):
         self.threadlist = []

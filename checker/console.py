@@ -93,9 +93,10 @@ def run():
     parser.add_option("--gpg-binary", "-g", dest="gpg", help=_("(optional) Location of gpg binary path if not in the default search path"))
     parser.add_option("--convert-jigdo", "-j", action="store_true", dest="jigdo", help=_("Convert Jigdo format file to Metalink"))
     parser.add_option("--port", dest="port", help=_("Streaming server port to use (default: No streaming server)"))
+    parser.add_option("--html", dest="html", help=_("Extract links from HTML webpage"))
     (options, args) = parser.parse_args()
 
-    if options.filevar == None and len(args) == 0:
+    if options.filevar == None and len(args) == 0 and options.html == None:
         parser.print_help()
         return
 
@@ -127,6 +128,25 @@ def run():
         print download.convert_jigdo(args[0])
         return
 
+    if options.html:
+        handle = download.urlopen(options.html)
+        text = handle.read()
+        handle.close()
+
+        page = checker.Webpage()
+        page.set_url(options.html)
+        page.feed(text)
+        
+        for item in page.urls:
+            if item.endswith(".metalink"):
+                print "=" * 79
+                print item
+                mcheck = checker.Checker()
+                mcheck.check_metalink(item)
+                results = mcheck.get_results()
+                print_totals(results)
+        return
+
     if options.check:
         # remove filevar eventually
         mcheck = checker.Checker()
@@ -134,7 +154,11 @@ def run():
         results = mcheck.get_results()
         print_totals(results)
         for item in args:
-            results = checker.check_metalink(item)
+            print "=" * 79
+            print item
+            mcheck = checker.Checker()
+            mcheck.check_metalink(item)
+            results = mcheck.get_results()
             print_totals(results)
         return
             
