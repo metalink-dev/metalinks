@@ -3,12 +3,12 @@
 
 Network Working Group                                      A. Bryan, Ed.
 Internet-Draft                                        Metalinker Project
-Intended status: Standards Track                           December 2008
-Expires: June 4, 2009
+Intended status: Standards Track                        January 13, 2009
+Expires: July 17, 2009
 
 
                 The Metalink Download Description Format
-                        draft-bryan-metalink-04
+                        draft-bryan-metalink-05
 
 Status of this Memo
 
@@ -31,11 +31,11 @@ Status of this Memo
    The list of Internet-Draft Shadow Directories can be accessed at
    http://www.ietf.org/shadow.html.
 
-   This Internet-Draft will expire on June 4, 2009.
+   This Internet-Draft will expire on July 17, 2009.
 
 Copyright Notice
 
-   Copyright (c) 2008 IETF Trust and the persons identified as the
+   Copyright (c) 2009 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -52,9 +52,9 @@ Abstract
 
 
 
-Bryan                     Expires June 4, 2009                  [Page 1]
+Bryan                     Expires July 17, 2009                 [Page 1]
 
-Internet-Draft    Metalink Download Description Format     December 2008
+Internet-Draft    Metalink Download Description Format      January 2009
 
 
 Table of Contents
@@ -108,9 +108,9 @@ Table of Contents
 
 
 
-Bryan                     Expires June 4, 2009                  [Page 2]
+Bryan                     Expires July 17, 2009                 [Page 2]
 
-Internet-Draft    Metalink Download Description Format     December 2008
+Internet-Draft    Metalink Download Description Format      January 2009
 
 
    8.  IANA Considerations  . . . . . . . . . . . . . . . . . . . . . 24
@@ -164,9 +164,9 @@ Internet-Draft    Metalink Download Description Format     December 2008
 
 
 
-Bryan                     Expires June 4, 2009                  [Page 3]
+Bryan                     Expires July 17, 2009                 [Page 3]
 
-Internet-Draft    Metalink Download Description Format     December 2008
+Internet-Draft    Metalink Download Description Format      January 2009
 
 
 1.  Introduction
@@ -220,9 +220,9 @@ Internet-Draft    Metalink Download Description Format     December 2008
 
 
 
-Bryan                     Expires June 4, 2009                  [Page 4]
+Bryan                     Expires July 17, 2009                 [Page 4]
 
-Internet-Draft    Metalink Download Description Format     December 2008
+Internet-Draft    Metalink Download Description Format      January 2009
 
 
    A more extensive, single file Metalink Document:
@@ -276,9 +276,9 @@ Internet-Draft    Metalink Download Description Format     December 2008
 
 
 
-Bryan                     Expires June 4, 2009                  [Page 5]
+Bryan                     Expires July 17, 2009                 [Page 5]
 
-Internet-Draft    Metalink Download Description Format     December 2008
+Internet-Draft    Metalink Download Description Format      January 2009
 
 
    naming Element Information Items and Attribute Information Items.
@@ -332,9 +332,9 @@ Internet-Draft    Metalink Download Description Format     December 2008
 
 
 
-Bryan                     Expires June 4, 2009                  [Page 6]
+Bryan                     Expires July 17, 2009                 [Page 6]
 
-Internet-Draft    Metalink Download Description Format     December 2008
+Internet-Draft    Metalink Download Description Format      January 2009
 
 
    Any element defined by this specification MAY have an xml:lang
@@ -388,9 +388,9 @@ Internet-Draft    Metalink Download Description Format     December 2008
 
 
 
-Bryan                     Expires June 4, 2009                  [Page 7]
+Bryan                     Expires July 17, 2009                 [Page 7]
 
-Internet-Draft    Metalink Download Description Format     December 2008
+Internet-Draft    Metalink Download Description Format      January 2009
 
 
    ...
@@ -444,9 +444,9 @@ Internet-Draft    Metalink Download Description Format     December 2008
 
 
 
-Bryan                     Expires June 4, 2009                  [Page 8]
+Bryan                     Expires July 17, 2009                 [Page 8]
 
-Internet-Draft    Metalink Download Description Format     December 2008
+Internet-Draft    Metalink Download Description Format      January 2009
 
 
 4.1.1.  The "metalink:metalink" Element
@@ -500,9 +500,9 @@ Internet-Draft    Metalink Download Description Format     December 2008
 
 
 
-Bryan                     Expires June 4, 2009                  [Page 9]
+Bryan                     Expires July 17, 2009                 [Page 9]
 
-Internet-Draft    Metalink Download Description Format     December 2008
+Internet-Draft    Metalink Download Description Format      January 2009
 
 
 4.1.2.  The "metalink:files" Element
@@ -556,9 +556,9 @@ Internet-Draft    Metalink Download Description Format     December 2008
 
 
 
-Bryan                     Expires June 4, 2009                 [Page 10]
+Bryan                     Expires July 17, 2009                [Page 10]
 
-Internet-Draft    Metalink Download Description Format     December 2008
+Internet-Draft    Metalink Download Description Format      January 2009
 
 
    o  metalink:files elements MAY contain exactly one metalink:copyright
@@ -612,9 +612,9 @@ Internet-Draft    Metalink Download Description Format     December 2008
 
 
 
-Bryan                     Expires June 4, 2009                 [Page 11]
+Bryan                     Expires July 17, 2009                [Page 11]
 
-Internet-Draft    Metalink Download Description Format     December 2008
+Internet-Draft    Metalink Download Description Format      January 2009
 
 
    o  metalink:file elements MAY contain exactly one metalink:os
@@ -668,9 +668,9 @@ Internet-Draft    Metalink Download Description Format     December 2008
 
 
 
-Bryan                     Expires June 4, 2009                 [Page 12]
+Bryan                     Expires July 17, 2009                [Page 12]
 
-Internet-Draft    Metalink Download Description Format     December 2008
+Internet-Draft    Metalink Download Description Format      January 2009
 
 
    This specification assigns no significance to the order of metalink:
@@ -724,9 +724,9 @@ Internet-Draft    Metalink Download Description Format     December 2008
 
 
 
-Bryan                     Expires June 4, 2009                 [Page 13]
+Bryan                     Expires July 17, 2009                [Page 13]
 
-Internet-Draft    Metalink Download Description Format     December 2008
+Internet-Draft    Metalink Download Description Format      January 2009
 
 
    metalinkPieces =
@@ -780,9 +780,9 @@ Internet-Draft    Metalink Download Description Format     December 2008
 
 
 
-Bryan                     Expires June 4, 2009                 [Page 14]
+Bryan                     Expires July 17, 2009                [Page 14]
 
-Internet-Draft    Metalink Download Description Format     December 2008
+Internet-Draft    Metalink Download Description Format      January 2009
 
 
    metalinkGenerator = element metalink:generator {
@@ -836,9 +836,9 @@ Internet-Draft    Metalink Download Description Format     December 2008
 
 
 
-Bryan                     Expires June 4, 2009                 [Page 15]
+Bryan                     Expires July 17, 2009                [Page 15]
 
-Internet-Draft    Metalink Download Description Format     December 2008
+Internet-Draft    Metalink Download Description Format      January 2009
 
 
    ...
@@ -892,9 +892,9 @@ Internet-Draft    Metalink Download Description Format     December 2008
 
 
 
-Bryan                     Expires June 4, 2009                 [Page 16]
+Bryan                     Expires July 17, 2009                [Page 16]
 
-Internet-Draft    Metalink Download Description Format     December 2008
+Internet-Draft    Metalink Download Description Format      January 2009
 
 
 4.2.6.  The "metalink:language" Element
@@ -948,9 +948,9 @@ Internet-Draft    Metalink Download Description Format     December 2008
 
 
 
-Bryan                     Expires June 4, 2009                 [Page 17]
+Bryan                     Expires July 17, 2009                [Page 17]
 
-Internet-Draft    Metalink Download Description Format     December 2008
+Internet-Draft    Metalink Download Description Format      January 2009
 
 
    BitTorrent .torrent file or a Metalink Document.
@@ -1004,9 +1004,9 @@ Internet-Draft    Metalink Download Description Format     December 2008
 
 
 
-Bryan                     Expires June 4, 2009                 [Page 18]
+Bryan                     Expires July 17, 2009                [Page 18]
 
-Internet-Draft    Metalink Download Description Format     December 2008
+Internet-Draft    Metalink Download Description Format      January 2009
 
 
       }
@@ -1060,9 +1060,9 @@ Internet-Draft    Metalink Download Description Format     December 2008
 
 
 
-Bryan                     Expires June 4, 2009                 [Page 19]
+Bryan                     Expires July 17, 2009                [Page 19]
 
-Internet-Draft    Metalink Download Description Format     December 2008
+Internet-Draft    Metalink Download Description Format      January 2009
 
 
 4.2.14.1.  The "type" Attribute
@@ -1116,9 +1116,9 @@ Internet-Draft    Metalink Download Description Format     December 2008
 
 
 
-Bryan                     Expires June 4, 2009                 [Page 20]
+Bryan                     Expires July 17, 2009                [Page 20]
 
-Internet-Draft    Metalink Download Description Format     December 2008
+Internet-Draft    Metalink Download Description Format      January 2009
 
 
 4.2.18.  The "metalink:url" Element
@@ -1172,9 +1172,9 @@ Internet-Draft    Metalink Download Description Format     December 2008
 
 
 
-Bryan                     Expires June 4, 2009                 [Page 21]
+Bryan                     Expires July 17, 2009                [Page 21]
 
-Internet-Draft    Metalink Download Description Format     December 2008
+Internet-Draft    Metalink Download Description Format      January 2009
 
 
    would be "3.0".
@@ -1228,9 +1228,9 @@ Internet-Draft    Metalink Download Description Format     December 2008
 
 
 
-Bryan                     Expires June 4, 2009                 [Page 22]
+Bryan                     Expires July 17, 2009                [Page 22]
 
-Internet-Draft    Metalink Download Description Format     December 2008
+Internet-Draft    Metalink Download Description Format      January 2009
 
 
 7.  Extending Metalink
@@ -1284,9 +1284,9 @@ Internet-Draft    Metalink Download Description Format     December 2008
 
 
 
-Bryan                     Expires June 4, 2009                 [Page 23]
+Bryan                     Expires July 17, 2009                [Page 23]
 
-Internet-Draft    Metalink Download Description Format     December 2008
+Internet-Draft    Metalink Download Description Format      January 2009
 
 
 7.4.1.  Simple Extension Elements
@@ -1340,9 +1340,9 @@ Internet-Draft    Metalink Download Description Format     December 2008
 
 
 
-Bryan                     Expires June 4, 2009                 [Page 24]
+Bryan                     Expires July 17, 2009                [Page 24]
 
-Internet-Draft    Metalink Download Description Format     December 2008
+Internet-Draft    Metalink Download Description Format      January 2009
 
 
 8.1.  XML Namespace Registration
@@ -1396,9 +1396,9 @@ Internet-Draft    Metalink Download Description Format     December 2008
 
 
 
-Bryan                     Expires June 4, 2009                 [Page 25]
+Bryan                     Expires July 17, 2009                [Page 25]
 
-Internet-Draft    Metalink Download Description Format     December 2008
+Internet-Draft    Metalink Download Description Format      January 2009
 
 
    Base URI:  As specified in [RFC3023], Section 6.
@@ -1452,9 +1452,9 @@ Internet-Draft    Metalink Download Description Format     December 2008
 
 
 
-Bryan                     Expires June 4, 2009                 [Page 26]
+Bryan                     Expires July 17, 2009                [Page 26]
 
-Internet-Draft    Metalink Download Description Format     December 2008
+Internet-Draft    Metalink Download Description Format      January 2009
 
 
    addresses the issue of spoofing.
@@ -1508,9 +1508,9 @@ Internet-Draft    Metalink Download Description Format     December 2008
 
 
 
-Bryan                     Expires June 4, 2009                 [Page 27]
+Bryan                     Expires July 17, 2009                [Page 27]
 
-Internet-Draft    Metalink Download Description Format     December 2008
+Internet-Draft    Metalink Download Description Format      January 2009
 
 
               Marsh, J., "XML Base", W3C REC W3C.REC-xmlbase-20010627,
@@ -1564,9 +1564,9 @@ Internet-Draft    Metalink Download Description Format     December 2008
 
 
 
-Bryan                     Expires June 4, 2009                 [Page 28]
+Bryan                     Expires July 17, 2009                [Page 28]
 
-Internet-Draft    Metalink Download Description Format     December 2008
+Internet-Draft    Metalink Download Description Format      January 2009
 
 
               compact-20021121.html>.
@@ -1620,9 +1620,9 @@ Appendix A.  Contributors
 
 
 
-Bryan                     Expires June 4, 2009                 [Page 29]
+Bryan                     Expires July 17, 2009                [Page 29]
 
-Internet-Draft    Metalink Download Description Format     December 2008
+Internet-Draft    Metalink Download Description Format      January 2009
 
 
    Hofmann, Dan Connolly, Tim Berners-Lee, Harry Chen, Adrien Macneil,
@@ -1676,9 +1676,9 @@ Appendix B.  RELAX NG Compact Schema
 
 
 
-Bryan                     Expires June 4, 2009                 [Page 30]
+Bryan                     Expires July 17, 2009                [Page 30]
 
-Internet-Draft    Metalink Download Description Format     December 2008
+Internet-Draft    Metalink Download Description Format      January 2009
 
 
    start =
@@ -1732,9 +1732,9 @@ Internet-Draft    Metalink Download Description Format     December 2008
 
 
 
-Bryan                     Expires June 4, 2009                 [Page 31]
+Bryan                     Expires July 17, 2009                [Page 31]
 
-Internet-Draft    Metalink Download Description Format     December 2008
+Internet-Draft    Metalink Download Description Format      January 2009
 
 
              element metalink:url {
@@ -1788,9 +1788,9 @@ Internet-Draft    Metalink Download Description Format     December 2008
 
 
 
-Bryan                     Expires June 4, 2009                 [Page 32]
+Bryan                     Expires July 17, 2009                [Page 32]
 
-Internet-Draft    Metalink Download Description Format     December 2008
+Internet-Draft    Metalink Download Description Format      January 2009
 
 
    undefinedAttribute =
@@ -1844,9 +1844,9 @@ Index
 
 
 
-Bryan                     Expires June 4, 2009                 [Page 33]
+Bryan                     Expires July 17, 2009                [Page 33]
 
-Internet-Draft    Metalink Download Description Format     December 2008
+Internet-Draft    Metalink Download Description Format      January 2009
 
 
          metalinkIdentity  16
@@ -1900,9 +1900,9 @@ Internet-Draft    Metalink Download Description Format     December 2008
 
 
 
-Bryan                     Expires June 4, 2009                 [Page 34]
+Bryan                     Expires July 17, 2009                [Page 34]
 
-Internet-Draft    Metalink Download Description Format     December 2008
+Internet-Draft    Metalink Download Description Format      January 2009
 
 
       metalinkLicense grammar production  17
@@ -1956,9 +1956,9 @@ Internet-Draft    Metalink Download Description Format     December 2008
 
 
 
-Bryan                     Expires June 4, 2009                 [Page 35]
+Bryan                     Expires July 17, 2009                [Page 35]
 
-Internet-Draft    Metalink Download Description Format     December 2008
+Internet-Draft    Metalink Download Description Format      January 2009
 
 
       XML Elements
@@ -2012,5 +2012,5 @@ Author's Address
 
 
 
-Bryan                     Expires June 4, 2009                 [Page 36]
+Bryan                     Expires July 17, 2009                [Page 36]
 

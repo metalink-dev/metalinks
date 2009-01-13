@@ -21,7 +21,7 @@
 -->
 <!DOCTYPE rfc
   PUBLIC "" "rfc2629.dtd">
-<rfc category="std" docName="draft-bryan-metalink-04" ipr="trust200811">
+<rfc category="std" docName="draft-bryan-metalink-05" ipr="trust200811">
     <front>        
       <title abbrev="Metalink Download Description Format">The Metalink Download Description Format</title>		
       <author initials="A." surname="Bryan" fullname="Anthony Bryan" role="editor">
@@ -32,7 +32,7 @@
 	</address>	
       </author>		
       
-      <date month="December" year="2008"/>        
+      <date month="January" year="2009"/>        
 
       <abstract>
 	<t>This document specifies Metalink Documents, an XML-based download description format.</t>
