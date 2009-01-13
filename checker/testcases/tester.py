@@ -104,10 +104,10 @@ class TestMetalink(unittest.TestCase):
         self.run_test("2_only_http.metalink")
     def test_3_fail_bad_only_advanced_checksums(self):
         self.run_test("3_fail_bad_only_advanced_checksums.metalink")
-    def test_3_metalink_bad_piece1and2(self):
-        self.run_test("3_metalink_bad_piece1and2.metalink")
-    def test_3_metalink_bad_piece2(self):
-        self.run_test("3_metalink_bad_piece2.metalink")
+    def test_3_fail_metalink_bad_piece1and2(self):
+        self.run_test("3_fail_metalink_bad_piece1and2.metalink")
+    def test_3_fail_metalink_bad_piece2(self):
+        self.run_test("3_fail_metalink_bad_piece2.metalink")
     def test_3_only_advanced_checksums(self):
         self.run_test("3_only_advanced_checksums.metalink")
     def test_4_empty_size_only_p2p(self):
@@ -130,10 +130,11 @@ class TestMetalink(unittest.TestCase):
             
         retcode = system(CMD % filename, TIMEOUT)
 
-        if filename.find("fail") != -1:
+        if filename.find("fail") == -1:
             self.assertEqual(retcode, 0) # Expected return code of zero.
         else:
             self.assertNotEqual(retcode, 0) # Expected non zero return code.
+            return True
 
         checklist = [0]
         if filename.find("three") != -1:
@@ -273,7 +274,7 @@ def run():
     runner = unittest.TextTestRunner()
     results = runner.run(suiteobj)
 
-    print dir(suiteobj._tests)
+    #print dir(suiteobj._tests)
     
 
 if __name__=="__main__":
