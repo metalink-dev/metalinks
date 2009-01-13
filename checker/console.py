@@ -190,6 +190,8 @@ def run():
             mcheck.check_metalink(item)
             results = mcheck.get_results()
             print_totals(results)
+            
+    sys.exit(0)
     
 def print_totals(results):
     for key in results.keys():
