@@ -20,7 +20,7 @@ import wxversion
 wxversion.ensureMinimal("2.6")
 import wx, metalink, sys, os.path
 
-current_version = "1.1.0"
+current_version = "1.2.0"
 
 use_chunks_default = True
 max_chunks_default = 100
