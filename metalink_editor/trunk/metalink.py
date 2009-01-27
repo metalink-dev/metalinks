@@ -17,7 +17,7 @@
 import os, os.path, md5, sha, re, xml.dom, math, time, binascii
 from xml.dom.minidom import parse, Node
 
-current_version = "1.1.0"
+current_version = "1.2.0"
 
 def get_first(x):
     try:
