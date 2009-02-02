@@ -60,12 +60,12 @@ class MetalinkFile(object):
         xml.addElement("version", self.version)
         xml.addElement("description", self.description)
         if self.size > 0: xml.addElement("size", str(self.size))
-        verification = (len(self.hashes) > 0)
-        if verification: xml.startElement("verification")
-        for hash in self.hashes:
-            hash.save(xml)
-        xml.endElement("verification")
-        if verification: xml.startElement("resources")
+        if len(self.hashes) > 0:
+            xml.startElement("verification")
+            for hash in self.hashes:
+                hash.save(xml)
+            xml.endElement("verification")
+        xml.startElement("resources")
         for res in self.resources:
             res.save(xml)
         xml.endElement("resources")
