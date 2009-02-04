@@ -2,13 +2,15 @@
 
 ; HM NIS Edit Wizard helper defines
 !define PRODUCT_NAME "Metalink Editor"
-!define PRODUCT_VERSION "1.1.0"
+!define PRODUCT_VERSION "1.2.0"
 !define PRODUCT_PUBLISHER "Hampus Wessman"
 !define PRODUCT_WEB_SITE "http://hampus.vox.nu/metalink/"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\metalink_editor.exe"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
 !define PRODUCT_UNINST_ROOT_KEY "HKLM"
 !define PRODUCT_STARTMENU_REGVAL "NSIS:StartMenuDir"
+
+!define BUILDDIR .
 
 SetCompressor lzma
 
@@ -52,7 +54,7 @@ var ICONS_GROUP
 ; MUI end ------
 
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
-OutFile "files\metalink_editor-${PRODUCT_VERSION}.exe"
+OutFile "metalink_editor-${PRODUCT_VERSION}.exe"
 InstallDir "$PROGRAMFILES\Metalink Editor"
 InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" ""
 ShowInstDetails show
@@ -61,30 +63,7 @@ ShowUnInstDetails show
 Section "MainSection" SEC01
   SetOutPath "$INSTDIR"
   SetOverwrite try
-  File "E:\Programmering\Hampus\python\metalink\dist\wxmsw26uh_vc.dll"
-  File "E:\Programmering\Hampus\python\metalink\dist\w9xpopen.exe"
-  File "E:\Programmering\Hampus\python\metalink\dist\unicodedata.pyd"
-  File "E:\Programmering\Hampus\python\metalink\dist\readme.txt"
-  File "E:\Programmering\Hampus\python\metalink\dist\python25.dll"
-  File "E:\Programmering\Hampus\python\metalink\dist\pyexpat.pyd"
-  File "E:\Programmering\Hampus\python\metalink\dist\MSVCR71.dll"
-  File "E:\Programmering\Hampus\python\metalink\dist\metalink_small.png"
-  File "E:\Programmering\Hampus\python\metalink\dist\metalink_small.ico"
-  File "E:\Programmering\Hampus\python\metalink\dist\metalink_editor.exe"
-  File "E:\Programmering\Hampus\python\metalink\dist\meditor.exe"
-  File "E:\Programmering\Hampus\python\metalink\dist\metalink.png"
-  File "E:\Programmering\Hampus\python\metalink\dist\license.txt"
-  File "E:\Programmering\Hampus\python\metalink\dist\library.zip"
-  File "E:\Programmering\Hampus\python\metalink\dist\changelog.txt"
-  File "E:\Programmering\Hampus\python\metalink\dist\bz2.pyd"
-  File "E:\Programmering\Hampus\python\metalink\dist\_windows_.pyd"
-  File "E:\Programmering\Hampus\python\metalink\dist\_ssl.pyd"
-  File "E:\Programmering\Hampus\python\metalink\dist\_socket.pyd"
-  File "E:\Programmering\Hampus\python\metalink\dist\_misc_.pyd"
-  File "E:\Programmering\Hampus\python\metalink\dist\_hashlib.pyd"
-  File "E:\Programmering\Hampus\python\metalink\dist\_gdi_.pyd"
-  File "E:\Programmering\Hampus\python\metalink\dist\_core_.pyd"
-  File "E:\Programmering\Hampus\python\metalink\dist\_controls_.pyd"
+  File /r ${BUILDDIR}\dist\*.*
 
 ; Shortcuts
   !insertmacro MUI_STARTMENU_WRITE_BEGIN Application

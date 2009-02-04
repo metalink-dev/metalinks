@@ -1,0 +1,7 @@
+include *.txt
+include *.py
+
+include *.bat
+include *.nsi
+include *.in
+include *.png

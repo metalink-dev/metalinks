@@ -1,0 +1,31 @@
+How to build Metalink Editor
+
+You will need the following:
+
+Python - http://www.python.org
+Nullsoft Scriptable Install System (NSIS) - http://nsis.sourceforge.net
+py2exe 0.6.6 - http://www.py2exe.org
+
+The program can be run as a normal Python script if Python is present.  NSIS and py2exe are not required, these are included only for 
+supporting distribution to the masses without Python.
+
+
+Building on Windows
+-------------------
+sample_setenv.bat - edit this file as appropriate for your system and rename to setenv.bat
+py2exe.bat - calls py2exe to make executable files for windows and .zip package
+pyinstexe.bat - calls pyinstaller to make executable files for windows and .zip package
+make_installer.bat - makes the NSIS Windows installer (should only be called after py2exe.bat)
+sdist.bat - creates a .zip file with the source code
+
+Building on UNIX/Linux
+----------------------
+sdist.sh - creates a .tar.gz file with the source code
+
+Advanced Build Options
+----------------------
+setup.py sdist - creates an archive with the source code for distribution
+setup.py clean - removes all unneeded files created during the build process
+setup.py py2exe - generates binary (.exe) files that can be run on Windows (Windows Only)
+setup.py install - install as a Python library on the current system
+setup.py zip - packages up whatever is in the dist/ directory into a .zip file (usually run after py2exe option)
