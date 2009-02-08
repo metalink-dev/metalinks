@@ -22,6 +22,7 @@ import subprocess
 import gettext
 import sys
 import locale
+import base64
 
 try: import win32process
 except ImportError: pass
@@ -50,7 +51,7 @@ _ = translate()
 
 # Default path used for searching for the GPG binary
 DEFAULT_PATH = ['/bin', '/usr/bin', '/usr/local/bin', \
-                    '${PROGRAMFILES}\\GNU\\GnuPG', '${PROGRAMFILES(X86)}\\GNU\\GnuPG',\
+                    '${PROGRAMFILES}\\GNU\\GnuPG', '${PROGRAMFILES(X86)}\\GNU\\GnuPG', 'GPG', \
                     '${SYSTEMDRIVE}\\cygwin\\bin', '${SYSTEMDRIVE}\\cygwin\\usr\\bin', '${SYSTEMDRIVE}\\cygwin\\usr\\local\\bin']
 
 class Signature:
@@ -414,6 +415,202 @@ class GPGSubprocess:
     def decrypt(self, data):
         "Decrypt the message contained in the string 'data'"
         pass
+
+def print_hex(binary_data):
+    for byte in binary_data:
+        print "%.2x" % ord(byte),
+
+def decode(filename):
+    if filename == None:
+        return []
+    if filename.endswith(".asc"):
+        return decode_asc(filename)
+    else:
+        return decode_sig(filename)
+
+def decode_sig(filename):
+    filehandle = open(filename)
+    binstr = filehandle.read()
+    filehandle.close()
+    return decode_data(binstr)
+
+def decode_asc(filename):
+    filehandle = open(filename)
+    lines = filehandle.readlines()
+    filehandle.close()
+    return decode_lines(lines)
+
+def decode_lines(lines):
+    text = ""
+    add = False
+    for line in lines:
+        if line.strip().startswith("-----END PGP "):
+                add = False
+        if add and line.strip() != "":
+                text += line
+        #if line.strip().startswith("-----BEGIN PGP SIGNATURE-----"):
+        if line.strip() == "":
+                add = True
+
+    binary_data = base64.standard_b64decode(text)
+    return decode_data(binary_data)
+
+def decode_data(binary_data):
+
+    pktlist = GPGFile()
+    while len(binary_data) > 3:
+        packet = decode_header(binary_data)
+        pktlist.append(packet)
+        binary_data = binary_data[packet['size']+packet['header_size']:]
+        #print len(binary_data)
+        
+    return pktlist
+
+def decode_header(binary_data):
+    results = {}
+
+    packet_header = ord(binary_data[0])
+
+    binary_data = binary_data[1:]
+
+    format = (packet_header & 0x40) >> 6
+
+    if format == 1:
+        # new format packet
+        #print "not implemented, new packet format"
+        results["content_tag"] = packet_header & 0x1F
+        results["format"] = "New"
+
+        #print "new", len(binary_data)
+        #results['header_size'] = 0
+        octet1 = ord(binary_data[0])
+        if octet1 < 192:
+            results['size'] = ord(binary_data[0])
+            binary_data = binary_data[1:]
+        elif 192 <= octet1 <= 223:
+            results['size'] = ((ord(binary_data[0]) - 192) << 8) + ord(binary_data[1])
+            binary_data = binary_data[2:]
+        elif octet1 == 255:
+            results['size'] = (ord(binary_data[0]) << 24) | (ord(binary_data[1]) << 16) | (ord(binary_data[2])) << 8 | ord(binary_data[3])
+            binary_data = binary_data[4:]
+        else:
+            print "not implemented, header length", length_octets
+            return results
+    else:
+        # old format
+        results["format"] = "Old"
+        results["content_tag"] = (packet_header >> 2) & 0x0F
+        length_type = packet_header & 0x03
+
+        #print length_type
+
+        if length_type < 3:
+            length_octets = pow(2, length_type)
+            results['header_size'] = length_octets + 1
+            #print length_octets
+            if length_octets == 1:
+                results['size'] = ord(binary_data[0])
+                binary_data = binary_data[1:]
+            elif length_octets == 2:
+                results['size'] = (ord(binary_data[0]) << 8) + ord(binary_data[1])
+                binary_data = binary_data[2:]
+            elif length_octets == 4:
+                results['size'] = (ord(binary_data[0]) << 24) + (ord(binary_data[1]) << 16) + (ord(binary_data[2]) << 8) + ord(binary_data[3])
+                binary_data = binary_data[4:]
+            else:
+                print "not implemented, header length", length_octets
+                return results
+        elif length_type == 3:
+            print "not implemented, length type", length_type
+            return results
+
+    return decode_tag(results, binary_data[:results['size']])
+
+def decode_tag(results, binary_data):
+        if results['content_tag'] == 2:
+            # signature packet
+            results["type"] = "Signature Packet"
+            sig_version = ord(binary_data[0])
+            if sig_version == 3:
+                mat_length = ord(binary_data[1])
+                sig_type = ord(binary_data[2])
+                print "sig type:", sig_type
+                create_time = binary_data[3:7]
+                print "create time:", print_hex(create_time)
+                key_id = binary_data[7:15]
+                print "key id:", print_hex(key_id)
+                key_algo = ord(binary_data[15])
+                hash_algo = ord(binary_data[16])
+                print "key algo: %x" % key_algo
+                print "hash algo: %x" % hash_algo
+                signed_hash = binary_data[17:19]
+                print "sig start:", print_hex(signed_hash)
+                signature = binary_data[19:]
+                #print len(signature)
+                r = signature[:20]
+                s = signature[20:]
+                print "r:", print_hex(signature[:20])
+                print "s:", print_hex(signature[20:])
+        elif results['content_tag'] == 6:
+            results["type"] = "Public Key Packet"
+            results["key.version"] = ord(binary_data[0])
+            if results["key.version"] == 4:
+                create_time = binary_data[1:5]
+                #print "create time:", print_hex(create_time)
+                #days = binary_data[5:7]
+                #print "valid days:", (ord(days[0]) << 8) + ord(days[1])
+                results["key.algo"] = ord(binary_data[5])
+            elif results["key.version"] == 3:
+                #create_time = binary_data[1:5]
+                #print "create time:", print_hex(create_time)
+                #days = binary_data[5:7]
+                #print "valid days:", (ord(days[0]) << 8) + ord(days[1])
+                #results["key.algo"] = ord(binary_data[6])
+                print "not implemented, key version", results["key.version"]
+            else:
+                print "not implemented, key version", results["key.version"]
+
+        elif results['content_tag'] == 13:
+            results["type"] = "User ID"
+            user = ""
+            for char in binary_data:
+                user += chr(ord(char))
+            results["user.value"] = user
+        else:
+            pass
+            #print "not yet implemented, tag", results['content_tag'] 
+            
+        return results
+                    #print "\nAll data:", print_hex(binary_data)
+
+class GPGFile(list):
+    def __init__(self, filename = None, url = None):
+        self.url = url
+        self.filename = filename
+        self.extend(decode(self.filename))
+        
+    def get_user_ids(self):
+        idlist = []
+        for item in self:
+            if item["content_tag"] == 13:
+                idlist.append(item["user.value"])
+
+        return idlist
+
+##def binary2int(bin):
+##    i = 0
+##    total = 0
+##    for j in range(len(bin)):
+##        total += ord(bin[j]) * pow(2,i)
+##        i += 8
+##    return total
+
+#if __name__=="__main__":
+#    for item in decode_asc("mcnab.asc"):
+#        print item
+#    print get_user_id("mcnab.asc")
+
+
 
 ##    
 ##if __name__ == '__main__':
