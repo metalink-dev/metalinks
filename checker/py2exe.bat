@@ -3,16 +3,14 @@ rem *** Used to create a Python exe
 call sample_setenv.bat
 call setenv.bat
 
-SET BUILD=%PYINSTALLERDIR%\Build.py
-
 SET PYTHONPATH=%PYTHONDIR%\python.exe
 
 %PYTHONPATH% setup.py clean
-%PYTHONPATH% setup.py merge
 
 rem ***** create the exe
-%PYTHONPATH% -OO %BUILD% metalink.spec
-%PYTHONPATH% -OO %BUILD% metalinkw.spec
+%PYTHONPATH% -OO setup.py py2exe 
+rem --packages=libappupdater
 
-rem **** pause so we can see the exit codes
+%PYTHONPATH% setup.py zip
+
 pause "done...hit a key to exit"

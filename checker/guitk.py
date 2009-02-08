@@ -7,6 +7,7 @@ import locale
 import time
 import webbrowser
 import threading
+import sys
 
 import checker
 
