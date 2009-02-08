@@ -76,6 +76,10 @@
 #
 # CHANGELOG:
 #
+# Version 4.4
+# -----------
+# - Bugfix for when HTTP 302 redirect code is issued during download
+#
 # Version 4.3
 # -----------
 # - Added custom HTTP header support
