@@ -5,7 +5,7 @@
 # URL: http://www.nabber.org/projects/
 # E-mail: webmaster@nabber.org
 #
-# Copyright: (C) 2007-2008, Neil McNab
+# Copyright: (C) 2007-2009, Neil McNab
 # License: GNU General Public License Version 2
 #   (http://www.gnu.org/copyleft/gpl.html)
 #
@@ -42,11 +42,13 @@
 #   Options:
 #     -h, --help            show this help message and exit
 #     -d, --download        Actually download the file(s) in the metalink
+#     -c, --check           Check the metalink file URLs
 #     -f FILE, --file=FILE  Metalink file to check
 #     -t TIMEOUT, --timeout=TIMEOUT
 #                           Set timeout in seconds to wait for response
 #                           (default=10)
 #     -o OS, --os=OS        Operating System preference
+#     -s, --no-segmented    Do not use the segmented download method
 #     -l LANG, --lang=LANG  Language preference (ISO-639/3166)
 #     -c LOC, --country=LOC
 #                           Two letter country preference (ISO 3166-1 alpha-2)
@@ -56,6 +58,13 @@
 #     -p FILE, --pgp-store=FILE
 #                           File with the PGP keys that you trust (default:
 #                           ~/.gnupg/pubring.gpg)
+#     -g GPG, --gpg-binary=GPG
+#                           (optional) Location of gpg binary path if not in the
+#                           default search path
+#     -j, --convert-jigdo   Convert Jigdo format file to Metalink
+#     --port=PORT           Streaming server port to use (default: No streaming
+#                           server)
+#     --html=HTML           Extract links from HTML webpage
 #
 # Library Instructions:
 #   - Use as expected.
@@ -66,6 +75,15 @@
 # results = metalink.check_metalink("file.metalink")
 #
 # CHANGELOG:
+#
+# Version 4.3
+# -----------
+# - Added custom HTTP header support
+# - Added option to parse an HTML file for .metalink files to check
+# - Started Debian packaging
+# - Added a beta feature for media streaming
+# - Added a minimal GUI for checking
+# - Various bugfixes
 #
 # Version 4.2
 # -----------
@@ -210,6 +228,7 @@ import binascii
 import urllib2
 import sys
 import gettext
+import BaseHTTPServer
 import socket
 import locale
 import optparse
@@ -222,6 +241,7 @@ import xml.parsers.expat
 import math
 import logging
 import re
+import HTMLParser
 import time
 import subprocess
 import StringIO
@@ -238,7 +258,7 @@ class Dummy:
 # URL: http://www.nabber.org/projects/
 # E-mail: webmaster@nabber.org
 #
-# Copyright: (C) 2007-2008, Neil McNab
+# Copyright: (C) 2007-2009, Neil McNab
 # License: GNU General Public License Version 2
 #   (http://www.gnu.org/copyleft/gpl.html)
 #
@@ -278,7 +298,7 @@ class Dummy:
 
 
 NAME="Metalink Checker"
-VERSION="4.2"
+VERSION="4.3"
 
 #WEBSITE="http://www.metalinker.org"
 WEBSITE="http://www.nabber.org/projects/checker/"
@@ -310,9 +330,33 @@ _ = translate()
 
 ABOUT = NAME + "\n" + _("Version") + ": " + VERSION + "\n" + \
                      _("Website") + ": " + WEBSITE + "\n\n" + \
-                     _("Copyright") + ": 2008 Neil McNab\n" + \
+                     _("Copyright") + ": 2009 Neil McNab\n" + \
                      _("License") + ": " + _("GNU General Public License, Version 2") + "\n\n" + \
                      NAME + _(" comes with ABSOLUTELY NO WARRANTY.  This is free software, and you are welcome to redistribute it under certain conditions, see LICENSE.txt for details.")
+
+
+class Webpage(HTMLParser.HTMLParser):
+
+    def __init__(self, *args):
+        self.urls = []
+        self.url = ""
+        HTMLParser.HTMLParser.__init__(self, *args)
+
+    def set_url(self, url):
+        self.url = url
+
+    def handle_starttag(self, tag, attrs):
+        if tag == "a":
+            for item in attrs:
+                if item[0] == "href":
+                    url = item[1]
+                    if not download.is_remote(item):
+                        #fix relative links
+                        url = download.path_join(self.url, url)
+                    if not url.startswith("mailto:"):
+                        self.urls.append(url)
+                        #print url
+
 
 class Checker:
     def __init__(self):
@@ -687,6 +731,7 @@ checker.NAME = NAME
 checker.URLCheck = URLCheck
 checker.VERSION = VERSION
 checker.WEBSITE = WEBSITE
+checker.Webpage = Webpage
 checker._ = _
 checker.translate = translate
 #!/usr/bin/env python
@@ -744,10 +789,11 @@ checker.translate = translate
 ########################################################################
 
 #import utils
+#import thread
 #import logging
 
 
-USER_AGENT = "Metalink Checker/4.1 +http://www.nabber.org/projects/"
+USER_AGENT = "Metalink Checker/4.3 +http://www.nabber.org/projects/"
 
 SEGMENTED = True
 LIMIT_PER_HOST = 1
@@ -779,6 +825,10 @@ HTTP_PROXY=""
 FTP_PROXY=""
 HTTPS_PROXY=""
 
+# Streaming server setings to use
+HOST = "localhost"
+PORT = None
+
 # Protocols to use for segmented downloads
 PROTOCOLS=("http","https","ftp")
 #PROTOCOLS=("ftp")
@@ -795,17 +845,27 @@ def reg_query(keyname, value=None):
     blanklines = 1
     
     if value == None:
-        tempresult = os.popen2("reg query \"%s\"" % keyname)
+        tempresult = os.popen2("reg.exe query \"%s\"" % keyname)
     else:
-        tempresult = os.popen2("reg query \"%s\" /v \"%s\"" % (keyname, value))
+        tempresult = os.popen2("reg.exe query \"%s\" /v \"%s\"" % (keyname, value))
     stdout = tempresult[1]
     stdout = stdout.readlines()
 
+    # handle case when reg.exe isn't in path
+    if len(stdout) == 0:
+        if value == None:
+            tempresult = os.popen2(os.environ["WINDIR"] + "\\system32\\reg.exe query \"%s\"" % keyname)
+        else:
+            tempresult = os.popen2(os.environ["WINDIR"] + "\\system32\\reg.exe query \"%s\" /v \"%s\"" % (keyname, value))
+        stdout = tempresult[1]
+        stdout = stdout.readlines()
+
     # For Windows XP, this was changed in Vista!
-    if stdout[1].startswith("! REG.EXE"):
+    if len(stdout) > 0 and stdout[1].startswith("! REG.EXE"):
         blanklines += 2
         if value == None:
             blanklines += 2
+
     stdout = stdout[blanklines:]
     
     return stdout
@@ -903,10 +963,10 @@ def translate():
 
 _ = translate()
     
-def urlopen(url, data = None, metalink=False):
-    #print "URLOPEN:", url
+def urlopen(url, data = None, metalink=False, headers = {}):
+    #print "URLOPEN:", url, headers
     url = complete_url(url)
-    req = urllib2.Request(url, data)
+    req = urllib2.Request(url, data, headers)
     req.add_header('User-agent', USER_AGENT)
     req.add_header('Cache-Control', "no-cache")
     req.add_header('Pragma', "no-cache")
@@ -922,12 +982,13 @@ def urlopen(url, data = None, metalink=False):
 
     return fp
 
-def urlhead(url, metalink=False):
+def urlhead(url, metalink=False, headers = {}):
     '''
     raise IOError for example if the URL does not exist
     '''
+    #print "URLHEAD:", url, headers
     url = complete_url(url)
-    req = urllib2.Request(url, None)
+    req = urllib2.Request(url, None, headers)
     req.add_header('User-agent', USER_AGENT)
     req.add_header('Cache-Control', "no-cache")
     req.add_header('Pragma', "no-cache")
@@ -957,7 +1018,7 @@ def set_proxies():
     # install this opener
     urllib2.install_opener(opener)
 
-def get(src, path, checksums = {}, force = False, handlers = {}, segmented = SEGMENTED):
+def get(src, path, checksums = {}, force = False, handlers = {}, segmented = SEGMENTED, headers = {}):
     '''
     Download a file, decodes metalinks.
     First parameter, file to download, URL or file path to download from
@@ -971,18 +1032,18 @@ def get(src, path, checksums = {}, force = False, handlers = {}, segmented = SEG
     raise socket.error e.g. "Operation timed out"
     '''
     if src.endswith(".jigdo"):
-        return download_jigdo(src, path, force, handlers, segmented)
+        return download_jigdo(src, path, force, handlers, segmented, headers)
     # assume metalink if ends with .metalink
     if src.endswith(".metalink"):
-        return download_metalink(src, path, force, handlers, segmented)
+        return download_metalink(src, path, force, handlers, segmented, headers)
     else:
         # not all servers support HEAD where GET is also supported
         # also a WindowsError is thrown if a local file does not exist
         try:
             # add head check for metalink type, if MIME_TYPE or application/xml? treat as metalink
-            if urlhead(src, metalink=True)["content-type"].startswith(MIME_TYPE):
+            if urlhead(src, metalink=True, headers = headers)["content-type"].startswith(MIME_TYPE):
                 print _("Metalink content-type detected.")
-                return download_metalink(src, path, force, handlers, segmented)
+                return download_metalink(src, path, force, handlers, segmented, headers)
         except:
             pass
             
@@ -990,13 +1051,13 @@ def get(src, path, checksums = {}, force = False, handlers = {}, segmented = SEG
     # parse out filename portion here
     filename = os.path.basename(src)
     result = download_file(src, os.path.join(path, filename), 
-            0, checksums, force, handlers, segmented = segmented)
+            0, checksums, force, handlers, segmented = segmented, headers = headers)
     if result:
         return [result]
     return False
     
 def download_file(url, local_file, size=0, checksums={}, force = False, 
-        handlers = {}, segmented = SEGMENTED, chunksums = {}, chunk_size = 0):
+        handlers = {}, segmented = SEGMENTED, chunksums = {}, chunk_size = 0, headers = {}):
     '''
     url {string->URL} locations of the file
     local_file string local file name to save to
@@ -1021,9 +1082,9 @@ def download_file(url, local_file, size=0, checksums={}, force = False,
     fileobj.piecelength = chunk_size
     fileobj.add_url(url)
 
-    return download_file_urls(fileobj, force, handlers, segmented)
+    return download_file_urls(fileobj, force, handlers, segmented, headers)
     
-def download_file_urls(metalinkfile, force = False, handlers = {}, segmented = SEGMENTED):
+def download_file_urls(metalinkfile, force = False, handlers = {}, segmented = SEGMENTED, headers = {}):
     '''
     Download a file.
     MetalinkFile object to download
@@ -1059,7 +1120,7 @@ def download_file_urls(metalinkfile, force = False, handlers = {}, segmented = S
 
     seg_result = False
     if segmented:
-        manager = Segment_Manager(metalinkfile)
+        manager = Segment_Manager(metalinkfile, headers)
         manager.set_callbacks(handlers)
         seg_result = manager.run()
         
@@ -1068,7 +1129,7 @@ def download_file_urls(metalinkfile, force = False, handlers = {}, segmented = S
             print "\n" + _("Could not download all segments of the file, trying one mirror at a time.")
 
     if (not segmented) or (not seg_result):
-        manager = NormalManager(metalinkfile)
+        manager = NormalManager(metalinkfile, headers)
         manager.set_callbacks(handlers)
         manager.run()
         
@@ -1140,7 +1201,7 @@ class Manager:
         return 0
             
 class NormalManager(Manager):
-    def __init__(self, metalinkfile):
+    def __init__(self, metalinkfile, headers = {}):
         Manager.__init__(self)
         self.local_file = metalinkfile.filename
         self.size = metalinkfile.size
@@ -1150,6 +1211,7 @@ class NormalManager(Manager):
         self.start_number = 0
         self.number = 0
         self.count = 1
+        self.headers = headers
 
     def random_start(self):
         # do it the old way
@@ -1166,7 +1228,7 @@ class NormalManager(Manager):
             self.status = True
             remote_file = complete_url(self.urllist[self.number])
 
-            manager = URLManager(remote_file, self.local_file, self.checksums)
+            manager = URLManager(remote_file, self.local_file, self.checksums, self.headers)
             manager.set_status_callback(self.status_handler)
             manager.set_cancel_callback(self.cancel_handler)
             manager.set_pause_callback(self.pause_handler)
@@ -1186,7 +1248,7 @@ class NormalManager(Manager):
             return False
     
 class URLManager(Manager):
-    def __init__(self, remote_file, filename, checksums = {}):
+    def __init__(self, remote_file, filename, checksums = {}, headers = {}):
         '''
         modernized replacement for urllib.urlretrieve() for use with proxy
         '''
@@ -1201,10 +1263,10 @@ class URLManager(Manager):
         self.resume = FileResume(filename + ".temp")
         self.resume.add_block(0)
     
-        self.data = open(filename, 'wb')
+        self.data = ThreadSafeFile(filename, 'wb+')
         
         try:
-            self.temp = urlopen(remote_file)
+            self.temp = urlopen(remote_file, headers = headers)
         except:
             self.status = False
             self.close_handler()
@@ -1215,11 +1277,21 @@ class URLManager(Manager):
             self.size = int(headers['Content-Length'])
         except KeyError:
             self.size = 0
+
+        self.streamserver = None
+        if PORT != None:
+            self.streamserver = StreamServer((HOST, PORT), StreamRequest)
+            self.streamserver.set_stream(self.data)
         
+            #thread.start_new_thread(self.streamserver.serve, ())
+            mythread = threading.Thread(target=self.streamserver.serve)
+            mythread.start()
+ 
     def close_handler(self):
         self.resume.complete()
         try:
-            self.data.close()
+            if PORT == None:
+                self.data.close()
             self.temp.close()
         except: pass
         
@@ -1234,11 +1306,16 @@ class URLManager(Manager):
             return False
         
         block = self.temp.read(self.block_size)
+        self.data.acquire()
         self.data.write(block)
+        self.data.release()
         self.counter += 1
         self.total += len(block)
 
         self.resume.set_block_size(self.counter * self.block_size)
+
+        if self.streamserver != None:        
+            self.streamserver.set_length(self.counter * self.block_size)
                         
         if self.status_handler != None:
             self.status_handler(self.total, 1, self.size)
@@ -1271,7 +1348,7 @@ def filecheck(local_file, checksums, size, handler = None):
     print "\n" + _("Checksum failed for %s.") % os.path.basename(local_file)
     return False
 
-def download_metalink(src, path, force = False, handlers = {}, segmented = SEGMENTED):
+def download_metalink(src, path, force = False, handlers = {}, segmented = SEGMENTED, headers = {}):
     '''
     Decode a metalink file, can be local or remote
     First parameter, file to download, URL or file path to download from
@@ -1283,7 +1360,7 @@ def download_metalink(src, path, force = False, handlers = {}, segmented = SEGME
     '''
     src = complete_url(src)
     try:
-        datasource = urlopen(src, metalink=True)
+        datasource = urlopen(src, metalink=True, headers = headers)
     except:
         return False
 
@@ -1296,7 +1373,7 @@ def download_metalink(src, path, force = False, handlers = {}, segmented = SEGME
         if origin != src and origin != "":
             print _("Downloading update from %s") % origin
             try:
-                return download_metalink(origin, path, force, handlers, segmented)
+                return download_metalink(origin, path, force, handlers, segmented, headers)
             except: pass
 
     urllist = metalink.files
@@ -1311,7 +1388,7 @@ def download_metalink(src, path, force = False, handlers = {}, segmented = SEGME
 
         if OS == None or len(ostag) == 0 or ostag[0].lower() == OS.lower():
             if "any" in LANG or len(langtag) == 0 or langtag.lower() in LANG:
-                result = download_file_node(filenode, path, force, handlers, segmented)
+                result = download_file_node(filenode, path, force, handlers, segmented, headers)
                 if result:
                     results.append(result)
     if len(results) == 0:
@@ -1320,7 +1397,7 @@ def download_metalink(src, path, force = False, handlers = {}, segmented = SEGME
     return results
 
 
-def download_jigdo(src, path, force = False, handlers = {}, segmented = SEGMENTED):
+def download_jigdo(src, path, force = False, handlers = {}, segmented = SEGMENTED, headers = {}):
     '''
     Decode a jigdo file, can be local or remote
     First parameter, file to download, URL or file path to download from
@@ -1332,7 +1409,7 @@ def download_jigdo(src, path, force = False, handlers = {}, segmented = SEGMENTE
     '''
     newsrc = complete_url(src)
     try:
-        datasource = urlopen(newsrc, metalink=True)
+        datasource = urlopen(newsrc, metalink=True, headers = headers)
     except:
         return False
 
@@ -1341,7 +1418,7 @@ def download_jigdo(src, path, force = False, handlers = {}, segmented = SEGMENTE
     datasource.close()
 
     #print path_join(src, jigdo.template)
-    template = get(path_join(src, jigdo.template), path, {"md5": jigdo.template_md5}, force, handlers, segmented)
+    template = get(path_join(src, jigdo.template), path, {"md5": jigdo.template_md5}, force, handlers, segmented, headers)
     if not template:
         print _("Could not download template file!")
         return False
@@ -1354,7 +1431,7 @@ def download_jigdo(src, path, force = False, handlers = {}, segmented = SEGMENTE
     results = []
     results.extend(template)
     for filenode in urllist:
-        result = download_file_node(filenode, path, force, handlers, segmented)
+        result = download_file_node(filenode, path, force, handlers, segmented, headers)
         if result:
               results.append(result)
     if len(results) == 0:
@@ -1365,7 +1442,7 @@ def download_jigdo(src, path, force = False, handlers = {}, segmented = SEGMENTE
     
     return results
 
-def convert_jigdo(src):
+def convert_jigdo(src, headers = {}):
     '''
     Decode a jigdo file, can be local or remote
     First parameter, file to download, URL or file path to download from
@@ -1374,7 +1451,7 @@ def convert_jigdo(src):
     
     newsrc = complete_url(src)
     try:
-        datasource = urlopen(newsrc, metalink=True)
+        datasource = urlopen(newsrc, metalink=True, headers = headers)
     except:
         return False
 
@@ -1395,7 +1472,7 @@ def convert_jigdo(src):
     return jigdo.generate()
 
 
-def download_file_node(item, path, force = False, handler = None, segmented=SEGMENTED):
+def download_file_node(item, path, force = False, handler = None, segmented=SEGMENTED, headers = {}):
     '''
     Downloads a specific version of a program
     First parameter, file XML node
@@ -1429,7 +1506,7 @@ def download_file_node(item, path, force = False, handler = None, segmented=SEGM
     chunksums = {}
     chunksums[item.piecetype] = item.pieces
 
-    return download_file_urls(item, force, handler, segmented)
+    return download_file_urls(item, force, handler, segmented, headers)
 
 def complete_url(url):
     '''
@@ -1445,14 +1522,14 @@ def complete_url(url):
         return "file://" + absfile
     return url
 
-def urlretrieve(url, filename, reporthook = None):
+def urlretrieve(url, filename, reporthook = None, headers = {}):
     '''
     modernized replacement for urllib.urlretrieve() for use with proxy
     '''
     block_size = 1024
     i = 0
     counter = 0
-    temp = urlopen(url)
+    temp = urlopen(url, headers = headers)
     headers = temp.info()
     
     try:
@@ -1856,9 +1933,10 @@ class ThreadSafeFile(file):
         return self.lock.release()
     
 class Segment_Manager(Manager):
-    def __init__(self, metalinkfile):
+    def __init__(self, metalinkfile, headers = {}):
         Manager.__init__(self)
-                
+
+        self.headers = headers
         self.sockets = []
         self.chunks = []
         self.limit_per_host = LIMIT_PER_HOST
@@ -1883,6 +1961,15 @@ class Segment_Manager(Manager):
             self.f = ThreadSafeFile(self.localfile, "wb+")
             
         self.resume = FileResume(self.localfile + ".temp")
+
+        self.streamserver = None
+        if PORT != None:
+            self.streamserver = StreamServer((HOST, PORT), StreamRequest)
+            self.streamserver.set_stream(self.f)
+        
+            #thread.start_new_thread(self.streamserver.serve, ())
+            mythread = threading.Thread(target=self.streamserver.serve)
+            mythread.start()
 
     def get_chunksum(self, index):
         mylist = {}
@@ -1912,7 +1999,7 @@ class Segment_Manager(Manager):
                 while (status == httplib.MOVED_PERMANENTLY or status == httplib.FOUND) and count < MAX_REDIRECTS:
                     http = Http_Host(url)
                     if http.conn != None:
-                        http.conn.request("HEAD", url)
+                        http.conn.request("HEAD", url, headers = self.headers)
                         try:
                             response = http.conn.getresponse()
                             status = response.status
@@ -1982,6 +2069,11 @@ class Segment_Manager(Manager):
         '''
         try:
             bytes = self.byte_total()
+
+            index = self.get_chunk_index()
+            if index != None and index > 0 and self.streamserver != None:
+                self.streamserver.set_length((index - 1) * self.chunk_size)
+            
             if self.oldtime == None:
                 self.start_bitrate(bytes)
                 
@@ -1993,6 +2085,7 @@ class Segment_Manager(Manager):
             
             self.update()
             self.resume.extend_blocks(self.chunk_list())
+
             if bytes >= self.size and self.active_count() == 0:
                 self.resume.complete()
                 self.close_handler()
@@ -2035,7 +2128,7 @@ class Segment_Manager(Manager):
                 end = self.size
 
             if next.protocol == "http" or next.protocol == "https":
-                segment = Http_Host_Segment(next, start, end, self.size, self.get_chunksum(index))
+                segment = Http_Host_Segment(next, start, end, self.size, self.get_chunksum(index), self.headers)
                 segment.set_cancel_callback(self.cancel_handler)
                 self.chunks[index] = segment
                 self.segment_init(index)
@@ -2060,7 +2153,7 @@ class Segment_Manager(Manager):
     def get_chunk_index(self):
         i = -1
         for i in range(len(self.chunks)):
-            if (self.chunks[i].error != None):
+            if (self.chunks[i] == None or self.chunks[i].error != None):
                 return i
             # weed out dead segments that have temp errors and reassign
             if (not self.chunks[i].isAlive() and self.chunks[i].bytes == 0):
@@ -2140,13 +2233,15 @@ class Segment_Manager(Manager):
 
     def remove_errors(self):
         for item in self.chunks:
-            if item.error != None:
+            if item != None and item.error != None:
                 #print item.error
                 if item.error == httplib.MOVED_PERMANENTLY or item.error == httplib.FOUND:
                     #print "location:", item.location
-                    newitem = copy.deepcopy(self.urls[item.url])
-                    newitem.url = item.location
-                    self.urls[item.location] = newitem
+                    try:
+                        newitem = copy.deepcopy(self.urls[item.url])
+                        newitem.url = item.location
+                        self.urls[item.location] = newitem
+                    except KeyError: pass
                     self.filter_urls()
                     
                 #print "removed %s" % item.url
@@ -2185,7 +2280,8 @@ class Segment_Manager(Manager):
         return chunks
     
     def close_handler(self):
-        self.f.close()
+        if PORT == None:
+            self.f.close()
         for host in self.sockets:
             host.close()
 
@@ -2326,7 +2422,7 @@ class Host_Segment:
     '''
     Base class for various segment protocol types.  Not to be used directly.
     '''
-    def __init__(self, host, start, end, filesize, checksums = {}):
+    def __init__(self, host, start, end, filesize, checksums = {}, headers = {}):
         threading.Thread.__init__(self)
         self.host = host
         self.host.set_active(True)
@@ -2344,6 +2440,7 @@ class Host_Segment:
         self.buffer = ""
         self.temp = ""
         self.cancel_handler = None
+        self.headers = headers
         
     def set_cancel_callback(self, handler):
         self.cancel_handler = handler
@@ -2557,7 +2654,8 @@ class Http_Host_Segment(threading.Thread, Host_Segment):
                 return
     
             try:
-                self.host.conn.request("GET", self.url, "", {"Range": "bytes=%lu-%lu\r\n" % (self.byte_start, self.byte_end - 1)})
+                self.headers.update({"Range": "bytes=%lu-%lu\r\n" % (self.byte_start, self.byte_end - 1)})
+                self.host.conn.request("GET", self.url, "", self.headers)
             except:
                 self.error = _("socket exception")
                 self.close()
@@ -2768,6 +2866,8 @@ class HTTPConnection:
         raise socket.error e.g. "Operation timed out"
         '''
         headers.update(self.headers)
+
+        #print "HTTP REQUEST:", headers
         if HTTP_PROXY == "":
             urlparts = urlparse.urlsplit(url)
             url = urlparts.path + "?" + urlparts.query
@@ -2818,6 +2918,82 @@ class HTTPSConnection:
 
     def close(self):
         return self.conn.close()
+
+class StreamRequest(BaseHTTPServer.BaseHTTPRequestHandler):
+    def do_GET(self):
+        self.send_response(200)
+        self.send_header("Content-Type", "application/octet-stream")
+        self.send_header("Cache-Control", "no-cache")
+        self.end_headers()
+
+        start = 0
+        while True:
+            if self.server.fileobj != None and (self.server.length - start) > 0:
+                try:
+                    self.server.fileobj.acquire()
+                    loc = self.server.fileobj.tell()
+                    self.server.fileobj.seek(start, 0)
+                    size = self.server.length - start
+                    
+                    data = self.server.fileobj.read(size)
+                    if len(data) > 0:
+                        self.wfile.write(data)
+
+                    self.server.fileobj.seek(loc, 0)
+                    self.server.fileobj.release()
+                    start += len(data)
+                except ValueError:
+                    break
+            time.sleep(.1)
+
+class StreamServer(BaseHTTPServer.HTTPServer):
+    def __init__(self, *args):
+        BaseHTTPServer.HTTPServer.__init__(self, *args)
+        self.fileobj = None
+        self.length = 0
+
+    # based on: http://code.activestate.com/recipes/425210/
+    def server_bind(self):
+        BaseHTTPServer.HTTPServer.server_bind(self)
+        self.socket.setblocking(0)
+        self.socket.settimeout(1)
+        self.run = True
+
+    def get_request(self):
+        while self.run:
+            try:
+                sock, addr = self.socket.accept()
+                sock.setblocking(0)
+                sock.settimeout(30)
+                return (sock, addr)
+            except socket.timeout:
+                pass
+
+    def stop(self):
+        self.run = False
+
+    def serve(self):
+        try:
+            while self.run:
+                self.handle_request()
+        except KeyboardInterrupt:
+            print "Server Interrupted!"
+            self.fileobj.close()
+            self.stop()
+        
+    def set_stream(self, fileobj):
+        self.fileobj = fileobj
+
+    def set_length(self, length):
+        self.length = int(length)
+
+##myserver = StreamServer(("localhost", 8080), StreamRequest)
+##myserver.set_stream(ThreadSafeFile("C:\\library\\avril\\Avril Lavigne - Complicated.mpg", "rb"))
+##myserver.set_length(50000000)
+##serverthread = threading.Thread(target=myserver.serve_forever)
+##serverthread.start()
+
+#myserver.serve_forever()
 download = Dummy()
 download.CONNECT_RETRY_COUNT = CONNECT_RETRY_COUNT
 download.COUNTRY = COUNTRY
@@ -2827,6 +3003,7 @@ download.FTP_PROXY = FTP_PROXY
 download.FileResume = FileResume
 download.Ftp_Host = Ftp_Host
 download.Ftp_Host_Segment = Ftp_Host_Segment
+download.HOST = HOST
 download.HOST_LIMIT = HOST_LIMIT
 download.HTTPConnection = HTTPConnection
 download.HTTPSConnection = HTTPSConnection
@@ -2847,9 +3024,12 @@ download.OS = OS
 download.PGP_KEY_DIR = PGP_KEY_DIR
 download.PGP_KEY_EXTS = PGP_KEY_EXTS
 download.PGP_KEY_STORE = PGP_KEY_STORE
+download.PORT = PORT
 download.PROTOCOLS = PROTOCOLS
 download.SEGMENTED = SEGMENTED
 download.Segment_Manager = Segment_Manager
+download.StreamRequest = StreamRequest
+download.StreamServer = StreamServer
 download.ThreadSafeFile = ThreadSafeFile
 download.URLManager = URLManager
 download.USER_AGENT = USER_AGENT
@@ -4198,9 +4378,11 @@ def run():
     parser.add_option("--pgp-store", "-p", dest="pgpstore", metavar="FILE", help=_("File with the PGP keys that you trust (default: ~/.gnupg/pubring.gpg)"))
     parser.add_option("--gpg-binary", "-g", dest="gpg", help=_("(optional) Location of gpg binary path if not in the default search path"))
     parser.add_option("--convert-jigdo", "-j", action="store_true", dest="jigdo", help=_("Convert Jigdo format file to Metalink"))
+    parser.add_option("--port", dest="port", help=_("Streaming server port to use (default: No streaming server)"))
+    parser.add_option("--html", dest="html", help=_("Extract links from HTML webpage"))
     (options, args) = parser.parse_args()
 
-    if options.filevar == None and len(args) == 0:
+    if options.filevar == None and len(args) == 0 and options.html == None:
         parser.print_help()
         return
 
@@ -4216,6 +4398,8 @@ def run():
         download.PGP_KEY_DIR = options.pgpdir
     if options.pgpstore != None:
         download.PGP_KEY_STORE = options.pgpstore
+    if options.port != None:
+        download.PORT = int(options.port)
     if options.gpg != None:
         GPG.DEFAULT_PATH.insert(0, options.gpg)
         
@@ -4230,6 +4414,25 @@ def run():
         print download.convert_jigdo(args[0])
         return
 
+    if options.html:
+        handle = download.urlopen(options.html)
+        text = handle.read()
+        handle.close()
+
+        page = checker.Webpage()
+        page.set_url(options.html)
+        page.feed(text)
+        
+        for item in page.urls:
+            if item.endswith(".metalink"):
+                print "=" * 79
+                print item
+                mcheck = checker.Checker()
+                mcheck.check_metalink(item)
+                results = mcheck.get_results()
+                print_totals(results)
+        return
+
     if options.check:
         # remove filevar eventually
         mcheck = checker.Checker()
@@ -4237,8 +4440,13 @@ def run():
         results = mcheck.get_results()
         print_totals(results)
         for item in args:
-            results = checker.check_metalink(item)
+            print "=" * 79
+            print item
+            mcheck = checker.Checker()
+            mcheck.check_metalink(item)
+            results = mcheck.get_results()
             print_totals(results)
+        return
             
     if options.download:
         # remove filevar eventually
@@ -4267,8 +4475,10 @@ def run():
             mcheck = checker.Checker()
             mcheck.check_metalink(item)
             results = mcheck.get_results()
-            print_totals(results)            
-
+            print_totals(results)
+            
+    sys.exit(0)
+    
 def print_totals(results):
     for key in results.keys():
         print "=" * 79
@@ -4292,7 +4502,7 @@ def print_totals(results):
             redir = results[key][subkey][2]
 
             print "-" * 79
-            print _("Checked") + ": %s" % key
+            print _("Checked") + ": %s" % subkey
             if redir != None:
                 print _("Redirected") + ": %s" % redir
             print _("Response Code") + ": %s\t" % status + _("Size Check") + ": %s" % size

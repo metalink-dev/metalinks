@@ -5,7 +5,7 @@ import shutil
 import glob
 
 APP_NAME = 'metalink-checker'
-VERSION = '4.2'
+VERSION = '4.3'
 LICENSE = 'GPL'
 DESC = 'A metalink checker and download client.'
 AUTHOR_NAME = 'Neil McNab'
