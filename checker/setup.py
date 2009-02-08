@@ -3,6 +3,7 @@ import sys
 import os.path
 import shutil
 import glob
+import zipfile
 
 APP_NAME = 'metalink-checker'
 VERSION = '4.3'
@@ -120,6 +121,20 @@ def clean():
                 os.remove(filename)
             except WindowsError: pass
 
+def create_zip(rootpath, zipname, mode="w"):
+    print zipname
+    myzip = zipfile.ZipFile(zipname, mode, zipfile.ZIP_DEFLATED)
+    for root, dirs, files in os.walk(rootpath):
+        for filename in files:
+            filepath = os.path.join(root, filename)
+            filehandle = open(filepath, "rb")
+            filepath = filepath[len(rootpath):]
+            text = filehandle.read()
+            #print filepath, len(text)
+            myzip.writestr(filepath, text)
+            filehandle.close()
+    myzip.close()
+
 def localegen():
     localedir = "locale"
     ignore = ("setup.py", "test.py")
@@ -208,3 +223,17 @@ elif sys.argv[1] == 'py2exe':
       author_email = EMAIL,
       url = URL
       )
+    setup(windows = ["guitk.py"],
+        zipfile = None,
+      name = APP_NAME,
+      version = VERSION,
+      license = LICENSE,
+      description = DESC,
+      author = AUTHOR_NAME,
+      author_email = EMAIL,
+      url = URL
+      )
+
+elif sys.argv[1] == 'zip':
+    #print "Zipping up..."
+    create_zip("dist/", APP_NAME + "-" + VERSION + "-win32.zip")
