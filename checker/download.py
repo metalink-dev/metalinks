@@ -1760,7 +1760,7 @@ class Host_Segment:
         self.host.set_active(False)
 
     def end(self):
-        if not self.checksum():
+        if self.error == None and not self.checksum():
             self.error = _("Chunk checksum failed")
         self.close()
 
