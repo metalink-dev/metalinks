@@ -78,7 +78,7 @@ import BaseHTTPServer
 try: import win32api
 except: pass
 
-USER_AGENT = "Metalink Checker/4.2 +http://www.nabber.org/projects/"
+USER_AGENT = "Metalink Checker/4.3 +http://www.nabber.org/projects/"
 
 SEGMENTED = True
 LIMIT_PER_HOST = 1
