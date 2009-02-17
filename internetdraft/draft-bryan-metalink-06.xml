@@ -29,10 +29,30 @@
 	<address>		
 	  <email>anthonybryan@gmail.com</email>	
 	  <uri>http://www.metalinker.org</uri>		
-	</address>	
-      </author>		
-      
-      <date month="January" year="2009"/>        
+	</address>
+      </author>
+      <author initials="T." surname="Tsujikawa" fullname="Tatsuhiro Tsujikawa" role="editor">
+       <organization>Metalinker Project</organization>
+       <address>
+         <email>tatsuhiro.t@gmail.com</email>
+         <uri>http://aria2.sourceforge.net</uri>
+       </address>
+      </author>
+      <author initials="N." surname="McNab" fullname="Neil McNab" role="editor">
+      <organization>Metalinker Project</organization>
+      <address>
+        <email>nabber00@gmail.com</email>
+        <uri>http://www.nabber.org</uri>
+      </address>
+    </author>
+      <author initials="P." surname="Poeml" fullname="Peter Poeml" role="editor">
+      <organization>Novell, Inc</organization>
+      <address>
+        <email>info@mirrorbrain.org</email>
+        <uri>http://www.mirrorbrain.org/</uri>
+      </address>
+    </author>
+	<date month="February" year="2009"/>        
 
       <abstract>
 	<t>This document specifies Metalink Documents, an XML-based download description format.</t>
@@ -1993,7 +2013,7 @@ structuredExtensionElement =
           Alexander Lazic, Mayank Sharma, Robin Heggelund Hansen, Steve Langasek, Federico
           Parodi, Stefano Verna, Jason Green, James Linden,
           Matt Nederlanden, Aren Olsen, Dag Odenhall,  Troy
-          Sobotka, Corey Farwell, Ed Lee, Shawn Wilsher, Mike Connor, Anand Muttagi, Dedric Carter, Debi
+          Sobotka, Corey Farwell, Ed Lee, Shawn Wilsher, Mike Connor, Anand Muttagi, Johan Svedberg, Dedric Carter, James Antill, Debi
           Goulding, the Anthony Family, the Bryan Family, Juanita Anthony and Zimmy Bryan.</t>
 
 	    </section> 
@@ -2161,12 +2181,13 @@ anyForeignElement =
 		  
 	    <section title="Document History">
 		<t>[[ to be removed by the RFC editor before publication as an RFC. ]]</t>
+		<t>Updated versions are kept in Subversion at http://metalinks.svn.sourceforge.net/viewvc/metalinks/internetdraft/ and http://tools.ietf.org/html/draft-bryan-metalink</t>
 <t>-06 
 	    
 	    <list style="symbols"> 
 	      
 
-	      <t>...</t>
+	      <t>Add authors.</t>
 	    </list></t>
 <t>-05 
 	    
@@ -2194,7 +2215,7 @@ anyForeignElement =
 
 	      <t>New namespace - urn:ietf:params:xml:ns:metalink</t>
 		  <t>Use the IANA registry named "Operating System Names" to define values for OS types.</t>
-		  <t>Add "Client Implementation Considerations" section.</t>
+		  <t>Add "Client Implementation Considerations" section, which includes Content Negotiation.</t>
 	    </list></t>
 <t>-02 
 	    
@@ -2202,8 +2223,8 @@ anyForeignElement =
 	      
 
 	      <t>Use the IANA registry named "Hash Function Textual Names" for hash types.</t>
-		  <t>metadata element for listing .torrent, .metalink, etc.</t>
-		  <t>Remove type attribute for "metalink:url" Element.</t>
+		  <t>metadata Element for listing .torrent, .metalink, etc.</t>
+		  <t>Remove type attribute for url Element.</t>
 	    </list></t> 
 <t>-01 
 	    
