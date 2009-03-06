@@ -21,7 +21,7 @@
 -->
 <!DOCTYPE rfc
   PUBLIC "" "rfc2629.dtd">
-<rfc category="std" docName="draft-bryan-metalink-06" ipr="trust200811">
+<rfc category="std" docName="draft-bryan-metalink-06" ipr="pre5378Trust200902">
     <front>        
       <title abbrev="Metalink Download Description Format">The Metalink Download Description Format</title>		
       <author initials="A." surname="Bryan" fullname="Anthony Bryan" role="editor">
@@ -46,13 +46,13 @@
       </address>
     </author>
       <author initials="P." surname="Poeml" fullname="Peter Poeml" role="editor">
-      <organization>Novell, Inc</organization>
+      <organization>Novell, Inc.</organization>
       <address>
         <email>info@mirrorbrain.org</email>
         <uri>http://www.mirrorbrain.org/</uri>
       </address>
     </author>
-	<date month="February" year="2009"/>        
+	<date month="March" year="2009"/>        
 
       <abstract>
 	<t>This document specifies Metalink Documents, an XML-based download description format.</t>
@@ -1988,11 +1988,10 @@ structuredExtensionElement =
 	    
           <t>The following people contributed to preliminary
           versions of this document: Paul Burkhead, Kristian Weston, Darius Liktorius, Michael Burford,
-          Giorgio Maone, Manuel Subredu, Tatsuhiro
-          Tsujikawa, A. Bram Neijt, Max Velasques, Manolo Valdes, Urs Wolfer,
-          Frederick Cheung, Nils Maier, Hampus Wessman, Neil McNab, Hayden
+          Giorgio Maone, Manuel Subredu, A. Bram Neijt, Max Velasques, Manolo Valdes, Urs Wolfer,
+          Frederick Cheung, Nils Maier, Hampus Wessman, Hayden
           Legendre, Danny Ayers, Nick Dominguez, Rene Leonhardt, Per Oyvind Karlsen, Gary Zellerbach, James Clark, Daniel
-          Stenberg, Peter Poeml, Matt Domsch, Chris Newman, Lisa Dusseault, Ian Macfarlane, Dave Cridland, Julian Reschke, Barry Leiba, Uri Blumenthal, Paul Hoffman, Eran Hammer-Lahav, and Mark Nottingham. 
+          Stenberg, Matt Domsch, Chris Newman, Lisa Dusseault, Ian Macfarlane, Dave Cridland, Julian Reschke, Barry Leiba, Uri Blumenthal, Paul Hoffman, Eran Hammer-Lahav, and Mark Nottingham. 
 		  The content and concepts within are a product of the Metalink
 	      community.</t>
 
@@ -2182,12 +2181,13 @@ anyForeignElement =
 	    <section title="Document History">
 		<t>[[ to be removed by the RFC editor before publication as an RFC. ]]</t>
 		<t>Updated versions are kept in Subversion at http://metalinks.svn.sourceforge.net/viewvc/metalinks/internetdraft/ and http://tools.ietf.org/html/draft-bryan-metalink</t>
+		<t>Remaining issues: Section 5 - Content negotiation vs HTTP Link header. Section 4.2.14 - Need to allow signatures other than PGP.</t>
 <t>-06 
 	    
 	    <list style="symbols"> 
 	      
 
-	      <t>Add authors.</t>
+	      <t>Add authors and this Document History section.</t>
 	    </list></t>
 <t>-05 
 	    
