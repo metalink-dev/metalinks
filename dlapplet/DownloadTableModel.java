@@ -1,4 +1,34 @@
-//package org.nabber.DLApplet;
+/*######################################################################
+#
+# Project: DLApplet
+# URL: http://www.nabber.org/projects/
+# E-mail: webmaster@nabber.org
+#
+# Copyright: (C) 2009, Neil McNab
+# License: GNU General Public License Version 2
+#   (http://www.gnu.org/copyleft/gpl.html)
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+#
+# Filename: $URL$
+# Last Updated: $Date$
+# Author(s): Neil McNab
+#
+# Description:
+#   GUI for table of downloads.
+######################################################################*/
 
 import java.util.*;
 import javax.swing.*;
@@ -9,7 +39,7 @@ class DownloadsTableModel extends AbstractTableModel
         implements Observer {
     
     // These are the names for the table's columns.
-    private static final String[] columnNames = {"URL", "Size",
+    private static final String[] columnNames = {"File", "Size",
     "Progress", "Status"};
     
     // These are the classes for each column's values.
@@ -69,8 +99,8 @@ class DownloadsTableModel extends AbstractTableModel
         
         Download download = (Download) downloadList.get(row);
         switch (col) {
-            case 0: // URL
-                return download.getUrl();
+            case 0: // Filename
+                return download.getFileName();
             case 1: // Size
                 int size = download.getSize();
                 return (size == -1) ? "" : Integer.toString(size);
