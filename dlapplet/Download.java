@@ -1,8 +1,12 @@
-//g package org.nabber.DLApplet;
+// package org.nabber.DLApplet;
 
 import java.io.*;
 import java.net.*;
 import java.util.*;
+
+import javax.xml.parsers.*;
+import org.xml.sax.*;
+import org.xml.sax.helpers.*;
 
 // This class downloads a file from a URL.
 class Download extends Observable implements Runnable {
@@ -36,8 +40,63 @@ class Download extends Observable implements Runnable {
         status = DOWNLOADING;
         
         // Begin the download.
-        download();
+        type_check(url);
     }
+	
+	public void type_check(URL url) {
+	    if (url.toString().endsWith(".metalink")) {
+		    System.out.println("processing as metalink");
+		    download_metalink(url);
+		} else {
+		    System.out.println("processing as normal download");
+	        download();
+		}
+	}
+	
+	public void download_metalink(URL url) {
+	    String buffer = "";
+		String line = "";
+		InputStream stream = null;
+		BufferedReader reader = null;
+	    /*try {
+		    stream = url.openStream();
+			
+			reader = new BufferedReader(new InputStreamReader(stream));
+			
+			while ((line = reader.readLine()) != null) {
+                buffer += line + "\n";
+            }
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}*/
+		
+		
+		Metalink handler = new Metalink();
+        SAXParserFactory factory = SAXParserFactory.newInstance();
+        try {
+		  //System.out.println("parsing");
+          SAXParser parser = factory.newSAXParser();
+          parser.parse(url.toString(), handler);
+        } catch(Exception e) {
+          String errorMessage =
+            "Error parsing " + url.toString() + ": " + e;
+          System.err.println(errorMessage);
+          e.printStackTrace();
+        }
+		/*try {
+		    stream.close();
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}*/
+		
+		for (MetalinkFile fileobj : handler.get_files()) {
+		    download_file(fileobj.get_filename(), fileobj.get_urls());
+		}
+	}
+	
+	public void download_file(String filename, ArrayList <String> urls) {
+	    System.out.println("Downloading: " + filename);
+	}
     
     // Get this download's URL.
     public String getUrl() {
@@ -91,7 +150,7 @@ class Download extends Observable implements Runnable {
     }
     
     // Get file name portion of URL.
-    private String getFileName(URL url) {
+    public String getFileName() {
         String fileName = url.getFile();
         return fileName.substring(fileName.lastIndexOf('/') + 1);
     }
@@ -132,7 +191,7 @@ class Download extends Observable implements Runnable {
             }
             
             // Open file and seek to the end of it.
-            file = new RandomAccessFile(download_path + "/" + getFileName(url), "rw");
+            file = new RandomAccessFile(download_path + "/" + getFileName(), "rw");
 			//file = new RandomAccessFile(getFileName(url), "rw");
             file.seek(downloaded);
             
