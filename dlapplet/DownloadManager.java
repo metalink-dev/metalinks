@@ -76,12 +76,18 @@ public class DownloadManager extends Panel
 		//Setup rows
 		JPanel PanelRows = new JPanel();
 		PanelRows.setLayout(new BoxLayout(PanelRows, BoxLayout.Y_AXIS));
+		//JPanel addPanel3 = new JPanel();
+        JLabel label = new JLabel("DLApplet");
+        PanelRows.add(label);
+		
 
         // Set up add panel.
         JPanel addPanel = new JPanel();
+        label = new JLabel("URL: ");
+        addPanel.add(label);
         addTextField = new JTextField(30);
         addPanel.add(addTextField);
-        JButton addButton = new JButton("Add Download");
+        JButton addButton = new JButton("Start Download!");
         addButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 actionAdd();
@@ -92,8 +98,18 @@ public class DownloadManager extends Panel
 		
 		// Set up save dir panel.
         JPanel addPanel2 = new JPanel();
+        label = new JLabel("Save Path:");
+        addPanel2.add(label);
         addPathField = new JTextField(30);
         addPanel2.add(addPathField);
+
+        JButton addBrowseButton = new JButton("Browse...");
+        addBrowseButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                actionBrowse();
+            }
+        });
+		addPanel2.add(addBrowseButton);
 		PanelRows.add(addPanel2);
         
         // Set up Downloads table.
@@ -181,6 +197,8 @@ public class DownloadManager extends Panel
     // Add a new download.
     private void actionAdd() {
         URL verifiedUrl = verifyUrl(addTextField.getText());
+		
+		// TODO validate Path value here
         if (verifiedUrl != null) {
             tableModel.addDownload(new Download(verifiedUrl, addPathField.getText()));
             addTextField.setText(""); // reset add text field
@@ -189,6 +207,21 @@ public class DownloadManager extends Panel
                     "Invalid Download URL", "Error",
                     JOptionPane.ERROR_MESSAGE);
         }
+    }
+	
+    // Browse for a directory to save to
+    private void actionBrowse() {
+        addPathField.getText();
+		
+		//Create a file chooser
+        JFileChooser fc = new JFileChooser();
+		// only allow directories, not files
+		fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		
+		int returnVal = fc.showOpenDialog(this);
+		if(returnVal == JFileChooser.APPROVE_OPTION) {
+			addPathField.setText(fc.getSelectedFile().getPath());
+		}
     }
     
     // Verify download URL.

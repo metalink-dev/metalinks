@@ -132,7 +132,7 @@ class Download extends Observable implements Runnable {
             }
             
             // Open file and seek to the end of it.
-            file = new RandomAccessFile(download_path + getFileName(url), "rw");
+            file = new RandomAccessFile(download_path + "/" + getFileName(url), "rw");
 			//file = new RandomAccessFile(getFileName(url), "rw");
             file.seek(downloaded);
             
