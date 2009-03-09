@@ -1,12 +1,40 @@
-// package org.nabber.DLApplet;
+/*######################################################################
+#
+# Project: DLApplet
+# URL: http://www.nabber.org/projects/
+# E-mail: webmaster@nabber.org
+#
+# Copyright: (C) 2009, Neil McNab
+# License: GNU General Public License Version 2
+#   (http://www.gnu.org/copyleft/gpl.html)
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+#
+# Filename: $URL$
+# Last Updated: $Date$
+# Author(s): Neil McNab
+#
+# Description:
+#   Class to handle normal downloads.  Tries alternate URLs if failure.
+######################################################################*/
+
+// FROM: http://www.java-tips.org/java-se-tips/javax.swing/how-to-create-a-download-manager-in-java.html
 
 import java.io.*;
 import java.net.*;
 import java.util.*;
-
-import javax.xml.parsers.*;
-import org.xml.sax.*;
-import org.xml.sax.helpers.*;
 
 // This class downloads a file from a URL.
 class Download extends Observable implements Runnable {
@@ -25,83 +53,39 @@ class Download extends Observable implements Runnable {
     public static final int CANCELLED = 3;
     public static final int ERROR = 4;
     
-    private URL url; // download URL
-	private String download_path;
+    //private URL url; // download URL
+	ArrayList <String> urls = new ArrayList <String> ();
+	private String filename;
+	private String path;
     private int size; // size of download in bytes
     private int downloaded; // number of bytes downloaded
     private int status; // current status of download
     
     // Constructor for Download.
-    public Download(URL url, String path) {
-        this.url = url;
-		this.download_path = path;
+    public Download(MetalinkFile ml, String pathin) {
+		filename = ml.filename;
+		path = pathin;
+		urls = ml.get_urls();
         size = -1;
         downloaded = 0;
         status = DOWNLOADING;
         
         // Begin the download.
-        type_check(url);
+        download();
     }
 	
-	public void type_check(URL url) {
-	    if (url.toString().endsWith(".metalink")) {
-		    System.out.println("processing as metalink");
-		    download_metalink(url);
-		} else {
-		    System.out.println("processing as normal download");
-	        download();
-		}
-	}
+	/*public void setUrl(URL url) {
+		this.url = url;
+	}*/
 	
-	public void download_metalink(URL url) {
-	    String buffer = "";
-		String line = "";
-		InputStream stream = null;
-		BufferedReader reader = null;
-	    /*try {
-		    stream = url.openStream();
-			
-			reader = new BufferedReader(new InputStreamReader(stream));
-			
-			while ((line = reader.readLine()) != null) {
-                buffer += line + "\n";
-            }
-		} catch (IOException ex) {
-			ex.printStackTrace();
-		}*/
-		
-		
-		Metalink handler = new Metalink();
-        SAXParserFactory factory = SAXParserFactory.newInstance();
-        try {
-		  //System.out.println("parsing");
-          SAXParser parser = factory.newSAXParser();
-          parser.parse(url.toString(), handler);
-        } catch(Exception e) {
-          String errorMessage =
-            "Error parsing " + url.toString() + ": " + e;
-          System.err.println(errorMessage);
-          e.printStackTrace();
-        }
-		/*try {
-		    stream.close();
-		} catch (IOException ex) {
-			ex.printStackTrace();
-		}*/
-		
-		for (MetalinkFile fileobj : handler.get_files()) {
-		    download_file(fileobj.get_filename(), fileobj.get_urls());
-		}
-	}
+	/*public void setPath(String path) { 
+		this.download_path = path;
+	}*/
 	
-	public void download_file(String filename, ArrayList <String> urls) {
-	    System.out.println("Downloading: " + filename);
-	}
-    
     // Get this download's URL.
-    public String getUrl() {
+    /*public String getUrl() {
         return url.toString();
-    }
+    }*/
     
     // Get this download's size.
     public int getSize() {
@@ -149,17 +133,31 @@ class Download extends Observable implements Runnable {
         thread.start();
     }
     
-    // Get file name portion of URL.
+	public String displayFileName() {
+        return filename;
+    }
+	
     public String getFileName() {
-        String fileName = url.getFile();
-        return fileName.substring(fileName.lastIndexOf('/') + 1);
+        return path;// + "/" + filename;
     }
     
     // Download file.
     public void run() {
-        RandomAccessFile file = null;
-        InputStream stream = null;
-        
+      RandomAccessFile file = null;
+      InputStream stream = null;
+
+	  URL url = null;
+
+      for (String urlstr : urls) {
+	    if (status == ERROR) {
+	        status = DOWNLOADING;
+		}
+		System.out.println("trying url normally: " + urlstr);
+		try {
+	        url = new URL(urlstr);
+		} catch (MalformedURLException e) {
+		    e.printStackTrace();
+		}
         try {
             // Open connection to URL.
             HttpURLConnection connection =
@@ -191,7 +189,7 @@ class Download extends Observable implements Runnable {
             }
             
             // Open file and seek to the end of it.
-            file = new RandomAccessFile(download_path + "/" + getFileName(), "rw");
+            file = new RandomAccessFile(getFileName(), "rw");
 			//file = new RandomAccessFile(getFileName(url), "rw");
             file.seek(downloaded);
             
@@ -240,6 +238,10 @@ class Download extends Observable implements Runnable {
                 } catch (Exception e) {}
             }
         }
+		if (status != ERROR) {
+		    break;
+		}
+	  }
     }
     
     // Notify observers that this download's status has changed.

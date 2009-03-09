@@ -32,39 +32,41 @@
 
 import org.xml.sax.*;
 import org.xml.sax.helpers.*;
-import java.util.jar.Attributes;
 import java.util.ArrayList;
 
 public class Metalink extends DefaultHandler {
   ArrayList <MetalinkFile> files = new ArrayList <MetalinkFile> ();
-  String dataString;
+  String dataString = "";
+  Boolean in_resources = false;
   
-  //public Metalink() {
-  //}
+  public Metalink() {
+  }
    
-  public void startElement(String namespaceUri, String localName, String qualifiedName, Attributes attributes)
+  public void startElement(String namespaceUri, String localName, String qualifiedName, Attributes attrs)
       throws SAXException {
-	  System.out.println("in sax start");
-    /*if (qualifiedName.equals("file")) {
-	    files.add(new MetalinkFile(attributes));
-	} else if (qualifiedName.equals("url")) {
-    }*/
+	  //System.out.println("in sax start");
+	  dataString = "";
+    if (qualifiedName.equals("file")) {
+	    files.add(new MetalinkFile(attrs.getValue("name")));
+	} else if (qualifiedName.equals("resources")) {
+	    in_resources = true;
+    }
   }
 
   public void endElement(String namespaceUri, String localName, String qualifiedName)
       throws SAXException {
-    if (qualifiedName.equals("file")) {
-    } else if (qualifiedName.equals("url")) {
-	    System.out.println("in sax end "+ qualifiedName);
-      	//MetalinkFile fileobj = files.get(files.size() - 1);
-		//fileobj.add_url(dataString);
-    }
+    if (qualifiedName.equals("url") && in_resources) {
+	    //System.out.println("sax url: "+ qualifiedName + dataString);
+      	MetalinkFile fileobj = files.get(files.size() - 1);
+		fileobj.add_url(dataString);
+    } else if (qualifiedName.equals("resources")) {
+		in_resources = false;
+	}
   }
 
-
   public void characters(char[] chars, int startIndex, int endIndex) {
-
-      String dataString = new String(chars, startIndex, endIndex).trim();
+      //String dataString = new String(chars, startIndex, endIndex).trim();
+	  dataString += new String(chars, startIndex, endIndex);
   }
   
   public ArrayList <MetalinkFile> get_files() {
