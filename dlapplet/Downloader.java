@@ -32,6 +32,7 @@
 
 import java.util.ArrayList;
 import java.net.URL;
+import java.io.File;
 
 import javax.xml.parsers.*;
 import org.xml.sax.*;
@@ -84,6 +85,12 @@ class Downloader extends Object {
 		
 	public void download_file_urls(MetalinkFile ml) {
 		//System.out.println("Downloading to: " + ml.get_filename());
+		
+		//create subdirectories if needed
+		File dir = new File(path);
+		if (!dir.exists()) {
+		    dir.mkdirs();
+		}
 		
 		boolean segmented = false;
 		
