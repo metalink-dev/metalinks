@@ -30,13 +30,13 @@
 #   Class to handle files according to the Metalink spec.
 ######################################################################*/
 import java.util.ArrayList;
-import java.util.jar.Attributes;
+import org.xml.sax.Attributes;
 
 public class MetalinkFile extends Object {
     ArrayList <String> urls = new ArrayList <String> ();
 	String filename;
-	public MetalinkFile(Attributes attrs) {
-	    filename = attrs.getValue("name");
+	public MetalinkFile(String filenamein) {
+	    filename = filenamein;
 	}
 	
     public void add_url(String url) {

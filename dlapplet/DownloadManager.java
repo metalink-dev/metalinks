@@ -230,7 +230,10 @@ public class DownloadManager extends Panel
 		
 		// TODO validate Path value here
         if (verifiedUrl != null) {
-            tableModel.addDownload(new Download(verifiedUrl, addPathField.getText()));
+		    Downloader dldr = new Downloader(verifiedUrl, addPathField.getText());
+			for (Download dl: dldr.get_managers()) {
+                tableModel.addDownload(dl);
+			}
             addTextField.setText(""); // reset add text field
         } else {
             JOptionPane.showMessageDialog(this,

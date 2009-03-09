@@ -100,7 +100,7 @@ class DownloadsTableModel extends AbstractTableModel
         Download download = (Download) downloadList.get(row);
         switch (col) {
             case 0: // Filename
-                return download.getFileName();
+                return download.displayFileName();
             case 1: // Size
                 int size = download.getSize();
                 return (size == -1) ? "" : Integer.toString(size);
