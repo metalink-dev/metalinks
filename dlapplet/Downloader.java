@@ -86,8 +86,11 @@ class Downloader extends Object {
 	public void download_file_urls(MetalinkFile ml) {
 		//System.out.println("Downloading to: " + ml.get_filename());
 		
+		String fullpath = path + "/" + ml.filename;
+		
 		//create subdirectories if needed
-		File dir = new File(path);
+		System.out.println("subdir: " + fullpath.substring(0, fullpath.lastIndexOf('/')));
+		File dir = new File(fullpath.substring(0, fullpath.lastIndexOf('/')));
 		if (!dir.exists()) {
 		    dir.mkdirs();
 		}
@@ -98,8 +101,8 @@ class Downloader extends Object {
 			//segment manager
 		}
 		if (!segmented) {
-		    System.out.println("fullpath: " + path + "/" + ml.filename);
-			Download dl = new Download(ml, path + "/" + ml.filename);
+		    System.out.println("fullpath: " + fullpath);
+			Download dl = new Download(ml, fullpath);
 			managers.add(dl);
 		}
 	}
