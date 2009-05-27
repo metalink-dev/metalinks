@@ -55,7 +55,9 @@ DEFAULT_PATH = ['/bin', '/usr/bin', '/usr/local/bin', \
                     '${SYSTEMDRIVE}\\cygwin\\bin', '${SYSTEMDRIVE}\\cygwin\\usr\\bin', '${SYSTEMDRIVE}\\cygwin\\usr\\local\\bin']
 
 class Signature:
-    "Used to hold information about a signature result"
+    '''
+    Used to hold information about a signature result
+    '''
 
     def __init__(self):
         self.valid = 0
@@ -90,6 +92,16 @@ class Signature:
         self.key_id = value
         self.nopubkey = True
         self.error = _("Signature error, missing public key with id 0x%s.") % value[-8:]
+
+    def KEYEXPIRED(self, value):
+        self.error = _("Signature error, signing key expired at %s.") % value
+
+    def SIGEXPIRED(self, value):
+        return self.KEYEXPIRED(value)
+
+    def EXPKEYSIG(self, value):
+        # value is the name of the expired key
+        self.error = _("Signature error, valid but key expired, %s") % value
         
     def TRUST_ULTIMATE(self, value):
         '''
@@ -104,10 +116,15 @@ class Signature:
         #raise AssertionError, "File not properly loaded for signature."
     
     def is_valid(self):
+        '''
+        returns boolean result of signature valididity
+        '''
         return self.valid
  
 class ImportResult:
-    "Used to hold information about a key import result"
+    '''
+    Used to hold information about a key import result
+    '''
 
     counts = '''count no_user_id imported imported_rsa unchanged
             n_uids n_subk n_sigs n_revoc sec_read sec_imported
@@ -246,8 +263,10 @@ class GPGSubprocess:
         self.keyring = keyring
 
     def _open_subprocess(self, *args):
-        # Internal method: open a pipe to a GPG subprocess and return
-        # the file objects for communicating with it.
+        '''
+        Internal method: open a pipe to a GPG subprocess and return
+        the file objects for communicating with it.
+        '''
         cmd = [self.gpg_binary, '--status-fd 2']
         if self.keyring:
             cmd.append('--keyring "%s" --no-default-keyring'% self.keyring)
@@ -273,11 +292,13 @@ class GPGSubprocess:
         return process.stdout, process.stdin, process.stderr
 
     def _read_response(self, child_stdout, response):
-        # Internal method: reads all the output from GPG, taking notice
-        # only of lines that begin with the magic [GNUPG:] prefix.
-        # 
-        # Calls methods on the response object for each valid token found,
-        # with the arg being the remainder of the status line.
+        '''
+        Internal method: reads all the output from GPG, taking notice
+        only of lines that begin with the magic [GNUPG:] prefix.
+        
+        Calls methods on the response object for each valid token found,
+        with the arg being the remainder of the status line.
+        '''
         while 1:
             line = child_stdout.readline()
             #print line
@@ -295,8 +316,10 @@ class GPGSubprocess:
                 getattr(response, keyword)(value)
 
     def _handle_gigo(self, args, file, result):
-        # Handle a basic data call - pass data to GPG, handle the output
-        # including status information. Garbage In, Garbage Out :)
+        '''
+        Handle a basic data call - pass data to GPG, handle the output
+        including status information. Garbage In, Garbage Out :)
+        '''
         child_stdout, child_stdin, child_stderr = self._open_subprocess(*args)
 
         # Copy the file to the GPG subprocess
@@ -323,17 +346,25 @@ class GPGSubprocess:
     # SIGNATURE VERIFICATION METHODS
     #
     def verify(self, data):
-        "Verify the signature on the contents of the string 'data'"
+        '''
+        Verify the signature on the contents of the string 'data'
+        '''
         file = StringIO.StringIO(data)
         return self.verify_file(file)
     
     def verify_file(self, file):
-        "Verify the signature on the contents of the file-like object 'file'"
+        '''
+        Verify the signature on the contents of the file-like object 'file'
+        '''
         sig = Signature()
         self._handle_gigo(['--verify -'], file, sig)
         return sig
 
     def verify_file_detached(self, filename, sigtext):
+        '''
+        filename - local name of file to check signature for
+        sigtext - text of the PGP signature
+        '''
         sig = Signature()
         sigfile = StringIO.StringIO(sigtext)
         self._handle_gigo(["--verify - \"%s\"" % filename], sigfile, sig)
@@ -384,7 +415,7 @@ class GPGSubprocess:
     # ENCRYPTING DATA
     #
     def encrypt_file(self, file, recipients):
-        "Encrypt the message read from the file-like object 'file'"
+        '''Encrypt the message read from the file-like object "file"'''
         args = ['--encrypt --armor']
         for recipient in recipients:
             args.append('--recipient %s'%recipient)
@@ -393,7 +424,7 @@ class GPGSubprocess:
         return result
 
     def encrypt(self, data, recipients):
-        "Encrypt the message contained in the string 'data'"
+        '''Encrypt the message contained in the string "data"'''
         file = StringIO.StringIO(data)
         return self.encrypt_file(file, recipients)
 
@@ -401,26 +432,32 @@ class GPGSubprocess:
     # Not yet implemented, because I don't need these methods
     # The methods certainly don't have all the parameters they'd need.
     def sign(self, data):
-        "Sign the contents of the string 'data'"
+        '''Sign the contents of the string "data"'''
         pass
 
     def sign_file(self, file):
-        "Sign the contents of the file-like object 'file'"
+        '''Sign the contents of the file-like object "file"'''
         pass
 
     def decrypt_file(self, file):
-        "Decrypt the message read from the file-like object 'file'"
+        '''Decrypt the message read from the file-like object "file"'''
         pass
 
     def decrypt(self, data):
-        "Decrypt the message contained in the string 'data'"
+        '''Decrypt the message contained in the string "data"'''
         pass
 
 def print_hex(binary_data):
+    '''
+    takes a binary string as input, prints it as hex bytes
+    '''
     for byte in binary_data:
         print "%.2x" % ord(byte),
 
 def decode(filename):
+    '''
+    Decodes data elements from a given PGP file name.
+    '''
     if filename == None:
         return []
     if filename.endswith(".asc"):
@@ -429,18 +466,27 @@ def decode(filename):
         return decode_sig(filename)
 
 def decode_sig(filename):
+    '''
+    Decodes data elements from a binary (.sig) PGP file.
+    '''
     filehandle = open(filename)
     binstr = filehandle.read()
     filehandle.close()
     return decode_data(binstr)
 
 def decode_asc(filename):
+    '''
+    Decodes data elements from a base 64 encoded (.asc) PGP file.
+    '''
     filehandle = open(filename)
     lines = filehandle.readlines()
     filehandle.close()
     return decode_lines(lines)
 
 def decode_lines(lines):
+    '''
+    Decodes header from PGP ASCII.
+    '''
     text = ""
     add = False
     for line in lines:
@@ -456,7 +502,9 @@ def decode_lines(lines):
     return decode_data(binary_data)
 
 def decode_data(binary_data):
-
+    '''
+    Decodes data packets from a PGP formatted string.
+    '''
     pktlist = GPGFile()
     while len(binary_data) > 3:
         packet = decode_header(binary_data)
@@ -467,6 +515,9 @@ def decode_data(binary_data):
     return pktlist
 
 def decode_header(binary_data):
+    '''
+    Decodes the header of a PGP formatted string.
+    '''
     results = {}
 
     packet_header = ord(binary_data[0])
@@ -527,6 +578,9 @@ def decode_header(binary_data):
     return decode_tag(results, binary_data[:results['size']])
 
 def decode_tag(results, binary_data):
+        '''
+        Decodes packet types from a PGP string.
+        '''
         if results['content_tag'] == 2:
             # signature packet
             results["type"] = "Signature Packet"
@@ -584,12 +638,18 @@ def decode_tag(results, binary_data):
                     #print "\nAll data:", print_hex(binary_data)
 
 class GPGFile(list):
+    '''
+    Class to manager PGP packet data.
+    '''
     def __init__(self, filename = None, url = None):
         self.url = url
         self.filename = filename
         self.extend(decode(self.filename))
         
     def get_user_ids(self):
+        '''
+        Returns a list of the display names for keys.
+        '''
         idlist = []
         for item in self:
             if item["content_tag"] == 13:
