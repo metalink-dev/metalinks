@@ -43,7 +43,11 @@ import xml.parsers.expat
 
 # for jigdo only
 import gzip
-import bz2
+
+# handle missing module in jython
+try: import bz2
+except ImportError: pass
+
 import base64
 import StringIO
 import binascii

@@ -88,7 +88,10 @@ def translate():
         localedir = os.path.join("/".join(["%s" % k for k in temp[:-1]]), "locale")
 
     #print base, localedir
-    t = gettext.translation(base, localedir, [locale.getdefaultlocale()[0]], None, 'en')
+    localelang = locale.getdefaultlocale()[0]
+    if localelang == None:
+        localelang = "LC_ALL"
+    t = gettext.translation(base, localedir, [localelang], None, 'en')
     return t.ugettext
 
 _ = translate()
@@ -138,7 +141,6 @@ class Checker:
         Returns the results of the check in a dictonary
         '''
         self.running = True
-        
         src = download.complete_url(src)
         datasource = urllib2.urlopen(src)
         try:

@@ -72,7 +72,10 @@ import GPG
 import base64
 import sys
 import gettext
-import bz2
+
+# for jython support
+#try: import bz2
+#except ImportError: pass
 import BaseHTTPServer
 
 try: import win32api
@@ -94,6 +97,8 @@ OS = None
 COUNTRY = None
 
 lang = locale.getdefaultlocale()[0]
+if lang == None:
+    lang = "LC_ALL"
 lang = lang.replace("_", "-").lower()
 LANG = [lang]
 
@@ -243,7 +248,10 @@ def translate():
         localedir = os.path.join("/".join(["%s" % k for k in temp[:-1]]), "locale")
 
     #print base, localedir
-    t = gettext.translation(base, localedir, [locale.getdefaultlocale()[0]], None, 'en')
+    localelang = locale.getdefaultlocale()[0]
+    if localelang == None:
+        localelang = "LC_ALL"
+    t = gettext.translation(base, localedir, [localelang], None, 'en')
     return t.ugettext
 
 _ = translate()
