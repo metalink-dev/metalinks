@@ -12,6 +12,7 @@ include *.ts
 
 prune cache
 prune jython
+prune jyinterface
 prune silverlight
 prune testcases
 prune debian

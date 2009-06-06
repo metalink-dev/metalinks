@@ -5,7 +5,7 @@
 # URL: http://www.nabber.org/projects/
 # E-mail: webmaster@nabber.org
 #
-# Copyright: (C) 2007-2008, Neil McNab
+# Copyright: (C) 2007-2009, Neil McNab
 # License: GNU General Public License Version 2
 #   (http://www.gnu.org/copyleft/gpl.html)
 #
@@ -51,7 +51,7 @@
 #   bitrate - kilobits per second (float)
 #
 ########################################################################
-import logging
+#import logging
 
 #import utils
 import urllib2
@@ -67,7 +67,8 @@ import copy
 import socket
 import ftplib
 import httplib
-import GPG
+try: import GPG
+except: pass
 #import logging
 import base64
 import sys
@@ -236,12 +237,15 @@ def translate():
     Setup translation path
     '''
     if __name__=="__main__":
+        base = ""
+        localedir = ""
         try:
             base = os.path.basename(__file__)[:-3]
             localedir = os.path.join(os.path.dirname(__file__), "locale")
         except NameError:
-            base = os.path.basename(sys.executable)[:-4]
-            localedir = os.path.join(os.path.dirname(sys.executable), "locale")
+            if sys.executable != None:
+                base = os.path.basename(sys.executable)[:-4]
+                localedir = os.path.join(os.path.dirname(sys.executable), "locale")
     else:
         temp = __name__.split(".")
         base = temp[-1]
@@ -289,7 +293,7 @@ def urlhead(url, metalink=False, headers = {}):
         req.add_header('Accept', MIME_TYPE + ", */*")
 
     req.get_method = lambda: "HEAD"
-    logging.debug(url)
+    #logging.debug(url)
     fp = urllib2.urlopen(req)
     headers = fp.headers
     fp.close()
