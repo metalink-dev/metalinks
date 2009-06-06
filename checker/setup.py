@@ -100,26 +100,26 @@ def clean():
     
     try:
         shutil.rmtree("build")
-    except WindowsError: pass
+    except: pass
     try:
         shutil.rmtree("dist")
-    except WindowsError: pass
+    except: pass
     try:
         shutil.rmtree("buildMetalink")
-    except WindowsError: pass
+    except: pass
     try:
         shutil.rmtree("buildmetalinkw")
-    except WindowsError: pass
+    except: pass
     
     try:
         shutil.rmtree("tests_temp")
-    except WindowsError: pass
+    except: pass
     
     for filename in filelist:
         if filename not in ignore:
             try:
                 os.remove(filename)
-            except WindowsError: pass
+            except: pass
 
 def create_zip(rootpath, zipname, mode="w"):
     print zipname
