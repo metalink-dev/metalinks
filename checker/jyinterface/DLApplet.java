@@ -32,10 +32,6 @@
 
 package jyinterface;
 
-import jyinterface.Download;
-import jyinterface.JythonFactory;
-import org.python.util.PythonInterpreter;
-
 import javax.swing.JApplet;
 import javax.swing.JFrame;
 
@@ -48,8 +44,7 @@ public class DLApplet extends JApplet{
   //TextField filenameT;
   //TextField urlT;
   //Button downloadB;
-  /*DownloadManager manager; */
-  Download et;
+  DownloadManager manager;
 
   public void init() {
         //text = "I'm a simple applet";
@@ -68,22 +63,13 @@ public class DLApplet extends JApplet{
       }
       });*/
 	  //setSize(300, 400);
-      /*
 	  add(manager = new DownloadManager());
 	  manager.set_url(getParameter("url"));
 	  manager.set_path(getParameter("path"));
-	  manager.setVisible(true);*/
+	  manager.setVisible(true);
 	  
 	  //DownloadManager f = new DownloadManager();
 	  //f.setVisible(true);
-      
-      System.out.println("URL: " + getParameter("url"));
-
-      JythonFactory jf = JythonFactory.getInstance();
-      Download eType = (Download) jf.getJythonObject(
-                               "jyinterface.Download", "download.py");
-      System.out.println("TEST: " + eType.complete_url("c:\test"));
-
   }
 
   /*
@@ -143,3 +129,4 @@ public class DLApplet extends JApplet{
         System.out.println("preparing to unload...");
   }
 }
+
