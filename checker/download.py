@@ -645,6 +645,18 @@ def filecheck(local_file, checksums, size, handler = None):
     print "\n" + _("Checksum failed for %s.") % os.path.basename(local_file)
     return False
 
+def parse_metalink(src, headers = {}):
+    src = complete_url(src)
+    try:
+        datasource = urlopen(src, metalink=True, headers = headers)
+    except:
+        return False
+
+    metalink = xmlutils.Metalink()
+    metalink.parsehandle(datasource)
+    datasource.close()
+    return metalink
+    
 def download_metalink(src, path, force = False, handlers = {}, segmented = SEGMENTED, headers = {}):
     '''
     Decode a metalink file, can be local or remote
@@ -655,15 +667,9 @@ def download_metalink(src, path, force = False, handlers = {}, segmented = SEGME
     Returns list of file paths if download(s) is successful
     Returns False otherwise (checksum fails)
     '''
-    src = complete_url(src)
-    try:
-        datasource = urlopen(src, metalink=True, headers = headers)
-    except:
+    metalink = parse_metalink(src, headers)
+    if metalink == False:
         return False
-
-    metalink = xmlutils.Metalink()
-    metalink.parsehandle(datasource)
-    datasource.close()
 
     if metalink.type == "dynamic":
         origin = metalink.origin
