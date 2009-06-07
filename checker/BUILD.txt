@@ -12,7 +12,17 @@ The program can be run as a normal Python script if Python is present.
 Pyinstaller and py2exe are not required, these are included only for 
 supporting distribution to the masses without Python.
 
+How to build a Java version
+
+You will need the following:
+
+Java SDK 1.6 - http://java.sun.com
+Jython 2.5 RC 3 - http://www.jython.org
+
 Building on Windows
 -------------------
+buildapplet.bat - calls jython and the Java compiler to packages into a Java application
 pyinstexe.bat - calls pyinstaller to make executable files for windows and .zip package
+py2exe.bat - calls py2exe to make executable files for windows and .zip package
 setup.py merge - generates a single metalink.py script from the library
+setup.py clean - cleans up the built files from your directory
