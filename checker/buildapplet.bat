@@ -81,6 +81,13 @@ copy %JYTHON_HOME%\Lib\warnings.py %BUILD_DIR%\.
 copy %JYTHON_HOME%\Lib\posixpath.py %BUILD_DIR%\.
 copy %JYTHON_HOME%\Lib\bisect.py %BUILD_DIR%\.
 copy %JYTHON_HOME%\Lib\urllib.py %BUILD_DIR%\.
+copy %JYTHON_HOME%\Lib\codecs.py %BUILD_DIR%\.
+copy %JYTHON_HOME%\Lib\gzip.py %BUILD_DIR%\.
+copy %JYTHON_HOME%\Lib\zlib.py %BUILD_DIR%\.
+copy %JYTHON_HOME%\Lib\StringIO.py %BUILD_DIR%\.
+copy %JYTHON_HOME%\Lib\copy.py %BUILD_DIR%\.
+copy %JYTHON_HOME%\Lib\BaseHTTPServer.py %BUILD_DIR%\.
+copy %JYTHON_HOME%\Lib\SocketServer.py %BUILD_DIR%\.
 
 xcopy /S /I %JYTHON_HOME%\Lib\xml %BUILD_DIR%\xml
 xcopy /S /I %JYTHON_HOME%\Lib\encodings %BUILD_DIR%\encodings
@@ -99,5 +106,3 @@ REM %JAVA_HOME%\bin\java.exe -jar applet.jar
 %JAVA_HOME%\bin\jarsigner.exe %APPNAME%.jar %APPNAME%
 
 cd ..
-
-pause
