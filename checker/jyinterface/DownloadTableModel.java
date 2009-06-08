@@ -37,8 +37,7 @@ import javax.swing.*;
 import javax.swing.table.*;
 
 // This class manages the download table's data.
-class DownloadsTableModel extends AbstractTableModel
-        implements Observer {
+class DownloadsTableModel extends AbstractTableModel implements Observer {
     
     // These are the names for the table's columns.
     private static final String[] columnNames = {"File", "Size",
@@ -116,7 +115,7 @@ class DownloadsTableModel extends AbstractTableModel
     
   /* Update is called when a Download notifies its
      observers of any changes */
-    public void update(Observable o, Object arg) {
+    public void update(Observable obs, Object o) {
         int index = downloadList.indexOf(o);
         
         // Fire table row update notification to table.
