@@ -21,7 +21,8 @@ Jython 2.5 RC 3 - http://www.jython.org
 
 Building on Windows
 -------------------
-buildapplet.bat - calls jython and the Java compiler to packages into a Java application
+buildapplet.bat - calls jython and the Java compiler to packages into a Java application, use the "opt" option for maximum compression
+keygen.bat - generate a key to sign the Java applet, this is required to allow write access to the file system
 pyinstexe.bat - calls pyinstaller to make executable files for windows and .zip package
 py2exe.bat - calls py2exe to make executable files for windows and .zip package
 setup.py merge - generates a single metalink.py script from the library
