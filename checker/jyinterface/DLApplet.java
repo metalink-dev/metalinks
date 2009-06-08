@@ -65,7 +65,6 @@ public class DLApplet extends JApplet{
 	  //setSize(300, 400);
 	  add(manager = new DownloadManager());
 	  manager.set_url(getParameter("url"));
-	  manager.set_path(getParameter("path"));
 	  manager.setVisible(true);
 	  
 	  //DownloadManager f = new DownloadManager();

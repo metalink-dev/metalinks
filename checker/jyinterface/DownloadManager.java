@@ -220,12 +220,14 @@ public class DownloadManager extends Panel
         add(downloadsPanel, BorderLayout.CENTER);
         add(buttonsPanel, BorderLayout.SOUTH);
         
+        set_path(System.getProperty("user.home"));
+        
         //precompile jython interfaces
         JythonFactory jf = JythonFactory.getInstance();
         Downloader eType = (Downloader) jf.getJythonObject(
-                               "jyinterface.Downloader", "JDownloader.py");
+                               "jyinterface.Downloader", "JDownloader");
         Download fType = (Download) jf.getJythonObject(
-                               "jyinterface.Download", "JDownload.py");
+                               "jyinterface.Download", "JDownload");
     }
     
     // Exit this program.
@@ -238,7 +240,7 @@ public class DownloadManager extends Panel
         URL verifiedUrl = verifyUrl(addTextField.getText());
 		
 		// TODO validate Path value here
-        if (addPathField.getText() == "") {
+        if (addPathField.getText().trim() == "") {
             JOptionPane.showMessageDialog(this,
                     "Invalid Save Path", "Error",
                     JOptionPane.ERROR_MESSAGE);
@@ -247,7 +249,7 @@ public class DownloadManager extends Panel
         if (verifiedUrl != null) {
             JythonFactory jf = JythonFactory.getInstance();
             Downloader dldr = (Downloader) jf.getJythonObject(
-                               "jyinterface.Downloader", "JDownloader.py");
+                               "jyinterface.Downloader", "JDownloader");
             dldr.start(verifiedUrl.toString(), addPathField.getText());
 		    //Downloader dldr = new Downloader(verifiedUrl, addPathField.getText());
 			for (Download dl: dldr.get_managers()) {
@@ -383,7 +385,7 @@ public class DownloadManager extends Panel
     
   /* Update is called when a Download notifies its
      observers of any changes. */
-    public void update(Observable o, Object arg) {
+    public void update(Observable obs, Object o) {
         // Update buttons if the selected download has changed.
         if (selectedDownload != null && selectedDownload.equals(o))
             updateButtons();
@@ -400,6 +402,10 @@ public class DownloadManager extends Panel
     // Run the Download Manager.
     public static void main(String[] args) {
 	    //window();
+        //PythonInterpreter intrp = new PythonInterpreter();
+	    //intrp.exec("import sys");
+	    //intrp.exec("print sys.path");
+        //System.out.println("" + System.getProperty("python.path"));
         DownloadManager manager = new DownloadManager();
         manager.window();
 		//manager.setVisible(true);
