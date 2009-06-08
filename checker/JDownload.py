@@ -33,10 +33,13 @@
 #
 ########################################################################
 
+# Java imports
 import jyinterface.Download
+import java.util.Observable
 
 import socket
-import thread
+import threading
+import os.path
 
 import download
 import xmlutils
@@ -53,6 +56,7 @@ class JDownload(jyinterface.Download):
         self._progress = 0
         self._paused = False
         self._cancelled = False
+        self._observers = []
         
     def start(self, filenode, path, segmented):
         self.filenode = filenode
@@ -60,11 +64,27 @@ class JDownload(jyinterface.Download):
                     "pause": self.get_pause, 
                     "cancel": self.get_cancel,
                     }
-        # make this a thread            
-        thread.start_new_thread(download.download_file_node, (filenode, path, True, handlers, segmented))
+                    
+        # make this a thread
+        class dl(threading.Thread):
+            def __init__(self, *args):
+                threading.Thread.__init__(self)
+                self.args = args
+                self.result = None
+            def run(self):
+                self.result = download.download_file_node(*self.args)
+                
+        self.dl = dl(filenode, path, True, handlers, segmented)
+        self.dl.start()
         
     def _set_status(self, block_count, block_size, total_size):
-        self._progress = (block_count * block_size) / total_size * 100
+        self._progress = float(block_count * block_size) / total_size * 100
+        if self.dl.result == False:
+            self._status = self.ERROR
+            return
+            
+        if float(block_count * block_size) >= total_size:
+            self._status = self.COMPLETE
         
     def getSize(self):
         return self.filenode.get_size()
@@ -84,24 +104,32 @@ class JDownload(jyinterface.Download):
     def pause(self):
         self._status = self.PAUSED
         self._paused = True
+        self.notifyObservers()
         
     def resume(self):
         self._status = self.DOWNLOADING
         self._paused = False
+        self.notifyObservers()
 
     def cancel(self):
         self._status = self.CANCELLED
         self._cancelled = True
+        self.notifyObservers()
 
     def error(self):
         self._status = self.ERROR
+        self.notifyObservers()
         
     def displayFileName(self):
-        return self.filenode.get_filename()
+        return os.path.basename(self.filenode.get_filename())
         
     def addObserver(self, observer):
-        pass
+        self._observers.append(observer)
     
     def deleteObserver(self, observer):
-        pass
+        self._observers.remove(observer)
+        
+    def notifyObservers(self):
+        for obs in self._observers:
+            obs.update(java.util.Observable(), self)
         
