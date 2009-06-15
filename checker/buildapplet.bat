@@ -109,6 +109,7 @@ copy %JYTHON_HOME%\Lib\base64.py .
 copy %JYTHON_HOME%\Lib\sys.py .
 copy %JYTHON_HOME%\Lib\gettext.py .
 
+copy %JYTHON_HOME%\Lib\__future__.py .
 copy %JYTHON_HOME%\Lib\string.py .
 copy %JYTHON_HOME%\Lib\sre_compile.py .
 copy %JYTHON_HOME%\Lib\sre_constants.py .
@@ -121,6 +122,7 @@ copy %JYTHON_HOME%\Lib\traceback.py .
 copy %JYTHON_HOME%\Lib\linecache.py .
 copy %JYTHON_HOME%\Lib\stat.py .
 copy %JYTHON_HOME%\Lib\ntpath.py .
+copy %JYTHON_HOME%\Lib\nturl2path.py .
 copy %JYTHON_HOME%\Lib\atexit.py .
 copy %JYTHON_HOME%\Lib\mimetools.py .
 copy %JYTHON_HOME%\Lib\rfc822.py .
