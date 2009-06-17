@@ -17,7 +17,7 @@ How to build a Java version
 You will need the following:
 
 Java SDK 1.6 - http://java.sun.com
-Jython 2.5 RC 4 - http://www.jython.org
+Jython 2.5 - http://www.jython.org
 
 Building on Windows
 -------------------
