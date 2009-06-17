@@ -52,7 +52,7 @@
         <uri>http://www.mirrorbrain.org/</uri>
       </address>
     </author>
-	<date month="May" year="2009"/>        
+	<date month="June" year="2009"/>        
 
       <abstract>
 	<t>This document specifies Metalink Documents, an XML-based download description format.</t>
@@ -583,9 +583,6 @@ metalinkFile =
            path MUST be relative.  The path MUST NOT begin with a "/", "./" or
            "../", contain "/../", or end with "/..". Metalink Processors MUST NOT allow
            directory traversal.</t>
-        <t>A Metalink Processor MAY alter the name of the subdirectory or file
-if they contain characters which are invalid in the destination
-filesystem.</t>
 	  </section> 
 
 
@@ -624,7 +621,7 @@ metalinkResources =
 	    
 	    <list style="symbols">     
 
-	      <t><xref target="element.resources" format="none">metalink:resources</xref> element MUST contain at least one <xref target="element.metadata" format="none">metalink:metadata</xref> element or at least one <xref target="element.url" format="none">metalink:url</xref> element. Typically, <xref target="element.resources" format="none">metalink:resources</xref> element contains more than one <xref target="element.url" format="none">metalink:url</xref> element to provide multiple download sources.</t>
+	      <t><xref target="element.resources" format="none">metalink:resources</xref> element MUST contain at least one <xref target="element.url" format="none">metalink:url</xref> element or at least one <xref target="element.metadata" format="none">metalink:metadata</xref> element. Typically, <xref target="element.resources" format="none">metalink:resources</xref> element contains more than one <xref target="element.url" format="none">metalink:url</xref> element to provide multiple download sources.</t>
 
 	    </list></t> 
 
@@ -1141,10 +1138,7 @@ digital signatures, so unknown types are allowed.
 	    the linked content in octets; it is a hint about the
 	    content length of the representation returned when the IRI
 	    is mapped to a URI and 
-	    dereferenced. Note that the "<xref target="element.size" format="none">metalink:size</xref>" element MUST
-	    override the actual content length of the representation
-	    as reported by the underlying protocol, i.e. files with different sizes should be discarded.
-	  
+	    dereferenced.	  
 	    <figure>
         <iref item="metalinkSize grammar production" primary="true"/>
         <iref item="Grammar" subitem="metalinkSize" primary="true"/>
@@ -1163,7 +1157,7 @@ metalinkSize =
     <iref item="type XML element" primary="true"/> 
 	      
 	  <t>The "<xref target="element.type" format="none">metalink:type</xref>" element is a Text construct that describes
-	  whether the IRI from "<xref target="element.origin" format="none">metalink:origin</xref>" a Metalink will contain dynamic updated Metalinks or static content that is not updated.
+	  whether the IRI from "<xref target="element.origin" format="none">metalink:origin</xref>" in a Metalink will contain dynamic updated Metalinks or static content that is not updated.
 	  
 	    <figure>
         <iref item="metalinkType grammar production" primary="true"/>
@@ -1228,18 +1222,7 @@ metalinkURL =
 	    <t><xref target="element.url" format="none">metalink:url</xref>
 	    elements MAY have a preference attribute, whose value MUST be a number from 1 to 100
 		for priority, with 100 used first and 1 used last. Multiple <xref target="element.url" format="none">metalink:url</xref> elements can have the same
-		preference, i.e. ten mirrors could have preference="100". A Metalink Processor MAY download different segments of a file from more than one IRI simultaneously, and when doing so SHOULD first use the highest priority IRIs and then use lower ones.</t>
-
-
-		<t>When one or more <xref target="element.url" format="none">metalink:url</xref> elements have a preference attribute value of "100", other <xref target="element.url" format="none">metalink:url</xref> elements
-SHOULD NOT be used, unless the elements with a preference of 100 cannot be processed (e.g. if
-they are of a <xref target="element.metadata" format="none">metalink:metadata</xref> element type which is not supported by the Metalink Processor,
-such as BitTorrent, or if the servers are unavailable).</t>
-
-<t>Any <xref target="element.url" format="none">metalink:url</xref> elements with a preference attribute value of "1" SHOULD NOT be used unless all
-other <xref target="element.url" format="none">metalink:url</xref> elements cannot be processed (e.g. if
-they are of a <xref target="element.metadata" format="none">metalink:metadata</xref> element type which is not supported by the Metalink Processor,
-such as BitTorrent, or if the servers are unavailable).</t>
+		preference, i.e. ten mirrors could have preference="100".</t>
 
 	  </section> 
 
@@ -1279,17 +1262,7 @@ metalinkVersion =
 
       </section> 
 
-    </section>
-
-	  <section title="Client Implementation Considerations">
-        <t>Metalink Processors that support HTTP MUST support transparent content negotiation with HTTP <xref target="RFC2295"/>. Transparent content negotiation is accomplished
-      by adding the Metalink media type to the Accept request header. Metalink Processors MUST check the returned content type, and if the Metalink media type is used, it MUST process the Metalink.
-      If the content type does not match the Metalink media type, then Metalink Processors SHOULD handle the response as a normal response. Metalink Processors MUST NOT add the Metalink media type to Accept when requesting
-      a URI from a <xref target="element.url" format="none">metalink:url</xref> element, thus avoiding loops. Metalink Processors SHOULD handle external redirects that might lead to a Metalink.</t>
-
-        <t>When multiple hash types methods are provided, a Metalink Processor MAY verify using more than one of these hash types. Metalink Processors are encouraged to check all hash types given which they are able to verify.</t>
-
-	  </section>
+    </section>  
 	
       <section title="Securing Metalink Documents"> 
 
@@ -1551,7 +1524,7 @@ structuredExtensionElement =
 		
 	    <section title="Cryptographic Hashes">
 
-	      <t>Currently, some of the hash types defined in the IANA registry named "Hash Function Textual Names" are considered insecure. These include the whole Message Digest family of algorithms which are not suitable for cryptographically strong verification. Malicious people could provide files that appear to be identical to another file because of a collision, i.e. the weak cryptographic hashes match.</t>
+	      <t>Currently, some of the hash types defined in the IANA registry named "Hash Function Textual Names" are considered insecure. These include the whole Message Digest family of algorithms which are not suitable for cryptographically strong verification. Malicious people could provide files that appear to be identical to another file because of a collision, i.e. the weak cryptographic hashes of the intended file and a substituted malicious file could match.</t>
           <t>Metalink Generators and Processors supporting verification SHOULD at least implement
           "sha-1" which is SHA1, as specified in <xref target="RFC3174"/>. </t>
 
@@ -1633,20 +1606,6 @@ structuredExtensionElement =
 <seriesInfo name="BCP" value="14"/>
 <seriesInfo name="RFC" value="2119"/>
 </reference>
- 
-<reference anchor="RFC2295">
-
-<front>
-<title>Transparent Content Negotiation in HTTP</title>
-<author initials="K." surname="Holtman" fullname="K. Holtman">
-<organization/></author>
-<author initials="A." surname="Mutz" fullname="A. Mutz">
-<organization/></author>
-<date year="1998" month="March"/></front>
-
-<seriesInfo name="RFC" value="2295"/>
-</reference>
-
  
  
 <reference anchor="RFC2818">
@@ -1896,6 +1855,8 @@ structuredExtensionElement =
 <seriesInfo name="ISO" value="Standard 3166"/>
 </reference>
 
+
+
 	  </references>
 	  
 	  <references title="Informative References">
@@ -1982,17 +1943,7 @@ structuredExtensionElement =
 </reference>
 
 
-<reference anchor="draft-nottingham-http-link-header">
-  <front>
-    <title abbrev="Web Linking">Web Linking</title>
-    <author initials="M." surname="Nottingham" fullname="Mark Nottingham">
-	  <organization></organization>
-      <address><email>mnot@mnot.net</email></address>
-    </author>
-    <date month="April" year="2009"/>
-  </front>
-  <seriesInfo name="Internet-Draft" value="draft-nottingham-http-link-header-05"/>
-</reference>
+
 
 	    </references> 
 
@@ -2003,17 +1954,20 @@ structuredExtensionElement =
           versions of this document: Paul Burkhead, Kristian Weston, Darius Liktorius, Michael Burford,
           Giorgio Maone, Manuel Subredu, A. Bram Neijt, Max Velasques, Manolo Valdes, Urs Wolfer,
           Frederick Cheung, Nils Maier, Hampus Wessman, Hayden
-          Legendre, Danny Ayers, Nick Dominguez, Rene Leonhardt, Per Oyvind Karlsen, Gary Zellerbach, James Clark, Daniel
-          Stenberg, Matt Domsch, Chris Newman, Lisa Dusseault, Ian Macfarlane, Dave Cridland, Julian Reschke, Barry Leiba, Uri Blumenthal, Paul Hoffman, Eran Hammer-Lahav, and Mark Nottingham. 
+          Legendre, Danny Ayers, Nick Dominguez, Rene Leonhardt, Per Oyvind Karlsen, Gary Zellerbach, 
+		  James Clark, Daniel Stenberg, Matt Domsch, Chris Newman, Lisa Dusseault, 
+		  Ian Macfarlane, Dave Cridland, Julian Reschke, Barry Leiba, Uri Blumenthal, Paul Hoffman, 
+		  Eran Hammer-Lahav, and Mark Nottingham. 
 		  The content and concepts within are a product of the Metalink
 	      community.</t>
 
 	      <t>The Metalink community has dozens of contributors who proposed ideas and wording for this
 	      document, or contributed to the evolution of Metalink, including:</t>
 
-          <t>Nicolas Alvarez, Patrick Ruckstuhl, Sebastien Willemijns, Micah Cowan, Yazsoft, Lukas Appelhans, KGet developers, FDM Team, Orbit Team, Arne Babenhauserheide, Mathias Berchtold, 
+          <t>Nicolas Alvarez, Patrick Ruckstuhl, Sebastien Willemijns, Micah Cowan, Yazsoft, 
+		  Lukas Appelhans, KGet developers, FDM Team, Orbit Team, Arne Babenhauserheide, Mathias Berchtold, 
           Xienzhenyu and TheWorld Browser Team, Xi Software, Bridget and Ethan Fletcher, Ruben Kerkhof, Agostino Russo,  
-          Gervase Markham, Salvatore and Robin Musumeci, Steve and Rachel Eshelman, 
+          Salvatore and Robin Musumeci, Steve and Rachel Eshelman, 
           Lucas Hewett, Ryan and Darren Cronin, Dave Winquist, Bob Denison,
           Wes Shelton, Kees Cook, Josh Colbert, Steve Kleisath, Chad Neptune, Nick Carrabba, Chris
           Carrabba, Erin Solari, Derick Cordoba, Ryan Alexander, John Sowder, Sandra Amisano,
@@ -2187,40 +2141,40 @@ anyForeignElement =
 		  
 	    <section title="Document History (to be removed by RFC Editor before publication)">
 		<t>[[ to be removed by the RFC editor before publication as an RFC. ]]</t>
-		<t>Updated versions are kept in Subversion at http://metalinks.svn.sourceforge.net/viewvc/metalinks/internetdraft/ and http://tools.ietf.org/html/draft-bryan-metalink</t>
+		<t>Updated versions can be found at http://tools.ietf.org/html/draft-bryan-metalink with frequent updates in Subversion at http://metalinks.svn.sourceforge.net/viewvc/metalinks/internetdraft/ </t>
 		<t>Known issues concerning this draft:
 	    <list style="symbols"> 
 	      
+	      <t>Section 4.2.14 - Current Metalinks are limited to including PGP signatures of files listed inside the Metalinks. (This does not concern signing of Metalinks themselves, that is covered in Section 5: Securing Metalink Documents and Section 8.4: Security Considerations: Signing). We need to allow other types of file signatures, besides PGP, to be referenced in Metalinks.</t>
 
-	      <t>Section 4.2.14 - Current Metalinks are limited to including PGP signatures of files listed inside the Metalinks. (This does not concern signatures of Metalinks). We need to allow other types of file signatures, besides PGP, to be referenced in Metalinks.</t>
-		  <t>Section 5 - Autodiscovery of Metalinks by Metalink Processors via Transparent Content negotiation in HTTP <xref target="RFC2295"/> vs HTTP Link header <xref target="draft-nottingham-http-link-header"/>. Autodiscovery allows Metalink Processors to request a certain URI, without knowing there is a Metalink describing that URI, and then discover that there is a Metalink available at another URI. That is, a download client can request a file over HTTP with a certain URI to start a traditional download, and discover there is a Metalink describing the file, then use the information in the Metalink to complete the download.</t>
 	    </list></t>
 		
-<t>-07 : May X, 2009.
+<t>-07 : June X, 2009.
 	    
 	    <list style="symbols"> 
 	      
-
+	      <t>This ID describes the Metalink document format/schema.</t>
+	      <t>Remove "Client Implementation Considerations" section.</t>
 	      <t>Expand "Known issues" section of Document History.</t>
-	    </list></t>		
+	   </list></t>
+	   
 <t>-06 : March 3, 2009.
 	    
-	    <list style="symbols"> 
-	      
+	    <list style="symbols">	      
 
 	      <t>Add authors and this Document History section.</t>
 	    </list></t>
+		
 <t>-05 : January 13, 2009.
 	    
-	    <list style="symbols"> 
-	      
+	    <list style="symbols">	      
 
 	      <t>Clarifications.</t>
 	    </list></t>
+		
 <t>-04 : December 31, 2008.
 	    
-	    <list style="symbols"> 
-	      
+	    <list style="symbols">	      
 
 	      <t>New IPR notice as required by IETF.</t>
 		  <t>Correct "metalink:pieces" Element text.</t>
@@ -2231,36 +2185,36 @@ anyForeignElement =
 
 <t>-03 : September 19, 2008.
 	    
-	    <list style="symbols"> 
-	      
+	    <list style="symbols">	      
 
 	      <t>New namespace - urn:ietf:params:xml:ns:metalink</t>
 		  <t>Use the IANA registry named "Operating System Names" to define values for OS types.</t>
 		  <t>Add "Client Implementation Considerations" section, which includes Content Negotiation.</t>
 	    </list></t>
+		
 <t>-02 : September 4, 2008.
 	    
-	    <list style="symbols"> 
-	      
+	    <list style="symbols">	      
 
 	      <t>Use the IANA registry named "Hash Function Textual Names" for hash types.</t>
 		  <t>metadata Element for listing .torrent, .metalink, etc.</t>
 		  <t>Remove type attribute for url Element.</t>
-	    </list></t> 
+	    </list></t>
+		
 <t>-01 : August 28, 2008.
 	    
-	    <list style="symbols"> 
-	      
+	    <list style="symbols">	      
 
 	      <t>Clarify directory info in name attribute, hash types, add text for preference attribute.</t>
-	    </list></t> 
+	    </list></t>
+		
 <t>-00 : August 23, 2008.
 	    
-	    <list style="symbols"> 
-	      
+	    <list style="symbols">	      
 
 	      <t>Initial draft; Text largely based on RFC 4287, ideas from Metalink 3.0 specification.</t>
-	    </list></t> 		
+	    </list></t>
+		
 	    </section> 		  
 	  </back> 
 	</rfc>
