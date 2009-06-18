@@ -284,8 +284,8 @@ A description of the example file for download.
 	    <t>The content of the Text
 	    construct MUST NOT contain child elements. Such text is
 	    intended to be presented to humans in a readable fashion.
-	    Thus, Metalink Processors MAY collapse white space (including
-	    line breaks) and display the text using typographic
+	    Thus, white space could be collapsed (including
+	    line breaks) and text could be displayed using typographic
 	    techniques such as justification and proportional
 	    fonts.</t>
 	  
@@ -579,10 +579,9 @@ metalinkFile =
 &lt;file name="debian-amd64/sarge/Contents-amd64.gz"&gt;
 </artwork></figure></t>
         <t>In this example, a subdirectory debian-amd64/sarge/ will be created
-           and a file named Contents-amd64.gz will be created inside it.  The
-           path MUST be relative.  The path MUST NOT begin with a "/", "./" or
-           "../", contain "/../", or end with "/..". Metalink Processors MUST NOT allow
-           directory traversal.</t>
+           and a file named Contents-amd64.gz will be created inside it.  The path MUST NOT contain any directory traversal directives or
+           information. The path MUST be relative.  The path MUST NOT begin with a "/", "./" or
+           "../", contain "/../", or end with "/..".</t>
 	  </section> 
 
 
@@ -699,8 +698,9 @@ metalinkPieces =
 		</t>
     
 
-	    <t>The IANA registry named "Hash Function Textual Names" defines values for hash types. Metalink Generators and Processors supporting verification SHOULD at least implement
-"sha-1" which is SHA1, as specified in <xref target="RFC3174"/>.</t>		
+	    <t>The IANA registry named "Hash Function Textual Names" defines values for hash types. If a Metalink Document contains verification information, it SHOULD
+        implement "sha-1" which is SHA1, as specified in <xref target="RFC3174"/>.  It MAY also
+        include other verification algorithms.</t>		
 	  </section>
 
 	  <section title="The &#34;length&#34; Attribute"> 
@@ -856,8 +856,8 @@ metalinkHash =
 
 
 
-	    <t>The IANA registry named "Hash Function Textual Names" defines values for hash types. Metalink Generators and Processors supporting verification SHOULD at least implement
-"sha-1" which is SHA1, as specified in <xref target="RFC3174"/>.</t>
+	    <t>The IANA registry named "Hash Function Textual Names" defines values for hash types. If a Metalink Document contains verification information, it SHOULD
+implement "sha-1" which is SHA1, as specified in <xref target="RFC3174"/>.  It MAY also include other verification algorithms.</t>
 		
 	  </section>
 
@@ -997,8 +997,6 @@ metalinkMetadata =
 
 	    <t><xref target="element.metadata" format="none">metalink:metadata</xref> elements MUST have a "type" attribute that indicates
 	    the MIME type of the metadata available at the IRI. In the case of BitTorrent as specified in <xref target="BITTORRENT"/>, the value "torrent" is required. Types without "/" are reserved. Currently, "torrent" is the only reserved value.</t>
-
-		<t>Metalink Processors that do not support a specified type of metadata about a resource to download MUST ignore that metadata.</t>
 
 	  </section> 
 	</section>
@@ -1515,9 +1513,8 @@ structuredExtensionElement =
 
 	    <section title="Spoofing">
 
-	      <t>Metalink Processors should be aware of the potential for
-	      spoofing attacks where the attacker publishes Metalinks
-	      with false information. Malicious publishers might create Metalink Documents containing inaccurate information anywhere in the document.
+	      <t>There is potential for spoofing attacks where the attacker publishes
+          Metalinks with false information. Malicious publishers might create Metalink Documents containing inaccurate information anywhere in the document.
           At best, this could deceive unaware downloaders that they are downloading a malicious or worthless file. At worst, malicious publishers could attempt a distributed denial of service attack by inserting unrelated IRIs into Metalink Documents.</t>
 
 	    </section>	
@@ -1525,8 +1522,9 @@ structuredExtensionElement =
 	    <section title="Cryptographic Hashes">
 
 	      <t>Currently, some of the hash types defined in the IANA registry named "Hash Function Textual Names" are considered insecure. These include the whole Message Digest family of algorithms which are not suitable for cryptographically strong verification. Malicious people could provide files that appear to be identical to another file because of a collision, i.e. the weak cryptographic hashes of the intended file and a substituted malicious file could match.</t>
-          <t>Metalink Generators and Processors supporting verification SHOULD at least implement
-          "sha-1" which is SHA1, as specified in <xref target="RFC3174"/>. </t>
+          <t>If a Metalink Document contains verification information, it SHOULD
+implement "sha-1" which is SHA1, as specified in <xref target="RFC3174"/>.  It MAY also
+include other verification algorithms. </t>
 
 	    </section>	
 		
