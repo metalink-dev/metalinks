@@ -401,9 +401,9 @@ Internet-Draft    Metalink Download Description Format         June 2009
 
    The content of the Text construct MUST NOT contain child elements.
    Such text is intended to be presented to humans in a readable
-   fashion.  Thus, Metalink Processors MAY collapse white space
-   (including line breaks) and display the text using typographic
-   techniques such as justification and proportional fonts.
+   fashion.  Thus, white space could be collapsed (including line
+   breaks) and text could be displayed using typographic techniques such
+   as justification and proportional fonts.
 
 3.2.  Date Constructs
 
@@ -642,9 +642,9 @@ Internet-Draft    Metalink Download Description Format         June 2009
 
    In this example, a subdirectory debian-amd64/sarge/ will be created
    and a file named Contents-amd64.gz will be created inside it.  The
-   path MUST be relative.  The path MUST NOT begin with a "/", "./" or
-   "../", contain "/../", or end with "/..".  Metalink Processors MUST
-   NOT allow directory traversal.
+   path MUST NOT contain any directory traversal directives or
+   information.  The path MUST be relative.  The path MUST NOT begin
+   with a "/", "./" or "../", contain "/../", or end with "/..".
 
 4.1.4.  The "metalink:resources" Element
 
@@ -734,9 +734,9 @@ Internet-Draft    Metalink Download Description Format         June 2009
    metalink:pieces elements MUST have a "type" attribute.
 
    The IANA registry named "Hash Function Textual Names" defines values
-   for hash types.  Metalink Generators and Processors supporting
-   verification SHOULD at least implement "sha-1" which is SHA1, as
-   specified in [RFC3174].
+   for hash types.  If a Metalink Document contains verification
+   information, it SHOULD implement "sha-1" which is SHA1, as specified
+   in [RFC3174].  It MAY also include other verification algorithms.
 
 4.1.6.2.  The "length" Attribute
 
@@ -864,9 +864,9 @@ Internet-Draft    Metalink Download Description Format         June 2009
 4.2.4.1.  The "type" Attribute
 
    The IANA registry named "Hash Function Textual Names" defines values
-   for hash types.  Metalink Generators and Processors supporting
-   verification SHOULD at least implement "sha-1" which is SHA1, as
-   specified in [RFC3174].
+   for hash types.  If a Metalink Document contains verification
+   information, it SHOULD implement "sha-1" which is SHA1, as specified
+   in [RFC3174].  It MAY also include other verification algorithms.
 
 4.2.4.2.  The "piece" Attribute
 
@@ -978,9 +978,6 @@ Internet-Draft    Metalink Download Description Format         June 2009
    is required.  Types without "/" are reserved.  Currently, "torrent"
    is the only reserved value.
 
-   Metalink Processors that do not support a specified type of metadata
-   about a resource to download MUST ignore that metadata.
-
 4.2.10.  The "metalink:origin" Element
 
    The "metalink:origin" element is an IRI where the Metalink Document
@@ -1001,6 +998,9 @@ Internet-Draft    Metalink Download Description Format         June 2009
    metalinkOS =
       element metalink:os {
       metalinkTextConstruct
+      }
+
+
 
 
 
@@ -1008,8 +1008,6 @@ Bryan, et al.           Expires December 20, 2009              [Page 18]
 
 Internet-Draft    Metalink Download Description Format         June 2009
 
-
-      }
 
 4.2.12.  The "metalink:published" Element
 
@@ -1055,6 +1053,8 @@ Internet-Draft    Metalink Download Description Format         June 2009
       attribute type { "pgp" },
       metalinkTextConstruct
       }
+
+
 
 
 
@@ -1373,14 +1373,13 @@ Internet-Draft    Metalink Download Description Format         June 2009
 
 8.2.  Spoofing
 
-   Metalink Processors should be aware of the potential for spoofing
-   attacks where the attacker publishes Metalinks with false
-   information.  Malicious publishers might create Metalink Documents
-   containing inaccurate information anywhere in the document.  At best,
-   this could deceive unaware downloaders that they are downloading a
-   malicious or worthless file.  At worst, malicious publishers could
-   attempt a distributed denial of service attack by inserting unrelated
-   IRIs into Metalink Documents.
+   There is potential for spoofing attacks where the attacker publishes
+   Metalinks with false information.  Malicious publishers might create
+   Metalink Documents containing inaccurate information anywhere in the
+   document.  At best, this could deceive unaware downloaders that they
+   are downloading a malicious or worthless file.  At worst, malicious
+   publishers could attempt a distributed denial of service attack by
+   inserting unrelated IRIs into Metalink Documents.
 
 8.3.  Cryptographic Hashes
 
@@ -1392,7 +1391,8 @@ Internet-Draft    Metalink Download Description Format         June 2009
    a collision, i.e. the weak cryptographic hashes of the intended file
    and a substituted malicious file could match.
 
-   Metalink Generators and Processors supporting verification SHOULD at
+   If a Metalink Document contains verification information, it SHOULD
+   implement "sha-1" which is SHA1, as specified in [RFC3174].  It MAY
 
 
 
@@ -1401,7 +1401,7 @@ Bryan, et al.           Expires December 20, 2009              [Page 25]
 Internet-Draft    Metalink Download Description Format         June 2009
 
 
-   least implement "sha-1" which is SHA1, as specified in [RFC3174].
+   also include other verification algorithms.
 
 8.4.  Signing
 
