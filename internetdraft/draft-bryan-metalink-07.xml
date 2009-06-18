@@ -2145,7 +2145,7 @@ anyForeignElement =
 		<t>Known issues concerning this draft:
 	    <list style="symbols"> 
 	      
-	      <t>Section 4.2.14 - Current Metalinks are limited to including PGP signatures of files listed inside the Metalinks. (This does not concern signing of Metalinks themselves, that is covered in Section 5: Securing Metalink Documents and Section 8.4: Security Considerations: Signing). We need to allow other types of file signatures, besides PGP, to be referenced in Metalinks.</t>
+	      <t>Section 4.2.14 - Current Metalinks are limited to including PGP signatures of files listed inside the Metalinks, but not other types of digital signatures. (This does not concern signing of Metalinks themselves, that is covered in Section 5: Securing Metalink Documents and Section 8.4: Security Considerations: Signing). We need to allow other types of file signatures, besides PGP, to be referenced in Metalinks.</t>
 
 	    </list></t>
 		
