@@ -1775,7 +1775,7 @@ Appendix C.  Document History (to be removed by RFC Editor before
       Signing).  We need to allow other types of file signatures,
       besides PGP, to be referenced in Metalinks.
 
-   -07 : June X, 2009.
+   -07 : June 18, 2009.
    o  This ID describes the Metalink document format/schema.
    o  Remove "Client Implementation Considerations" section.
    o  Expand "Known issues" section of Document History.
