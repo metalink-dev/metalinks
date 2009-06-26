@@ -1118,7 +1118,7 @@ metalinkSignature =
 	  <section title="The &#34;type&#34; Attribute"> 
 
 	    <t><xref target="element.signature" format="none">metalink:signature</xref> elements MUST have a "type" attribute.
-		The inital value of "type" is the string that is non-empty and matches "pgp". It may be useful to extend Metalink documents with new types of
+		The initial value of "type" is the string that is non-empty and matches "pgp". It may be useful to extend Metalink documents with new types of
 digital signatures, so unknown types are allowed.
 		</t>
 
@@ -2146,6 +2146,13 @@ anyForeignElement =
 	      <t>Section 4.2.14 - Current Metalinks are limited to including PGP signatures of files listed inside the Metalinks, but not other types of digital signatures. (This does not concern signing of Metalinks themselves, that is covered in Section 5: Securing Metalink Documents and Section 8.4: Security Considerations: Signing). We need to allow other types of file signatures, besides PGP, to be referenced in Metalinks.</t>
 
 	    </list></t>
+
+<t>-08 : June   , 2009.
+	    
+	    <list style="symbols"> 
+	      
+	      <t>Minor clarifications.</t>
+	   </list></t>
 		
 <t>-07 : June 18, 2009.
 	    
