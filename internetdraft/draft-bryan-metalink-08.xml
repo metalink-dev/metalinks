@@ -1199,7 +1199,7 @@ metalinkUpdated =
     <iref item="XML Elements" subitem="url" primary="true"/>
     <iref item="url XML element" primary="true"/> 
 	  
-	  <t>The "<xref target="element.url" format="none">metalink:url</xref>" element contains the IRI of a file. All IRIs MUST lead to identical files.
+	  <t>The "<xref target="element.url" format="none">metalink:url</xref>" element contains the IRI of a file. All IRIs contained in each <xref target="element.resources" format="none">metalink:resources</xref> element SHOULD lead to identical files.
 
 	    <figure>
         <iref item="metalinkURL grammar production" primary="true"/>
