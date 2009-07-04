@@ -52,7 +52,7 @@
         <uri>http://www.mirrorbrain.org/</uri>
       </address>
     </author>
-	<date month="June" year="2009"/>        
+	<date month="July" year="2009"/>        
 
       <abstract>
 	<t>This document specifies Metalink Documents, an XML-based download description format.</t>
@@ -766,7 +766,7 @@ metalinkDescription =
     <iref item="XML Elements" subitem="generator" primary="true"/>
     <iref item="generator XML element" primary="true"/>
 	      
-	  <t>The "<xref target="element.generator" format="none">metalink:generator</xref>" element's content identifies the agent used
+	  <t>The "<xref target="element.generator" format="none">metalink:generator</xref>" element's content identifies the generating agent name and version, separated by a "/", used
 	  to generate a Metalink Document, for debugging and other purposes.
       
 	    <figure> 
@@ -775,24 +775,15 @@ metalinkDescription =
 	      <artwork type="rnc">
 metalinkGenerator = element metalink:generator {
    metalinkCommonAttributes,
-   attribute uri { metalinkUri }?,
-   attribute version { text }?,
    text
 }</artwork></figure></t> 
 
 	  <t>The content of this element, when present, MUST be a
-	  string that is a human-readable name for the generating
-	  agent.  Entities such as "&amp;amp;" and "&amp;lt;"
+	  string that is a human-readable name and version, separated by a "/", for the generating
+	  agent.  For example, "MirrorBrain/2.8.1", where "MirrorBrain" is the name and "2.8.1" is the version. Entities such as "&amp;amp;" and "&amp;lt;"
 	  represent their corresponding characters ("&amp;" and "&lt;"
 	  respectively), not markup.</t>
 
-	  <t>The <xref target="element.generator" format="none">metalink:generator</xref> element MAY have a "uri" attribute
-	  whose value MUST be an IRI reference <xref target="RFC3987"/>. When dereferenced, the resulting URI (mapped from an
-	  IRI, if necessary) SHOULD produce a representation that is
-	  relevant to that agent.</t>
-
-	  <t>The <xref target="element.generator" format="none">metalink:generator</xref> element MAY have a "version" attribute that
-	  indicates the version of the generating agent.</t>
 
 	</section>	
 
@@ -971,7 +962,8 @@ metalinkLogo = element metalink:logo {
     <iref item="XML Elements" subitem="metadata" primary="true"/>
     <iref item="metadata XML element" primary="true"/> 
 	  
-	  <t>The "<xref target="element.metadata" format="none">metalink:metadata</xref>" element contains the IRI of metadata about a resource to download. For example, this could be the IRI of a BitTorrent .torrent file or a Metalink Document.
+	  <t>The "<xref target="element.metadata" format="none">metalink:metadata</xref>" element contains the IRI of metadata about a resource to download. For example, this could be the IRI of a BitTorrent .torrent file or a Metalink Document. Note that
+	  the information in the <xref target="element.verification" format="none">metalink:verification</xref> element does not apply to these files.
 
 	    <figure>
         <iref item="metalinkURL grammar production" primary="true"/>
@@ -2019,8 +2011,6 @@ include other verification algorithms. </t>
 start =
   element metalink:metalink {
     element metalink:generator {
-      attribute uri { metalinkUri }?,
-      attribute version { text }?,
       metalinkTextConstruct
     }
     element metalink:origin { metalinkUri }?,
@@ -2143,15 +2133,16 @@ anyForeignElement =
 		<t>Known issues concerning this draft:
 	    <list style="symbols"> 
 	      
-	      <t>Section 4.2.14 - Current Metalinks are limited to including PGP signatures of files listed inside the Metalinks, but not other types of digital signatures. (This does not concern signing of Metalinks themselves, that is covered in Section 5: Securing Metalink Documents and Section 8.4: Security Considerations: Signing). We need to allow other types of file signatures, besides PGP, to be referenced in Metalinks.</t>
+	      <t>None.</t>
 
 	    </list></t>
 
-<t>-08 : June   , 2009.
+<t>-08 : July  04, 2009.
 	    
 	    <list style="symbols"> 
 	      
-	      <t>Minor clarifications.</t>
+	      <t>Clarifications.</t>
+		  <t>Remove "uri" and "version" attributes from generator element.</t>
 	   </list></t>
 		
 <t>-07 : June 18, 2009.
