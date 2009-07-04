@@ -381,7 +381,7 @@ metalinkMetalink =
 
 	      <t><xref target="element.metalink" format="none">metalink:metalink</xref> elements MUST contain exactly one <xref target="element.files" format="none">metalink:files</xref> element.</t>
 
-	      <t>If <xref target="element.type" format="none">metalink:type</xref> is "dynamic", <xref target="element.metalink" format="none">metalink:metalink</xref> elements MAY contain exactly one <xref target="element.origin" format="none">metalink:origin</xref> element.</t>
+	      <t><xref target="element.metalink" format="none">metalink:metalink</xref> elements SHOULD contain exactly one <xref target="element.origin" format="none">metalink:origin</xref> element.</t>
 
 	      <t><xref target="element.metalink" format="none">metalink:metalink</xref> elements MAY contain exactly one <xref target="element.type" format="none">metalink:type</xref> element.</t>
 
