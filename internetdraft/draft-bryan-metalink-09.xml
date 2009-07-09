@@ -103,6 +103,7 @@
     &lt;file name="example.ext"&gt;
       &lt;identity&gt;Example&lt;/identity&gt;
       &lt;version&gt;1.0&lt;/version&gt;
+      &lt;language&gt;en&lt;/language&gt;	  
       &lt;description&gt;A description of the example file for 
 download.&lt;/description&gt;
       &lt;verification&gt;
@@ -110,9 +111,11 @@ download.&lt;/description&gt;
         &lt;/hash&gt;
         &lt;/verification&gt;
       &lt;resources&gt;
-        &lt;url&gt;ftp://ftp.example.com/example.ext&lt;/url&gt;
-        &lt;url&gt;http://example.com/example.ext&lt;/url&gt; 
-        &lt;metadata type="torrent"&gt;
+        &lt;url location="de" preference="95"&gt;
+        ftp://ftp.example.com/example.ext&lt;/url&gt;
+        &lt;url location="fr" preference="100"&gt;
+        http://example.com/example.ext&lt;/url&gt; 
+        &lt;metadata type="torrent" preference="90"&gt;
         http://example.com/example.ext.torrent
         &lt;/metadata&gt;
       &lt;/resources&gt;
