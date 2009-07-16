@@ -1832,10 +1832,10 @@ include other verification algorithms. </t>
 </reference>
 
  
-<reference anchor="REC-xmldsig-core" target="http://www.w3.org/TR/2002/REC-xmldsig-core-20020212">
+<reference anchor="REC-xmldsig-core" target="http://www.w3.org/TR/2008/REC-xmldsig-core-20080610">
 
 <front>
-<title>XML-Signature Syntax and Processing</title>
+<title>XML-Signature Syntax and Processing (Second Edition)</title>
 
 <author fullname="David Solo" surname="Solo" initials="D.">
     <organization></organization>
@@ -1850,10 +1850,10 @@ include other verification algorithms. </t>
 
 </author>
 
-<date year="2002" day="12" month="February"></date>
+<date year="2008" day="10" month="June"></date>
 </front>
 
-<seriesInfo name="World Wide Web Consortium Recommendation" value="REC-xmldsig-core-20020212"></seriesInfo>
+<seriesInfo name="World Wide Web Consortium Recommendation" value="REC-xmldsig-core-20080610"></seriesInfo>
 </reference>
 
 
@@ -2160,11 +2160,12 @@ anyForeignElement =
 
 	    </list></t>
 
-<t>-09 : July   , 2009.
+<t>-10 : July   , 2009.
 	    
 	    <list style="symbols"> 
 	      
 	      <t>Rename metadata element to metaurl, add name attribute to it similar to file element's name attribute.</t>
+		  <t>Update REC-xmldsig-core reference to second edition.</t>
 	   </list></t>
 	   
 <t>-09 : July 11, 2009.
