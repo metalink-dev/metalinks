@@ -1005,7 +1005,7 @@ metalinkMetaURL =
 		<figure>
 		<preamble>Directory information can also be contained in a "path/file" format only, as in:</preamble>
 	  <artwork type="example">
-&lt;file name="debian-amd64/sarge/Contents-amd64.gz"&gt;
+&lt;metaurl name="debian-amd64/sarge/Contents-amd64.gz"&gt;
 </artwork></figure></t>
         <t>In this example, a file named "Contents-amd64.gz" is indicated, in a "debian-amd64/sarge/" subdirectory.
            The path MUST NOT contain any directory traversal directives or

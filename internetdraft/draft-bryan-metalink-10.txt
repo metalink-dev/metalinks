@@ -991,7 +991,7 @@ Internet-Draft    Metalink Download Description Format         July 2009
    Directory information can also be contained in a "path/file" format
    only, as in:
 
-   <file name="debian-amd64/sarge/Contents-amd64.gz">
+   <metaurl name="debian-amd64/sarge/Contents-amd64.gz">
 
    In this example, a file named "Contents-amd64.gz" is indicated, in a
    "debian-amd64/sarge/" subdirectory.  The path MUST NOT contain any
