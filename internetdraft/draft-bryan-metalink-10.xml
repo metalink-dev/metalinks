@@ -70,9 +70,9 @@
       <t>The primary use case that Metalink addresses is the description of downloadable content in a format so download agents can act intelligently and
 	  recover from common errors with little or no user interaction necessary. These errors can include multiple servers going down and data corrupted in transmission.</t>
 
-      <t>Discussion of this draft should take place on discuss@apps.ietf.org or the Metalink discussion mailing list
+      <t>[[ Discussion of this draft should take place on discuss@apps.ietf.org or the Metalink discussion mailing list
    located at metalink-discussion@googlegroups.com. To join the list, visit
-   http://groups.google.com/group/metalink-discussion .</t>
+   http://groups.google.com/group/metalink-discussion . ]]</t>
       <section title="Examples"><t><figure> 
 	  <preamble>A brief, single file Metalink Document:</preamble>
 	  
@@ -599,7 +599,11 @@ metalinkFile =
 	  <t>The "metalink:resources" element acts as a container for metadata and
 	  data associated with the listed files.  It contains one or more <xref target="element.url" format="none">metalink:url</xref> child
 	  elements. It can also contain one or more <xref target="element.metaurl" format="none">metalink:metaurl</xref> child
-	  elements.
+	  elements.</t>
+
+	  <t>All elements contained in each <xref target="element.resources" format="none">metalink:resources</xref> element SHOULD lead to identical files. That is,
+	  each <xref target="element.url" format="none">metalink:url</xref> element should be an alternative location for the same file and each 
+	  <xref target="element.metaurl" format="none">metalink:metaurl</xref> element should provide metadata to retrieve the same file in another way, such as a peer to peer network.
 	  
 	  <figure> 
         <iref item="metalinkResources grammar production" primary="true"/>
@@ -614,7 +618,7 @@ metalinkResources =
    }</artwork></figure></t>
 	  
 	  <t>This specification assigns no significance to the order of
-	  <xref target="element.url" format="none">metalink:url</xref> elements. Significance is determined by the value of the "preference" attribute of the <xref target="element.url" format="none">metalink:url</xref> elements.</t>
+	  <xref target="element.url" format="none">metalink:url</xref> or <xref target="element.metaurl" format="none">metalink:metaurl</xref> elements. Significance is determined by the value of the "preference" attribute of the <xref target="element.url" format="none">metalink:url</xref> or <xref target="element.metaurl" format="none">metalink:metaurl</xref> elements.</t>
 	
 	  <t>The following child elements are defined by this specification
 	  (note that the presence of some of these elements is required):</t>
@@ -966,7 +970,7 @@ metalinkLogo = element metalink:logo {
     <iref item="metadata XML element" primary="true"/> 
 	  
 	  <t>The "<xref target="element.metaurl" format="none">metalink:metaurl</xref>" element contains the IRI of metadata about a resource to download. For example, this could be the IRI of a BitTorrent .torrent file or a Metalink Document. Note that
-	  the information in the <xref target="element.verification" format="none">metalink:verification</xref> element does not apply to these files.
+	  the information in the <xref target="element.verification" format="none">metalink:verification</xref> element does not apply to these files, but to the files that are described by them.
 
 	    <figure>
         <iref item="metalinkURL grammar production" primary="true"/>
@@ -1212,7 +1216,9 @@ metalinkUpdated =
     <iref item="XML Elements" subitem="url" primary="true"/>
     <iref item="url XML element" primary="true"/> 
 	  
-	  <t>The "<xref target="element.url" format="none">metalink:url</xref>" element contains the IRI of a file. All IRIs contained in each <xref target="element.resources" format="none">metalink:resources</xref> element SHOULD lead to identical files.
+	  <t>The "<xref target="element.url" format="none">metalink:url</xref>" element contains the IRI of a file.
+	  Most Metalink Documents will contain multiple <xref target="element.url" format="none">metalink:url</xref> elements,
+	  and each one SHOULD be a valid alternative to download the same file.
 
 	    <figure>
         <iref item="metalinkURL grammar production" primary="true"/>
