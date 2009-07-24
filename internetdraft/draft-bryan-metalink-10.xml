@@ -706,7 +706,7 @@ metalinkPieces =
     
 
 	    <t>The IANA registry named "Hash Function Textual Names" defines values for hash types. If a Metalink Document contains verification information, it SHOULD
-        implement "sha-1" which is SHA1, as specified in <xref target="RFC3174"/>.  It MAY also
+        include "sha-1" which is SHA1, as specified in <xref target="RFC3174"/>.  It MAY also
         include other verification algorithms.</t>		
 	  </section>
 
@@ -855,7 +855,7 @@ metalinkHash =
 
 
 	    <t>The IANA registry named "Hash Function Textual Names" defines values for hash types. If a Metalink Document contains verification information, it SHOULD
-implement "sha-1" which is SHA1, as specified in <xref target="RFC3174"/>.  It MAY also include other verification algorithms.</t>
+include "sha-1" which is SHA1, as specified in <xref target="RFC3174"/>.  It MAY also include other verification algorithms.</t>
 		
 	  </section>
 
