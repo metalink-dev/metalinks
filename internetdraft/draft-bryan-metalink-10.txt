@@ -4,10 +4,10 @@
 Network Working Group                                      A. Bryan, Ed.
 Internet-Draft                                         T. Tsujikawa, Ed.
 Intended status: Standards Track                           N. McNab, Ed.
-Expires: January 25, 2010                             Metalinker Project
+Expires: January 26, 2010                             Metalinker Project
                                                            P. Poeml, Ed.
                                                             Novell, Inc.
-                                                           July 24, 2009
+                                                           July 25, 2009
 
 
                 The Metalink Download Description Format
@@ -44,7 +44,7 @@ Status of this Memo
    The list of Internet-Draft Shadow Directories can be accessed at
    http://www.ietf.org/shadow.html.
 
-   This Internet-Draft will expire on January 25, 2010.
+   This Internet-Draft will expire on January 26, 2010.
 
 Copyright Notice
 
@@ -52,7 +52,7 @@ Copyright Notice
 
 
 
-Bryan, et al.           Expires January 25, 2010                [Page 1]
+Bryan, et al.           Expires January 26, 2010                [Page 1]
 
 Internet-Draft    Metalink Download Description Format         July 2009
 
@@ -108,7 +108,7 @@ Table of Contents
 
 
 
-Bryan, et al.           Expires January 25, 2010                [Page 2]
+Bryan, et al.           Expires January 26, 2010                [Page 2]
 
 Internet-Draft    Metalink Download Description Format         July 2009
 
@@ -164,7 +164,7 @@ Internet-Draft    Metalink Download Description Format         July 2009
 
 
 
-Bryan, et al.           Expires January 25, 2010                [Page 3]
+Bryan, et al.           Expires January 26, 2010                [Page 3]
 
 Internet-Draft    Metalink Download Description Format         July 2009
 
@@ -220,7 +220,7 @@ Internet-Draft    Metalink Download Description Format         July 2009
 
 
 
-Bryan, et al.           Expires January 25, 2010                [Page 4]
+Bryan, et al.           Expires January 26, 2010                [Page 4]
 
 Internet-Draft    Metalink Download Description Format         July 2009
 
@@ -276,7 +276,7 @@ Internet-Draft    Metalink Download Description Format         July 2009
 
 
 
-Bryan, et al.           Expires January 25, 2010                [Page 5]
+Bryan, et al.           Expires January 26, 2010                [Page 5]
 
 Internet-Draft    Metalink Download Description Format         July 2009
 
@@ -332,7 +332,7 @@ Internet-Draft    Metalink Download Description Format         July 2009
 
 
 
-Bryan, et al.           Expires January 25, 2010                [Page 6]
+Bryan, et al.           Expires January 26, 2010                [Page 6]
 
 Internet-Draft    Metalink Download Description Format         July 2009
 
@@ -388,7 +388,7 @@ Internet-Draft    Metalink Download Description Format         July 2009
 
 
 
-Bryan, et al.           Expires January 25, 2010                [Page 7]
+Bryan, et al.           Expires January 26, 2010                [Page 7]
 
 Internet-Draft    Metalink Download Description Format         July 2009
 
@@ -434,8 +434,8 @@ Internet-Draft    Metalink Download Description Format         July 2009
 
    Date values SHOULD be as accurate as possible.  For example, it would
    be generally inappropriate for a publishing system to apply the same
-   timestamp to several entries that were published during the course of
-   a single day.
+   timestamp to several Metalink Documents that were published during
+   the course of a single day.
 
 
 4.  Metalink Element Definitions
@@ -444,7 +444,7 @@ Internet-Draft    Metalink Download Description Format         July 2009
 
 
 
-Bryan, et al.           Expires January 25, 2010                [Page 8]
+Bryan, et al.           Expires January 26, 2010                [Page 8]
 
 Internet-Draft    Metalink Download Description Format         July 2009
 
@@ -462,12 +462,13 @@ Internet-Draft    Metalink Download Description Format         July 2009
    metalinkMetalink =
       element metalink:metalink {
          metalinkCommonAttributes,
-         (metalinkPublished?
-          & metalinkOrigin?
+         (metalinkFiles
           & metalinkGenerator?
+          & metalinkOrigin?
+          & metalinkPublished?
+          & metalinkType?
           & metalinkUpdated?
           & extensionElement*),
-         metalinkFiles
       }
 
    The following child elements are defined by this specification (note
@@ -475,14 +476,14 @@ Internet-Draft    Metalink Download Description Format         July 2009
 
    o  metalink:metalink elements MUST contain exactly one metalink:files
       element.
-   o  metalink:metalink elements SHOULD contain exactly one metalink:
-      origin element.
-   o  metalink:metalink elements MAY contain exactly one metalink:type
-      element.
    o  metalink:metalink elements MAY contain exactly one metalink:
       generator element.
+   o  metalink:metalink elements SHOULD contain exactly one metalink:
+      origin element.
    o  metalink:metalink elements MAY contain exactly one metalink:
       published element.
+   o  metalink:metalink elements MAY contain exactly one metalink:type
+      element.
    o  If metalink:type is "dynamic", metalink:metalink elements MAY
       contain exactly one metalink:updated element.
 
@@ -496,15 +497,15 @@ Internet-Draft    Metalink Download Description Format         July 2009
    element contain a non-empty metalink:description element, a non-empty
    metalink:identity element when that element is present, and a non-
    empty metalink:version element, and a non-empty metalink:publisher
-   element.  However, the absence of metalink:description is not an
 
 
 
-Bryan, et al.           Expires January 25, 2010                [Page 9]
+Bryan, et al.           Expires January 26, 2010                [Page 9]
 
 Internet-Draft    Metalink Download Description Format         July 2009
 
 
+   element.  However, the absence of metalink:description is not an
    error, and Metalink Processors MUST NOT fail to function correctly as
    a consequence of such an absence.
 
@@ -523,51 +524,50 @@ Internet-Draft    Metalink Download Description Format         July 2009
    metalinkFiles =
       element metalink:files {
          metalinkCommonAttributes,
-         (metalinkIdentity?
-          & metalinkVersion?
+         (metalinkCopyright?
           & metalinkDescription?
-          & metalinkOS?
-          & metalinkLogo?
+          & metalinkFile
+          & metalinkIdentity?
           & metalinkLanguage?
-          & metalinkPublisher?
-          & metalinkCopyright?
           & metalinkLicense?
+          & metalinkLogo?
+          & metalinkOS?
+          & metalinkPublisher?
+          & metalinkVersion?
           & extensionElement*)
-         metalinkFile
       }
 
    The following child elements are defined by this specification (note
    that the presence of some of these elements is required):
 
-   o  metalink:files element MUST contain one or more metalink:file
-      elements.
-   o  metalink:files elements SHOULD contain exactly one metalink:
-      identity element.
-   o  metalink:files elements SHOULD contain exactly one metalink:
-      version element.
+   o  metalink:files elements MAY contain exactly one metalink:copyright
+      element.
    o  metalink:files elements MAY contain exactly one metalink:
       description element.
-   o  metalink:files elements MAY contain exactly one metalink:os
+   o  metalink:files elements MUST contain one or more metalink:file
+      elements.
+   o  metalink:files elements MAY contain exactly one metalink:identity
       element.
-   o  metalink:files elements MAY contain exactly one metalink:logo
+   o  metalink:files elements MAY contain exactly one metalink:language
+      element.
+   o  metalink:files elements MAY contain exactly one metalink:license
       element.
 
 
 
 
-
-Bryan, et al.           Expires January 25, 2010               [Page 10]
+Bryan, et al.           Expires January 26, 2010               [Page 10]
 
 Internet-Draft    Metalink Download Description Format         July 2009
 
 
-   o  metalink:files elements MAY contain exactly one metalink:language
+   o  metalink:files elements MAY contain exactly one metalink:logo
+      element.
+   o  metalink:files elements MAY contain exactly one metalink:os
       element.
    o  metalink:files elements MAY contain exactly one metalink:publisher
       element.
-   o  metalink:files elements MAY contain exactly one metalink:copyright
-      element.
-   o  metalink:files elements MAY contain exactly one metalink:license
+   o  metalink:files elements MAY contain exactly one metalink:version
       element.
 
 4.1.3.  The "metalink:file" Element
@@ -579,20 +579,20 @@ Internet-Draft    Metalink Download Description Format         July 2009
       element metalink:file {
          metalinkCommonAttributes,
          attribute name { metalinkTextConstruct },
-         (metalinkVerification?
-          & metalinkIdentity?
-          & metalinkVersion?
+         (metalinkCopyright?
           & metalinkDescription?
-          & metalinkSize?
-          & metalinkOS?
-          & metalinkLogo?
+          & metalinkIdentity?
           & metalinkLanguage?
-          & metalinkPublisher?
-          & metalinkCopyright?
           & metalinkLicense?
+          & metalinkLogo?
+          & metalinkOS?
+          & metalinkPublisher?
+          & metalinkResources
+          & metalinkSize?
+          & metalinkVerification?
+          & metalinkVersion?
           & extensionElement*)
-         metalinkResources
-      }
+      }+
 
    This specification assigns no significance to the order of metalink:
    file elements.
@@ -600,44 +600,44 @@ Internet-Draft    Metalink Download Description Format         July 2009
    The following child elements are defined by this specification (note
    that it requires the presence of some of these elements):
 
-   o  metalink:file elements MUST contain exactly one metalink:resources
+   o  metalink:file elements MAY contain exactly one metalink:copyright
       element.
-   o  metalink:file elements SHOULD contain exactly one metalink:
-      verification element.
-   o  metalink:file elements SHOULD contain exactly one metalink:
-      identity element.
-   o  metalink:file elements SHOULD contain exactly one metalink:version
+   o  metalink:file elements MAY contain exactly one metalink:
+      description element.
+   o  metalink:file elements MAY contain exactly one metalink:identity
+      element.
+   o  metalink:file elements MAY contain exactly one metalink:language
       element.
 
 
 
 
-Bryan, et al.           Expires January 25, 2010               [Page 11]
+Bryan, et al.           Expires January 26, 2010               [Page 11]
 
 Internet-Draft    Metalink Download Description Format         July 2009
 
 
-   o  metalink:file elements MAY contain exactly one metalink:
-      description element.
-   o  metalink:file elements SHOULD contain exactly one metalink:size
-      element.
-   o  metalink:file elements MAY contain exactly one metalink:os
+   o  metalink:file elements MAY contain exactly one metalink:license
       element.
    o  metalink:file elements MAY contain exactly one metalink:logo
       element.
-   o  metalink:file elements MAY contain exactly one metalink:language
+   o  metalink:file elements MAY contain exactly one metalink:os
       element.
    o  metalink:file elements MAY contain exactly one metalink:publisher
       element.
-   o  metalink:file elements MAY contain exactly one metalink:copyright
+   o  metalink:file elements MUST contain exactly one metalink:resources
       element.
-   o  metalink:file elements MAY contain exactly one metalink:license
+   o  metalink:file elements SHOULD contain exactly one metalink:size
+      element.
+   o  metalink:file elements SHOULD contain exactly one metalink:
+      verification element.
+   o  metalink:file elements MAY contain exactly one metalink:version
       element.
 
 4.1.3.1.  The "name" Attribute
 
    metalink:file elements MUST have a "name" attribute, which contains
-   the filename of the file downloaded.
+   the filename of the file to be downloaded.
 
    Directory information can also be contained in a "path/file" format
    only, as in:
@@ -668,7 +668,7 @@ Internet-Draft    Metalink Download Description Format         July 2009
 
 
 
-Bryan, et al.           Expires January 25, 2010               [Page 12]
+Bryan, et al.           Expires January 26, 2010               [Page 12]
 
 Internet-Draft    Metalink Download Description Format         July 2009
 
@@ -676,9 +676,9 @@ Internet-Draft    Metalink Download Description Format         July 2009
    metalinkResources =
       element metalink:resources {
          metalinkCommonAttributes,
-         extensionElement*
-         metalinkURL*
          metalinkMetaURL*
+         metalinkURL*
+         extensionElement*
       }
 
    This specification assigns no significance to the order of metalink:
@@ -689,7 +689,7 @@ Internet-Draft    Metalink Download Description Format         July 2009
    The following child elements are defined by this specification (note
    that the presence of some of these elements is required):
 
-   o  metalink:resources element MUST contain at least one metalink:url
+   o  metalink:resources elements MUST contain at least one metalink:url
       element or at least one metalink:metaurl element.  Typically,
       metalink:resources element contains more than one metalink:url
       element to provide multiple download sources.
@@ -715,21 +715,21 @@ Internet-Draft    Metalink Download Description Format         July 2009
 
    The following child elements are defined by this specification:
 
-   o  metalink:verification element MAY contain one or more metalink:
+   o  metalink:verification elements MAY contain one or more metalink:
       hash elements.
-   o  metalink:verification element MAY contain one or more metalink:
+   o  metalink:verification elements MAY contain one or more metalink:
       pieces elements.
 
 
 
 
 
-Bryan, et al.           Expires January 25, 2010               [Page 13]
+Bryan, et al.           Expires January 26, 2010               [Page 13]
 
 Internet-Draft    Metalink Download Description Format         July 2009
 
 
-   o  metalink:verification element MAY contain one or more metalink:
+   o  metalink:verification elements MAY contain one or more metalink:
       signature elements.
 
 4.1.6.  The "metalink:pieces" Element
@@ -740,7 +740,7 @@ Internet-Draft    Metalink Download Description Format         July 2009
 
    metalinkPieces =
       element metalink:pieces {
-         attribute length { metalinkTextConstruct },
+         attribute length { xsd:integer },
          attribute type { metalinkTextConstruct },
          hash+
       }+,
@@ -780,7 +780,7 @@ Internet-Draft    Metalink Download Description Format         July 2009
 
 
 
-Bryan, et al.           Expires January 25, 2010               [Page 14]
+Bryan, et al.           Expires January 26, 2010               [Page 14]
 
 Internet-Draft    Metalink Download Description Format         July 2009
 
@@ -796,10 +796,11 @@ Internet-Draft    Metalink Download Description Format         July 2009
    agent name and version, separated by a "/", used to generate a
    Metalink Document, for debugging and other purposes.
 
-   metalinkGenerator = element metalink:generator {
+   metalinkGenerator =
+      element metalink:generator {
       metalinkCommonAttributes,
       text
-   }
+      }
 
    The content of this element, when present, MUST be a string that is a
    human-readable name and version, separated by a "/", for the
@@ -812,16 +813,19 @@ Internet-Draft    Metalink Download Description Format         July 2009
 
    The "metalink:hash" element is a Text construct that conveys a hash
    for a file.  All hashes are encoded in lowercase hexadecimal format.
+   metalink:hash elements MUST have a "type" attribute or a "piece"
+   attribute.
 
    metalinkHash =
       element metalink:hash {
       attribute piece { xsd:integer }?,
-      attribute type { metalinkTextConstruct },
+      attribute type { metalinkTextConstruct }?,
       text
-      }
+      }+
 
-   Metalinks can contain multiples hashes for a complete file, for
-   example both SHA-1 and SHA-256.
+   Metalinks can contain one or multiples hashes of a complete file, for
+   example both SHA-1 and SHA-256. metalink:hash elements with a "type"
+   attribute contain a hash of the whole file.
 
    ...
    <verification>
@@ -829,17 +833,20 @@ Internet-Draft    Metalink Download Description Format         July 2009
      <hash type="sha-256">fc87941af7fd7f03e53b34af393f4c14923d74
      825f51116ff591336af4880227</hash>
    </verification>
-   ...
-
-   Metalinks can also contain hashes for individual pieces of a file.
 
 
 
-
-Bryan, et al.           Expires January 25, 2010               [Page 15]
+Bryan, et al.           Expires January 26, 2010               [Page 15]
 
 Internet-Draft    Metalink Download Description Format         July 2009
 
+
+   ...
+
+   Metalinks can also contain hashes for individual pieces of a file.
+   metalink:hash elements with a "piece" attribute contain a hash for
+   that specific piece or chunk of the file, and are of the same hash
+   type as the metalink:pieces element they are contained in.
 
    ...
    <verification>
@@ -855,26 +862,22 @@ Internet-Draft    Metalink Download Description Format         July 2009
    </verification>
    ...
 
-   metalink:hash elements MUST have a "type" attribute or a "piece"
-   attribute. metalink:hash elements with a "type" attribute contain a
-   hash of the whole file. metalink:hash elements with a "piece"
-   attribute contain a hash for that specific piece or chunk of the
-   file.
-
 4.2.4.1.  The "type" Attribute
 
-   The IANA registry named "Hash Function Textual Names" defines values
-   for hash types.  If a Metalink Document contains verification
-   information, it SHOULD include "sha-1" which is SHA1, as specified in
-   [RFC3174].  It MAY also include other verification algorithms.
+   metalink:hash elements MUST have a "type" attribute, but only when
+   they are a sub element of metalink:verification.  The IANA registry
+   named "Hash Function Textual Names" defines values for hash types.
+   If a Metalink Document contains verification information, it SHOULD
+   include "sha-1" which is SHA1, as specified in [RFC3174].  It MAY
+   also include other verification algorithms.
 
 4.2.4.2.  The "piece" Attribute
 
-   metalink:hash elements MAY have a "piece" attribute, only when they
-   are a sub element of metalink:pieces.  The value of "piece" starts at
-   "0" and increases, depending on the "length" attribute of metalink:
-   pieces and the size of the file.  Depending on the size of a file,
-   the last piece may not be the same size as the others.
+   metalink:hash elements MUST have a "piece" attribute, but only when
+   they are a sub element of metalink:pieces.  The value of "piece"
+   starts at "0" and increases, depending on the "length" attribute of
+   metalink:pieces and the size of the file.  Depending on the size of a
+   file, the last piece may not be the same size as the others.
 
 4.2.5.  The "metalink:identity" Element
 
@@ -889,10 +892,7 @@ Internet-Draft    Metalink Download Description Format         July 2009
 
 
 
-
-
-
-Bryan, et al.           Expires January 25, 2010               [Page 16]
+Bryan, et al.           Expires January 26, 2010               [Page 16]
 
 Internet-Draft    Metalink Download Description Format         July 2009
 
@@ -948,7 +948,7 @@ Internet-Draft    Metalink Download Description Format         July 2009
 
 
 
-Bryan, et al.           Expires January 25, 2010               [Page 17]
+Bryan, et al.           Expires January 26, 2010               [Page 17]
 
 Internet-Draft    Metalink Download Description Format         July 2009
 
@@ -971,8 +971,9 @@ Internet-Draft    Metalink Download Description Format         July 2009
    metalink:metaurl elements MAY have a preference attribute, whose
    value MUST be a number from 1 to 100 for priority, with 100 used
    first and 1 used last.  Multiple metalink:metaurl elements can have
-   the same preference, i.e. ten mirrors could have preference="100".
-   See also the "preference" attribute of the metalink:url element.
+   the same preference, i.e. three BitTorrent .torrent files could have
+   preference="100".  See also the "preference" attribute of the
+   metalink:url element.
 
 4.2.9.2.  The "type" Attribute
 
@@ -1003,8 +1004,7 @@ Internet-Draft    Metalink Download Description Format         July 2009
 
 
 
-
-Bryan, et al.           Expires January 25, 2010               [Page 18]
+Bryan, et al.           Expires January 26, 2010               [Page 18]
 
 Internet-Draft    Metalink Download Description Format         July 2009
 
@@ -1060,7 +1060,7 @@ Internet-Draft    Metalink Download Description Format         July 2009
 
 
 
-Bryan, et al.           Expires January 25, 2010               [Page 19]
+Bryan, et al.           Expires January 26, 2010               [Page 19]
 
 Internet-Draft    Metalink Download Description Format         July 2009
 
@@ -1116,7 +1116,7 @@ Internet-Draft    Metalink Download Description Format         July 2009
 
 
 
-Bryan, et al.           Expires January 25, 2010               [Page 20]
+Bryan, et al.           Expires January 26, 2010               [Page 20]
 
 Internet-Draft    Metalink Download Description Format         July 2009
 
@@ -1172,7 +1172,7 @@ Internet-Draft    Metalink Download Description Format         July 2009
 
 
 
-Bryan, et al.           Expires January 25, 2010               [Page 21]
+Bryan, et al.           Expires January 26, 2010               [Page 21]
 
 Internet-Draft    Metalink Download Description Format         July 2009
 
@@ -1228,7 +1228,7 @@ Internet-Draft    Metalink Download Description Format         July 2009
 
 
 
-Bryan, et al.           Expires January 25, 2010               [Page 22]
+Bryan, et al.           Expires January 26, 2010               [Page 22]
 
 Internet-Draft    Metalink Download Description Format         July 2009
 
@@ -1284,7 +1284,7 @@ Internet-Draft    Metalink Download Description Format         July 2009
 
 
 
-Bryan, et al.           Expires January 25, 2010               [Page 23]
+Bryan, et al.           Expires January 26, 2010               [Page 23]
 
 Internet-Draft    Metalink Download Description Format         July 2009
 
@@ -1340,7 +1340,7 @@ Internet-Draft    Metalink Download Description Format         July 2009
 
 
 
-Bryan, et al.           Expires January 25, 2010               [Page 24]
+Bryan, et al.           Expires January 26, 2010               [Page 24]
 
 Internet-Draft    Metalink Download Description Format         July 2009
 
@@ -1396,7 +1396,7 @@ Internet-Draft    Metalink Download Description Format         July 2009
 
 
 
-Bryan, et al.           Expires January 25, 2010               [Page 25]
+Bryan, et al.           Expires January 26, 2010               [Page 25]
 
 Internet-Draft    Metalink Download Description Format         July 2009
 
@@ -1452,7 +1452,7 @@ Internet-Draft    Metalink Download Description Format         July 2009
 
 
 
-Bryan, et al.           Expires January 25, 2010               [Page 26]
+Bryan, et al.           Expires January 26, 2010               [Page 26]
 
 Internet-Draft    Metalink Download Description Format         July 2009
 
@@ -1508,7 +1508,7 @@ Internet-Draft    Metalink Download Description Format         July 2009
 
 
 
-Bryan, et al.           Expires January 25, 2010               [Page 27]
+Bryan, et al.           Expires January 26, 2010               [Page 27]
 
 Internet-Draft    Metalink Download Description Format         July 2009
 
@@ -1564,7 +1564,7 @@ Appendix A.  Acknowledgements and Contributors
 
 
 
-Bryan, et al.           Expires January 25, 2010               [Page 28]
+Bryan, et al.           Expires January 26, 2010               [Page 28]
 
 Internet-Draft    Metalink Download Description Format         July 2009
 
@@ -1606,7 +1606,7 @@ Appendix B.  RELAX NG Compact Schema
 
    # -*- rnc -*-
    # RELAX NG Compact Syntax Grammar for the
-   # Metalink Format Specification Version 2
+   # Metalink Format Specification Version 3
 
       namespace metalink = "urn:ietf:params:xml:ns:metalink"
       namespace xsd = "http://www.w3.org/2001/XMLSchema"
@@ -1620,7 +1620,7 @@ Appendix B.  RELAX NG Compact Schema
 
 
 
-Bryan, et al.           Expires January 25, 2010               [Page 29]
+Bryan, et al.           Expires January 26, 2010               [Page 29]
 
 Internet-Draft    Metalink Download Description Format         July 2009
 
@@ -1672,11 +1672,11 @@ Internet-Draft    Metalink Download Description Format         July 2009
            element metalink:verification {
              hash+,
              element metalink:pieces {
-               attribute length { metalinkTextConstruct },
+               attribute length { xsd:integer },
 
 
 
-Bryan, et al.           Expires January 25, 2010               [Page 30]
+Bryan, et al.           Expires January 26, 2010               [Page 30]
 
 Internet-Draft    Metalink Download Description Format         July 2009
 
@@ -1709,7 +1709,7 @@ Internet-Draft    Metalink Download Description Format         July 2009
    hash =
      element metalink:hash {
        attribute piece { metalinkTextConstruct }?,
-       attribute type { metalinkTextConstruct },
+       attribute type { metalinkTextConstruct }?,
        text
      }
 
@@ -1732,7 +1732,7 @@ Internet-Draft    Metalink Download Description Format         July 2009
 
 
 
-Bryan, et al.           Expires January 25, 2010               [Page 31]
+Bryan, et al.           Expires January 26, 2010               [Page 31]
 
 Internet-Draft    Metalink Download Description Format         July 2009
 
@@ -1788,7 +1788,7 @@ Appendix C.  Document History (to be removed by RFC Editor before
 
 
 
-Bryan, et al.           Expires January 25, 2010               [Page 32]
+Bryan, et al.           Expires January 26, 2010               [Page 32]
 
 Internet-Draft    Metalink Download Description Format         July 2009
 
@@ -1844,7 +1844,7 @@ Internet-Draft    Metalink Download Description Format         July 2009
 
 
 
-Bryan, et al.           Expires January 25, 2010               [Page 33]
+Bryan, et al.           Expires January 26, 2010               [Page 33]
 
 Internet-Draft    Metalink Download Description Format         July 2009
 
@@ -1900,7 +1900,7 @@ Index
 
 
 
-Bryan, et al.           Expires January 25, 2010               [Page 34]
+Bryan, et al.           Expires January 26, 2010               [Page 34]
 
 Internet-Draft    Metalink Download Description Format         July 2009
 
@@ -1956,7 +1956,7 @@ Internet-Draft    Metalink Download Description Format         July 2009
 
 
 
-Bryan, et al.           Expires January 25, 2010               [Page 35]
+Bryan, et al.           Expires January 26, 2010               [Page 35]
 
 Internet-Draft    Metalink Download Description Format         July 2009
 
@@ -2012,7 +2012,7 @@ Internet-Draft    Metalink Download Description Format         July 2009
 
 
 
-Bryan, et al.           Expires January 25, 2010               [Page 36]
+Bryan, et al.           Expires January 26, 2010               [Page 36]
 
 Internet-Draft    Metalink Download Description Format         July 2009
 
@@ -2068,5 +2068,5 @@ Authors' Addresses
 
 
 
-Bryan, et al.           Expires January 25, 2010               [Page 37]
+Bryan, et al.           Expires January 26, 2010               [Page 37]
 

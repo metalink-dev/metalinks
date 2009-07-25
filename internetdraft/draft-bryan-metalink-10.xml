@@ -335,7 +335,7 @@ metalinkDateConstruct =
 
 	<t>Date values SHOULD be as accurate as possible. For
 	example, it would be generally inappropriate for a publishing
-	system to apply the same timestamp to several entries that
+	system to apply the same timestamp to several Metalink Documents that
 	were published during the course of a single day.</t>
 
 
@@ -366,12 +366,13 @@ metalinkDateConstruct =
 metalinkMetalink =
    element metalink:metalink {
       metalinkCommonAttributes,
-      (metalinkPublished?
-       &amp; metalinkOrigin?
+      (metalinkFiles
        &amp; metalinkGenerator?
+       &amp; metalinkOrigin?
+       &amp; metalinkPublished?
+       &amp; metalinkType?
        &amp; metalinkUpdated?
        &amp; extensionElement*),
-      metalinkFiles
    }</artwork></figure></t> 
 	
 	  <t>The following child elements are defined by this specification
@@ -384,13 +385,13 @@ metalinkMetalink =
 
 	      <t><xref target="element.metalink" format="none">metalink:metalink</xref> elements MUST contain exactly one <xref target="element.files" format="none">metalink:files</xref> element.</t>
 
-	      <t><xref target="element.metalink" format="none">metalink:metalink</xref> elements SHOULD contain exactly one <xref target="element.origin" format="none">metalink:origin</xref> element.</t>
-
-	      <t><xref target="element.metalink" format="none">metalink:metalink</xref> elements MAY contain exactly one <xref target="element.type" format="none">metalink:type</xref> element.</t>
-
 	      <t><xref target="element.metalink" format="none">metalink:metalink</xref> elements MAY contain exactly one <xref target="element.generator" format="none">metalink:generator</xref> element.</t>
 
+	      <t><xref target="element.metalink" format="none">metalink:metalink</xref> elements SHOULD contain exactly one <xref target="element.origin" format="none">metalink:origin</xref> element.</t>
+
 	      <t><xref target="element.metalink" format="none">metalink:metalink</xref> elements MAY contain exactly one <xref target="element.published" format="none">metalink:published</xref> element.</t>
+
+	      <t><xref target="element.metalink" format="none">metalink:metalink</xref> elements MAY contain exactly one <xref target="element.type" format="none">metalink:type</xref> element.</t>
 
 	      <t>If <xref target="element.type" format="none">metalink:type</xref> is "dynamic", <xref target="element.metalink" format="none">metalink:metalink</xref> elements MAY contain exactly one <xref target="element.updated" format="none">metalink:updated</xref> element.</t>
 		  
@@ -434,17 +435,17 @@ metalinkMetalink =
 metalinkFiles =
    element metalink:files {
       metalinkCommonAttributes,
-      (metalinkIdentity?
-       &amp; metalinkVersion?
+      (metalinkCopyright?
        &amp; metalinkDescription?
-       &amp; metalinkOS?
-       &amp; metalinkLogo?
+       &amp; metalinkFile
+       &amp; metalinkIdentity?
        &amp; metalinkLanguage?
-       &amp; metalinkPublisher?
-       &amp; metalinkCopyright?
        &amp; metalinkLicense?
+       &amp; metalinkLogo?
+       &amp; metalinkOS?
+       &amp; metalinkPublisher?
+       &amp; metalinkVersion?
        &amp; extensionElement*)
-      metalinkFile
    }</artwork></figure></t> 
 	
 	  <t>The following child elements are defined by this specification
@@ -454,36 +455,37 @@ metalinkFiles =
 	    
 	    <list style="symbols">     
 	  
-	      <t><xref target="element.files" format="none">metalink:files</xref> element MUST contain one or more <xref target="element.file" format="none">metalink:file</xref>
-	      elements.</t>
-		  
-	      <t><xref target="element.files" format="none">metalink:files</xref> elements SHOULD contain exactly one <xref target="element.identity" format="none">metalink:identity</xref>
+	      <t><xref target="element.files" format="none">metalink:files</xref> elements MAY contain exactly one <xref target="element.copyright" format="none">metalink:copyright</xref>
 	      element.</t>	
 
-	      <t><xref target="element.files" format="none">metalink:files</xref> elements SHOULD contain exactly one <xref target="element.version" format="none">metalink:version</xref>
-	      element.</t>	
-		  
 	      <t><xref target="element.files" format="none">metalink:files</xref> elements MAY contain exactly one <xref target="element.description" format="none">metalink:description</xref>
 	      element.</t>	
 	  
-	      <t><xref target="element.files" format="none">metalink:files</xref> elements MAY contain exactly one <xref target="element.os" format="none">metalink:os</xref>
-	      element.</t>	
+	      <t><xref target="element.files" format="none">metalink:files</xref> elements MUST contain one or more <xref target="element.file" format="none">metalink:file</xref>
+	      elements.</t>
 		  
-	      <t><xref target="element.files" format="none">metalink:files</xref> elements MAY contain exactly one <xref target="element.logo" format="none">metalink:logo</xref>
+	      <t><xref target="element.files" format="none">metalink:files</xref> elements MAY contain exactly one <xref target="element.identity" format="none">metalink:identity</xref>
 	      element.</t>	
 
 	      <t><xref target="element.files" format="none">metalink:files</xref> elements MAY contain exactly one <xref target="element.language" format="none">metalink:language</xref>
 	      element.</t>	
 
+	      <t><xref target="element.files" format="none">metalink:files</xref> elements MAY contain exactly one <xref target="element.license" format="none">metalink:license</xref>
+	      element.</t>	
+	      
+	      <t><xref target="element.files" format="none">metalink:files</xref> elements MAY contain exactly one <xref target="element.logo" format="none">metalink:logo</xref>
+	      element.</t>	
+
+	      <t><xref target="element.files" format="none">metalink:files</xref> elements MAY contain exactly one <xref target="element.os" format="none">metalink:os</xref>
+	      element.</t>	
+		  
 	      <t><xref target="element.files" format="none">metalink:files</xref> elements MAY contain exactly one <xref target="element.publisher" format="none">metalink:publisher</xref>
 	      element.</t>	
 
-	      <t><xref target="element.files" format="none">metalink:files</xref> elements MAY contain exactly one <xref target="element.copyright" format="none">metalink:copyright</xref>
+		  <t><xref target="element.files" format="none">metalink:files</xref> elements MAY contain exactly one <xref target="element.version" format="none">metalink:version</xref>
 	      element.</t>	
-
-	      <t><xref target="element.files" format="none">metalink:files</xref> elements MAY contain exactly one <xref target="element.license" format="none">metalink:license</xref>
-	      element.</t>	
-	    </list></t> 
+		  
+		  </list></t> 
 
 
 	</section> 
@@ -507,20 +509,20 @@ metalinkFile =
    element metalink:file {
       metalinkCommonAttributes,
       attribute name { metalinkTextConstruct },
-      (metalinkVerification?
-       &amp; metalinkIdentity?
-       &amp; metalinkVersion?
+      (metalinkCopyright?
        &amp; metalinkDescription?
-       &amp; metalinkSize?
-       &amp; metalinkOS?
-       &amp; metalinkLogo?
+       &amp; metalinkIdentity?
        &amp; metalinkLanguage?
-       &amp; metalinkPublisher?
-       &amp; metalinkCopyright?
        &amp; metalinkLicense?
+       &amp; metalinkLogo?
+       &amp; metalinkOS?
+       &amp; metalinkPublisher?
+       &amp; metalinkResources
+       &amp; metalinkSize?
+       &amp; metalinkVerification?
+       &amp; metalinkVersion?
        &amp; extensionElement*)
-      metalinkResources
-   }</artwork></figure></t>
+   }+</artwork></figure></t>
 
 	  <t>This specification assigns no significance to the order of
 	  <xref target="element.file" format="none">metalink:file</xref> elements.</t>
@@ -532,42 +534,41 @@ metalinkFile =
 	
 	    <list style="symbols"> 
 
-	      <t><xref target="element.file" format="none">metalink:file</xref> elements MUST contain exactly one <xref target="element.resources" format="none">metalink:resources</xref>
-	      element.</t>
-
-	      <t><xref target="element.file" format="none">metalink:file</xref> elements SHOULD contain exactly one <xref target="element.verification" format="none">metalink:verification</xref>
-	      element.</t>		    
-
-	      <t><xref target="element.file" format="none">metalink:file</xref> elements SHOULD contain exactly one <xref target="element.identity" format="none">metalink:identity</xref>
+	      <t><xref target="element.file" format="none">metalink:file</xref> elements MAY contain exactly one <xref target="element.copyright" format="none">metalink:copyright</xref>
 	      element.</t>	
 
-	      <t><xref target="element.file" format="none">metalink:file</xref> elements SHOULD contain exactly one <xref target="element.version" format="none">metalink:version</xref>
-	      element.</t>	
-		  
 	      <t><xref target="element.file" format="none">metalink:file</xref> elements MAY contain exactly one <xref target="element.description" format="none">metalink:description</xref>
 	      element.</t>	
 
-	      <t><xref target="element.file" format="none">metalink:file</xref> elements SHOULD contain exactly one <xref target="element.size" format="none">metalink:size</xref>
-	      element.</t>
-		  
-	      <t><xref target="element.file" format="none">metalink:file</xref> elements MAY contain exactly one <xref target="element.os" format="none">metalink:os</xref>
-	      element.</t>	
-		  
-	      <t><xref target="element.file" format="none">metalink:file</xref> elements MAY contain exactly one <xref target="element.logo" format="none">metalink:logo</xref>
+	      <t><xref target="element.file" format="none">metalink:file</xref> elements MAY contain exactly one <xref target="element.identity" format="none">metalink:identity</xref>
 	      element.</t>	
 
 	      <t><xref target="element.file" format="none">metalink:file</xref> elements MAY contain exactly one <xref target="element.language" format="none">metalink:language</xref>
 	      element.</t>	
 
-	      <t><xref target="element.file" format="none">metalink:file</xref> elements MAY contain exactly one <xref target="element.publisher" format="none">metalink:publisher</xref>
-	      element.</t>	
-
-	      <t><xref target="element.file" format="none">metalink:file</xref> elements MAY contain exactly one <xref target="element.copyright" format="none">metalink:copyright</xref>
-	      element.</t>	
-
 	      <t><xref target="element.file" format="none">metalink:file</xref> elements MAY contain exactly one <xref target="element.license" format="none">metalink:license</xref>
 	      element.</t>	
+
+	      <t><xref target="element.file" format="none">metalink:file</xref> elements MAY contain exactly one <xref target="element.logo" format="none">metalink:logo</xref>
+	      element.</t>	
+
+	      <t><xref target="element.file" format="none">metalink:file</xref> elements MAY contain exactly one <xref target="element.os" format="none">metalink:os</xref>
+	      element.</t>	
+		 
+          <t><xref target="element.file" format="none">metalink:file</xref> elements MAY contain exactly one <xref target="element.publisher" format="none">metalink:publisher</xref>
+	      element.</t>	
+
+	      <t><xref target="element.file" format="none">metalink:file</xref> elements MUST contain exactly one <xref target="element.resources" format="none">metalink:resources</xref>
+	      element.</t>
+
+	      <t><xref target="element.file" format="none">metalink:file</xref> elements SHOULD contain exactly one <xref target="element.size" format="none">metalink:size</xref>
+	      element.</t>
 		  
+	      <t><xref target="element.file" format="none">metalink:file</xref> elements SHOULD contain exactly one <xref target="element.verification" format="none">metalink:verification</xref>
+	      element.</t>		    
+
+	      <t><xref target="element.file" format="none">metalink:file</xref> elements MAY contain exactly one <xref target="element.version" format="none">metalink:version</xref>
+	      element.</t>	
       
 	    </list> 
 
@@ -575,7 +576,7 @@ metalinkFile =
 
 	  <section title="The &#34;name&#34; Attribute"> 
 
-	    <t><xref target="element.file" format="none">metalink:file</xref> elements MUST have a "name" attribute, which contains the filename of the file downloaded.
+	    <t><xref target="element.file" format="none">metalink:file</xref> elements MUST have a "name" attribute, which contains the filename of the file to be downloaded.
 	<figure>
 	  <preamble>Directory information can also be contained in a "path/file" format only, as in:</preamble>
 	  <artwork type="example">
@@ -612,9 +613,9 @@ metalinkFile =
 metalinkResources =
    element metalink:resources {
       metalinkCommonAttributes,
-      extensionElement*
-      metalinkURL*
       metalinkMetaURL*
+      metalinkURL*
+      extensionElement*
    }</artwork></figure></t>
 	  
 	  <t>This specification assigns no significance to the order of
@@ -627,7 +628,7 @@ metalinkResources =
 	    
 	    <list style="symbols">     
 
-	      <t><xref target="element.resources" format="none">metalink:resources</xref> element MUST contain at least one <xref target="element.url" format="none">metalink:url</xref> element or at least one <xref target="element.metaurl" format="none">metalink:metaurl</xref> element. Typically, <xref target="element.resources" format="none">metalink:resources</xref> element contains more than one <xref target="element.url" format="none">metalink:url</xref> element to provide multiple download sources.</t>
+	      <t><xref target="element.resources" format="none">metalink:resources</xref> elements MUST contain at least one <xref target="element.url" format="none">metalink:url</xref> element or at least one <xref target="element.metaurl" format="none">metalink:metaurl</xref> element. Typically, <xref target="element.resources" format="none">metalink:resources</xref> element contains more than one <xref target="element.url" format="none">metalink:url</xref> element to provide multiple download sources.</t>
 
 	    </list></t> 
 
@@ -665,13 +666,13 @@ metalinkVerification =
 	    
 	    <list style="symbols">     
 	  
-	      <t><xref target="element.verification" format="none">metalink:verification</xref> element MAY contain one or more 
+	      <t><xref target="element.verification" format="none">metalink:verification</xref> elements MAY contain one or more 
 	      <xref target="element.hash" format="none">metalink:hash</xref> elements.</t>
 
-	      <t><xref target="element.verification" format="none">metalink:verification</xref> element MAY contain one or more 
+	      <t><xref target="element.verification" format="none">metalink:verification</xref> elements MAY contain one or more 
 	      <xref target="element.pieces" format="none">metalink:pieces</xref> elements.</t>
 
-	      <t><xref target="element.verification" format="none">metalink:verification</xref> element MAY contain one or more
+	      <t><xref target="element.verification" format="none">metalink:verification</xref> elements MAY contain one or more
 	      <xref target="element.signature" format="none">metalink:signature</xref> elements.</t>
 		  
 		  
@@ -694,7 +695,7 @@ metalinkVerification =
 	      <artwork type="rnc">
 metalinkPieces =
    element metalink:pieces {
-      attribute length { metalinkTextConstruct },
+      attribute length { xsd:integer },
       attribute type { metalinkTextConstruct },
       hash+
    }+,</artwork></figure></t>
@@ -780,10 +781,11 @@ metalinkDescription =
         <iref item="metalinkGenerator grammar production" primary="true"/>
         <iref item="Grammar" subitem="metalinkGenerator" primary="true"/>
 	      <artwork type="rnc">
-metalinkGenerator = element metalink:generator {
+metalinkGenerator = 
+   element metalink:generator {
    metalinkCommonAttributes,
    text
-}</artwork></figure></t> 
+   }</artwork></figure></t> 
 
 	  <t>The content of this element, when present, MUST be a
 	  string that is a human-readable name and version, separated by a "/", for the generating
@@ -801,7 +803,7 @@ metalinkGenerator = element metalink:generator {
     <iref item="hash XML element" primary="true"/> 
 	      
 	  <t>The "<xref target="element.hash" format="none">metalink:hash</xref>" element is a Text construct that conveys a
-	  hash for a file. All hashes are encoded in lowercase hexadecimal format.
+	  hash for a file. All hashes are encoded in lowercase hexadecimal format. <xref target="element.hash" format="none">metalink:hash</xref> elements MUST have a "type" attribute or a "piece" attribute.
 	  
 	    <figure>
         <iref item="metalinkHash grammar production" primary="true"/>
@@ -810,10 +812,11 @@ metalinkGenerator = element metalink:generator {
 metalinkHash =
    element metalink:hash {
    attribute piece { xsd:integer }?,
-   attribute type { metalinkTextConstruct },
+   attribute type { metalinkTextConstruct }?,
    text
-   }</artwork></figure></t>
-      <t>Metalinks can contain multiples hashes for a complete file, for example both SHA-1 and SHA-256.
+   }+</artwork></figure></t>
+      <t>Metalinks can contain one or multiples hashes of a complete file, for example both SHA-1 and SHA-256. <xref target="element.hash" format="none">metalink:hash</xref> elements
+      with a "type" attribute contain a hash of the whole file.
 	  
 	      <figure>
 		<artwork type="example">
@@ -826,7 +829,7 @@ metalinkHash =
 ...</artwork>
 	      </figure>
       </t>
-      <t>Metalinks can also contain hashes for individual pieces of a file.
+      <t>Metalinks can also contain hashes for individual pieces of a file.  <xref target="element.hash" format="none">metalink:hash</xref> elements with a "piece" attribute contain a hash for that specific piece or chunk of the file, and are of the same hash type as the <xref target="element.pieces" format="none">metalink:pieces</xref> element they are contained in.
 	  
 	      <figure>
 		<artwork type="example">
@@ -845,23 +848,19 @@ metalinkHash =
 ...</artwork>
 	      </figure>
       </t>
-
-	  <t><xref target="element.hash" format="none">metalink:hash</xref> elements MUST have a "type" attribute or a "piece" attribute. <xref target="element.hash" format="none">metalink:hash</xref> elements
-      with a "type" attribute contain a hash of the whole file. <xref target="element.hash" format="none">metalink:hash</xref> elements with a "piece" attribute contain a hash for that specific piece or chunk of the file.</t>
-
-	  
+ 
 	  <section title="The &#34;type&#34; Attribute"> 
 
 
 
-	    <t>The IANA registry named "Hash Function Textual Names" defines values for hash types. If a Metalink Document contains verification information, it SHOULD
+	    <t><xref target="element.hash" format="none">metalink:hash</xref> elements MUST have a "type" attribute, but only when they are a sub element of <xref target="element.verification" format="none">metalink:verification</xref>. The IANA registry named "Hash Function Textual Names" defines values for hash types. If a Metalink Document contains verification information, it SHOULD
 include "sha-1" which is SHA1, as specified in <xref target="RFC3174"/>.  It MAY also include other verification algorithms.</t>
 		
 	  </section>
 
 	  <section title="The &#34;piece&#34; Attribute"> 
 
-	    <t><xref target="element.hash" format="none">metalink:hash</xref> elements MAY have a "piece" attribute, only when they are a sub element of <xref target="element.pieces" format="none">metalink:pieces</xref>.
+	    <t><xref target="element.hash" format="none">metalink:hash</xref> elements MUST have a "piece" attribute, but only when they are a sub element of <xref target="element.pieces" format="none">metalink:pieces</xref>.
 		The value of "piece" starts at "0" and increases, depending on the "length" attribute of <xref target="element.pieces" format="none">metalink:pieces</xref> and the size of the file. Depending on the size of a file, the last piece may not be the same size as the others.
 		</t>
 		
@@ -990,7 +989,7 @@ metalinkMetaURL =
 	    <t><xref target="element.metaurl" format="none">metalink:metaurl</xref>
 	    elements MAY have a preference attribute, whose value MUST be a number from 1 to 100
 		for priority, with 100 used first and 1 used last. Multiple <xref target="element.metaurl" format="none">metalink:metaurl</xref> elements can have the same
-		preference, i.e. ten mirrors could have preference="100". See also the "preference" attribute of the <xref target="element.url" format="none">metalink:url</xref> element.</t>
+		preference, i.e. three BitTorrent .torrent files could have preference="100". See also the "preference" attribute of the <xref target="element.url" format="none">metalink:url</xref> element.</t>
 
 	  </section> 
 
@@ -2010,7 +2009,7 @@ include other verification algorithms. </t>
 		<artwork type="rnc">
 # -*- rnc -*-
 # RELAX NG Compact Syntax Grammar for the
-# Metalink Format Specification Version 2
+# Metalink Format Specification Version 3
 
    namespace metalink = "urn:ietf:params:xml:ns:metalink"
    namespace xsd = "http://www.w3.org/2001/XMLSchema"
@@ -2068,7 +2067,7 @@ start =
         element metalink:verification {
           hash+,
           element metalink:pieces {
-            attribute length { metalinkTextConstruct },
+            attribute length { xsd:integer },
             attribute type { metalinkTextConstruct },
             hash+
           }+,
@@ -2097,7 +2096,7 @@ start =
 hash =
   element metalink:hash {
     attribute piece { metalinkTextConstruct }?,
-    attribute type { metalinkTextConstruct },
+    attribute type { metalinkTextConstruct }?,
     text
   }
 
