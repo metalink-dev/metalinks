@@ -144,10 +144,10 @@
 <tr><td class="header">Network Working Group</td><td class="header">A. Bryan, Ed.</td></tr>
 <tr><td class="header">Internet-Draft</td><td class="header">T. Tsujikawa, Ed.</td></tr>
 <tr><td class="header">Intended status: Standards Track</td><td class="header">N. McNab, Ed.</td></tr>
-<tr><td class="header">Expires: January 26, 2010</td><td class="header">Metalinker Project</td></tr>
+<tr><td class="header">Expires: January 27, 2010</td><td class="header">Metalinker Project</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">P. Poeml, Ed.</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">Novell, Inc.</td></tr>
-<tr><td class="header">&nbsp;</td><td class="header">July 25, 2009</td></tr>
+<tr><td class="header">&nbsp;</td><td class="header">July 26, 2009</td></tr>
 </table></td></tr></table>
 <h1><br />The Metalink Download Description Format<br />draft-bryan-metalink-10</h1>
 
@@ -183,7 +183,7 @@ The list of current Internet-Drafts can be accessed at
 The list of Internet-Draft Shadow Directories can be accessed at
 <a href='http://www.ietf.org/shadow.html'>http://www.ietf.org/shadow.html</a>.</p>
 <p>
-This Internet-Draft will expire on January 26, 2010.</p>
+This Internet-Draft will expire on January 27, 2010.</p>
 
 <h3>Copyright Notice</h3>
 <p>
@@ -696,7 +696,7 @@ metalinkFiles =
       metalinkCommonAttributes,
       (metalinkCopyright?
        &amp; metalinkDescription?
-       &amp; metalinkFile
+       &amp; metalinkFile+
        &amp; metalinkIdentity?
        &amp; metalinkLanguage?
        &amp; metalinkLicense?
@@ -1896,12 +1896,27 @@ start =
   element metalink:metalink {
     element metalink:generator {
       metalinkTextConstruct
-    }
+    }?,
     element metalink:origin { metalinkUri }?,
     element metalink:type { "static" | "dynamic"  }?,
     element metalink:published { metalinkDateConstruct }?,
     element metalink:updated { metalinkDateConstruct }?,
     element metalink:files {
+      element metalink:copyright { metalinkTextConstruct }?,
+      element metalink:description { metalinkTextConstruct }?,
+      element metalink:identity { metalinkTextConstruct }?,
+      element metalink:language { metalinkTextConstruct }?,
+      element metalink:license {
+        attribute uri { metalinkUri }?,
+        attribute name { metalinkTextConstruct }?,
+      }?,
+      element metalink:logo { metalinkUri }?,
+      element metalink:os { metalinkTextConstruct }?,
+      element metalink:publisher {
+        attribute uri { metalinkUri }?,
+        attribute name { metalinkTextConstruct }?,
+      }?,
+      element metalink:version { metalinkTextConstruct }?,
       element metalink:file {
         attribute name { metalinkTextConstruct },
         element metalink:identity { metalinkTextConstruct }?,
@@ -1922,16 +1937,16 @@ start =
         element metalink:license { metalinkTextConstruct }?,
         element metalink:os { metalinkTextConstruct }?,
         element metalink:verification {
-          hash+,
+          hash*,
           element metalink:pieces {
             attribute length { xsd:integer },
             attribute type { metalinkTextConstruct },
             hash+
-          }+,
+          }*,
           element metalink:signature {
            attribute type { "pgp" },
            text
-           }+
+          }?
         }?,
         element metalink:resources {
           element metalink:metaurl {
@@ -1939,13 +1954,14 @@ start =
             attribute type { metalinkTextConstruct },
             attribute name { metalinkTextConstruct }?,
             metalinkUri
+          }*,
           element metalink:url {
             attribute location { xsd:string {
             minLength = "2"  maxLength="2"}
             }?,
             attribute preference { xsd:integer }?,
             metalinkUri
-          }+
+          }*
         }
       }+
     }
