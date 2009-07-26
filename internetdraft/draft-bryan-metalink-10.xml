@@ -437,7 +437,7 @@ metalinkFiles =
       metalinkCommonAttributes,
       (metalinkCopyright?
        &amp; metalinkDescription?
-       &amp; metalinkFile
+       &amp; metalinkFile+
        &amp; metalinkIdentity?
        &amp; metalinkLanguage?
        &amp; metalinkLicense?
@@ -2039,12 +2039,27 @@ start =
   element metalink:metalink {
     element metalink:generator {
       metalinkTextConstruct
-    }
+    }?,
     element metalink:origin { metalinkUri }?,
     element metalink:type { "static" | "dynamic"  }?,
     element metalink:published { metalinkDateConstruct }?,
     element metalink:updated { metalinkDateConstruct }?,
     element metalink:files {
+      element metalink:copyright { metalinkTextConstruct }?,
+      element metalink:description { metalinkTextConstruct }?,
+      element metalink:identity { metalinkTextConstruct }?,
+      element metalink:language { metalinkTextConstruct }?,
+      element metalink:license {
+        attribute uri { metalinkUri }?,
+        attribute name { metalinkTextConstruct }?,
+      }?,
+      element metalink:logo { metalinkUri }?,
+      element metalink:os { metalinkTextConstruct }?,
+      element metalink:publisher {
+        attribute uri { metalinkUri }?,
+        attribute name { metalinkTextConstruct }?,
+      }?,
+      element metalink:version { metalinkTextConstruct }?,
       element metalink:file {
         attribute name { metalinkTextConstruct },
         element metalink:identity { metalinkTextConstruct }?,
@@ -2065,16 +2080,16 @@ start =
         element metalink:license { metalinkTextConstruct }?,
         element metalink:os { metalinkTextConstruct }?,
         element metalink:verification {
-          hash+,
+          hash*,
           element metalink:pieces {
             attribute length { xsd:integer },
             attribute type { metalinkTextConstruct },
             hash+
-          }+,
+          }*,
           element metalink:signature {
            attribute type { "pgp" },
            text
-           }+
+          }?
         }?,
         element metalink:resources {
           element metalink:metaurl {
@@ -2082,13 +2097,14 @@ start =
             attribute type { metalinkTextConstruct },
             attribute name { metalinkTextConstruct }?,
             metalinkUri
+          }*,
           element metalink:url {
             attribute location { xsd:string { 
             minLength = "2"  maxLength="2"} 
             }?,
             attribute preference { xsd:integer }?,
             metalinkUri
-          }+
+          }*
         }
       }+
     }
