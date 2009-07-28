@@ -144,10 +144,10 @@
 <tr><td class="header">Network Working Group</td><td class="header">A. Bryan, Ed.</td></tr>
 <tr><td class="header">Internet-Draft</td><td class="header">T. Tsujikawa, Ed.</td></tr>
 <tr><td class="header">Intended status: Standards Track</td><td class="header">N. McNab, Ed.</td></tr>
-<tr><td class="header">Expires: January 27, 2010</td><td class="header">Metalinker Project</td></tr>
+<tr><td class="header">Expires: January 29, 2010</td><td class="header">Metalinker Project</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">P. Poeml, Ed.</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">Novell, Inc.</td></tr>
-<tr><td class="header">&nbsp;</td><td class="header">July 26, 2009</td></tr>
+<tr><td class="header">&nbsp;</td><td class="header">July 28, 2009</td></tr>
 </table></td></tr></table>
 <h1><br />The Metalink Download Description Format<br />draft-bryan-metalink-10</h1>
 
@@ -183,7 +183,7 @@ The list of current Internet-Drafts can be accessed at
 The list of Internet-Draft Shadow Directories can be accessed at
 <a href='http://www.ietf.org/shadow.html'>http://www.ietf.org/shadow.html</a>.</p>
 <p>
-This Internet-Draft will expire on January 27, 2010.</p>
+This Internet-Draft will expire on January 29, 2010.</p>
 
 <h3>Copyright Notice</h3>
 <p>
@@ -634,7 +634,7 @@ metalinkMetalink =
        &amp; metalinkPublished?
        &amp; metalinkType?
        &amp; metalinkUpdated?
-       &amp; extensionElement*),
+       &amp; extensionElement*)
    }</pre></div><p>
 
 </p>
@@ -761,7 +761,7 @@ The &#34;metalink:file&#34; Element</h3>
 metalinkFile =
    element metalink:file {
       metalinkCommonAttributes,
-      attribute name { metalinkTextConstruct },
+      attribute name { text },
       (metalinkCopyright?
        &amp; metalinkDescription?
        &amp; metalinkIdentity?
@@ -775,7 +775,7 @@ metalinkFile =
        &amp; metalinkVerification?
        &amp; metalinkVersion?
        &amp; extensionElement*)
-   }+</pre></div><p>
+   }</pre></div><p>
 
 </p>
 <p>This specification assigns no significance to the order of
@@ -864,9 +864,9 @@ The &#34;metalink:resources&#34; Element</h3>
 metalinkResources =
    element metalink:resources {
       metalinkCommonAttributes,
-      metalinkMetaURL*
-      metalinkURL*
-      extensionElement*
+      (metalinkMetaURL*
+       &amp; metalinkURL*
+       &amp; extensionElement*)
    }</pre></div><p>
 
 </p>
@@ -936,9 +936,9 @@ The &#34;metalink:pieces&#34; Element</h3>
 metalinkPieces =
    element metalink:pieces {
       attribute length { xsd:integer },
-      attribute type { metalinkTextConstruct },
-      hash+
-   }+,</pre></div><p>
+      attribute type { text },
+      metalinkHash+
+   }</pre></div><p>
 
 </p>
 <a name="anchor10"></a><br /><hr />
@@ -979,7 +979,7 @@ The &#34;metalink:copyright&#34; Element</h3>
 <div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
 metalinkCopyright =
    element metalink:copyright {
-   metalinkTextConstruct
+     metalinkTextConstruct
    }</pre></div><p>
 
 </p>
@@ -995,7 +995,7 @@ The &#34;metalink:description&#34; Element</h3>
 <div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
 metalinkDescription =
    element metalink:description {
-   metalinkTextConstruct
+     metalinkTextConstruct
    }</pre></div><p>
 
 </p>
@@ -1011,8 +1011,7 @@ The &#34;metalink:generator&#34; Element</h3>
 <div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
 metalinkGenerator =
    element metalink:generator {
-   metalinkCommonAttributes,
-   text
+     metalinkTextConstruct
    }</pre></div><p>
 
 </p>
@@ -1034,10 +1033,10 @@ The &#34;metalink:hash&#34; Element</h3>
 <div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
 metalinkHash =
    element metalink:hash {
-   attribute piece { xsd:integer }?,
-   attribute type { metalinkTextConstruct }?,
-   text
-   }+</pre></div><p>
+     attribute piece { xsd:integer }?,
+     attribute type { text }?,
+     text
+   }</pre></div><p>
 
 </p>
 <p>Metalinks can contain one or multiples hashes of a complete file, for example both SHA-1 and SHA-256. <a class='info' href='#element.hash'>metalink:hash<span> (</span><span class='info'>The &#34;metalink:hash&#34; Element</span><span>)</span></a> elements
@@ -1104,7 +1103,7 @@ The &#34;metalink:identity&#34; Element</h3>
 <div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
 metalinkIdentity =
    element metalink:identity {
-   metalinkTextConstruct
+     metalinkTextConstruct
    }</pre></div><p>
 
 </p>
@@ -1120,7 +1119,7 @@ The &#34;metalink:language&#34; Element</h3>
 <div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
 metalinkLanguage =
    element metalink:language {
-   metalinkTextConstruct
+     metalinkTextConstruct
    }</pre></div><p>
 
 </p>
@@ -1136,9 +1135,9 @@ The &#34;metalink:license&#34; Element</h3>
 <div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
 metalinkLicense =
    element metalink:license {
-   metalinkCommonAttributes,
-   attribute uri { metalinkUri }?,
-   attribute name { metalinkTextConstruct }?,
+     metalinkCommonAttributes,
+     attribute uri { metalinkUri }?,
+     attribute name { text }?
    }</pre></div><p>
 
 </p>
@@ -1160,10 +1159,11 @@ The &#34;metalink:logo&#34; Element</h3>
 
 	    <a name='anchor94'></a><a name='anchor95'></a></p>
 <div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
-metalinkLogo = element metalink:logo {
-   metalinkCommonAttributes,
-   (metalinkUri)
-}</pre></div><p>
+metalinkLogo =
+   element metalink:logo {
+     metalinkCommonAttributes,
+     (metalinkUri)
+   }</pre></div><p>
 
 </p>
 <p>The image SHOULD have an aspect ratio of one (horizontal)
@@ -1184,10 +1184,10 @@ metalinkMetaURL =
    element metalink:metaurl {
       metalinkCommonAttributes,
       attribute preference { xsd:integer }?,
-      attribute type { metalinkTextConstruct },
-      attribute name { metalinkTextConstruct }?,
+      attribute type { text },
+      attribute name { text }?,
       metalinkUri
-   }+</pre></div><p>
+   }</pre></div><p>
 
 </p>
 <a name="anchor15"></a><br /><hr />
@@ -1238,10 +1238,11 @@ The &#34;metalink:origin&#34; Element</h3>
 
 	    <a name='anchor102'></a><a name='anchor103'></a></p>
 <div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
-metalinkOrigin = element metalink:origin {
-   metalinkCommonAttributes,
-   (metalinkUri)
-}</pre></div><p>
+metalinkOrigin =
+   element metalink:origin {
+     metalinkCommonAttributes,
+     (metalinkUri)
+   }</pre></div><p>
 
 </p>
 <a name="element.os"></a><br /><hr />
@@ -1256,7 +1257,7 @@ The &#34;metalink:os&#34; Element</h3>
 <div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
 metalinkOS =
    element metalink:os {
-   metalinkTextConstruct
+     metalinkTextConstruct
    }</pre></div><p>
 
 </p>
@@ -1273,7 +1274,7 @@ The &#34;metalink:published&#34; Element</h3>
 <div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
 metalinkPublished =
    element metalink:published {
-   metalinkDateConstruct
+     metalinkDateConstruct
    }</pre></div><p>
 
 </p>
@@ -1292,10 +1293,10 @@ The &#34;metalink:publisher&#34; Element</h3>
 <div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
 metalinkPublisher =
    element metalink:publisher {
-   metalinkCommonAttributes,
-   attribute uri { metalinkUri }?,
-   attribute name { metalinkTextConstruct }?,
-}</pre></div><p>
+     metalinkCommonAttributes,
+     attribute uri { metalinkUri }?,
+     attribute name { text }?
+   }</pre></div><p>
 
 </p>
 <p>The <a class='info' href='#element.publisher'>metalink:publisher<span> (</span><span class='info'>The &#34;metalink:publisher&#34; Element</span><span>)</span></a> element MAY have a "uri" attribute
@@ -1318,8 +1319,8 @@ The &#34;metalink:signature&#34; Element</h3>
 <div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
 metalinkSignature =
    element metalink:signature {
-   attribute type { "pgp" },
-   metalinkTextConstruct
+     attribute type { "pgp" },
+     metalinkTextConstruct
    }</pre></div><p>
 
 </p>
@@ -1347,7 +1348,7 @@ The &#34;metalink:size&#34; Element</h3>
 <div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
 metalinkSize =
    element metalink:size {
-   metalinkTextConstruct
+     metalinkTextConstruct
    }</pre></div><p>
 
 </p>
@@ -1363,7 +1364,7 @@ The &#34;metalink:type&#34; Element</h3>
 <div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
 metalinkType =
    element metalink:type {
-   "static" | "dynamic"
+      "static" | "dynamic"
    }</pre></div><p>
 
 </p>
@@ -1382,7 +1383,7 @@ The &#34;metalink:updated&#34; Element</h3>
 <div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
 metalinkUpdated =
    element metalink:updated {
-   metalinkDateConstruct
+     metalinkDateConstruct
    }</pre></div><p>
 
 </p>
@@ -1404,10 +1405,10 @@ metalinkURL =
       metalinkCommonAttributes,
       attribute location { xsd:string {
         minLength = "2"  maxLength="2"}
-        }?,
+      }?,
       attribute preference { xsd:integer }?,
       metalinkUri
-   }+</pre></div><p>
+   }</pre></div><p>
 
 </p>
 <a name="anchor19"></a><br /><hr />
@@ -1442,7 +1443,7 @@ The &#34;metalink:version&#34; Element</h3>
 <div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
 metalinkVersion =
    element metalink:version {
-   metalinkTextConstruct
+     metalinkTextConstruct
    }</pre></div><p>
 
 </p>
@@ -1868,110 +1869,214 @@ RELAX NG Compact Schema</h3>
 # RELAX NG Compact Syntax Grammar for the
 # Metalink Format Specification Version 3
 
-   namespace metalink = "urn:ietf:params:xml:ns:metalink"
-   namespace xsd = "http://www.w3.org/2001/XMLSchema"
+namespace local = ""
+namespace metalink = "urn:ietf:params:xml:ns:metalink"
+namespace xsd = "http://www.w3.org/2001/XMLSchema"
 
+# Common attributes
 
-   # Common attributes
+metalinkCommonAttributes =
+   attribute xml:base { metalinkUri }?,
+   attribute xml:lang { metalinkLanguageTag }?,
+   undefinedAttribute*
 
-   metalinkCommonAttributes =
-      attribute xml:base { metalinkUri }?,
-      attribute xml:lang { metalinkLanguageTag }?,
-      undefinedAttribute*
+# Text Constructs
 
-   # Text Constructs
+metalinkTextConstruct =
+   metalinkCommonAttributes,
+   text
 
-   metalinkTextConstruct =
+# Date Construct
+
+metalinkDateConstruct =
+   metalinkCommonAttributes,
+   xsd:dateTime
+
+start = metalinkMetalink
+
+metalinkMetalink =
+   element metalink:metalink {
       metalinkCommonAttributes,
-      text
+      (metalinkFiles
+       &amp; metalinkGenerator?
+       &amp; metalinkOrigin?
+       &amp; metalinkPublished?
+       &amp; metalinkType?
+       &amp; metalinkUpdated?
+       &amp; extensionElement*)
+   }
 
-   # Date Construct
-
-   metalinkDateConstruct =
+metalinkFiles =
+   element metalink:files {
       metalinkCommonAttributes,
-      xsd:dateTime
+      (metalinkCopyright?
+       &amp; metalinkDescription?
+       &amp; metalinkFile+
+       &amp; metalinkIdentity?
+       &amp; metalinkLanguage?
+       &amp; metalinkLicense?
+       &amp; metalinkLogo?
+       &amp; metalinkOS?
+       &amp; metalinkPublisher?
+       &amp; metalinkVersion?
+       &amp; extensionElement*)
+   }
 
+metalinkFile =
+   element metalink:file {
+      metalinkCommonAttributes,
+      attribute name { text },
+      (metalinkCopyright?
+       &amp; metalinkDescription?
+       &amp; metalinkIdentity?
+       &amp; metalinkLanguage?
+       &amp; metalinkLicense?
+       &amp; metalinkLogo?
+       &amp; metalinkOS?
+       &amp; metalinkPublisher?
+       &amp; metalinkResources
+       &amp; metalinkSize?
+       &amp; metalinkVerification?
+       &amp; metalinkVersion?
+       &amp; extensionElement*)
+   }
 
-start =
-  element metalink:metalink {
-    element metalink:generator {
+metalinkResources =
+   element metalink:resources {
+      metalinkCommonAttributes,
+      (metalinkMetaURL*
+       &amp; metalinkURL*
+       &amp; extensionElement*)
+   }
+
+metalinkVerification =
+   element metalink:verification {
+      metalinkCommonAttributes,
+      (metalinkHash*
+       &amp; metalinkPieces*
+       &amp; metalinkSignature?
+       &amp; extensionElement*)
+   }
+
+metalinkPieces =
+   element metalink:pieces {
+      attribute length { xsd:integer },
+      attribute type { text },
+      metalinkHash+
+   }
+
+metalinkCopyright =
+   element metalink:copyright {
       metalinkTextConstruct
-    }?,
-    element metalink:origin { metalinkUri }?,
-    element metalink:type { "static" | "dynamic"  }?,
-    element metalink:published { metalinkDateConstruct }?,
-    element metalink:updated { metalinkDateConstruct }?,
-    element metalink:files {
-      element metalink:copyright { metalinkTextConstruct }?,
-      element metalink:description { metalinkTextConstruct }?,
-      element metalink:identity { metalinkTextConstruct }?,
-      element metalink:language { metalinkTextConstruct }?,
-      element metalink:license {
-        attribute uri { metalinkUri }?,
-        attribute name { metalinkTextConstruct }?,
+   }
+
+metalinkDescription =
+   element metalink:description {
+      metalinkTextConstruct
+   }
+
+metalinkGenerator =
+   element metalink:generator {
+      metalinkTextConstruct
+   }
+
+metalinkHash =
+   element metalink:hash {
+      attribute piece { xsd:integer }?,
+      attribute type { text }?,
+      text
+   }
+
+metalinkIdentity =
+   element metalink:identity {
+      metalinkTextConstruct
+   }
+
+metalinkLanguage =
+   element metalink:language {
+      metalinkTextConstruct
+   }
+
+metalinkLicense =
+   element metalink:license {
+      metalinkCommonAttributes,
+      attribute uri { metalinkUri }?,
+      attribute name { text }?
+   }
+
+metalinkLogo =
+   element metalink:logo {
+      metalinkCommonAttributes,
+      (metalinkUri)
+   }
+
+metalinkMetaURL =
+   element metalink:metaurl {
+      metalinkCommonAttributes,
+      attribute preference { xsd:integer }?,
+      attribute type { text },
+      attribute name { text }?,
+      metalinkUri
+   }
+
+metalinkOrigin =
+   element metalink:origin {
+      metalinkCommonAttributes,
+      (metalinkUri)
+   }
+
+metalinkOS =
+   element metalink:os {
+      metalinkTextConstruct
+   }
+
+metalinkPublished =
+   element metalink:published {
+      metalinkDateConstruct
+   }
+
+metalinkPublisher =
+   element metalink:publisher {
+      metalinkCommonAttributes,
+      attribute uri { metalinkUri }?,
+      attribute name { text }?
+   }
+
+metalinkSignature =
+   element metalink:signature {
+      attribute type { "pgp" },
+      metalinkTextConstruct
+   }
+
+metalinkSize =
+   element metalink:size {
+      metalinkTextConstruct
+   }
+
+metalinkType =
+   element metalink:type {
+      "static" | "dynamic"
+   }
+
+metalinkUpdated =
+   element metalink:updated {
+      metalinkDateConstruct
+   }
+
+metalinkURL =
+   element metalink:url {
+      metalinkCommonAttributes,
+      attribute location { xsd:string {
+         minLength = "2"  maxLength="2"}
       }?,
-      element metalink:logo { metalinkUri }?,
-      element metalink:os { metalinkTextConstruct }?,
-      element metalink:publisher {
-        attribute uri { metalinkUri }?,
-        attribute name { metalinkTextConstruct }?,
-      }?,
-      element metalink:version { metalinkTextConstruct }?,
-      element metalink:file {
-        attribute name { metalinkTextConstruct },
-        element metalink:identity { metalinkTextConstruct }?,
-        element metalink:version { metalinkTextConstruct }?,
-        element metalink:size { xsd:integer }?,
-        element metalink:description { metalinkTextConstruct }?,
-        element metalink:license {
-          attribute uri { metalinkUri }?,
-          attribute name { metalinkTextConstruct }?,
-        }?,
-        element metalink:logo { metalinkUri }?,
-        element metalink:publisher {
-          attribute uri { metalinkUri }?,
-          attribute name { metalinkTextConstruct }?,
-        }?,
-        element metalink:language { metalinkTextConstruct }?,
-        element metalink:copyright { metalinkTextConstruct }?,
-        element metalink:license { metalinkTextConstruct }?,
-        element metalink:os { metalinkTextConstruct }?,
-        element metalink:verification {
-          hash*,
-          element metalink:pieces {
-            attribute length { xsd:integer },
-            attribute type { metalinkTextConstruct },
-            hash+
-          }*,
-          element metalink:signature {
-           attribute type { "pgp" },
-           text
-          }?
-        }?,
-        element metalink:resources {
-          element metalink:metaurl {
-            attribute preference { xsd:integer }?,
-            attribute type { metalinkTextConstruct },
-            attribute name { metalinkTextConstruct }?,
-            metalinkUri
-          }*,
-          element metalink:url {
-            attribute location { xsd:string {
-            minLength = "2"  maxLength="2"}
-            }?,
-            attribute preference { xsd:integer }?,
-            metalinkUri
-          }*
-        }
-      }+
-    }
-  }
-hash =
-  element metalink:hash {
-    attribute piece { metalinkTextConstruct }?,
-    attribute type { metalinkTextConstruct }?,
-    text
-  }
+      attribute preference { xsd:integer }?,
+      metalinkUri
+   }
+
+metalinkVersion =
+   element metalink:version {
+      metalinkTextConstruct
+   }
 
 # As defined in RFC 3066 and compatible with RFC 4646
 metalinkLanguageTag = xsd:string {
@@ -2040,10 +2145,12 @@ Document History (to be removed by RFC Editor before publication)</h3>
 </li>
 </ul>
 
-<p>-10 : July   , 2009.
+<p>-10 : July 28, 2009.
 	    
 	    </p>
 <ul class="text">
+<li>Schema fixes.
+</li>
 <li>Rename metadata element to metaurl, add name attribute to it similar to file element's name attribute.
 </li>
 <li>Update REC-xmldsig-core reference to second edition.

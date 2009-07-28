@@ -2286,10 +2286,11 @@ anyForeignElement =
 
 	    </list></t>
 
-<t>-10 : July   , 2009.
+<t>-10 : July 28, 2009.
 	    
 	    <list style="symbols"> 
 	      
+		  <t>Schema fixes.</t>
 	      <t>Rename metadata element to metaurl, add name attribute to it similar to file element's name attribute.</t>
 		  <t>Update REC-xmldsig-core reference to second edition.</t>
 	   </list></t>
