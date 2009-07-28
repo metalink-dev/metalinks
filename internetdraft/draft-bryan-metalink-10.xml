@@ -372,7 +372,7 @@ metalinkMetalink =
        &amp; metalinkPublished?
        &amp; metalinkType?
        &amp; metalinkUpdated?
-       &amp; extensionElement*),
+       &amp; extensionElement*)
    }</artwork></figure></t> 
 	
 	  <t>The following child elements are defined by this specification
@@ -508,7 +508,7 @@ metalinkFiles =
 metalinkFile =
    element metalink:file {
       metalinkCommonAttributes,
-      attribute name { metalinkTextConstruct },
+      attribute name { text },
       (metalinkCopyright?
        &amp; metalinkDescription?
        &amp; metalinkIdentity?
@@ -522,7 +522,7 @@ metalinkFile =
        &amp; metalinkVerification?
        &amp; metalinkVersion?
        &amp; extensionElement*)
-   }+</artwork></figure></t>
+   }</artwork></figure></t>
 
 	  <t>This specification assigns no significance to the order of
 	  <xref target="element.file" format="none">metalink:file</xref> elements.</t>
@@ -613,9 +613,9 @@ metalinkFile =
 metalinkResources =
    element metalink:resources {
       metalinkCommonAttributes,
-      metalinkMetaURL*
-      metalinkURL*
-      extensionElement*
+      (metalinkMetaURL*
+       &amp; metalinkURL*
+       &amp; extensionElement*)
    }</artwork></figure></t>
 	  
 	  <t>This specification assigns no significance to the order of
@@ -696,9 +696,9 @@ metalinkVerification =
 metalinkPieces =
    element metalink:pieces {
       attribute length { xsd:integer },
-      attribute type { metalinkTextConstruct },
-      hash+
-   }+,</artwork></figure></t>
+      attribute type { text },
+      metalinkHash+
+   }</artwork></figure></t>
    
 	  <section title="The &#34;type&#34; Attribute"> 
 
@@ -743,7 +743,7 @@ metalinkPieces =
 	      <artwork type="rnc">
 metalinkCopyright =
    element metalink:copyright {
-   metalinkTextConstruct
+     metalinkTextConstruct
    }</artwork></figure></t>
 	  
 	</section> 	
@@ -763,7 +763,7 @@ metalinkCopyright =
 	      <artwork type="rnc">
 metalinkDescription =
    element metalink:description {
-   metalinkTextConstruct
+     metalinkTextConstruct
    }</artwork></figure></t>
 	  
 	</section>
@@ -783,8 +783,7 @@ metalinkDescription =
 	      <artwork type="rnc">
 metalinkGenerator = 
    element metalink:generator {
-   metalinkCommonAttributes,
-   text
+     metalinkTextConstruct
    }</artwork></figure></t> 
 
 	  <t>The content of this element, when present, MUST be a
@@ -811,10 +810,10 @@ metalinkGenerator =
 	      <artwork type="rnc">
 metalinkHash =
    element metalink:hash {
-   attribute piece { xsd:integer }?,
-   attribute type { metalinkTextConstruct }?,
-   text
-   }+</artwork></figure></t>
+     attribute piece { xsd:integer }?,
+     attribute type { text }?,
+     text
+   }</artwork></figure></t>
       <t>Metalinks can contain one or multiples hashes of a complete file, for example both SHA-1 and SHA-256. <xref target="element.hash" format="none">metalink:hash</xref> elements
       with a "type" attribute contain a hash of the whole file.
 	  
@@ -883,7 +882,7 @@ include "sha-1" which is SHA1, as specified in <xref target="RFC3174"/>.  It MAY
 	      <artwork type="rnc">
 metalinkIdentity =
    element metalink:identity {
-   metalinkTextConstruct
+     metalinkTextConstruct
    }</artwork></figure></t>
 	  
 	</section> 	
@@ -903,7 +902,7 @@ metalinkIdentity =
 	      <artwork type="rnc">
 metalinkLanguage =
    element metalink:language {
-   metalinkTextConstruct
+     metalinkTextConstruct
    }</artwork></figure></t>
    
 	</section>
@@ -923,9 +922,9 @@ metalinkLanguage =
 	      <artwork type="rnc">
 metalinkLicense =
    element metalink:license {
-   metalinkCommonAttributes,
-   attribute uri { metalinkUri }?,
-   attribute name { metalinkTextConstruct }?,
+     metalinkCommonAttributes,
+     attribute uri { metalinkUri }?,
+     attribute name { text }?
    }</artwork></figure></t>
 
 	  <t>The <xref target="element.license" format="none">metalink:license</xref> element MAY have a "uri" attribute
@@ -952,10 +951,11 @@ metalinkLicense =
         <iref item="metalinkLogo grammar production" primary="true"/>
         <iref item="Grammar" subitem="metalinkLogo" primary="true"/>
 	      <artwork type="rnc">
-metalinkLogo = element metalink:logo {
-   metalinkCommonAttributes,
-   (metalinkUri)
-}</artwork></figure></t> 
+metalinkLogo =
+   element metalink:logo {
+     metalinkCommonAttributes,
+     (metalinkUri)
+   }</artwork></figure></t> 
 
 	  <t>The image SHOULD have an aspect ratio of one (horizontal)
 	  to one (vertical) and SHOULD be suitable for presentation
@@ -979,10 +979,10 @@ metalinkMetaURL =
    element metalink:metaurl {
       metalinkCommonAttributes,
       attribute preference { xsd:integer }?,
-      attribute type { metalinkTextConstruct },
-      attribute name { metalinkTextConstruct }?,
+      attribute type { text },
+      attribute name { text }?,
       metalinkUri
-   }+</artwork></figure></t> 
+   }</artwork></figure></t> 
 
 	  <section title="The &#34;preference&#34; Attribute"> 
 
@@ -1030,10 +1030,11 @@ metalinkMetaURL =
         <iref item="metalinkOrigin grammar production" primary="true"/>
         <iref item="Grammar" subitem="metalinkOrigin" primary="true"/>
 	      <artwork type="rnc">
-metalinkOrigin = element metalink:origin {
-   metalinkCommonAttributes,
-   (metalinkUri)
-}</artwork></figure></t> 
+metalinkOrigin =
+   element metalink:origin {
+     metalinkCommonAttributes,
+     (metalinkUri)
+   }</artwork></figure></t> 
 	  
 	</section>
 
@@ -1052,7 +1053,7 @@ metalinkOrigin = element metalink:origin {
 	      <artwork type="rnc">
 metalinkOS =
    element metalink:os {
-   metalinkTextConstruct
+     metalinkTextConstruct
    }</artwork></figure></t>
 	  
 	</section>
@@ -1073,7 +1074,7 @@ metalinkOS =
 	      <artwork type="rnc">
 metalinkPublished =
    element metalink:published { 
-   metalinkDateConstruct
+     metalinkDateConstruct
    }</artwork></figure></t>
 
 	   <t>Typically, <xref target="element.published" format="none">metalink:published</xref> will be associated with the
@@ -1097,10 +1098,10 @@ metalinkPublished =
 	      <artwork type="rnc">
 metalinkPublisher =
    element metalink:publisher {
-   metalinkCommonAttributes,
-   attribute uri { metalinkUri }?,
-   attribute name { metalinkTextConstruct }?,
-}</artwork></figure></t>
+     metalinkCommonAttributes,
+     attribute uri { metalinkUri }?,
+     attribute name { text }?
+   }</artwork></figure></t>
 
 	  <t>The <xref target="element.publisher" format="none">metalink:publisher</xref> element MAY have a "uri" attribute
 	  whose value MUST be an IRI reference <xref target="RFC3987"/>. When dereferenced, the resulting URI (mapped from an
@@ -1127,8 +1128,8 @@ metalinkPublisher =
 	      <artwork type="rnc">
 metalinkSignature =
    element metalink:signature {
-   attribute type { "pgp" },
-   metalinkTextConstruct
+     attribute type { "pgp" },
+     metalinkTextConstruct
    }</artwork></figure></t>
 
 	  <section title="The &#34;type&#34; Attribute"> 
@@ -1159,7 +1160,7 @@ digital signatures, so unknown types are allowed.
 	      <artwork type="rnc">
 metalinkSize =
    element metalink:size {
-   metalinkTextConstruct
+     metalinkTextConstruct
    }</artwork></figure></t> 
 	  
 	</section> 
@@ -1179,7 +1180,7 @@ metalinkSize =
 	      <artwork type="rnc">
 metalinkType =
    element metalink:type {
-   "static" | "dynamic"
+      "static" | "dynamic"
    }</artwork></figure></t> 
 	  
 	</section> 
@@ -1202,7 +1203,7 @@ metalinkType =
 	      <artwork type="rnc">
 metalinkUpdated =
    element metalink:updated { 
-   metalinkDateConstruct
+     metalinkDateConstruct
    }</artwork></figure></t>
 
 	  <t>Publishers MAY change the value of this element over time.</t>
@@ -1228,10 +1229,10 @@ metalinkURL =
       metalinkCommonAttributes,
       attribute location { xsd:string {
         minLength = "2"  maxLength="2"}
-        }?,
+      }?,
       attribute preference { xsd:integer }?,
       metalinkUri
-   }+</artwork></figure></t> 
+   }</artwork></figure></t> 
 
 	  <section title="The &#34;preference&#34; Attribute"> 
 
@@ -1269,7 +1270,7 @@ metalinkURL =
 	      <artwork type="rnc">
 metalinkVersion =
    element metalink:version {
-   metalinkTextConstruct
+     metalinkTextConstruct
    }</artwork></figure></t> 
 	  
 	</section> 
@@ -2011,110 +2012,214 @@ include other verification algorithms. </t>
 # RELAX NG Compact Syntax Grammar for the
 # Metalink Format Specification Version 3
 
-   namespace metalink = "urn:ietf:params:xml:ns:metalink"
-   namespace xsd = "http://www.w3.org/2001/XMLSchema"
+namespace local = ""
+namespace metalink = "urn:ietf:params:xml:ns:metalink"
+namespace xsd = "http://www.w3.org/2001/XMLSchema"
 
+# Common attributes
 
-   # Common attributes
+metalinkCommonAttributes =
+   attribute xml:base { metalinkUri }?,
+   attribute xml:lang { metalinkLanguageTag }?,
+   undefinedAttribute*
 
-   metalinkCommonAttributes =
-      attribute xml:base { metalinkUri }?,
-      attribute xml:lang { metalinkLanguageTag }?,
-      undefinedAttribute*
+# Text Constructs
 
-   # Text Constructs
+metalinkTextConstruct =
+   metalinkCommonAttributes,
+   text
 
-   metalinkTextConstruct =
+# Date Construct
+
+metalinkDateConstruct =
+   metalinkCommonAttributes,
+   xsd:dateTime
+
+start = metalinkMetalink
+
+metalinkMetalink =
+   element metalink:metalink {
       metalinkCommonAttributes,
-      text
+      (metalinkFiles
+       & metalinkGenerator?
+       & metalinkOrigin?
+       & metalinkPublished?
+       & metalinkType?
+       & metalinkUpdated?
+       & extensionElement*)
+   }
 
-   # Date Construct
-
-   metalinkDateConstruct =
+metalinkFiles =
+   element metalink:files {
       metalinkCommonAttributes,
-      xsd:dateTime
+      (metalinkCopyright?
+       & metalinkDescription?
+       & metalinkFile+
+       & metalinkIdentity?
+       & metalinkLanguage?
+       & metalinkLicense?
+       & metalinkLogo?
+       & metalinkOS?
+       & metalinkPublisher?
+       & metalinkVersion?
+       & extensionElement*)
+   }
 
+metalinkFile =
+   element metalink:file {
+      metalinkCommonAttributes,
+      attribute name { text },
+      (metalinkCopyright?
+       & metalinkDescription?
+       & metalinkIdentity?
+       & metalinkLanguage?
+       & metalinkLicense?
+       & metalinkLogo?
+       & metalinkOS?
+       & metalinkPublisher?
+       & metalinkResources
+       & metalinkSize?
+       & metalinkVerification?
+       & metalinkVersion?
+       & extensionElement*)
+   }
 
-start =
-  element metalink:metalink {
-    element metalink:generator {
+metalinkResources =
+   element metalink:resources {
+      metalinkCommonAttributes,
+      (metalinkMetaURL*
+       & metalinkURL*
+       & extensionElement*)
+   }
+
+metalinkVerification =
+   element metalink:verification {
+      metalinkCommonAttributes,
+      (metalinkHash*
+       & metalinkPieces*
+       & metalinkSignature?
+       & extensionElement*)
+   }
+
+metalinkPieces =
+   element metalink:pieces {
+      attribute length { xsd:integer },
+      attribute type { text },
+      metalinkHash+
+   }
+
+metalinkCopyright =
+   element metalink:copyright {
       metalinkTextConstruct
-    }?,
-    element metalink:origin { metalinkUri }?,
-    element metalink:type { "static" | "dynamic"  }?,
-    element metalink:published { metalinkDateConstruct }?,
-    element metalink:updated { metalinkDateConstruct }?,
-    element metalink:files {
-      element metalink:copyright { metalinkTextConstruct }?,
-      element metalink:description { metalinkTextConstruct }?,
-      element metalink:identity { metalinkTextConstruct }?,
-      element metalink:language { metalinkTextConstruct }?,
-      element metalink:license {
-        attribute uri { metalinkUri }?,
-        attribute name { metalinkTextConstruct }?,
+   }
+
+metalinkDescription =
+   element metalink:description {
+      metalinkTextConstruct
+   }
+
+metalinkGenerator =
+   element metalink:generator {
+      metalinkTextConstruct
+   }
+
+metalinkHash =
+   element metalink:hash {
+      attribute piece { xsd:integer }?,
+      attribute type { text }?,
+      text
+   }
+
+metalinkIdentity =
+   element metalink:identity {
+      metalinkTextConstruct
+   }
+
+metalinkLanguage =
+   element metalink:language {
+      metalinkTextConstruct
+   }
+
+metalinkLicense =
+   element metalink:license {
+      metalinkCommonAttributes,
+      attribute uri { metalinkUri }?,
+      attribute name { text }?
+   }
+
+metalinkLogo =
+   element metalink:logo {
+      metalinkCommonAttributes,
+      (metalinkUri)
+   }
+
+metalinkMetaURL =
+   element metalink:metaurl {
+      metalinkCommonAttributes,
+      attribute preference { xsd:integer }?,
+      attribute type { text },
+      attribute name { text }?,
+      metalinkUri
+   }
+
+metalinkOrigin =
+   element metalink:origin {
+      metalinkCommonAttributes,
+      (metalinkUri)
+   }
+
+metalinkOS =
+   element metalink:os {
+      metalinkTextConstruct
+   }
+
+metalinkPublished =
+   element metalink:published {
+      metalinkDateConstruct
+   }
+
+metalinkPublisher =
+   element metalink:publisher {
+      metalinkCommonAttributes,
+      attribute uri { metalinkUri }?,
+      attribute name { text }?
+   }
+
+metalinkSignature =
+   element metalink:signature {
+      attribute type { "pgp" },
+      metalinkTextConstruct
+   }
+
+metalinkSize =
+   element metalink:size {
+      metalinkTextConstruct
+   }
+
+metalinkType =
+   element metalink:type {
+      "static" | "dynamic"
+   }
+
+metalinkUpdated =
+   element metalink:updated {
+      metalinkDateConstruct
+   }
+
+metalinkURL =
+   element metalink:url {
+      metalinkCommonAttributes,
+      attribute location { xsd:string {
+         minLength = "2"  maxLength="2"}
       }?,
-      element metalink:logo { metalinkUri }?,
-      element metalink:os { metalinkTextConstruct }?,
-      element metalink:publisher {
-        attribute uri { metalinkUri }?,
-        attribute name { metalinkTextConstruct }?,
-      }?,
-      element metalink:version { metalinkTextConstruct }?,
-      element metalink:file {
-        attribute name { metalinkTextConstruct },
-        element metalink:identity { metalinkTextConstruct }?,
-        element metalink:version { metalinkTextConstruct }?,
-        element metalink:size { xsd:integer }?,
-        element metalink:description { metalinkTextConstruct }?,
-        element metalink:license {
-          attribute uri { metalinkUri }?,
-          attribute name { metalinkTextConstruct }?,
-        }?,
-        element metalink:logo { metalinkUri }?,
-        element metalink:publisher {
-          attribute uri { metalinkUri }?,
-          attribute name { metalinkTextConstruct }?,
-        }?,
-        element metalink:language { metalinkTextConstruct }?,
-        element metalink:copyright { metalinkTextConstruct }?,
-        element metalink:license { metalinkTextConstruct }?,
-        element metalink:os { metalinkTextConstruct }?,
-        element metalink:verification {
-          hash*,
-          element metalink:pieces {
-            attribute length { xsd:integer },
-            attribute type { metalinkTextConstruct },
-            hash+
-          }*,
-          element metalink:signature {
-           attribute type { "pgp" },
-           text
-          }?
-        }?,
-        element metalink:resources {
-          element metalink:metaurl {
-            attribute preference { xsd:integer }?,
-            attribute type { metalinkTextConstruct },
-            attribute name { metalinkTextConstruct }?,
-            metalinkUri
-          }*,
-          element metalink:url {
-            attribute location { xsd:string { 
-            minLength = "2"  maxLength="2"} 
-            }?,
-            attribute preference { xsd:integer }?,
-            metalinkUri
-          }*
-        }
-      }+
-    }
-  }
-hash =
-  element metalink:hash {
-    attribute piece { metalinkTextConstruct }?,
-    attribute type { metalinkTextConstruct }?,
-    text
-  }
+      attribute preference { xsd:integer }?,
+      metalinkUri
+   }
+
+metalinkVersion =
+   element metalink:version {
+      metalinkTextConstruct
+   }
 
 # As defined in RFC 3066 and compatible with RFC 4646
 metalinkLanguageTag = xsd:string {
