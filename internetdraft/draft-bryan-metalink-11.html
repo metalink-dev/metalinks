@@ -683,25 +683,14 @@ The &#34;metalink:files&#34; Element</h3>
 <a name='anchor44'></a><a name='anchor45'></a>
 <p>The "metalink:files" element acts as a container for metadata and
 	  data associated with the listed files.  It contains one or more <a class='info' href='#element.file'>metalink:file<span> (</span><span class='info'>The &#34;metalink:file&#34; Element</span><span>)</span></a> child
-	  elements. Certain elements can be listed either under <a class='info' href='#element.files'>metalink:files<span> (</span><span class='info'>The &#34;metalink:files&#34; Element</span><span>)</span></a> or <a class='info' href='#element.file'>metalink:file<span> (</span><span class='info'>The &#34;metalink:file&#34; Element</span><span>)</span></a>.
-      If under <a class='info' href='#element.files'>metalink:files<span> (</span><span class='info'>The &#34;metalink:files&#34; Element</span><span>)</span></a>, they apply to all files listed in each <a class='info' href='#element.file'>metalink:file<span> (</span><span class='info'>The &#34;metalink:file&#34; Element</span><span>)</span></a>. If under <a class='info' href='#element.file'>metalink:file<span> (</span><span class='info'>The &#34;metalink:file&#34; Element</span><span>)</span></a>, then they apply to just that specific file.
-	  If an element is listed both under <a class='info' href='#element.files'>metalink:files<span> (</span><span class='info'>The &#34;metalink:files&#34; Element</span><span>)</span></a> and <a class='info' href='#element.file'>metalink:file<span> (</span><span class='info'>The &#34;metalink:file&#34; Element</span><span>)</span></a>, then the element under <a class='info' href='#element.file'>metalink:file<span> (</span><span class='info'>The &#34;metalink:file&#34; Element</span><span>)</span></a> has precedence and the <a class='info' href='#element.files'>metalink:files<span> (</span><span class='info'>The &#34;metalink:files&#34; Element</span><span>)</span></a> element does not apply to that particular file.
+	  elements. 
 	  
 	    <a name='anchor46'></a><a name='anchor47'></a></p>
 <div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
 metalinkFiles =
    element metalink:files {
       metalinkCommonAttributes,
-      (metalinkCopyright?
-       &amp; metalinkDescription?
-       &amp; metalinkFile+
-       &amp; metalinkIdentity?
-       &amp; metalinkLanguage?
-       &amp; metalinkLicense?
-       &amp; metalinkLogo?
-       &amp; metalinkOS?
-       &amp; metalinkPublisher?
-       &amp; metalinkVersion?
+      (metalinkFile+
        &amp; extensionElement*)
    }</pre></div><p>
 
@@ -713,35 +702,8 @@ metalinkFiles =
 	    
 	    </p>
 <ul class="text">
-<li><a class='info' href='#element.files'>metalink:files<span> (</span><span class='info'>The &#34;metalink:files&#34; Element</span><span>)</span></a> elements MAY contain exactly one <a class='info' href='#element.copyright'>metalink:copyright<span> (</span><span class='info'>The &#34;metalink:copyright&#34; Element</span><span>)</span></a>
-	      element.
-</li>
-<li><a class='info' href='#element.files'>metalink:files<span> (</span><span class='info'>The &#34;metalink:files&#34; Element</span><span>)</span></a> elements MAY contain exactly one <a class='info' href='#element.description'>metalink:description<span> (</span><span class='info'>The &#34;metalink:description&#34; Element</span><span>)</span></a>
-	      element.
-</li>
 <li><a class='info' href='#element.files'>metalink:files<span> (</span><span class='info'>The &#34;metalink:files&#34; Element</span><span>)</span></a> elements MUST contain one or more <a class='info' href='#element.file'>metalink:file<span> (</span><span class='info'>The &#34;metalink:file&#34; Element</span><span>)</span></a>
 	      elements.
-</li>
-<li><a class='info' href='#element.files'>metalink:files<span> (</span><span class='info'>The &#34;metalink:files&#34; Element</span><span>)</span></a> elements MAY contain exactly one <a class='info' href='#element.identity'>metalink:identity<span> (</span><span class='info'>The &#34;metalink:identity&#34; Element</span><span>)</span></a>
-	      element.
-</li>
-<li><a class='info' href='#element.files'>metalink:files<span> (</span><span class='info'>The &#34;metalink:files&#34; Element</span><span>)</span></a> elements MAY contain exactly one <a class='info' href='#element.language'>metalink:language<span> (</span><span class='info'>The &#34;metalink:language&#34; Element</span><span>)</span></a>
-	      element.
-</li>
-<li><a class='info' href='#element.files'>metalink:files<span> (</span><span class='info'>The &#34;metalink:files&#34; Element</span><span>)</span></a> elements MAY contain exactly one <a class='info' href='#element.license'>metalink:license<span> (</span><span class='info'>The &#34;metalink:license&#34; Element</span><span>)</span></a>
-	      element.
-</li>
-<li><a class='info' href='#element.files'>metalink:files<span> (</span><span class='info'>The &#34;metalink:files&#34; Element</span><span>)</span></a> elements MAY contain exactly one <a class='info' href='#element.logo'>metalink:logo<span> (</span><span class='info'>The &#34;metalink:logo&#34; Element</span><span>)</span></a>
-	      element.
-</li>
-<li><a class='info' href='#element.files'>metalink:files<span> (</span><span class='info'>The &#34;metalink:files&#34; Element</span><span>)</span></a> elements MAY contain exactly one <a class='info' href='#element.os'>metalink:os<span> (</span><span class='info'>The &#34;metalink:os&#34; Element</span><span>)</span></a>
-	      element.
-</li>
-<li><a class='info' href='#element.files'>metalink:files<span> (</span><span class='info'>The &#34;metalink:files&#34; Element</span><span>)</span></a> elements MAY contain exactly one <a class='info' href='#element.publisher'>metalink:publisher<span> (</span><span class='info'>The &#34;metalink:publisher&#34; Element</span><span>)</span></a>
-	      element.
-</li>
-<li><a class='info' href='#element.files'>metalink:files<span> (</span><span class='info'>The &#34;metalink:files&#34; Element</span><span>)</span></a> elements MAY contain exactly one <a class='info' href='#element.version'>metalink:version<span> (</span><span class='info'>The &#34;metalink:version&#34; Element</span><span>)</span></a>
-	      element.
 </li>
 </ul>
 
@@ -1047,8 +1009,8 @@ The &#34;metalink:hash&#34; Element</h3>
 <div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
 metalinkHash =
    element metalink:hash {
-     attribute piece { xsd:integer }?,
-     attribute type { text }?,
+     (attribute piece { xsd:integer }
+      | attribute type { text }),
      text
    }</pre></div><p>
 
@@ -1907,16 +1869,7 @@ metalinkMetalink =
 metalinkFiles =
    element metalink:files {
       metalinkCommonAttributes,
-      (metalinkCopyright?
-       &amp; metalinkDescription?
-       &amp; metalinkFile+
-       &amp; metalinkIdentity?
-       &amp; metalinkLanguage?
-       &amp; metalinkLicense?
-       &amp; metalinkLogo?
-       &amp; metalinkOS?
-       &amp; metalinkPublisher?
-       &amp; metalinkVersion?
+      (metalinkFile+
        &amp; extensionElement*)
    }
 
