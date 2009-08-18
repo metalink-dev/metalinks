@@ -668,7 +668,7 @@ metalinkPieces =
     
 
 	    <t>The IANA registry named "Hash Function Textual Names" defines values for hash types. If a Metalink Document contains verification information, it SHOULD
-        include "sha-1" which is SHA1 (or stronger), as specified in <xref target="RFC3174"/>.  It MAY also
+        include "sha-1" which is SHA1 as specified in <xref target="RFC3174"/>, or a stronger hash.  It MAY also
         include other verification algorithms.</t>		
 	  </section>
 
@@ -737,7 +737,7 @@ metalinkDescription =
     <iref item="type XML element" primary="true"/> 
 	      
 	  <t>The "<xref target="element.dynamic" format="none">metalink:dynamic</xref>" element is a Text construct that describes
-	  whether the IRI from "<xref target="element.origin" format="none">metalink:origin</xref>" in a Metalink will contain dynamic updated Metalinks or static content that is not updated.
+	  whether the IRI from "<xref target="element.origin" format="none">metalink:origin</xref>" in a Metalink will contain dynamic updated information or if it is static and not likely to be updated.
 	  
 	    <figure>
         <iref item="metalinkType grammar production" primary="true"/>
@@ -796,8 +796,8 @@ metalinkHash =
      attribute type { text }?, 
      text
    }</artwork></figure></t>
-      <t>Metalinks can contain one or multiples hashes of a complete file, for example both SHA-1 and SHA-256. <xref target="element.hash" format="none">metalink:hash</xref> elements
-      with a "type" attribute MUST contain a hash of the complete file.
+      <t><xref target="element.hash" format="none">metalink:hash</xref> elements
+      with a "type" attribute MUST contain a hash of the complete file. Metalink Documents can contain one or multiples hashes of a complete file. In this example, both SHA-1 and SHA-256 hashes are included. 
 	  
 	      <figure>
 		<artwork type="example">
@@ -810,7 +810,7 @@ metalinkHash =
 ...</artwork>
 	      </figure>
       </t>
-      <t>Metalinks can also contain hashes for individual pieces of a file.  <xref target="element.hash" format="none">metalink:hash</xref> elements that are inside a <xref target="element.pieces" format="none">metalink:pieces</xref> container element have a hash for that specific piece or chunk of the file, and are of the same hash type as the <xref target="element.pieces" format="none">metalink:pieces</xref> element they are contained in.
+      <t>Metalink Documents can also contain hashes for individual pieces of a file.  <xref target="element.hash" format="none">metalink:hash</xref> elements that are inside a <xref target="element.pieces" format="none">metalink:pieces</xref> container element have a hash for that specific piece or chunk of the file, and are of the same hash type as the <xref target="element.pieces" format="none">metalink:pieces</xref> element they are contained in.
       <xref target="element.hash" format="none">metalink:hash</xref> elements without a "type" attribute MUST contain a hash for that specific piece or chunk of the file and MUST be listed in the
       same order as the corresponding pieces appear in the file, starting at the beginning of the file.
 
@@ -838,7 +838,7 @@ metalinkHash =
 
 	    <t><xref target="element.hash" format="none">metalink:hash</xref> elements MUST have a "type" attribute, if and only if
         it contains a hash of the complete file. The IANA registry named "Hash Function Textual Names" defines values for hash types. If a Metalink Document contains verification information, it SHOULD
-include "sha-1" which is SHA1 (or stronger), as specified in <xref target="RFC3174"/>.  It MAY also include other verification algorithms.</t>
+include "sha-1" which is SHA1 as specified in <xref target="RFC3174"/>, or a stronger hash.  It MAY also include other verification algorithms.</t>
 		
 	  </section>
 
@@ -901,11 +901,11 @@ metalinkLanguage =
 metalinkLicense =
    element metalink:license {
      metalinkCommonAttributes,
-     attribute uri { metalinkUri }?,
+     attribute url { metalinkUri }?,
      attribute name { text }?
    }</artwork></figure></t>
 
-	  <t>The <xref target="element.license" format="none">metalink:license</xref> element MAY have a "uri" attribute
+	  <t>The <xref target="element.license" format="none">metalink:license</xref> element MAY have a "url" attribute
 	  whose value MUST be an IRI reference <xref target="RFC3987"/>. When dereferenced, the resulting URI (mapped from an
 	  IRI, if necessary) SHOULD produce a representation that is
 	  relevant to that agent.</t>
@@ -1077,11 +1077,11 @@ metalinkPublished =
 metalinkPublisher =
    element metalink:publisher {
      metalinkCommonAttributes,
-     attribute uri { metalinkUri }?,
+     attribute url { metalinkUri }?,
      attribute name { text }?
    }</artwork></figure></t>
 
-	  <t>The <xref target="element.publisher" format="none">metalink:publisher</xref> element MAY have a "uri" attribute
+	  <t>The <xref target="element.publisher" format="none">metalink:publisher</xref> element MAY have a "url" attribute
 	  whose value MUST be an IRI reference <xref target="RFC3987"/>. When dereferenced, the resulting URI (mapped from an
 	  IRI, if necessary) SHOULD produce a representation that is
 	  relevant to that agent.</t>
@@ -1245,10 +1245,9 @@ metalinkVersion =
 	    mechanisms can be used to secure its content.</t>
 
 	    
-	    <t>Producers of Metalinks may have sound
-	    reasons for signing
+	    <t>Producers of Metalink Documents may have sound reasons for signing
 	    otherwise-unprotected content. For example, a merchant
-	    might digitally sign a Metalink that lists a file download to verify its origin. Other merchants may wish to sign and encrypt Metalinks that list digital songs that have been purchased. Of course,
+	    might digitally sign a Metalink that lists a file download to verify its origin. Other merchants may wish to sign and encrypt Metalink Documents that list digital songs that have been purchased. Of course,
 	    many other examples are conceivable as well.</t>
 
 
@@ -1491,7 +1490,7 @@ structuredExtensionElement =
 	    <section title="Spoofing">
 
 	      <t>There is potential for spoofing attacks where the attacker publishes
-          Metalinks with false information. Malicious publishers might create Metalink Documents containing inaccurate information anywhere in the document.
+          Metalink Documents with false information. Malicious publishers might create Metalink Documents containing inaccurate information anywhere in the document.
           At best, this could deceive unaware downloaders that they are downloading a malicious or worthless file. At worst, malicious publishers could attempt a distributed denial of service attack by inserting unrelated IRIs into Metalink Documents.</t>
 
 	    </section>	
@@ -2096,7 +2095,7 @@ metalinkLanguage =
 metalinkLicense =
    element metalink:license {
       metalinkCommonAttributes,
-      attribute uri { metalinkUri }?,
+      attribute url { metalinkUri }?,
       attribute name { text }?
    }
 
@@ -2134,7 +2133,7 @@ metalinkPublished =
 metalinkPublisher =
    element metalink:publisher {
       metalinkCommonAttributes,
-      attribute uri { metalinkUri }?,
+      attribute url { metalinkUri }?,
       attribute name { text }?
    }
 
@@ -2234,11 +2233,12 @@ anyForeignElement =
 
 	    </list></t>
 
-<t>-12 : August   , 2009.
+<t>-12 : August 18, 2009.
 	    
 	    <list style="symbols"> 
 	      
 		  <t>Remove "piece" attribute from hash elements in pieces container elements.</t>
+          <t>Rename "uri" attribute of license and publisher elements to "url".</t>
 	   </list></t>
 		
 <t>-11 : August 08, 2009.

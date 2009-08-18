@@ -144,10 +144,10 @@
 <tr><td class="header">Network Working Group</td><td class="header">A. Bryan</td></tr>
 <tr><td class="header">Internet-Draft</td><td class="header">T. Tsujikawa</td></tr>
 <tr><td class="header">Intended status: Standards Track</td><td class="header">N. McNab</td></tr>
-<tr><td class="header">Expires: February 16, 2010</td><td class="header">Metalinker Project</td></tr>
+<tr><td class="header">Expires: February 19, 2010</td><td class="header">Metalinker Project</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">P. Poeml</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">Novell, Inc.</td></tr>
-<tr><td class="header">&nbsp;</td><td class="header">August 15, 2009</td></tr>
+<tr><td class="header">&nbsp;</td><td class="header">August 18, 2009</td></tr>
 </table></td></tr></table>
 <h1><br />The Metalink Download Description Format<br />draft-bryan-metalink-12</h1>
 
@@ -183,7 +183,7 @@ The list of current Internet-Drafts can be accessed at
 The list of Internet-Draft Shadow Directories can be accessed at
 <a href='http://www.ietf.org/shadow.html'>http://www.ietf.org/shadow.html</a>.</p>
 <p>
-This Internet-Draft will expire on February 16, 2010.</p>
+This Internet-Draft will expire on February 19, 2010.</p>
 
 <h3>Copyright Notice</h3>
 <p>
@@ -911,7 +911,7 @@ The &#34;type&#34; Attribute</h3>
 		
 </p>
 <p>The IANA registry named "Hash Function Textual Names" defines values for hash types. If a Metalink Document contains verification information, it SHOULD
-        include "sha-1" which is SHA1 (or stronger), as specified in <a class='info' href='#RFC3174'>[RFC3174]<span> (</span><span class='info'>Eastlake, D. and P. Jones, &ldquo;US Secure Hash Algorithm 1 (SHA1),&rdquo; September&nbsp;2001.</span><span>)</span></a>.  It MAY also
+        include "sha-1" which is SHA1 as specified in <a class='info' href='#RFC3174'>[RFC3174]<span> (</span><span class='info'>Eastlake, D. and P. Jones, &ldquo;US Secure Hash Algorithm 1 (SHA1),&rdquo; September&nbsp;2001.</span><span>)</span></a>, or a stronger hash.  It MAY also
         include other verification algorithms.
 </p>
 <a name="anchor11"></a><br /><hr />
@@ -967,7 +967,7 @@ metalinkDescription =
 The &#34;metalink:dynamic&#34; Element</h3>
 <a name='anchor71'></a><a name='anchor72'></a>
 <p>The "<a class='info' href='#element.dynamic'>metalink:dynamic<span> (</span><span class='info'>The &#34;metalink:dynamic&#34; Element</span><span>)</span></a>" element is a Text construct that describes
-	  whether the IRI from "<a class='info' href='#element.origin'>metalink:origin<span> (</span><span class='info'>The &#34;metalink:origin&#34; Element</span><span>)</span></a>" in a Metalink will contain dynamic updated Metalinks or static content that is not updated.
+	  whether the IRI from "<a class='info' href='#element.origin'>metalink:origin<span> (</span><span class='info'>The &#34;metalink:origin&#34; Element</span><span>)</span></a>" in a Metalink will contain dynamic updated information or if it is static and not likely to be updated.
 	  
 	    <a name='anchor73'></a><a name='anchor74'></a></p>
 <div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
@@ -1016,8 +1016,8 @@ metalinkHash =
    }</pre></div><p>
 
 </p>
-<p>Metalinks can contain one or multiples hashes of a complete file, for example both SHA-1 and SHA-256. <a class='info' href='#element.hash'>metalink:hash<span> (</span><span class='info'>The &#34;metalink:hash&#34; Element</span><span>)</span></a> elements
-      with a "type" attribute MUST contain a hash of the complete file.
+<p><a class='info' href='#element.hash'>metalink:hash<span> (</span><span class='info'>The &#34;metalink:hash&#34; Element</span><span>)</span></a> elements
+      with a "type" attribute MUST contain a hash of the complete file. Metalink Documents can contain one or multiples hashes of a complete file. In this example, both SHA-1 and SHA-256 hashes are included. 
 	  
 	      </p>
 <div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
@@ -1031,7 +1031,7 @@ metalinkHash =
 
       
 </p>
-<p>Metalinks can also contain hashes for individual pieces of a file.  <a class='info' href='#element.hash'>metalink:hash<span> (</span><span class='info'>The &#34;metalink:hash&#34; Element</span><span>)</span></a> elements that are inside a <a class='info' href='#element.pieces'>metalink:pieces<span> (</span><span class='info'>The &#34;metalink:pieces&#34; Element</span><span>)</span></a> container element have a hash for that specific piece or chunk of the file, and are of the same hash type as the <a class='info' href='#element.pieces'>metalink:pieces<span> (</span><span class='info'>The &#34;metalink:pieces&#34; Element</span><span>)</span></a> element they are contained in.
+<p>Metalink Documents can also contain hashes for individual pieces of a file.  <a class='info' href='#element.hash'>metalink:hash<span> (</span><span class='info'>The &#34;metalink:hash&#34; Element</span><span>)</span></a> elements that are inside a <a class='info' href='#element.pieces'>metalink:pieces<span> (</span><span class='info'>The &#34;metalink:pieces&#34; Element</span><span>)</span></a> container element have a hash for that specific piece or chunk of the file, and are of the same hash type as the <a class='info' href='#element.pieces'>metalink:pieces<span> (</span><span class='info'>The &#34;metalink:pieces&#34; Element</span><span>)</span></a> element they are contained in.
       <a class='info' href='#element.hash'>metalink:hash<span> (</span><span class='info'>The &#34;metalink:hash&#34; Element</span><span>)</span></a> elements without a "type" attribute MUST contain a hash for that specific piece or chunk of the file and MUST be listed in the
       same order as the corresponding pieces appear in the file, starting at the beginning of the file.
 
@@ -1060,7 +1060,7 @@ The &#34;type&#34; Attribute</h3>
 
 <p><a class='info' href='#element.hash'>metalink:hash<span> (</span><span class='info'>The &#34;metalink:hash&#34; Element</span><span>)</span></a> elements MUST have a "type" attribute, if and only if
         it contains a hash of the complete file. The IANA registry named "Hash Function Textual Names" defines values for hash types. If a Metalink Document contains verification information, it SHOULD
-include "sha-1" which is SHA1 (or stronger), as specified in <a class='info' href='#RFC3174'>[RFC3174]<span> (</span><span class='info'>Eastlake, D. and P. Jones, &ldquo;US Secure Hash Algorithm 1 (SHA1),&rdquo; September&nbsp;2001.</span><span>)</span></a>.  It MAY also include other verification algorithms.
+include "sha-1" which is SHA1 as specified in <a class='info' href='#RFC3174'>[RFC3174]<span> (</span><span class='info'>Eastlake, D. and P. Jones, &ldquo;US Secure Hash Algorithm 1 (SHA1),&rdquo; September&nbsp;2001.</span><span>)</span></a>, or a stronger hash.  It MAY also include other verification algorithms.
 </p>
 <a name="element.identity"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
@@ -1107,12 +1107,12 @@ The &#34;metalink:license&#34; Element</h3>
 metalinkLicense =
    element metalink:license {
      metalinkCommonAttributes,
-     attribute uri { metalinkUri }?,
+     attribute url { metalinkUri }?,
      attribute name { text }?
    }</pre></div><p>
 
 </p>
-<p>The <a class='info' href='#element.license'>metalink:license<span> (</span><span class='info'>The &#34;metalink:license&#34; Element</span><span>)</span></a> element MAY have a "uri" attribute
+<p>The <a class='info' href='#element.license'>metalink:license<span> (</span><span class='info'>The &#34;metalink:license&#34; Element</span><span>)</span></a> element MAY have a "url" attribute
 	  whose value MUST be an IRI reference <a class='info' href='#RFC3987'>[RFC3987]<span> (</span><span class='info'>Duerst, M. and M. Suignard, &ldquo;Internationalized Resource Identifiers (IRIs),&rdquo; January&nbsp;2005.</span><span>)</span></a>. When dereferenced, the resulting URI (mapped from an
 	  IRI, if necessary) SHOULD produce a representation that is
 	  relevant to that agent.
@@ -1265,12 +1265,12 @@ The &#34;metalink:publisher&#34; Element</h3>
 metalinkPublisher =
    element metalink:publisher {
      metalinkCommonAttributes,
-     attribute uri { metalinkUri }?,
+     attribute url { metalinkUri }?,
      attribute name { text }?
    }</pre></div><p>
 
 </p>
-<p>The <a class='info' href='#element.publisher'>metalink:publisher<span> (</span><span class='info'>The &#34;metalink:publisher&#34; Element</span><span>)</span></a> element MAY have a "uri" attribute
+<p>The <a class='info' href='#element.publisher'>metalink:publisher<span> (</span><span class='info'>The &#34;metalink:publisher&#34; Element</span><span>)</span></a> element MAY have a "url" attribute
 	  whose value MUST be an IRI reference <a class='info' href='#RFC3987'>[RFC3987]<span> (</span><span class='info'>Duerst, M. and M. Suignard, &ldquo;Internationalized Resource Identifiers (IRIs),&rdquo; January&nbsp;2005.</span><span>)</span></a>. When dereferenced, the resulting URI (mapped from an
 	  IRI, if necessary) SHOULD produce a representation that is
 	  relevant to that agent.
@@ -1410,10 +1410,9 @@ Securing Metalink Documents</h3>
 <p>Because Metalink is an XML-based format, existing XML security
 	    mechanisms can be used to secure its content.
 </p>
-<p>Producers of Metalinks may have sound
-	    reasons for signing
+<p>Producers of Metalink Documents may have sound reasons for signing
 	    otherwise-unprotected content. For example, a merchant
-	    might digitally sign a Metalink that lists a file download to verify its origin. Other merchants may wish to sign and encrypt Metalinks that list digital songs that have been purchased. Of course,
+	    might digitally sign a Metalink that lists a file download to verify its origin. Other merchants may wish to sign and encrypt Metalink Documents that list digital songs that have been purchased. Of course,
 	    many other examples are conceivable as well.
 </p>
 <p>The algorithm requirements in this section pertain to
@@ -1687,7 +1686,7 @@ URIs and IRIs</h3>
 Spoofing</h3>
 
 <p>There is potential for spoofing attacks where the attacker publishes
-          Metalinks with false information. Malicious publishers might create Metalink Documents containing inaccurate information anywhere in the document.
+          Metalink Documents with false information. Malicious publishers might create Metalink Documents containing inaccurate information anywhere in the document.
           At best, this could deceive unaware downloaders that they are downloading a malicious or worthless file. At worst, malicious publishers could attempt a distributed denial of service attack by inserting unrelated IRIs into Metalink Documents.
 </p>
 <a name="anchor27"></a><br /><hr />
@@ -1950,7 +1949,7 @@ metalinkLanguage =
 metalinkLicense =
    element metalink:license {
       metalinkCommonAttributes,
-      attribute uri { metalinkUri }?,
+      attribute url { metalinkUri }?,
       attribute name { text }?
    }
 
@@ -1988,7 +1987,7 @@ metalinkPublished =
 metalinkPublisher =
    element metalink:publisher {
       metalinkCommonAttributes,
-      attribute uri { metalinkUri }?,
+      attribute url { metalinkUri }?,
       attribute name { text }?
    }
 
@@ -2090,11 +2089,13 @@ Document History (to be removed by RFC Editor before publication)</h3>
 </li>
 </ul>
 
-<p>-12 : August   , 2009.
+<p>-12 : August 18, 2009.
 	    
 	    </p>
 <ul class="text">
 <li>Remove "piece" attribute from hash elements in pieces container elements.
+</li>
+<li>Rename "uri" attribute of license and publisher elements to "url".
 </li>
 </ul>
 
