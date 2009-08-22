@@ -363,7 +363,7 @@ Examples</h3>
 </p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
 &lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;metalink xmlns="urn:ietf:params:xml:ns:metalink"&gt;
-  &lt;published&gt;2008-05-15T12:23:23Z&lt;/published&gt;
+  &lt;published&gt;2009-05-15T12:23:23Z&lt;/published&gt;
   &lt;file name="example.ext"&gt;
     &lt;identity&gt;Example&lt;/identity&gt;
     &lt;version&gt;1.0&lt;/version&gt;
@@ -573,10 +573,10 @@ metalinkDateConstruct =
 
 	</p>
 <div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
-&lt;updated&gt;2008-12-13T18:30:02Z&lt;/updated&gt;
-&lt;updated&gt;2008-12-13T18:30:02.25Z&lt;/updated&gt;
-&lt;updated&gt;2008-12-13T18:30:02+01:00&lt;/updated&gt;
-&lt;updated&gt;2008-12-13T18:30:02.25+01:00&lt;/updated&gt;
+&lt;updated&gt;2009-05-15T18:30:02Z&lt;/updated&gt;
+&lt;updated&gt;2009-05-15T18:30:02.25Z&lt;/updated&gt;
+&lt;updated&gt;2009-05-15T18:30:02+01:00&lt;/updated&gt;
+&lt;updated&gt;2009-05-15T18:30:02.25+01:00&lt;/updated&gt;
 </pre></div><p>
 
 	
@@ -1752,6 +1752,7 @@ metalinkFile =
        &amp; metalinkMetaURL*
        &amp; metalinkURL*
        &amp; metalinkOS?
+       &amp; metalinkPieces*
        &amp; metalinkPublisher?
        &amp; metalinkSignature?
        &amp; metalinkSize?

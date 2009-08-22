@@ -1877,6 +1877,7 @@ metalinkFile =
        & metalinkMetaURL*
        & metalinkURL*
        & metalinkOS?
+       & metalinkPieces*
        & metalinkPublisher?
        & metalinkSignature?
        & metalinkSize?

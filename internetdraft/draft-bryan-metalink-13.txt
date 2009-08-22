@@ -229,7 +229,7 @@ Internet-Draft    Metalink Download Description Format       August 2009
 
    <?xml version="1.0" encoding="UTF-8"?>
    <metalink xmlns="urn:ietf:params:xml:ns:metalink">
-     <published>2008-05-15T12:23:23Z</published>
+     <published>2009-05-15T12:23:23Z</published>
      <file name="example.ext">
        <identity>Example</identity>
        <version>1.0</version>
@@ -417,10 +417,10 @@ Internet-Draft    Metalink Download Description Format       August 2009
 
    Example Date constructs:
 
-   <updated>2008-12-13T18:30:02Z</updated>
-   <updated>2008-12-13T18:30:02.25Z</updated>
-   <updated>2008-12-13T18:30:02+01:00</updated>
-   <updated>2008-12-13T18:30:02.25+01:00</updated>
+   <updated>2009-05-15T18:30:02Z</updated>
+   <updated>2009-05-15T18:30:02.25Z</updated>
+   <updated>2009-05-15T18:30:02+01:00</updated>
+   <updated>2009-05-15T18:30:02.25+01:00</updated>
 
    Date values SHOULD be as accurate as possible.  For example, it would
    be generally inappropriate for a publishing system to apply the same
@@ -1535,6 +1535,7 @@ Internet-Draft    Metalink Download Description Format       August 2009
           & metalinkMetaURL*
           & metalinkURL*
           & metalinkOS?
+          & metalinkPieces*
           & metalinkPublisher?
           & metalinkSignature?
           & metalinkSize?
@@ -1560,7 +1561,6 @@ Internet-Draft    Metalink Download Description Format       August 2009
       }
 
    metalinkDynamic =
-      element metalink:dynamic {
 
 
 
@@ -1569,6 +1569,7 @@ Bryan, et al.           Expires February 22, 2010              [Page 28]
 Internet-Draft    Metalink Download Description Format       August 2009
 
 
+      element metalink:dynamic {
          "true" | "false"
       }
 
@@ -1616,7 +1617,6 @@ Internet-Draft    Metalink Download Description Format       August 2009
       }
 
    metalinkOrigin =
-      element metalink:origin {
 
 
 
@@ -1625,6 +1625,7 @@ Bryan, et al.           Expires February 22, 2010              [Page 29]
 Internet-Draft    Metalink Download Description Format       August 2009
 
 
+      element metalink:origin {
          metalinkCommonAttributes,
          (metalinkUri)
       }
@@ -1672,7 +1673,6 @@ Internet-Draft    Metalink Download Description Format       August 2009
          metalinkUri
       }
 
-   metalinkVersion =
 
 
 
@@ -1681,6 +1681,7 @@ Bryan, et al.           Expires February 22, 2010              [Page 30]
 Internet-Draft    Metalink Download Description Format       August 2009
 
 
+   metalinkVersion =
       element metalink:version {
          metalinkTextConstruct
       }
@@ -1728,7 +1729,6 @@ Internet-Draft    Metalink Download Description Format       August 2009
           | anyElement)*
       }
 
-   anyForeignElement =
 
 
 
@@ -1737,6 +1737,7 @@ Bryan, et al.           Expires February 22, 2010              [Page 31]
 Internet-Draft    Metalink Download Description Format       August 2009
 
 
+   anyForeignElement =
       element * - metalink:* {
          (attribute * { text }
           | text
@@ -1782,9 +1783,8 @@ Appendix C.  Document History (to be removed by RFC Editor before
 
    -09 : July 11, 2009.
    o  Replace ISO639-2 references with RFC 4646.
-   o  Add ISO3166-1.
 
-   -08 : July 04, 2009.
+
 
 
 
@@ -1793,6 +1793,9 @@ Bryan, et al.           Expires February 22, 2010              [Page 32]
 Internet-Draft    Metalink Download Description Format       August 2009
 
 
+   o  Add ISO3166-1.
+
+   -08 : July 04, 2009.
    o  Clarifications.
    o  Remove "uri" and "version" attributes from generator element.
 
@@ -1838,9 +1841,6 @@ Internet-Draft    Metalink Download Description Format       August 2009
 
 Index
 
-   A
-      application/metalink+xml Media Type  22
-
 
 
 
@@ -1848,6 +1848,9 @@ Bryan, et al.           Expires February 22, 2010              [Page 33]
 
 Internet-Draft    Metalink Download Description Format       August 2009
 
+
+   A
+      application/metalink+xml Media Type  22
 
    C
       copyright XML element  12
@@ -1894,9 +1897,6 @@ Internet-Draft    Metalink Download Description Format       August 2009
    I
       identity XML element  14
 
-   L
-      language XML element  14
-      license XML element  15
 
 
 
@@ -1905,6 +1905,9 @@ Bryan, et al.           Expires February 22, 2010              [Page 34]
 Internet-Draft    Metalink Download Description Format       August 2009
 
 
+   L
+      language XML element  14
+      license XML element  15
       logo XML element  15
 
    M
@@ -1950,9 +1953,6 @@ Internet-Draft    Metalink Download Description Format       August 2009
       signature XML element  18
       simpleExtensionElement grammar production  21
       size XML element  18
-      structuredExtensionElement grammar production  21
-
-   T
 
 
 
@@ -1961,6 +1961,9 @@ Bryan, et al.           Expires February 22, 2010              [Page 35]
 Internet-Draft    Metalink Download Description Format       August 2009
 
 
+      structuredExtensionElement grammar production  21
+
+   T
       type XML element  12
 
    U
@@ -2003,9 +2006,6 @@ Authors' Addresses
 
    Email: anthonybryan@gmail.com
    URI:   http://www.metalinker.org
-
-
-
 
 
 
