@@ -326,12 +326,22 @@ Authors' Addresses<br />
 <a name="rfc.section.1"></a><h3>1.&nbsp;
 Introduction</h3>
 
-<p>Metalink is an XML-based document format that describes a file or lists of files to be added to a download queue. Lists are composed of a number of files,
+<p>Metalink is an XML-based document format that describes a file or lists of files to be added to a download queue. Metalinks can list a number of files,
       each with an extensible set of attached
       metadata. For example, each file can have a description, checksum, and list of URIs that it is available from.
 </p>
-<p>The primary use case that Metalink addresses is the description of downloadable content in a format so download agents can act intelligently and
-	  recover from common errors with little or no user interaction necessary. These errors can include multiple servers going down and data corrupted in transmission.
+<p>Downloads are sometimes offered at a centralized location. Identical copies of a file are frequently accessible in multiple locations on the Internet over a variety of protocols (FTP, HTTP, and Peer-to-Peer).
+      Users are shown a list of these multiple download locations (mirrors) and must manually select a single one on the basis of geographical location, priority, or bandwidth.
+      This distributes the load across multiple servers. At times, individual servers can be slow, outdated, or unreachable, but this can not be determined until the download has been initiated.
+      This can lead to cancelling the download and needing to restart it. During downloads, errors in transmission can corrupt the file.
+      There are no easy ways to repair these files. For large downloads this can be extremely troublesome.
+      Any of the number of problems that can occur with a download lead to frustration on the part of normal users.
+</p>
+<p>All the information about a download, including mirrors, checksums, digital signatures, and other information can be stored in a machine-readable Metalink file.
+      This Metalink file transfers the knowledge of the download server (and mirror database) to the client. With this knowledge, the client is enabled to work its way to a successful download even under adverse circumstances. 
+      All this is done transparently to the user and the download is much more reliable and efficient.
+      In contrast, a traditional HTTP redirect to a mirror conveys only extremely minimal information - one link to one server, and there is no provision in the HTTP protocol to handle failures.
+      Other features that some clients provide include multi-source downloads, where chunks of a file are downloaded from multiple mirrors simultaneously and frequently results in a faster download.
 </p>
 <p>[[ Discussion of this draft should take place on discuss@apps.ietf.org or the Metalink discussion mailing list
    located at metalink-discussion@googlegroups.com. To join the list, visit
@@ -1943,6 +1953,14 @@ Document History (to be removed by RFC Editor before publication)</h3>
 	    </p>
 <ul class="text">
 <li>None.
+</li>
+</ul>
+
+<p>-14 : August , 2009.
+	    
+	    </p>
+<ul class="text">
+<li>Update abstract and introduction.
 </li>
 </ul>
 
