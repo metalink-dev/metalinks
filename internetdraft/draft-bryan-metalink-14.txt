@@ -69,8 +69,8 @@ Abstract
 
    This document specifies Metalink, an XML-based download description
    format.  Metalink describes alternate download locations (mirrors),
-   checksums, and other information so file transfers are more reliable
-   and able to transparently recover from errors.
+   checksums, and other information.  Clients can transparently use this
+   information to reliably transfer files.
 
 
 Table of Contents
@@ -177,20 +177,19 @@ Internet-Draft    Metalink Download Description Format       August 2009
    For example, each file can have a description, checksum, and list of
    URIs that it is available from.
 
-   Downloads are sometimes offered at a centralized location.  Identical
-   copies of a file are frequently accessible in multiple locations on
-   the Internet over a variety of protocols (FTP, HTTP, and Peer-to-
-   Peer).  Users are shown a list of these multiple download locations
-   (mirrors) and must manually select a single one on the basis of
-   geographical location, priority, or bandwidth.  This distributes the
-   load across multiple servers.  At times, individual servers can be
-   slow, outdated, or unreachable, but this can not be determined until
-   the download has been initiated.  This can lead to cancelling the
-   download and needing to restart it.  During downloads, errors in
-   transmission can corrupt the file.  There are no easy ways to repair
-   these files.  For large downloads this can be extremely troublesome.
-   Any of the number of problems that can occur with a download lead to
-   frustration on the part of normal users.
+   Identical copies of a file are frequently accessible in multiple
+   locations on the Internet over a variety of protocols (FTP, HTTP, and
+   Peer-to-Peer).  Users are shown a list of these multiple download
+   locations (mirrors) and must manually select a single one on the
+   basis of geographical location, priority, or bandwidth.  This
+   distributes the load across multiple servers.  At times, individual
+   servers can be slow, outdated, or unreachable, but this can not be
+   determined until the download has been initiated.  This can lead to
+   the user canceling the download and needing to restart it.  During
+   downloads, errors in transmission can corrupt the file.  There are no
+   easy ways to repair these files.  For large downloads this can be
+   extremely troublesome.  Any of the number of problems that can occur
+   during a download lead to frustration on the part of users.
 
    All the information about a download, including mirrors, checksums,
    digital signatures, and other information can be stored in a machine-
@@ -204,7 +203,8 @@ Internet-Draft    Metalink Download Description Format       August 2009
    and there is no provision in the HTTP protocol to handle failures.
    Other features that some clients provide include multi-source
    downloads, where chunks of a file are downloaded from multiple
-   mirrors simultaneously and frequently results in a faster download.
+   mirrors (and optionally, Peer-to-Peer) simultaneously which
+   frequently results in a faster download.
 
    [[ Discussion of this draft should take place on
    discuss@apps.ietf.org or the Metalink discussion mailing list located
