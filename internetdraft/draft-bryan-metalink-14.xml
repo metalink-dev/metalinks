@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><?rfc linefile="1:draft-bryan-metalink-13.xml"?>
+<?xml version="1.0" encoding="UTF-8"?><?rfc linefile="1:draft-bryan-metalink-14.xml"?>
 <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
 <?rfc toc="yes" ?>
 <?rfc tocdepth="3" ?>
@@ -11,7 +11,7 @@
 <?rfc inline="yes" ?>
 <!DOCTYPE rfc
   PUBLIC "" "rfc2629.dtd">
-<rfc category="std" docName="draft-bryan-metalink-13" ipr="pre5378Trust200902">
+<rfc category="std" docName="draft-bryan-metalink-14" ipr="pre5378Trust200902">
     <front>        
       <title abbrev="Metalink Download Description Format">The Metalink Download Description Format</title>		
       <author initials="A." surname="Bryan" fullname="Anthony Bryan" role="editor">
@@ -45,7 +45,7 @@
 	<date month="August" year="2009"/>        
 
       <abstract>
-	<t>This document specifies Metalink Documents, an XML-based download description format.</t>
+	<t>This document specifies Metalink, an XML-based download description format. Metalink describes alternate download locations (mirrors), checksums, and other information so file transfers are more reliable and able to transparently recover from errors.</t>
       </abstract>    
 	  
   </front>    
@@ -2068,6 +2068,13 @@ anyForeignElement =
 	      <t>None.</t>
 
 	    </list></t>
+
+<t>-14 : August , 2009.
+	    
+	    <list style="symbols"> 
+	      
+		  <t>Update abstract.</t>
+	   </list></t>
 
 <t>-13 : August 21, 2009.
 	    
