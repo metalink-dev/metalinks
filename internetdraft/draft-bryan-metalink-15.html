@@ -144,12 +144,12 @@
 <tr><td class="header">Network Working Group</td><td class="header">A. Bryan, Ed.</td></tr>
 <tr><td class="header">Internet-Draft</td><td class="header">T. Tsujikawa</td></tr>
 <tr><td class="header">Intended status: Standards Track</td><td class="header">N. McNab</td></tr>
-<tr><td class="header">Expires: February 25, 2010</td><td class="header">Metalinker Project</td></tr>
+<tr><td class="header">Expires: February 26, 2010</td><td class="header">Metalinker Project</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">P. Poeml</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">Novell, Inc.</td></tr>
-<tr><td class="header">&nbsp;</td><td class="header">August 24, 2009</td></tr>
+<tr><td class="header">&nbsp;</td><td class="header">August 25, 2009</td></tr>
 </table></td></tr></table>
-<h1><br />The Metalink Download Description Format<br />draft-bryan-metalink-14</h1>
+<h1><br />The Metalink Download Description Format<br />draft-bryan-metalink-15</h1>
 
 <h3>Status of this Memo</h3>
 <p>
@@ -183,7 +183,7 @@ The list of current Internet-Drafts can be accessed at
 The list of Internet-Draft Shadow Directories can be accessed at
 <a href='http://www.ietf.org/shadow.html'>http://www.ietf.org/shadow.html</a>.</p>
 <p>
-This Internet-Draft will expire on February 25, 2010.</p>
+This Internet-Draft will expire on February 26, 2010.</p>
 
 <h3>Copyright Notice</h3>
 <p>
@@ -291,7 +291,7 @@ IANA Considerations<br />
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor22">7.1.</a>&nbsp;
 XML Namespace Registration<br />
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor23">7.2.</a>&nbsp;
-application/metalink+xml MIME type<br />
+application/metalink4+xml MIME type<br />
 <a href="#anchor24">8.</a>&nbsp;
 Security Considerations<br />
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor25">8.1.</a>&nbsp;
@@ -326,7 +326,7 @@ Authors' Addresses<br />
 <a name="rfc.section.1"></a><h3>1.&nbsp;
 Introduction</h3>
 
-<p>Metalink is an XML-based document format that describes a file or lists of files to be added to a download queue. Metalinks can list a number of files,
+<p>Metalink is an XML-based document format that describes a file or list of files to be added to a download queue. Metalinks can list a number of files,
       each with an extensible set of attached
       metadata. For example, each file can have a description, checksum, and list of URIs that it is available from.
 </p>
@@ -341,7 +341,7 @@ Introduction</h3>
       This Metalink file transfers the knowledge of the download server (and mirror database) to the client. With this knowledge, the client is enabled to work its way to a successful download even under adverse circumstances. 
       All this is done transparently to the user and the download is much more reliable and efficient.
       In contrast, a traditional HTTP redirect to a mirror conveys only extremely minimal information - one link to one server, and there is no provision in the HTTP protocol to handle failures.
-      Other features that some clients provide include multi-source downloads, where chunks of a file are downloaded from multiple mirrors (and optionally, Peer-to-Peer) simultaneously, which frequently results in a faster download.
+      Other features that some clients provide include multi-source downloads, where chunks of a file are downloaded from multiple mirrors (and optionally, Peer-to-Peer) simultaneously, which frequently results in a faster download. Metalinks also provide structured information that can be indexed by search engines.
 </p>
 <p>[[ Discussion of this draft should take place on discuss@apps.ietf.org or the Metalink discussion mailing list
    located at metalink-discussion@googlegroups.com. To join the list, visit
@@ -382,11 +382,11 @@ Examples</h3>
 download.&lt;/description&gt;
     &lt;hash type="sha-1"&gt;
     80bc95fd391772fa61c91ed68567f0980bb45fd9&lt;/hash&gt;
-    &lt;url location="de" preference="95"&gt;
+    &lt;url location="de" priority="95"&gt;
     ftp://ftp.example.com/example.ext&lt;/url&gt;
-    &lt;url location="fr" preference="100"&gt;
+    &lt;url location="fr" priority="100"&gt;
     http://example.com/example.ext&lt;/url&gt;
-    &lt;metaurl type="torrent" preference="90"&gt;
+    &lt;metaurl type="torrent" priority="90"&gt;
     http://example.com/example.ext.torrent
     &lt;/metaurl&gt;
   &lt;/file&gt;
@@ -452,7 +452,7 @@ namespace metalink = "urn:ietf:params:xml:ns:metalink"
 start = metalinkMetalink</pre></div>
 <p>Metalink Documents are specified in terms of the
       XML Information Set, serialized as XML 1.0 <a class='info' href='#REC-xml'>[REC&#8209;xml]<span> (</span><span class='info'>Yergeau, F., Paoli, J., Bray, T., Sperberg-McQueen, C., and E. Maler, &ldquo;Extensible Markup Language (XML) 1.0 (Fourth Edition),&rdquo; August&nbsp;2006.</span><span>)</span></a> and identified with the
-      "application/metalink+xml" media type.
+      "application/metalink4+xml" media type.
 </p>
 <p>Metalink Documents MUST be
       well-formed XML. This specification does not define a DTD for
@@ -709,7 +709,7 @@ metalinkFile =
 </p>
 <p>This specification assigns no significance to the order of
 	  <a class='info' href='#element.file'>metalink:file<span> (</span><span class='info'>The &#34;metalink:file&#34; Element</span><span>)</span></a> elements or to the order of
-	  <a class='info' href='#element.url'>metalink:url<span> (</span><span class='info'>The &#34;metalink:url&#34; Element</span><span>)</span></a> or <a class='info' href='#element.metaurl'>metalink:metaurl<span> (</span><span class='info'>The &#34;metalink:metaurl&#34; Element</span><span>)</span></a> elements. Significance is determined by the value of the "preference" attribute of the <a class='info' href='#element.url'>metalink:url<span> (</span><span class='info'>The &#34;metalink:url&#34; Element</span><span>)</span></a> or <a class='info' href='#element.metaurl'>metalink:metaurl<span> (</span><span class='info'>The &#34;metalink:metaurl&#34; Element</span><span>)</span></a> elements.
+	  <a class='info' href='#element.url'>metalink:url<span> (</span><span class='info'>The &#34;metalink:url&#34; Element</span><span>)</span></a> or <a class='info' href='#element.metaurl'>metalink:metaurl<span> (</span><span class='info'>The &#34;metalink:metaurl&#34; Element</span><span>)</span></a> elements. Significance is determined by the value of the "priority" attribute of the <a class='info' href='#element.url'>metalink:url<span> (</span><span class='info'>The &#34;metalink:url&#34; Element</span><span>)</span></a> or <a class='info' href='#element.metaurl'>metalink:metaurl<span> (</span><span class='info'>The &#34;metalink:metaurl&#34; Element</span><span>)</span></a> elements.
 </p>
 <p>The following child elements are defined by this specification
 	  (note that it requires the presence of some of these elements):
@@ -889,7 +889,7 @@ metalinkGenerator =
 </p>
 <p>The content of this element, when present, MUST be a
 	  string that is a human-readable name and version, separated by a "/", for the generating
-	  agent.  For example, "MirrorBrain/2.8.1", where "MirrorBrain" is the name and "2.8.1" is the version. Entities such as "&amp;amp;" and "&amp;lt;"
+	  agent.  For example, "MirrorBrain/2.9.2", where "MirrorBrain" is the name and "2.9.2" is the version. Entities such as "&amp;amp;" and "&amp;lt;"
 	  represent their corresponding characters ("&amp;" and "&lt;"
 	  respectively), not markup.
 </p>
@@ -1044,7 +1044,7 @@ The &#34;metalink:metaurl&#34; Element</h3>
 metalinkMetaURL =
    element metalink:metaurl {
       metalinkCommonAttributes,
-      attribute preference { xsd:integer }?,
+      attribute priority { xsd:integer }?,
       attribute type { text },
       attribute name { text }?,
       metalinkUri
@@ -1054,12 +1054,12 @@ metalinkMetaURL =
 <a name="anchor14"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.2.10.1"></a><h3>4.2.10.1.&nbsp;
-The &#34;preference&#34; Attribute</h3>
+The &#34;priority&#34; Attribute</h3>
 
 <p><a class='info' href='#element.metaurl'>metalink:metaurl<span> (</span><span class='info'>The &#34;metalink:metaurl&#34; Element</span><span>)</span></a>
-	    elements MAY have a preference attribute, whose value MUST be a number from 1 to 100
+	    elements MAY have a priority attribute, whose value MUST be a number from 1 to 100
 		for priority, with 100 used first and 1 used last. Multiple <a class='info' href='#element.metaurl'>metalink:metaurl<span> (</span><span class='info'>The &#34;metalink:metaurl&#34; Element</span><span>)</span></a> elements can have the same
-		preference, i.e. three BitTorrent .torrent files could have preference="100". See also the "preference" attribute of the <a class='info' href='#element.url'>metalink:url<span> (</span><span class='info'>The &#34;metalink:url&#34; Element</span><span>)</span></a> element.
+		priority, i.e. three BitTorrent .torrent files could have priority="100". See also the "priority" attribute of the <a class='info' href='#element.url'>metalink:url<span> (</span><span class='info'>The &#34;metalink:url&#34; Element</span><span>)</span></a> element.
 </p>
 <a name="anchor15"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
@@ -1251,7 +1251,7 @@ metalinkURL =
       attribute location { xsd:string {
         minLength = "2"  maxLength="2"}
       }?,
-      attribute preference { xsd:integer }?,
+      attribute priority { xsd:integer }?,
       metalinkUri
    }</pre></div><p>
 
@@ -1259,12 +1259,12 @@ metalinkURL =
 <a name="anchor18"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.2.18.1"></a><h3>4.2.18.1.&nbsp;
-The &#34;preference&#34; Attribute</h3>
+The &#34;priority&#34; Attribute</h3>
 
 <p><a class='info' href='#element.url'>metalink:url<span> (</span><span class='info'>The &#34;metalink:url&#34; Element</span><span>)</span></a>
-	    elements MAY have a preference attribute, whose value MUST be a number from 1 to 100
+	    elements MAY have a priority attribute, whose value MUST be a number from 1 to 100
 		for priority, with 100 used first and 1 used last. Multiple <a class='info' href='#element.url'>metalink:url<span> (</span><span class='info'>The &#34;metalink:url&#34; Element</span><span>)</span></a> elements can have the same
-		preference, i.e. ten mirrors could have preference="100".
+		priority, i.e. ten mirrors could have priority="100".
 </p>
 <a name="anchor19"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
@@ -1464,7 +1464,7 @@ XML Namespace Registration</h3>
 <a name="anchor23"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.7.2"></a><h3>7.2.&nbsp;
-application/metalink+xml MIME type</h3>
+application/metalink4+xml MIME type</h3>
 <a name='anchor131'></a><a name='anchor132'></a>
 <p>A Metalink Document, when serialized as XML 1.0, can be identified
 	    with the following media type:
@@ -1829,7 +1829,7 @@ metalinkLogo =
 metalinkMetaURL =
    element metalink:metaurl {
       metalinkCommonAttributes,
-      attribute preference { xsd:integer }?,
+      attribute priority { xsd:integer }?,
       attribute type { text },
       attribute name { text }?,
       metalinkUri
@@ -1880,7 +1880,7 @@ metalinkURL =
       attribute location { xsd:string {
          minLength = "2"  maxLength="2"}
       }?,
-      attribute preference { xsd:integer }?,
+      attribute priority { xsd:integer }?,
       metalinkUri
    }
 
@@ -1956,7 +1956,17 @@ Document History (to be removed by RFC Editor before publication)</h3>
 </li>
 </ul>
 
-<p>-14 : August , 2009.
+<p>-15 : August , 2009.
+	    
+	    </p>
+<ul class="text">
+<li>Rename "preference" attribute of metaurl and url elements to "priority".
+</li>
+<li>Clarifications.
+</li>
+</ul>
+
+<p>-14 : August 24, 2009.
 	    
 	    </p>
 <ul class="text">
@@ -2114,7 +2124,7 @@ Document History (to be removed by RFC Editor before publication)</h3>
 <h3>Index</h3>
 <table>
 <tr><td><strong>A</strong></td><td>&nbsp;</td></tr>
-<tr><td>&nbsp;</td><td><a href="#anchor132"><b>application/metalink+xml Media Type</b></a></td></tr>
+<tr><td>&nbsp;</td><td><a href="#anchor132"><b>application/metalink4+xml Media Type</b></a></td></tr>
 <tr><td><strong>C</strong></td><td>&nbsp;</td></tr>
 <tr><td>&nbsp;</td><td><a href="#anchor52"><b>copyright XML element</b></a></td></tr>
 <tr><td><strong>D</strong></td><td>&nbsp;</td></tr>
@@ -2160,7 +2170,7 @@ Document History (to be removed by RFC Editor before publication)</h3>
 <tr><td>&nbsp;</td><td><a href="#anchor84"><b>logo XML element</b></a></td></tr>
 <tr><td><strong>M</strong></td><td>&nbsp;</td></tr>
 <tr><td>&nbsp;</td><td>Media Type</td></tr>
-<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor131"><b>application/metalink+xml</b></a></td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor131"><b>application/metalink4+xml</b></a></td></tr>
 <tr><td>&nbsp;</td><td><a href="#anchor88"><b>metadata XML element</b></a></td></tr>
 <tr><td>&nbsp;</td><td><a href="#anchor40"><b>metalink XML element</b></a></td></tr>
 <tr><td>&nbsp;</td><td><a href="#anchor33"><b>metalinkCommonAttributes grammar production</b></a></td></tr>
