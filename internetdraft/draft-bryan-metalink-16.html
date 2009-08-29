@@ -144,12 +144,12 @@
 <tr><td class="header">Network Working Group</td><td class="header">A. Bryan, Ed.</td></tr>
 <tr><td class="header">Internet-Draft</td><td class="header">T. Tsujikawa</td></tr>
 <tr><td class="header">Intended status: Standards Track</td><td class="header">N. McNab</td></tr>
-<tr><td class="header">Expires: February 27, 2010</td><td class="header">Metalinker Project</td></tr>
+<tr><td class="header">Expires: March 2, 2010</td><td class="header">Metalinker Project</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">P. Poeml</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">Novell, Inc.</td></tr>
-<tr><td class="header">&nbsp;</td><td class="header">August 26, 2009</td></tr>
+<tr><td class="header">&nbsp;</td><td class="header">August 29, 2009</td></tr>
 </table></td></tr></table>
-<h1><br />The Metalink Download Description Format<br />draft-bryan-metalink-15</h1>
+<h1><br />The Metalink Download Description Format<br />draft-bryan-metalink-16</h1>
 
 <h3>Status of this Memo</h3>
 <p>
@@ -183,7 +183,7 @@ The list of current Internet-Drafts can be accessed at
 The list of Internet-Draft Shadow Directories can be accessed at
 <a href='http://www.ietf.org/shadow.html'>http://www.ietf.org/shadow.html</a>.</p>
 <p>
-This Internet-Draft will expire on February 27, 2010.</p>
+This Internet-Draft will expire on March 2, 2010.</p>
 
 <h3>Copyright Notice</h3>
 <p>
@@ -815,7 +815,8 @@ The &#34;length&#34; Attribute</h3>
 
 <p><a class='info' href='#element.pieces'>metalink:pieces<span> (</span><span class='info'>The &#34;metalink:pieces&#34; Element</span><span>)</span></a> elements MUST have a "length" attribute, which is an integer
         that describes the length of the pieces of the file in octets. The whole file is divided into non-overlapping pieces of this length,
-        starting from the beginning of the file. The last piece extends at most to the end of the file, and can therefore be shorter than the other pieces.
+        starting from the beginning of the file. That is, every piece should be the same size, apart from
+        the last piece which is the remainder. The last piece extends at most to the end of the file, and can therefore be shorter than the other pieces.
 		
 </p>
 <a name="anchor12"></a><br /><hr />
@@ -925,7 +926,8 @@ metalinkHash =
 </p>
 <p>Metalink Documents can also contain hashes for individual pieces of a file.  <a class='info' href='#element.hash'>metalink:hash<span> (</span><span class='info'>The &#34;metalink:hash&#34; Element</span><span>)</span></a> elements that are inside a <a class='info' href='#element.pieces'>metalink:pieces<span> (</span><span class='info'>The &#34;metalink:pieces&#34; Element</span><span>)</span></a> container element have a hash for that specific piece or chunk of the file, and are of the same hash type as the <a class='info' href='#element.pieces'>metalink:pieces<span> (</span><span class='info'>The &#34;metalink:pieces&#34; Element</span><span>)</span></a> element they are contained in.
       <a class='info' href='#element.hash'>metalink:hash<span> (</span><span class='info'>The &#34;metalink:hash&#34; Element</span><span>)</span></a> elements without a "type" attribute MUST contain a hash for that specific piece or chunk of the file and MUST be listed in the
-      same order as the corresponding pieces appear in the file, starting at the beginning of the file.
+      same order as the corresponding pieces appear in the file, starting at the beginning of the file. The size of the piece is equal to the value of the "length" attribute of the <a class='info' href='#element.pieces'>metalink:pieces<span> (</span><span class='info'>The &#34;metalink:pieces&#34; Element</span><span>)</span></a> element. The whole file is divided into non-overlapping pieces of this length, starting from the beginning of the file. That is, every piece should be the same size, apart from the last piece which is the remainder. The last piece extends at most to the end of the file, and can therefore be shorter than the other pieces.
+
 
 	      </p>
 <div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
@@ -1954,13 +1956,19 @@ Document History (to be removed by RFC Editor before publication)</h3>
 </li>
 </ul>
 
-<p>-15 : August , 2009.
+<p>-16 : August , 2009.
+	    
+	    </p>
+<ul class="text">
+<li>Clarifications.
+</li>
+</ul>
+
+<p>-15 : August 26, 2009.
 	    
 	    </p>
 <ul class="text">
 <li>Rename "preference" attribute of metaurl and url elements to "priority", where lower values indicate higher priority.
-</li>
-<li>Clarifications.
 </li>
 </ul>
 

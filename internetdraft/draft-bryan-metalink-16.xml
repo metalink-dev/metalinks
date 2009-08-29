@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><?rfc linefile="1:draft-bryan-metalink-15.xml"?>
+<?xml version="1.0" encoding="UTF-8"?><?rfc linefile="1:draft-bryan-metalink-16.xml"?>
 <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
 <?rfc toc="yes" ?>
 <?rfc tocdepth="3" ?>
@@ -11,7 +11,7 @@
 <?rfc inline="yes" ?>
 <!DOCTYPE rfc
   PUBLIC "" "rfc2629.dtd">
-<rfc category="std" docName="draft-bryan-metalink-15" ipr="pre5378Trust200902">
+<rfc category="std" docName="draft-bryan-metalink-16" ipr="pre5378Trust200902">
     <front>        
       <title abbrev="Metalink Download Description Format">The Metalink Download Description Format</title>		
       <author initials="A." surname="Bryan" fullname="Anthony Bryan" role="editor">
@@ -549,7 +549,8 @@ metalinkPieces =
 
 	    <t><xref target="element.pieces" format="none">metalink:pieces</xref> elements MUST have a "length" attribute, which is an integer
         that describes the length of the pieces of the file in octets. The whole file is divided into non-overlapping pieces of this length,
-        starting from the beginning of the file. The last piece extends at most to the end of the file, and can therefore be shorter than the other pieces.
+        starting from the beginning of the file. That is, every piece should be the same size, apart from
+        the last piece which is the remainder. The last piece extends at most to the end of the file, and can therefore be shorter than the other pieces.
 		</t>
 		
 	  </section> 
@@ -683,7 +684,8 @@ metalinkHash =
       </t>
       <t>Metalink Documents can also contain hashes for individual pieces of a file.  <xref target="element.hash" format="none">metalink:hash</xref> elements that are inside a <xref target="element.pieces" format="none">metalink:pieces</xref> container element have a hash for that specific piece or chunk of the file, and are of the same hash type as the <xref target="element.pieces" format="none">metalink:pieces</xref> element they are contained in.
       <xref target="element.hash" format="none">metalink:hash</xref> elements without a "type" attribute MUST contain a hash for that specific piece or chunk of the file and MUST be listed in the
-      same order as the corresponding pieces appear in the file, starting at the beginning of the file.
+      same order as the corresponding pieces appear in the file, starting at the beginning of the file. The size of the piece is equal to the value of the "length" attribute of the <xref target="element.pieces" format="none">metalink:pieces</xref> element. The whole file is divided into non-overlapping pieces of this length, starting from the beginning of the file. That is, every piece should be the same size, apart from the last piece which is the remainder. The last piece extends at most to the end of the file, and can therefore be shorter than the other pieces.
+
 
 	      <figure>
 		<artwork type="example">
@@ -2077,6 +2079,13 @@ anyForeignElement =
 
 	    </list></t>
 
+<t>-16 : August , 2009.
+	    
+	    <list style="symbols"> 
+	      
+		  <t>Clarifications.</t>
+	   </list></t>
+		
 <t>-15 : August 26, 2009.
 	    
 	    <list style="symbols"> 
