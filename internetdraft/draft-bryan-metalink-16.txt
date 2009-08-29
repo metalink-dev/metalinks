@@ -4,14 +4,14 @@
 Network Working Group                                      A. Bryan, Ed.
 Internet-Draft                                              T. Tsujikawa
 Intended status: Standards Track                                N. McNab
-Expires: February 27, 2010                            Metalinker Project
+Expires: March 2, 2010                                Metalinker Project
                                                                 P. Poeml
                                                             Novell, Inc.
-                                                         August 26, 2009
+                                                         August 29, 2009
 
 
                 The Metalink Download Description Format
-                        draft-bryan-metalink-15
+                        draft-bryan-metalink-16
 
 Status of this Memo
 
@@ -44,7 +44,7 @@ Status of this Memo
    The list of Internet-Draft Shadow Directories can be accessed at
    http://www.ietf.org/shadow.html.
 
-   This Internet-Draft will expire on February 27, 2010.
+   This Internet-Draft will expire on March 2, 2010.
 
 Copyright Notice
 
@@ -52,7 +52,7 @@ Copyright Notice
 
 
 
-Bryan, et al.           Expires February 27, 2010               [Page 1]
+Bryan, et al.             Expires March 2, 2010                 [Page 1]
 
 Internet-Draft    Metalink Download Description Format       August 2009
 
@@ -91,45 +91,45 @@ Table of Contents
        4.1.3.  The "metalink:pieces" Element  . . . . . . . . . . . . 12
      4.2.  Metadata Elements  . . . . . . . . . . . . . . . . . . . . 12
        4.2.1.  The "metalink:copyright" Element . . . . . . . . . . . 12
-       4.2.2.  The "metalink:description" Element . . . . . . . . . . 12
+       4.2.2.  The "metalink:description" Element . . . . . . . . . . 13
        4.2.3.  The "metalink:dynamic" Element . . . . . . . . . . . . 13
        4.2.4.  The "metalink:generator" Element . . . . . . . . . . . 13
        4.2.5.  The "metalink:hash" Element  . . . . . . . . . . . . . 13
-       4.2.6.  The "metalink:identity" Element  . . . . . . . . . . . 14
+       4.2.6.  The "metalink:identity" Element  . . . . . . . . . . . 15
        4.2.7.  The "metalink:language" Element  . . . . . . . . . . . 15
        4.2.8.  The "metalink:license" Element . . . . . . . . . . . . 15
-       4.2.9.  The "metalink:logo" Element  . . . . . . . . . . . . . 15
+       4.2.9.  The "metalink:logo" Element  . . . . . . . . . . . . . 16
        4.2.10. The "metalink:metaurl" Element . . . . . . . . . . . . 16
        4.2.11. The "metalink:origin" Element  . . . . . . . . . . . . 17
        4.2.12. The "metalink:os" Element  . . . . . . . . . . . . . . 17
        4.2.13. The "metalink:published" Element . . . . . . . . . . . 17
-       4.2.14. The "metalink:publisher" Element . . . . . . . . . . . 17
+       4.2.14. The "metalink:publisher" Element . . . . . . . . . . . 18
        4.2.15. The "metalink:signature" Element . . . . . . . . . . . 18
 
 
 
-Bryan, et al.           Expires February 27, 2010               [Page 2]
+Bryan, et al.             Expires March 2, 2010                 [Page 2]
 
 Internet-Draft    Metalink Download Description Format       August 2009
 
 
-       4.2.16. The "metalink:size" Element  . . . . . . . . . . . . . 18
+       4.2.16. The "metalink:size" Element  . . . . . . . . . . . . . 19
        4.2.17. The "metalink:updated" Element . . . . . . . . . . . . 19
        4.2.18. The "metalink:url" Element . . . . . . . . . . . . . . 19
-       4.2.19. The "metalink:version" Element . . . . . . . . . . . . 19
+       4.2.19. The "metalink:version" Element . . . . . . . . . . . . 20
    5.  Securing Metalink Documents  . . . . . . . . . . . . . . . . . 20
    6.  Extending Metalink . . . . . . . . . . . . . . . . . . . . . . 20
      6.1.  Extensions from Non-Metalink Vocabularies  . . . . . . . . 20
-     6.2.  Extensions to the Metalink Vocabulary  . . . . . . . . . . 20
+     6.2.  Extensions to the Metalink Vocabulary  . . . . . . . . . . 21
      6.3.  Processing Foreign Markup  . . . . . . . . . . . . . . . . 21
      6.4.  Extension Elements . . . . . . . . . . . . . . . . . . . . 21
        6.4.1.  Simple Extension Elements  . . . . . . . . . . . . . . 21
        6.4.2.  Structured Extension Elements  . . . . . . . . . . . . 22
    7.  IANA Considerations  . . . . . . . . . . . . . . . . . . . . . 22
      7.1.  XML Namespace Registration . . . . . . . . . . . . . . . . 22
-     7.2.  application/metalink4+xml MIME type  . . . . . . . . . . . 22
+     7.2.  application/metalink4+xml MIME type  . . . . . . . . . . . 23
    8.  Security Considerations  . . . . . . . . . . . . . . . . . . . 23
-     8.1.  URIs and IRIs  . . . . . . . . . . . . . . . . . . . . . . 23
+     8.1.  URIs and IRIs  . . . . . . . . . . . . . . . . . . . . . . 24
      8.2.  Spoofing . . . . . . . . . . . . . . . . . . . . . . . . . 24
      8.3.  Cryptographic Hashes . . . . . . . . . . . . . . . . . . . 24
      8.4.  Signing  . . . . . . . . . . . . . . . . . . . . . . . . . 24
@@ -164,7 +164,7 @@ Internet-Draft    Metalink Download Description Format       August 2009
 
 
 
-Bryan, et al.           Expires February 27, 2010               [Page 3]
+Bryan, et al.             Expires March 2, 2010                 [Page 3]
 
 Internet-Draft    Metalink Download Description Format       August 2009
 
@@ -220,7 +220,7 @@ Internet-Draft    Metalink Download Description Format       August 2009
 
 
 
-Bryan, et al.           Expires February 27, 2010               [Page 4]
+Bryan, et al.             Expires March 2, 2010                 [Page 4]
 
 Internet-Draft    Metalink Download Description Format       August 2009
 
@@ -276,7 +276,7 @@ Internet-Draft    Metalink Download Description Format       August 2009
 
 
 
-Bryan, et al.           Expires February 27, 2010               [Page 5]
+Bryan, et al.             Expires March 2, 2010                 [Page 5]
 
 Internet-Draft    Metalink Download Description Format       August 2009
 
@@ -332,7 +332,7 @@ Internet-Draft    Metalink Download Description Format       August 2009
 
 
 
-Bryan, et al.           Expires February 27, 2010               [Page 6]
+Bryan, et al.             Expires March 2, 2010                 [Page 6]
 
 Internet-Draft    Metalink Download Description Format       August 2009
 
@@ -388,7 +388,7 @@ Internet-Draft    Metalink Download Description Format       August 2009
 
 
 
-Bryan, et al.           Expires February 27, 2010               [Page 7]
+Bryan, et al.             Expires March 2, 2010                 [Page 7]
 
 Internet-Draft    Metalink Download Description Format       August 2009
 
@@ -444,7 +444,7 @@ Internet-Draft    Metalink Download Description Format       August 2009
 
 
 
-Bryan, et al.           Expires February 27, 2010               [Page 8]
+Bryan, et al.             Expires March 2, 2010                 [Page 8]
 
 Internet-Draft    Metalink Download Description Format       August 2009
 
@@ -500,7 +500,7 @@ Internet-Draft    Metalink Download Description Format       August 2009
 
 
 
-Bryan, et al.           Expires February 27, 2010               [Page 9]
+Bryan, et al.             Expires March 2, 2010                 [Page 9]
 
 Internet-Draft    Metalink Download Description Format       August 2009
 
@@ -556,7 +556,7 @@ Internet-Draft    Metalink Download Description Format       August 2009
 
 
 
-Bryan, et al.           Expires February 27, 2010              [Page 10]
+Bryan, et al.             Expires March 2, 2010                [Page 10]
 
 Internet-Draft    Metalink Download Description Format       August 2009
 
@@ -612,7 +612,7 @@ Internet-Draft    Metalink Download Description Format       August 2009
 
 
 
-Bryan, et al.           Expires February 27, 2010              [Page 11]
+Bryan, et al.             Expires March 2, 2010                [Page 11]
 
 Internet-Draft    Metalink Download Description Format       August 2009
 
@@ -645,9 +645,10 @@ Internet-Draft    Metalink Download Description Format       August 2009
    metalink:pieces elements MUST have a "length" attribute, which is an
    integer that describes the length of the pieces of the file in
    octets.  The whole file is divided into non-overlapping pieces of
-   this length, starting from the beginning of the file.  The last piece
-   extends at most to the end of the file, and can therefore be shorter
-   than the other pieces.
+   this length, starting from the beginning of the file.  That is, every
+   piece should be the same size, apart from the last piece which is the
+   remainder.  The last piece extends at most to the end of the file,
+   and can therefore be shorter than the other pieces.
 
 4.2.  Metadata Elements
 
@@ -661,17 +662,21 @@ Internet-Draft    Metalink Download Description Format       August 2009
         metalinkTextConstruct
       }
 
+
+
+
+
+
+
+Bryan, et al.             Expires March 2, 2010                [Page 12]
+
+Internet-Draft    Metalink Download Description Format       August 2009
+
+
 4.2.2.  The "metalink:description" Element
 
    The "metalink:description" element is a Text construct that conveys a
    human-readable description for a file.
-
-
-
-Bryan, et al.           Expires February 27, 2010              [Page 12]
-
-Internet-Draft    Metalink Download Description Format       August 2009
-
 
    metalinkDescription =
       element metalink:description {
@@ -716,18 +721,19 @@ Internet-Draft    Metalink Download Description Format       August 2009
    of a file to determine if the file has been transferred without any
    errors.
 
+
+
+
+Bryan, et al.             Expires March 2, 2010                [Page 13]
+
+Internet-Draft    Metalink Download Description Format       August 2009
+
+
    metalinkHash =
       element metalink:hash {
         attribute type { text }?,
         text
       }
-
-
-
-Bryan, et al.           Expires February 27, 2010              [Page 13]
-
-Internet-Draft    Metalink Download Description Format       August 2009
-
 
    metalink:hash elements with a "type" attribute MUST contain a hash of
    the complete file.  Metalink Documents can contain one or multiples
@@ -747,7 +753,14 @@ Internet-Draft    Metalink Download Description Format       August 2009
    they are contained in. metalink:hash elements without a "type"
    attribute MUST contain a hash for that specific piece or chunk of the
    file and MUST be listed in the same order as the corresponding pieces
-   appear in the file, starting at the beginning of the file.
+   appear in the file, starting at the beginning of the file.  The size
+   of the piece is equal to the value of the "length" attribute of the
+   metalink:pieces element.  The whole file is divided into non-
+   overlapping pieces of this length, starting from the beginning of the
+   file.  That is, every piece should be the same size, apart from the
+   last piece which is the remainder.  The last piece extends at most to
+   the end of the file, and can therefore be shorter than the other
+   pieces.
 
    ...
      <hash type="sha-1">a97fcf6ba9358f8a6f62beee4421863d3e52b080</hash>
@@ -760,6 +773,17 @@ Internet-Draft    Metalink Download Description Format       August 2009
        <hash>67183e4c3ab892d3ebe8326b7d79eb62d077f487</hash>
      </pieces>
    ...
+
+
+
+
+
+
+
+Bryan, et al.             Expires March 2, 2010                [Page 14]
+
+Internet-Draft    Metalink Download Description Format       August 2009
+
 
 4.2.5.1.  The "type" Attribute
 
@@ -775,15 +799,6 @@ Internet-Draft    Metalink Download Description Format       August 2009
    The "metalink:identity" element is a Text construct that conveys a
    human-readable identity for a file.  The identity of OpenOffice.org
    3.0 would be "OpenOffice.org".
-
-
-
-
-
-Bryan, et al.           Expires February 27, 2010              [Page 14]
-
-Internet-Draft    Metalink Download Description Format       August 2009
-
 
    metalinkIdentity =
       element metalink:identity {
@@ -818,6 +833,14 @@ Internet-Draft    Metalink Download Description Format       August 2009
    representation that is relevant to that agent.
 
    The metalink:license element MAY have a "name" attribute that
+
+
+
+Bryan, et al.             Expires March 2, 2010                [Page 15]
+
+Internet-Draft    Metalink Download Description Format       August 2009
+
+
    indicates the name of the license.
 
 4.2.9.  The "metalink:logo" Element
@@ -833,14 +856,6 @@ Internet-Draft    Metalink Download Description Format       August 2009
       }
 
    The image SHOULD have an aspect ratio of one (horizontal) to one
-
-
-
-Bryan, et al.           Expires February 27, 2010              [Page 15]
-
-Internet-Draft    Metalink Download Description Format       August 2009
-
-
    (vertical) and SHOULD be suitable for presentation at a small size.
 
 4.2.10.  The "metalink:metaurl" Element
@@ -874,6 +889,14 @@ Internet-Draft    Metalink Download Description Format       August 2009
    the MIME type of the metadata available at the IRI.  In the case of
    BitTorrent as specified in [BITTORRENT], the value "torrent" is
    required.  Types without "/" are reserved.  Currently, "torrent" is
+
+
+
+Bryan, et al.             Expires March 2, 2010                [Page 16]
+
+Internet-Draft    Metalink Download Description Format       August 2009
+
+
    the only reserved value.
 
 4.2.10.3.  The "name" Attribute
@@ -889,14 +912,6 @@ Internet-Draft    Metalink Download Description Format       August 2009
 
    In this example, a file named "Contents-amd64.gz" is indicated, in a
    "debian-amd64/sarge/" subdirectory.  The path MUST NOT contain any
-
-
-
-Bryan, et al.           Expires February 27, 2010              [Page 16]
-
-Internet-Draft    Metalink Download Description Format       August 2009
-
-
    directory traversal directives or information.  The path MUST be
    relative.  The path MUST NOT begin with a "/", "./" or "../", contain
    "/../", or end with "/..".
@@ -930,6 +945,14 @@ Internet-Draft    Metalink Download Description Format       August 2009
    instant in time associated with an event early in the life cycle of
    the entry.
 
+
+
+
+Bryan, et al.             Expires March 2, 2010                [Page 17]
+
+Internet-Draft    Metalink Download Description Format       August 2009
+
+
    metalinkPublished =
       element metalink:published {
         metalinkDateConstruct
@@ -942,16 +965,6 @@ Internet-Draft    Metalink Download Description Format       August 2009
 
    The "metalink:publisher" element indicates a group or other entity
    which has published the file described in the Metalink Document.
-
-
-
-
-
-
-Bryan, et al.           Expires February 27, 2010              [Page 17]
-
-Internet-Draft    Metalink Download Description Format       August 2009
-
 
    metalinkPublisher =
       element metalink:publisher {
@@ -988,6 +1001,14 @@ Internet-Draft    Metalink Download Description Format       August 2009
    "pgp".  It may be useful to extend Metalink documents with new types
    of digital signatures, so unknown types are allowed.
 
+
+
+
+Bryan, et al.             Expires March 2, 2010                [Page 18]
+
+Internet-Draft    Metalink Download Description Format       August 2009
+
+
 4.2.16.  The "metalink:size" Element
 
    The "metalink:size" element indicates the length of the linked
@@ -999,15 +1020,6 @@ Internet-Draft    Metalink Download Description Format       August 2009
       element metalink:size {
         metalinkTextConstruct
       }
-
-
-
-
-
-Bryan, et al.           Expires February 27, 2010              [Page 18]
-
-Internet-Draft    Metalink Download Description Format       August 2009
-
 
 4.2.17.  The "metalink:updated" Element
 
@@ -1045,6 +1057,14 @@ Internet-Draft    Metalink Download Description Format       August 2009
    indicate a higher priority.  Multiple metalink:url elements can have
    the same priority, i.e. ten mirrors could have priority="1".
 
+
+
+
+Bryan, et al.             Expires March 2, 2010                [Page 19]
+
+Internet-Draft    Metalink Download Description Format       August 2009
+
+
 4.2.18.2.  The "location" Attribute
 
    metalink:url elements MAY have a "location" attribute, which is a
@@ -1056,14 +1076,6 @@ Internet-Draft    Metalink Download Description Format       August 2009
    The "metalink:version" element is a Text construct that conveys a
    human-readable version for a file.  The version of OpenOffice.org 3.0
    would be "3.0".
-
-
-
-
-Bryan, et al.           Expires February 27, 2010              [Page 19]
-
-Internet-Draft    Metalink Download Description Format       August 2009
-
 
    metalinkVersion =
       element metalink:version {
@@ -1101,6 +1113,14 @@ Internet-Draft    Metalink Download Description Format       August 2009
    Markup from other vocabularies ("foreign markup") can be used in an
    Metalink Document.
 
+
+
+
+Bryan, et al.             Expires March 2, 2010                [Page 20]
+
+Internet-Draft    Metalink Download Description Format       August 2009
+
+
 6.2.  Extensions to the Metalink Vocabulary
 
    The Metalink namespace is reserved for future forward-compatible
@@ -1111,15 +1131,6 @@ Internet-Draft    Metalink Download Description Format       August 2009
    be able to distinguish it from markup error.  For the purposes of
    this discussion, unrecognized markup from the Metalink vocabulary
    will be considered "foreign markup".
-
-
-
-
-
-Bryan, et al.           Expires February 27, 2010              [Page 20]
-
-Internet-Draft    Metalink Download Description Format       August 2009
-
 
 6.3.  Processing Foreign Markup
 
@@ -1158,6 +1169,14 @@ Internet-Draft    Metalink Download Description Format       August 2009
          text
       }
 
+
+
+
+Bryan, et al.             Expires March 2, 2010                [Page 21]
+
+Internet-Draft    Metalink Download Description Format       August 2009
+
+
    The element can be interpreted as a simple property (or name/value
    pair) of the parent element that encloses it.  The pair consisting of
    the namespace-URI of the element and the local name of the element
@@ -1165,17 +1184,6 @@ Internet-Draft    Metalink Download Description Format       August 2009
    content of the element can be interpreted as the value of the
    property.  If the element is empty, then the property value can be
    interpreted as an empty string.
-
-
-
-
-
-
-
-Bryan, et al.           Expires February 27, 2010              [Page 21]
-
-Internet-Draft    Metalink Download Description Format       August 2009
-
 
 6.4.2.  Structured Extension Elements
 
@@ -1217,21 +1225,18 @@ Internet-Draft    Metalink Download Description Format       August 2009
 
    XML: None.  Namespace URIs do not represent an XML specification.
 
+
+
+
+Bryan, et al.             Expires March 2, 2010                [Page 22]
+
+Internet-Draft    Metalink Download Description Format       August 2009
+
+
 7.2.  application/metalink4+xml MIME type
 
    A Metalink Document, when serialized as XML 1.0, can be identified
    with the following media type:
-
-
-
-
-
-
-
-Bryan, et al.           Expires February 27, 2010              [Page 22]
-
-Internet-Draft    Metalink Download Description Format       August 2009
-
 
    MIME media type name:  application
    MIME subtype name:  metalink4+xml
@@ -1274,20 +1279,21 @@ Internet-Draft    Metalink Download Description Format       August 2009
    are also encouraged to include digital signatures of the files within
    the Metalink Documents if they are available.
 
+
+
+
+
+
+Bryan, et al.             Expires March 2, 2010                [Page 23]
+
+Internet-Draft    Metalink Download Description Format       August 2009
+
+
 8.1.  URIs and IRIs
 
    Metalink Processors handle URIs and IRIs.  See Section 7 of [RFC3986]
    and Section 8 of [RFC3987] for security considerations related to
    their handling and use.
-
-
-
-
-
-Bryan, et al.           Expires February 27, 2010              [Page 23]
-
-Internet-Draft    Metalink Download Description Format       August 2009
-
 
 8.2.  Spoofing
 
@@ -1332,18 +1338,18 @@ Internet-Draft    Metalink Download Description Format       August 2009
               BITTORRENT 11031, February 2008,
               <http://www.bittorrent.org/beps/bep_0003.html>.
 
+
+
+Bryan, et al.             Expires March 2, 2010                [Page 24]
+
+Internet-Draft    Metalink Download Description Format       August 2009
+
+
    [ISO3166-1]
               International Organization for Standardization, "ISO 3166-
               1:2006.  Codes for the representation of names of
               countries and their subdivisions -- Part 1: Country
               codes", November 2006.
-
-
-
-Bryan, et al.           Expires February 27, 2010              [Page 24]
-
-Internet-Draft    Metalink Download Description Format       August 2009
-
 
    [REC-xml]  Yergeau, F., Paoli, J., Bray, T., Sperberg-McQueen, C.,
               and E. Maler, "Extensible Markup Language (XML) 1.0
@@ -1387,19 +1393,19 @@ Internet-Draft    Metalink Download Description Format       August 2009
    [RFC3174]  Eastlake, D. and P. Jones, "US Secure Hash Algorithm 1
               (SHA1)", RFC 3174, September 2001.
 
+
+
+
+Bryan, et al.             Expires March 2, 2010                [Page 25]
+
+Internet-Draft    Metalink Download Description Format       August 2009
+
+
    [RFC3339]  Klyne, G. and C. Newman, "Date and Time on the Internet:
               Timestamps", RFC 3339, July 2002.
 
    [RFC3688]  Mealling, M., "The IETF XML Registry", BCP 81, RFC 3688,
               January 2004.
-
-
-
-
-Bryan, et al.           Expires February 27, 2010              [Page 25]
-
-Internet-Draft    Metalink Download Description Format       August 2009
-
 
    [RFC3986]  Berners-Lee, T., Fielding, R., and L. Masinter, "Uniform
               Resource Identifier (URI): Generic Syntax", STD 66,
@@ -1444,19 +1450,18 @@ Appendix A.  Acknowledgements and Contributors
    The layout and content of this document relies heavily on work
    pioneered in the Atom Syndication Format as specified in [RFC4287].
 
+
+
+Bryan, et al.             Expires March 2, 2010                [Page 26]
+
+Internet-Draft    Metalink Download Description Format       August 2009
+
+
    The following people contributed to preliminary versions of this
    document: Paul Burkhead, Kristian Weston, Darius Liktorius, Michael
    Burford, Giorgio Maone, Manuel Subredu, A. Bram Neijt, Max Velasques,
    Manolo Valdes, Urs Wolfer, Frederick Cheung, Nils Maier, Hampus
    Wessman, Hayden Legendre, Danny Ayers, Nick Dominguez, Rene
-
-
-
-Bryan, et al.           Expires February 27, 2010              [Page 26]
-
-Internet-Draft    Metalink Download Description Format       August 2009
-
-
    Leonhardt, Per Oyvind Karlsen, Gary Zellerbach, James Clark, Daniel
    Stenberg, Matt Domsch, Chris Newman, Lisa Dusseault, Ian Macfarlane,
    Dave Cridland, Julian Reschke, Barry Leiba, Uri Blumenthal, Paul
@@ -1501,18 +1506,17 @@ Appendix B.  RELAX NG Compact Schema
    namespace metalink = "urn:ietf:params:xml:ns:metalink"
    namespace xsd = "http://www.w3.org/2001/XMLSchema"
 
-   # Common attributes
-
-   metalinkCommonAttributes =
-      attribute xml:base { metalinkUri }?,
 
 
-
-Bryan, et al.           Expires February 27, 2010              [Page 27]
+Bryan, et al.             Expires March 2, 2010                [Page 27]
 
 Internet-Draft    Metalink Download Description Format       August 2009
 
 
+   # Common attributes
+
+   metalinkCommonAttributes =
+      attribute xml:base { metalinkUri }?,
       attribute xml:lang { metalinkLanguageTag }?,
       undefinedAttribute*
 
@@ -1557,18 +1561,18 @@ Internet-Draft    Metalink Download Description Format       August 2009
           & metalinkURL*
           & metalinkOS?
           & metalinkPieces*
-          & metalinkPublisher?
-          & metalinkSignature?
-          & metalinkSize?
-          & metalinkVersion?
 
 
 
-Bryan, et al.           Expires February 27, 2010              [Page 28]
+Bryan, et al.             Expires March 2, 2010                [Page 28]
 
 Internet-Draft    Metalink Download Description Format       August 2009
 
 
+          & metalinkPublisher?
+          & metalinkSignature?
+          & metalinkSize?
+          & metalinkVersion?
           & extensionElement*)
       }
 
@@ -1613,18 +1617,18 @@ Internet-Draft    Metalink Download Description Format       August 2009
    metalinkLanguage =
       element metalink:language {
          metalinkTextConstruct
-      }
-
-   metalinkLicense =
-      element metalink:license {
 
 
 
-Bryan, et al.           Expires February 27, 2010              [Page 29]
+Bryan, et al.             Expires March 2, 2010                [Page 29]
 
 Internet-Draft    Metalink Download Description Format       August 2009
 
 
+      }
+
+   metalinkLicense =
+      element metalink:license {
          metalinkCommonAttributes,
          attribute url { metalinkUri }?,
          attribute name { text }?
@@ -1669,17 +1673,18 @@ Internet-Draft    Metalink Download Description Format       August 2009
       }
 
    metalinkSignature =
+
+
+
+Bryan, et al.             Expires March 2, 2010                [Page 30]
+
+Internet-Draft    Metalink Download Description Format       August 2009
+
+
       element metalink:signature {
          attribute type { "pgp" },
          metalinkTextConstruct
       }
-
-
-
-Bryan, et al.           Expires February 27, 2010              [Page 30]
-
-Internet-Draft    Metalink Download Description Format       August 2009
-
 
    metalinkSize =
       element metalink:size {
@@ -1724,19 +1729,19 @@ Internet-Draft    Metalink Download Description Format       August 2009
 
    # Structured Extension
 
+
+
+
+Bryan, et al.             Expires March 2, 2010                [Page 31]
+
+Internet-Draft    Metalink Download Description Format       August 2009
+
+
    structuredExtensionElement =
       element * - metalink:* {
          (attribute * { text }+,
             (text|anyElement)*)
        | (attribute * { text }*,
-
-
-
-Bryan, et al.           Expires February 27, 2010              [Page 31]
-
-Internet-Draft    Metalink Download Description Format       August 2009
-
-
           (text?, anyElement+, (text|anyElement)*))
       }
 
@@ -1778,22 +1783,24 @@ Appendix C.  Document History (to be removed by RFC Editor before
    http://metalinks.svn.sourceforge.net/viewvc/metalinks/internetdraft/
 
    Known issues concerning this draft:
-   o  None.
-
-   -15 : August , 2009.
-   o  Rename "preference" attribute of metaurl and url elements to
-      "priority", where lower values indicate higher priority.
 
 
 
 
 
-Bryan, et al.           Expires February 27, 2010              [Page 32]
+Bryan, et al.             Expires March 2, 2010                [Page 32]
 
 Internet-Draft    Metalink Download Description Format       August 2009
 
 
+   o  None.
+
+   -16 : August , 2009.
    o  Clarifications.
+
+   -15 : August 26, 2009.
+   o  Rename "preference" attribute of metaurl and url elements to
+      "priority", where lower values indicate higher priority.
 
    -14 : August 24, 2009.
    o  Update abstract and introduction.
@@ -1833,22 +1840,21 @@ Internet-Draft    Metalink Download Description Format       August 2009
    o  Expand "Known issues" section of Document History.
 
    -06 : March 3, 2009.
+
+
+
+
+Bryan, et al.             Expires March 2, 2010                [Page 33]
+
+Internet-Draft    Metalink Download Description Format       August 2009
+
+
    o  Add authors and this Document History section.
 
    -05 : January 13, 2009.
    o  Clarifications.
 
    -04 : December 31, 2008.
-
-
-
-
-
-Bryan, et al.           Expires February 27, 2010              [Page 33]
-
-Internet-Draft    Metalink Download Description Format       August 2009
-
-
    o  New IPR notice as required by IETF.
    o  Correct "metalink:pieces" Element text.
    o  Add hash examples.
@@ -1880,16 +1886,24 @@ Internet-Draft    Metalink Download Description Format       August 2009
 Index
 
    A
-      application/metalink4+xml Media Type  22
+      application/metalink4+xml Media Type  23
 
    C
       copyright XML element  12
 
    D
-      description XML element  12
+      description XML element  13
 
    F
       file XML element  10
+
+
+
+
+Bryan, et al.             Expires March 2, 2010                [Page 34]
+
+Internet-Draft    Metalink Download Description Format       August 2009
+
 
    G
       generator XML element  13
@@ -1897,30 +1911,22 @@ Index
          metalinkCommonAttributes  7
          metalinkCopyright  12
          metalinkDateConstruct  8
-
-
-
-Bryan, et al.           Expires February 27, 2010              [Page 34]
-
-Internet-Draft    Metalink Download Description Format       August 2009
-
-
          metalinkDescription  13
          metalinkFile  10
          metalinkGenerator  13
-         metalinkHash  13
+         metalinkHash  14
          metalinkIdentity  15
          metalinkLanguage  15
          metalinkLicense  15
-         metalinkLogo  15
+         metalinkLogo  16
          metalinkMetalink  9
          metalinkOrigin  17
          metalinkOS  17
          metalinkPieces  12
-         metalinkPublished  17
+         metalinkPublished  18
          metalinkPublisher  18
          metalinkSignature  18
-         metalinkSize  18
+         metalinkSize  19
          metalinkTextConstruct  8
          metalinkType  13
          metalinkUpdated  19
@@ -1933,45 +1939,45 @@ Internet-Draft    Metalink Download Description Format       August 2009
       hash XML element  13
 
    I
-      identity XML element  14
+      identity XML element  15
 
    L
       language XML element  15
       license XML element  15
-      logo XML element  15
+      logo XML element  16
 
    M
       Media Type
-         application/metalink4+xml  22
+         application/metalink4+xml  23
       metadata XML element  16
       metalink XML element  9
       metalinkCommonAttributes grammar production  7
       metalinkCopyright grammar production  12
-      metalinkDateConstruct grammar production  8
-      metalinkDescription grammar production  13
-      metalinkFile grammar production  10
-      metalinkGenerator grammar production  13
-      metalinkHash grammar production  13
-      metalinkIdentity grammar production  15
 
 
 
-Bryan, et al.           Expires February 27, 2010              [Page 35]
+Bryan, et al.             Expires March 2, 2010                [Page 35]
 
 Internet-Draft    Metalink Download Description Format       August 2009
 
 
+      metalinkDateConstruct grammar production  8
+      metalinkDescription grammar production  13
+      metalinkFile grammar production  10
+      metalinkGenerator grammar production  13
+      metalinkHash grammar production  14
+      metalinkIdentity grammar production  15
       metalinkLanguage grammar production  15
       metalinkLicense grammar production  15
-      metalinkLogo grammar production  15
+      metalinkLogo grammar production  16
       metalinkMetalink grammar production  9
       metalinkOrigin grammar production  17
       metalinkOS grammar production  17
       metalinkPieces grammar production  12
-      metalinkPublished grammar production  17
+      metalinkPublished grammar production  18
       metalinkPublisher grammar production  18
       metalinkSignature grammar production  18
-      metalinkSize grammar production  18
+      metalinkSize grammar production  19
       metalinkTextConstruct grammar production  8
       metalinkType grammar production  13
       metalinkUpdated grammar production  19
@@ -1985,12 +1991,12 @@ Internet-Draft    Metalink Download Description Format       August 2009
    P
       pieces XML element  12
       published XML element  17
-      publisher XML element  17
+      publisher XML element  18
 
    S
       signature XML element  18
       simpleExtensionElement grammar production  21
-      size XML element  18
+      size XML element  19
       structuredExtensionElement grammar production  22
 
    T
@@ -2001,40 +2007,40 @@ Internet-Draft    Metalink Download Description Format       August 2009
       url XML element  19
 
    V
-      version XML element  19
-
-   X
-      XML Elements
-         copyright  12
-         description  12
-         entry  10
-         generator  13
+      version XML element  20
 
 
 
-Bryan, et al.           Expires February 27, 2010              [Page 36]
+
+Bryan, et al.             Expires March 2, 2010                [Page 36]
 
 Internet-Draft    Metalink Download Description Format       August 2009
 
 
+   X
+      XML Elements
+         copyright  12
+         description  13
+         entry  10
+         generator  13
          hash  13
-         identity  14
+         identity  15
          language  15
          license  15
-         logo  15
+         logo  16
          metadata  16
          metalink  9
          origin  17
          os  17
          pieces  12
          published  17
-         publisher  17
+         publisher  18
          signature  18
-         size  18
+         size  19
          type  13
          updated  19
          url  19
-         version  19
+         version  20
 
 
 Authors' Addresses
@@ -2062,13 +2068,7 @@ Authors' Addresses
 
 
 
-
-
-
-
-
-
-Bryan, et al.           Expires February 27, 2010              [Page 37]
+Bryan, et al.             Expires March 2, 2010                [Page 37]
 
 Internet-Draft    Metalink Download Description Format       August 2009
 
@@ -2124,5 +2124,5 @@ Internet-Draft    Metalink Download Description Format       August 2009
 
 
 
-Bryan, et al.           Expires February 27, 2010              [Page 38]
+Bryan, et al.             Expires March 2, 2010                [Page 38]
 
