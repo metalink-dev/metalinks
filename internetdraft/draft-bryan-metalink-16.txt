@@ -4,10 +4,10 @@
 Network Working Group                                      A. Bryan, Ed.
 Internet-Draft                                              T. Tsujikawa
 Intended status: Standards Track                                N. McNab
-Expires: March 2, 2010                                Metalinker Project
+Expires: March 4, 2010                                Metalinker Project
                                                                 P. Poeml
                                                             Novell, Inc.
-                                                         August 29, 2009
+                                                         August 31, 2009
 
 
                 The Metalink Download Description Format
@@ -44,7 +44,7 @@ Status of this Memo
    The list of Internet-Draft Shadow Directories can be accessed at
    http://www.ietf.org/shadow.html.
 
-   This Internet-Draft will expire on March 2, 2010.
+   This Internet-Draft will expire on March 4, 2010.
 
 Copyright Notice
 
@@ -52,7 +52,7 @@ Copyright Notice
 
 
 
-Bryan, et al.             Expires March 2, 2010                 [Page 1]
+Bryan, et al.             Expires March 4, 2010                 [Page 1]
 
 Internet-Draft    Metalink Download Description Format       August 2009
 
@@ -108,7 +108,7 @@ Table of Contents
 
 
 
-Bryan, et al.             Expires March 2, 2010                 [Page 2]
+Bryan, et al.             Expires March 4, 2010                 [Page 2]
 
 Internet-Draft    Metalink Download Description Format       August 2009
 
@@ -164,7 +164,7 @@ Internet-Draft    Metalink Download Description Format       August 2009
 
 
 
-Bryan, et al.             Expires March 2, 2010                 [Page 3]
+Bryan, et al.             Expires March 4, 2010                 [Page 3]
 
 Internet-Draft    Metalink Download Description Format       August 2009
 
@@ -220,7 +220,7 @@ Internet-Draft    Metalink Download Description Format       August 2009
 
 
 
-Bryan, et al.             Expires March 2, 2010                 [Page 4]
+Bryan, et al.             Expires March 4, 2010                 [Page 4]
 
 Internet-Draft    Metalink Download Description Format       August 2009
 
@@ -276,7 +276,7 @@ Internet-Draft    Metalink Download Description Format       August 2009
 
 
 
-Bryan, et al.             Expires March 2, 2010                 [Page 5]
+Bryan, et al.             Expires March 4, 2010                 [Page 5]
 
 Internet-Draft    Metalink Download Description Format       August 2009
 
@@ -332,7 +332,7 @@ Internet-Draft    Metalink Download Description Format       August 2009
 
 
 
-Bryan, et al.             Expires March 2, 2010                 [Page 6]
+Bryan, et al.             Expires March 4, 2010                 [Page 6]
 
 Internet-Draft    Metalink Download Description Format       August 2009
 
@@ -388,7 +388,7 @@ Internet-Draft    Metalink Download Description Format       August 2009
 
 
 
-Bryan, et al.             Expires March 2, 2010                 [Page 7]
+Bryan, et al.             Expires March 4, 2010                 [Page 7]
 
 Internet-Draft    Metalink Download Description Format       August 2009
 
@@ -444,7 +444,7 @@ Internet-Draft    Metalink Download Description Format       August 2009
 
 
 
-Bryan, et al.             Expires March 2, 2010                 [Page 8]
+Bryan, et al.             Expires March 4, 2010                 [Page 8]
 
 Internet-Draft    Metalink Download Description Format       August 2009
 
@@ -500,7 +500,7 @@ Internet-Draft    Metalink Download Description Format       August 2009
 
 
 
-Bryan, et al.             Expires March 2, 2010                 [Page 9]
+Bryan, et al.             Expires March 4, 2010                 [Page 9]
 
 Internet-Draft    Metalink Download Description Format       August 2009
 
@@ -556,7 +556,7 @@ Internet-Draft    Metalink Download Description Format       August 2009
 
 
 
-Bryan, et al.             Expires March 2, 2010                [Page 10]
+Bryan, et al.             Expires March 4, 2010                [Page 10]
 
 Internet-Draft    Metalink Download Description Format       August 2009
 
@@ -612,7 +612,7 @@ Internet-Draft    Metalink Download Description Format       August 2009
 
 
 
-Bryan, et al.             Expires March 2, 2010                [Page 11]
+Bryan, et al.             Expires March 4, 2010                [Page 11]
 
 Internet-Draft    Metalink Download Description Format       August 2009
 
@@ -647,8 +647,8 @@ Internet-Draft    Metalink Download Description Format       August 2009
    octets.  The whole file is divided into non-overlapping pieces of
    this length, starting from the beginning of the file.  That is, every
    piece should be the same size, apart from the last piece which is the
-   remainder.  The last piece extends at most to the end of the file,
-   and can therefore be shorter than the other pieces.
+   remainder.  The last piece extends to the end of the file, and can
+   therefore be shorter than the other pieces.
 
 4.2.  Metadata Elements
 
@@ -668,7 +668,7 @@ Internet-Draft    Metalink Download Description Format       August 2009
 
 
 
-Bryan, et al.             Expires March 2, 2010                [Page 12]
+Bryan, et al.             Expires March 4, 2010                [Page 12]
 
 Internet-Draft    Metalink Download Description Format       August 2009
 
@@ -724,7 +724,7 @@ Internet-Draft    Metalink Download Description Format       August 2009
 
 
 
-Bryan, et al.             Expires March 2, 2010                [Page 13]
+Bryan, et al.             Expires March 4, 2010                [Page 13]
 
 Internet-Draft    Metalink Download Description Format       August 2009
 
@@ -758,9 +758,8 @@ Internet-Draft    Metalink Download Description Format       August 2009
    metalink:pieces element.  The whole file is divided into non-
    overlapping pieces of this length, starting from the beginning of the
    file.  That is, every piece should be the same size, apart from the
-   last piece which is the remainder.  The last piece extends at most to
-   the end of the file, and can therefore be shorter than the other
-   pieces.
+   last piece which is the remainder.  The last piece extends to the end
+   of the file, and can therefore be shorter than the other pieces.
 
    ...
      <hash type="sha-1">a97fcf6ba9358f8a6f62beee4421863d3e52b080</hash>
@@ -774,21 +773,18 @@ Internet-Draft    Metalink Download Description Format       August 2009
      </pieces>
    ...
 
-
-
-
-
-
-
-Bryan, et al.             Expires March 2, 2010                [Page 14]
-
-Internet-Draft    Metalink Download Description Format       August 2009
-
-
 4.2.5.1.  The "type" Attribute
 
    metalink:hash elements MUST have a "type" attribute, if and only if
    it contains a hash of the complete file.  The IANA registry named
+
+
+
+Bryan, et al.             Expires March 4, 2010                [Page 14]
+
+Internet-Draft    Metalink Download Description Format       August 2009
+
+
    "Hash Function Textual Names" defines values for hash types.  If a
    Metalink Document contains hashes, it SHOULD include "sha-1" which is
    SHA-1 as specified in [RFC3174], or a stronger hash.  It MAY also
@@ -833,15 +829,17 @@ Internet-Draft    Metalink Download Description Format       August 2009
    representation that is relevant to that agent.
 
    The metalink:license element MAY have a "name" attribute that
+   indicates the name of the license.
 
 
 
-Bryan, et al.             Expires March 2, 2010                [Page 15]
+
+
+
+Bryan, et al.             Expires March 4, 2010                [Page 15]
 
 Internet-Draft    Metalink Download Description Format       August 2009
 
-
-   indicates the name of the license.
 
 4.2.9.  The "metalink:logo" Element
 
@@ -889,15 +887,15 @@ Internet-Draft    Metalink Download Description Format       August 2009
    the MIME type of the metadata available at the IRI.  In the case of
    BitTorrent as specified in [BITTORRENT], the value "torrent" is
    required.  Types without "/" are reserved.  Currently, "torrent" is
+   the only reserved value.
 
 
 
-Bryan, et al.             Expires March 2, 2010                [Page 16]
+
+Bryan, et al.             Expires March 4, 2010                [Page 16]
 
 Internet-Draft    Metalink Download Description Format       August 2009
 
-
-   the only reserved value.
 
 4.2.10.3.  The "name" Attribute
 
@@ -948,7 +946,9 @@ Internet-Draft    Metalink Download Description Format       August 2009
 
 
 
-Bryan, et al.             Expires March 2, 2010                [Page 17]
+
+
+Bryan, et al.             Expires March 4, 2010                [Page 17]
 
 Internet-Draft    Metalink Download Description Format       August 2009
 
@@ -1004,7 +1004,7 @@ Internet-Draft    Metalink Download Description Format       August 2009
 
 
 
-Bryan, et al.             Expires March 2, 2010                [Page 18]
+Bryan, et al.             Expires March 4, 2010                [Page 18]
 
 Internet-Draft    Metalink Download Description Format       August 2009
 
@@ -1060,7 +1060,7 @@ Internet-Draft    Metalink Download Description Format       August 2009
 
 
 
-Bryan, et al.             Expires March 2, 2010                [Page 19]
+Bryan, et al.             Expires March 4, 2010                [Page 19]
 
 Internet-Draft    Metalink Download Description Format       August 2009
 
@@ -1116,7 +1116,7 @@ Internet-Draft    Metalink Download Description Format       August 2009
 
 
 
-Bryan, et al.             Expires March 2, 2010                [Page 20]
+Bryan, et al.             Expires March 4, 2010                [Page 20]
 
 Internet-Draft    Metalink Download Description Format       August 2009
 
@@ -1172,7 +1172,7 @@ Internet-Draft    Metalink Download Description Format       August 2009
 
 
 
-Bryan, et al.             Expires March 2, 2010                [Page 21]
+Bryan, et al.             Expires March 4, 2010                [Page 21]
 
 Internet-Draft    Metalink Download Description Format       August 2009
 
@@ -1228,7 +1228,7 @@ Internet-Draft    Metalink Download Description Format       August 2009
 
 
 
-Bryan, et al.             Expires March 2, 2010                [Page 22]
+Bryan, et al.             Expires March 4, 2010                [Page 22]
 
 Internet-Draft    Metalink Download Description Format       August 2009
 
@@ -1284,7 +1284,7 @@ Internet-Draft    Metalink Download Description Format       August 2009
 
 
 
-Bryan, et al.             Expires March 2, 2010                [Page 23]
+Bryan, et al.             Expires March 4, 2010                [Page 23]
 
 Internet-Draft    Metalink Download Description Format       August 2009
 
@@ -1300,10 +1300,10 @@ Internet-Draft    Metalink Download Description Format       August 2009
    There is potential for spoofing attacks where the attacker publishes
    Metalink Documents with false information.  Malicious publishers
    might create Metalink Documents containing inaccurate information
-   anywhere in the document.  At best, this could deceive unaware
-   downloaders that they are downloading a malicious or worthless file.
-   At worst, malicious publishers could attempt a distributed denial of
-   service attack by inserting unrelated IRIs into Metalink Documents.
+   anywhere in the document.  Unaware downloaders could be deceived into
+   downloading a malicious or worthless file.  Malicious publishers
+   could attempt a distributed denial of service attack by inserting
+   unrelated IRIs into Metalink Documents.
 
 8.3.  Cryptographic Hashes
 
@@ -1340,7 +1340,7 @@ Internet-Draft    Metalink Download Description Format       August 2009
 
 
 
-Bryan, et al.             Expires March 2, 2010                [Page 24]
+Bryan, et al.             Expires March 4, 2010                [Page 24]
 
 Internet-Draft    Metalink Download Description Format       August 2009
 
@@ -1396,7 +1396,7 @@ Internet-Draft    Metalink Download Description Format       August 2009
 
 
 
-Bryan, et al.             Expires March 2, 2010                [Page 25]
+Bryan, et al.             Expires March 4, 2010                [Page 25]
 
 Internet-Draft    Metalink Download Description Format       August 2009
 
@@ -1452,41 +1452,40 @@ Appendix A.  Acknowledgements and Contributors
 
 
 
-Bryan, et al.             Expires March 2, 2010                [Page 26]
+Bryan, et al.             Expires March 4, 2010                [Page 26]
 
 Internet-Draft    Metalink Download Description Format       August 2009
 
 
-   The following people contributed to preliminary versions of this
-   document: Paul Burkhead, Kristian Weston, Darius Liktorius, Michael
-   Burford, Giorgio Maone, Manuel Subredu, A. Bram Neijt, Max Velasques,
-   Manolo Valdes, Urs Wolfer, Frederick Cheung, Nils Maier, Hampus
-   Wessman, Hayden Legendre, Danny Ayers, Nick Dominguez, Rene
-   Leonhardt, Per Oyvind Karlsen, Gary Zellerbach, James Clark, Daniel
-   Stenberg, Matt Domsch, Chris Newman, Lisa Dusseault, Ian Macfarlane,
-   Dave Cridland, Julian Reschke, Barry Leiba, Uri Blumenthal, Paul
-   Hoffman, Felix Sasaki, Matthias Fuchs, Eran Hammer-Lahav, and Mark
-   Nottingham.  The content and concepts within are a product of the
-   Metalink community.
+   The content and concepts within are a product of the Metalink
+   community.
 
    The Metalink community has dozens of contributors who proposed ideas
    and wording for this document, or contributed to the evolution of
    Metalink, including:
 
-   Nicolas Alvarez, Patrick Ruckstuhl, Sebastien Willemijns, Micah
-   Cowan, Yazsoft, KGet developers, FDM Team, Orbit Team, Arne
+   Paul Burkhead, Kristian Weston, Darius Liktorius, Michael Burford,
+   Giorgio Maone, Manuel Subredu, A. Bram Neijt, Max Velasques, Manolo
+   Valdes, Urs Wolfer, Frederick Cheung, Nils Maier, Hampus Wessman,
+   Hayden Legendre, Danny Ayers, Nick Dominguez, Rene Leonhardt, Per
+   Oyvind Karlsen, Gary Zellerbach, James Clark, Daniel Stenberg, Matt
+   Domsch, Yazsoft, KGet developers, FDM Team, Orbit Team, Arne
    Babenhauserheide, Mathias Berchtold, Xienzhenyu and TheWorld Browser
-   Team, Xi Software, Bridget and Ethan Fletcher, Ruben Kerkhof,
-   Agostino Russo, Salvatore and Robin Musumeci, Steve and Rachel
-   Eshelman, Lucas Hewett, Ryan and Darren Cronin, Dave Winquist, Bob
-   Denison, Wes Shelton, Kees Cook, Josh Colbert, Steve Kleisath, Chad
-   Neptune, Nick Carrabba, Chris Carrabba, Erin Solari, Derick Cordoba,
-   Ryan Alexander, John Sowder, Sandra Amisano, Tom Mainville, Janie
-   Wargo, Jason Hansen, Tim Bray, Dan Brickley, Markus Hofmann, Dan
-   Connolly, Tim Berners-Lee, Louis Suarez-Potts, Ross Smith, Jeff
-   Covey, Ed Lee, Shawn Wilsher, Mike Connor, Johan Svedberg, Dedric
-   Carter, James Antill, Debi Goulding, the Anthony Family, the Bryan
-   Family, Juanita Anthony and Zimmy Bryan.
+   Team, Xi Software, Nicolas Alvarez, Patrick Ruckstuhl, Sebastien
+   Willemijns, Micah Cowan, Bridget and Ethan Fletcher, Ruben Kerkhof,
+   Agostino Russo, Salvatore Musumeci, Steve Eshelman, Lucas Hewett,
+   Ryan Cronin, Dave Winquist, Bob Denison, Wes Shelton, Kees Cook, Josh
+   Colbert, Steve Kleisath, Chad Neptune, Nick Carrabba, Chris Carrabba,
+   Erin Solari, Derick Cordoba, Ryan Alexander, John Sowder, Sandra
+   Amisano, Tom Mainville, Janie Wargo, Jason Hansen, Tim Bray, Dan
+   Brickley, Markus Hofmann, Dan Connolly, Tim Berners-Lee, Louis
+   Suarez-Potts, Ross Smith, Jeff Covey, Ed Lee, Shawn Wilsher, Mike
+   Connor, Johan Svedberg, Dedric Carter, James Antill, Debi Goulding,
+   Chris Newman, Lisa Dusseault, Ian Macfarlane, Dave Cridland, Julian
+   Reschke, Barry Leiba, Uri Blumenthal, Paul Hoffman, Felix Sasaki,
+   Matthias Fuchs, Eran Hammer-Lahav, and Mark Nottingham.  We also
+   thank the Anthony Family, the Bryan Family, Juanita Anthony and Zimmy
+   Bryan.
 
 
 Appendix B.  RELAX NG Compact Schema
@@ -1508,7 +1507,8 @@ Appendix B.  RELAX NG Compact Schema
 
 
 
-Bryan, et al.             Expires March 2, 2010                [Page 27]
+
+Bryan, et al.             Expires March 4, 2010                [Page 27]
 
 Internet-Draft    Metalink Download Description Format       August 2009
 
@@ -1564,7 +1564,7 @@ Internet-Draft    Metalink Download Description Format       August 2009
 
 
 
-Bryan, et al.             Expires March 2, 2010                [Page 28]
+Bryan, et al.             Expires March 4, 2010                [Page 28]
 
 Internet-Draft    Metalink Download Description Format       August 2009
 
@@ -1620,7 +1620,7 @@ Internet-Draft    Metalink Download Description Format       August 2009
 
 
 
-Bryan, et al.             Expires March 2, 2010                [Page 29]
+Bryan, et al.             Expires March 4, 2010                [Page 29]
 
 Internet-Draft    Metalink Download Description Format       August 2009
 
@@ -1676,7 +1676,7 @@ Internet-Draft    Metalink Download Description Format       August 2009
 
 
 
-Bryan, et al.             Expires March 2, 2010                [Page 30]
+Bryan, et al.             Expires March 4, 2010                [Page 30]
 
 Internet-Draft    Metalink Download Description Format       August 2009
 
@@ -1732,7 +1732,7 @@ Internet-Draft    Metalink Download Description Format       August 2009
 
 
 
-Bryan, et al.             Expires March 2, 2010                [Page 31]
+Bryan, et al.             Expires March 4, 2010                [Page 31]
 
 Internet-Draft    Metalink Download Description Format       August 2009
 
@@ -1788,7 +1788,7 @@ Appendix C.  Document History (to be removed by RFC Editor before
 
 
 
-Bryan, et al.             Expires March 2, 2010                [Page 32]
+Bryan, et al.             Expires March 4, 2010                [Page 32]
 
 Internet-Draft    Metalink Download Description Format       August 2009
 
@@ -1844,7 +1844,7 @@ Internet-Draft    Metalink Download Description Format       August 2009
 
 
 
-Bryan, et al.             Expires March 2, 2010                [Page 33]
+Bryan, et al.             Expires March 4, 2010                [Page 33]
 
 Internet-Draft    Metalink Download Description Format       August 2009
 
@@ -1900,7 +1900,7 @@ Index
 
 
 
-Bryan, et al.             Expires March 2, 2010                [Page 34]
+Bryan, et al.             Expires March 4, 2010                [Page 34]
 
 Internet-Draft    Metalink Download Description Format       August 2009
 
@@ -1956,7 +1956,7 @@ Internet-Draft    Metalink Download Description Format       August 2009
 
 
 
-Bryan, et al.             Expires March 2, 2010                [Page 35]
+Bryan, et al.             Expires March 4, 2010                [Page 35]
 
 Internet-Draft    Metalink Download Description Format       August 2009
 
@@ -2012,7 +2012,7 @@ Internet-Draft    Metalink Download Description Format       August 2009
 
 
 
-Bryan, et al.             Expires March 2, 2010                [Page 36]
+Bryan, et al.             Expires March 4, 2010                [Page 36]
 
 Internet-Draft    Metalink Download Description Format       August 2009
 
@@ -2068,7 +2068,7 @@ Authors' Addresses
 
 
 
-Bryan, et al.             Expires March 2, 2010                [Page 37]
+Bryan, et al.             Expires March 4, 2010                [Page 37]
 
 Internet-Draft    Metalink Download Description Format       August 2009
 
@@ -2124,5 +2124,5 @@ Internet-Draft    Metalink Download Description Format       August 2009
 
 
 
-Bryan, et al.             Expires March 2, 2010                [Page 38]
+Bryan, et al.             Expires March 4, 2010                [Page 38]
 
