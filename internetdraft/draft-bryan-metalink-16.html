@@ -144,10 +144,10 @@
 <tr><td class="header">Network Working Group</td><td class="header">A. Bryan, Ed.</td></tr>
 <tr><td class="header">Internet-Draft</td><td class="header">T. Tsujikawa</td></tr>
 <tr><td class="header">Intended status: Standards Track</td><td class="header">N. McNab</td></tr>
-<tr><td class="header">Expires: March 2, 2010</td><td class="header">Metalinker Project</td></tr>
+<tr><td class="header">Expires: March 4, 2010</td><td class="header">Metalinker Project</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">P. Poeml</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">Novell, Inc.</td></tr>
-<tr><td class="header">&nbsp;</td><td class="header">August 29, 2009</td></tr>
+<tr><td class="header">&nbsp;</td><td class="header">August 31, 2009</td></tr>
 </table></td></tr></table>
 <h1><br />The Metalink Download Description Format<br />draft-bryan-metalink-16</h1>
 
@@ -183,7 +183,7 @@ The list of current Internet-Drafts can be accessed at
 The list of Internet-Draft Shadow Directories can be accessed at
 <a href='http://www.ietf.org/shadow.html'>http://www.ietf.org/shadow.html</a>.</p>
 <p>
-This Internet-Draft will expire on March 2, 2010.</p>
+This Internet-Draft will expire on March 4, 2010.</p>
 
 <h3>Copyright Notice</h3>
 <p>
@@ -816,7 +816,7 @@ The &#34;length&#34; Attribute</h3>
 <p><a class='info' href='#element.pieces'>metalink:pieces<span> (</span><span class='info'>The &#34;metalink:pieces&#34; Element</span><span>)</span></a> elements MUST have a "length" attribute, which is an integer
         that describes the length of the pieces of the file in octets. The whole file is divided into non-overlapping pieces of this length,
         starting from the beginning of the file. That is, every piece should be the same size, apart from
-        the last piece which is the remainder. The last piece extends at most to the end of the file, and can therefore be shorter than the other pieces.
+        the last piece which is the remainder. The last piece extends to the end of the file, and can therefore be shorter than the other pieces.
 		
 </p>
 <a name="anchor12"></a><br /><hr />
@@ -926,7 +926,7 @@ metalinkHash =
 </p>
 <p>Metalink Documents can also contain hashes for individual pieces of a file.  <a class='info' href='#element.hash'>metalink:hash<span> (</span><span class='info'>The &#34;metalink:hash&#34; Element</span><span>)</span></a> elements that are inside a <a class='info' href='#element.pieces'>metalink:pieces<span> (</span><span class='info'>The &#34;metalink:pieces&#34; Element</span><span>)</span></a> container element have a hash for that specific piece or chunk of the file, and are of the same hash type as the <a class='info' href='#element.pieces'>metalink:pieces<span> (</span><span class='info'>The &#34;metalink:pieces&#34; Element</span><span>)</span></a> element they are contained in.
       <a class='info' href='#element.hash'>metalink:hash<span> (</span><span class='info'>The &#34;metalink:hash&#34; Element</span><span>)</span></a> elements without a "type" attribute MUST contain a hash for that specific piece or chunk of the file and MUST be listed in the
-      same order as the corresponding pieces appear in the file, starting at the beginning of the file. The size of the piece is equal to the value of the "length" attribute of the <a class='info' href='#element.pieces'>metalink:pieces<span> (</span><span class='info'>The &#34;metalink:pieces&#34; Element</span><span>)</span></a> element. The whole file is divided into non-overlapping pieces of this length, starting from the beginning of the file. That is, every piece should be the same size, apart from the last piece which is the remainder. The last piece extends at most to the end of the file, and can therefore be shorter than the other pieces.
+      same order as the corresponding pieces appear in the file, starting at the beginning of the file. The size of the piece is equal to the value of the "length" attribute of the <a class='info' href='#element.pieces'>metalink:pieces<span> (</span><span class='info'>The &#34;metalink:pieces&#34; Element</span><span>)</span></a> element. The whole file is divided into non-overlapping pieces of this length, starting from the beginning of the file. That is, every piece should be the same size, apart from the last piece which is the remainder. The last piece extends to the end of the file, and can therefore be shorter than the other pieces.
 
 
 	      </p>
@@ -1577,7 +1577,7 @@ Spoofing</h3>
 
 <p>There is potential for spoofing attacks where the attacker publishes
           Metalink Documents with false information. Malicious publishers might create Metalink Documents containing inaccurate information anywhere in the document.
-          At best, this could deceive unaware downloaders that they are downloading a malicious or worthless file. At worst, malicious publishers could attempt a distributed denial of service attack by inserting unrelated IRIs into Metalink Documents.
+          Unaware downloaders could be deceived into downloading a malicious or worthless file. Malicious publishers could attempt a distributed denial of service attack by inserting unrelated IRIs into Metalink Documents.
 </p>
 <a name="anchor27"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
@@ -1667,31 +1667,29 @@ Acknowledgements and Contributors</h3>
 
 <p>The layout and content of this document relies heavily on work pioneered in the Atom Syndication Format as specified in <a class='info' href='#RFC4287'>[RFC4287]<span> (</span><span class='info'>Nottingham, M. and R. Sayre, &ldquo;The Atom Syndication Format,&rdquo; December&nbsp;2005.</span><span>)</span></a>.
 </p>
-<p>The following people contributed to preliminary
-          versions of this document: Paul Burkhead, Kristian Weston, Darius Liktorius, Michael Burford,
-          Giorgio Maone, Manuel Subredu, A. Bram Neijt, Max Velasques, Manolo Valdes, Urs Wolfer,
-          Frederick Cheung, Nils Maier, Hampus Wessman, Hayden
-          Legendre, Danny Ayers, Nick Dominguez, Rene Leonhardt, Per Oyvind Karlsen, Gary Zellerbach, 
-		  James Clark, Daniel Stenberg, Matt Domsch, Chris Newman, Lisa Dusseault, 
-		  Ian Macfarlane, Dave Cridland, Julian Reschke, Barry Leiba, Uri Blumenthal, Paul Hoffman, Felix Sasaki, Matthias Fuchs,
-		  Eran Hammer-Lahav, and Mark Nottingham. 
-		  The content and concepts within are a product of the Metalink
+<p>The content and concepts within are a product of the Metalink
 	      community.
 </p>
 <p>The Metalink community has dozens of contributors who proposed ideas and wording for this
 	      document, or contributed to the evolution of Metalink, including:
 </p>
-<p>Nicolas Alvarez, Patrick Ruckstuhl, Sebastien Willemijns, Micah Cowan, Yazsoft, 
+<p>Paul Burkhead, Kristian Weston, Darius Liktorius, Michael Burford,
+          Giorgio Maone, Manuel Subredu, A. Bram Neijt, Max Velasques, Manolo Valdes, Urs Wolfer,
+          Frederick Cheung, Nils Maier, Hampus Wessman, Hayden
+          Legendre, Danny Ayers, Nick Dominguez, Rene Leonhardt, Per Oyvind Karlsen, Gary Zellerbach, 
+		  James Clark, Daniel Stenberg, Matt Domsch, Yazsoft, 
 		  KGet developers, FDM Team, Orbit Team, Arne Babenhauserheide, Mathias Berchtold, 
-          Xienzhenyu and TheWorld Browser Team, Xi Software, Bridget and Ethan Fletcher, Ruben Kerkhof, Agostino Russo,  
-          Salvatore and Robin Musumeci, Steve and Rachel Eshelman, 
-          Lucas Hewett, Ryan and Darren Cronin, Dave Winquist, Bob Denison,
+          Xienzhenyu and TheWorld Browser Team, Xi Software, Nicolas Alvarez, Patrick Ruckstuhl, Sebastien Willemijns, Micah Cowan, Bridget and Ethan Fletcher, Ruben Kerkhof, Agostino Russo,  
+          Salvatore Musumeci, Steve Eshelman, 
+          Lucas Hewett, Ryan Cronin, Dave Winquist, Bob Denison,
           Wes Shelton, Kees Cook, Josh Colbert, Steve Kleisath, Chad Neptune, Nick Carrabba, Chris
           Carrabba, Erin Solari, Derick Cordoba, Ryan Alexander, John Sowder, Sandra Amisano,
           Tom Mainville, Janie Wargo, Jason Hansen, Tim Bray, Dan Brickley, Markus Hofmann, 
           Dan Connolly, Tim Berners-Lee, Louis Suarez-Potts, Ross Smith, Jeff Covey, 
           Ed Lee, Shawn Wilsher, Mike Connor, Johan Svedberg, Dedric Carter, James Antill, Debi
-          Goulding, the Anthony Family, the Bryan Family, Juanita Anthony and Zimmy Bryan.
+          Goulding, Chris Newman, Lisa Dusseault, 
+		  Ian Macfarlane, Dave Cridland, Julian Reschke, Barry Leiba, Uri Blumenthal, Paul Hoffman, Felix Sasaki, Matthias Fuchs,
+		  Eran Hammer-Lahav, and Mark Nottingham. We also thank the Anthony Family, the Bryan Family, Juanita Anthony and Zimmy Bryan.
 </p>
 <a name="schema"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
