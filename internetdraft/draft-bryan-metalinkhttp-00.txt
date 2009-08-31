@@ -1,0 +1,560 @@
+
+
+
+Network Working Group                                      A. Bryan, Ed.
+Internet-Draft                                        Metalinker Project
+Intended status: Standards Track                         August 28, 2009
+Expires: March 1, 2010
+
+
+                        Metalink in HTTP Headers
+                      draft-bryan-metalinkhttp-00
+
+Status of this Memo
+
+   This Internet-Draft is submitted to IETF in full conformance with the
+   provisions of BCP 78 and BCP 79.  This document may contain material
+   from IETF Documents or IETF Contributions published or made publicly
+   available before November 10, 2008.  The person(s) controlling the
+   copyright in some of this material may not have granted the IETF
+   Trust the right to allow modifications of such material outside the
+   IETF Standards Process.  Without obtaining an adequate license from
+   the person(s) controlling the copyright in such materials, this
+   document may not be modified outside the IETF Standards Process, and
+   derivative works of it may not be created outside the IETF Standards
+   Process, except to format it for publication as an RFC or to
+   translate it into languages other than English.
+
+   Internet-Drafts are working documents of the Internet Engineering
+   Task Force (IETF), its areas, and its working groups.  Note that
+   other groups may also distribute working documents as Internet-
+   Drafts.
+
+   Internet-Drafts are draft documents valid for a maximum of six months
+   and may be updated, replaced, or obsoleted by other documents at any
+   time.  It is inappropriate to use Internet-Drafts as reference
+   material or to cite them other than as "work in progress."
+
+   The list of current Internet-Drafts can be accessed at
+   http://www.ietf.org/ietf/1id-abstracts.txt.
+
+   The list of Internet-Draft Shadow Directories can be accessed at
+   http://www.ietf.org/shadow.html.
+
+   This Internet-Draft will expire on March 1, 2010.
+
+Copyright Notice
+
+   Copyright (c) 2009 IETF Trust and the persons identified as the
+   document authors.  All rights reserved.
+
+   This document is subject to BCP 78 and the IETF Trust's Legal
+
+
+
+Bryan                     Expires March 1, 2010                 [Page 1]
+
+Internet-Draft          Metalink in HTTP Headers             August 2009
+
+
+   Provisions Relating to IETF Documents in effect on the date of
+   publication of this document (http://trustee.ietf.org/license-info).
+   Please review these documents carefully, as they describe your rights
+   and restrictions with respect to this document.
+
+Abstract
+
+   This document specifies Metalink in HTTP Headers, an alternative
+   representation, instead of the usual XML-based download description
+   format.  Metalink describes alternate download locations (mirrors),
+   Peer-to-Peer information, checksums, digital signatures, and other
+   information.  Clients can transparently use this information to
+   reliably transfer files.
+
+
+Table of Contents
+
+   1.  Introduction . . . . . . . . . . . . . . . . . . . . . . . . .  3
+     1.1.  Examples . . . . . . . . . . . . . . . . . . . . . . . . .  4
+     1.2.  Notational Conventions . . . . . . . . . . . . . . . . . .  4
+   2.  Requirements . . . . . . . . . . . . . . . . . . . . . . . . .  4
+   3.  Mirrors / Alternate Download Locations . . . . . . . . . . . .  5
+   4.  Peer-to-Peer . . . . . . . . . . . . . . . . . . . . . . . . .  5
+   5.  OpenPGP Signatures . . . . . . . . . . . . . . . . . . . . . .  5
+   6.  Checksums  . . . . . . . . . . . . . . . . . . . . . . . . . .  5
+   7.  Client / Server Multi-source Download Interaction  . . . . . .  6
+   8.  Security Considerations  . . . . . . . . . . . . . . . . . . .  7
+     8.1.  URIs and IRIs  . . . . . . . . . . . . . . . . . . . . . .  7
+     8.2.  Spoofing . . . . . . . . . . . . . . . . . . . . . . . . .  7
+     8.3.  Cryptographic Hashes . . . . . . . . . . . . . . . . . . .  7
+     8.4.  Signing  . . . . . . . . . . . . . . . . . . . . . . . . .  8
+   9.  References . . . . . . . . . . . . . . . . . . . . . . . . . .  8
+     9.1.  Normative References . . . . . . . . . . . . . . . . . . .  8
+     9.2.  Informative References . . . . . . . . . . . . . . . . . .  8
+   Appendix A.  Acknowledgements and Contributors . . . . . . . . . .  9
+   Appendix B.  What's different...?! (to be removed by RFC
+                Editor before publication)  . . . . . . . . . . . . .  9
+   Appendix C.  Document History (to be removed by RFC Editor
+                before publication) . . . . . . . . . . . . . . . . .  9
+   Author's Address . . . . . . . . . . . . . . . . . . . . . . . . . 10
+
+
+
+
+
+
+
+
+
+
+
+Bryan                     Expires March 1, 2010                 [Page 2]
+
+Internet-Draft          Metalink in HTTP Headers             August 2009
+
+
+1.  Introduction
+
+   Metalink in HTTP Headers is an alternative to Metalink, usually
+   represented in an XML-based document format [draft-bryan-metalink].
+   Metalink in HTTP Headers attempts to duplicate as much functionality
+   of the Metalink XML format with existing standards such as Web
+   Linking [draft-nottingham-http-link-header] and Instance Digests in
+   HTTP [RFC3230].  Metalinks list information about a file to be
+   downloaded.  This includes lists of alternate URIs (mirrors), Peer-
+   to-Peer information, checksums, and digital signatures.
+
+   Identical copies of a file are frequently accessible in multiple
+   locations on the Internet over a variety of protocols (FTP, HTTP, and
+   Peer-to-Peer).  In some cases, Users are shown a list of these
+   multiple download locations (mirrors) and must manually select a
+   single one on the basis of geographical location, priority, or
+   bandwidth.  This distributes the load across multiple servers.  At
+   times, individual servers can be slow, outdated, or unreachable, but
+   this can not be determined until the download has been initiated.
+   This can lead to the user canceling the download and needing to
+   restart it.  During downloads, errors in transmission can corrupt the
+   file.  There are no easy ways to repair these files.  For large
+   downloads this can be extremely troublesome.  Any of the number of
+   problems that can occur during a download lead to frustration on the
+   part of users.
+
+   All the information about a download, including mirrors, checksums,
+   digital signatures, and more can be transferred in coordinated HTTP
+   Headers.  This Metalink transfers the knowledge of the download
+   server (and mirror database) to the client.  Clients can fallback to
+   alternate mirrors if the current one has an issue.  With this
+   knowledge, the client is enabled to work its way to a successful
+   download even under adverse circumstances.  All this is done
+   transparently to the user and the download is much more reliable and
+   efficient.  In contrast, a traditional HTTP redirect to a mirror
+   conveys only extremely minimal information - one link to one server,
+   and there is no provision in the HTTP protocol to handle failures.
+   Other features that some clients provide include multi-source
+   downloads, where chunks of a file are downloaded from multiple
+   mirrors (and optionally, Peer-to-Peer) simultaneously, which
+   frequently results in a faster download.
+
+   [[ Discussion of this draft should take place on
+   discuss@apps.ietf.org or the Metalink discussion mailing list located
+   at metalink-discussion@googlegroups.com.  To join the list, visit
+   http://groups.google.com/group/metalink-discussion . ]]
+
+
+
+
+
+Bryan                     Expires March 1, 2010                 [Page 3]
+
+Internet-Draft          Metalink in HTTP Headers             August 2009
+
+
+1.1.  Examples
+
+   A brief Metalink server response with checksum, mirrors, .torrent,
+   and OpenPGP signature:
+
+   Link: <http://www2.example.com/example.ext>; rel="alternate";
+   Link: <ftp://ftp.example.com/example.ext>; rel="alternate";
+   Link: <http://example.com/example.ext.torrent>; rel="describedby";
+   type="torrent";
+   Link: <http://example.com/example.ext.asc>; rel="describedby";
+   type="application/pgp-signature";
+   Digest: SHA=thvDyvhfIqlvFe+A9MYgxAfm1q5=
+
+1.2.  Notational Conventions
+
+   This specification describes conformance of Metalink in HTTP Headers.
+
+   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+   document are to be interpreted as described in BCP 14, [RFC2119], as
+   scoped to those conformance targets.
+
+
+2.  Requirements
+
+   In this context, "Metalink" refers to Metalink in HTTP Headers as
+   described in this document.  "Metalink XML" refers to the XML format
+   described in [draft-bryan-metalink].
+
+   Metalink servers are HTTP servers that MUST have lists of mirrors and
+   use the Link header [draft-nottingham-http-link-header] to indicate
+   them.  They also MUST provide checksums of files via Instance Digests
+   in HTTP [RFC3230].
+
+   Metalink clients use the mirrors provided by a Metalink server with
+   Link header [draft-nottingham-http-link-header].  Metalink clients
+   MUST support HTTP and MAY support FTP, BitTorrent, or other download
+   methods.  Metalink clients MUST switch downloads from one mirror to
+   another if the one mirror becomes unreachable.  Metalink clients are
+   RECOMMENDED to support multi-source downloads, where chunks of a file
+   are downloaded from multiple mirrors simultaneously (and optionally,
+   Peer-to-Peer).  Metalink clients MUST support Instance Digests in
+   HTTP [RFC3230] by requesting and verifying checksums.
+
+   Mirrors are servers that mirror another server.  That is, they
+   provide identical copies of (at least some) files that are also on
+   the mirrored server.  Mirror servers are typically FTP or HTTP
+   servers.  Mirror servers MAY be Metalink servers.
+
+
+
+Bryan                     Expires March 1, 2010                 [Page 4]
+
+Internet-Draft          Metalink in HTTP Headers             August 2009
+
+
+3.  Mirrors / Alternate Download Locations
+
+   Mirrors are specified with the Link header
+   [draft-nottingham-http-link-header] and a relation type of
+   "alternate".
+
+   A brief Metalink server response with two mirrors only:
+
+   Link: <http://www2.example.com/example.ext>; rel="alternate";
+   Link: <ftp://ftp.example.com/example.ext>; rel="alternate";
+
+
+4.  Peer-to-Peer
+
+   Ways to download a file over Peer-to-Peer networks are specified with
+   the Link header [draft-nottingham-http-link-header] and a relation
+   type of "describedby" and a type parameter of "torrent" for .torrent
+   [BITTORRENT] files.
+
+   A brief Metalink server response with .torrent only:
+
+   Link: <http://example.com/example.ext.torrent>; rel="describedby";
+   type="torrent";
+
+
+5.  OpenPGP Signatures
+
+   OpenPGP signatures are specified with the Link header
+   [draft-nottingham-http-link-header] and a relation type of
+   "describedby" and a type parameter of "application/pgp-signature".
+
+   A brief Metalink server response with OpenPGP signature only:
+
+   Link: <http://example.com/example.ext.asc>; rel="describedby";
+   type="application/pgp-signature";
+
+
+6.  Checksums
+
+   Instance Digests in HTTP [RFC3230] are used to request and retrieve
+   whole file checksums.
+
+   A brief Metalink client request that prefers SHA-1 checksums over
+   MD5:
+
+   Want-Digest: MD5;q=0.3, SHA;q=0.8
+
+
+
+
+
+Bryan                     Expires March 1, 2010                 [Page 5]
+
+Internet-Draft          Metalink in HTTP Headers             August 2009
+
+
+   A brief Metalink server response with checksum:
+
+   Digest: SHA=thvDyvhfIqlvFe+A9MYgxAfm1q5=
+
+   [[Some publishers will probably desire stronger hashes.  How will we
+   provide chunk checksums?  Content-MD5?]]
+
+
+7.  Client / Server Multi-source Download Interaction
+
+   Metalink clients begin a download with a standard HTTP [RFC2616] GET
+   request to the Metalink server.  Here the client prefers SHA-1
+   checksums over MD5:
+
+
+   GET /distribution/example.ext HTTP/1.1
+   Host: www.example.com
+   Want-Digest: MD5;q=0.3, SHA;q=0.8
+
+   The Metalink server responds with this:
+
+   HTTP/1.1 200 OK
+   Accept-Ranges: bytes
+   Content-Length: 14867603
+   Content-Type: application/x-cd-image
+   Link: <http://www2.example.com/example.ext>; rel="alternate";
+   Link: <ftp://ftp.example.com/example.ext>; rel="alternate";
+   Link: <http://example.com/example.ext.torrent>; rel="describedby";
+   type="torrent";
+   Link: <http://example.com/example.ext.asc>; rel="describedby";
+   type="application/pgp-signature";
+   Digest: SHA=thvDyvhfIqlvFe+A9MYgxAfm1q5=
+
+   The Metalink client then contacts the other mirrors requesting a
+   portion of the file with the "Range" header field, and using the
+   location of the original GET request in the "Referer" header field.
+   One of the requests to a mirror:
+
+   GET /example.ext HTTP/1.1
+   Host: www2.example.com
+   Range: bytes=7433802-
+   Referer: http://www.example.com/distribution/example.ext
+
+   The mirror servers respond with a 206 Partial Content HTTP status
+   code and appropriate "Content-Length" and "Content Range" header
+   fields.  The response, from a mirror, to the request above:
+
+
+
+
+
+Bryan                     Expires March 1, 2010                 [Page 6]
+
+Internet-Draft          Metalink in HTTP Headers             August 2009
+
+
+   HTTP/1.1 206 Partial Content
+   Accept-Ranges: bytes
+   Content-Length: 7433801
+   Content-Range: bytes 7433802-14867602/14867603
+
+   [[Content-MD5 for chunk checksums?  That could lead to many random
+   size chunk checksum requests.  Use consistent chunk sizes?  Could we
+   get all chunk checksums from the referring Metalink server with
+   Content-MD5?  Otherwise, this could also be a lot to ask on a mirror
+   network if you don't control it and most servers might not have this
+   feature enabled.]]
+
+   Once the download has completed, the Metalink client should verify
+   the checksum of the file.
+
+
+8.  Security Considerations
+
+8.1.  URIs and IRIs
+
+   Metalink clients handle URIs and IRIs.  See Section 7 of [RFC3986]
+   and Section 8 of [RFC3987] for security considerations related to
+   their handling and use.
+
+8.2.  Spoofing
+
+   There is potential for spoofing attacks where the attacker publishes
+   Metalinks with false information.  In that case, this could deceive
+   unaware downloaders that they are downloading a malicious or
+   worthless file.  Also, malicious publishers could attempt a
+   distributed denial of service attack by inserting unrelated IRIs into
+   Metalinks.
+
+8.3.  Cryptographic Hashes
+
+   Currently, some of the hash types defined in Instance Digests in HTTP
+   [RFC3230] and the IANA registry named "Hash Function Textual Names"
+   are considered insecure.  These include the whole Message Digest
+   family of algorithms which are not suitable for cryptographically
+   strong verification.  Malicious people could provide files that
+   appear to be identical to another file because of a collision, i.e.
+   the weak cryptographic hashes of the intended file and a substituted
+   malicious file could match.
+
+   If a Metalink contains hashes as described in Section 6, it SHOULD
+   include "sha" which is SHA-1, as specified in [RFC3174].  It MAY also
+   include other hashes.
+
+
+
+
+Bryan                     Expires March 1, 2010                 [Page 7]
+
+Internet-Draft          Metalink in HTTP Headers             August 2009
+
+
+8.4.  Signing
+
+   Metalinks should include digital signatures, as described in
+   Section 5.
+
+   Digital signatures provide authentication, message integrity, and
+   non-repudiation with proof of origin.
+
+
+9.  References
+
+9.1.  Normative References
+
+   [BITTORRENT]
+              Cohen, B., "The BitTorrent Protocol Specification",
+              BITTORRENT 11031, February 2008,
+              <http://www.bittorrent.org/beps/bep_0003.html>.
+
+   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
+              Requirement Levels", BCP 14, RFC 2119, March 1997.
+
+   [RFC2616]  Fielding, R., Gettys, J., Mogul, J., Frystyk, H.,
+              Masinter, L., Leach, P., and T. Berners-Lee, "Hypertext
+              Transfer Protocol -- HTTP/1.1", RFC 2616, June 1999.
+
+   [RFC3174]  Eastlake, D. and P. Jones, "US Secure Hash Algorithm 1
+              (SHA1)", RFC 3174, September 2001.
+
+   [RFC3230]  Mogul, J. and A. Van Hoff, "Instance Digests in HTTP",
+              RFC 3230, January 2002.
+
+   [RFC3986]  Berners-Lee, T., Fielding, R., and L. Masinter, "Uniform
+              Resource Identifier (URI): Generic Syntax", STD 66,
+              RFC 3986, January 2005.
+
+   [RFC3987]  Duerst, M. and M. Suignard, "Internationalized Resource
+              Identifiers (IRIs)", RFC 3987, January 2005.
+
+   [draft-nottingham-http-link-header]
+              Nottingham, M., "Web Linking",
+              draft-nottingham-http-link-header-06 (work in progress),
+              July 2009.
+
+9.2.  Informative References
+
+   [draft-bryan-metalink]
+              Bryan, A., Ed., Tsujikawa, T., McNab, N., and P. Poeml,
+              "The Metalink Download Description Format",
+
+
+
+Bryan                     Expires March 1, 2010                 [Page 8]
+
+Internet-Draft          Metalink in HTTP Headers             August 2009
+
+
+              draft-bryan-metalink-15 (work in progress), August 2009.
+
+
+Appendix A.  Acknowledgements and Contributors
+
+   Thanks!
+
+
+Appendix B.  What's different...?! (to be removed by RFC Editor before
+             publication)
+
+   ...or missing, compared to the Metalink XML format
+   [draft-bryan-metalink] :
+
+   o  (+) Reuses existing standards without defining much new stuff.
+      It's more of a collection/coordinated feature set.
+   o  (+) No XML dependency.
+   o  (-?)  Tied to HTTP, not as generic.  FTP/P2P clients won't be
+      using it unless they also support HTTP, unlike Metalink XML.
+   o  (---) Requires changes to server software.
+   o  (-?)  Could require some coordination of all mirror servers for
+      all features, which may be difficult or impossible unless you are
+      in control of all servers on the mirror network.
+   o  (-) Metalink XML could be created by user (or server, but server
+      component/changes not required).
+   o  (-) Also, Metalink XML files are easily mirrored on all servers.
+      Even if usage in that case is not as transparent, it still gives
+      access to users at all mirrors to all download information with no
+      changes needed to the server.
+   o  (-) Not portable/archivable/emailable.  Not as easy for search
+      engines to index?
+   o  (-) No way to show mirror/p2p priority or geographical location
+      (yet).
+   o  (---) No chunk checksums/download repair (yet).
+   o  (-) No checksums besides MD5/SHA-1 (yet).
+   o  (-) Not as rich metadata.
+   o  (-) Not able to add multiple files to a download queue or create
+      directory structure.
+
+
+Appendix C.  Document History (to be removed by RFC Editor before
+             publication)
+
+   [[ to be removed by the RFC editor before publication as an RFC. ]]
+
+   Known issues concerning this draft:
+
+
+
+
+
+Bryan                     Expires March 1, 2010                 [Page 9]
+
+Internet-Draft          Metalink in HTTP Headers             August 2009
+
+
+   o  None.
+
+   -00
+   o  Initial draft.
+
+
+Author's Address
+
+   Anthony Bryan (editor)
+   Metalinker Project
+
+   Email: anthonybryan@gmail.com
+   URI:   http://www.metalinker.org
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Bryan                     Expires March 1, 2010                [Page 10]
+
