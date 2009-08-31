@@ -1,0 +1,592 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en"><head><title>Metalink in HTTP Headers</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="description" content="Metalink in HTTP Headers">
+<meta name="generator" content="xml2rfc v1.34pre3 (http://xml.resource.org/)">
+<style type='text/css'><!--
+        body {
+                font-family: verdana, charcoal, helvetica, arial, sans-serif;
+                font-size: small; color: #000; background-color: #FFF;
+                margin: 2em;
+        }
+        h1, h2, h3, h4, h5, h6 {
+                font-family: helvetica, monaco, "MS Sans Serif", arial, sans-serif;
+                font-weight: bold; font-style: normal;
+        }
+        h1 { color: #900; background-color: transparent; text-align: right; }
+        h3 { color: #333; background-color: transparent; }
+
+        td.RFCbug {
+                font-size: x-small; text-decoration: none;
+                width: 30px; height: 30px; padding-top: 2px;
+                text-align: justify; vertical-align: middle;
+                background-color: #000;
+        }
+        td.RFCbug span.RFC {
+                font-family: monaco, charcoal, geneva, "MS Sans Serif", helvetica, verdana, sans-serif;
+                font-weight: bold; color: #666;
+        }
+        td.RFCbug span.hotText {
+                font-family: charcoal, monaco, geneva, "MS Sans Serif", helvetica, verdana, sans-serif;
+                font-weight: normal; text-align: center; color: #FFF;
+        }
+
+        table.TOCbug { width: 30px; height: 15px; }
+        td.TOCbug {
+                text-align: center; width: 30px; height: 15px;
+                color: #FFF; background-color: #900;
+        }
+        td.TOCbug a {
+                font-family: monaco, charcoal, geneva, "MS Sans Serif", helvetica, sans-serif;
+                font-weight: bold; font-size: x-small; text-decoration: none;
+                color: #FFF; background-color: transparent;
+        }
+
+        td.header {
+                font-family: arial, helvetica, sans-serif; font-size: x-small;
+                vertical-align: top; width: 33%;
+                color: #FFF; background-color: #666;
+        }
+        td.author { font-weight: bold; font-size: x-small; margin-left: 4em; }
+        td.author-text { font-size: x-small; }
+
+        /* info code from SantaKlauss at http://www.madaboutstyle.com/tooltip2.html */
+        a.info {
+                /* This is the key. */
+                position: relative;
+                z-index: 24;
+                text-decoration: none;
+        }
+        a.info:hover {
+                z-index: 25;
+                color: #FFF; background-color: #900;
+        }
+        a.info span { display: none; }
+        a.info:hover span.info {
+                /* The span will display just on :hover state. */
+                display: block;
+                position: absolute;
+                font-size: smaller;
+                top: 2em; left: -5em; width: 15em;
+                padding: 2px; border: 1px solid #333;
+                color: #900; background-color: #EEE;
+                text-align: left;
+        }
+
+        a { font-weight: bold; }
+        a:link    { color: #900; background-color: transparent; }
+        a:visited { color: #633; background-color: transparent; }
+        a:active  { color: #633; background-color: transparent; }
+
+        p { margin-left: 2em; margin-right: 2em; }
+        p.copyright { font-size: x-small; }
+        p.toc { font-size: small; font-weight: bold; margin-left: 3em; }
+        table.toc { margin: 0 0 0 3em; padding: 0; border: 0; vertical-align: text-top; }
+        td.toc { font-size: small; font-weight: bold; vertical-align: text-top; }
+
+        ol.text { margin-left: 2em; margin-right: 2em; }
+        ul.text { margin-left: 2em; margin-right: 2em; }
+        li      { margin-left: 3em; }
+
+        /* RFC-2629 <spanx>s and <artwork>s. */
+        em     { font-style: italic; }
+        strong { font-weight: bold; }
+        dfn    { font-weight: bold; font-style: normal; }
+        cite   { font-weight: normal; font-style: normal; }
+        tt     { color: #036; }
+        tt, pre, pre dfn, pre em, pre cite, pre span {
+                font-family: "Courier New", Courier, monospace; font-size: small;
+        }
+        pre {
+                text-align: left; padding: 4px;
+                color: #000; background-color: #CCC;
+        }
+        pre dfn  { color: #900; }
+        pre em   { color: #66F; background-color: #FFC; font-weight: normal; }
+        pre .key { color: #33C; font-weight: bold; }
+        pre .id  { color: #900; }
+        pre .str { color: #000; background-color: #CFF; }
+        pre .val { color: #066; }
+        pre .rep { color: #909; }
+        pre .oth { color: #000; background-color: #FCF; }
+        pre .err { background-color: #FCC; }
+
+        /* RFC-2629 <texttable>s. */
+        table.all, table.full, table.headers, table.none {
+                font-size: small; text-align: center; border-width: 2px;
+                vertical-align: top; border-collapse: collapse;
+        }
+        table.all, table.full { border-style: solid; border-color: black; }
+        table.headers, table.none { border-style: none; }
+        th {
+                font-weight: bold; border-color: black;
+                border-width: 2px 2px 3px 2px;
+        }
+        table.all th, table.full th { border-style: solid; }
+        table.headers th { border-style: none none solid none; }
+        table.none th { border-style: none; }
+        table.all td {
+                border-style: solid; border-color: #333;
+                border-width: 1px 2px;
+        }
+        table.full td, table.headers td, table.none td { border-style: none; }
+
+        hr { height: 1px; }
+        hr.insert {
+                width: 80%; border-style: none; border-width: 0;
+                color: #CCC; background-color: #CCC;
+        }
+--></style>
+</head>
+<body>
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<table summary="layout" width="66%" border="0" cellpadding="0" cellspacing="0"><tr><td><table summary="layout" width="100%" border="0" cellpadding="2" cellspacing="1">
+<tr><td class="header">Network Working Group</td><td class="header">A. Bryan, Ed.</td></tr>
+<tr><td class="header">Internet-Draft</td><td class="header">Metalinker Project</td></tr>
+<tr><td class="header">Intended status: Standards Track</td><td class="header">August 28, 2009</td></tr>
+<tr><td class="header">Expires: March 1, 2010</td><td class="header">&nbsp;</td></tr>
+</table></td></tr></table>
+<h1><br />Metalink in HTTP Headers<br />draft-bryan-metalinkhttp-00</h1>
+
+<h3>Status of this Memo</h3>
+<p>
+This Internet-Draft is submitted to IETF in full
+conformance with the provisions of BCP&nbsp;78 and BCP&nbsp;79.
+This document may contain material from IETF Documents or IETF
+Contributions published or made publicly available before November
+10, 2008. The person(s) controlling the copyright in some of this
+material may not have granted the IETF Trust the right to allow
+modifications of such material outside the IETF Standards Process.
+Without obtaining an adequate license from the person(s) controlling
+the copyright in such materials, this document may not be modified
+outside the IETF Standards Process, and derivative works of it may
+not be created outside the IETF Standards Process, except to format
+it for publication as an RFC or to translate it into languages other
+than English.</p>
+<p>
+Internet-Drafts are working documents of the Internet Engineering
+Task Force (IETF), its areas, and its working groups.
+Note that other groups may also distribute working documents as
+Internet-Drafts.</p>
+<p>
+Internet-Drafts are draft documents valid for a maximum of six months
+and may be updated, replaced, or obsoleted by other documents at any time.
+It is inappropriate to use Internet-Drafts as reference material or to cite
+them other than as &ldquo;work in progress.&rdquo;</p>
+<p>
+The list of current Internet-Drafts can be accessed at
+<a href='http://www.ietf.org/ietf/1id-abstracts.txt'>http://www.ietf.org/ietf/1id-abstracts.txt</a>.</p>
+<p>
+The list of Internet-Draft Shadow Directories can be accessed at
+<a href='http://www.ietf.org/shadow.html'>http://www.ietf.org/shadow.html</a>.</p>
+<p>
+This Internet-Draft will expire on March 1, 2010.</p>
+
+<h3>Copyright Notice</h3>
+<p>
+Copyright (c) 2009 IETF Trust and the persons identified as the
+document authors.  All rights reserved.</p>
+<p>
+This document is subject to BCP 78 and the IETF Trust's Legal
+Provisions Relating to IETF Documents in effect on the date of
+publication of this document (http://trustee.ietf.org/license-info).
+Please review these documents carefully, as they describe your
+rights and restrictions with respect to this document.</p>
+
+<h3>Abstract</h3>
+
+<p>This document specifies Metalink in HTTP Headers, an alternative representation, instead of the usual XML-based download description format. Metalink describes alternate download locations (mirrors), Peer-to-Peer information, checksums, digital signatures, and other information. Clients can transparently use this information to reliably transfer files.
+</p><a name="toc"></a><br /><hr />
+<h3>Table of Contents</h3>
+<p class="toc">
+<a href="#anchor1">1.</a>&nbsp;
+Introduction<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor2">1.1.</a>&nbsp;
+Examples<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor3">1.2.</a>&nbsp;
+Notational Conventions<br />
+<a href="#req">2.</a>&nbsp;
+Requirements<br />
+<a href="#alternatedl">3.</a>&nbsp;
+Mirrors / Alternate Download Locations<br />
+<a href="#p2p">4.</a>&nbsp;
+Peer-to-Peer<br />
+<a href="#openpgp">5.</a>&nbsp;
+OpenPGP Signatures<br />
+<a href="#checksums">6.</a>&nbsp;
+Checksums<br />
+<a href="#clientserver">7.</a>&nbsp;
+Client / Server Multi-source Download Interaction<br />
+<a href="#anchor4">8.</a>&nbsp;
+Security Considerations<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor5">8.1.</a>&nbsp;
+URIs and IRIs<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor6">8.2.</a>&nbsp;
+Spoofing<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor7">8.3.</a>&nbsp;
+Cryptographic Hashes<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor8">8.4.</a>&nbsp;
+Signing<br />
+<a href="#rfc.references1">9.</a>&nbsp;
+References<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#rfc.references1">9.1.</a>&nbsp;
+Normative References<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#rfc.references2">9.2.</a>&nbsp;
+Informative References<br />
+<a href="#anchor11">Appendix&nbsp;A.</a>&nbsp;
+Acknowledgements and Contributors<br />
+<a href="#anchor12">Appendix&nbsp;B.</a>&nbsp;
+What's different...?! (to be removed by RFC Editor before publication)<br />
+<a href="#anchor13">Appendix&nbsp;C.</a>&nbsp;
+Document History (to be removed by RFC Editor before publication)<br />
+<a href="#rfc.authors">&#167;</a>&nbsp;
+Author's Address<br />
+</p>
+<br clear="all" />
+
+<a name="anchor1"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.1"></a><h3>1.&nbsp;
+Introduction</h3>
+
+<p>Metalink in HTTP Headers is an alternative to Metalink, usually represented in an XML-based document format <a class='info' href='#draft-bryan-metalink'>[draft&#8209;bryan&#8209;metalink]<span> (</span><span class='info'>Bryan, A., Ed., Tsujikawa, T., McNab, N., and P. Poeml, &ldquo;The Metalink Download Description Format,&rdquo; August&nbsp;2009.</span><span>)</span></a>. Metalink in HTTP Headers attempts to duplicate as much functionality of the Metalink XML format with existing standards such as Web Linking <a class='info' href='#draft-nottingham-http-link-header'>[draft&#8209;nottingham&#8209;http&#8209;link&#8209;header]<span> (</span><span class='info'>Nottingham, M., &ldquo;Web Linking,&rdquo; July&nbsp;2009.</span><span>)</span></a> and Instance Digests in HTTP <a class='info' href='#RFC3230'>[RFC3230]<span> (</span><span class='info'>Mogul, J. and A. Van Hoff, &ldquo;Instance Digests in HTTP,&rdquo; January&nbsp;2002.</span><span>)</span></a>. Metalinks list
+      information about a file to be downloaded. This includes lists of alternate URIs (mirrors), Peer-to-Peer information, checksums, and digital signatures.
+</p>
+<p>Identical copies of a file are frequently accessible in multiple locations on the Internet over a variety of protocols (FTP, HTTP, and Peer-to-Peer).
+      In some cases, Users are shown a list of these multiple download locations (mirrors) and must manually select a single one on the basis of geographical location, priority, or bandwidth.
+      This distributes the load across multiple servers. At times, individual servers can be slow, outdated, or unreachable, but this can not be determined until the download has been initiated.
+      This can lead to the user canceling the download and needing to restart it. During downloads, errors in transmission can corrupt the file.
+      There are no easy ways to repair these files. For large downloads this can be extremely troublesome.
+      Any of the number of problems that can occur during a download lead to frustration on the part of users.
+</p>
+<p>All the information about a download, including mirrors, checksums, digital signatures, and more can be transferred in coordinated HTTP Headers.
+      This Metalink transfers the knowledge of the download server (and mirror database) to the client. Clients can fallback to alternate mirrors if the current one has an issue. With this knowledge, the client is enabled to work its way to a successful download even under adverse circumstances. 
+      All this is done transparently to the user and the download is much more reliable and efficient.
+      In contrast, a traditional HTTP redirect to a mirror conveys only extremely minimal information - one link to one server, and there is no provision in the HTTP protocol to handle failures.
+      Other features that some clients provide include multi-source downloads, where chunks of a file are downloaded from multiple mirrors (and optionally, Peer-to-Peer) simultaneously, which frequently results in a faster download.
+</p>
+<p>[[ Discussion of this draft should take place on discuss@apps.ietf.org or the Metalink discussion mailing list
+   located at metalink-discussion@googlegroups.com. To join the list, visit
+   http://groups.google.com/group/metalink-discussion . ]]
+</p>
+<a name="anchor2"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.1.1"></a><h3>1.1.&nbsp;
+Examples</h3>
+
+<p>
+<p>A brief Metalink server response with checksum, mirrors, .torrent, and OpenPGP signature:
+</p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
+Link: &lt;http://www2.example.com/example.ext&gt;; rel="alternate";
+Link: &lt;ftp://ftp.example.com/example.ext&gt;; rel="alternate";
+Link: &lt;http://example.com/example.ext.torrent&gt;; rel="describedby";
+type="torrent";
+Link: &lt;http://example.com/example.ext.asc&gt;; rel="describedby";
+type="application/pgp-signature";
+Digest: SHA=thvDyvhfIqlvFe+A9MYgxAfm1q5=
+</pre></div>
+
+<a name="anchor3"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.1.2"></a><h3>1.2.&nbsp;
+Notational Conventions</h3>
+
+<p>This specification describes conformance of Metalink in HTTP Headers.
+</p>
+<p>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+	"SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+	document are to be interpreted as described in BCP 14, <a class='info' href='#RFC2119'>[RFC2119]<span> (</span><span class='info'>Bradner, S., &ldquo;Key words for use in RFCs to Indicate Requirement Levels,&rdquo; March&nbsp;1997.</span><span>)</span></a>, as scoped to those conformance targets.
+</p>
+<a name="req"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.2"></a><h3>2.&nbsp;
+Requirements</h3>
+
+<p>In this context, "Metalink" refers to Metalink in HTTP Headers as described in this document. "Metalink XML" refers to the XML format described in <a class='info' href='#draft-bryan-metalink'>[draft&#8209;bryan&#8209;metalink]<span> (</span><span class='info'>Bryan, A., Ed., Tsujikawa, T., McNab, N., and P. Poeml, &ldquo;The Metalink Download Description Format,&rdquo; August&nbsp;2009.</span><span>)</span></a>.
+</p>
+<p>Metalink servers are HTTP servers that MUST have lists of mirrors and use the Link header <a class='info' href='#draft-nottingham-http-link-header'>[draft&#8209;nottingham&#8209;http&#8209;link&#8209;header]<span> (</span><span class='info'>Nottingham, M., &ldquo;Web Linking,&rdquo; July&nbsp;2009.</span><span>)</span></a> to indicate them. They also MUST
+	  provide checksums of files via Instance Digests in HTTP <a class='info' href='#RFC3230'>[RFC3230]<span> (</span><span class='info'>Mogul, J. and A. Van Hoff, &ldquo;Instance Digests in HTTP,&rdquo; January&nbsp;2002.</span><span>)</span></a>.
+</p>
+<p>Metalink clients use the mirrors provided by a Metalink server with Link header <a class='info' href='#draft-nottingham-http-link-header'>[draft&#8209;nottingham&#8209;http&#8209;link&#8209;header]<span> (</span><span class='info'>Nottingham, M., &ldquo;Web Linking,&rdquo; July&nbsp;2009.</span><span>)</span></a>. Metalink clients MUST support HTTP and MAY support FTP, BitTorrent, or other download methods. Metalink clients MUST switch downloads from one mirror to another if the one mirror becomes unreachable. Metalink clients are RECOMMENDED to support multi-source downloads, where chunks of a file are downloaded from multiple mirrors simultaneously (and optionally, Peer-to-Peer). Metalink clients MUST support Instance Digests in HTTP <a class='info' href='#RFC3230'>[RFC3230]<span> (</span><span class='info'>Mogul, J. and A. Van Hoff, &ldquo;Instance Digests in HTTP,&rdquo; January&nbsp;2002.</span><span>)</span></a> by requesting and verifying checksums.
+</p>
+<p>Mirrors are servers that mirror another server. That is, they provide identical copies of (at least some) files that are also on the mirrored server. Mirror servers are typically FTP or HTTP servers. Mirror servers MAY be Metalink servers.
+</p>
+<a name="alternatedl"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.3"></a><h3>3.&nbsp;
+Mirrors / Alternate Download Locations</h3>
+
+<p>Mirrors are specified with the Link header <a class='info' href='#draft-nottingham-http-link-header'>[draft&#8209;nottingham&#8209;http&#8209;link&#8209;header]<span> (</span><span class='info'>Nottingham, M., &ldquo;Web Linking,&rdquo; July&nbsp;2009.</span><span>)</span></a> and a relation type of "alternate".
+</p>
+<p>
+<p>A brief Metalink server response with two mirrors only:
+</p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
+Link: &lt;http://www2.example.com/example.ext&gt;; rel="alternate";
+Link: &lt;ftp://ftp.example.com/example.ext&gt;; rel="alternate";
+</pre></div>
+
+<a name="p2p"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.4"></a><h3>4.&nbsp;
+Peer-to-Peer</h3>
+
+<p>Ways to download a file over Peer-to-Peer networks are specified with the Link header <a class='info' href='#draft-nottingham-http-link-header'>[draft&#8209;nottingham&#8209;http&#8209;link&#8209;header]<span> (</span><span class='info'>Nottingham, M., &ldquo;Web Linking,&rdquo; July&nbsp;2009.</span><span>)</span></a> and a relation type of "describedby" and a type parameter of "torrent" for .torrent <a class='info' href='#BITTORRENT'>[BITTORRENT]<span> (</span><span class='info'>Cohen, B., &ldquo;The BitTorrent Protocol Specification,&rdquo; February&nbsp;2008.</span><span>)</span></a> files.
+</p>
+<p>
+<p>A brief Metalink server response with .torrent only:
+</p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
+Link: &lt;http://example.com/example.ext.torrent&gt;; rel="describedby";
+type="torrent";
+</pre></div>
+
+<a name="openpgp"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.5"></a><h3>5.&nbsp;
+OpenPGP Signatures</h3>
+
+<p>OpenPGP signatures are specified with the Link header <a class='info' href='#draft-nottingham-http-link-header'>[draft&#8209;nottingham&#8209;http&#8209;link&#8209;header]<span> (</span><span class='info'>Nottingham, M., &ldquo;Web Linking,&rdquo; July&nbsp;2009.</span><span>)</span></a> and a relation type of "describedby" and a type parameter of "application/pgp-signature".
+</p>
+<p>
+<p>A brief Metalink server response with OpenPGP signature only:
+</p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
+Link: &lt;http://example.com/example.ext.asc&gt;; rel="describedby";
+type="application/pgp-signature";
+</pre></div>
+
+<a name="checksums"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.6"></a><h3>6.&nbsp;
+Checksums</h3>
+
+<p>Instance Digests in HTTP <a class='info' href='#RFC3230'>[RFC3230]<span> (</span><span class='info'>Mogul, J. and A. Van Hoff, &ldquo;Instance Digests in HTTP,&rdquo; January&nbsp;2002.</span><span>)</span></a> are used to request and retrieve whole file checksums.
+</p>
+<p>
+<p>A brief Metalink client request that prefers SHA-1 checksums over MD5:
+</p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
+Want-Digest: MD5;q=0.3, SHA;q=0.8
+</pre></div>
+
+<p>
+<p>A brief Metalink server response with checksum:
+</p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
+Digest: SHA=thvDyvhfIqlvFe+A9MYgxAfm1q5=
+</pre></div>
+
+<p>[[Some publishers will probably desire stronger hashes. How will we provide chunk checksums? Content-MD5?]]
+</p>
+<a name="clientserver"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.7"></a><h3>7.&nbsp;
+Client / Server Multi-source Download Interaction</h3>
+
+<p>Metalink clients begin a download with a standard HTTP <a class='info' href='#RFC2616'>[RFC2616]<span> (</span><span class='info'>Fielding, R., Gettys, J., Mogul, J., Frystyk, H., Masinter, L., Leach, P., and T. Berners-Lee, &ldquo;Hypertext Transfer Protocol -- HTTP/1.1,&rdquo; June&nbsp;1999.</span><span>)</span></a> GET request to the Metalink server. Here the client prefers SHA-1 checksums over MD5:
+</p>
+<p></p>
+<div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
+GET /distribution/example.ext HTTP/1.1
+Host: www.example.com
+Want-Digest: MD5;q=0.3, SHA;q=0.8
+</pre></div><p>
+
+</p>
+<p>The Metalink server responds with this:
+
+</p>
+<div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
+HTTP/1.1 200 OK
+Accept-Ranges: bytes
+Content-Length: 14867603
+Content-Type: application/x-cd-image
+Link: &lt;http://www2.example.com/example.ext&gt;; rel="alternate";
+Link: &lt;ftp://ftp.example.com/example.ext&gt;; rel="alternate";
+Link: &lt;http://example.com/example.ext.torrent&gt;; rel="describedby";
+type="torrent";
+Link: &lt;http://example.com/example.ext.asc&gt;; rel="describedby";
+type="application/pgp-signature";
+Digest: SHA=thvDyvhfIqlvFe+A9MYgxAfm1q5=
+</pre></div><p>
+
+</p>
+<p>The Metalink client then contacts the other mirrors requesting a portion of the file with the "Range" header field, and using the location of the original GET request in the "Referer" header field. One of the requests to a mirror:
+
+</p>
+<div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
+GET /example.ext HTTP/1.1
+Host: www2.example.com
+Range: bytes=7433802-
+Referer: http://www.example.com/distribution/example.ext
+</pre></div><p>
+
+</p>
+<p>The mirror servers respond with a 206 Partial Content HTTP status code and appropriate "Content-Length" and "Content Range" header fields. The response, from a mirror, to the request above:
+
+</p>
+<div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
+HTTP/1.1 206 Partial Content
+Accept-Ranges: bytes
+Content-Length: 7433801
+Content-Range: bytes 7433802-14867602/14867603
+</pre></div><p>
+
+</p>
+<p>[[Content-MD5 for chunk checksums? That could lead to many random size chunk checksum requests. Use consistent chunk sizes? Could we get all chunk checksums from the referring Metalink server with Content-MD5? Otherwise, this could also be a lot to ask on a mirror network if you don't control it and most servers might not have this feature enabled.]]
+</p>
+<p>Once the download has completed, the Metalink client should verify the checksum of the file.
+</p>
+<a name="anchor4"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.8"></a><h3>8.&nbsp;
+Security Considerations</h3>
+
+<a name="anchor5"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.8.1"></a><h3>8.1.&nbsp;
+URIs and IRIs</h3>
+
+<p>Metalink clients handle URIs and IRIs. See Section 7 of <a class='info' href='#RFC3986'>[RFC3986]<span> (</span><span class='info'>Berners-Lee, T., Fielding, R., and L. Masinter, &ldquo;Uniform Resource Identifier (URI): Generic Syntax,&rdquo; January&nbsp;2005.</span><span>)</span></a> and Section 8 of <a class='info' href='#RFC3987'>[RFC3987]<span> (</span><span class='info'>Duerst, M. and M. Suignard, &ldquo;Internationalized Resource Identifiers (IRIs),&rdquo; January&nbsp;2005.</span><span>)</span></a> for security
+          considerations related to their handling and use.
+</p>
+<a name="anchor6"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.8.2"></a><h3>8.2.&nbsp;
+Spoofing</h3>
+
+<p>There is potential for spoofing attacks where the attacker publishes Metalinks with false information.
+          In that case, this could deceive unaware downloaders that they are downloading a malicious or worthless file. Also, malicious publishers could attempt a distributed denial of service attack by inserting unrelated IRIs into Metalinks.
+</p>
+<a name="anchor7"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.8.3"></a><h3>8.3.&nbsp;
+Cryptographic Hashes</h3>
+
+<p>Currently, some of the hash types defined in Instance Digests in HTTP <a class='info' href='#RFC3230'>[RFC3230]<span> (</span><span class='info'>Mogul, J. and A. Van Hoff, &ldquo;Instance Digests in HTTP,&rdquo; January&nbsp;2002.</span><span>)</span></a> and the IANA registry named "Hash Function Textual Names" are considered insecure. These include the whole Message Digest family of algorithms which are not suitable for cryptographically strong verification. Malicious people could provide files that appear to be identical to another file because of a collision, i.e. the weak cryptographic hashes of the intended file and a substituted malicious file could match.
+</p>
+<p>If a Metalink contains hashes as described in <a class='info' href='#checksums'>Section&nbsp;6<span> (</span><span class='info'>Checksums</span><span>)</span></a>, it SHOULD include "sha" which is SHA-1, as specified in <a class='info' href='#RFC3174'>[RFC3174]<span> (</span><span class='info'>Eastlake, D. and P. Jones, &ldquo;US Secure Hash Algorithm 1 (SHA1),&rdquo; September&nbsp;2001.</span><span>)</span></a>.  It MAY also include other hashes.
+</p>
+<a name="anchor8"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.8.4"></a><h3>8.4.&nbsp;
+Signing</h3>
+
+<p>Metalinks should include digital signatures, as described in <a class='info' href='#openpgp'>Section&nbsp;5<span> (</span><span class='info'>OpenPGP Signatures</span><span>)</span></a>.
+</p>
+<p>Digital signatures provide authentication, message
+	      integrity, and non-repudiation with proof of
+	      origin.
+</p>
+<a name="rfc.references"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.9"></a><h3>9.&nbsp;
+References</h3>
+
+<a name="rfc.references1"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<h3>9.1.&nbsp;Normative References</h3>
+<table width="99%" border="0">
+<tr><td class="author-text" valign="top"><a name="BITTORRENT">[BITTORRENT]</a></td>
+<td class="author-text">Cohen, B., &ldquo;<a href="http://www.bittorrent.org/beps/bep_0003.html">The BitTorrent Protocol Specification</a>,&rdquo; BITTORRENT&nbsp;11031, February&nbsp;2008.</td></tr>
+<tr><td class="author-text" valign="top"><a name="RFC2119">[RFC2119]</a></td>
+<td class="author-text"><a href="mailto:sob@harvard.edu">Bradner, S.</a>, &ldquo;<a href="http://tools.ietf.org/html/rfc2119">Key words for use in RFCs to Indicate Requirement Levels</a>,&rdquo; BCP&nbsp;14, RFC&nbsp;2119, March&nbsp;1997.</td></tr>
+<tr><td class="author-text" valign="top"><a name="RFC2616">[RFC2616]</a></td>
+<td class="author-text">Fielding, R., Gettys, J., Mogul, J., Frystyk, H., Masinter, L., Leach, P., and T. Berners-Lee, &ldquo;<a href="http://tools.ietf.org/html/rfc2616">Hypertext Transfer Protocol -- HTTP/1.1</a>,&rdquo; RFC&nbsp;2616, June&nbsp;1999.</td></tr>
+<tr><td class="author-text" valign="top"><a name="RFC3174">[RFC3174]</a></td>
+<td class="author-text">Eastlake, D. and P. Jones, &ldquo;<a href="http://tools.ietf.org/html/rfc3174">US Secure Hash Algorithm 1 (SHA1)</a>,&rdquo; RFC&nbsp;3174, September&nbsp;2001.</td></tr>
+<tr><td class="author-text" valign="top"><a name="RFC3230">[RFC3230]</a></td>
+<td class="author-text">Mogul, J. and A. Van Hoff, &ldquo;<a href="http://tools.ietf.org/html/rfc3230">Instance Digests in HTTP</a>,&rdquo; RFC&nbsp;3230, January&nbsp;2002.</td></tr>
+<tr><td class="author-text" valign="top"><a name="RFC3986">[RFC3986]</a></td>
+<td class="author-text">Berners-Lee, T., Fielding, R., and L. Masinter, &ldquo;<a href="http://tools.ietf.org/html/rfc3986">Uniform Resource Identifier (URI): Generic Syntax</a>,&rdquo; STD&nbsp;66, RFC&nbsp;3986, January&nbsp;2005.</td></tr>
+<tr><td class="author-text" valign="top"><a name="RFC3987">[RFC3987]</a></td>
+<td class="author-text">Duerst, M. and M. Suignard, &ldquo;<a href="http://tools.ietf.org/html/rfc3987">Internationalized Resource Identifiers (IRIs)</a>,&rdquo; RFC&nbsp;3987, January&nbsp;2005.</td></tr>
+<tr><td class="author-text" valign="top"><a name="draft-nottingham-http-link-header">[draft-nottingham-http-link-header]</a></td>
+<td class="author-text"><a href="mailto:mnot@mnot.net">Nottingham, M.</a>, &ldquo;<a href="http://www.ietf.org/internet-drafts/draft-nottingham-http-link-header-06.txt">Web Linking</a>,&rdquo; draft-nottingham-http-link-header-06 (work in progress), July&nbsp;2009.</td></tr>
+</table>
+
+<a name="rfc.references2"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<h3>9.2.&nbsp;Informative References</h3>
+<table width="99%" border="0">
+<tr><td class="author-text" valign="top"><a name="draft-bryan-metalink">[draft-bryan-metalink]</a></td>
+<td class="author-text"><a href="mailto:anthonybryan@gmail.com">Bryan, A., Ed.</a>, <a href="mailto:tatsuhiro.t@gmail.com">Tsujikawa, T.</a>, <a href="mailto:nabber00@gmail.com">McNab, N.</a>, and <a href="mailto:info@mirrorbrain.org">P. Poeml</a>, &ldquo;<a href="http://www.ietf.org/internet-drafts/draft-bryan-metalink-15.txt">The Metalink Download Description Format</a>,&rdquo; draft-bryan-metalink-15 (work in progress), August&nbsp;2009.</td></tr>
+</table>
+
+<a name="anchor11"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.A"></a><h3>Appendix A.&nbsp;
+Acknowledgements and Contributors</h3>
+
+<p>Thanks!
+</p>
+<a name="anchor12"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.B"></a><h3>Appendix B.&nbsp;
+What's different...?! (to be removed by RFC Editor before publication)</h3>
+
+<p>...or missing, compared to the Metalink XML format <a class='info' href='#draft-bryan-metalink'>[draft&#8209;bryan&#8209;metalink]<span> (</span><span class='info'>Bryan, A., Ed., Tsujikawa, T., McNab, N., and P. Poeml, &ldquo;The Metalink Download Description Format,&rdquo; August&nbsp;2009.</span><span>)</span></a> :
+</p>
+<p>
+	    </p>
+<ul class="text">
+<li>(+) Reuses existing standards without defining much new stuff. It's more of a collection/coordinated feature set.
+</li>
+<li>(+) No XML dependency.
+</li>
+<li>(-?) Tied to HTTP, not as generic. FTP/P2P clients won't be using it unless they also support HTTP, unlike Metalink XML.
+</li>
+<li>(---) Requires changes to server software.
+</li>
+<li>(-?) Could require some coordination of all mirror servers for all features, which may be difficult or impossible unless you are in control of all servers on the mirror network.
+</li>
+<li>(-) Metalink XML could be created by user (or server, but server component/changes not required).
+</li>
+<li>(-) Also, Metalink XML files are easily mirrored on all servers. Even if usage in that case is not as transparent, it still gives access to users at all mirrors to all download information with no changes needed to the server.
+</li>
+<li>(-) Not portable/archivable/emailable. Not as easy for search engines to index?
+</li>
+<li>(-) No way to show mirror/p2p priority or geographical location (yet).
+</li>
+<li>(---) No chunk checksums/download repair (yet).
+</li>
+<li>(-) No checksums besides MD5/SHA-1 (yet).
+</li>
+<li>(-) Not as rich metadata.
+</li>
+<li>(-) Not able to add multiple files to a download queue or create directory structure.
+</li>
+</ul>
+
+<a name="anchor13"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.C"></a><h3>Appendix C.&nbsp;
+Document History (to be removed by RFC Editor before publication)</h3>
+
+<p>[[ to be removed by the RFC editor before publication as an RFC. ]]
+</p>
+<p>Known issues concerning this draft:
+	    </p>
+<ul class="text">
+<li>None.
+</li>
+</ul>
+
+<p>-00
+	    
+	    </p>
+<ul class="text">
+<li>Initial draft.
+</li>
+</ul>
+
+<a name="rfc.authors"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<h3>Author's Address</h3>
+<table width="99%" border="0" cellpadding="0" cellspacing="0">
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text">Anthony Bryan (editor)</td></tr>
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text">Metalinker Project</td></tr>
+<tr><td class="author" align="right">Email:&nbsp;</td>
+<td class="author-text"><a href="mailto:anthonybryan@gmail.com">anthonybryan@gmail.com</a></td></tr>
+<tr><td class="author" align="right">URI:&nbsp;</td>
+<td class="author-text"><a href="http://www.metalinker.org">http://www.metalinker.org</a></td></tr>
+</table>
+</body></html>
