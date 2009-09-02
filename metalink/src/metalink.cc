@@ -242,7 +242,11 @@ try
 	  	<< "\nnative_directory_string-: " << targetFile.native_directory_string()
   		<< "\nnative_file_string------: " << targetFile.native_file_string()
   		<< '\n');
-  	
+#ifdef OS_WIN
+    //Translate '\' into '/'
+    assert(0);//This has not yet been tested!
+    filename = filename.translated('\\', '/');
+#endif  	
 		MetalinkFile record(filename, &mirrorList);
 		//Add matching links
 		//foearch(links[filename], link) addpath basename(links)
@@ -330,7 +334,7 @@ try
 		
 		//FINALIZE
 		hl.finalize();
-
+    
 		//Add hashes and P2P paths
 		_foreach(hp, hl)
 		{
