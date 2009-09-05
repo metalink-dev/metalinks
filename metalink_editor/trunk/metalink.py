@@ -14,7 +14,7 @@
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-import os, os.path, md5, sha, re, xml.dom, math, time, binascii
+import os, os.path, md5, sha, re, xml.dom, math, time, binascii, base64
 from xml.dom.minidom import parse, Node
 
 current_version = "1.2.0"
@@ -108,6 +108,7 @@ class Metalink:
         self.hash_sha256 = ""
         self.sig = ""
         self.ed2k = ""
+        self.magnet = ""
         self.pieces = []
         self.piecelength = 0
         self.piecetype = ""
@@ -206,9 +207,15 @@ class Metalink:
             self.hash_sha256 = sha256hash.hexdigest()
 
         # automatically add an ed2k url here
-        self.ed2k = compute_ed2k(filename)
+        ed2khash = ed2k_hash(filename)
+        
+        self.ed2k = compute_ed2k(filename, ed2khash)
         if self.ed2k != "":
             self.add_url(self.ed2k)
+
+        self.magnet = compute_magnet(filename, self.size, self.hash_md5, self.hash_sha1, ed2khash)
+        if self.magnet != "":
+            self.add_url(self.magnet)
 
         self.sig = read_sig(filename)
             
@@ -505,10 +512,18 @@ def read_asc_sig(filename):
     return ""
 
 
-def compute_ed2k(filename):
+def compute_ed2k(filename, size=None, ed2khash=None):
     '''
     Generates an ed2k link for a file on the local filesystem.
     '''
+    if size == None:
+        size = os.path.getsize(filename)
+    if ed2khash == None:
+        ed2khash = ed2k_hash(filename)
+
+    return "ed2k://|file|%s|%s|%s|/" % (os.path.basename(filename), size, ed2khash)
+
+def ed2k_hash(filename):
     try:
         import hashlib
     except ImportError:
@@ -520,13 +535,17 @@ def compute_ed2k(filename):
     handle = open(filename, "rb")
     data = handle.read(blocksize)
     hashes = ""
+    md4 = None
     
     while data:
         md4 = hashlib.new('md4')
         md4.update(data)
         hashes += md4.digest()
         data = handle.read(blocksize)
-        
+
+    # handle file size of zero
+    if md4 == None:
+        md4 = hashlib.new('md4')
     outputhash = md4.hexdigest()
 
     if size % blocksize == 0:
@@ -538,5 +557,48 @@ def compute_ed2k(filename):
         md4 = hashlib.new('md4')
         md4.update(hashes)
         outputhash = md4.hexdigest()
+        
+    return outputhash
 
-    return "ed2k://|file|%s|%s|%s|/" % (os.path.basename(filename), size, outputhash)
+def file_hash(filename, hashtype):
+    '''
+    returns checksum as a hex string
+    '''
+    try:
+        import hashlib
+        hashfunc = getattr(hashlib, hashtype)
+    except ImportError:
+        hashfunc = getattr(hashtype, new)
+
+    hashobj = hashfunc()
+    return filehash(filename, hashobj)
+
+def filehash(thisfile, filesha):
+    '''
+    First parameter, filename
+    Returns sum as a string of hex digits
+    '''
+    try:
+        filehandle = open(thisfile, "rb")
+    except:
+        return ""
+
+    chunksize = 1024*1024
+    data = filehandle.read(chunksize)
+    while(data != ""):
+        filesha.update(data)
+        data = filehandle.read(chunksize)
+
+    filehandle.close()
+    return filesha.hexdigest()
+
+def compute_magnet(filename, size = None, md5 = None, sha1 = None, ed2khash = None):
+    if size == None:
+        size = os.path.getsize(filename)
+    if ed2khash == None:
+        ed2khash = ed2k_hash(filename)
+    if md5 == None:
+        md5 = file_hash(filename, 'md5')
+    if sha1 == None:
+        sha1 = file_hash(filename, 'sha1')
+    return "magnet:?dn=%s&xl=%s&xt=urn:sha1:%s&xt=urn:md5:%s&xt=urn:ed2k:%s" % (os.path.basename(filename), size, base64.b32encode(binascii.unhexlify(sha1)), md5.upper(), ed2khash.upper())
