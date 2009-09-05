@@ -469,9 +469,13 @@ class MainFrame(wx.Frame):
                 if url.startswith("ed2k://"):
                     # remove ed2k links, they add themselves back in later
                     self.filelist.DeleteItem(item)
+                if url.startswith("magnet:"):
+                    # remove magnet links, they add themselves back in later
+                    self.filelist.DeleteItem(item)
                                 
-            # add ed2k link to GUI for this file
+            # add ed2k and magnet link to GUI for this file
             self.addurl(metalink.Resource(self.ml.ed2k))
+            self.addurl(metalink.Resource(self.ml.magnet))
             
             self.filename = filename + ".metalink"
             self.new_file = True
@@ -501,7 +505,7 @@ class MainFrame(wx.Frame):
 
     def onBtnChange(self, evt):
         if self.txtctrl_url.GetValue() != "":
-            url = self.txtctrl_url.GetValue()
+            url = seedlf.txtctrl_url.GetValue()
             loc = self.txtctrl_loc.GetValue()
             pref = self.txtctrl_pref.GetValue()
             conns = self.combo_maxconn.GetValue()
