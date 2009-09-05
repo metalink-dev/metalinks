@@ -130,6 +130,8 @@ def run():
     parser.add_option("--description", dest="description", help="Description")
     parser.add_option("--license-name", dest="license_name", help="License Name")
     parser.add_option("--license-url", dest="license_url", help="License URL")
+    parser.add_option("--magnet", dest="magnet", action="store_false", help="Do not add a magnet URL")
+    parser.add_option("--ed2k", dest="ed2k", action="store_false", help="Do not add a ed2k URL")
     #parser.add_option("-l", "--language", dest="language", help="The language the file is in, per ISO-639/3166. \"en-US\" for Standard American English")
     #parser.add_option("--maxconn", dest="maxconn_total", help="Maximum number of connections for downloading")    
     parser.add_option("--origin", dest="origin", help="URL for the finished metalink file to check for updates")
@@ -138,7 +140,7 @@ def run():
         
     #parser.add_option("-s", "--size", dest="size", help="File size")
 
-    parser.set_defaults(identity=None,version=None,os=None,publisher_name=None,publisher_url=None,copyright=None,description=None,license_name=None,license_url=None,language=None,maxconn_total=None,origin=None)
+    parser.set_defaults(identity=None,version=None,os=None,publisher_name=None,publisher_url=None,copyright=None,description=None,license_name=None,license_url=None,language=None,maxconn_total=None,origin=None,ed2k=True,magnet=True)
     (options, args) = parser.parse_args()
     if len(args) <= 0:
         print "ERROR: Specify a URL."
@@ -149,7 +151,7 @@ def run():
         # RFC 822 format
     #    options.pubdate = time.strftime("%a, %d %b %Y %H:%M:%S +0000", time.gmtime())
 
-    xml = metalink.Metalink()
+    xml = metalink.Metalink(options.ed2k, options.magnet)
 
     if options.open != None:
         xml.load_file(options.open)
