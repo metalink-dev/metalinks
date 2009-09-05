@@ -87,7 +87,7 @@ class Resource:
         return valid
 
 class Metalink:
-    def __init__(self):
+    def __init__(self, do_ed2k=True, do_magnet=True):
         self.errors = []
         self.filename = ""
         self.identity = ""
@@ -113,6 +113,8 @@ class Metalink:
         self.piecelength = 0
         self.piecetype = ""
         self.resources = []
+        self.do_ed2k = do_ed2k
+        self.do_magnet = do_magnet
     
     def clear_res(self):
         self.resources = []
@@ -209,13 +211,15 @@ class Metalink:
         # automatically add an ed2k url here
         ed2khash = ed2k_hash(filename)
         
-        self.ed2k = compute_ed2k(filename, ed2khash)
-        if self.ed2k != "":
-            self.add_url(self.ed2k)
+        if self.do_ed2k:
+            self.ed2k = compute_ed2k(filename, ed2khash)
+            if self.ed2k != "":
+                self.add_url(self.ed2k)
 
-        self.magnet = compute_magnet(filename, self.size, self.hash_md5, self.hash_sha1, ed2khash)
-        if self.magnet != "":
-            self.add_url(self.magnet)
+        if self.do_magnet:
+            self.magnet = compute_magnet(filename, self.size, self.hash_md5, self.hash_sha1, ed2khash)
+            if self.magnet != "":
+                self.add_url(self.magnet)
 
         self.sig = read_sig(filename)
             
