@@ -37,7 +37,6 @@ import urllib
 import optparse
 import os.path
 import sys
-import time
 
 # This value is used by the ProgressBar class. Set it to False if the
 # current console doesn't support \b
@@ -56,6 +55,9 @@ def xml_encode(data):
     return tempstr
 
 def build(xml, urls, output=None, localfile=None, download=True):
+    '''
+    urls - RFC 2396 encoded urls
+    '''
 
     if len(urls) > 0:
         url = urls[0]
@@ -73,7 +75,7 @@ def build(xml, urls, output=None, localfile=None, download=True):
 
     xml.scan_file(localfile)
     for item in urls:
-        xml.add_url(urllib.quote(item, ":/?"))
+        xml.add_url(item)
 
     if not xml.validate():
         for line in xml.errors:
@@ -140,7 +142,7 @@ def run():
         
     #parser.add_option("-s", "--size", dest="size", help="File size")
 
-    parser.set_defaults(identity=None,version=None,os=None,publisher_name=None,publisher_url=None,copyright=None,description=None,license_name=None,license_url=None,language=None,maxconn_total=None,origin=None,ed2k=True,magnet=True)
+    parser.set_defaults(identity=None,version=None,os=None,publisher_name=None,publisher_url=None,copyright=None,description=None,license_name=None,license_url=None,language=None,maxconn_total=None,origin=None)
     (options, args) = parser.parse_args()
     if len(args) <= 0:
         print "ERROR: Specify a URL."
