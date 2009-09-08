@@ -605,4 +605,4 @@ def compute_magnet(filename, size = None, md5 = None, sha1 = None, ed2khash = No
         md5 = file_hash(filename, 'md5')
     if sha1 == None:
         sha1 = file_hash(filename, 'sha1')
-    return "magnet:?dn=%s&xl=%s&xt=urn:sha1:%s&xt=urn:md5:%s&xt=urn:ed2k:%s" % (os.path.basename(filename), size, base64.b32encode(binascii.unhexlify(sha1)), md5.upper(), ed2khash.upper())
+    return "magnet:?dn=%s&amp;xl=%s&amp;xt=urn:sha1:%s&amp;xt=urn:md5:%s&amp;xt=urn:ed2k:%s" % (os.path.basename(filename), size, base64.b32encode(binascii.unhexlify(sha1)), md5.upper(), ed2khash.upper())
