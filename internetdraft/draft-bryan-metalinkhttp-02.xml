@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><?rfc linefile="1:draft-bryan-metalinkhttp-01.xml"?>
+<?xml version="1.0" encoding="UTF-8"?><?rfc linefile="1:draft-bryan-metalinkhttp-02.xml"?>
 <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
 <?rfc toc="yes" ?>
 <?rfc tocdepth="3" ?>
@@ -11,9 +11,9 @@
 <?rfc inline="yes" ?>
 <!DOCTYPE rfc
   PUBLIC "" "rfc2629.dtd">
-<rfc category="std" docName="draft-bryan-metalinkhttp-01" ipr="pre5378Trust200902">
+<rfc category="std" docName="draft-bryan-metalinkhttp-02" ipr="pre5378Trust200902">
     <front>        
-      <title abbrev="MetaLinkHeaders: Mirrors and Checksums">MetaLinkHeaders: Mirrors and Checksums in HTTP Headers</title>		
+      <title abbrev="MetaLinkHeader: Mirrors and Checksums">MetaLinkHeader: Mirrors and Checksums in HTTP Headers</title>		
       <author initials="A." surname="Bryan" fullname="Anthony Bryan" role="editor">
 	    <organization>Metalinker Project</organization>
 	    <address>		
@@ -24,7 +24,9 @@
 	<date month="September" year="2009"/>        
 
       <abstract>
-	<t>This document specifies MetaLinkHeaders: Mirrors and Checksums in HTTP Headers, an alternative representation of Metalink, instead of the usual XML-based download description format. MetaLinkHeaders describes multiple download locations (mirrors), Peer-to-Peer, checksums, digital signatures, and other information using existing standards. Clients can transparently use this information to make file transfers more robust and reliable.</t>
+	<t>This document specifies MetaLinkHeader: Mirrors and Checksums in HTTP Headers, an alternative representation of Metalink, instead of the usual XML-based download description format. 
+    MetaLinkHeader describes multiple download locations (mirrors), Peer-to-Peer, checksums, digital signatures, and other information using existing standards. Clients can transparently 
+    use this information to make file transfers more robust and reliable.</t>
       </abstract>    
 	  
   </front>    
@@ -32,7 +34,9 @@
   <middle>
     <section title="Introduction">
       
-      <t>MetaLinkHeaders is an alternative to Metalink, usually represented in an XML-based document format <xref target="draft-bryan-metalink"/>. MetaLinkHeaders attempts to provide as much functionality as the Metalink XML format by using existing standards such as Web Linking <xref target="draft-nottingham-http-link-header"/> and Instance Digests in HTTP <xref target="RFC3230"/>. MetaLinkHeaders list
+      <t>MetaLinkHeader is an alternative to Metalink, usually represented in an XML-based document format <xref target="draft-bryan-metalink"/>. 
+      MetaLinkHeader attempts to provide as much functionality as the Metalink XML format by using existing standards such as Web Linking <xref target="draft-nottingham-http-link-header"/>, 
+      Instance Digests in HTTP <xref target="RFC3230"/>, and Content-MD5 <xref target="RFC1864"/>. MetaLinkHeader is used to list
       information about a file to be downloaded. This includes lists of multiple URIs (mirrors), Peer-to-Peer information, checksums, and digital signatures.</t>
       
       <t>Identical copies of a file are frequently accessible in multiple locations on the Internet over a variety of protocols (FTP, HTTP, and Peer-to-Peer).
@@ -43,10 +47,12 @@
       Any of the number of problems that can occur during a download lead to frustration on the part of users.</t>
 
       <t>All the information about a download, including mirrors, checksums, digital signatures, and more can be transferred in coordinated HTTP Headers.
-      This Metalink transfers the knowledge of the download server (and mirror database) to the client. Clients can fallback to other mirrors if the current one has an issue. With this knowledge, the client is enabled to work its way to a successful download even under adverse circumstances. 
+      This Metalink transfers the knowledge of the download server (and mirror database) to the client. Clients can fallback to other mirrors if the current one has an issue. With this knowledge, 
+      the client is enabled to work its way to a successful download even under adverse circumstances. 
       All this is done transparently to the user and the download is much more reliable and efficient.
       In contrast, a traditional HTTP redirect to a mirror conveys only extremely minimal information - one link to one server, and there is no provision in the HTTP protocol to handle failures.
-      Other features that some clients provide include multi-source downloads, where chunks of a file are downloaded from multiple mirrors (and optionally, Peer-to-Peer) simultaneously, which frequently results in a faster download.</t>
+      Other features that some clients provide include multi-source downloads, where chunks of a file are downloaded from multiple mirrors (and optionally, Peer-to-Peer) simultaneously, 
+      which frequently results in a faster download.</t>
 
       <t>[[ Discussion of this draft should take place on IETF HTTP WG mailing list at ietf-http-wg@w3.org or the Metalink discussion mailing list
    located at metalink-discussion@googlegroups.com. To join the list, visit
@@ -66,7 +72,7 @@ Digest: SHA=thvDyvhfIqlvFe+A9MYgxAfm1q5=
       </section> 
       <section title="Notational Conventions"> 
 
-	<t>This specification describes conformance of MetaLinkHeaders.</t>
+	<t>This specification describes conformance of MetaLinkHeader.</t>
      
 
 	<t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
@@ -77,13 +83,18 @@ Digest: SHA=thvDyvhfIqlvFe+A9MYgxAfm1q5=
     </section>
 
     <section title="Requirements" anchor="req">
-	  <t>In this context, "MetaLinkHeaders" refers to Metalink in HTTP Headers as described in this document. "Metalink XML" refers to the XML format described in <xref target="draft-bryan-metalink"/>.</t>
+	  <t>In this context, "MetaLink" refers to a MetaLinkHeader which consists of mirrors and checksums in HTTP Headers as described in this document. "Metalink XML" refers to the XML format described in <xref target="draft-bryan-metalink"/>.</t>
       <t>Metalink servers are HTTP servers that MUST have lists of mirrors and use the Link header <xref target="draft-nottingham-http-link-header"/> to indicate them. They also MUST
-	  provide checksums of files via Instance Digests in HTTP <xref target="RFC3230"/>.</t>
+	  provide checksums of files via Instance Digests in HTTP <xref target="RFC3230"/>. Mirror and checksum information provided by the originating Metalink server is considered authoritative.</t>
 
-      <t>Metalink clients use the mirrors provided by a Metalink server with Link header <xref target="draft-nottingham-http-link-header"/>. Metalink clients MUST support HTTP and MAY support FTP, BitTorrent, or other download methods. Metalink clients MUST switch downloads from one mirror to another if the one mirror becomes unreachable. Metalink clients are RECOMMENDED to support multi-source downloads, where chunks of a file are downloaded from multiple mirrors simultaneously (and optionally, Peer-to-Peer). Metalink clients MUST support Instance Digests in HTTP <xref target="RFC3230"/> by requesting and verifying checksums. Metalink clients MAY make use of digital signatures if they are offered.</t>
+	  <t>Mirror servers are typically FTP or HTTP servers that "mirror" another server. That is, they provide identical copies of (at least some) files that are also on the mirrored server. 
+      Mirror servers MAY be Metalink servers. Mirror servers MUST support serving partial content. Mirror servers SHOULD support Instance Digests in HTTP <xref target="RFC3230"/>.</t>
+
+      <t>Metalink clients use the mirrors provided by a Metalink server with Link header <xref target="draft-nottingham-http-link-header"/>. Metalink clients MUST support HTTP and MAY support FTP, BitTorrent, 
+      or other download methods. Metalink clients MUST switch downloads from one mirror to another if the one mirror becomes unreachable. Metalink clients are RECOMMENDED to support multi-source, or parallel, 
+      downloads, where chunks of a file are downloaded from multiple mirrors simultaneously (and optionally, Peer-to-Peer). Metalink clients MUST support Instance Digests in HTTP <xref target="RFC3230"/> by 
+      requesting and verifying checksums. Metalink clients MAY make use of digital signatures if they are offered.</t>
 	  
-	  <t>Mirrors are servers that mirror another server. That is, they provide identical copies of (at least some) files that are also on the mirrored server. Mirror servers are typically FTP or HTTP servers. Mirror servers MAY be Metalink servers. Mirror servers MUST support serving partial content. Mirror servers SHOULD support Instance Digests in HTTP <xref target="RFC3230"/>.</t>
 	  </section>
 	
     <section title="Mirrors / Multiple Download Locations" anchor="mirrors">
@@ -95,6 +106,8 @@ Digest: SHA=thvDyvhfIqlvFe+A9MYgxAfm1q5=
 Link: &lt;http://www2.example.com/example.ext&gt;; rel="duplicate";
 Link: &lt;ftp://ftp.example.com/example.ext&gt;; rel="duplicate";
 </artwork></figure></t>
+
+      <t>Mirror servers are listed in order of priority.</t>
 
 	  </section>
 
@@ -122,6 +135,8 @@ type="application/pgp-signature";
 
     <section title="Checksums" anchor="checksums">
 
+    <section title="Checksums of Whole Files" anchor="wholechecksums">
+	
 	<t>Instance Digests in HTTP <xref target="RFC3230"/> are used to request and retrieve whole file checksums.</t>
 <t><figure> 
 	  <preamble>A brief Metalink client request that prefers SHA-1 checksums over MD5:</preamble>	
@@ -135,8 +150,35 @@ Want-Digest: MD5;q=0.3, SHA;q=0.8
 Digest: SHA=thvDyvhfIqlvFe+A9MYgxAfm1q5=
 </artwork></figure></t>
 
-      <t>[[Some publishers will probably desire stronger hashes. How will we provide chunk checksums? Content-MD5 or Metalink XML?]]</t>
+      <t>[[Some publishers will probably desire stronger hashes.]]</t>
+    </section>
+    <section title="Checksums of Chunks of Files" anchor="chunkchecksums">
 
+	<t>The Content-MD5 header <xref target="RFC1864"/> provides checksums for a chunk, or portion, of a file, when requested with a Range header field.</t>
+	<t>Negotiation of Content-MD5 is described in <xref target="RFC3230"/>. A checksum for a chunk of a file can determine if there has been an error in transmission, which means the file is corrupt. If an error is detected in a chunk, then just that chunk can be requested again from the current mirror, or a different mirror.</t>
+<t><figure> 
+	  <preamble>A brief Metalink client request for Content-MD5 of a portion of a file:</preamble>	
+	  <artwork type="example">
+Range: bytes=7433802-
+Want-Digest: contentMD5;q=0.8
+</artwork></figure></t>
+	
+<t><figure> 
+	  <preamble>A brief Metalink server response with checksum:</preamble>	
+	  <artwork type="example">
+HTTP/1.1 206 Partial Content
+Accept-Ranges: bytes
+Content-Length: 7433801
+Content-Range: bytes 7433802-14867602/14867603
+Content-MD5:  Q2hlY2sgSW50ZWdyaXR5IQ==
+</artwork></figure></t>
+
+<t>[[Content-MD5 for chunk checksums could lead to many random size chunk checksum requests. 
+Use consistent chunk sizes? Could we get all chunk checksums from the referring Metalink server with Content-MD5? 
+Otherwise, this could also be a lot to ask on a mirror network if you don't control it and most servers might not have this feature enabled.]]</t>
+
+<t>[[Alternatively, Metalink XML could be used for chunk checksums but that complicates things.]]</t>	  
+	</section>  
     </section>
 
     <section title="Client / Server Multi-source Download Interaction" anchor="clientserver">
@@ -165,7 +207,8 @@ type="application/pgp-signature";
 Digest: SHA=thvDyvhfIqlvFe+A9MYgxAfm1q5=
 </artwork></figure></t>
 
-<t>The Metalink client then contacts the other mirrors requesting a portion of the file with the "Range" header field, and using the location of the original GET request in the "Referer" header field. One of the client requests to a mirror server:
+<t>The Metalink client then contacts the other mirrors requesting a portion of the file with the "Range" header field, and using the location of the original GET request in the "Referer" header field. 
+One of the client requests to a mirror server:
 
 <figure> 
 	  <artwork type="example">
@@ -187,10 +230,6 @@ Content-Length: 7433801
 Content-Range: bytes 7433802-14867602/14867603
 </artwork></figure></t>
 
-
-
-<t>[[Content-MD5 for chunk checksums? That could lead to many random size chunk checksum requests. Use consistent chunk sizes? Could we get all chunk checksums from the referring Metalink server with Content-MD5? Otherwise, this could also be a lot to ask on a mirror network if you don't control it and most servers might not have this feature enabled.]]</t>
-
 <t>Once the download has completed, the Metalink client MUST verify the checksum of the file.</t>
 
     </section>
@@ -199,7 +238,7 @@ Content-Range: bytes 7433802-14867602/14867603
 <t>o  Relation Name: duplicate</t>
 <t>o  Description: Refers to an identical resource that is a byte-for-byte equivalence of representations.</t>
 <t>o  Reference: This specification.</t>
-<t>o  Notes: This relation is for static resources. It does not make sense for dynamic or POSTable resources and should not be used for them.</t>
+<t>o  Notes: This relation is for static resources. That is, an HTTP GET request on any duplicate will return the same representation. It does not make sense for dynamic or POSTable resources and should not be used for them.</t>
 
     </section>	
 
@@ -221,7 +260,9 @@ Content-Range: bytes 7433802-14867602/14867603
 		
 	    <section title="Cryptographic Hashes">
 
-	      <t>Currently, some of the hash types defined in Instance Digests in HTTP <xref target="RFC3230"/> and the IANA registry named "Hash Function Textual Names" are considered insecure. These include the whole Message Digest family of algorithms which are not suitable for cryptographically strong verification. Malicious people could provide files that appear to be identical to another file because of a collision, i.e. the weak cryptographic hashes of the intended file and a substituted malicious file could match.</t>
+	      <t>Currently, some of the hash types defined in the IANA registry named "Hash Function Textual Names", Instance Digests in HTTP <xref target="RFC3230"/>, and Content-MD5 header  <xref target="RFC1864"/> are considered insecure. 
+          These include the whole Message Digest family of algorithms which are not suitable for cryptographically strong verification. Malicious people could provide files that appear to be 
+          identical to another file because of a collision, i.e. the weak cryptographic hashes of the intended file and a substituted malicious file could match.</t>
           <t>If a Metalink contains hashes as described in <xref target="checksums"/>, it SHOULD include "sha" which is SHA-1, as specified in <xref target="RFC3174"/>.  It MAY also include other hashes.</t>
 
 	    </section>	
@@ -260,6 +301,18 @@ Content-Range: bytes 7433802-14867602/14867603
 <seriesInfo name="BITTORRENT" value="11031"/>
 </reference>	  
 
+<reference anchor="RFC1864">
+
+<front>
+<title>The Content-MD5 Header Field</title>
+<author initials="J." surname="Myers" fullname="J. Myers">
+<organization/></author>
+<author initials="M." surname="Rose" fullname="M. Rose">
+<organization/></author>
+<date year="1995" month="October"/></front>
+
+<seriesInfo name="RFC" value="1864"/>
+</reference> 
 
 <reference anchor="RFC2119">
 
@@ -431,7 +484,7 @@ Content-Range: bytes 7433802-14867602/14867603
       </author>
     <date month="August" year="2009"/>
   </front>
-  <seriesInfo name="Internet-Draft" value="draft-bryan-metalink-15"/>
+  <seriesInfo name="Internet-Draft" value="draft-bryan-metalink-16"/>
 </reference>
 
 	    </references> 
@@ -455,8 +508,7 @@ Content-Range: bytes 7433802-14867602/14867603
 	      <t>(-) Metalink XML can be created by user (or server, but server component/changes not required).</t>
 		  <t>(-) Also, Metalink XML files are easily mirrored on all servers. Even if usage in that case is not as transparent, it still gives access to users at all mirrors (FTP included) to all download information with no changes needed to the server.</t>
 	      <t>(-) Not portable/archivable/emailable. Not as easy for search engines to index?</t>
-	      <t>(-) No way to show mirror/p2p priority or geographical location (yet). Could just go by order for priority.</t>
-	      <t>(---) No chunk checksums/download repair (yet). Maybe just use Metalink XML?</t>
+	      <t>(-) No way to show mirror/p2p geographical location (yet).</t>
 	      <t>(-) No checksums besides MD5/SHA-1 (yet).</t>
 	      <t>(-) Not as rich metadata.</t>
 	      <t>(-) Not able to add multiple files to a download queue or create directory structure.</t>
@@ -471,6 +523,12 @@ Content-Range: bytes 7433802-14867602/14867603
 	      
 	      <t>None.</t>
 
+	    </list></t>
+<t>-02 : September 6, 2009.
+	    
+	    <list style="symbols">
+
+	      <t>Content-MD5 for chunk checksums.</t>
 	    </list></t>
 
 <t>-01 : September 1, 2009.
