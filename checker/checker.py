@@ -55,6 +55,7 @@ import httplib
 import ftplib
 import threading
 import time
+import binascii
 
 import xmlutils
 import download
@@ -229,10 +230,40 @@ class Checker:
         self.results = {}
         self.new_results = {}
         
-    def _check_process(self, headers, filesize):
+    def _check_process(self, headers, filesize, checksums = {}):
         size = "?"
+        checksum = "?"
         
         sizeheader = self._get_header(headers, "Content-Length")
+        
+        # digest code, untested since no servers seem to support this, but possibly going to be part of metalink RFC
+        digest = self._get_header(headers, "Content-MD5")
+        if digest != None:
+            try:
+                if binascii.hexlify(binascii.a2b_base64(digest)).lower() == checksums['md5'].lower():
+                    checksum = _("OK")
+                else:
+                    checksum = _("FAIL")
+            except KeyError: pass
+
+        digest = self._get_header(headers, "Digest")
+        if digest != None:
+            digests = digest.split(",")
+            for d in digests:
+                (name, value) = d.split("=", 2)
+                type = ""
+                if name.lower() == "sha":
+                    type = "sha1"
+                elif name.lower() == "md5":
+                    type = "md5"
+                    
+                if type != "" and checksum == "?":
+                    try:
+                        if binascii.hexlify(binascii.a2b_base64(value)).lower() == checksums[type].lower():
+                            checksum = _("OK")
+                        else:
+                            checksum = _("FAIL")
+                    except KeyError: pass
 
         if sizeheader != None and filesize != None:
             if int(sizeheader) == int(filesize):
@@ -245,7 +276,7 @@ class Checker:
         if temp_code != None:
             response_code = temp_code
             
-        return [response_code, size]
+        return [response_code, size, checksum]
 
     def _get_header(self, textheaders, name):
         textheaders = str(textheaders)
@@ -278,7 +309,7 @@ class Checker:
             checker = URLCheck(filename)
             headers = checker.info()
             redir = self._get_header(headers, "Redirected")
-            result = self._check_process(headers, size)
+            result = self._check_process(headers, size, item.get_checksums())
             result.append(redir)
             #self.results[item.name][checker.geturl()] = result
             self._add_result(item.name, filename, result)
@@ -317,6 +348,7 @@ class URLCheck:
         self.url = url
         urlparts = urlparse.urlparse(url)
         self.scheme = urlparts.scheme
+        headers = {"Want-Digest": "MD5;q=0.3, SHA;q=1"}
         
         if self.scheme == "http":
             # need to set default port here
@@ -330,7 +362,7 @@ class URLCheck:
     
             conn = download.HTTPConnection(urlparts.hostname, port)
             try:
-                conn.request("HEAD", url)
+                conn.request("HEAD", url, headers = headers)
             except socket.error, error:
                 self.infostring += _("Response") + ": " + _("Connection Error") + "\r\n"
                 return
@@ -359,7 +391,7 @@ class URLCheck:
                 
                 conn = download.HTTPConnection(urlparts.hostname, urlparts.port)
                 try:
-                    conn.request("HEAD", url)
+                    conn.request("HEAD", url, headers = headers)
                     resp = conn.getresponse()
                 except socket.gaierror:
                     resp = None
@@ -393,7 +425,7 @@ class URLCheck:
     
             conn = download.HTTPSConnection(urlparts.hostname, port)
             try:
-                conn.request("HEAD", url)
+                conn.request("HEAD", url, headers = headers)
             except socket.error, error:
                 #dir(error)
                 self.infostring += _("Response") + ": " + _("Connection Error") + "\r\n"
@@ -415,7 +447,7 @@ class URLCheck:
                     port = urlparts.port
                 
                 conn = download.HTTPSConnection(urlparts.hostname, urlparts.port)
-                conn.request("HEAD", url)
+                conn.request("HEAD", url, headers = headers)
                 resp = conn.getresponse()
                 count += 1
 

@@ -218,7 +218,7 @@ class Application:
             #count = active
 
     def format_table(self, datadict):
-        datalist = [[_("Filename"), _("URL"), _("Response Code"), _("Size Check"), _("Redirect")]]
+        datalist = [[_("Filename"), _("URL"), _("Response Code"), _("Size Check"), _("Checksum"), _("Redirect")]]
         for filename in datadict.keys():
             datalist.append([filename])
             urls = datadict[filename].keys()
