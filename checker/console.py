@@ -203,6 +203,7 @@ def print_totals(results):
 
         status_count = 0
         size_count = 0
+        checksum_count = 0
         error_count = 0
         total = len(results[key])
         for subkey in results[key].keys():
@@ -216,23 +217,31 @@ def print_totals(results):
             if size == "FAIL":
                 size_bool = True
 
+            checksum = results[key][subkey][2]
+            checksum_bool = False
+            if checksum == "FAIL":
+                checksum_bool = True
+                
             redir = results[key][subkey][2]
 
             print "-" * 79
             print _("Checked") + ": %s" % subkey
             if redir != None:
                 print _("Redirected") + ": %s" % redir
-            print _("Response Code") + ": %s\t" % status + _("Size Check") + ": %s" % size
+            print _("Response Code") + ": %s\t" % status + _("Size Check") + ": %s\t" % size + _("Checksum") + ": %s" % checksum
                 
             if size_bool:
                 size_count += 1
+            if checksum_bool:
+                checksum_count += 1
             if status_bool:
                 status_count += 1
-            if size_bool or status_bool:
+            if size_bool or status_bool or checksum_bool:
                 error_count += 1
 
         print _("Download errors") + ": %s/%s" % (status_count, total)
         print _("Size check failures") + ": %s/%s" % (size_count, total)
+        print _("Checksum failures") + ": %s/%s" % (checksum_count, total)
         print _("Overall failures") + ": %s/%s" % (error_count, total)
 
 ##def print_summary(results):
