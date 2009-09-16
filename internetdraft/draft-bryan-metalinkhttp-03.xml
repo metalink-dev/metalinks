@@ -236,7 +236,7 @@ Content-Range: bytes 7433802-14867602/14867603
 	
     <section title="Link Relation Type Registration: &#34;duplicate&#34;" anchor="duplicate">
 <t>o  Relation Name: duplicate</t>
-<t>o  Description: Refers to an identical resource that is a byte-for-byte equivalence of representations. When resources share representations, those representations are duplicates.</t>
+<t>o  Description: Refers to a resource whose available representations are byte-for-byte identical with the corresponding representations of the context IRI.</t>
 <t>o  Reference: This specification.</t>
 <t>o  Notes: This relation is for static resources. That is, an HTTP GET request on any duplicate will return the same representation. It does not make sense for dynamic or POSTable resources and should not be used for them.</t>
 
@@ -272,9 +272,7 @@ Content-Range: bytes 7433802-14867602/14867603
 
 	      <t>Metalinks should include digital signatures, as described in <xref target="openpgp"/>.</t>
 
-	      <t>Digital signatures provide authentication, message
-	      integrity, and non-repudiation with proof of
-	      origin.</t>
+	      <t>Digital signatures provide authentication, message integrity, and non-repudiation with proof of origin.</t>
 
 	    </section>
 
@@ -524,6 +522,13 @@ Content-Range: bytes 7433802-14867602/14867603
 	      <t>None.</t>
 
 	    </list></t>
+<t>-03 : September 16, 2009.
+	    
+	    <list style="symbols">
+
+	      <t>Content-MD5 for chunk checksums.</t>
+	    </list></t>
+
 <t>-02 : September 6, 2009.
 	    
 	    <list style="symbols">

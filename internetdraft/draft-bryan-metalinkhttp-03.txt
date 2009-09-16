@@ -403,9 +403,9 @@ Internet-Draft    MetaLinkHeader: Mirrors and Checksums   September 2009
 
    o Relation Name: duplicate
 
-   o Description: Refers to an identical resource that is a byte-for-
-   byte equivalence of representations.  When resources share
-   representations, those representations are duplicates.
+   o Description: Refers to a resource whose available representations
+   are byte-for-byte identical with the corresponding representations of
+   the context IRI.
 
    o Reference: This specification.
 
