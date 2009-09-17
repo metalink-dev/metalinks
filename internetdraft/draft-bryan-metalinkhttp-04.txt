@@ -2,13 +2,13 @@
 
 
 Network Working Group                                      A. Bryan, Ed.
-Internet-Draft                                        Metalinker Project
-Intended status: Standards Track                      September 16, 2009
-Expires: March 20, 2010
+Internet-Draft                                                  N. McNab
+Intended status: Standards Track                      Metalinker Project
+Expires: March 21, 2010                               September 17, 2009
 
 
          MetaLinkHeader: Mirrors and Checksums in HTTP Headers
-                      draft-bryan-metalinkhttp-03
+                      draft-bryan-metalinkhttp-04
 
 Status of this Memo
 
@@ -41,7 +41,7 @@ Status of this Memo
    The list of Internet-Draft Shadow Directories can be accessed at
    http://www.ietf.org/shadow.html.
 
-   This Internet-Draft will expire on March 20, 2010.
+   This Internet-Draft will expire on March 21, 2010.
 
 Copyright Notice
 
@@ -52,7 +52,7 @@ Copyright Notice
 
 
 
-Bryan                    Expires March 20, 2010                 [Page 1]
+Bryan & McNab            Expires March 21, 2010                 [Page 1]
 
 Internet-Draft    MetaLinkHeader: Mirrors and Checksums   September 2009
 
@@ -100,7 +100,7 @@ Table of Contents
                 Editor before publication)  . . . . . . . . . . . . . 10
    Appendix C.  Document History (to be removed by RFC Editor
                 before publication) . . . . . . . . . . . . . . . . . 11
-   Author's Address . . . . . . . . . . . . . . . . . . . . . . . . . 11
+   Authors' Addresses . . . . . . . . . . . . . . . . . . . . . . . . 11
 
 
 
@@ -108,7 +108,7 @@ Table of Contents
 
 
 
-Bryan                    Expires March 20, 2010                 [Page 2]
+Bryan & McNab            Expires March 21, 2010                 [Page 2]
 
 Internet-Draft    MetaLinkHeader: Mirrors and Checksums   September 2009
 
@@ -164,7 +164,7 @@ Internet-Draft    MetaLinkHeader: Mirrors and Checksums   September 2009
 
 
 
-Bryan                    Expires March 20, 2010                 [Page 3]
+Bryan & McNab            Expires March 21, 2010                 [Page 3]
 
 Internet-Draft    MetaLinkHeader: Mirrors and Checksums   September 2009
 
@@ -220,7 +220,7 @@ Internet-Draft    MetaLinkHeader: Mirrors and Checksums   September 2009
 
 
 
-Bryan                    Expires March 20, 2010                 [Page 4]
+Bryan & McNab            Expires March 21, 2010                 [Page 4]
 
 Internet-Draft    MetaLinkHeader: Mirrors and Checksums   September 2009
 
@@ -276,7 +276,7 @@ Internet-Draft    MetaLinkHeader: Mirrors and Checksums   September 2009
 
 
 
-Bryan                    Expires March 20, 2010                 [Page 5]
+Bryan & McNab            Expires March 21, 2010                 [Page 5]
 
 Internet-Draft    MetaLinkHeader: Mirrors and Checksums   September 2009
 
@@ -332,7 +332,7 @@ Internet-Draft    MetaLinkHeader: Mirrors and Checksums   September 2009
 
 
 
-Bryan                    Expires March 20, 2010                 [Page 6]
+Bryan & McNab            Expires March 21, 2010                 [Page 6]
 
 Internet-Draft    MetaLinkHeader: Mirrors and Checksums   September 2009
 
@@ -388,7 +388,7 @@ Internet-Draft    MetaLinkHeader: Mirrors and Checksums   September 2009
 
 
 
-Bryan                    Expires March 20, 2010                 [Page 7]
+Bryan & McNab            Expires March 21, 2010                 [Page 7]
 
 Internet-Draft    MetaLinkHeader: Mirrors and Checksums   September 2009
 
@@ -444,7 +444,7 @@ Internet-Draft    MetaLinkHeader: Mirrors and Checksums   September 2009
 
 
 
-Bryan                    Expires March 20, 2010                 [Page 8]
+Bryan & McNab            Expires March 21, 2010                 [Page 8]
 
 Internet-Draft    MetaLinkHeader: Mirrors and Checksums   September 2009
 
@@ -500,7 +500,7 @@ Internet-Draft    MetaLinkHeader: Mirrors and Checksums   September 2009
 
 
 
-Bryan                    Expires March 20, 2010                 [Page 9]
+Bryan & McNab            Expires March 21, 2010                 [Page 9]
 
 Internet-Draft    MetaLinkHeader: Mirrors and Checksums   September 2009
 
@@ -556,7 +556,7 @@ Appendix B.  What's different...?! (to be removed by RFC Editor before
 
 
 
-Bryan                    Expires March 20, 2010                [Page 10]
+Bryan & McNab            Expires March 21, 2010                [Page 10]
 
 Internet-Draft    MetaLinkHeader: Mirrors and Checksums   September 2009
 
@@ -600,7 +600,7 @@ Appendix C.  Document History (to be removed by RFC Editor before
    o  Initial draft.
 
 
-Author's Address
+Authors' Addresses
 
    Anthony Bryan (editor)
    Metalinker Project
@@ -612,5 +612,61 @@ Author's Address
 
 
 
-Bryan                    Expires March 20, 2010                [Page 11]
+Bryan & McNab            Expires March 21, 2010                [Page 11]
+
+Internet-Draft    MetaLinkHeader: Mirrors and Checksums   September 2009
+
+
+   Neil McNab
+   Metalinker Project
+
+   Email: nabber00@gmail.com
+   URI:   http://www.nabber.org
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Bryan & McNab            Expires March 21, 2010                [Page 12]
 
