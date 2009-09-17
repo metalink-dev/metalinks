@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 ########################################################################
 #
 # Project: Metalink
@@ -31,6 +32,8 @@
 #   Converts a .metalink file into Apache directives for mod_headers and mod_setenvif based on RFC draft.
 # http://tools.ietf.org/html/draft-bryan-metalinkhttp
 #
+# TODO
+# - handle describedby links correctly like bittorrent, ed2k, magnet
 ########################################################################
 
 import optparse
