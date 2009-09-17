@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><?rfc linefile="1:draft-bryan-metalinkhttp-03.xml"?>
+<?xml version="1.0" encoding="UTF-8"?><?rfc linefile="1:draft-bryan-metalinkhttp-04.xml"?>
 <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
 <?rfc toc="yes" ?>
 <?rfc tocdepth="3" ?>
@@ -11,7 +11,7 @@
 <?rfc inline="yes" ?>
 <!DOCTYPE rfc
   PUBLIC "" "rfc2629.dtd">
-<rfc category="std" docName="draft-bryan-metalinkhttp-03" ipr="pre5378Trust200902">
+<rfc category="std" docName="draft-bryan-metalinkhttp-04" ipr="pre5378Trust200902">
     <front>        
       <title abbrev="MetaLinkHeader: Mirrors and Checksums">MetaLinkHeader: Mirrors and Checksums in HTTP Headers</title>		
       <author initials="A." surname="Bryan" fullname="Anthony Bryan" role="editor">
@@ -20,6 +20,13 @@
 	      <email>anthonybryan@gmail.com</email>	
 	      <uri>http://www.metalinker.org</uri>		
 	    </address>
+      </author>
+	        <author initials="N." surname="McNab" fullname="Neil McNab">
+        <organization>Metalinker Project</organization>
+        <address>
+          <email>nabber00@gmail.com</email>
+          <uri>http://www.nabber.org</uri>
+        </address>
       </author>
 	<date month="September" year="2009"/>        
 
