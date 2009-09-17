@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 ########################################################################
 #
 # Project: Metalink Checker
@@ -73,6 +74,7 @@ except: pass
 import base64
 import sys
 import gettext
+import binascii
 
 # for jython support
 #try: import bz2
@@ -295,9 +297,9 @@ def urlhead(url, metalink=False, headers = {}):
     req.get_method = lambda: "HEAD"
     #logging.debug(url)
     fp = urllib2.urlopen(req)
-    headers = fp.headers
+    newheaders = fp.headers
     fp.close()
-    return headers
+    return newheaders
 
 def set_proxies():
     # Set proxies
@@ -338,10 +340,36 @@ def get(src, path, checksums = {}, force = False, handlers = {}, segmented = SEG
         # also a WindowsError is thrown if a local file does not exist
         try:
             # add head check for metalink type, if MIME_TYPE or application/xml? treat as metalink
-            if urlhead(src, metalink=True, headers = headers)["content-type"].startswith(MIME_TYPE):
+            myheaders = urlhead(src, metalink=True, headers = headers)
+            if myheaders["content-type"].startswith(MIME_TYPE):
                 print _("Metalink content-type detected.")
                 return download_metalink(src, path, force, handlers, segmented, headers)
-        except:
+            elif myheaders["link"]:
+                # Metalink HTTP Link headers implementation
+                # does not check for describedby urls but we can't use any of those anyway
+                # TODO this should be more robust and ignore commas in <> for urls
+                links = myheaders['link'].split(",")
+                fileobj = xmlutils.MetalinkFile(os.path.join(path, os.path.basename(src)))
+                fileobj.set_size(myheaders["content-length"])
+                for link in links:
+                    parts = link.split(";")
+                    if parts[1].strip() == 'rel="duplicate"':
+                        fileobj.add_url(parts[0].strip(" <>"))
+                try:
+                    fileobj.hashlist['md5'] = binascii.hexlify(binascii.a2b_base64(myheaders['content-md5'].strip()))
+                except KeyError: pass
+                try:
+                    hashes = myheaders['digest'].split(",")
+                    for hash in hashes:
+                        parts = hash.split("=", 1)
+                        if parts[0].strip() == 'sha':
+                            fileobj.hashlist['sha1'] = binascii.hexlify(binascii.a2b_base64(parts[1].strip()))
+                        if parts[0].strip() == 'md5':
+                            fileobj.hashlist['md5'] = binascii.hexlify(binascii.a2b_base64(parts[1]).strip())
+                except KeyError: pass
+                print _("Using Metalink HTTP Link headers.")
+                return download_file_urls(fileobj, force, handlers, segmented = segmented, headers = headers)
+        except KeyError:
             pass
             
     # assume normal file download here
