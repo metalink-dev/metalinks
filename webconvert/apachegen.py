@@ -68,7 +68,7 @@ def run():
                 text += "SetEnvIf Request_URI \"/%s$\" md5=%s\n" % (fileobj.filename.replace(".","\."), binascii.b2a_base64(binascii.unhexlify(fileobj.hashlist["md5"])))
                 text += "SetEnvIf Request_URI \"/%s$\" sha1=%s\n" % (fileobj.filename.replace(".","\."), binascii.b2a_base64(binascii.unhexlify(fileobj.hashlist["sha1"])))
                 text += "Header onsuccess set Content-MD5 %%{md5}e env=%s\n" % fileobj.filename.replace(".", "_")
-                text += "Header onsuccess set Digest md5=%%{md5}e,sha=%%{md5}e env=%s\n\n" % fileobj.filename.replace(".", "_")
+                text += "Header onsuccess set Digest md5=%%{md5}e,sha=%%{sha1}e env=%s\n\n" % fileobj.filename.replace(".", "_")
             
     print text
 
