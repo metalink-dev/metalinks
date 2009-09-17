@@ -143,14 +143,45 @@ class Checker:
         '''
         self.running = True
         src = download.complete_url(src)
-        datasource = urllib2.urlopen(src)
+        
         try:
-            metalink = xmlutils.Metalink()
-            metalink.parsehandle(datasource)
-        except:
-            print _("ERROR parsing XML.")
-            raise
-        datasource.close()
+            # add head check for metalink type, if MIME_TYPE or application/xml? treat as metalink
+            myheaders = download.urlhead(src, metalink=True)
+            if myheaders["link"]:
+                # Metalink HTTP Link headers implementation
+                # does not check for describedby urls but we can't use any of those anyway
+                # TODO this should be more robust and ignore commas in <> for urls
+                links = myheaders['link'].split(",")
+                fileobj = xmlutils.MetalinkFile(os.path.basename(src))
+                fileobj.set_size(myheaders["content-length"])
+                for link in links:
+                    parts = link.split(";")
+                    if parts[1].strip() == 'rel="duplicate"':
+                        fileobj.add_url(parts[0].strip(" <>"))
+                try:
+                    fileobj.hashlist['md5'] = binascii.hexlify(binascii.a2b_base64(myheaders['content-md5'].strip()))
+                except KeyError: pass
+                try:
+                    hashes = myheaders['digest'].split(",")
+                    for hash in hashes:
+                        parts = hash.split("=", 1)
+                        if parts[0].strip() == 'sha':
+                            fileobj.hashlist['sha1'] = binascii.hexlify(binascii.a2b_base64(parts[1].strip()))
+                        if parts[0].strip() == 'md5':
+                            fileobj.hashlist['md5'] = binascii.hexlify(binascii.a2b_base64(parts[1]).strip())
+                except KeyError: pass
+                print _("Using Metalink HTTP Link headers.")
+                metalink = xmlutils.Metalink()
+                metalink.files.append(fileobj)
+        except KeyError:
+            datasource = urllib2.urlopen(src)
+            try:
+                metalink = xmlutils.Metalink()
+                metalink.parsehandle(datasource)
+            except:
+                print _("ERROR parsing XML.")
+                raise
+            datasource.close()
         
         if metalink.type == "dynamic":
             origin = metalink.origin
@@ -312,7 +343,7 @@ class Checker:
             result = self._check_process(headers, size, item.get_checksums())
             result.append(redir)
             #self.results[item.name][checker.geturl()] = result
-            self._add_result(item.name, filename, result)
+            self._add_result(item.filename, filename, result)
             #print "-" *79
             #print _("Checked") + ": %s" % filename
             #if redir != None:
