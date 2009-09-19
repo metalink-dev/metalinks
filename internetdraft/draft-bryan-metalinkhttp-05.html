@@ -144,9 +144,9 @@
 <tr><td class="header">Network Working Group</td><td class="header">A. Bryan, Ed.</td></tr>
 <tr><td class="header">Internet-Draft</td><td class="header">N. McNab</td></tr>
 <tr><td class="header">Intended status: Standards Track</td><td class="header">Metalinker Project</td></tr>
-<tr><td class="header">Expires: March 21, 2010</td><td class="header">September 17, 2009</td></tr>
+<tr><td class="header">Expires: March 23, 2010</td><td class="header">September 19, 2009</td></tr>
 </table></td></tr></table>
-<h1><br />MetaLinkHeader: Mirrors and Checksums in HTTP Headers<br />draft-bryan-metalinkhttp-04</h1>
+<h1><br />MetaLinkHeader: Mirrors and Checksums in HTTP Headers<br />draft-bryan-metalinkhttp-05</h1>
 
 <h3>Status of this Memo</h3>
 <p>
@@ -180,7 +180,7 @@ The list of current Internet-Drafts can be accessed at
 The list of Internet-Draft Shadow Directories can be accessed at
 <a href='http://www.ietf.org/shadow.html'>http://www.ietf.org/shadow.html</a>.</p>
 <p>
-This Internet-Draft will expire on March 21, 2010.</p>
+This Internet-Draft will expire on March 23, 2010.</p>
 
 <h3>Copyright Notice</h3>
 <p>
@@ -244,7 +244,7 @@ Informative References<br />
 <a href="#anchor11">Appendix&nbsp;A.</a>&nbsp;
 Acknowledgements and Contributors<br />
 <a href="#anchor12">Appendix&nbsp;B.</a>&nbsp;
-What's different...?! (to be removed by RFC Editor before publication)<br />
+Comparisons to Similar Options (to be removed by RFC Editor before publication)<br />
 <a href="#anchor13">Appendix&nbsp;C.</a>&nbsp;
 Document History (to be removed by RFC Editor before publication)<br />
 <a href="#rfc.authors">&#167;</a>&nbsp;
@@ -317,14 +317,15 @@ Requirements</h3>
 <p>In this context, "MetaLink" refers to a MetaLinkHeader which consists of mirrors and checksums in HTTP Headers as described in this document. "Metalink XML" refers to the XML format described in <a class='info' href='#draft-bryan-metalink'>[draft&#8209;bryan&#8209;metalink]<span> (</span><span class='info'>Bryan, A., Ed., Tsujikawa, T., McNab, N., and P. Poeml, &ldquo;The Metalink Download Description Format,&rdquo; August&nbsp;2009.</span><span>)</span></a>.
 </p>
 <p>Metalink servers are HTTP servers that MUST have lists of mirrors and use the Link header <a class='info' href='#draft-nottingham-http-link-header'>[draft&#8209;nottingham&#8209;http&#8209;link&#8209;header]<span> (</span><span class='info'>Nottingham, M., &ldquo;Web Linking,&rdquo; July&nbsp;2009.</span><span>)</span></a> to indicate them. They also MUST
-	  provide checksums of files via Instance Digests in HTTP <a class='info' href='#RFC3230'>[RFC3230]<span> (</span><span class='info'>Mogul, J. and A. Van Hoff, &ldquo;Instance Digests in HTTP,&rdquo; January&nbsp;2002.</span><span>)</span></a>. Mirror and checksum information provided by the originating Metalink server is considered authoritative.
+	  provide checksums of files via Instance Digests in HTTP <a class='info' href='#RFC3230'>[RFC3230]<span> (</span><span class='info'>Mogul, J. and A. Van Hoff, &ldquo;Instance Digests in HTTP,&rdquo; January&nbsp;2002.</span><span>)</span></a>. Mirror and checksum information provided by the originating Metalink server MUST be considered authoritative. Metalink servers and their associated mirror servers
+      SHOULD all share the same ETag policy, i.e. base it on the file contents (checksum) and not server-unique filesystem metadata. The emitted ETag may be implemented the same as the Instance Digest for simplicity.
 </p>
 <p>Mirror servers are typically FTP or HTTP servers that "mirror" another server. That is, they provide identical copies of (at least some) files that are also on the mirrored server. 
       Mirror servers MAY be Metalink servers. Mirror servers MUST support serving partial content. Mirror servers SHOULD support Instance Digests in HTTP <a class='info' href='#RFC3230'>[RFC3230]<span> (</span><span class='info'>Mogul, J. and A. Van Hoff, &ldquo;Instance Digests in HTTP,&rdquo; January&nbsp;2002.</span><span>)</span></a>.
 </p>
 <p>Metalink clients use the mirrors provided by a Metalink server with Link header <a class='info' href='#draft-nottingham-http-link-header'>[draft&#8209;nottingham&#8209;http&#8209;link&#8209;header]<span> (</span><span class='info'>Nottingham, M., &ldquo;Web Linking,&rdquo; July&nbsp;2009.</span><span>)</span></a>. Metalink clients MUST support HTTP and MAY support FTP, BitTorrent, 
       or other download methods. Metalink clients MUST switch downloads from one mirror to another if the one mirror becomes unreachable. Metalink clients are RECOMMENDED to support multi-source, or parallel, 
-      downloads, where chunks of a file are downloaded from multiple mirrors simultaneously (and optionally, Peer-to-Peer). Metalink clients MUST support Instance Digests in HTTP <a class='info' href='#RFC3230'>[RFC3230]<span> (</span><span class='info'>Mogul, J. and A. Van Hoff, &ldquo;Instance Digests in HTTP,&rdquo; January&nbsp;2002.</span><span>)</span></a> by 
+      downloads, where chunks of a file are downloaded from multiple mirrors simultaneously (and optionally, from Peer-to-Peer sources). Metalink clients MUST support Instance Digests in HTTP <a class='info' href='#RFC3230'>[RFC3230]<span> (</span><span class='info'>Mogul, J. and A. Van Hoff, &ldquo;Instance Digests in HTTP,&rdquo; January&nbsp;2002.</span><span>)</span></a> by 
       requesting and verifying checksums. Metalink clients MAY make use of digital signatures if they are offered.
 </p>
 <a name="mirrors"></a><br /><hr />
@@ -398,8 +399,6 @@ Want-Digest: MD5;q=0.3, SHA;q=0.8
 Digest: SHA=thvDyvhfIqlvFe+A9MYgxAfm1q5=
 </pre></div>
 
-<p>[[Some publishers will probably desire stronger hashes.]]
-</p>
 <a name="chunkchecksums"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.6.2"></a><h3>6.2.&nbsp;
@@ -584,19 +583,19 @@ References</h3>
 <a name="rfc.section.A"></a><h3>Appendix A.&nbsp;
 Acknowledgements and Contributors</h3>
 
-<p>Thanks to Daniel Stenberg and Mark Nottingham.
+<p>Thanks to Mark Nottingham, Daniel Stenberg and Henrik Nordstrom.
 </p>
 <a name="anchor12"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.B"></a><h3>Appendix B.&nbsp;
-What's different...?! (to be removed by RFC Editor before publication)</h3>
+Comparisons to Similar Options (to be removed by RFC Editor before publication)</h3>
 
 <p>...or missing, compared to the Metalink XML format <a class='info' href='#draft-bryan-metalink'>[draft&#8209;bryan&#8209;metalink]<span> (</span><span class='info'>Bryan, A., Ed., Tsujikawa, T., McNab, N., and P. Poeml, &ldquo;The Metalink Download Description Format,&rdquo; August&nbsp;2009.</span><span>)</span></a> :
 </p>
 <p>
 	    </p>
 <ul class="text">
-<li>(+) Reuses existing standards without defining much new stuff. It's more of a collection/coordinated feature set.
+<li>(+) Reuses existing HTTP standards without defining anything new besides a Link Relation Type. It's more of a collection/coordinated feature set.
 </li>
 <li>(+) No XML dependency.
 </li>
@@ -610,7 +609,7 @@ What's different...?! (to be removed by RFC Editor before publication)</h3>
 </li>
 <li>(-) Also, Metalink XML files are easily mirrored on all servers. Even if usage in that case is not as transparent, it still gives access to users at all mirrors (FTP included) to all download information with no changes needed to the server.
 </li>
-<li>(-) Not portable/archivable/emailable. Not as easy for search engines to index?
+<li>(-) Not portable/archivable/emailable. Metalink XML is used to import/export transfer queues. Not as easy for search engines to index?
 </li>
 <li>(-) No way to show mirror/p2p geographical location (yet).
 </li>
@@ -629,7 +628,7 @@ What's different...?! (to be removed by RFC Editor before publication)</h3>
 <ul class="text">
 <li>(+) Can define mirrors for whole directories.
 </li>
-<li>(-?) Defines mostly new stuff. Doesn't reuse existing standards.
+<li>(-?) Defines new headers. Doesn't reuse existing standards.
 </li>
 <li>(---) Requires changes to server software.
 </li>
@@ -637,7 +636,7 @@ What's different...?! (to be removed by RFC Editor before publication)</h3>
 </li>
 <li>(---) Doesn't tie in p2p.
 </li>
-<li>(-) No way to show mirror/p2p geographical location (yet).
+<li>(-) No way to show mirror/p2p priority or geographical location (yet).
 </li>
 </ul>
 
@@ -651,11 +650,27 @@ Document History (to be removed by RFC Editor before publication)</h3>
 <p>Known issues concerning this draft:
 	    </p>
 <ul class="text">
+<li>Mirror negotiation. Only send a few mirrors, or only send them if Want-Digest is used? Some organizations have many mirrors.
+</li>
+<li>Some publishers desire stronger hashes than MD5 and SHA-1.
+</li>
+<li>Content-MD5 for chunk checksums could lead to many random size chunk checksum requests. Use consistent chunk sizes?
+</li>
+<li>Do we want a way to show that whole directories are mirrored, instead of individual files?
+</li>
 <li>Need an official MIME type for .torrent files.
 </li>
 </ul>
 
-<p>-04 : September , 2009.
+<p>-05 : September , 2009.
+	    
+	    </p>
+<ul class="text">
+<li>ETags, preferably matching the Instance Digests.
+</li>
+</ul>
+
+<p>-04 : September 17, 2009.
 	    
 	    </p>
 <ul class="text">

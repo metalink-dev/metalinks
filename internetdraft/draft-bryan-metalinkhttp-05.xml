@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><?rfc linefile="1:draft-bryan-metalinkhttp-04.xml"?>
+<?xml version="1.0" encoding="UTF-8"?><?rfc linefile="1:draft-bryan-metalinkhttp-05.xml"?>
 <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
 <?rfc toc="yes" ?>
 <?rfc tocdepth="3" ?>
@@ -11,7 +11,7 @@
 <?rfc inline="yes" ?>
 <!DOCTYPE rfc
   PUBLIC "" "rfc2629.dtd">
-<rfc category="std" docName="draft-bryan-metalinkhttp-04" ipr="pre5378Trust200902">
+<rfc category="std" docName="draft-bryan-metalinkhttp-05" ipr="pre5378Trust200902">
     <front>        
       <title abbrev="MetaLinkHeader: Mirrors and Checksums">MetaLinkHeader: Mirrors and Checksums in HTTP Headers</title>		
       <author initials="A." surname="Bryan" fullname="Anthony Bryan" role="editor">
@@ -92,14 +92,15 @@ Digest: SHA=thvDyvhfIqlvFe+A9MYgxAfm1q5=
     <section title="Requirements" anchor="req">
 	  <t>In this context, "MetaLink" refers to a MetaLinkHeader which consists of mirrors and checksums in HTTP Headers as described in this document. "Metalink XML" refers to the XML format described in <xref target="draft-bryan-metalink"/>.</t>
       <t>Metalink servers are HTTP servers that MUST have lists of mirrors and use the Link header <xref target="draft-nottingham-http-link-header"/> to indicate them. They also MUST
-	  provide checksums of files via Instance Digests in HTTP <xref target="RFC3230"/>. Mirror and checksum information provided by the originating Metalink server is considered authoritative.</t>
+	  provide checksums of files via Instance Digests in HTTP <xref target="RFC3230"/>. Mirror and checksum information provided by the originating Metalink server MUST be considered authoritative. Metalink servers and their associated mirror servers
+      SHOULD all share the same ETag policy, i.e. base it on the file contents (checksum) and not server-unique filesystem metadata. The emitted ETag may be implemented the same as the Instance Digest for simplicity.</t>
 
 	  <t>Mirror servers are typically FTP or HTTP servers that "mirror" another server. That is, they provide identical copies of (at least some) files that are also on the mirrored server. 
       Mirror servers MAY be Metalink servers. Mirror servers MUST support serving partial content. Mirror servers SHOULD support Instance Digests in HTTP <xref target="RFC3230"/>.</t>
 
       <t>Metalink clients use the mirrors provided by a Metalink server with Link header <xref target="draft-nottingham-http-link-header"/>. Metalink clients MUST support HTTP and MAY support FTP, BitTorrent, 
       or other download methods. Metalink clients MUST switch downloads from one mirror to another if the one mirror becomes unreachable. Metalink clients are RECOMMENDED to support multi-source, or parallel, 
-      downloads, where chunks of a file are downloaded from multiple mirrors simultaneously (and optionally, Peer-to-Peer). Metalink clients MUST support Instance Digests in HTTP <xref target="RFC3230"/> by 
+      downloads, where chunks of a file are downloaded from multiple mirrors simultaneously (and optionally, from Peer-to-Peer sources). Metalink clients MUST support Instance Digests in HTTP <xref target="RFC3230"/> by 
       requesting and verifying checksums. Metalink clients MAY make use of digital signatures if they are offered.</t>
 	  
 	  </section>
@@ -160,7 +161,6 @@ Want-Digest: MD5;q=0.3, SHA;q=0.8
 Digest: SHA=thvDyvhfIqlvFe+A9MYgxAfm1q5=
 </artwork></figure></t>
 
-      <t>[[Some publishers will probably desire stronger hashes.]]</t>
     </section>
     <section title="Checksums of Chunks of Files" anchor="chunkchecksums">
 
@@ -486,24 +486,24 @@ Content-Range: bytes 7433802-14867602/14867603
 	    </references> 
 
 	    <section title="Acknowledgements and Contributors">
-		  <t>Thanks to Daniel Stenberg and Mark Nottingham.</t>
+		  <t>Thanks to Mark Nottingham, Daniel Stenberg and Henrik Nordstrom.</t>
     
 
 	    </section> 
 
-	    <section title="What's different...?! (to be removed by RFC Editor before publication)">
+	    <section title="Comparisons to Similar Options (to be removed by RFC Editor before publication)">
 		<t>...or missing, compared to the Metalink XML format <xref target="draft-bryan-metalink"/> :</t>
         <t>
 	    <list style="symbols">
 
-	      <t>(+) Reuses existing standards without defining much new stuff. It's more of a collection/coordinated feature set.</t>
+	      <t>(+) Reuses existing HTTP standards without defining anything new besides a Link Relation Type. It's more of a collection/coordinated feature set.</t>
 	      <t>(+) No XML dependency.</t>
 		  <t>(-?) Tied to HTTP, not as generic. FTP/P2P clients won't be using it unless they also support HTTP, unlike Metalink XML.</t>
 	      <t>(---) Requires changes to server software.</t>
 	      <t>(-?) Could require some coordination of all mirror servers for all features, which may be difficult or impossible unless you are in control of all servers on the mirror network.</t>
 	      <t>(-) Metalink XML can be created by user (or server, but server component/changes not required).</t>
 		  <t>(-) Also, Metalink XML files are easily mirrored on all servers. Even if usage in that case is not as transparent, it still gives access to users at all mirrors (FTP included) to all download information with no changes needed to the server.</t>
-	      <t>(-) Not portable/archivable/emailable. Not as easy for search engines to index?</t>
+	      <t>(-) Not portable/archivable/emailable. Metalink XML is used to import/export transfer queues. Not as easy for search engines to index?</t>
 	      <t>(-) No way to show mirror/p2p geographical location (yet).</t>
 	      <t>(-) No checksums besides MD5/SHA-1 (yet).</t>
 	      <t>(-) Not as rich metadata.</t>
@@ -515,11 +515,11 @@ Content-Range: bytes 7433802-14867602/14867603
 	    <list style="symbols">
 
 	      <t>(+) Can define mirrors for whole directories.</t>
-	      <t>(-?) Defines mostly new stuff. Doesn't reuse existing standards.</t>
+	      <t>(-?) Defines new headers. Doesn't reuse existing standards.</t>
 	      <t>(---) Requires changes to server software.</t>
 	      <t>(---) Requires coordination of all mirror servers for all features, which may be difficult or impossible unless you are in control of all servers on the mirror network.</t>
 		  <t>(---) Doesn't tie in p2p.</t>
-	      <t>(-) No way to show mirror/p2p geographical location (yet).</t>
+	      <t>(-) No way to show mirror/p2p priority or geographical location (yet).</t>
 	    </list></t>
 		
 		
@@ -530,15 +530,28 @@ Content-Range: bytes 7433802-14867602/14867603
 		<t>Known issues concerning this draft:
 	    <list style="symbols"> 
 	      
-	      <t>Need an official MIME type for .torrent files.</t>
+	      <t>Mirror negotiation. Only send a few mirrors, or only send them if Want-Digest is used? Some organizations have many mirrors.</t>
+		  <t>Some publishers desire stronger hashes than MD5 and SHA-1.</t>
+		  <t>Content-MD5 for chunk checksums could lead to many random size chunk checksum requests. Use consistent chunk sizes?</t>
+		  <t>Do we want a way to show that whole directories are mirrored, instead of individual files?</t>
+		  <t>Need an official MIME type for .torrent files.</t>
 
 	    </list></t>
-<t>-04 : September , 2009.
+
+<t>-05 : September , 2009.
+	    
+	    <list style="symbols">
+
+	      <t>ETags, preferably matching the Instance Digests.</t>
+	    </list></t>
+		  
+<t>-04 : September 17, 2009.
 	    
 	    <list style="symbols">
 
 	      <t>Remove .torrent until it has an official MIME type.</t>
 	    </list></t>
+
 <t>-03 : September 16, 2009.
 	    
 	    <list style="symbols">
