@@ -31,9 +31,7 @@
 # Description:
 #   Converts a .metalink file into Apache directives for mod_headers and mod_setenvif based on RFC draft.
 # http://tools.ietf.org/html/draft-bryan-metalinkhttp
-#
-# TODO
-# - handle describedby links correctly like bittorrent, ed2k, magnet
+# 
 ########################################################################
 
 import optparse
@@ -41,6 +39,9 @@ import os
 import binascii
 
 import xmlutils
+
+# set to "always" or "onsuccess" as described in the apache manual for mod_headers
+HTTPSTATUS="always"
 
 def run():
     # Command line parser options.
@@ -66,12 +67,15 @@ def run():
                 i = 1
                 for res in fileobj.resources:
                     text += "SetEnvIf Request_URI \"/%s$\" link%d=%s\n" % (fileobj.filename.replace(".","\."), i, res.url)
-                    text += "Header onsuccess add Link \"<%%{link%d}e>; rel=\\\"duplicate\\\";\" env=%s\n" % (i, fileobj.filename.replace(".", "_"))
+                    if res.url.split(":")[0] in ("http", "ftp", "https", "ftps", "resync") and res.url.rsplit(".")[-1] != "torrent":
+                        text += "Header %s add Link \"<%%{link%d}e>; rel=\\\"duplicate\\\";\" env=%s\n" % (HTTPSTATUS, i, fileobj.filename.replace(".", "_"))
+                    else:
+                        text += "Header %s add Link \"<%%{link%d}e>; rel=\\\"describedby\\\";\" env=%s\n" % (HTTPSTATUS, i, fileobj.filename.replace(".", "_"))
                     i += 1
                 text += "SetEnvIf Request_URI \"/%s$\" md5=%s\n" % (fileobj.filename.replace(".","\."), binascii.b2a_base64(binascii.unhexlify(fileobj.hashlist["md5"])))
                 text += "SetEnvIf Request_URI \"/%s$\" sha1=%s\n" % (fileobj.filename.replace(".","\."), binascii.b2a_base64(binascii.unhexlify(fileobj.hashlist["sha1"])))
-                text += "Header onsuccess set Content-MD5 %%{md5}e env=%s\n" % fileobj.filename.replace(".", "_")
-                text += "Header onsuccess set Digest md5=%%{md5}e,sha=%%{sha1}e env=%s\n\n" % fileobj.filename.replace(".", "_")
+                text += "Header %s set Content-MD5 %%{md5}e env=%s\n" % (HTTPSTATUS, fileobj.filename.replace(".", "_"))
+                text += "Header %s set Digest md5=%%{md5}e,sha=%%{sha1}e env=%s\n\n" % (HTTPSTATUS, fileobj.filename.replace(".", "_"))
             
     print text
 
