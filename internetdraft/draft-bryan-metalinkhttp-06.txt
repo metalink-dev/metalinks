@@ -86,24 +86,24 @@ Table of Contents
      6.1.  Checksums of Whole Files . . . . . . . . . . . . . . . . .  6
      6.2.  Checksums of Partial Files . . . . . . . . . . . . . . . .  6
    7.  Client / Server Multi-source Download Interaction  . . . . . .  7
-   8.  Link Relation Type Registration: "duplicate" . . . . . . . . .  9
-   9.  Security Considerations  . . . . . . . . . . . . . . . . . . .  9
-     9.1.  URIs and IRIs  . . . . . . . . . . . . . . . . . . . . . .  9
-     9.2.  Spoofing . . . . . . . . . . . . . . . . . . . . . . . . .  9
-     9.3.  Cryptographic Hashes . . . . . . . . . . . . . . . . . . .  9
+   8.  IANA Considerations  . . . . . . . . . . . . . . . . . . . . .  9
+     8.1.  Link Relation Type Registration: "duplicate" . . . . . . .  9
+     8.2.  Hypertext Transfer Protocol (HTTP) Digest Algorithm
+           Values Registration  . . . . . . . . . . . . . . . . . . .  9
+   9.  Security Considerations  . . . . . . . . . . . . . . . . . . . 10
+     9.1.  URIs and IRIs  . . . . . . . . . . . . . . . . . . . . . . 10
+     9.2.  Spoofing . . . . . . . . . . . . . . . . . . . . . . . . . 10
+     9.3.  Cryptographic Hashes . . . . . . . . . . . . . . . . . . . 10
      9.4.  Signing  . . . . . . . . . . . . . . . . . . . . . . . . . 10
-   10. References . . . . . . . . . . . . . . . . . . . . . . . . . . 10
-     10.1. Normative References . . . . . . . . . . . . . . . . . . . 10
-     10.2. Informative References . . . . . . . . . . . . . . . . . . 11
-   Appendix A.  Acknowledgements and Contributors . . . . . . . . . . 11
+   10. References . . . . . . . . . . . . . . . . . . . . . . . . . . 11
+     10.1. Normative References . . . . . . . . . . . . . . . . . . . 11
+     10.2. Informative References . . . . . . . . . . . . . . . . . . 12
+   Appendix A.  Acknowledgements and Contributors . . . . . . . . . . 12
    Appendix B.  Comparisons to Similar Options (to be removed by
-                RFC Editor before publication)  . . . . . . . . . . . 11
+                RFC Editor before publication)  . . . . . . . . . . . 12
    Appendix C.  Document History (to be removed by RFC Editor
-                before publication) . . . . . . . . . . . . . . . . . 12
-   Authors' Addresses . . . . . . . . . . . . . . . . . . . . . . . . 13
-
-
-
+                before publication) . . . . . . . . . . . . . . . . . 13
+   Authors' Addresses . . . . . . . . . . . . . . . . . . . . . . . . 14
 
 
 
@@ -174,14 +174,14 @@ Internet-Draft    MetaLinkHeader: Mirrors and Checksums   September 2009
    A brief Metalink server response with checksum, mirrors, .metalink,
    and OpenPGP signature:
 
-   Link: <http://www2.example.com/example.ext>; rel="duplicate";
-   Link: <ftp://ftp.example.com/example.ext>; rel="duplicate";
+   Link: <http://www2.example.com/example.ext>; rel="duplicate"
+   Link: <ftp://ftp.example.com/example.ext>; rel="duplicate"
    Link: <http://example.com/example.ext.torrent>; rel="describedby";
-   type="application/x-bittorrent";
+   type="application/x-bittorrent"
    Link: <http://example.com/example.ext.metalink>; rel="describedby";
-   type="application/metalink4+xml";
+   type="application/metalink4+xml"
    Link: <http://example.com/example.ext.asc>; rel="describedby";
-   type="application/pgp-signature";
+   type="application/pgp-signature"
    Digest: SHA=thvDyvhfIqlvFe+A9MYgxAfm1q5=
 
 1.2.  Notational Conventions
@@ -206,9 +206,9 @@ Internet-Draft    MetaLinkHeader: Mirrors and Checksums   September 2009
    them.  They also MUST provide checksums of files via Instance Digests
    in HTTP [RFC3230].  Mirror and checksum information provided by the
    originating Metalink server MUST be considered authoritative.
-   Metalink servers and their associated mirror servers MAY all share
-   the same ETag policy, i.e. base it on the file contents (checksum)
-   and not server-unique filesystem metadata.  The emitted ETag may be
+   Metalink servers and their associated mirror servers SHOULD all share
+   the same ETag policy, i.e. based on the file contents (checksum) and
+   not server-unique filesystem metadata.  The emitted ETag may be
    implemented the same as the Instance Digest for simplicity.
 
    Mirror servers are typically FTP or HTTP servers that "mirror"
@@ -242,7 +242,7 @@ Internet-Draft    MetaLinkHeader: Mirrors and Checksums   September 2009
 
    Mirrors are specified with the Link header
    [draft-nottingham-http-link-header] and a relation type of
-   "duplicate" as defined in Section 8.
+   "duplicate" as defined in Section 8.1.
 
    A brief Metalink server response with two mirrors only:
 
@@ -265,9 +265,9 @@ Internet-Draft    MetaLinkHeader: Mirrors and Checksums   September 2009
    A brief Metalink server response with .torrent and .metalink:
 
    Link: <http://example.com/example.ext.torrent>; rel="describedby";
-   type="application/x-bittorrent";
+   type="application/x-bittorrent"
    Link: <http://example.com/example.ext.metalink>; rel="describedby";
-   type="application/metalink4+xml";
+   type="application/metalink4+xml"
 
 
 
@@ -375,14 +375,14 @@ Internet-Draft    MetaLinkHeader: Mirrors and Checksums   September 2009
    Content-Length: 14867603
    Content-Type: application/x-cd-image
    Etag: "thvDyvhfIqlvFe+A9MYgxAfm1q5="
-   Link: <http://www2.example.com/example.ext>; rel="duplicate";
-   Link: <ftp://ftp.example.com/example.ext>; rel="duplicate";
+   Link: <http://www2.example.com/example.ext>; rel="duplicate"
+   Link: <ftp://ftp.example.com/example.ext>; rel="duplicate"
    Link: <http://example.com/example.ext.torrent>; rel="describedby";
-   type="application/x-bittorrent";
+   type="application/x-bittorrent"
    Link: <http://example.com/example.ext.metalink>; rel="describedby";
-   type="application/metalink4+xml";
+   type="application/metalink4+xml"
    Link: <http://example.com/example.ext.asc>; rel="describedby";
-   type="application/pgp-signature";
+   type="application/pgp-signature"
    Digest: SHA=thvDyvhfIqlvFe+A9MYgxAfm1q5=
 
 
@@ -412,7 +412,11 @@ Internet-Draft    MetaLinkHeader: Mirrors and Checksums   September 2009
    If no Range limit was given in the original request then work from
    the tail of the object (the first request is still running and will
    eventually catch up), otherwise continue after the range requested in
-   the first request.  One of the client requests to a mirror server:
+   the first request.
+
+   If ETags are coordinated between mirrors, If-Match conditions based
+   on the ETag SHOULD be used to quickly detect out-of-date mirrors.
+   One of the client requests to a mirror server:
 
    GET /example.ext HTTP/1.1
    Host: www2.example.com
@@ -437,10 +441,6 @@ Internet-Draft    MetaLinkHeader: Mirrors and Checksums   September 2009
    checksum of the file.
 
    If the object checksum does not match the Instance Digest then fetch
-   the Metalink XML or other recovery profile link, where partial file
-   checksums can be found, allowing detection of which server returned
-   bad information.
-
 
 
 
@@ -448,6 +448,10 @@ Bryan & McNab            Expires March 26, 2010                 [Page 8]
 
 Internet-Draft    MetaLinkHeader: Mirrors and Checksums   September 2009
 
+
+   the Metalink XML or other recovery profile link, where partial file
+   checksums can be found, allowing detection of which server returned
+   bad information.
 
    In most cases it is sufficient that the Metalink server provides
    mirrors and Instance Digest information, but operation will be more
@@ -458,7 +462,11 @@ Internet-Draft    MetaLinkHeader: Mirrors and Checksums   September 2009
    servers.
 
 
-8.  Link Relation Type Registration: "duplicate"
+8.  IANA Considerations
+
+   Accordingly, IANA has made the following registrations.
+
+8.1.  Link Relation Type Registration: "duplicate"
 
    o Relation Name: duplicate
 
@@ -472,6 +480,42 @@ Internet-Draft    MetaLinkHeader: Mirrors and Checksums   September 2009
    request on any duplicate will return the same representation.  It
    does not make sense for dynamic or POSTable resources and should not
    be used for them.
+
+8.2.  Hypertext Transfer Protocol (HTTP) Digest Algorithm Values
+      Registration
+
+   This document makes use of the IANA registry named "Hypertext
+   Transfer Protocol (HTTP) Digest Algorithm Values" specified in
+   [RFC3230].
+
+      Digest Algorithm: SHA-224
+      Description: The SHA-224 algorithm [SHS].  The output of this
+      algorithm is encoded using the base64 encoding [RFC2045].
+      Reference: [SHS] [RFC2045]
+
+      Digest Algorithm: SHA-256
+      Description: The SHA-256 algorithm [SHS].  The output of this
+      algorithm is encoded using the base64 encoding [RFC2045].
+
+
+
+
+Bryan & McNab            Expires March 26, 2010                 [Page 9]
+
+Internet-Draft    MetaLinkHeader: Mirrors and Checksums   September 2009
+
+
+      Reference: [SHS] [RFC2045]
+
+      Digest Algorithm: SHA-384
+      Description: The SHA-384 algorithm [SHS].  The output of this
+      algorithm is encoded using the base64 encoding [RFC2045].
+      Reference: [SHS] [RFC2045]
+
+      Digest Algorithm: SHA-512
+      Description: The SHA-512 algorithm [SHS].  The output of this
+      algorithm is encoded using the base64 encoding [RFC2045].
+      Reference: [SHS] [RFC2045]
 
 
 9.  Security Considerations
@@ -497,14 +541,6 @@ Internet-Draft    MetaLinkHeader: Mirrors and Checksums   September 2009
    [RFC3230] and Content-MD5 header [RFC1864] are considered insecure.
    These include the whole Message Digest family of algorithms which are
    not suitable for cryptographically strong verification.  Malicious
-
-
-
-Bryan & McNab            Expires March 26, 2010                 [Page 9]
-
-Internet-Draft    MetaLinkHeader: Mirrors and Checksums   September 2009
-
-
    people could provide files that appear to be identical to another
    file because of a collision, i.e. the weak cryptographic hashes of
    the intended file and a substituted malicious file could match.
@@ -518,6 +554,13 @@ Internet-Draft    MetaLinkHeader: Mirrors and Checksums   September 2009
    Metalinks should include digital signatures, as described in
    Section 5.
 
+
+
+Bryan & McNab            Expires March 26, 2010                [Page 10]
+
+Internet-Draft    MetaLinkHeader: Mirrors and Checksums   September 2009
+
+
    Digital signatures provide authentication, message integrity, and
    non-repudiation with proof of origin.
 
@@ -528,6 +571,10 @@ Internet-Draft    MetaLinkHeader: Mirrors and Checksums   September 2009
 
    [RFC1864]  Myers, J. and M. Rose, "The Content-MD5 Header Field",
               RFC 1864, October 1995.
+
+   [RFC2045]  Freed, N. and N. Borenstein, "Multipurpose Internet Mail
+              Extensions (MIME) Part One: Format of Internet Message
+              Bodies", RFC 2045, November 1996.
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119, March 1997.
@@ -549,6 +596,11 @@ Internet-Draft    MetaLinkHeader: Mirrors and Checksums   September 2009
    [RFC3987]  Duerst, M. and M. Suignard, "Internationalized Resource
               Identifiers (IRIs)", RFC 3987, January 2005.
 
+   [SHS]      National Institute of Standards and Technology (NIST),
+              "Secure Hash Standard", FIPS PUB 180-3, October 2008, <htt
+              p://csrc.nist.gov/publications/fips/fips180-3/
+              fips180-3_final.pdf>.
+
    [draft-nottingham-http-link-header]
               Nottingham, M., "Web Linking",
               draft-nottingham-http-link-header-06 (work in progress),
@@ -556,7 +608,11 @@ Internet-Draft    MetaLinkHeader: Mirrors and Checksums   September 2009
 
 
 
-Bryan & McNab            Expires March 26, 2010                [Page 10]
+
+
+
+
+Bryan & McNab            Expires March 26, 2010                [Page 11]
 
 Internet-Draft    MetaLinkHeader: Mirrors and Checksums   September 2009
 
@@ -612,7 +668,7 @@ Appendix B.  Comparisons to Similar Options (to be removed by RFC Editor
 
 
 
-Bryan & McNab            Expires March 26, 2010                [Page 11]
+Bryan & McNab            Expires March 26, 2010                [Page 12]
 
 Internet-Draft    MetaLinkHeader: Mirrors and Checksums   September 2009
 
@@ -668,7 +724,7 @@ Appendix C.  Document History (to be removed by RFC Editor before
 
 
 
-Bryan & McNab            Expires March 26, 2010                [Page 12]
+Bryan & McNab            Expires March 26, 2010                [Page 13]
 
 Internet-Draft    MetaLinkHeader: Mirrors and Checksums   September 2009
 
@@ -724,5 +780,5 @@ Authors' Addresses
 
 
 
-Bryan & McNab            Expires March 26, 2010                [Page 13]
+Bryan & McNab            Expires March 26, 2010                [Page 14]
 
