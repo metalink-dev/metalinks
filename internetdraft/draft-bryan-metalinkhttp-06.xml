@@ -68,14 +68,14 @@
 	  <preamble>A brief Metalink server response with checksum, mirrors, .metalink, and OpenPGP signature:</preamble>
 	  
 	  <artwork type="example">
-Link: &lt;http://www2.example.com/example.ext&gt;; rel="duplicate";
-Link: &lt;ftp://ftp.example.com/example.ext&gt;; rel="duplicate";
+Link: &lt;http://www2.example.com/example.ext&gt;; rel="duplicate"
+Link: &lt;ftp://ftp.example.com/example.ext&gt;; rel="duplicate"
 Link: &lt;http://example.com/example.ext.torrent&gt;; rel="describedby";
-type="application/x-bittorrent";
+type="application/x-bittorrent"
 Link: &lt;http://example.com/example.ext.metalink&gt;; rel="describedby";
-type="application/metalink4+xml";
+type="application/metalink4+xml"
 Link: &lt;http://example.com/example.ext.asc&gt;; rel="describedby";
-type="application/pgp-signature";
+type="application/pgp-signature"
 Digest: SHA=thvDyvhfIqlvFe+A9MYgxAfm1q5=
 </artwork></figure></t>
       </section> 
@@ -95,7 +95,7 @@ Digest: SHA=thvDyvhfIqlvFe+A9MYgxAfm1q5=
 	  <t>In this context, "MetaLink" refers to a MetaLinkHeader which consists of mirrors and checksums in HTTP Headers as described in this document. "Metalink XML" refers to the XML format described in <xref target="draft-bryan-metalink"/>.</t>
       <t>Metalink servers are HTTP servers that MUST have lists of mirrors and use the Link header <xref target="draft-nottingham-http-link-header"/> to indicate them. They also MUST
 	  provide checksums of files via Instance Digests in HTTP <xref target="RFC3230"/>. Mirror and checksum information provided by the originating Metalink server MUST be considered authoritative. Metalink servers and their associated mirror servers
-      MAY all share the same ETag policy, i.e. base it on the file contents (checksum) and not server-unique filesystem metadata. The emitted ETag may be implemented the same as the Instance Digest for simplicity.</t>
+      SHOULD all share the same ETag policy, i.e. based on the file contents (checksum) and not server-unique filesystem metadata. The emitted ETag may be implemented the same as the Instance Digest for simplicity.</t>
 
 	  <t>Mirror servers are typically FTP or HTTP servers that "mirror" another server. That is, they provide identical copies of (at least some) files that are also on the mirrored server. 
       Mirror servers MAY be Metalink servers. Mirror servers MUST support serving partial content. Mirror servers SHOULD support Instance Digests in HTTP <xref target="RFC3230"/>.</t>
@@ -130,9 +130,9 @@ Link: &lt;ftp://ftp.example.com/example.ext&gt;; rel="duplicate";
 	  <preamble>A brief Metalink server response with .torrent and .metalink:</preamble>	
 	  <artwork type="example">
 Link: &lt;http://example.com/example.ext.torrent&gt;; rel="describedby";
-type="application/x-bittorrent";
+type="application/x-bittorrent"
 Link: &lt;http://example.com/example.ext.metalink&gt;; rel="describedby";
-type="application/metalink4+xml";
+type="application/metalink4+xml"
 </artwork></figure></t>
 	
     </section>
@@ -214,14 +214,14 @@ Accept-Ranges: bytes
 Content-Length: 14867603
 Content-Type: application/x-cd-image
 Etag: "thvDyvhfIqlvFe+A9MYgxAfm1q5="
-Link: &lt;http://www2.example.com/example.ext&gt;; rel="duplicate";
-Link: &lt;ftp://ftp.example.com/example.ext&gt;; rel="duplicate";
+Link: &lt;http://www2.example.com/example.ext&gt;; rel="duplicate"
+Link: &lt;ftp://ftp.example.com/example.ext&gt;; rel="duplicate"
 Link: &lt;http://example.com/example.ext.torrent&gt;; rel="describedby";
-type="application/x-bittorrent";
+type="application/x-bittorrent"
 Link: &lt;http://example.com/example.ext.metalink&gt;; rel="describedby";
-type="application/metalink4+xml";
+type="application/metalink4+xml"
 Link: &lt;http://example.com/example.ext.asc&gt;; rel="describedby";
-type="application/pgp-signature";
+type="application/pgp-signature"
 Digest: SHA=thvDyvhfIqlvFe+A9MYgxAfm1q5=
 </artwork></figure></t>
 
@@ -241,8 +241,9 @@ object:
 
 
 <t>If the object is large and gets delivered slower than expected then the Metalink client starts a number of parallel ranged downloads (one per selected mirror server other than the
-first) using mirrors provided by the Link header with "duplicate" relation type, using the location of the original GET request in the "Referer" header field. If no Range limit was given in the original request
-then work from the tail of the object (the first request is still running and will eventually catch up), otherwise continue after the range requested in the first request.
+first) using mirrors provided by the Link header with "duplicate" relation type, using the location of the original GET request in the "Referer" header field. 
+If no Range limit was given in the original request then work from the tail of the object (the first request is still running and will eventually catch up), otherwise continue after the range requested in the first request.</t>
+<t>If ETags are coordinated between mirrors, If-Match conditions based on the ETag SHOULD be used to quickly detect out-of-date mirrors.
 
 One of the client requests to a mirror server:
 
@@ -286,13 +287,49 @@ to be shared among the mirror servers.</t>
 
     </section>
 	
+
+
+	<section title="IANA Considerations" anchor="IANA">
+
+	<t>Accordingly, IANA has made the following registrations.</t>
+	
     <section title="Link Relation Type Registration: &#34;duplicate&#34;" anchor="duplicate">
 <t>o  Relation Name: duplicate</t>
 <t>o  Description: Refers to a resource whose available representations are byte-for-byte identical with the corresponding representations of the context IRI.</t>
 <t>o  Reference: This specification.</t>
 <t>o  Notes: This relation is for static resources. That is, an HTTP GET request on any duplicate will return the same representation. It does not make sense for dynamic or POSTable resources and should not be used for them.</t>
 
-    </section>	
+    </section>
+	<section title="Hypertext Transfer Protocol (HTTP) Digest Algorithm Values Registration">
+	
+	<t>This document makes use of the IANA registry named "Hypertext Transfer Protocol (HTTP) Digest Algorithm Values" specified in <xref target="RFC3230"/>.</t>
+
+   <t><list>
+   <t>Digest Algorithm: SHA-224</t>
+   <t>Description: The SHA-224 algorithm <xref target="SHS"/>. The output of this algorithm is encoded using the base64 encoding <xref target="RFC2045"/>.</t>
+   <t>Reference: <xref target="SHS"/> <xref target="RFC2045"/></t>
+   </list></t>
+<t></t>
+   <t><list>   
+   <t>Digest Algorithm: SHA-256</t>
+   <t>Description: The SHA-256 algorithm <xref target="SHS"/>. The output of this algorithm is encoded using the base64 encoding <xref target="RFC2045"/>.</t>
+   <t>Reference: <xref target="SHS"/> <xref target="RFC2045"/></t>
+   </list></t>
+   
+   <t><list>
+   <t>Digest Algorithm: SHA-384</t>
+   <t>Description: The SHA-384 algorithm <xref target="SHS"/>. The output of this algorithm is encoded using the base64 encoding <xref target="RFC2045"/>.</t>
+   <t>Reference: <xref target="SHS"/> <xref target="RFC2045"/></t>
+   </list></t>
+   
+   <t><list>
+   <t>Digest Algorithm: SHA-512</t>
+   <t>Description: The SHA-512 algorithm <xref target="SHS"/>. The output of this algorithm is encoded using the base64 encoding <xref target="RFC2045"/>.</t>
+   <t>Reference: <xref target="SHS"/> <xref target="RFC2045"/></t>   
+   </list></t>
+
+    </section>
+	</section>
 
 	  <section title="Security Considerations">
 
@@ -349,7 +386,21 @@ to be shared among the mirror servers.</t>
 <date year="1995" month="October"/></front>
 
 <seriesInfo name="RFC" value="1864"/>
-</reference> 
+</reference>
+
+<reference anchor="RFC2045">
+
+<front>
+<title>Multipurpose Internet Mail Extensions (MIME) Part One: Format of Internet Message Bodies</title>
+<author initials="N." surname="Freed" fullname="N. Freed">
+<organization/></author>
+<author initials="N." surname="Borenstein" fullname="N. Borenstein">
+<organization/></author>
+<date year="1996" month="November"/></front>
+
+<seriesInfo name="RFC" value="2045"/>
+</reference>
+
 
 <reference anchor="RFC2119">
 
@@ -481,6 +532,23 @@ to be shared among the mirror servers.</t>
     <date month="July" year="2009"/>
   </front>
   <seriesInfo name="Internet-Draft" value="draft-nottingham-http-link-header-06"/>
+</reference>
+
+<reference anchor="SHS" target="http://csrc.nist.gov/publications/fips/fips180-3/fips180-3_final.pdf">
+<front>
+<title>Secure Hash Standard</title>
+
+<author>
+
+    <organization>National Institute of Standards and Technology (NIST)</organization>
+</author>
+
+
+
+<date year="2008" month="October"></date>
+</front>
+
+<seriesInfo name="FIPS PUB" value="180-3"></seriesInfo>
 </reference>
 
 

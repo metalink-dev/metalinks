@@ -223,17 +223,21 @@ Checksums of Whole Files<br />
 Checksums of Partial Files<br />
 <a href="#clientserver">7.</a>&nbsp;
 Client / Server Multi-source Download Interaction<br />
-<a href="#duplicate">8.</a>&nbsp;
+<a href="#IANA">8.</a>&nbsp;
+IANA Considerations<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#duplicate">8.1.</a>&nbsp;
 Link Relation Type Registration: &#34;duplicate&#34;<br />
-<a href="#anchor4">9.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor4">8.2.</a>&nbsp;
+Hypertext Transfer Protocol (HTTP) Digest Algorithm Values Registration<br />
+<a href="#anchor5">9.</a>&nbsp;
 Security Considerations<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor5">9.1.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor6">9.1.</a>&nbsp;
 URIs and IRIs<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor6">9.2.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor7">9.2.</a>&nbsp;
 Spoofing<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor7">9.3.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor8">9.3.</a>&nbsp;
 Cryptographic Hashes<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor8">9.4.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor9">9.4.</a>&nbsp;
 Signing<br />
 <a href="#rfc.references1">10.</a>&nbsp;
 References<br />
@@ -241,11 +245,11 @@ References<br />
 Normative References<br />
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="#rfc.references2">10.2.</a>&nbsp;
 Informative References<br />
-<a href="#anchor11">Appendix&nbsp;A.</a>&nbsp;
+<a href="#anchor12">Appendix&nbsp;A.</a>&nbsp;
 Acknowledgements and Contributors<br />
-<a href="#anchor12">Appendix&nbsp;B.</a>&nbsp;
+<a href="#anchor13">Appendix&nbsp;B.</a>&nbsp;
 Comparisons to Similar Options (to be removed by RFC Editor before publication)<br />
-<a href="#anchor13">Appendix&nbsp;C.</a>&nbsp;
+<a href="#anchor14">Appendix&nbsp;C.</a>&nbsp;
 Document History (to be removed by RFC Editor before publication)<br />
 <a href="#rfc.authors">&#167;</a>&nbsp;
 Authors' Addresses<br />
@@ -289,14 +293,14 @@ Examples</h3>
 <p>
 <p>A brief Metalink server response with checksum, mirrors, .metalink, and OpenPGP signature:
 </p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
-Link: &lt;http://www2.example.com/example.ext&gt;; rel="duplicate";
-Link: &lt;ftp://ftp.example.com/example.ext&gt;; rel="duplicate";
+Link: &lt;http://www2.example.com/example.ext&gt;; rel="duplicate"
+Link: &lt;ftp://ftp.example.com/example.ext&gt;; rel="duplicate"
 Link: &lt;http://example.com/example.ext.torrent&gt;; rel="describedby";
-type="application/x-bittorrent";
+type="application/x-bittorrent"
 Link: &lt;http://example.com/example.ext.metalink&gt;; rel="describedby";
-type="application/metalink4+xml";
+type="application/metalink4+xml"
 Link: &lt;http://example.com/example.ext.asc&gt;; rel="describedby";
-type="application/pgp-signature";
+type="application/pgp-signature"
 Digest: SHA=thvDyvhfIqlvFe+A9MYgxAfm1q5=
 </pre></div>
 
@@ -320,7 +324,7 @@ Requirements</h3>
 </p>
 <p>Metalink servers are HTTP servers that MUST have lists of mirrors and use the Link header <a class='info' href='#draft-nottingham-http-link-header'>[draft&#8209;nottingham&#8209;http&#8209;link&#8209;header]<span> (</span><span class='info'>Nottingham, M., &ldquo;Web Linking,&rdquo; July&nbsp;2009.</span><span>)</span></a> to indicate them. They also MUST
 	  provide checksums of files via Instance Digests in HTTP <a class='info' href='#RFC3230'>[RFC3230]<span> (</span><span class='info'>Mogul, J. and A. Van Hoff, &ldquo;Instance Digests in HTTP,&rdquo; January&nbsp;2002.</span><span>)</span></a>. Mirror and checksum information provided by the originating Metalink server MUST be considered authoritative. Metalink servers and their associated mirror servers
-      MAY all share the same ETag policy, i.e. base it on the file contents (checksum) and not server-unique filesystem metadata. The emitted ETag may be implemented the same as the Instance Digest for simplicity.
+      SHOULD all share the same ETag policy, i.e. based on the file contents (checksum) and not server-unique filesystem metadata. The emitted ETag may be implemented the same as the Instance Digest for simplicity.
 </p>
 <p>Mirror servers are typically FTP or HTTP servers that "mirror" another server. That is, they provide identical copies of (at least some) files that are also on the mirrored server. 
       Mirror servers MAY be Metalink servers. Mirror servers MUST support serving partial content. Mirror servers SHOULD support Instance Digests in HTTP <a class='info' href='#RFC3230'>[RFC3230]<span> (</span><span class='info'>Mogul, J. and A. Van Hoff, &ldquo;Instance Digests in HTTP,&rdquo; January&nbsp;2002.</span><span>)</span></a>.
@@ -335,7 +339,7 @@ Requirements</h3>
 <a name="rfc.section.3"></a><h3>3.&nbsp;
 Mirrors / Multiple Download Locations</h3>
 
-<p>Mirrors are specified with the Link header <a class='info' href='#draft-nottingham-http-link-header'>[draft&#8209;nottingham&#8209;http&#8209;link&#8209;header]<span> (</span><span class='info'>Nottingham, M., &ldquo;Web Linking,&rdquo; July&nbsp;2009.</span><span>)</span></a> and a relation type of "duplicate" as defined in <a class='info' href='#duplicate'>Section&nbsp;8<span> (</span><span class='info'>Link Relation Type Registration: &#34;duplicate&#34;</span><span>)</span></a>.
+<p>Mirrors are specified with the Link header <a class='info' href='#draft-nottingham-http-link-header'>[draft&#8209;nottingham&#8209;http&#8209;link&#8209;header]<span> (</span><span class='info'>Nottingham, M., &ldquo;Web Linking,&rdquo; July&nbsp;2009.</span><span>)</span></a> and a relation type of "duplicate" as defined in <a class='info' href='#duplicate'>Section&nbsp;8.1<span> (</span><span class='info'>Link Relation Type Registration: &#34;duplicate&#34;</span><span>)</span></a>.
 </p>
 <p>
 <p>A brief Metalink server response with two mirrors only:
@@ -360,9 +364,9 @@ Peer-to-Peer Descriptions / Metainfo</h3>
 <p>A brief Metalink server response with .torrent and .metalink:
 </p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
 Link: &lt;http://example.com/example.ext.torrent&gt;; rel="describedby";
-type="application/x-bittorrent";
+type="application/x-bittorrent"
 Link: &lt;http://example.com/example.ext.metalink&gt;; rel="describedby";
-type="application/metalink4+xml";
+type="application/metalink4+xml"
 </pre></div>
 
 <a name="openpgp"></a><br /><hr />
@@ -459,14 +463,14 @@ Accept-Ranges: bytes
 Content-Length: 14867603
 Content-Type: application/x-cd-image
 Etag: "thvDyvhfIqlvFe+A9MYgxAfm1q5="
-Link: &lt;http://www2.example.com/example.ext&gt;; rel="duplicate";
-Link: &lt;ftp://ftp.example.com/example.ext&gt;; rel="duplicate";
+Link: &lt;http://www2.example.com/example.ext&gt;; rel="duplicate"
+Link: &lt;ftp://ftp.example.com/example.ext&gt;; rel="duplicate"
 Link: &lt;http://example.com/example.ext.torrent&gt;; rel="describedby";
-type="application/x-bittorrent";
+type="application/x-bittorrent"
 Link: &lt;http://example.com/example.ext.metalink&gt;; rel="describedby";
-type="application/metalink4+xml";
+type="application/metalink4+xml"
 Link: &lt;http://example.com/example.ext.asc&gt;; rel="describedby";
-type="application/pgp-signature";
+type="application/pgp-signature"
 Digest: SHA=thvDyvhfIqlvFe+A9MYgxAfm1q5=
 </pre></div><p>
 
@@ -494,8 +498,10 @@ object:
 </ul>
 
 <p>If the object is large and gets delivered slower than expected then the Metalink client starts a number of parallel ranged downloads (one per selected mirror server other than the
-first) using mirrors provided by the Link header with "duplicate" relation type, using the location of the original GET request in the "Referer" header field. If no Range limit was given in the original request
-then work from the tail of the object (the first request is still running and will eventually catch up), otherwise continue after the range requested in the first request.
+first) using mirrors provided by the Link header with "duplicate" relation type, using the location of the original GET request in the "Referer" header field. 
+If no Range limit was given in the original request then work from the tail of the object (the first request is still running and will eventually catch up), otherwise continue after the range requested in the first request.
+</p>
+<p>If ETags are coordinated between mirrors, If-Match conditions based on the ETag SHOULD be used to quickly detect out-of-date mirrors.
 
 One of the client requests to a mirror server:
 
@@ -537,9 +543,16 @@ may be implemented the same as the Instance Digest for simplicity,
 but there is no need to specify how ETag generated, just that it needs
 to be shared among the mirror servers.
 </p>
-<a name="duplicate"></a><br /><hr />
+<a name="IANA"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.8"></a><h3>8.&nbsp;
+IANA Considerations</h3>
+
+<p>Accordingly, IANA has made the following registrations.
+</p>
+<a name="duplicate"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.8.1"></a><h3>8.1.&nbsp;
 Link Relation Type Registration: &#34;duplicate&#34;</h3>
 
 <p>o  Relation Name: duplicate
@@ -552,10 +565,59 @@ Link Relation Type Registration: &#34;duplicate&#34;</h3>
 </p>
 <a name="anchor4"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.8.2"></a><h3>8.2.&nbsp;
+Hypertext Transfer Protocol (HTTP) Digest Algorithm Values Registration</h3>
+
+<p>This document makes use of the IANA registry named "Hypertext Transfer Protocol (HTTP) Digest Algorithm Values" specified in <a class='info' href='#RFC3230'>[RFC3230]<span> (</span><span class='info'>Mogul, J. and A. Van Hoff, &ldquo;Instance Digests in HTTP,&rdquo; January&nbsp;2002.</span><span>)</span></a>.
+</p>
+<p></p>
+<blockquote class="text">
+<p>Digest Algorithm: SHA-224
+</p>
+<p>Description: The SHA-224 algorithm <a class='info' href='#SHS'>[SHS]<span> (</span><span class='info'>National Institute of Standards and Technology (NIST), &ldquo;Secure Hash Standard,&rdquo; October&nbsp;2008.</span><span>)</span></a>. The output of this algorithm is encoded using the base64 encoding <a class='info' href='#RFC2045'>[RFC2045]<span> (</span><span class='info'>Freed, N. and N. Borenstein, &ldquo;Multipurpose Internet Mail Extensions (MIME) Part One: Format of Internet Message Bodies,&rdquo; November&nbsp;1996.</span><span>)</span></a>.
+</p>
+<p>Reference: <a class='info' href='#SHS'>[SHS]<span> (</span><span class='info'>National Institute of Standards and Technology (NIST), &ldquo;Secure Hash Standard,&rdquo; October&nbsp;2008.</span><span>)</span></a> <a class='info' href='#RFC2045'>[RFC2045]<span> (</span><span class='info'>Freed, N. and N. Borenstein, &ldquo;Multipurpose Internet Mail Extensions (MIME) Part One: Format of Internet Message Bodies,&rdquo; November&nbsp;1996.</span><span>)</span></a>
+</p>
+</blockquote>
+
+<p>
+</p>
+<p></p>
+<blockquote class="text">
+<p>Digest Algorithm: SHA-256
+</p>
+<p>Description: The SHA-256 algorithm <a class='info' href='#SHS'>[SHS]<span> (</span><span class='info'>National Institute of Standards and Technology (NIST), &ldquo;Secure Hash Standard,&rdquo; October&nbsp;2008.</span><span>)</span></a>. The output of this algorithm is encoded using the base64 encoding <a class='info' href='#RFC2045'>[RFC2045]<span> (</span><span class='info'>Freed, N. and N. Borenstein, &ldquo;Multipurpose Internet Mail Extensions (MIME) Part One: Format of Internet Message Bodies,&rdquo; November&nbsp;1996.</span><span>)</span></a>.
+</p>
+<p>Reference: <a class='info' href='#SHS'>[SHS]<span> (</span><span class='info'>National Institute of Standards and Technology (NIST), &ldquo;Secure Hash Standard,&rdquo; October&nbsp;2008.</span><span>)</span></a> <a class='info' href='#RFC2045'>[RFC2045]<span> (</span><span class='info'>Freed, N. and N. Borenstein, &ldquo;Multipurpose Internet Mail Extensions (MIME) Part One: Format of Internet Message Bodies,&rdquo; November&nbsp;1996.</span><span>)</span></a>
+</p>
+</blockquote>
+
+<p></p>
+<blockquote class="text">
+<p>Digest Algorithm: SHA-384
+</p>
+<p>Description: The SHA-384 algorithm <a class='info' href='#SHS'>[SHS]<span> (</span><span class='info'>National Institute of Standards and Technology (NIST), &ldquo;Secure Hash Standard,&rdquo; October&nbsp;2008.</span><span>)</span></a>. The output of this algorithm is encoded using the base64 encoding <a class='info' href='#RFC2045'>[RFC2045]<span> (</span><span class='info'>Freed, N. and N. Borenstein, &ldquo;Multipurpose Internet Mail Extensions (MIME) Part One: Format of Internet Message Bodies,&rdquo; November&nbsp;1996.</span><span>)</span></a>.
+</p>
+<p>Reference: <a class='info' href='#SHS'>[SHS]<span> (</span><span class='info'>National Institute of Standards and Technology (NIST), &ldquo;Secure Hash Standard,&rdquo; October&nbsp;2008.</span><span>)</span></a> <a class='info' href='#RFC2045'>[RFC2045]<span> (</span><span class='info'>Freed, N. and N. Borenstein, &ldquo;Multipurpose Internet Mail Extensions (MIME) Part One: Format of Internet Message Bodies,&rdquo; November&nbsp;1996.</span><span>)</span></a>
+</p>
+</blockquote>
+
+<p></p>
+<blockquote class="text">
+<p>Digest Algorithm: SHA-512
+</p>
+<p>Description: The SHA-512 algorithm <a class='info' href='#SHS'>[SHS]<span> (</span><span class='info'>National Institute of Standards and Technology (NIST), &ldquo;Secure Hash Standard,&rdquo; October&nbsp;2008.</span><span>)</span></a>. The output of this algorithm is encoded using the base64 encoding <a class='info' href='#RFC2045'>[RFC2045]<span> (</span><span class='info'>Freed, N. and N. Borenstein, &ldquo;Multipurpose Internet Mail Extensions (MIME) Part One: Format of Internet Message Bodies,&rdquo; November&nbsp;1996.</span><span>)</span></a>.
+</p>
+<p>Reference: <a class='info' href='#SHS'>[SHS]<span> (</span><span class='info'>National Institute of Standards and Technology (NIST), &ldquo;Secure Hash Standard,&rdquo; October&nbsp;2008.</span><span>)</span></a> <a class='info' href='#RFC2045'>[RFC2045]<span> (</span><span class='info'>Freed, N. and N. Borenstein, &ldquo;Multipurpose Internet Mail Extensions (MIME) Part One: Format of Internet Message Bodies,&rdquo; November&nbsp;1996.</span><span>)</span></a>
+</p>
+</blockquote>
+
+<a name="anchor5"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.9"></a><h3>9.&nbsp;
 Security Considerations</h3>
 
-<a name="anchor5"></a><br /><hr />
+<a name="anchor6"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.9.1"></a><h3>9.1.&nbsp;
 URIs and IRIs</h3>
@@ -563,7 +625,7 @@ URIs and IRIs</h3>
 <p>Metalink clients handle URIs and IRIs. See Section 7 of <a class='info' href='#RFC3986'>[RFC3986]<span> (</span><span class='info'>Berners-Lee, T., Fielding, R., and L. Masinter, &ldquo;Uniform Resource Identifier (URI): Generic Syntax,&rdquo; January&nbsp;2005.</span><span>)</span></a> and Section 8 of <a class='info' href='#RFC3987'>[RFC3987]<span> (</span><span class='info'>Duerst, M. and M. Suignard, &ldquo;Internationalized Resource Identifiers (IRIs),&rdquo; January&nbsp;2005.</span><span>)</span></a> for security
           considerations related to their handling and use.
 </p>
-<a name="anchor6"></a><br /><hr />
+<a name="anchor7"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.9.2"></a><h3>9.2.&nbsp;
 Spoofing</h3>
@@ -571,7 +633,7 @@ Spoofing</h3>
 <p>There is potential for spoofing attacks where the attacker publishes Metalinks with false information.
           In that case, this could deceive unaware downloaders that they are downloading a malicious or worthless file. Also, malicious publishers could attempt a distributed denial of service attack by inserting unrelated IRIs into Metalinks.
 </p>
-<a name="anchor7"></a><br /><hr />
+<a name="anchor8"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.9.3"></a><h3>9.3.&nbsp;
 Cryptographic Hashes</h3>
@@ -582,7 +644,7 @@ Cryptographic Hashes</h3>
 </p>
 <p>If a Metalink contains hashes as described in <a class='info' href='#checksums'>Section&nbsp;6<span> (</span><span class='info'>Checksums</span><span>)</span></a>, it SHOULD include "sha" which is SHA-1, as specified in <a class='info' href='#RFC3174'>[RFC3174]<span> (</span><span class='info'>Eastlake, D. and P. Jones, &ldquo;US Secure Hash Algorithm 1 (SHA1),&rdquo; September&nbsp;2001.</span><span>)</span></a>.  It MAY also include other hashes.
 </p>
-<a name="anchor8"></a><br /><hr />
+<a name="anchor9"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.9.4"></a><h3>9.4.&nbsp;
 Signing</h3>
@@ -602,6 +664,8 @@ References</h3>
 <table width="99%" border="0">
 <tr><td class="author-text" valign="top"><a name="RFC1864">[RFC1864]</a></td>
 <td class="author-text">Myers, J. and M. Rose, &ldquo;<a href="http://tools.ietf.org/html/rfc1864">The Content-MD5 Header Field</a>,&rdquo; RFC&nbsp;1864, October&nbsp;1995.</td></tr>
+<tr><td class="author-text" valign="top"><a name="RFC2045">[RFC2045]</a></td>
+<td class="author-text">Freed, N. and N. Borenstein, &ldquo;<a href="http://tools.ietf.org/html/rfc2045">Multipurpose Internet Mail Extensions (MIME) Part One: Format of Internet Message Bodies</a>,&rdquo; RFC&nbsp;2045, November&nbsp;1996.</td></tr>
 <tr><td class="author-text" valign="top"><a name="RFC2119">[RFC2119]</a></td>
 <td class="author-text"><a href="mailto:sob@harvard.edu">Bradner, S.</a>, &ldquo;<a href="http://tools.ietf.org/html/rfc2119">Key words for use in RFCs to Indicate Requirement Levels</a>,&rdquo; BCP&nbsp;14, RFC&nbsp;2119, March&nbsp;1997.</td></tr>
 <tr><td class="author-text" valign="top"><a name="RFC2616">[RFC2616]</a></td>
@@ -614,6 +678,8 @@ References</h3>
 <td class="author-text">Berners-Lee, T., Fielding, R., and L. Masinter, &ldquo;<a href="http://tools.ietf.org/html/rfc3986">Uniform Resource Identifier (URI): Generic Syntax</a>,&rdquo; STD&nbsp;66, RFC&nbsp;3986, January&nbsp;2005.</td></tr>
 <tr><td class="author-text" valign="top"><a name="RFC3987">[RFC3987]</a></td>
 <td class="author-text">Duerst, M. and M. Suignard, &ldquo;<a href="http://tools.ietf.org/html/rfc3987">Internationalized Resource Identifiers (IRIs)</a>,&rdquo; RFC&nbsp;3987, January&nbsp;2005.</td></tr>
+<tr><td class="author-text" valign="top"><a name="SHS">[SHS]</a></td>
+<td class="author-text">National Institute of Standards and Technology (NIST), &ldquo;<a href="http://csrc.nist.gov/publications/fips/fips180-3/fips180-3_final.pdf">Secure Hash Standard</a>,&rdquo; FIPS PUB&nbsp;180-3, October&nbsp;2008.</td></tr>
 <tr><td class="author-text" valign="top"><a name="draft-nottingham-http-link-header">[draft-nottingham-http-link-header]</a></td>
 <td class="author-text"><a href="mailto:mnot@mnot.net">Nottingham, M.</a>, &ldquo;<a href="http://www.ietf.org/internet-drafts/draft-nottingham-http-link-header-06.txt">Web Linking</a>,&rdquo; draft-nottingham-http-link-header-06 (work in progress), July&nbsp;2009.</td></tr>
 </table>
@@ -626,14 +692,14 @@ References</h3>
 <td class="author-text"><a href="mailto:anthonybryan@gmail.com">Bryan, A., Ed.</a>, <a href="mailto:tatsuhiro.t@gmail.com">Tsujikawa, T.</a>, <a href="mailto:nabber00@gmail.com">McNab, N.</a>, and <a href="mailto:info@mirrorbrain.org">P. Poeml</a>, &ldquo;<a href="http://www.ietf.org/internet-drafts/draft-bryan-metalink-16.txt">The Metalink Download Description Format</a>,&rdquo; draft-bryan-metalink-16 (work in progress), August&nbsp;2009.</td></tr>
 </table>
 
-<a name="anchor11"></a><br /><hr />
+<a name="anchor12"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.A"></a><h3>Appendix A.&nbsp;
 Acknowledgements and Contributors</h3>
 
 <p>Thanks to Mark Nottingham, Daniel Stenberg and Henrik Nordstrom.
 </p>
-<a name="anchor12"></a><br /><hr />
+<a name="anchor13"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.B"></a><h3>Appendix B.&nbsp;
 Comparisons to Similar Options (to be removed by RFC Editor before publication)</h3>
@@ -692,7 +758,7 @@ Comparisons to Similar Options (to be removed by RFC Editor before publication)<
 </li>
 </ul>
 
-<a name="anchor13"></a><br /><hr />
+<a name="anchor14"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.C"></a><h3>Appendix C.&nbsp;
 Document History (to be removed by RFC Editor before publication)</h3>
