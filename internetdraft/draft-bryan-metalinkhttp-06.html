@@ -144,7 +144,7 @@
 <tr><td class="header">Network Working Group</td><td class="header">A. Bryan, Ed.</td></tr>
 <tr><td class="header">Internet-Draft</td><td class="header">N. McNab</td></tr>
 <tr><td class="header">Intended status: Standards Track</td><td class="header">Metalinker Project</td></tr>
-<tr><td class="header">Expires: March 26, 2010</td><td class="header">September 22, 2009</td></tr>
+<tr><td class="header">Expires: March 27, 2010</td><td class="header">September 23, 2009</td></tr>
 </table></td></tr></table>
 <h1><br />MetaLinkHeader: Mirrors and Checksums in HTTP Headers<br />draft-bryan-metalinkhttp-06</h1>
 
@@ -180,7 +180,7 @@ The list of current Internet-Drafts can be accessed at
 The list of Internet-Draft Shadow Directories can be accessed at
 <a href='http://www.ietf.org/shadow.html'>http://www.ietf.org/shadow.html</a>.</p>
 <p>
-This Internet-Draft will expire on March 26, 2010.</p>
+This Internet-Draft will expire on March 27, 2010.</p>
 
 <h3>Copyright Notice</h3>
 <p>
@@ -223,21 +223,25 @@ Checksums of Whole Files<br />
 Checksums of Partial Files<br />
 <a href="#clientserver">7.</a>&nbsp;
 Client / Server Multi-source Download Interaction<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor4">7.1.</a>&nbsp;
+Early File Mismatch Detection with Strong ETag or Instance Digest from Mirrors<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor5">7.2.</a>&nbsp;
+Error Recovery<br />
 <a href="#IANA">8.</a>&nbsp;
 IANA Considerations<br />
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="#duplicate">8.1.</a>&nbsp;
 Link Relation Type Registration: &#34;duplicate&#34;<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor4">8.2.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor6">8.2.</a>&nbsp;
 Hypertext Transfer Protocol (HTTP) Digest Algorithm Values Registration<br />
-<a href="#anchor5">9.</a>&nbsp;
+<a href="#anchor7">9.</a>&nbsp;
 Security Considerations<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor6">9.1.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor8">9.1.</a>&nbsp;
 URIs and IRIs<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor7">9.2.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor9">9.2.</a>&nbsp;
 Spoofing<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor8">9.3.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor10">9.3.</a>&nbsp;
 Cryptographic Hashes<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor9">9.4.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor11">9.4.</a>&nbsp;
 Signing<br />
 <a href="#rfc.references1">10.</a>&nbsp;
 References<br />
@@ -245,11 +249,11 @@ References<br />
 Normative References<br />
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="#rfc.references2">10.2.</a>&nbsp;
 Informative References<br />
-<a href="#anchor12">Appendix&nbsp;A.</a>&nbsp;
+<a href="#anchor14">Appendix&nbsp;A.</a>&nbsp;
 Acknowledgements and Contributors<br />
-<a href="#anchor13">Appendix&nbsp;B.</a>&nbsp;
+<a href="#anchor15">Appendix&nbsp;B.</a>&nbsp;
 Comparisons to Similar Options (to be removed by RFC Editor before publication)<br />
-<a href="#anchor14">Appendix&nbsp;C.</a>&nbsp;
+<a href="#anchor16">Appendix&nbsp;C.</a>&nbsp;
 Document History (to be removed by RFC Editor before publication)<br />
 <a href="#rfc.authors">&#167;</a>&nbsp;
 Authors' Addresses<br />
@@ -324,10 +328,10 @@ Requirements</h3>
 </p>
 <p>Metalink servers are HTTP servers that MUST have lists of mirrors and use the Link header <a class='info' href='#draft-nottingham-http-link-header'>[draft&#8209;nottingham&#8209;http&#8209;link&#8209;header]<span> (</span><span class='info'>Nottingham, M., &ldquo;Web Linking,&rdquo; July&nbsp;2009.</span><span>)</span></a> to indicate them. They also MUST
 	  provide checksums of files via Instance Digests in HTTP <a class='info' href='#RFC3230'>[RFC3230]<span> (</span><span class='info'>Mogul, J. and A. Van Hoff, &ldquo;Instance Digests in HTTP,&rdquo; January&nbsp;2002.</span><span>)</span></a>. Mirror and checksum information provided by the originating Metalink server MUST be considered authoritative. Metalink servers and their associated mirror servers
-      SHOULD all share the same ETag policy, i.e. based on the file contents (checksum) and not server-unique filesystem metadata. The emitted ETag may be implemented the same as the Instance Digest for simplicity.
+      SHOULD all share the same ETag policy (ETag Synchronization), i.e. based on the file contents (checksum) and not server-unique filesystem metadata. The emitted ETag may be implemented the same as the Instance Digest for simplicity.
 </p>
 <p>Mirror servers are typically FTP or HTTP servers that "mirror" another server. That is, they provide identical copies of (at least some) files that are also on the mirrored server. 
-      Mirror servers MAY be Metalink servers. Mirror servers MUST support serving partial content. Mirror servers SHOULD support Instance Digests in HTTP <a class='info' href='#RFC3230'>[RFC3230]<span> (</span><span class='info'>Mogul, J. and A. Van Hoff, &ldquo;Instance Digests in HTTP,&rdquo; January&nbsp;2002.</span><span>)</span></a>.
+      Mirror servers MAY be Metalink servers. Mirror servers MUST support serving partial content. Mirror servers SHOULD support Instance Digests in HTTP <a class='info' href='#RFC3230'>[RFC3230]<span> (</span><span class='info'>Mogul, J. and A. Van Hoff, &ldquo;Instance Digests in HTTP,&rdquo; January&nbsp;2002.</span><span>)</span></a>. Optimally, mirror servers will share the same ETag policy as the Metalink server and provide Instance Digests.
 </p>
 <p>Metalink clients use the mirrors provided by a Metalink server with Link header <a class='info' href='#draft-nottingham-http-link-header'>[draft&#8209;nottingham&#8209;http&#8209;link&#8209;header]<span> (</span><span class='info'>Nottingham, M., &ldquo;Web Linking,&rdquo; July&nbsp;2009.</span><span>)</span></a>. Metalink clients MUST support HTTP and MAY support FTP, BitTorrent, 
       or other download methods. Metalink clients MUST switch downloads from one mirror to another if the one mirror becomes unreachable. Metalink clients are RECOMMENDED to support multi-source, or parallel, 
@@ -487,7 +491,7 @@ object:
 </li>
 <li>Object size.
 </li>
-<li>ETag. (ETag coordination between mirrors is OPTIONAL).
+<li>ETag. (ETag synchronization between mirrors is OPTIONAL).
 </li>
 <li>Peer-to-peer information.
 </li>
@@ -501,7 +505,8 @@ object:
 first) using mirrors provided by the Link header with "duplicate" relation type, using the location of the original GET request in the "Referer" header field. 
 If no Range limit was given in the original request then work from the tail of the object (the first request is still running and will eventually catch up), otherwise continue after the range requested in the first request.
 </p>
-<p>If ETags are coordinated between mirrors, If-Match conditions based on the ETag SHOULD be used to quickly detect out-of-date mirrors.
+<p>If ETags are coordinated between mirrors, If-Match conditions based on the ETag SHOULD be used to quickly detect out-of-date mirrors by using the ETag from the Metalink server response. If no indication of ETag syncronisation/knowledge is given then If-Match
+should not be used, and optimally there will be an Instance Digest in the mirror response which we can use to detect a mismatch early, and if not then a mismatch won't be detected until the completed object is verified.
 
 One of the client requests to a mirror server:
 
@@ -510,6 +515,7 @@ One of the client requests to a mirror server:
 GET /example.ext HTTP/1.1
 Host: www2.example.com
 Range: bytes=7433802-
+If-Match: "thvDyvhfIqlvFe+A9MYgxAfm1q5="
 Referer: http://www.example.com/distribution/example.ext
 </pre></div><p>
 
@@ -523,25 +529,78 @@ Accept-Ranges: bytes
 Content-Length: 7433801
 Content-Range: bytes 7433802-14867602/14867603
 Etag: "thvDyvhfIqlvFe+A9MYgxAfm1q5="
+Digest: SHA=thvDyvhfIqlvFe+A9MYgxAfm1q5=
 </pre></div><p>
 
 </p>
-<p>If the first request was not Range limited then abort it by closing
-the connection when it catches up with the other parallel downloads of
-the same object.
+<p>If the first request was not Range limited then abort it by closing the connection when it catches up with the other parallel downloads of the same object.
 </p>
 <p>Once the download has completed, the Metalink client MUST verify the checksum of the file.
 </p>
-<p>If the object checksum does not match the Instance Digest then fetch the Metalink XML or other recovery profile link, where partial file checksums can be found,
-allowing detection of which server returned bad information.
-</p>
-<p>In most cases it is sufficient that the Metalink server provides
+<a name="anchor4"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.7.1"></a><h3>7.1.&nbsp;
+Early File Mismatch Detection with Strong ETag or Instance Digest from Mirrors</h3>
+
+<p>In HTTP terms, the requirement is that merging of ranges from multiple
+responses must be verified with a strong validator, which in this
+context is the same as either instance digest or a strong ETag.
+In most cases it is sufficient that the Metalink server provides
 mirrors and Instance Digest information, but operation will be
-more robust and efficient if the mirror servers do implement a common
-ETag as well. In fact the emitted ETag
+more robust and efficient if the mirror servers do implement a synchronized
+ETag as well. In fact, the emitted ETag
 may be implemented the same as the Instance Digest for simplicity,
 but there is no need to specify how ETag generated, just that it needs
 to be shared among the mirror servers.
+If the mirror server provides neither synchronized ETag or Instance Digest, then early detection of
+mismatches is not possible unless file length also differs. Finally, the error is still detectable when the merged response is verified.
+</p>
+<p>ETag can not be used for verifying the integrity of the received
+content. But it is a guarantee issued by the Metalink server that the content is
+correct for that ETag. And if the ETag given by the mirror server matches
+the ETag given by the master server, then we have a chain of trust where the master server
+authorizes these responses as valid for that object.
+</p>
+<p>This guarantees that a mismatch will be detected by using only the synchronized ETag from a master server and mirror server, even alerted by the mirror servers themselves by responding
+with an error, preventing accidental merges of ranges from different
+versions of files with the same name. This even includes many malicious attacks
+where the data on the mirror has been replaced by some other file, but
+not all.
+</p>
+<p>Synchronized ETag can not strictly protect against malicious attacks or server or
+network errors replacing content, but neither can Instance Digest on the
+mirror servers as the attacker most certainly can make the server
+seemingly respond with the expected Instance Digest even if the file
+contents have been modified, just as he can with ETag, and the same
+for various system failures also causing bad data to be returned. The Metalink client
+has to rely on the Instance Digest returned by the Metalink master server in the
+first response for the verification of the downloaded object as a whole.
+</p>
+<p>If the mirror servers do return an Instance Digest, then that is a bonus,
+just as having them return the right set of Link headers is. The set of
+trusted mirrors doing that can be substituted as master servers
+accepting the initial request if one likes.
+</p>
+<p>The benefit of having slave mirror servers (those not trusted as
+masters) return Instance Digest is that the client then can detect
+mismatches early even if ETag is not used. Both ETag and slave mirror
+Instance Digest do provide value, but just one is sufficient for early
+detection of mismatches. If none is provided then early detection of
+mismatches is not possible unless the file length also differs, but the
+error is still detected when the merged response is verified.
+</p>
+<a name="anchor5"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.7.2"></a><h3>7.2.&nbsp;
+Error Recovery</h3>
+
+<p>If the object checksum does not match the Instance Digest then fetch the Metalink XML or other recovery profile link, where partial file checksums can be found,
+allowing detection of which server returned bad information.
+If the Instance Digest computation does not match then the client needs
+to fetch the partial file checksums and from there figure out what of
+the downloaded data can be recovered and what needs to be fetched again,
+or if no partial checksums are available fetch the complete object from
+a trusted Metalink server.
 </p>
 <a name="IANA"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
@@ -563,7 +622,7 @@ Link Relation Type Registration: &#34;duplicate&#34;</h3>
 </p>
 <p>o  Notes: This relation is for static resources. That is, an HTTP GET request on any duplicate will return the same representation. It does not make sense for dynamic or POSTable resources and should not be used for them.
 </p>
-<a name="anchor4"></a><br /><hr />
+<a name="anchor6"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.8.2"></a><h3>8.2.&nbsp;
 Hypertext Transfer Protocol (HTTP) Digest Algorithm Values Registration</h3>
@@ -612,12 +671,12 @@ Hypertext Transfer Protocol (HTTP) Digest Algorithm Values Registration</h3>
 </p>
 </blockquote>
 
-<a name="anchor5"></a><br /><hr />
+<a name="anchor7"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.9"></a><h3>9.&nbsp;
 Security Considerations</h3>
 
-<a name="anchor6"></a><br /><hr />
+<a name="anchor8"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.9.1"></a><h3>9.1.&nbsp;
 URIs and IRIs</h3>
@@ -625,7 +684,7 @@ URIs and IRIs</h3>
 <p>Metalink clients handle URIs and IRIs. See Section 7 of <a class='info' href='#RFC3986'>[RFC3986]<span> (</span><span class='info'>Berners-Lee, T., Fielding, R., and L. Masinter, &ldquo;Uniform Resource Identifier (URI): Generic Syntax,&rdquo; January&nbsp;2005.</span><span>)</span></a> and Section 8 of <a class='info' href='#RFC3987'>[RFC3987]<span> (</span><span class='info'>Duerst, M. and M. Suignard, &ldquo;Internationalized Resource Identifiers (IRIs),&rdquo; January&nbsp;2005.</span><span>)</span></a> for security
           considerations related to their handling and use.
 </p>
-<a name="anchor7"></a><br /><hr />
+<a name="anchor9"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.9.2"></a><h3>9.2.&nbsp;
 Spoofing</h3>
@@ -633,7 +692,7 @@ Spoofing</h3>
 <p>There is potential for spoofing attacks where the attacker publishes Metalinks with false information.
           In that case, this could deceive unaware downloaders that they are downloading a malicious or worthless file. Also, malicious publishers could attempt a distributed denial of service attack by inserting unrelated IRIs into Metalinks.
 </p>
-<a name="anchor8"></a><br /><hr />
+<a name="anchor10"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.9.3"></a><h3>9.3.&nbsp;
 Cryptographic Hashes</h3>
@@ -644,7 +703,7 @@ Cryptographic Hashes</h3>
 </p>
 <p>If a Metalink contains hashes as described in <a class='info' href='#checksums'>Section&nbsp;6<span> (</span><span class='info'>Checksums</span><span>)</span></a>, it SHOULD include "sha" which is SHA-1, as specified in <a class='info' href='#RFC3174'>[RFC3174]<span> (</span><span class='info'>Eastlake, D. and P. Jones, &ldquo;US Secure Hash Algorithm 1 (SHA1),&rdquo; September&nbsp;2001.</span><span>)</span></a>.  It MAY also include other hashes.
 </p>
-<a name="anchor9"></a><br /><hr />
+<a name="anchor11"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.9.4"></a><h3>9.4.&nbsp;
 Signing</h3>
@@ -692,14 +751,14 @@ References</h3>
 <td class="author-text"><a href="mailto:anthonybryan@gmail.com">Bryan, A., Ed.</a>, <a href="mailto:tatsuhiro.t@gmail.com">Tsujikawa, T.</a>, <a href="mailto:nabber00@gmail.com">McNab, N.</a>, and <a href="mailto:info@mirrorbrain.org">P. Poeml</a>, &ldquo;<a href="http://www.ietf.org/internet-drafts/draft-bryan-metalink-16.txt">The Metalink Download Description Format</a>,&rdquo; draft-bryan-metalink-16 (work in progress), August&nbsp;2009.</td></tr>
 </table>
 
-<a name="anchor12"></a><br /><hr />
+<a name="anchor14"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.A"></a><h3>Appendix A.&nbsp;
 Acknowledgements and Contributors</h3>
 
 <p>Thanks to Mark Nottingham, Daniel Stenberg and Henrik Nordstrom.
 </p>
-<a name="anchor13"></a><br /><hr />
+<a name="anchor15"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.B"></a><h3>Appendix B.&nbsp;
 Comparisons to Similar Options (to be removed by RFC Editor before publication)</h3>
@@ -731,7 +790,7 @@ Comparisons to Similar Options (to be removed by RFC Editor before publication)<
 </li>
 <li>(-) No way to show mirror/p2p geographical location (yet).
 </li>
-<li>(-) No checksums besides MD5/SHA-1 (yet).
+<li>(ADDRESSED IN THIS REVISION) No checksums besides MD5/SHA-1.
 </li>
 <li>(-) Not as rich metadata.
 </li>
@@ -758,7 +817,7 @@ Comparisons to Similar Options (to be removed by RFC Editor before publication)<
 </li>
 </ul>
 
-<a name="anchor14"></a><br /><hr />
+<a name="anchor16"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.C"></a><h3>Appendix C.&nbsp;
 Document History (to be removed by RFC Editor before publication)</h3>
@@ -776,7 +835,7 @@ Document History (to be removed by RFC Editor before publication)</h3>
 </li>
 <li>Do we want a way to show that whole directories are mirrored, instead of individual files?
 </li>
-<li>Need an official MIME type for .torrent files.
+<li>Need an official MIME type for .torrent files or allow "application/x-bittorrent"?
 </li>
 </ul>
 
@@ -854,7 +913,7 @@ Document History (to be removed by RFC Editor before publication)</h3>
 <tr><td class="author-text">&nbsp;</td>
 <td class="author-text">Metalinker Project</td></tr>
 <tr><td class="author" align="right">Email:&nbsp;</td>
-<td class="author-text"><a href="mailto:nabber00@gmail.com">nabber00@gmail.com</a></td></tr>
+<td class="author-text"><a href="mailto:neil@nabber.org">neil@nabber.org</a></td></tr>
 <tr><td class="author" align="right">URI:&nbsp;</td>
 <td class="author-text"><a href="http://www.nabber.org">http://www.nabber.org</a></td></tr>
 </table>
