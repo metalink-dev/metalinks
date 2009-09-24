@@ -144,7 +144,8 @@
 <tr><td class="header">Network Working Group</td><td class="header">A. Bryan, Ed.</td></tr>
 <tr><td class="header">Internet-Draft</td><td class="header">N. McNab</td></tr>
 <tr><td class="header">Intended status: Standards Track</td><td class="header">Metalinker Project</td></tr>
-<tr><td class="header">Expires: March 27, 2010</td><td class="header">September 23, 2009</td></tr>
+<tr><td class="header">Expires: March 28, 2010</td><td class="header">H. Nordstrom</td></tr>
+<tr><td class="header">&nbsp;</td><td class="header">September 24, 2009</td></tr>
 </table></td></tr></table>
 <h1><br />MetaLinkHeader: Mirrors and Checksums in HTTP Headers<br />draft-bryan-metalinkhttp-06</h1>
 
@@ -180,7 +181,7 @@ The list of current Internet-Drafts can be accessed at
 The list of Internet-Draft Shadow Directories can be accessed at
 <a href='http://www.ietf.org/shadow.html'>http://www.ietf.org/shadow.html</a>.</p>
 <p>
-This Internet-Draft will expire on March 27, 2010.</p>
+This Internet-Draft will expire on March 28, 2010.</p>
 
 <h3>Copyright Notice</h3>
 <p>
@@ -215,12 +216,8 @@ Mirrors / Multiple Download Locations<br />
 Peer-to-Peer Descriptions / Metainfo<br />
 <a href="#openpgp">5.</a>&nbsp;
 OpenPGP Signatures<br />
-<a href="#checksums">6.</a>&nbsp;
-Checksums<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#wholechecksums">6.1.</a>&nbsp;
+<a href="#wholechecksums">6.</a>&nbsp;
 Checksums of Whole Files<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#partialchecksums">6.2.</a>&nbsp;
-Checksums of Partial Files<br />
 <a href="#clientserver">7.</a>&nbsp;
 Client / Server Multi-source Download Interaction<br />
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor4">7.1.</a>&nbsp;
@@ -267,7 +264,7 @@ Introduction</h3>
 
 <p>MetaLinkHeader is an alternative to Metalink, usually an XML-based document format <a class='info' href='#draft-bryan-metalink'>[draft&#8209;bryan&#8209;metalink]<span> (</span><span class='info'>Bryan, A., Ed., Tsujikawa, T., McNab, N., and P. Poeml, &ldquo;The Metalink Download Description Format,&rdquo; August&nbsp;2009.</span><span>)</span></a>. 
       MetaLinkHeader attempts to provide as much functionality as the Metalink XML format by using existing standards such as Web Linking <a class='info' href='#draft-nottingham-http-link-header'>[draft&#8209;nottingham&#8209;http&#8209;link&#8209;header]<span> (</span><span class='info'>Nottingham, M., &ldquo;Web Linking,&rdquo; July&nbsp;2009.</span><span>)</span></a>, 
-      Instance Digests in HTTP <a class='info' href='#RFC3230'>[RFC3230]<span> (</span><span class='info'>Mogul, J. and A. Van Hoff, &ldquo;Instance Digests in HTTP,&rdquo; January&nbsp;2002.</span><span>)</span></a>, and Content-MD5 <a class='info' href='#RFC1864'>[RFC1864]<span> (</span><span class='info'>Myers, J. and M. Rose, &ldquo;The Content-MD5 Header Field,&rdquo; October&nbsp;1995.</span><span>)</span></a>. MetaLinkHeader is used to list
+      Instance Digests in HTTP <a class='info' href='#RFC3230'>[RFC3230]<span> (</span><span class='info'>Mogul, J. and A. Van Hoff, &ldquo;Instance Digests in HTTP,&rdquo; January&nbsp;2002.</span><span>)</span></a>, and Etags. MetaLinkHeader is used to list
       information about a file to be downloaded. This includes lists of multiple URIs (mirrors), Peer-to-Peer information, checksums, and digital signatures.
 </p>
 <p>Identical copies of a file are frequently accessible in multiple locations on the Internet over a variety of protocols (FTP, HTTP, and Peer-to-Peer).
@@ -327,7 +324,7 @@ Requirements</h3>
 <p>In this context, "MetaLink" refers to a MetaLinkHeader which consists of mirrors and checksums in HTTP Headers as described in this document. "Metalink XML" refers to the XML format described in <a class='info' href='#draft-bryan-metalink'>[draft&#8209;bryan&#8209;metalink]<span> (</span><span class='info'>Bryan, A., Ed., Tsujikawa, T., McNab, N., and P. Poeml, &ldquo;The Metalink Download Description Format,&rdquo; August&nbsp;2009.</span><span>)</span></a>.
 </p>
 <p>Metalink servers are HTTP servers that MUST have lists of mirrors and use the Link header <a class='info' href='#draft-nottingham-http-link-header'>[draft&#8209;nottingham&#8209;http&#8209;link&#8209;header]<span> (</span><span class='info'>Nottingham, M., &ldquo;Web Linking,&rdquo; July&nbsp;2009.</span><span>)</span></a> to indicate them. They also MUST
-	  provide checksums of files via Instance Digests in HTTP <a class='info' href='#RFC3230'>[RFC3230]<span> (</span><span class='info'>Mogul, J. and A. Van Hoff, &ldquo;Instance Digests in HTTP,&rdquo; January&nbsp;2002.</span><span>)</span></a>. Mirror and checksum information provided by the originating Metalink server MUST be considered authoritative. Metalink servers and their associated mirror servers
+	  provide checksums of files via Instance Digests in HTTP <a class='info' href='#RFC3230'>[RFC3230]<span> (</span><span class='info'>Mogul, J. and A. Van Hoff, &ldquo;Instance Digests in HTTP,&rdquo; January&nbsp;2002.</span><span>)</span></a>, whether requested or not. Mirror and checksum information provided by the originating Metalink server MUST be considered authoritative. Metalink servers and their associated mirror servers
       SHOULD all share the same ETag policy (ETag Synchronization), i.e. based on the file contents (checksum) and not server-unique filesystem metadata. The emitted ETag may be implemented the same as the Instance Digest for simplicity.
 </p>
 <p>Mirror servers are typically FTP or HTTP servers that "mirror" another server. That is, they provide identical copies of (at least some) files that are also on the mirrored server. 
@@ -348,8 +345,8 @@ Mirrors / Multiple Download Locations</h3>
 <p>
 <p>A brief Metalink server response with two mirrors only:
 </p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
-Link: &lt;http://www2.example.com/example.ext&gt;; rel="duplicate";
-Link: &lt;ftp://ftp.example.com/example.ext&gt;; rel="duplicate";
+Link: &lt;http://www2.example.com/example.ext&gt;; rel="duplicate"
+Link: &lt;ftp://ftp.example.com/example.ext&gt;; rel="duplicate"
 </pre></div>
 
 <p>Mirror servers are listed in order of priority.
@@ -384,63 +381,22 @@ OpenPGP Signatures</h3>
 <p>A brief Metalink server response with OpenPGP signature only:
 </p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
 Link: &lt;http://example.com/example.ext.asc&gt;; rel="describedby";
-type="application/pgp-signature";
+type="application/pgp-signature"
 </pre></div>
-
-<a name="checksums"></a><br /><hr />
-<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.6"></a><h3>6.&nbsp;
-Checksums</h3>
 
 <a name="wholechecksums"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.6.1"></a><h3>6.1.&nbsp;
+<a name="rfc.section.6"></a><h3>6.&nbsp;
 Checksums of Whole Files</h3>
 
-<p>Instance Digests in HTTP <a class='info' href='#RFC3230'>[RFC3230]<span> (</span><span class='info'>Mogul, J. and A. Van Hoff, &ldquo;Instance Digests in HTTP,&rdquo; January&nbsp;2002.</span><span>)</span></a> are used to request and retrieve whole file checksums.
+<p>Metalink servers MUST provide Instance Digests in HTTP <a class='info' href='#RFC3230'>[RFC3230]<span> (</span><span class='info'>Mogul, J. and A. Van Hoff, &ldquo;Instance Digests in HTTP,&rdquo; January&nbsp;2002.</span><span>)</span></a> for files they describe with mirrors. Mirror servers MAY as well.
 </p>
-<p>
-<p>A brief Metalink client request that prefers SHA-1 checksums over MD5:
-</p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
-Want-Digest: MD5;q=0.3, SHA;q=0.8
-</pre></div>
-
 <p>
 <p>A brief Metalink server response with checksum:
 </p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
 Digest: SHA=thvDyvhfIqlvFe+A9MYgxAfm1q5=
 </pre></div>
 
-<a name="partialchecksums"></a><br /><hr />
-<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.6.2"></a><h3>6.2.&nbsp;
-Checksums of Partial Files</h3>
-
-<p>The Content-MD5 header <a class='info' href='#RFC1864'>[RFC1864]<span> (</span><span class='info'>Myers, J. and M. Rose, &ldquo;The Content-MD5 Header Field,&rdquo; October&nbsp;1995.</span><span>)</span></a> provides checksums for a portion of a file, when requested with a Range header field.
-</p>
-<p>Negotiation of Content-MD5 is described in <a class='info' href='#RFC3230'>[RFC3230]<span> (</span><span class='info'>Mogul, J. and A. Van Hoff, &ldquo;Instance Digests in HTTP,&rdquo; January&nbsp;2002.</span><span>)</span></a>. A checksum for a partial file can determine if there has been an error in transmission, which means the file is corrupt. If an error is detected in a partial file, then just that Range can be requested again from the current mirror, or a different mirror.
-</p>
-<p>
-<p>A brief Metalink client request for Content-MD5 of a portion of a file:
-</p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
-Range: bytes=7433802-
-Want-Digest: contentMD5;q=0.8
-</pre></div>
-
-<p>
-<p>A brief Metalink server response with checksum:
-</p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
-HTTP/1.1 206 Partial Content
-Accept-Ranges: bytes
-Content-Length: 7433801
-Content-Range: bytes 7433802-14867602/14867603
-Content-MD5:  Q2hlY2sgSW50ZWdyaXR5IQ==
-</pre></div>
-
-<p>[[Content-MD5 for partial file checksums could lead to many random Range size checksum requests. 
-Use consistent partial file size? Could we get all partial file checksums from the referring Metalink server with Content-MD5? 
-Otherwise, this could also be a lot to ask on a mirror network if you don't control it and most servers might not have this feature enabled.]]
-</p>
 <a name="clientserver"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.7"></a><h3>7.&nbsp;
@@ -452,7 +408,6 @@ Client / Server Multi-source Download Interaction</h3>
 <div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
 GET /distribution/example.ext HTTP/1.1
 Host: www.example.com
-Want-Digest: MD5;q=0.3, SHA;q=0.8
 </pre></div><p>
 
 </p>
@@ -697,11 +652,11 @@ Spoofing</h3>
 <a name="rfc.section.9.3"></a><h3>9.3.&nbsp;
 Cryptographic Hashes</h3>
 
-<p>Currently, some of the hash types defined in Instance Digests in HTTP <a class='info' href='#RFC3230'>[RFC3230]<span> (</span><span class='info'>Mogul, J. and A. Van Hoff, &ldquo;Instance Digests in HTTP,&rdquo; January&nbsp;2002.</span><span>)</span></a> and Content-MD5 header  <a class='info' href='#RFC1864'>[RFC1864]<span> (</span><span class='info'>Myers, J. and M. Rose, &ldquo;The Content-MD5 Header Field,&rdquo; October&nbsp;1995.</span><span>)</span></a> are considered insecure. 
+<p>Currently, some of the digest values defined in Instance Digests in HTTP <a class='info' href='#RFC3230'>[RFC3230]<span> (</span><span class='info'>Mogul, J. and A. Van Hoff, &ldquo;Instance Digests in HTTP,&rdquo; January&nbsp;2002.</span><span>)</span></a> are considered insecure. 
           These include the whole Message Digest family of algorithms which are not suitable for cryptographically strong verification. Malicious people could provide files that appear to be 
           identical to another file because of a collision, i.e. the weak cryptographic hashes of the intended file and a substituted malicious file could match.
 </p>
-<p>If a Metalink contains hashes as described in <a class='info' href='#checksums'>Section&nbsp;6<span> (</span><span class='info'>Checksums</span><span>)</span></a>, it SHOULD include "sha" which is SHA-1, as specified in <a class='info' href='#RFC3174'>[RFC3174]<span> (</span><span class='info'>Eastlake, D. and P. Jones, &ldquo;US Secure Hash Algorithm 1 (SHA1),&rdquo; September&nbsp;2001.</span><span>)</span></a>.  It MAY also include other hashes.
+<p>If a Metalink contains hashes as described in <a class='info' href='#wholechecksums'>Section&nbsp;6<span> (</span><span class='info'>Checksums of Whole Files</span><span>)</span></a>, it SHOULD include "sha" which is SHA-1, as specified in <a class='info' href='#RFC3174'>[RFC3174]<span> (</span><span class='info'>Eastlake, D. and P. Jones, &ldquo;US Secure Hash Algorithm 1 (SHA1),&rdquo; September&nbsp;2001.</span><span>)</span></a>. It MAY also include other hashes.
 </p>
 <a name="anchor11"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
@@ -721,8 +676,6 @@ References</h3>
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <h3>10.1.&nbsp;Normative References</h3>
 <table width="99%" border="0">
-<tr><td class="author-text" valign="top"><a name="RFC1864">[RFC1864]</a></td>
-<td class="author-text">Myers, J. and M. Rose, &ldquo;<a href="http://tools.ietf.org/html/rfc1864">The Content-MD5 Header Field</a>,&rdquo; RFC&nbsp;1864, October&nbsp;1995.</td></tr>
 <tr><td class="author-text" valign="top"><a name="RFC2045">[RFC2045]</a></td>
 <td class="author-text">Freed, N. and N. Borenstein, &ldquo;<a href="http://tools.ietf.org/html/rfc2045">Multipurpose Internet Mail Extensions (MIME) Part One: Format of Internet Message Bodies</a>,&rdquo; RFC&nbsp;2045, November&nbsp;1996.</td></tr>
 <tr><td class="author-text" valign="top"><a name="RFC2119">[RFC2119]</a></td>
@@ -756,7 +709,7 @@ References</h3>
 <a name="rfc.section.A"></a><h3>Appendix A.&nbsp;
 Acknowledgements and Contributors</h3>
 
-<p>Thanks to Mark Nottingham, Daniel Stenberg and Henrik Nordstrom.
+<p>Thanks to Mark Nottingham, Daniel Stenberg and Matt Domsch.
 </p>
 <a name="anchor15"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
@@ -827,15 +780,15 @@ Document History (to be removed by RFC Editor before publication)</h3>
 <p>Known issues concerning this draft:
 	    </p>
 <ul class="text">
-<li>Mirror negotiation. Only send a few mirrors, or only send them if Want-Digest is used? Some organizations have many mirrors.
+<li>Use of Link header to describe Mirrors. Only send a few mirrors with Link header, or only send them if Want-Digest is used? Some organizations have many mirrors.
 </li>
-<li>Some publishers desire stronger hashes than MD5 and SHA-1.
-</li>
-<li>Content-MD5 for partial file checksums could lead to many random Range size checksum requests. Use consistent Range sizes?
+<li>A way to differentiate between mirrors that have synchronized ETags and those that don't.
 </li>
 <li>Do we want a way to show that whole directories are mirrored, instead of individual files?
 </li>
 <li>Need an official MIME type for .torrent files or allow "application/x-bittorrent"?
+</li>
+<li>ADDRESSED:Some publishers desire stronger hashes than MD5 and SHA-1.
 </li>
 </ul>
 
@@ -843,7 +796,9 @@ Document History (to be removed by RFC Editor before publication)</h3>
 	    
 	    </p>
 <ul class="text">
-<li>...
+<li>Add Mismatch Detection, Error Recovery, and Digest Algorithm values.
+</li>
+<li>Remove Content-MD5 and Want-Digest.
 </li>
 </ul>
 
@@ -859,7 +814,7 @@ Document History (to be removed by RFC Editor before publication)</h3>
 	    
 	    </p>
 <ul class="text">
-<li>Remove .torrent until it has an official MIME type.
+<li>Temporarily remove .torrent.
 </li>
 </ul>
 
@@ -916,5 +871,12 @@ Document History (to be removed by RFC Editor before publication)</h3>
 <td class="author-text"><a href="mailto:neil@nabber.org">neil@nabber.org</a></td></tr>
 <tr><td class="author" align="right">URI:&nbsp;</td>
 <td class="author-text"><a href="http://www.nabber.org">http://www.nabber.org</a></td></tr>
+<tr cellpadding="3"><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text">Henrik Nordstrom</td></tr>
+<tr><td class="author" align="right">Email:&nbsp;</td>
+<td class="author-text"><a href="mailto:henrik@henriknordstrom.net">henrik@henriknordstrom.net</a></td></tr>
+<tr><td class="author" align="right">URI:&nbsp;</td>
+<td class="author-text"><a href="http://www.henriknordstrom.net/">http://www.henriknordstrom.net/</a></td></tr>
 </table>
 </body></html>
