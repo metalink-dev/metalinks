@@ -144,26 +144,15 @@
 <tr><td class="header">Network Working Group</td><td class="header">A. Bryan, Ed.</td></tr>
 <tr><td class="header">Internet-Draft</td><td class="header">N. McNab</td></tr>
 <tr><td class="header">Intended status: Standards Track</td><td class="header">Metalinker Project</td></tr>
-<tr><td class="header">Expires: March 29, 2010</td><td class="header">H. Nordstrom</td></tr>
-<tr><td class="header">&nbsp;</td><td class="header">September 25, 2009</td></tr>
+<tr><td class="header">Expires: April 1, 2010</td><td class="header">H. Nordstrom</td></tr>
+<tr><td class="header">&nbsp;</td><td class="header">September 28, 2009</td></tr>
 </table></td></tr></table>
 <h1><br />MetaLinkHeader: Mirrors and Checksums in HTTP Headers<br />draft-bryan-metalinkhttp-07</h1>
 
 <h3>Status of this Memo</h3>
 <p>
 This Internet-Draft is submitted to IETF in full
-conformance with the provisions of BCP&nbsp;78 and BCP&nbsp;79.
-This document may contain material from IETF Documents or IETF
-Contributions published or made publicly available before November
-10, 2008. The person(s) controlling the copyright in some of this
-material may not have granted the IETF Trust the right to allow
-modifications of such material outside the IETF Standards Process.
-Without obtaining an adequate license from the person(s) controlling
-the copyright in such materials, this document may not be modified
-outside the IETF Standards Process, and derivative works of it may
-not be created outside the IETF Standards Process, except to format
-it for publication as an RFC or to translate it into languages other
-than English.</p>
+conformance with the provisions of BCP&nbsp;78 and BCP&nbsp;79.</p>
 <p>
 Internet-Drafts are working documents of the Internet Engineering
 Task Force (IETF), its areas, and its working groups.
@@ -181,7 +170,7 @@ The list of current Internet-Drafts can be accessed at
 The list of Internet-Draft Shadow Directories can be accessed at
 <a href='http://www.ietf.org/shadow.html'>http://www.ietf.org/shadow.html</a>.</p>
 <p>
-This Internet-Draft will expire on March 29, 2010.</p>
+This Internet-Draft will expire on April 1, 2010.</p>
 
 <h3>Copyright Notice</h3>
 <p>
@@ -263,8 +252,8 @@ Authors' Addresses<br />
 Introduction</h3>
 
 <p>MetaLinkHeader is an alternative to Metalink, usually an XML-based document format <a class='info' href='#draft-bryan-metalink'>[draft&#8209;bryan&#8209;metalink]<span> (</span><span class='info'>Bryan, A., Ed., Tsujikawa, T., McNab, N., and P. Poeml, &ldquo;The Metalink Download Description Format,&rdquo; August&nbsp;2009.</span><span>)</span></a>. 
-      MetaLinkHeader attempts to provide as much functionality as the Metalink XML format by using existing standards such as Web Linking <a class='info' href='#draft-nottingham-http-link-header'>[draft&#8209;nottingham&#8209;http&#8209;link&#8209;header]<span> (</span><span class='info'>Nottingham, M., &ldquo;Web Linking,&rdquo; July&nbsp;2009.</span><span>)</span></a>, 
-      Instance Digests in HTTP <a class='info' href='#RFC3230'>[RFC3230]<span> (</span><span class='info'>Mogul, J. and A. Van Hoff, &ldquo;Instance Digests in HTTP,&rdquo; January&nbsp;2002.</span><span>)</span></a>, and Etags. MetaLinkHeader is used to list
+      MetaLinkHeader attempts to provide as much functionality as the Metalink/XML format by using existing standards such as Web Linking <a class='info' href='#draft-nottingham-http-link-header'>[draft&#8209;nottingham&#8209;http&#8209;link&#8209;header]<span> (</span><span class='info'>Nottingham, M., &ldquo;Web Linking,&rdquo; July&nbsp;2009.</span><span>)</span></a>, 
+      Instance Digests in HTTP <a class='info' href='#RFC3230'>[RFC3230]<span> (</span><span class='info'>Mogul, J. and A. Van Hoff, &ldquo;Instance Digests in HTTP,&rdquo; January&nbsp;2002.</span><span>)</span></a>, and ETags. MetaLinkHeader is used to list
       information about a file to be downloaded. This includes lists of multiple URIs (mirrors), Peer-to-Peer information, checksums, and digital signatures.
 </p>
 <p>Identical copies of a file are frequently accessible in multiple locations on the Internet over a variety of protocols (FTP, HTTP, and Peer-to-Peer).
@@ -321,14 +310,14 @@ Notational Conventions</h3>
 <a name="rfc.section.2"></a><h3>2.&nbsp;
 Requirements</h3>
 
-<p>In this context, "MetaLink" refers to a MetaLinkHeader which consists of mirrors and checksums in HTTP Headers as described in this document. "Metalink XML" refers to the XML format described in <a class='info' href='#draft-bryan-metalink'>[draft&#8209;bryan&#8209;metalink]<span> (</span><span class='info'>Bryan, A., Ed., Tsujikawa, T., McNab, N., and P. Poeml, &ldquo;The Metalink Download Description Format,&rdquo; August&nbsp;2009.</span><span>)</span></a>.
+<p>In this context, "MetaLink" refers to a MetaLinkHeader which consists of mirrors and checksums in HTTP Headers as described in this document. "Metalink/XML" refers to the XML format described in <a class='info' href='#draft-bryan-metalink'>[draft&#8209;bryan&#8209;metalink]<span> (</span><span class='info'>Bryan, A., Ed., Tsujikawa, T., McNab, N., and P. Poeml, &ldquo;The Metalink Download Description Format,&rdquo; August&nbsp;2009.</span><span>)</span></a>.
 </p>
 <p>Metalink servers are HTTP servers that MUST have lists of mirrors and use the Link header <a class='info' href='#draft-nottingham-http-link-header'>[draft&#8209;nottingham&#8209;http&#8209;link&#8209;header]<span> (</span><span class='info'>Nottingham, M., &ldquo;Web Linking,&rdquo; July&nbsp;2009.</span><span>)</span></a> to indicate them. They also MUST
 	  provide checksums of files via Instance Digests in HTTP <a class='info' href='#RFC3230'>[RFC3230]<span> (</span><span class='info'>Mogul, J. and A. Van Hoff, &ldquo;Instance Digests in HTTP,&rdquo; January&nbsp;2002.</span><span>)</span></a>, whether requested or not. Mirror and checksum information provided by the originating Metalink server MUST be considered authoritative. Metalink servers and their associated mirror servers
       SHOULD all share the same ETag policy (ETag Synchronization), i.e. based on the file contents (checksum) and not server-unique filesystem metadata. The emitted ETag may be implemented the same as the Instance Digest for simplicity.
 </p>
 <p>Mirror servers are typically FTP or HTTP servers that "mirror" another server. That is, they provide identical copies of (at least some) files that are also on the mirrored server. 
-      Mirror servers MAY be Metalink servers. Mirror servers MUST support serving partial content. Mirror servers SHOULD support Instance Digests in HTTP <a class='info' href='#RFC3230'>[RFC3230]<span> (</span><span class='info'>Mogul, J. and A. Van Hoff, &ldquo;Instance Digests in HTTP,&rdquo; January&nbsp;2002.</span><span>)</span></a>. Optimally, mirror servers will share the same ETag policy as the Metalink server and provide Instance Digests.
+      Mirror servers MAY be Metalink servers. Mirror servers MUST support serving partial content. Mirror servers SHOULD support Instance Digests in HTTP <a class='info' href='#RFC3230'>[RFC3230]<span> (</span><span class='info'>Mogul, J. and A. Van Hoff, &ldquo;Instance Digests in HTTP,&rdquo; January&nbsp;2002.</span><span>)</span></a>. Optimally, HTTP mirror servers will share the same ETag policy as the Metalink server and provide Instance Digests.
 </p>
 <p>Metalink clients use the mirrors provided by a Metalink server with Link header <a class='info' href='#draft-nottingham-http-link-header'>[draft&#8209;nottingham&#8209;http&#8209;link&#8209;header]<span> (</span><span class='info'>Nottingham, M., &ldquo;Web Linking,&rdquo; July&nbsp;2009.</span><span>)</span></a>. Metalink clients MUST support HTTP and MAY support FTP, BitTorrent, 
       or other download methods. Metalink clients MUST switch downloads from one mirror to another if the one mirror becomes unreachable. Metalink clients are RECOMMENDED to support multi-source, or parallel, 
@@ -345,11 +334,14 @@ Mirrors / Multiple Download Locations</h3>
 <p>
 <p>A brief Metalink server response with two mirrors only:
 </p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
-Link: &lt;http://www2.example.com/example.ext&gt;; rel="duplicate"
-Link: &lt;ftp://ftp.example.com/example.ext&gt;; rel="duplicate"
+Link: &lt;http://www2.example.com/example.ext&gt;; rel="duplicate";
+pri=1; pref=1
+Link: &lt;ftp://ftp.example.com/example.ext&gt;; rel="duplicate"; pri=2
 </pre></div>
 
-<p>Mirror servers are listed in order of priority.
+<p>Mirror servers are listed in order of priority or have a "pri" value, where mirrors with lower values are used first.
+</p>
+<p>There are two types of mirror servers: preferred and normal. Optimally, HTTP mirror servers will share the same ETag policy as the Metalink server, provide Instance Digests, or both. These mirrors are preferred, and make it possible to detect early on, before data is transferred, if the file requested matches the desired file. Preferred HTTP mirror servers have a "pref" value of 1.
 </p>
 <p>[[Some organizations have many mirrors. Only send a few mirrors, or only use the Link header if Want-Digest is used?]]
 </p>
@@ -389,7 +381,7 @@ type="application/pgp-signature"
 <a name="rfc.section.6"></a><h3>6.&nbsp;
 Checksums of Whole Files</h3>
 
-<p>Metalink servers MUST provide Instance Digests in HTTP <a class='info' href='#RFC3230'>[RFC3230]<span> (</span><span class='info'>Mogul, J. and A. Van Hoff, &ldquo;Instance Digests in HTTP,&rdquo; January&nbsp;2002.</span><span>)</span></a> for files they describe with mirrors. Mirror servers MAY as well.
+<p>Metalink servers MUST provide Instance Digests in HTTP <a class='info' href='#RFC3230'>[RFC3230]<span> (</span><span class='info'>Mogul, J. and A. Van Hoff, &ldquo;Instance Digests in HTTP,&rdquo; January&nbsp;2002.</span><span>)</span></a> for files they describe with mirrors. Mirror servers SHOULD as well.
 </p>
 <p>
 <p>A brief Metalink server response with checksum:
@@ -402,7 +394,7 @@ Digest: SHA=thvDyvhfIqlvFe+A9MYgxAfm1q5=
 <a name="rfc.section.7"></a><h3>7.&nbsp;
 Client / Server Multi-source Download Interaction</h3>
 
-<p>Metalink clients begin a download with a standard HTTP <a class='info' href='#RFC2616'>[RFC2616]<span> (</span><span class='info'>Fielding, R., Gettys, J., Mogul, J., Frystyk, H., Masinter, L., Leach, P., and T. Berners-Lee, &ldquo;Hypertext Transfer Protocol -- HTTP/1.1,&rdquo; June&nbsp;1999.</span><span>)</span></a> GET request to the Metalink server. A Range limit is optional, not required. Here the client prefers SHA-1 checksums over MD5:
+<p>Metalink clients begin a download with a standard HTTP <a class='info' href='#RFC2616'>[RFC2616]<span> (</span><span class='info'>Fielding, R., Gettys, J., Mogul, J., Frystyk, H., Masinter, L., Leach, P., and T. Berners-Lee, &ldquo;Hypertext Transfer Protocol -- HTTP/1.1,&rdquo; June&nbsp;1999.</span><span>)</span></a> GET request to the Metalink server. A Range limit is optional, not required.
 </p>
 <p></p>
 <div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
@@ -411,7 +403,7 @@ Host: www.example.com
 </pre></div><p>
 
 </p>
-<p>Alternatively, Metalink clients can use a HEAD request to discover mirrors via Link headers. After that, it follows with a GET request as usual.
+<p>Alternatively, Metalink clients can use a HEAD request to discover mirrors via Link headers. After that, the client follows with a GET request as usual.
 </p>
 <p>The Metalink server responds with the data and these headers:
 
@@ -435,7 +427,7 @@ Digest: SHA=thvDyvhfIqlvFe+A9MYgxAfm1q5=
 
 </p>
 <p>From the Metalink server response the client learns the following metadata
-about the requested object, in addition also starting to receive the
+about the requested object, in addition to also starting to receive the
 object:
 </p>
 <p>
@@ -447,13 +439,13 @@ object:
 </li>
 <li>Object size.
 </li>
-<li>ETag. (ETag synchronization between mirrors is OPTIONAL).
+<li>ETag.
 </li>
 <li>Peer-to-peer information.
 </li>
 <li>Digital signature.
 </li>
-<li>Metalink XML, which can include checksums to repair a file.
+<li>Metalink/XML, which can include partial file checksums to repair a file.
 </li>
 </ul>
 
@@ -491,6 +483,8 @@ Digest: SHA=thvDyvhfIqlvFe+A9MYgxAfm1q5=
 </p>
 <p>If the first request was not Range limited then abort it by closing the connection when it catches up with the other parallel downloads of the same object.
 </p>
+<p>Downloads from mirrors that do not have the same file size as the Metalink server MUST be aborted.
+</p>
 <p>Once the download has completed, the Metalink client MUST verify the checksum of the file.
 </p>
 <a name="anchor4"></a><br /><hr />
@@ -500,16 +494,16 @@ Early File Mismatch Detection with Strong ETag or Instance Digest from Mirrors</
 
 <p>In HTTP terms, the requirement is that merging of ranges from multiple
 responses must be verified with a strong validator, which in this
-context is the same as either instance digest or a strong ETag.
+context is the same as either Instance Digest or a strong ETag.
 In most cases it is sufficient that the Metalink server provides
 mirrors and Instance Digest information, but operation will be
 more robust and efficient if the mirror servers do implement a synchronized
 ETag as well. In fact, the emitted ETag
 may be implemented the same as the Instance Digest for simplicity,
-but there is no need to specify how ETag generated, just that it needs
+but there is no need to specify how the ETag is generated, just that it needs
 to be shared among the mirror servers.
 If the mirror server provides neither synchronized ETag or Instance Digest, then early detection of
-mismatches is not possible unless file length also differs. Finally, the error is still detectable when the merged response is verified.
+mismatches is not possible unless file length also differs. Finally, the error is still detectable, after the download has completed, when the merged response is verified.
 </p>
 <p>ETag can not be used for verifying the integrity of the received
 content. But it is a guarantee issued by the Metalink server that the content is
@@ -550,13 +544,15 @@ error is still detected when the merged response is verified.
 <a name="rfc.section.7.2"></a><h3>7.2.&nbsp;
 Error Recovery</h3>
 
-<p>If the object checksum does not match the Instance Digest then fetch the Metalink XML or other recovery profile link, where partial file checksums can be found,
+<p>If the object checksum does not match the Instance Digest then fetch the Metalink/XML or other recovery profile link, where partial file checksums can be found,
 allowing detection of which server returned bad information.
 If the Instance Digest computation does not match then the client needs
 to fetch the partial file checksums and from there figure out what of
-the downloaded data can be recovered and what needs to be fetched again,
-or if no partial checksums are available fetch the complete object from
+the downloaded data can be recovered and what needs to be fetched again.
+If no partial checksums are available, then the client MUST fetch the complete object from
 a trusted Metalink server.
+</p>
+<p>Partial file checksums can be used to detect errors during the download.
 </p>
 <a name="IANA"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
@@ -657,7 +653,7 @@ Cryptographic Hashes</h3>
           These include the whole Message Digest family of algorithms which are not suitable for cryptographically strong verification. Malicious people could provide files that appear to be 
           identical to another file because of a collision, i.e. the weak cryptographic hashes of the intended file and a substituted malicious file could match.
 </p>
-<p>If a Metalink contains hashes as described in <a class='info' href='#wholechecksums'>Section&nbsp;6<span> (</span><span class='info'>Checksums of Whole Files</span><span>)</span></a>, it SHOULD include "sha" which is SHA-1, as specified in <a class='info' href='#RFC3174'>[RFC3174]<span> (</span><span class='info'>Eastlake, D. and P. Jones, &ldquo;US Secure Hash Algorithm 1 (SHA1),&rdquo; September&nbsp;2001.</span><span>)</span></a>. It MAY also include other hashes.
+<p>If a Metalink contains whole file hashes as described in <a class='info' href='#wholechecksums'>Section&nbsp;6<span> (</span><span class='info'>Checksums of Whole Files</span><span>)</span></a>, it SHOULD include "sha" which is SHA-1, as specified in <a class='info' href='#RFC3174'>[RFC3174]<span> (</span><span class='info'>Eastlake, D. and P. Jones, &ldquo;US Secure Hash Algorithm 1 (SHA1),&rdquo; September&nbsp;2001.</span><span>)</span></a>, or stronger. It MAY also include other hashes.
 </p>
 <a name="anchor11"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
@@ -710,14 +706,14 @@ References</h3>
 <a name="rfc.section.A"></a><h3>Appendix A.&nbsp;
 Acknowledgements and Contributors</h3>
 
-<p>Thanks to Mark Nottingham, Daniel Stenberg and Matt Domsch.
+<p>Thanks to the Metalink community, Mark Nottingham, Daniel Stenberg, Tatsuhiro Tsujikawa, Peter Poeml, Matt Domsch, and Alan Ford.
 </p>
 <a name="anchor15"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.B"></a><h3>Appendix B.&nbsp;
 Comparisons to Similar Options (to be removed by RFC Editor before publication)</h3>
 
-<p>This draft, compared to the Metalink XML format <a class='info' href='#draft-bryan-metalink'>[draft&#8209;bryan&#8209;metalink]<span> (</span><span class='info'>Bryan, A., Ed., Tsujikawa, T., McNab, N., and P. Poeml, &ldquo;The Metalink Download Description Format,&rdquo; August&nbsp;2009.</span><span>)</span></a> :
+<p>This draft, compared to the Metalink/XML format <a class='info' href='#draft-bryan-metalink'>[draft&#8209;bryan&#8209;metalink]<span> (</span><span class='info'>Bryan, A., Ed., Tsujikawa, T., McNab, N., and P. Poeml, &ldquo;The Metalink Download Description Format,&rdquo; August&nbsp;2009.</span><span>)</span></a> :
 </p>
 <p>
 	    </p>
@@ -728,23 +724,21 @@ Comparisons to Similar Options (to be removed by RFC Editor before publication)<
 </li>
 <li>(+) No XML dependency.
 </li>
-<li>(?) Existing Metalink XML clients can be easily converted to support this as well.
+<li>(?) Existing Metalink/XML clients can be easily converted to support this as well.
 </li>
-<li>(-?) Tied to HTTP, not as generic. FTP/P2P clients won't be using it unless they also support HTTP, unlike Metalink XML.
+<li>(-?) Tied to HTTP, not as generic. FTP/P2P clients won't be using it unless they also support HTTP, unlike Metalink/XML.
 </li>
 <li>(---) Requires changes to server software.
 </li>
-<li>(-?) Could require some coordination of all mirror servers for all features, which may be difficult or impossible unless you are in control of all servers on the mirror network.
+<li>(+) Coordination of mirror servers is preferred, but not required. Coordination may be difficult or impossible unless you are in control of all servers on the mirror network.
 </li>
-<li>(-) Requires server-side support. Metalink XML can be created by user (or server, but server component/changes not required).
+<li>(-) Requires server-side support. Metalink/XML can be created by user (or server, but server component/changes not required).
 </li>
-<li>(-) Also, Metalink XML files are easily mirrored on all servers. Even if usage in that case is not as transparent, it still gives access to users at all mirrors (FTP included) to all download information with no changes needed to the server.
+<li>(-) Also, Metalink/XML files are easily mirrored on all servers. Even if usage in that case is not as transparent, it still gives access to users at all mirrors (FTP included) to all download information with no changes needed to the server.
 </li>
-<li>(-) Not portable/archivable/emailable. Metalink XML is used to import/export transfer queues. Not as easy for search engines to index?
+<li>(-) Not portable/archivable/emailable. Metalink/XML is used to import/export transfer queues. Not as easy for search engines to index?
 </li>
-<li>(-) No way to show mirror/p2p geographical location (yet).
-</li>
-<li>(ADDRESSED IN THIS REVISION) No checksums besides MD5/SHA-1.
+<li>(-) No way to show mirror geographical location (yet).
 </li>
 <li>(-) Not as rich metadata.
 </li>
@@ -789,15 +783,13 @@ Document History (to be removed by RFC Editor before publication)</h3>
 </li>
 <li>Need an official MIME type for .torrent files or allow "application/x-bittorrent"?
 </li>
-<li>ADDRESSED:Some publishers desire stronger hashes than MD5 and SHA-1.
-</li>
 </ul>
 
 <p>-07 : September , 2009.
 	    
 	    </p>
 <ul class="text">
-<li>...
+<li>Preferred mirror servers.
 </li>
 </ul>
 
