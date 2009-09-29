@@ -5,11 +5,14 @@ Network Working Group                                      A. Bryan, Ed.
 Internet-Draft                                                  N. McNab
 Intended status: Standards Track                      Metalinker Project
 Expires: April 2, 2010                                      H. Nordstrom
+
+                                                                 A. Ford
+                                                     Roke Manor Research
                                                       September 29, 2009
 
 
          MetaLinkHeader: Mirrors and Checksums in HTTP Headers
-                      draft-bryan-metalinkhttp-07
+                      draft-bryan-metalinkhttp-08
 
 Status of this Memo
 
@@ -45,10 +48,7 @@ Copyright Notice
    Please review these documents carefully, as they describe your rights
    and restrictions with respect to this document.
 
-Abstract
 
-   This document specifies MetaLinkHeader: Mirrors and Checksums in HTTP
-   Headers, an alternative to the Metalink XML-based download
 
 
 
@@ -57,6 +57,10 @@ Bryan, et al.             Expires April 2, 2010                 [Page 1]
 Internet-Draft    MetaLinkHeader: Mirrors and Checksums   September 2009
 
 
+Abstract
+
+   This document specifies MetaLinkHeader: Mirrors and Checksums in HTTP
+   Headers, an alternative to the Metalink XML-based download
    description format.  MetaLinkHeader describes multiple download
    locations (mirrors), Peer-to-Peer, checksums, digital signatures, and
    other information using existing standards.  Clients can
@@ -96,10 +100,6 @@ Table of Contents
    Appendix C.  Document History (to be removed by RFC Editor
                 before publication) . . . . . . . . . . . . . . . . . 14
    Authors' Addresses . . . . . . . . . . . . . . . . . . . . . . . . 14
-
-
-
-
 
 
 
@@ -807,14 +807,14 @@ Authors' Addresses
    URI:   http://www.henriknordstrom.net/
 
 
+   Alan Ford
+   Roke Manor Research
+   Old Salisbury Lane
+   Romsey, Hampshire  SO51 0ZN
+   UK
 
-
-
-
-
-
-
-
+   Phone: +44 1794 833 465
+   Email: alan.ford@roke.co.uk
 
 
 
