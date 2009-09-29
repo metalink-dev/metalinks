@@ -43,6 +43,19 @@ import xmlutils
 # set to "always" or "onsuccess" as described in the apache manual for mod_headers
 HTTPSTATUS="always"
 
+HASHMAP = { "sha256": "sha-256", 
+            "sha1": "sha",
+            "sha-512": "sha-512",
+            "sha224": "sha-224",
+            "sha384": "sha-384",
+            }
+
+def lookup(text):
+    try:
+        return HASHMAP[text]
+    except KeyError:
+        return text
+
 def run():
     # Command line parser options.
     parser = optparse.OptionParser(usage = "usage: %prog [options] directory")
@@ -68,16 +81,29 @@ def run():
                 for res in fileobj.resources:
                     text += "SetEnvIf Request_URI \"/%s$\" link%d=%s\n" % (fileobj.filename.replace(".","\."), i, res.url)
                     if res.url.split(":")[0] in ("http", "ftp", "https", "ftps", "resync") and res.url.rsplit(".")[-1] != "torrent":
-                        text += "Header %s add Link \"<%%{link%d}e>; rel=\\\"duplicate\\\";\" env=%s\n" % (HTTPSTATUS, i, fileobj.filename.replace(".", "_"))
+                        pri = ""
+                        if res.preference != "":
+                            pri = "; pri=%s" % res.preference
+                        text += "Header %s add Link \"<%%{link%d}e>; rel=\\\"duplicate\\\"%s\" env=%s\n" % (HTTPSTATUS, i, pri, fileobj.filename.replace(".", "_"))
                     else:
-                        text += "Header %s add Link \"<%%{link%d}e>; rel=\\\"describedby\\\";\" env=%s\n" % (HTTPSTATUS, i, fileobj.filename.replace(".", "_"))
+                        text += "Header %s add Link \"<%%{link%d}e>; rel=\\\"describedby\\\"\" env=%s\n" % (HTTPSTATUS, i, fileobj.filename.replace(".", "_"))
                     i += 1
-                text += "SetEnvIf Request_URI \"/%s$\" md5=%s\n" % (fileobj.filename.replace(".","\."), binascii.b2a_base64(binascii.unhexlify(fileobj.hashlist["md5"])))
-                text += "SetEnvIf Request_URI \"/%s$\" sha1=%s\n" % (fileobj.filename.replace(".","\."), binascii.b2a_base64(binascii.unhexlify(fileobj.hashlist["sha1"])))
-                text += "Header %s set Content-MD5 %%{md5}e env=%s\n" % (HTTPSTATUS, fileobj.filename.replace(".", "_"))
-                text += "Header %s set Digest md5=%%{md5}e,sha=%%{sha1}e env=%s\n\n" % (HTTPSTATUS, fileobj.filename.replace(".", "_"))
+                keys = []
+                for key in fileobj.hashlist.keys():
+                    keys.append(key)
+                    text += "SetEnvIf Request_URI \"/%s$\" %s=%s\n" % (fileobj.filename.replace(".","\."), key.replace("-", ""), binascii.b2a_base64(binascii.unhexlify(fileobj.hashlist[key])))
+                    
+                #if "md5" in keys:
+                #    text += "Header %s set Content-MD5 %%{md5}e env=%s\n" % (HTTPSTATUS, fileobj.filename.replace(".", "_"))
+                    
+                if len(keys) != 0:
+                    hashtext = ""
+                    for key in keys:
+                        hashtext += "%s=%%{%s}e," % (lookup(key), key.replace("-",""))
+                    hashtext = hashtext[:-1]
+                    text += "Header %s set Digest %s env=%s\n\n" % (HTTPSTATUS, hashtext, fileobj.filename.replace(".", "_"))
             
     print text
-
+    
 if __name__=="__main__":
     run()
