@@ -353,21 +353,46 @@ def get(src, path, checksums = {}, force = False, handlers = {}, segmented = SEG
                 fileobj.set_size(myheaders["content-length"])
                 for link in links:
                     parts = link.split(";")
-                    if parts[1].strip() == 'rel="duplicate"':
-                        fileobj.add_url(parts[0].strip(" <>"))
-                try:
-                    fileobj.hashlist['md5'] = binascii.hexlify(binascii.a2b_base64(myheaders['content-md5'].strip()))
-                except KeyError: pass
+                    mydict = {}
+                    for part in parts[1:]:
+                        part1, part2 = part.split("=", 1)
+                        mydict[part1.strip()] = part2.strip()
+                    
+                    pri = ""
+                    try:
+                        pri = mydict["pri"]
+                    except KeyError: pass
+                    type = ""
+                    try:
+                        type = mydict["type"]
+                    except KeyError: pass
+                    try:
+                        if mydict['rel'] == '"duplicate"':
+                            fileobj.add_url(parts[0].strip(" <>"), preference=pri)
+                        elif mydict['rel'] == '"describedby"' and type=="application/metalink4+xml":
+                            # TODO support metalink describedby type
+                            #fileobj.add_url(parts[0].strip(" <>"), preference=pri)
+                            pass
+                        elif mydict['rel'] == '"describedby"' and type=="application/pgp-signature":
+                            # support openpgp describedby type
+                            fp = urlopen(parts[0].strip(" <>"), headers = {"referer": src})
+                            fileobj.hashlist['pgp'] = fp.read()
+                            fp.close()
+                        elif mydict['rel'] == '"describedby"':
+                            fileobj.add_url(parts[0].strip(" <>"), preference=pri)
+                    except KeyError: pass
                 try:
                     hashes = myheaders['digest'].split(",")
                     for hash in hashes:
                         parts = hash.split("=", 1)
                         if parts[0].strip() == 'sha':
                             fileobj.hashlist['sha1'] = binascii.hexlify(binascii.a2b_base64(parts[1].strip()))
-                        if parts[0].strip() == 'md5':
-                            fileobj.hashlist['md5'] = binascii.hexlify(binascii.a2b_base64(parts[1]).strip())
+                        else:
+                            fileobj.hashlist[parts[0].strip().replace("-", "")] = binascii.hexlify(binascii.a2b_base64(parts[1]).strip())
                 except KeyError: pass
                 print _("Using Metalink HTTP Link headers.")
+                # set referer header
+                headers['referer'] = src
                 return download_file_urls(fileobj, force, handlers, segmented = segmented, headers = headers)
         except KeyError:
             pass

@@ -149,26 +149,45 @@ class Checker:
             myheaders = download.urlhead(src, metalink=True)
             if myheaders["link"]:
                 # Metalink HTTP Link headers implementation
-                # does not check for describedby urls but we can't use any of those anyway
+                # TODO support metalink describedby type
+                # TODO support openpgp describedby type
                 # TODO this should be more robust and ignore commas in <> for urls
                 links = myheaders['link'].split(",")
                 fileobj = xmlutils.MetalinkFile(os.path.basename(src))
                 fileobj.set_size(myheaders["content-length"])
                 for link in links:
                     parts = link.split(";")
-                    if parts[1].strip() == 'rel="duplicate"':
-                        fileobj.add_url(parts[0].strip(" <>"))
-                try:
-                    fileobj.hashlist['md5'] = binascii.hexlify(binascii.a2b_base64(myheaders['content-md5'].strip()))
-                except KeyError: pass
+                    mydict = {}
+                    for part in parts[1:]:
+                        part1, part2 = part.split("=", 1)
+                        mydict[part1.strip()] = part2.strip()
+                    
+                    pri = ""
+                    try:
+                        pri = mydict["pri"]
+                    except KeyError: pass
+                    type = ""
+                    try:
+                        type = mydict["type"]
+                    except KeyError: pass
+                    try:
+                        if mydict['rel'] == '"duplicate"':
+                            fileobj.add_url(parts[0].strip(" <>"), preference=pri)
+                        elif mydict['rel'] == '"describedby"' and type == "application/metalink4+xml":
+                            self.check_metalink(parts[0].strip(" <>"))
+                        elif type == "application/pgp-signature":
+                            pass
+                        elif mydict['rel'] == '"describedby"':
+                            fileobj.add_url(parts[0].strip(" <>"), preference=pri)
+                    except KeyError: pass
                 try:
                     hashes = myheaders['digest'].split(",")
                     for hash in hashes:
                         parts = hash.split("=", 1)
                         if parts[0].strip() == 'sha':
                             fileobj.hashlist['sha1'] = binascii.hexlify(binascii.a2b_base64(parts[1].strip()))
-                        if parts[0].strip() == 'md5':
-                            fileobj.hashlist['md5'] = binascii.hexlify(binascii.a2b_base64(parts[1]).strip())
+                        else:
+                            fileobj.hashlist[parts[0].strip().replace("-", "")] = binascii.hexlify(binascii.a2b_base64(parts[1]).strip())
                 except KeyError: pass
                 print _("Using Metalink HTTP Link headers.")
                 metalink = xmlutils.Metalink()
@@ -205,7 +224,10 @@ class Checker:
             name = filenode.filename
             #print "=" * 79
             #print _("File") + ": %s " % name + _("Size") + ": %s" % size
-            self.check_file_node(filenode)
+            myheaders = {}
+            if download.is_remote(src):
+                myheaders = {'referer': src}
+            self.check_file_node(filenode, myheaders)
 
         self.running = False
         #return results
@@ -267,7 +289,7 @@ class Checker:
         
         sizeheader = self._get_header(headers, "Content-Length")
         
-        # digest code, untested since no servers seem to support this, but possibly going to be part of metalink RFC
+        # digest code, untested since no servers seem to support this
         digest = self._get_header(headers, "Content-MD5")
         if digest != None:
             try:
@@ -322,7 +344,7 @@ class Checker:
 
         return None
 
-    def check_file_node(self, item):
+    def check_file_node(self, item, myheaders = {}):
         '''
         First parameter, file object
         Returns dictionary of file paths with headers
@@ -336,8 +358,8 @@ class Checker:
             self.running = False
             return False
 
-        def thread(filename):
-            checker = URLCheck(filename)
+        def thread(filename, myheaders):
+            checker = URLCheck(filename, myheaders)
             headers = checker.info()
             redir = self._get_header(headers, "Redirected")
             result = self._check_process(headers, size, item.get_checksums())
@@ -360,7 +382,7 @@ class Checker:
             #don't start too many threads at once
             while self.activeCount() > MAX_THREADS and not self.cancel:
                 time.sleep(0.1)
-            mythread = threading.Thread(target = thread, args = [filename], name = filename)
+            mythread = threading.Thread(target = thread, args = [filename, myheaders], name = filename)
             mythread.start()
             self.threadlist.append(mythread)
             #thread(filename)
@@ -374,12 +396,13 @@ class Checker:
         self.running = False
        
 class URLCheck:    
-    def __init__(self, url):
+    def __init__(self, url, myheaders = {}):
         self.infostring = ""
         self.url = url
         urlparts = urlparse.urlparse(url)
         self.scheme = urlparts.scheme
         headers = {"Want-Digest": "MD5;q=0.3, SHA;q=1"}
+        headers.update(myheaders)
         
         if self.scheme == "http":
             # need to set default port here
