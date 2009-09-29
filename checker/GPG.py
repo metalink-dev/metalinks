@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 '''
 From sourceforge pycrypto project:
 http://sourceforge.net/projects/pycrypto/

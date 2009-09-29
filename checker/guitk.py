@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import Tkinter
 import tkFileDialog
 import tkMessageBox
