@@ -56,6 +56,19 @@ import zlib
 
 current_version = "1.1.0"
 
+HASHMAP = { "sha256": "sha-256", 
+            "sha1": "sha-1",
+            "sha512": "sha-512",
+            "sha224": "sha-224",
+            "sha384": "sha-384",
+            }
+
+def hashlookup(text):
+    try:
+        return HASHMAP[text]
+    except KeyError:
+        return text
+
 def get_first(x):
     try:
         return x[0]
@@ -381,6 +394,45 @@ class MetalinkFile:
         text += '    </file>\n'
         return text
 
+    def generate_file_rfc(self, extra=""):
+        if self.filename.strip() != "":
+            text = '  <file name="' + self.filename + '">\n%s' % extra
+        else:
+            text = '  <file>\n%s' % extra
+        # File info
+        if self.size != 0:
+            text += '      <size>'+str(self.size)+'</size>\n'
+        if self.language.strip() != "":
+            text += '      <language>'+self.language+'</language>\n'
+        if self.os.strip() != "":
+            text += '      <os>'+self.os+'</os>\n'
+        # Verification
+        for key in self.hashlist.keys():
+            text += '      <hash type="%s">' % hashlookup(key) + self.hashlist[key].lower() + '</hash>\n'
+        if len(self.pieces) > 1:
+            text += '      <pieces type="'+hashlookup(self.piecetype)+'" length="'+self.piecelength+'">\n'
+            for id in range(len(self.pieces)):
+                text += '        <hash piece="'+str(id)+'">'+self.pieces[id]+'</hash>\n'
+            text += '      </pieces>\n'
+        # File list
+        if self.maxconnections.strip() != "" and self.maxconnections.strip() != "-":
+            maxconns = ' maxconnections="'+self.maxconnections+'"'
+        else:
+            maxconns = ""
+        for res in self.resources:
+            details = ''
+            if res.location.strip() != "":
+                details += ' location="'+res.location.lower()+'"'
+            if res.preference.strip() != "": details += ' priority="'+str(101-int(res.preference))+'"'
+            if res.url.endswith(".torrent"):
+                text += '      <metaurl type="torrent"'+details+'>'+res.url+'</metaurl>\n'
+            else:
+                text += '      <url type="'+res.type+'"'+details+'>'+res.url+'</url>\n'
+        text += '  </file>\n'
+        return text
+
+        
+        
 class XMLTag:
     def __init__(self, name, attrs={}):
         self.name = name
@@ -412,8 +464,26 @@ class Metalink:
         self.p.StartElementHandler = self.start_element
         self.p.EndElementHandler = self.end_element
         self.p.CharacterDataHandler = self.char_data
-    
-    def generate(self):
+
+    def generate_rfc(self):
+        text = '<?xml version="1.0" encoding="utf-8"?>\n'
+        if self.origin.strip() != "":
+            text += '<origin>'+self.origin+'</origin>'
+        if self.type.strip().lower() == "dynamic":
+            text += '<dynamic>TRUE</dynamic>'
+        text += '<metalink xmlns="urn:ietf:params:xml:ns:metalink">\n'
+       
+        for fileobj in self.files:
+            text += fileobj.generate_file_rfc(self.generate_info_rfc())
+        text += '</metalink>'
+        try:
+            return text.encode('utf-8')
+        except:
+            return text.decode('latin1').encode('utf-8')
+            
+    def generate(self, rfc=False):
+        if rfc:
+            return self.generate_rfc()
         text = '<?xml version="1.0" encoding="utf-8"?>\n'
         origin = ""
         if self.origin.strip() != "":
@@ -462,6 +532,34 @@ class Metalink:
             text += '  <description>'+self.description+'</description>\n'
         if self.upgrade.strip() != "":
             text += '  <upgrade>'+self.upgrade+'</upgrade>\n'
+        return text
+            
+    def generate_info_rfc(self):
+        text = ""
+        # Publisher info
+        if self.publisher_name.strip() != "" or self.publisher_url.strip() != "":
+            lictext = ""
+            if self.publisher_name.strip() != "":
+                lictext += ' name="' + self.publisher_name + '"'
+            if self.publisher_url.strip() != "":
+                lictext += ' url="' + self.publisher_url + '"'
+            text += '      <publisher%s></publisher>\n' % lictext
+        # License info
+        if self.license_name.strip() != "" or self.license_url.strip() != "":
+            #text += '  <license>\n'
+            lictext = ""
+            if self.license_name.strip() != "":
+                lictext += ' name="' + self.license_name + '"'
+            if self.license_url.strip() != "":
+                lictext += ' url="' + self.license_url + '"'
+            text += '      <license%s></license>\n' % lictext
+        # Release info
+        if self.identity.strip() != "":
+            text += '      <identity>'+self.identity+'</identity>\n'
+        if self.version.strip() != "":
+            text += '      <version>'+self.version+'</version>\n'
+        if self.description.strip() != "":
+            text += '      <description>'+self.description+'</description>\n'
         return text
 
     # 3 handler functions
@@ -811,3 +909,4 @@ class ParseINI(dict):
             return self[section]
         except KeyError:
             return []
+
