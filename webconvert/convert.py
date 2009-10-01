@@ -40,7 +40,7 @@ import os
 def run():
     # Command line parser options.
     parser = optparse.OptionParser(usage = "usage: %prog [options] file.metalink")
-    #parser.add_option("-o", dest="output", metavar="FILE", help=_("Apache style access file to"))
+    parser.add_option("-r", dest="rev", action="store_true", help="Reverses conversion to 4 (RFC) to 3")
 
     (options, args) = parser.parse_args()
 
@@ -48,14 +48,17 @@ def run():
         print "ERROR: Specify a file."
         parser.print_help()
         return
+        
+    convert = 4
+    if options.rev != None:
+        convert = 3
 
     #for filename in os.listdir(args[0]):
     filename = args[0]
-    if filename.endswith(".metalink"):
+    if filename.endswith(".metalink") or filename.endswith(".metalink4"):
         fullname = os.path.join(os.path.dirname(__file__), filename)
-        xml = xmlutils.Metalink()
-        xml.parsefile(fullname)
-        print xml.generate_rfc()
+        xml = xmlutils.metalink_parsefile(fullname, convert)
+        print xml.generate()
 
             
 if __name__=="__main__":
