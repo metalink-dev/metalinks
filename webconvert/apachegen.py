@@ -45,7 +45,7 @@ HTTPSTATUS="always"
 
 HASHMAP = { "sha256": "sha-256", 
             "sha1": "sha",
-            "sha-512": "sha-512",
+            "sha512": "sha-512",
             "sha224": "sha-224",
             "sha384": "sha-384",
             }
