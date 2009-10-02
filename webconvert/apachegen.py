@@ -72,8 +72,7 @@ def run():
     for filename in os.listdir(args[0]):
         if filename.endswith(".metalink"):
             fullname = os.path.join(args[0], filename)
-            xml = xmlutils.Metalink()
-            xml.parsefile(fullname)
+            xml = xmlutils.metalink_parsefile(fullname)
             
             for fileobj in xml.files:
                 text += "SetEnvIf Request_URI \"/%s$\" %s\n" % (fileobj.filename.replace(".","\."), fileobj.filename.replace(".", "_"))
