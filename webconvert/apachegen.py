@@ -38,16 +38,13 @@ import optparse
 import os
 import binascii
 
-import xmlutils
+import metalink
 
 # set to "always" or "onsuccess" as described in the apache manual for mod_headers
 HTTPSTATUS="always"
 
-HASHMAP = { "sha256": "sha-256", 
-            "sha1": "sha",
-            "sha512": "sha-512",
-            "sha224": "sha-224",
-            "sha384": "sha-384",
+HASHMAP = { 
+            "sha-1": "sha",
             }
 
 def lookup(text):
@@ -70,19 +67,19 @@ def run():
 
     text = ""
     for filename in os.listdir(args[0]):
-        if filename.endswith(".metalink"):
+        if filename.endswith(".metalink") or filename.endswith(".meta4"):
             fullname = os.path.join(args[0], filename)
-            xml = xmlutils.metalink_parsefile(fullname)
+            xml = metalink.parsefile(fullname, 4)
             
             for fileobj in xml.files:
                 text += "SetEnvIf Request_URI \"/%s$\" %s\n" % (fileobj.filename.replace(".","\."), fileobj.filename.replace(".", "_"))
                 i = 1
                 for res in fileobj.resources:
                     text += "SetEnvIf Request_URI \"/%s$\" link%d=%s\n" % (fileobj.filename.replace(".","\."), i, res.url)
-                    if res.url.split(":")[0] in ("http", "ftp", "https", "ftps", "resync") and res.url.rsplit(".")[-1] != "torrent":
+                    if res.type == "":
                         pri = ""
-                        if res.preference != "":
-                            pri = "; pri=%s" % res.preference
+                        if res.priority != "":
+                            pri = "; pri=%s" % res.priority
                         text += "Header %s add Link \"<%%{link%d}e>; rel=\\\"duplicate\\\"%s\" env=%s\n" % (HTTPSTATUS, i, pri, fileobj.filename.replace(".", "_"))
                     else:
                         text += "Header %s add Link \"<%%{link%d}e>; rel=\\\"describedby\\\"\" env=%s\n" % (HTTPSTATUS, i, fileobj.filename.replace(".", "_"))
