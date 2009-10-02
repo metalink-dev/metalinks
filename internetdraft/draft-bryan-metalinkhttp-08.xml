@@ -49,7 +49,7 @@
           <email>alan.ford@roke.co.uk</email>
         </address>
       </author>
-	<date month="September" year="2009"/>        
+	<date month="October" year="2009"/>        
 
       <abstract>
 	<t>This document specifies MetaLinkHeader: Mirrors and Checksums in HTTP Headers, an alternative to the Metalink XML-based download description format. 
@@ -119,7 +119,8 @@ Digest: SHA=thvDyvhfIqlvFe+A9MYgxAfm1q5=
       SHOULD all share the same ETag policy (ETag Synchronization), i.e. based on the file contents (checksum) and not server-unique filesystem metadata. The emitted ETag may be implemented the same as the Instance Digest for simplicity.</t>
 
 	  <t>Mirror servers are typically FTP or HTTP servers that "mirror" another server. That is, they provide identical copies of (at least some) files that are also on the mirrored server. 
-      Mirror servers MAY be Metalink servers. Mirror servers MUST support serving partial content. Mirror servers SHOULD support Instance Digests in HTTP <xref target="RFC3230"/>. Optimally, HTTP mirror servers will share the same ETag policy as the Metalink server and provide Instance Digests.</t>
+      Mirror servers MAY be Metalink servers. Mirror servers MUST support serving partial content. Mirror servers SHOULD support Instance Digests in HTTP <xref target="RFC3230"/>. Optimally, HTTP mirror servers will share the same ETag policy as the Metalink server, provide Instance Digests, or both. Preferred mirror servers
+	  MUST share the same ETag policy or MUST support Instance Digests.</t>
 
       <t>Metalink clients use the mirrors provided by a Metalink server with Link header <xref target="draft-nottingham-http-link-header"/>. Metalink clients MUST support HTTP and MAY support FTP, BitTorrent, 
       or other download methods. Metalink clients MUST switch downloads from one mirror to another if the one mirror becomes unreachable. Metalink clients are RECOMMENDED to support multi-source, or parallel, 
@@ -141,7 +142,8 @@ Link: &lt;ftp://ftp.example.com/example.ext&gt;; rel="duplicate"; pri=2
 
       <t>Mirror servers are listed in order of priority or have a "pri" value, where mirrors with lower values are used first.</t>
 	  
-	  <t>There are two types of mirror servers: preferred and normal. Optimally, HTTP mirror servers will share the same ETag policy as the Metalink server, provide Instance Digests, or both. These mirrors are preferred, and make it possible to detect early on, before data is transferred, if the file requested matches the desired file. Preferred HTTP mirror servers have a "pref" value of 1.</t>
+	  <t>There are two types of mirror servers: preferred and normal. Optimally, HTTP mirror servers will share the same ETag policy as the Metalink server, provide Instance Digests, or both. These mirrors are preferred, and make it possible to detect early on, before data is transferred, if the file requested matches the desired file.  Preferred mirror servers
+	  MUST share the same ETag policy or MUST support Instance Digests. Preferred HTTP mirror servers have a "pref" value of 1.</t>
 	  
 	  <t>[[Some organizations have many mirrors. Only send a few mirrors, or only use the Link header if Want-Digest is used?]]</t>
 
@@ -632,7 +634,7 @@ a trusted Metalink server.</t>
 	    </references> 
 
 	    <section title="Acknowledgements and Contributors">
-		  <t>Thanks to the Metalink community, Mark Nottingham, Daniel Stenberg, Tatsuhiro Tsujikawa, Peter Poeml, Matt Domsch, and Alan Ford.</t>
+		  <t>Thanks to the Metalink community, Mark Nottingham, Daniel Stenberg, Tatsuhiro Tsujikawa, Peter Poeml, and Matt Domsch.</t>
     
 
 	    </section> 
@@ -683,7 +685,14 @@ a trusted Metalink server.</t>
 		  <t>Need an official MIME type for .torrent files or allow "application/x-bittorrent"?</t>
 	    </list></t>
 
-<t>-07 : September , 2009.
+<t>-08 : October , 2009.
+	    
+	    <list style="symbols">
+
+	      <t>Preferred mirror servers.</t>
+	    </list></t>
+
+<t>-07 : September 29, 2009.
 	    
 	    <list style="symbols">
 

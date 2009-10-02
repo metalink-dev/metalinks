@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><?rfc linefile="1:draft-bryan-metalink-17.xml"?>
+<?xml version="1.0" encoding="UTF-8"?><?rfc linefile="1:draft-bryan-metalink-18.xml"?>
 <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
 <?rfc toc="yes" ?>
 <?rfc tocdepth="3" ?>
@@ -11,7 +11,7 @@
 <?rfc inline="yes" ?>
 <!DOCTYPE rfc
   PUBLIC "" "rfc2629.dtd">
-<rfc category="std" docName="draft-bryan-metalink-17" ipr="pre5378Trust200902">
+<rfc category="std" docName="draft-bryan-metalink-18" ipr="pre5378Trust200902">
     <front>        
       <title abbrev="Metalink Download Description Format">The Metalink Download Description Format</title>		
       <author initials="A." surname="Bryan" fullname="Anthony Bryan" role="editor">
@@ -42,7 +42,7 @@
           <uri>http://www.mirrorbrain.org/</uri>
         </address>
       </author>
-	<date month="September" year="2009"/>        
+	<date month="October" year="2009"/>        
 
       <abstract>
 	<t>This document specifies Metalink, an XML-based download description format. Metalink describes alternate download locations (mirrors), checksums, and other information. Clients can transparently use this information to reliably transfer files.</t>
@@ -65,7 +65,7 @@
       Any of the number of problems that can occur during a download lead to frustration on the part of users.</t>
 
       <t>All the information about a download, including mirrors, checksums, digital signatures, and more can be stored in a machine-readable Metalink file.
-      This Metalink file transfers the knowledge of the download server (and mirror database) to the client. Clients can fallback to alternate mirrors if the current one has an issue. With this knowledge, the client is enabled to work its way to a successful download even under adverse circumstances. 
+      This Metalink file transfers the knowledge of the download server (and mirror database) to the client. Clients can fall back to alternate mirrors if the current one has an issue. With this knowledge, the client is enabled to work its way to a successful download even under adverse circumstances. 
       All this is done transparently to the user and the download is much more reliable and efficient.
       In contrast, a traditional HTTP redirect to a mirror conveys only extremely minimal information - one link to one server, and there is no provision in the HTTP protocol to handle failures.
       Other features that some clients provide include multi-source downloads, where chunks of a file are downloaded from multiple mirrors (and optionally, Peer-to-Peer) simultaneously, which frequently results in a faster download. Metalinks also provide structured information about downloads that can be indexed by search engines.</t>
@@ -474,7 +474,7 @@ metalinkFile =
 	      <t><xref target="element.file" format="none">metalink:file</xref> elements MAY contain exactly one <xref target="element.logo" format="none">metalink:logo</xref>
 	      element.</t>	
 
-	      <t><xref target="element.file" format="none">metalink:file</xref> elements MAY contain exactly one <xref target="element.os" format="none">metalink:os</xref>
+	      <t><xref target="element.file" format="none">metalink:file</xref> elements MAY contain one or more <xref target="element.os" format="none">metalink:os</xref>
 	      element.</t>	
 
 	      <t><xref target="element.file" format="none">metalink:file</xref> elements MUST contain at least one <xref target="element.url" format="none">metalink:url</xref> element or at least one <xref target="element.metaurl" format="none">metalink:metaurl</xref> element. Typically, <xref target="element.file" format="none">metalink:file</xref> elements contain more than one <xref target="element.url" format="none">metalink:url</xref> element to provide multiple download sources.</t>		 
@@ -1326,7 +1326,7 @@ structuredExtensionElement =
 		<t hangText="Magic number(s):"> As specified for
 		"application/xml" in <xref target="RFC3023"/>, Section 3.2.</t>
 
-		<t hangText="File extension:"> .metalink</t> 
+		<t hangText="File extension:"> .meta4</t> 
 
 		<t hangText="Fragment identifiers:"> As specified for
 		"application/xml" in <xref target="RFC3023"/>, Section 5.</t>
@@ -2078,10 +2078,11 @@ anyForeignElement =
 	    </list></t>
         
 
-<t>-18 : September 30, 2009.
+<t>-18 : October 1, 2009.
 	    
-	    <list style="symbols"> 
-	      
+	    <list style="symbols">
+		
+		  <t>File extension: .meta4</t>	      
 		  <t>Hashes clarification, modified to allow multiple metalink:os elements.</t>
 	   </list></t>
 

@@ -144,11 +144,11 @@
 <tr><td class="header">Network Working Group</td><td class="header">A. Bryan, Ed.</td></tr>
 <tr><td class="header">Internet-Draft</td><td class="header">N. McNab</td></tr>
 <tr><td class="header">Intended status: Standards Track</td><td class="header">Metalinker Project</td></tr>
-<tr><td class="header">Expires: April 2, 2010</td><td class="header">H. Nordstrom</td></tr>
+<tr><td class="header">Expires: April 5, 2010</td><td class="header">H. Nordstrom</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">&nbsp;</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">A. Ford</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">Roke Manor Research</td></tr>
-<tr><td class="header">&nbsp;</td><td class="header">September 29, 2009</td></tr>
+<tr><td class="header">&nbsp;</td><td class="header">October 2, 2009</td></tr>
 </table></td></tr></table>
 <h1><br />MetaLinkHeader: Mirrors and Checksums in HTTP Headers<br />draft-bryan-metalinkhttp-08</h1>
 
@@ -173,7 +173,7 @@ The list of current Internet-Drafts can be accessed at
 The list of Internet-Draft Shadow Directories can be accessed at
 <a href='http://www.ietf.org/shadow.html'>http://www.ietf.org/shadow.html</a>.</p>
 <p>
-This Internet-Draft will expire on April 2, 2010.</p>
+This Internet-Draft will expire on April 5, 2010.</p>
 
 <h3>Copyright Notice</h3>
 <p>
@@ -320,7 +320,8 @@ Requirements</h3>
       SHOULD all share the same ETag policy (ETag Synchronization), i.e. based on the file contents (checksum) and not server-unique filesystem metadata. The emitted ETag may be implemented the same as the Instance Digest for simplicity.
 </p>
 <p>Mirror servers are typically FTP or HTTP servers that "mirror" another server. That is, they provide identical copies of (at least some) files that are also on the mirrored server. 
-      Mirror servers MAY be Metalink servers. Mirror servers MUST support serving partial content. Mirror servers SHOULD support Instance Digests in HTTP <a class='info' href='#RFC3230'>[RFC3230]<span> (</span><span class='info'>Mogul, J. and A. Van Hoff, &ldquo;Instance Digests in HTTP,&rdquo; January&nbsp;2002.</span><span>)</span></a>. Optimally, HTTP mirror servers will share the same ETag policy as the Metalink server and provide Instance Digests.
+      Mirror servers MAY be Metalink servers. Mirror servers MUST support serving partial content. Mirror servers SHOULD support Instance Digests in HTTP <a class='info' href='#RFC3230'>[RFC3230]<span> (</span><span class='info'>Mogul, J. and A. Van Hoff, &ldquo;Instance Digests in HTTP,&rdquo; January&nbsp;2002.</span><span>)</span></a>. Optimally, HTTP mirror servers will share the same ETag policy as the Metalink server, provide Instance Digests, or both. Preferred mirror servers
+	  MUST share the same ETag policy or MUST support Instance Digests.
 </p>
 <p>Metalink clients use the mirrors provided by a Metalink server with Link header <a class='info' href='#draft-nottingham-http-link-header'>[draft&#8209;nottingham&#8209;http&#8209;link&#8209;header]<span> (</span><span class='info'>Nottingham, M., &ldquo;Web Linking,&rdquo; July&nbsp;2009.</span><span>)</span></a>. Metalink clients MUST support HTTP and MAY support FTP, BitTorrent, 
       or other download methods. Metalink clients MUST switch downloads from one mirror to another if the one mirror becomes unreachable. Metalink clients are RECOMMENDED to support multi-source, or parallel, 
@@ -344,7 +345,8 @@ Link: &lt;ftp://ftp.example.com/example.ext&gt;; rel="duplicate"; pri=2
 
 <p>Mirror servers are listed in order of priority or have a "pri" value, where mirrors with lower values are used first.
 </p>
-<p>There are two types of mirror servers: preferred and normal. Optimally, HTTP mirror servers will share the same ETag policy as the Metalink server, provide Instance Digests, or both. These mirrors are preferred, and make it possible to detect early on, before data is transferred, if the file requested matches the desired file. Preferred HTTP mirror servers have a "pref" value of 1.
+<p>There are two types of mirror servers: preferred and normal. Optimally, HTTP mirror servers will share the same ETag policy as the Metalink server, provide Instance Digests, or both. These mirrors are preferred, and make it possible to detect early on, before data is transferred, if the file requested matches the desired file.  Preferred mirror servers
+	  MUST share the same ETag policy or MUST support Instance Digests. Preferred HTTP mirror servers have a "pref" value of 1.
 </p>
 <p>[[Some organizations have many mirrors. Only send a few mirrors, or only use the Link header if Want-Digest is used?]]
 </p>
@@ -709,7 +711,7 @@ References</h3>
 <a name="rfc.section.A"></a><h3>Appendix A.&nbsp;
 Acknowledgements and Contributors</h3>
 
-<p>Thanks to the Metalink community, Mark Nottingham, Daniel Stenberg, Tatsuhiro Tsujikawa, Peter Poeml, Matt Domsch, and Alan Ford.
+<p>Thanks to the Metalink community, Mark Nottingham, Daniel Stenberg, Tatsuhiro Tsujikawa, Peter Poeml, and Matt Domsch.
 </p>
 <a name="anchor15"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
@@ -788,7 +790,15 @@ Document History (to be removed by RFC Editor before publication)</h3>
 </li>
 </ul>
 
-<p>-07 : September , 2009.
+<p>-08 : October , 2009.
+	    
+	    </p>
+<ul class="text">
+<li>Preferred mirror servers.
+</li>
+</ul>
+
+<p>-07 : September 29, 2009.
 	    
 	    </p>
 <ul class="text">
