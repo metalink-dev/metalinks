@@ -17,7 +17,7 @@ URL = 'http://www.nabber.org/projects/'
 
 #main is first
 modules = ['console', 'xmlutils', 'GPG', 'download', 'checker']
-outputfile = "metalink.py"
+outputfile = "metalinkc.py"
 
 readhandle = open("header.txt")
 header = readhandle.read()
@@ -215,7 +215,7 @@ elif sys.argv[1] == 'py2exe':
     #localegen()
     #localecompile()
     
-    setup(console = ["metalink.py"],
+    setup(console = ["metalinkc.py"],
         zipfile = None,
       name = APP_NAME,
       version = VERSION,
