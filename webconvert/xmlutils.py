@@ -6,7 +6,7 @@
 # URL: http://www.nabber.org/projects/
 # E-mail: webmaster@nabber.org
 #
-# Copyright: (C) 2007-2008, Hampus Wessman, Neil McNab
+# Copyright: (C) 2007-2009, Hampus Wessman, Neil McNab
 # License: GNU General Public License Version 2
 #   (http://www.gnu.org/copyleft/gpl.html)
 #
@@ -454,7 +454,7 @@ class MetalinkFile4(MetalinkFileBase):
         if len(self.pieces) > 1:
             text += '      <pieces type="'+hashlookup(self.piecetype)+'" length="'+self.piecelength+'">\n'
             for id in range(len(self.pieces)):
-                text += '        <hash piece="'+str(id)+'">'+self.pieces[id]+'</hash>\n'
+                text += '        <hash>'+self.pieces[id]+'</hash>\n'
             text += '      </pieces>\n'
         # File list
         for res in self.resources:
@@ -756,11 +756,11 @@ class Metalink4(MetalinkBase):
 
     def generate(self):
         text = '<?xml version="1.0" encoding="utf-8"?>\n'
-        if self.origin.strip() != "":
-            text += '<origin>'+self.origin+'</origin>'
-        if self.type.strip().lower() == "dynamic":
-            text += '<dynamic>TRUE</dynamic>'
         text += '<metalink xmlns="urn:ietf:params:xml:ns:metalink">\n'
+        if self.origin.strip() != "":
+            text += '<origin>'+self.origin+'</origin>\n'
+        if self.dynamic.lower() == "true":
+            text += '<dynamic>true</dynamic>\n'
        
         for fileobj in self.files:
             text += fileobj.generate_file()
@@ -1100,8 +1100,9 @@ class ParseINI(dict):
 def metalink4to3(metalinkobj4):
     metalinkobj3 = Metalink()
     
-    for attr in ('origin', 'type'):
-        setattr(metalinkobj3, attr, getattr(metalinkobj4, attr))
+    setattr(metalinkobj3, 'origin', getattr(metalinkobj4, 'origin'))
+    if getattr(metalinkobj4, 'dynamic').lower() == "true":
+        setattr(metalinkobj3, 'type', 'dynamic')
         
     for fileobj4 in metalinkobj4.files:
         fileobj3 = MetalinkFile(fileobj4.filename)
@@ -1124,8 +1125,11 @@ def metalink4to3(metalinkobj4):
 def metalink3to4(metalinkobj3):
     metalinkobj4 = Metalink4()
     # copy common attributes
-    for attr in ('origin', 'type'):
-        setattr(metalinkobj4, attr, getattr(metalinkobj3, attr))
+    setattr(metalinkobj4, 'origin', getattr(metalinkobj3, 'origin'))
+    if getattr(metalinkobj3, 'type') == 'dynamic':
+        setattr(metalinkobj4, 'dynamic', "true")
+    else:
+        setattr(metalinkobj4, 'dynamic', "false")
         
     for fileobj3 in metalinkobj3.files:
         fileobj4 = MetalinkFile4(fileobj3.filename)
