@@ -29,18 +29,17 @@
 # Author(s): Neil McNab
 #
 # Description:
-#   Convert Metalink 3.0 files into Metalink RFC
-#
+#   Convert Metalink 3.0 files into Metalink RFC and back.
 ########################################################################
 
-import xmlutils
+import metalink
 import optparse
 import os
 
 def run():
     # Command line parser options.
     parser = optparse.OptionParser(usage = "usage: %prog [options] file.metalink")
-    parser.add_option("-r", dest="rev", action="store_true", help="Reverses conversion to 4 (RFC) to 3")
+    parser.add_option("-r", dest="rev", action="store_true", help="Reverses conversion to 4 (IETF RFC) to 3")
 
     (options, args) = parser.parse_args()
 
@@ -55,9 +54,9 @@ def run():
 
     #for filename in os.listdir(args[0]):
     filename = args[0]
-    if filename.endswith(".metalink") or filename.endswith(".metalink4"):
+    if filename.endswith(".metalink") or filename.endswith(".meta4"):
         fullname = os.path.join(os.path.dirname(__file__), filename)
-        xml = xmlutils.metalink_parsefile(fullname, convert)
+        xml = metalink.parsefile(fullname, convert)
         print xml.generate()
 
             
