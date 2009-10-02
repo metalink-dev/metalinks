@@ -1097,7 +1097,10 @@ class ParseINI(dict):
         except KeyError:
             return []
 
-def metalink4to3(metalinkobj4):
+def convert_4to3(metalinkobj4):
+#
+# TODO:
+#   Detect and convert date formats properly.
     metalinkobj3 = Metalink()
     
     setattr(metalinkobj3, 'origin', getattr(metalinkobj4, 'origin'))
@@ -1122,7 +1125,10 @@ def metalink4to3(metalinkobj4):
         metalinkobj3.files.append(fileobj3)
     return metalinkobj3
 
-def metalink3to4(metalinkobj3):
+def convert_3to4(metalinkobj3):
+#
+# TODO:
+#   Detect and convert date formats properly.
     metalinkobj4 = Metalink4()
     # copy common attributes
     setattr(metalinkobj4, 'origin', getattr(metalinkobj3, 'origin'))
@@ -1149,22 +1155,34 @@ def metalink3to4(metalinkobj3):
         metalinkobj4.files.append(fileobj4)
     return metalinkobj4
     
-def metalink_convert(metalinkobj, ver=4):
+def convert(metalinkobj, ver=4):
+    ver = int(ver)
     if metalinkobj.ver == ver:
         return metalinkobj
     elif metalinkobj.ver == 3 and ver == 4:
-        return metalink3to4(metalinkobj)
+        return convert_3to4(metalinkobj)
     elif metalinkobj.ver == 4 and ver == 3:
-        return metalink4to3(metalinkobj)
+        return convert_4to3(metalinkobj)
     else:
         raise AssertionError, "Cannot do conversion %s to %s!" % (metalinkobj.ver, ver)
     
-def metalink_parsefile(filename, ver=3):
+def parsefile(filename, ver=3):
     xml = Metalink4()
     try:
         xml.parsefile(filename)
     except AssertionError:
         xml = Metalink()
         xml.parsefile(filename)
-    xml = metalink_convert(xml, ver)
+    xml = convert(xml, ver)
+    return xml
+    
+def parsehandle(handle, ver=3):
+    xml = Metalink4()
+    try:
+        xml.parsehandle(handle)
+    except AssertionError:
+        handle.seek(0)
+        xml = Metalink()
+        xml.parsefile(handle)
+    xml = convert(xml, ver)
     return xml
