@@ -40,6 +40,8 @@ import sha
 import re
 import math
 import time
+import rfc822
+import calendar
 import xml.parsers.expat
 
 # for jigdo only
@@ -55,6 +57,9 @@ import binascii
 import zlib
 
 current_version = "1.1.0"
+
+RFC3339 = "%Y-%m-%dT%H:%M:%SZ"
+RFC822 = "%a, %d %b %Y %H:%M:%S +0000"
 
 HASHMAP = { "sha256": "sha-256", 
             "sha1": "sha-1",
@@ -619,6 +624,8 @@ class Metalink(MetalinkBase):
         self.type = ""
         self.upgrade = ""
         self.tags = ""
+        self.pubdate = ""
+        self.refreshdate = ""
         MetalinkBase.__init__(self)
         
     def generate(self):
@@ -681,13 +688,11 @@ class Metalink(MetalinkBase):
             self.files.append(fileobj)
             
         if name == "metalink":
-            try:
-                self.origin = attrs["origin"]
-            except KeyError: pass
-            try:
-                self.type = attrs["type"]
-            except KeyError: pass
-        
+            for attrname in ("origin", "type", "pubdate", "refreshdate"):
+                try:
+                    setattr(self, attrname, attrs[attrname])
+                except KeyError: pass
+            
     def end_element(self, name):
         tag = self.parent.pop()
 
@@ -1107,6 +1112,11 @@ def convert_4to3(metalinkobj4):
     if getattr(metalinkobj4, 'dynamic').lower() == "true":
         setattr(metalinkobj3, 'type', 'dynamic')
         
+    if metalinkobj4.published != "":
+        metalinkobj3.pubdate = time.strftime(RFC822, rfc3339_parsedate(metalinkobj4.published))
+    if metalinkobj4.updated != "":
+        metalinkobj3.refreshdate = time.strftime(RFC822, rfc3339_parsedate(metalinkobj4.updated))
+        
     for fileobj4 in metalinkobj4.files:
         fileobj3 = MetalinkFile(fileobj4.filename)
         # copy common attributes
@@ -1119,16 +1129,13 @@ def convert_4to3(metalinkobj4):
             fileobj3.hashlist[key.replace("-", "")] = fileobj4.hashlist[key]
         for res4 in fileobj4.resources:
             if res4.priority != "":
-                fileobj3.add_url(res4.url, "", res4.location, str(100-int(res4.priority)))
+                fileobj3.add_url(res4.url, "", res4.location, str(101-int(res4.priority)))
             else:
                 fileobj3.add_url(res4.url, "", res4.location)
         metalinkobj3.files.append(fileobj3)
     return metalinkobj3
 
 def convert_3to4(metalinkobj3):
-#
-# TODO:
-#   Detect and convert date formats properly.
     metalinkobj4 = Metalink4()
     # copy common attributes
     setattr(metalinkobj4, 'origin', getattr(metalinkobj3, 'origin'))
@@ -1136,6 +1143,11 @@ def convert_3to4(metalinkobj3):
         setattr(metalinkobj4, 'dynamic', "true")
     else:
         setattr(metalinkobj4, 'dynamic', "false")
+
+    if metalinkobj3.pubdate != "":
+        metalinkobj4.published = time.strftime(RFC3339, rfc822.parsedate(metalinkobj3.pubdate))
+    if metalinkobj3.refreshdate != "":
+        metalinkobj4.updated = time.strftime(RFC3339, rfc822.parsedate(metalinkobj3.refreshdate))
         
     for fileobj3 in metalinkobj3.files:
         fileobj4 = MetalinkFile4(fileobj3.filename)
@@ -1149,7 +1161,7 @@ def convert_3to4(metalinkobj3):
             fileobj4.hashlist[hashlookup(key)] = fileobj3.hashlist[key]
         for res3 in fileobj3.resources:
             if res3.preference != "":
-                fileobj4.add_url(res3.url, "", res3.location, str(100-int(res3.preference)))
+                fileobj4.add_url(res3.url, "", res3.location, str(101-int(res3.preference)))
             else:
                 fileobj4.add_url(res3.url, "", res3.location)
         metalinkobj4.files.append(fileobj4)
@@ -1165,7 +1177,38 @@ def convert(metalinkobj, ver=4):
         return convert_4to3(metalinkobj)
     else:
         raise AssertionError, "Cannot do conversion %s to %s!" % (metalinkobj.ver, ver)
-    
+
+def rfc3339_parsedate(datestr):
+    offset = "+00:00"
+    if datestr.endswith("Z"):   
+        datestr = datestr[:-1]
+    else:
+        offset = datestr[-6:]
+        datestr = datestr[:-6]
+    # remove milliseconds, strptime breaks otherwise
+    datestr = datestr.split(".")[0]
+    offset = __convert_offset(offset)
+    # Convert to UNIX epoch time to add offset and then convert back to Python time tuple
+    unixtime = calendar.timegm(time.strptime(datestr, "%Y-%m-%dT%H:%M:%S"))
+    unixtime += offset
+    return time.gmtime(unixtime)
+
+def __convert_offset(offsetstr):
+    '''
+    Convert string offset of the form "-08:00" to an int of seconds for
+    use with UNIX epoch time.
+    '''
+    offsetstr = offsetstr.replace(":", "")
+    operator = offsetstr[0]
+    hour = offsetstr[1:3]
+    minute = offsetstr[3:5]
+    offsetsecs = 0
+    offsetsecs += int(hour) * 3600
+    offsetsecs += int(minute) * 60
+    if operator == "+":
+        offsetsecs *= -1
+    return offsetsecs
+
 def parsefile(filename, ver=3):
     xml = Metalink4()
     try:
@@ -1186,3 +1229,7 @@ def parsehandle(handle, ver=3):
         xml.parsefile(handle)
     xml = convert(xml, ver)
     return xml
+
+#for test in ("2009-05-15T18:30:02Z", "2009-05-15T18:30:02.25Z", "2009-05-15T18:30:02-04:00", "2009-05-15T18:30:02.25-08:00"):
+#    run = time.strftime(RFC822, rfc3339_parsedate(test))
+#    print test, run
