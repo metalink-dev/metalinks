@@ -13,7 +13,7 @@
   PUBLIC "" "rfc2629.dtd">
 <rfc category="std" docName="draft-bryan-metalinkhttp-08" ipr="trust200902">
     <front>        
-      <title abbrev="MetaLinkHeader: Mirrors and Checksums">MetaLinkHeader: Mirrors and Checksums in HTTP Headers</title>		
+      <title abbrev="Metalink/HTTP: Mirrors and Checksums">Metalink/HTTP: Mirrors and Checksums in HTTP Headers</title>		
       <author initials="A." surname="Bryan" fullname="Anthony Bryan" role="editor">
 	    <organization>Metalinker Project</organization>
 	    <address>		
@@ -52,8 +52,8 @@
 	<date month="October" year="2009"/>        
 
       <abstract>
-	<t>This document specifies MetaLinkHeader: Mirrors and Checksums in HTTP Headers, an alternative to the Metalink XML-based download description format. 
-    MetaLinkHeader describes multiple download locations (mirrors), Peer-to-Peer, checksums, digital signatures, and other information using existing standards. Clients can transparently 
+	<t>This document specifies Metalink/HTTP: Mirrors and Checksums in HTTP Headers, an alternative to the Metalink XML-based download description format. 
+    Metalink/HTTP describes multiple download locations (mirrors), Peer-to-Peer, checksums, digital signatures, and other information using existing standards. Clients can transparently 
     use this information to make file transfers more robust and reliable.</t>
       </abstract>    
 	  
@@ -62,9 +62,9 @@
   <middle>
     <section title="Introduction">
       
-      <t>MetaLinkHeader is an alternative to Metalink, usually an XML-based document format <xref target="draft-bryan-metalink"/>. 
-      MetaLinkHeader attempts to provide as much functionality as the Metalink/XML format by using existing standards such as Web Linking <xref target="draft-nottingham-http-link-header"/>, 
-      Instance Digests in HTTP <xref target="RFC3230"/>, and ETags. MetaLinkHeader is used to list
+      <t>Metalink/HTTP is an alternative to Metalink, usually an XML-based document format <xref target="draft-bryan-metalink"/>. 
+      Metalink/HTTP attempts to provide as much functionality as the Metalink/XML format by using existing standards such as Web Linking <xref target="draft-nottingham-http-link-header"/>, 
+      Instance Digests in HTTP <xref target="RFC3230"/>, and ETags. Metalink/HTTP is used to list
       information about a file to be downloaded. This includes lists of multiple URIs (mirrors), Peer-to-Peer information, checksums, and digital signatures.</t>
       
       <t>Identical copies of a file are frequently accessible in multiple locations on the Internet over a variety of protocols (FTP, HTTP, and Peer-to-Peer).
@@ -102,7 +102,7 @@ Digest: SHA=thvDyvhfIqlvFe+A9MYgxAfm1q5=
       </section> 
       <section title="Notational Conventions"> 
 
-	<t>This specification describes conformance of MetaLinkHeader.</t>
+	<t>This specification describes conformance of Metalink/HTTP.</t>
      
 
 	<t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
@@ -113,7 +113,7 @@ Digest: SHA=thvDyvhfIqlvFe+A9MYgxAfm1q5=
     </section>
 
     <section title="Requirements" anchor="req">
-	  <t>In this context, "MetaLink" refers to a MetaLinkHeader which consists of mirrors and checksums in HTTP Headers as described in this document. "Metalink/XML" refers to the XML format described in <xref target="draft-bryan-metalink"/>.</t>
+	  <t>In this context, "Metalink" refers to Metalink/HTTP which consists of mirrors and checksums in HTTP Headers as described in this document. "Metalink/XML" refers to the XML format described in <xref target="draft-bryan-metalink"/>.</t>
       <t>Metalink servers are HTTP servers that MUST have lists of mirrors and use the Link header <xref target="draft-nottingham-http-link-header"/> to indicate them. They also MUST
 	  provide checksums of files via Instance Digests in HTTP <xref target="RFC3230"/>, whether requested or not. Mirror and checksum information provided by the originating Metalink server MUST be considered authoritative. Metalink servers and their associated mirror servers
       SHOULD all share the same ETag policy (ETag Synchronization), i.e. based on the file contents (checksum) and not server-unique filesystem metadata. The emitted ETag may be implemented the same as the Instance Digest for simplicity.</t>
@@ -149,8 +149,8 @@ Link: &lt;ftp://ftp.example.com/example.ext&gt;; rel="duplicate"; pri=2
 
 	  </section>
 
-    <section title="Peer-to-Peer Descriptions / Metainfo" anchor="p2p">
-      <t>Ways to download a file over Peer-to-Peer networks are specified with the Link header <xref target="draft-nottingham-http-link-header"/> and a relation type of "describedby" and a type parameter hat indicates
+    <section title="Peer-to-Peer Metainfo" anchor="p2p">
+      <t>Metainfo files, which describe ways to download a file over Peer-to-Peer networks or otherwise, are specified with the Link header <xref target="draft-nottingham-http-link-header"/> and a relation type of "describedby" and a type parameter that indicates
    the MIME type of the metadata available at the IRI.</t>
 <t><figure> 
 	  <preamble>A brief Metalink server response with .torrent and .metalink:</preamble>	
@@ -196,7 +196,7 @@ GET /distribution/example.ext HTTP/1.1
 Host: www.example.com
 </artwork></figure></t>
 
-<t>Alternatively, Metalink clients can use a HEAD request to discover mirrors via Link headers. After that, the client follows with a GET request as usual.</t>
+<t>Alternatively, Metalink clients can begin a download with a HEAD request to the Metalink server to discover mirrors via Link headers. After that, the client follows with a GET request to the desired mirrors.</t>
 
 <t>The Metalink server responds with the data and these headers:
 
@@ -270,7 +270,12 @@ Digest: SHA=thvDyvhfIqlvFe+A9MYgxAfm1q5=
 
 <t>Once the download has completed, the Metalink client MUST verify the checksum of the file.</t>
 
-<section title="Early File Mismatch Detection with Strong ETag or Instance Digest from Mirrors">
+<section title="Error Prevention, Detection, and Correction">
+
+<t>Error prevention, or early file mismatch detection, is possible before file transfers with the use of file sizes, ETags, and Instance Digests. Error dectection requires Instance Digests, or checksums, to
+determine after transfers if there has been an error. Error correction, or download repair, is possible with partial file checksums.</t>
+
+<section title="Error Prevention (Early File Mismatch Detection)">
 
 <t>In HTTP terms, the requirement is that merging of ranges from multiple
 responses must be verified with a strong validator, which in this
@@ -321,7 +326,7 @@ error is still detected when the merged response is verified.</t>
 
 </section>
 
-<section title="Error Recovery">
+<section title="Error Correction">
 
 <t>If the object checksum does not match the Instance Digest then fetch the Metalink/XML or other recovery profile link, where partial file checksums can be found,
 allowing detection of which server returned bad information.
@@ -335,6 +340,7 @@ a trusted Metalink server.</t>
 
 </section>
 
+</section>
 
     </section>
 	
@@ -634,7 +640,7 @@ a trusted Metalink server.</t>
 	    </references> 
 
 	    <section title="Acknowledgements and Contributors">
-		  <t>Thanks to the Metalink community, Mark Nottingham, Daniel Stenberg, Tatsuhiro Tsujikawa, Peter Poeml, and Matt Domsch.</t>
+		  <t>Thanks to the Metalink community, Mark Handley, Mark Nottingham, Daniel Stenberg, Tatsuhiro Tsujikawa, Peter Poeml, and Matt Domsch.</t>
     
 
 	    </section> 
@@ -644,13 +650,13 @@ a trusted Metalink server.</t>
         <t>
 	    <list style="symbols">
 
-	      <t>(+) Reuses existing HTTP standards without defining anything new besides a Link Relation Type. It's more of a collection/coordinated feature set.</t>
+	      <t>(+) Reuses existing HTTP standards without much new besides a Link Relation Type. It's more of a collection/coordinated feature set.</t>
 		  <t>(?) The existing standards don't seem to be widely implemented.</t>
-	      <t>(+) No XML dependency.</t>
-		  <t>(?) Existing Metalink/XML clients can be easily converted to support this as well.</t>
-		  <t>(-?) Tied to HTTP, not as generic. FTP/P2P clients won't be using it unless they also support HTTP, unlike Metalink/XML.</t>
-	      <t>(---) Requires changes to server software.</t>
+	      <t>(+) No XML dependency, unless we use Metalink/XML for partial file checksums.</t>
+		  <t>(+) Existing Metalink/XML clients can be easily converted to support this as well.</t>
 	      <t>(+) Coordination of mirror servers is preferred, but not required. Coordination may be difficult or impossible unless you are in control of all servers on the mirror network.</t>
+	      <t>(---) Requires changes to server software.</t>
+		  <t>(-?) Tied to HTTP, not as generic. FTP/P2P clients won't be using it unless they also support HTTP, unlike Metalink/XML.</t>
 	      <t>(-) Requires server-side support. Metalink/XML can be created by user (or server, but server component/changes not required).</t>
 		  <t>(-) Also, Metalink/XML files are easily mirrored on all servers. Even if usage in that case is not as transparent, it still gives access to users at all mirrors (FTP included) to all download information with no changes needed to the server.</t>
 	      <t>(-) Not portable/archivable/emailable. Metalink/XML is used to import/export transfer queues. Not as easy for search engines to index?</t>
@@ -664,10 +670,10 @@ a trusted Metalink server.</t>
 	    <list style="symbols">
 
 	      <t>(+) Plans to define mirrors for whole directories.</t>
-	      <t>(-?) Defines new headers. Doesn't reuse existing standards.</t>
 	      <t>(---) Requires changes to server software.</t>
 	      <t>(---) Requires coordination of all mirror servers, which may be difficult or impossible unless you are in control of all servers on the mirror network.</t>
 		  <t>(---) Doesn't tie in p2p.</t>
+	      <t>(-) Defines new headers. Doesn't reuse existing standards.</t>
 	      <t>(-) No way to show mirror/p2p priority or geographical location (yet).</t>
 	    </list></t>
 		
@@ -689,7 +695,7 @@ a trusted Metalink server.</t>
 	    
 	    <list style="symbols">
 
-	      <t>Preferred mirror servers.</t>
+	      <t>...</t>
 	    </list></t>
 
 <t>-07 : September 29, 2009.
