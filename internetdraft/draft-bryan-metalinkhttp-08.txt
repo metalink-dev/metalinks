@@ -4,14 +4,14 @@
 Network Working Group                                      A. Bryan, Ed.
 Internet-Draft                                                  N. McNab
 Intended status: Standards Track                      Metalinker Project
-Expires: April 5, 2010                                      H. Nordstrom
+Expires: April 6, 2010                                      H. Nordstrom
 
                                                                  A. Ford
                                                      Roke Manor Research
-                                                         October 2, 2009
+                                                         October 3, 2009
 
 
-         MetaLinkHeader: Mirrors and Checksums in HTTP Headers
+          Metalink/HTTP: Mirrors and Checksums in HTTP Headers
                       draft-bryan-metalinkhttp-08
 
 Status of this Memo
@@ -35,7 +35,7 @@ Status of this Memo
    The list of Internet-Draft Shadow Directories can be accessed at
    http://www.ietf.org/shadow.html.
 
-   This Internet-Draft will expire on April 5, 2010.
+   This Internet-Draft will expire on April 6, 2010.
 
 Copyright Notice
 
@@ -52,16 +52,16 @@ Copyright Notice
 
 
 
-Bryan, et al.             Expires April 5, 2010                 [Page 1]
+Bryan, et al.             Expires April 6, 2010                 [Page 1]
 
-Internet-Draft    MetaLinkHeader: Mirrors and Checksums     October 2009
+Internet-Draft    Metalink/HTTP: Mirrors and Checksums      October 2009
 
 
 Abstract
 
-   This document specifies MetaLinkHeader: Mirrors and Checksums in HTTP
+   This document specifies Metalink/HTTP: Mirrors and Checksums in HTTP
    Headers, an alternative to the Metalink XML-based download
-   description format.  MetaLinkHeader describes multiple download
+   description format.  Metalink/HTTP describes multiple download
    locations (mirrors), Peer-to-Peer, checksums, digital signatures, and
    other information using existing standards.  Clients can
    transparently use this information to make file transfers more robust
@@ -75,13 +75,13 @@ Table of Contents
      1.2.  Notational Conventions . . . . . . . . . . . . . . . . . .  4
    2.  Requirements . . . . . . . . . . . . . . . . . . . . . . . . .  4
    3.  Mirrors / Multiple Download Locations  . . . . . . . . . . . .  5
-   4.  Peer-to-Peer Descriptions / Metainfo . . . . . . . . . . . . .  6
+   4.  Peer-to-Peer Metainfo  . . . . . . . . . . . . . . . . . . . .  6
    5.  OpenPGP Signatures . . . . . . . . . . . . . . . . . . . . . .  6
    6.  Checksums of Whole Files . . . . . . . . . . . . . . . . . . .  6
    7.  Client / Server Multi-source Download Interaction  . . . . . .  6
-     7.1.  Early File Mismatch Detection with Strong ETag or
-           Instance Digest from Mirrors . . . . . . . . . . . . . . .  8
-     7.2.  Error Recovery . . . . . . . . . . . . . . . . . . . . . .  9
+     7.1.  Error Prevention, Detection, and Correction  . . . . . . .  8
+       7.1.1.  Error Prevention (Early File Mismatch Detection) . . .  8
+       7.1.2.  Error Correction . . . . . . . . . . . . . . . . . . . 10
    8.  IANA Considerations  . . . . . . . . . . . . . . . . . . . . . 10
      8.1.  Link Relation Type Registration: "duplicate" . . . . . . . 10
      8.2.  Hypertext Transfer Protocol (HTTP) Digest Algorithm
@@ -90,10 +90,10 @@ Table of Contents
      9.1.  URIs and IRIs  . . . . . . . . . . . . . . . . . . . . . . 11
      9.2.  Spoofing . . . . . . . . . . . . . . . . . . . . . . . . . 11
      9.3.  Cryptographic Hashes . . . . . . . . . . . . . . . . . . . 11
-     9.4.  Signing  . . . . . . . . . . . . . . . . . . . . . . . . . 11
+     9.4.  Signing  . . . . . . . . . . . . . . . . . . . . . . . . . 12
    10. References . . . . . . . . . . . . . . . . . . . . . . . . . . 12
      10.1. Normative References . . . . . . . . . . . . . . . . . . . 12
-     10.2. Informative References . . . . . . . . . . . . . . . . . . 12
+     10.2. Informative References . . . . . . . . . . . . . . . . . . 13
    Appendix A.  Acknowledgements and Contributors . . . . . . . . . . 13
    Appendix B.  Comparisons to Similar Options (to be removed by
                 RFC Editor before publication)  . . . . . . . . . . . 13
@@ -108,19 +108,19 @@ Table of Contents
 
 
 
-Bryan, et al.             Expires April 5, 2010                 [Page 2]
+Bryan, et al.             Expires April 6, 2010                 [Page 2]
 
-Internet-Draft    MetaLinkHeader: Mirrors and Checksums     October 2009
+Internet-Draft    Metalink/HTTP: Mirrors and Checksums      October 2009
 
 
 1.  Introduction
 
-   MetaLinkHeader is an alternative to Metalink, usually an XML-based
-   document format [draft-bryan-metalink].  MetaLinkHeader attempts to
+   Metalink/HTTP is an alternative to Metalink, usually an XML-based
+   document format [draft-bryan-metalink].  Metalink/HTTP attempts to
    provide as much functionality as the Metalink/XML format by using
    existing standards such as Web Linking
    [draft-nottingham-http-link-header], Instance Digests in HTTP
-   [RFC3230], and ETags.  MetaLinkHeader is used to list information
+   [RFC3230], and ETags.  Metalink/HTTP is used to list information
    about a file to be downloaded.  This includes lists of multiple URIs
    (mirrors), Peer-to-Peer information, checksums, and digital
    signatures.
@@ -164,9 +164,9 @@ Internet-Draft    MetaLinkHeader: Mirrors and Checksums     October 2009
 
 
 
-Bryan, et al.             Expires April 5, 2010                 [Page 3]
+Bryan, et al.             Expires April 6, 2010                 [Page 3]
 
-Internet-Draft    MetaLinkHeader: Mirrors and Checksums     October 2009
+Internet-Draft    Metalink/HTTP: Mirrors and Checksums      October 2009
 
 
 1.1.  Examples
@@ -186,7 +186,7 @@ Internet-Draft    MetaLinkHeader: Mirrors and Checksums     October 2009
 
 1.2.  Notational Conventions
 
-   This specification describes conformance of MetaLinkHeader.
+   This specification describes conformance of Metalink/HTTP.
 
    The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
    "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
@@ -196,9 +196,9 @@ Internet-Draft    MetaLinkHeader: Mirrors and Checksums     October 2009
 
 2.  Requirements
 
-   In this context, "MetaLink" refers to a MetaLinkHeader which consists
-   of mirrors and checksums in HTTP Headers as described in this
-   document.  "Metalink/XML" refers to the XML format described in
+   In this context, "Metalink" refers to Metalink/HTTP which consists of
+   mirrors and checksums in HTTP Headers as described in this document.
+   "Metalink/XML" refers to the XML format described in
    [draft-bryan-metalink].
 
    Metalink servers are HTTP servers that MUST have lists of mirrors and
@@ -220,9 +220,9 @@ Internet-Draft    MetaLinkHeader: Mirrors and Checksums     October 2009
 
 
 
-Bryan, et al.             Expires April 5, 2010                 [Page 4]
+Bryan, et al.             Expires April 6, 2010                 [Page 4]
 
-Internet-Draft    MetaLinkHeader: Mirrors and Checksums     October 2009
+Internet-Draft    Metalink/HTTP: Mirrors and Checksums      October 2009
 
 
    [RFC3230].  Optimally, HTTP mirror servers will share the same ETag
@@ -276,17 +276,18 @@ Internet-Draft    MetaLinkHeader: Mirrors and Checksums     October 2009
 
 
 
-Bryan, et al.             Expires April 5, 2010                 [Page 5]
+Bryan, et al.             Expires April 6, 2010                 [Page 5]
 
-Internet-Draft    MetaLinkHeader: Mirrors and Checksums     October 2009
+Internet-Draft    Metalink/HTTP: Mirrors and Checksums      October 2009
 
 
-4.  Peer-to-Peer Descriptions / Metainfo
+4.  Peer-to-Peer Metainfo
 
-   Ways to download a file over Peer-to-Peer networks are specified with
-   the Link header [draft-nottingham-http-link-header] and a relation
-   type of "describedby" and a type parameter hat indicates the MIME
-   type of the metadata available at the IRI.
+   Metainfo files, which describe ways to download a file over Peer-to-
+   Peer networks or otherwise, are specified with the Link header
+   [draft-nottingham-http-link-header] and a relation type of
+   "describedby" and a type parameter that indicates the MIME type of
+   the metadata available at the IRI.
 
    A brief Metalink server response with .torrent and .metalink:
 
@@ -328,17 +329,18 @@ Internet-Draft    MetaLinkHeader: Mirrors and Checksums     October 2009
    GET /distribution/example.ext HTTP/1.1
    Host: www.example.com
 
-   Alternatively, Metalink clients can use a HEAD request to discover
 
 
 
-Bryan, et al.             Expires April 5, 2010                 [Page 6]
+Bryan, et al.             Expires April 6, 2010                 [Page 6]
 
-Internet-Draft    MetaLinkHeader: Mirrors and Checksums     October 2009
+Internet-Draft    Metalink/HTTP: Mirrors and Checksums      October 2009
 
 
-   mirrors via Link headers.  After that, the client follows with a GET
-   request as usual.
+   Alternatively, Metalink clients can begin a download with a HEAD
+   request to the Metalink server to discover mirrors via Link headers.
+   After that, the client follows with a GET request to the desired
+   mirrors.
 
    The Metalink server responds with the data and these headers:
 
@@ -383,16 +385,16 @@ Internet-Draft    MetaLinkHeader: Mirrors and Checksums     October 2009
    If ETags are coordinated between mirrors, If-Match conditions based
    on the ETag SHOULD be used to quickly detect out-of-date mirrors by
    using the ETag from the Metalink server response.  If no indication
+
+
+
+Bryan, et al.             Expires April 6, 2010                 [Page 7]
+
+Internet-Draft    Metalink/HTTP: Mirrors and Checksums      October 2009
+
+
    of ETag syncronisation/knowledge is given then If-Match should not be
    used, and optimally there will be an Instance Digest in the mirror
-
-
-
-Bryan, et al.             Expires April 5, 2010                 [Page 7]
-
-Internet-Draft    MetaLinkHeader: Mirrors and Checksums     October 2009
-
-
    response which we can use to detect a mismatch early, and if not then
    a mismatch won't be detected until the completed object is verified.
    One of the client requests to a mirror server:
@@ -424,13 +426,29 @@ Internet-Draft    MetaLinkHeader: Mirrors and Checksums     October 2009
    Once the download has completed, the Metalink client MUST verify the
    checksum of the file.
 
-7.1.  Early File Mismatch Detection with Strong ETag or Instance Digest
-      from Mirrors
+7.1.  Error Prevention, Detection, and Correction
+
+   Error prevention, or early file mismatch detection, is possible
+   before file transfers with the use of file sizes, ETags, and Instance
+   Digests.  Error dectection requires Instance Digests, or checksums,
+   to determine after transfers if there has been an error.  Error
+   correction, or download repair, is possible with partial file
+   checksums.
+
+7.1.1.  Error Prevention (Early File Mismatch Detection)
 
    In HTTP terms, the requirement is that merging of ranges from
    multiple responses must be verified with a strong validator, which in
    this context is the same as either Instance Digest or a strong ETag.
    In most cases it is sufficient that the Metalink server provides
+
+
+
+Bryan, et al.             Expires April 6, 2010                 [Page 8]
+
+Internet-Draft    Metalink/HTTP: Mirrors and Checksums      October 2009
+
+
    mirrors and Instance Digest information, but operation will be more
    robust and efficient if the mirror servers do implement a
    synchronized ETag as well.  In fact, the emitted ETag may be
@@ -441,13 +459,6 @@ Internet-Draft    MetaLinkHeader: Mirrors and Checksums     October 2009
    mismatches is not possible unless file length also differs.  Finally,
    the error is still detectable, after the download has completed, when
    the merged response is verified.
-
-
-
-Bryan, et al.             Expires April 5, 2010                 [Page 8]
-
-Internet-Draft    MetaLinkHeader: Mirrors and Checksums     October 2009
-
 
    ETag can not be used for verifying the integrity of the received
    content.  But it is a guarantee issued by the Metalink server that
@@ -486,9 +497,17 @@ Internet-Draft    MetaLinkHeader: Mirrors and Checksums     October 2009
    for early detection of mismatches.  If none is provided then early
    detection of mismatches is not possible unless the file length also
    differs, but the error is still detected when the merged response is
+
+
+
+Bryan, et al.             Expires April 6, 2010                 [Page 9]
+
+Internet-Draft    Metalink/HTTP: Mirrors and Checksums      October 2009
+
+
    verified.
 
-7.2.  Error Recovery
+7.1.2.  Error Correction
 
    If the object checksum does not match the Instance Digest then fetch
    the Metalink/XML or other recovery profile link, where partial file
@@ -497,14 +516,6 @@ Internet-Draft    MetaLinkHeader: Mirrors and Checksums     October 2009
    then the client needs to fetch the partial file checksums and from
    there figure out what of the downloaded data can be recovered and
    what needs to be fetched again.  If no partial checksums are
-
-
-
-Bryan, et al.             Expires April 5, 2010                 [Page 9]
-
-Internet-Draft    MetaLinkHeader: Mirrors and Checksums     October 2009
-
-
    available, then the client MUST fetch the complete object from a
    trusted Metalink server.
 
@@ -541,6 +552,15 @@ Internet-Draft    MetaLinkHeader: Mirrors and Checksums     October 2009
       Digest Algorithm: SHA-224
       Description: The SHA-224 algorithm [SHS].  The output of this
       algorithm is encoded using the base64 encoding [RFC2045].
+
+
+
+
+Bryan, et al.             Expires April 6, 2010                [Page 10]
+
+Internet-Draft    Metalink/HTTP: Mirrors and Checksums      October 2009
+
+
       Reference: [SHS] [RFC2045]
 
       Digest Algorithm: SHA-256
@@ -551,16 +571,6 @@ Internet-Draft    MetaLinkHeader: Mirrors and Checksums     October 2009
       Digest Algorithm: SHA-384
       Description: The SHA-384 algorithm [SHS].  The output of this
       algorithm is encoded using the base64 encoding [RFC2045].
-
-
-
-
-
-Bryan, et al.             Expires April 5, 2010                [Page 10]
-
-Internet-Draft    MetaLinkHeader: Mirrors and Checksums     October 2009
-
-
       Reference: [SHS] [RFC2045]
 
       Digest Algorithm: SHA-512
@@ -600,6 +610,13 @@ Internet-Draft    MetaLinkHeader: Mirrors and Checksums     October 2009
    it SHOULD include "sha" which is SHA-1, as specified in [RFC3174], or
    stronger.  It MAY also include other hashes.
 
+
+
+Bryan, et al.             Expires April 6, 2010                [Page 11]
+
+Internet-Draft    Metalink/HTTP: Mirrors and Checksums      October 2009
+
+
 9.4.  Signing
 
    Metalinks should include digital signatures, as described in
@@ -607,14 +624,6 @@ Internet-Draft    MetaLinkHeader: Mirrors and Checksums     October 2009
 
    Digital signatures provide authentication, message integrity, and
    non-repudiation with proof of origin.
-
-
-
-
-
-Bryan, et al.             Expires April 5, 2010                [Page 11]
-
-Internet-Draft    MetaLinkHeader: Mirrors and Checksums     October 2009
 
 
 10.  References
@@ -655,6 +664,15 @@ Internet-Draft    MetaLinkHeader: Mirrors and Checksums     October 2009
               draft-nottingham-http-link-header-06 (work in progress),
               July 2009.
 
+
+
+
+
+Bryan, et al.             Expires April 6, 2010                [Page 12]
+
+Internet-Draft    Metalink/HTTP: Mirrors and Checksums      October 2009
+
+
 10.2.  Informative References
 
    [draft-bryan-metalink]
@@ -663,20 +681,10 @@ Internet-Draft    MetaLinkHeader: Mirrors and Checksums     October 2009
               draft-bryan-metalink-16 (work in progress), August 2009.
 
 
-
-
-
-
-
-Bryan, et al.             Expires April 5, 2010                [Page 12]
-
-Internet-Draft    MetaLinkHeader: Mirrors and Checksums     October 2009
-
-
 Appendix A.  Acknowledgements and Contributors
 
-   Thanks to the Metalink community, Mark Nottingham, Daniel Stenberg,
-   Tatsuhiro Tsujikawa, Peter Poeml, and Matt Domsch.
+   Thanks to the Metalink community, Mark Handley, Mark Nottingham,
+   Daniel Stenberg, Tatsuhiro Tsujikawa, Peter Poeml, and Matt Domsch.
 
 
 Appendix B.  Comparisons to Similar Options (to be removed by RFC Editor
@@ -685,19 +693,19 @@ Appendix B.  Comparisons to Similar Options (to be removed by RFC Editor
    This draft, compared to the Metalink/XML format
    [draft-bryan-metalink] :
 
-   o  (+) Reuses existing HTTP standards without defining anything new
-      besides a Link Relation Type.  It's more of a collection/
-      coordinated feature set.
+   o  (+) Reuses existing HTTP standards without much new besides a Link
+      Relation Type.  It's more of a collection/coordinated feature set.
    o  (?)  The existing standards don't seem to be widely implemented.
-   o  (+) No XML dependency.
-   o  (?)  Existing Metalink/XML clients can be easily converted to
+   o  (+) No XML dependency, unless we use Metalink/XML for partial file
+      checksums.
+   o  (+) Existing Metalink/XML clients can be easily converted to
       support this as well.
-   o  (-?)  Tied to HTTP, not as generic.  FTP/P2P clients won't be
-      using it unless they also support HTTP, unlike Metalink/XML.
-   o  (---) Requires changes to server software.
    o  (+) Coordination of mirror servers is preferred, but not required.
       Coordination may be difficult or impossible unless you are in
       control of all servers on the mirror network.
+   o  (---) Requires changes to server software.
+   o  (-?)  Tied to HTTP, not as generic.  FTP/P2P clients won't be
+      using it unless they also support HTTP, unlike Metalink/XML.
    o  (-) Requires server-side support.  Metalink/XML can be created by
       user (or server, but server component/changes not required).
    o  (-) Also, Metalink/XML files are easily mirrored on all servers.
@@ -714,22 +722,20 @@ Appendix B.  Comparisons to Similar Options (to be removed by RFC Editor
 
    draft-ford-http-multi-server compared to this draft :
 
+
+
+Bryan, et al.             Expires April 6, 2010                [Page 13]
+
+Internet-Draft    Metalink/HTTP: Mirrors and Checksums      October 2009
+
+
    o  (+) Plans to define mirrors for whole directories.
-   o  (-?)  Defines new headers.  Doesn't reuse existing standards.
    o  (---) Requires changes to server software.
    o  (---) Requires coordination of all mirror servers, which may be
       difficult or impossible unless you are in control of all servers
       on the mirror network.
-
-
-
-
-Bryan, et al.             Expires April 5, 2010                [Page 13]
-
-Internet-Draft    MetaLinkHeader: Mirrors and Checksums     October 2009
-
-
    o  (---) Doesn't tie in p2p.
+   o  (-) Defines new headers.  Doesn't reuse existing standards.
    o  (-) No way to show mirror/p2p priority or geographical location
       (yet).
 
@@ -751,7 +757,7 @@ Appendix C.  Document History (to be removed by RFC Editor before
       "application/x-bittorrent"?
 
    -08 : October , 2009.
-   o  Preferred mirror servers.
+   o  ...
 
    -07 : September 29, 2009.
    o  Preferred mirror servers.
@@ -771,20 +777,20 @@ Appendix C.  Document History (to be removed by RFC Editor before
    o  Mention HEAD request, negotiate mirrors if Want-Digest is used.
 
    -02 : September 6, 2009.
+
+
+
+Bryan, et al.             Expires April 6, 2010                [Page 14]
+
+Internet-Draft    Metalink/HTTP: Mirrors and Checksums      October 2009
+
+
    o  Content-MD5 for partial file checksums.
 
    -01 : September 1, 2009.
    o  Link Relation Type Registration: "duplicate"
 
    -00 : August 24, 2009.
-
-
-
-Bryan, et al.             Expires April 5, 2010                [Page 14]
-
-Internet-Draft    MetaLinkHeader: Mirrors and Checksums     October 2009
-
-
    o  Initial draft.
 
 
@@ -830,11 +836,5 @@ Authors' Addresses
 
 
 
-
-
-
-
-
-
-Bryan, et al.             Expires April 5, 2010                [Page 15]
+Bryan, et al.             Expires April 6, 2010                [Page 15]
 
