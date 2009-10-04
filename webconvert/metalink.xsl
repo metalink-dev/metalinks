@@ -5,7 +5,7 @@
 		xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 		xmlns:metalink="http://www.metalinker.org/"
                 xmlns:metalink4="urn:ietf:params:xml:ns:metalink"
-		version="1.0">
+		version="2.0">
 
   <xsl:output method="xml" encoding="utf-8"
 	doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"
@@ -56,7 +56,7 @@ style="color: black; font-weight: bold" href="http://www.metalinker.org/samples.
                         <a><xsl:attribute name="href">#<xsl:value-of select="@name"/></xsl:attribute><xsl:value-of select="@name"/></a>
                 </td>
                 <td>
-                        <xsl:value-of select="metalink4:size"/>
+                        <xsl:value-of select="format-number(metalink4:size, '###,###,###,###,###')"/>
                 </td>
                 <td>
                         <xsl:value-of select="metalink4:os"/>
@@ -209,14 +209,10 @@ License:
         <title>
           Metalink v3 - <xsl:value-of select="metalink:identity"/>
         </title>
-<!--        <link rel="stylesheet" href="/main.css" type="text/css" 
-/>-->
       </head>
       <body>
-<!--	<a href="http://www.metalinker.org"><img src="/images/metalink_logo.png" border="0" /></a>-->
 	<a href="http://www.metalinker.org"><img src="metalink_logo_small.png" border="0" /></a>
 
-<!--	<h3>About Metalinks</h3>-->
 	<p>
 		Metalink is an Open Standard that bundles the various ways (<abbr title="File Transfer Protocol">FTP</abbr>/<abbr 
 title="Web">HTTP</abbr>/<abbr title="Peer-to-Peer">P2P</abbr>) to get files into one format for easier downloads. That's probably already <a 
@@ -290,7 +286,7 @@ Keywords: <xsl:value-of select="metalink:tags"/>
 			<a><xsl:attribute name="href">#<xsl:value-of select="@name"/></xsl:attribute><xsl:value-of select="@name"/></a>
 		</td>
 		<td>
-			<xsl:value-of select="metalink:size"/>
+			<xsl:value-of select="format-number(metalink:size, '###,###,###,###,###')"/>
 		</td>
 		<td>
 			<xsl:value-of select="metalink:os"/>
