@@ -11,7 +11,7 @@ Expires: April 7, 2010                                Metalinker Project
 
 
                 The Metalink Download Description Format
-                        draft-bryan-metalink-18
+                        draft-bryan-metalink-19
 
 Status of this Memo
 
@@ -1795,7 +1795,7 @@ Internet-Draft    Metalink Download Description Format      October 2009
 
    o  None.
 
-   -18 : October 1, 2009.
+   -18 : October 4, 2009.
    o  File extension: .meta4
    o  Hashes clarification, modified to allow multiple metalink:os
       elements, add size element to example.

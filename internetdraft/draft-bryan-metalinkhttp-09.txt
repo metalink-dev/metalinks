@@ -12,7 +12,7 @@ Expires: April 7, 2010                                      H. Nordstrom
 
 
           Metalink/HTTP: Mirrors and Checksums in HTTP Headers
-                      draft-bryan-metalinkhttp-08
+                      draft-bryan-metalinkhttp-09
 
 Status of this Memo
 
