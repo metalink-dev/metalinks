@@ -5,7 +5,7 @@
 # URL: https://sourceforge.net/projects/metalinks/
 # E-mail: webmaster@nabber.org
 #
-# Copyright: (C) 2008, Neil McNab
+# Copyright: (C) 2008-2009, Neil McNab
 # License: GNU General Public License Version 2
 #   (http://www.gnu.org/copyleft/gpl.html)
 #
@@ -31,6 +31,8 @@
 #   Decodes a metalink url into a html file.  Requires curl.
 #
 ########################################################################
+
+include_once("convert.php");
 
 class curl {
   var $timeout;
@@ -68,10 +70,8 @@ class curl {
   }
 }
 
-
+  if (isset($_GET['url'])) {
     $url = $_GET['url'];
-
-    header('Content-type: application/xml');
 
     $curl = new curl();
     $lines = $curl->getFile($url, 1000, 1000);
@@ -79,15 +79,73 @@ class curl {
         print "error";
         return array("", "");
     }
+  }
+
+  if (isset($_POST['data'])) {
+    $lines = $_POST['data'];
+  }
+
+  if (isset($lines)) {
+
+    $ver = intval($_REQUEST['v']);
+
+    header('Content-type: application/xml');
+
+    $v4 = stristr($lines, "urn:ietf:params:xml:ns:metalink") !== FALSE;
+    if ($v4 AND ($ver == 3)) {
+        $lines = metalink4to3($lines);
+    } elseif(!$v4 AND $ver == 4) {
+        $lines = metalink3to4($lines);
+    }
+
     $lines = split("\n", $lines);
 
     $i = 0;
     foreach ($lines as $line) {
-            echo $line;
+            echo $line . "\n";
             if ($i == 0) {
                 print "<?xml-stylesheet type='text/xsl' href='metalink.xsl'?>\n";
             }
             $i++;
     }
+  } else {
 
+?>
+
+<html>
+<head>
+</head>
+<body>
+
+<p><img src="metalink_logo_small.png" alt="Metalink Logo" /></p>
+<p>Convert a Metalink file to a HTML web page and convert between v3 and v4.
+</p>
+<form action="" method="get">
+    <p>
+      Metalink URL: <input maxlength="500" name="url" size="50" value="" /><input type="submit" />
+    <br />
+    Output Metalink Version*: <input type="radio" name="v" value="3" checked="checked">3 <input type="radio" name="v" value="4">4
+</p>
+</form>
+
+<hr />
+<form action="" method="post">
+    <p>
+      Metalink Document XML Text: <br /><textarea rows="20" cols="80" name="data"></textarea>
+    <br />
+    Output Metalink Version*: <input type="radio" name="v" value="3" checked="checked">3 <input type="radio" name="v" value="4">4
+   <br />
+<input type="submit" />
+</p>
+</form>
+
+<p>* This is not a complete conversion, but suitable for download programs.</p>
+
+<p><a href="metalink.xsl">Metalink XML to XHTML XSL</a> - <a href="metalink.3to4.xsl">Metalink 3 to 4 XSL</a> - <a href="metalink.4to3.xsl">Metalink 4 to 3 XSL</a></p>
+
+</body>
+</html>
+
+<?php
+  }
 ?>
