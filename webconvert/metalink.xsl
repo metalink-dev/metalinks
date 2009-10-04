@@ -15,7 +15,7 @@
     <html>
       <head>
         <title>
-          Metalink
+          Metalink v4
         </title>
 
       </head>
@@ -43,7 +43,7 @@ style="color: black; font-weight: bold" href="http://www.metalinker.org/samples.
             <tr>
                 <th>Identity</th>
                 <th>File Name</th>
-                <th>Size</th>
+                <th>Size (Bytes)</th>
                 <th>OS</th>
             </tr>
 
@@ -56,7 +56,7 @@ style="color: black; font-weight: bold" href="http://www.metalinker.org/samples.
                         <a><xsl:attribute name="href">#<xsl:value-of select="@name"/></xsl:attribute><xsl:value-of select="@name"/></a>
                 </td>
                 <td>
-                        <xsl:value-of select="metalink4:size"/> Bytes
+                        <xsl:value-of select="metalink4:size"/>
                 </td>
                 <td>
                         <xsl:value-of select="metalink4:os"/>
@@ -207,7 +207,7 @@ License:
     <html>
       <head>
         <title>
-          Metalink - <xsl:value-of select="metalink:identity"/>
+          Metalink v3 - <xsl:value-of select="metalink:identity"/>
         </title>
 <!--        <link rel="stylesheet" href="/main.css" type="text/css" 
 />-->
@@ -280,7 +280,7 @@ Keywords: <xsl:value-of select="metalink:tags"/>
         <table border="1">
             <tr>
                 <th>File Name</th>
-                <th>Size</th>
+                <th>Size (Bytes)</th>
                 <th>OS</th>
             </tr>
 
@@ -290,7 +290,7 @@ Keywords: <xsl:value-of select="metalink:tags"/>
 			<a><xsl:attribute name="href">#<xsl:value-of select="@name"/></xsl:attribute><xsl:value-of select="@name"/></a>
 		</td>
 		<td>
-			<xsl:value-of select="metalink:size"/> Bytes
+			<xsl:value-of select="metalink:size"/>
 		</td>
 		<td>
 			<xsl:value-of select="metalink:os"/>
