@@ -57,6 +57,11 @@
 
 <xsl:for-each select="metalink4:hash">
 <hash>
+
+<xsl:attribute name="piece">
+<xsl:value-of select="position()-1" />
+</xsl:attribute>
+
 <xsl:value-of select="."/>
 </hash>
 </xsl:for-each>
