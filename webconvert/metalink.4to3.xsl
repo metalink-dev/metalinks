@@ -12,10 +12,14 @@
 
 <metalink>
 
-<xsl:if test="origin">
+<xsl:if test="metalink4:origin">
 <xsl:attribute name="origin">
-<xsl:value-of select="origin"/>
+<xsl:value-of select="metalink4:origin"/>
 </xsl:attribute>
+</xsl:if>
+
+<xsl:if test="metalink4:dynamic">
+<xsl:attribute name="type">dynamic</xsl:attribute>
 </xsl:if>
 
 <files>
@@ -27,12 +31,16 @@
 <xsl:value-of select="@name"/>
 </xsl:attribute>
 
-<xsl:if test="metalink:size">
-<size><xsl:value-of select="metalink:size"/></size>
+<xsl:if test="metalink4:size">
+<size><xsl:value-of select="metalink4:size"/></size>
 </xsl:if>
 
-<xsl:if test="metalink:os">
-<os><xsl:value-of select="metalink:os"/></os>
+<xsl:if test="metalink4:os">
+<os><xsl:value-of select="metalink4:os"/></os>
+</xsl:if>
+
+<xsl:if test="metalink4:version">
+<version><xsl:value-of select="metalink4:version"/></version>
 </xsl:if>
 
 <!-- Verification -->

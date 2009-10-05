@@ -18,6 +18,10 @@
 </origin>
 </xsl:if>
 
+<xsl:if test="@type='dynamic'">
+<dynamic>true</dynamic>
+</xsl:if>
+
 <!-- List file details -->
 <xsl:for-each select="metalink:files/metalink:file">
 
@@ -32,6 +36,10 @@
 
 <xsl:if test="metalink:os">
 <os><xsl:value-of select="metalink:os"/></os>
+</xsl:if>
+
+<xsl:if test="metalink:version">
+<version><xsl:value-of select="metalink:version"/></version>
 </xsl:if>
 
 <!-- Verification -->
@@ -63,9 +71,7 @@
 <xsl:choose>
 <xsl:when test="starts-with(@type, 'sha')">
 
-<xsl:attribute name="type">
-sha-<xsl:value-of select="substring-after(@type,'sha')"/>
-</xsl:attribute>
+<xsl:attribute name="type">sha-<xsl:value-of select="substring-after(@type,'sha')"/></xsl:attribute>
 
 </xsl:when>
 <xsl:otherwise>
@@ -86,10 +92,10 @@ sha-<xsl:value-of select="substring-after(@type,'sha')"/>
 
 
 <!-- signature block -->
-<xsl:if test="metalink:signature">
+<xsl:if test="metalink:verification/metalink:signature">
 
-<xsl:for-each select="metalink:signature">
-    <signature>
+<xsl:for-each select="metalink:verification/metalink:signature">
+<signature>
 
 <xsl:if test="@type">
 <xsl:attribute name="type">
@@ -98,7 +104,9 @@ sha-<xsl:value-of select="substring-after(@type,'sha')"/>
 </xsl:if>
 
 <xsl:value-of select="."/>
+
 </signature>
+
 </xsl:for-each>
 </xsl:if>
 
