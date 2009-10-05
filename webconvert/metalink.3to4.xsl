@@ -22,6 +22,10 @@
 <dynamic>true</dynamic>
 </xsl:if>
 
+<xsl:if test="@generator">
+<generator><xsl:value-of select="@generator"/></generator>
+</xsl:if>
+
 <!-- List file details -->
 <xsl:for-each select="metalink:files/metalink:file">
 
