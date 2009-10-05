@@ -56,7 +56,7 @@ import StringIO
 import binascii
 import zlib
 
-current_version = "5.0"
+GENERATOR = "Metalink Checker Version 5.0"
 
 RFC3339 = "%Y-%m-%dT%H:%M:%SZ"
 RFC822 = "%a, %d %b %Y %H:%M:%S +0000"
@@ -573,8 +573,8 @@ class MetalinkBase:
     def __init__(self):
         self.errors = []
         self.files = []
+        self.generator = GENERATOR
         self.origin = ""
-        self.type = ""
 
         self.p = xml.parsers.expat.ParserCreate()
         self.parent = []
@@ -621,9 +621,9 @@ class Metalink(MetalinkBase):
         self.license_name = ""
         self.license_url = ""
         self.version = ""
-        self.type = ""
         self.upgrade = ""
         self.tags = ""
+        self.type = ""
         self.pubdate = ""
         self.refreshdate = ""
         MetalinkBase.__init__(self)
@@ -636,7 +636,10 @@ class Metalink(MetalinkBase):
         typetext = ""
         if self.type.strip() != "":
             typetext = 'type="'+self.type+'" '
-        text += '<metalink version="3.0" '+origin + typetext +'generator="Metalink Checker version '+current_version+'" xmlns="http://www.metalinker.org/">\n'
+        gentext = ""
+        if self.generator.strip() != "":
+            gentext = 'generator="'+self.generator+'" '
+        text += '<metalink version="3.0" '+origin + typetext + gentext + 'xmlns="http://www.metalinker.org/">\n'
         text += self.generate_info()
         text += '  <files>\n'
         for fileobj in self.files:
@@ -753,8 +756,6 @@ class Metalink4(MetalinkBase):
     def __init__(self):
         self.ver = 4
         self.dynamic=""
-        self.generator=""
-        self.origin=""
         self.published=""
         self.updated=""
         MetalinkBase.__init__(self)
@@ -1103,12 +1104,10 @@ class ParseINI(dict):
             return []
 
 def convert_4to3(metalinkobj4):
-#
-# TODO:
-#   Detect and convert date formats properly.
     metalinkobj3 = Metalink()
     
-    setattr(metalinkobj3, 'origin', getattr(metalinkobj4, 'origin'))
+    for attr in ('generator', 'origin'):
+        setattr(metalinkobj3, attr, getattr(metalinkobj4, attr))
     if getattr(metalinkobj4, 'dynamic').lower() == "true":
         setattr(metalinkobj3, 'type', 'dynamic')
         
@@ -1138,7 +1137,8 @@ def convert_4to3(metalinkobj4):
 def convert_3to4(metalinkobj3):
     metalinkobj4 = Metalink4()
     # copy common attributes
-    setattr(metalinkobj4, 'origin', getattr(metalinkobj3, 'origin'))
+    for attr in ('origin', 'generator'):
+        setattr(metalinkobj4, attr, getattr(metalinkobj3, attr))
     if getattr(metalinkobj3, 'type') == 'dynamic':
         setattr(metalinkobj4, 'dynamic', "true")
     else:
