@@ -3,12 +3,11 @@
 
 Network Working Group                                      A. Bryan, Ed.
 Internet-Draft                                                  N. McNab
-Intended status: Standards Track                      Metalinker Project
-Expires: April 7, 2010                                      H. Nordstrom
-
+Intended status: Standards Track                            H. Nordstrom
+Expires: April 8, 2010
                                                                  A. Ford
                                                      Roke Manor Research
-                                                         October 4, 2009
+                                                         October 5, 2009
 
 
           Metalink/HTTP: Mirrors and Checksums in HTTP Headers
@@ -35,7 +34,7 @@ Status of this Memo
    The list of Internet-Draft Shadow Directories can be accessed at
    http://www.ietf.org/shadow.html.
 
-   This Internet-Draft will expire on April 7, 2010.
+   This Internet-Draft will expire on April 8, 2010.
 
 Copyright Notice
 
@@ -52,7 +51,8 @@ Copyright Notice
 
 
 
-Bryan, et al.             Expires April 7, 2010                 [Page 1]
+
+Bryan, et al.             Expires April 8, 2010                 [Page 1]
 
 Internet-Draft    Metalink/HTTP: Mirrors and Checksums      October 2009
 
@@ -108,7 +108,7 @@ Table of Contents
 
 
 
-Bryan, et al.             Expires April 7, 2010                 [Page 2]
+Bryan, et al.             Expires April 8, 2010                 [Page 2]
 
 Internet-Draft    Metalink/HTTP: Mirrors and Checksums      October 2009
 
@@ -164,7 +164,7 @@ Internet-Draft    Metalink/HTTP: Mirrors and Checksums      October 2009
 
 
 
-Bryan, et al.             Expires April 7, 2010                 [Page 3]
+Bryan, et al.             Expires April 8, 2010                 [Page 3]
 
 Internet-Draft    Metalink/HTTP: Mirrors and Checksums      October 2009
 
@@ -220,7 +220,7 @@ Internet-Draft    Metalink/HTTP: Mirrors and Checksums      October 2009
 
 
 
-Bryan, et al.             Expires April 7, 2010                 [Page 4]
+Bryan, et al.             Expires April 8, 2010                 [Page 4]
 
 Internet-Draft    Metalink/HTTP: Mirrors and Checksums      October 2009
 
@@ -276,7 +276,7 @@ Internet-Draft    Metalink/HTTP: Mirrors and Checksums      October 2009
 
 
 
-Bryan, et al.             Expires April 7, 2010                 [Page 5]
+Bryan, et al.             Expires April 8, 2010                 [Page 5]
 
 Internet-Draft    Metalink/HTTP: Mirrors and Checksums      October 2009
 
@@ -332,7 +332,7 @@ Internet-Draft    Metalink/HTTP: Mirrors and Checksums      October 2009
 
 
 
-Bryan, et al.             Expires April 7, 2010                 [Page 6]
+Bryan, et al.             Expires April 8, 2010                 [Page 6]
 
 Internet-Draft    Metalink/HTTP: Mirrors and Checksums      October 2009
 
@@ -388,7 +388,7 @@ Internet-Draft    Metalink/HTTP: Mirrors and Checksums      October 2009
 
 
 
-Bryan, et al.             Expires April 7, 2010                 [Page 7]
+Bryan, et al.             Expires April 8, 2010                 [Page 7]
 
 Internet-Draft    Metalink/HTTP: Mirrors and Checksums      October 2009
 
@@ -444,7 +444,7 @@ Internet-Draft    Metalink/HTTP: Mirrors and Checksums      October 2009
 
 
 
-Bryan, et al.             Expires April 7, 2010                 [Page 8]
+Bryan, et al.             Expires April 8, 2010                 [Page 8]
 
 Internet-Draft    Metalink/HTTP: Mirrors and Checksums      October 2009
 
@@ -500,7 +500,7 @@ Internet-Draft    Metalink/HTTP: Mirrors and Checksums      October 2009
 
 
 
-Bryan, et al.             Expires April 7, 2010                 [Page 9]
+Bryan, et al.             Expires April 8, 2010                 [Page 9]
 
 Internet-Draft    Metalink/HTTP: Mirrors and Checksums      October 2009
 
@@ -556,7 +556,7 @@ Internet-Draft    Metalink/HTTP: Mirrors and Checksums      October 2009
 
 
 
-Bryan, et al.             Expires April 7, 2010                [Page 10]
+Bryan, et al.             Expires April 8, 2010                [Page 10]
 
 Internet-Draft    Metalink/HTTP: Mirrors and Checksums      October 2009
 
@@ -612,7 +612,7 @@ Internet-Draft    Metalink/HTTP: Mirrors and Checksums      October 2009
 
 
 
-Bryan, et al.             Expires April 7, 2010                [Page 11]
+Bryan, et al.             Expires April 8, 2010                [Page 11]
 
 Internet-Draft    Metalink/HTTP: Mirrors and Checksums      October 2009
 
@@ -668,7 +668,7 @@ Internet-Draft    Metalink/HTTP: Mirrors and Checksums      October 2009
 
 
 
-Bryan, et al.             Expires April 7, 2010                [Page 12]
+Bryan, et al.             Expires April 8, 2010                [Page 12]
 
 Internet-Draft    Metalink/HTTP: Mirrors and Checksums      October 2009
 
@@ -724,7 +724,7 @@ Appendix B.  Comparisons to Similar Options (to be removed by RFC Editor
 
 
 
-Bryan, et al.             Expires April 7, 2010                [Page 13]
+Bryan, et al.             Expires April 8, 2010                [Page 13]
 
 Internet-Draft    Metalink/HTTP: Mirrors and Checksums      October 2009
 
@@ -780,7 +780,7 @@ Appendix C.  Document History (to be removed by RFC Editor before
 
 
 
-Bryan, et al.             Expires April 7, 2010                [Page 14]
+Bryan, et al.             Expires April 8, 2010                [Page 14]
 
 Internet-Draft    Metalink/HTTP: Mirrors and Checksums      October 2009
 
@@ -800,14 +800,12 @@ Internet-Draft    Metalink/HTTP: Mirrors and Checksums      October 2009
 Authors' Addresses
 
    Anthony Bryan (editor)
-   Metalinker Project
 
    Email: anthonybryan@gmail.com
    URI:   http://www.metalinker.org
 
 
    Neil McNab
-   Metalinker Project
 
    Email: neil@nabber.org
    URI:   http://www.nabber.org
@@ -836,5 +834,7 @@ Authors' Addresses
 
 
 
-Bryan, et al.             Expires April 7, 2010                [Page 15]
+
+
+Bryan, et al.             Expires April 8, 2010                [Page 15]
 
