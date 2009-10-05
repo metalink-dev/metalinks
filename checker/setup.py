@@ -8,7 +8,7 @@ import glob
 import zipfile
 
 APP_NAME = 'metalink-checker'
-VERSION = '4.3'
+VERSION = '5.0'
 LICENSE = 'GPL'
 DESC = 'A metalink checker and download client.'
 AUTHOR_NAME = 'Neil McNab'
@@ -16,7 +16,7 @@ EMAIL = 'webmaster@nabber.org'
 URL = 'http://www.nabber.org/projects/'
 
 #main is first
-modules = ['console', 'xmlutils', 'GPG', 'download', 'checker']
+modules = ['console', 'metalink', 'GPG', 'download', 'checker']
 outputfile = "metalinkc.py"
 
 readhandle = open("header.txt")
