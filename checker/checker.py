@@ -145,61 +145,13 @@ class Checker:
         src = download.complete_url(src)
         
         try:
-            # add head check for metalink type, if MIME_TYPE or application/xml? treat as metalink
-            myheaders = download.urlhead(src, metalink_header=True)
-            if myheaders["link"]:
-                # Metalink HTTP Link headers implementation
-                # TODO support metalink describedby type
-                # TODO support openpgp describedby type
-                # TODO this should be more robust and ignore commas in <> for urls
-                links = myheaders['link'].split(",")
-                fileobj = metalink.MetalinkFile(os.path.basename(src))
-                fileobj.set_size(myheaders["content-length"])
-                for link in links:
-                    parts = link.split(";")
-                    mydict = {}
-                    for part in parts[1:]:
-                        part1, part2 = part.split("=", 1)
-                        mydict[part1.strip()] = part2.strip()
-                    
-                    pri = ""
-                    try:
-                        pri = mydict["pri"]
-                    except KeyError: pass
-                    type = ""
-                    try:
-                        type = mydict["type"]
-                    except KeyError: pass
-                    try:
-                        if mydict['rel'] == '"duplicate"':
-                            fileobj.add_url(parts[0].strip(" <>"), preference=pri)
-                        elif mydict['rel'] == '"describedby"' and type == "application/metalink4+xml":
-                            self.check_metalink(parts[0].strip(" <>"))
-                        elif type == "application/pgp-signature":
-                            pass
-                        elif mydict['rel'] == '"describedby"':
-                            fileobj.add_url(parts[0].strip(" <>"), preference=pri)
-                    except KeyError: pass
-                try:
-                    hashes = myheaders['digest'].split(",")
-                    for hash in hashes:
-                        parts = hash.split("=", 1)
-                        if parts[0].strip() == 'sha':
-                            fileobj.hashlist['sha1'] = binascii.hexlify(binascii.a2b_base64(parts[1].strip()))
-                        else:
-                            fileobj.hashlist[parts[0].strip().replace("-", "")] = binascii.hexlify(binascii.a2b_base64(parts[1]).strip())
-                except KeyError: pass
-                print _("Using Metalink HTTP Link headers.")
-                metalinkobj = metalink.Metalink()
-                metalinkobj.files.append(fileobj)
-        except KeyError:
-            datasource = urllib2.urlopen(src)
-            try:
-                metalinkobj = metalink.parsehandle(datasource)
-            except:
-                print _("ERROR parsing XML.")
-                raise
-            datasource.close()
+            metalinkobj = download.parse_metalink(src, nocheck=False)
+        except:
+            print _("ERROR parsing XML.")
+            raise
+            
+        if metalinkobj == False:
+            return False
         
         if metalinkobj.type == "dynamic":
             origin = metalinkobj.origin

@@ -5,7 +5,7 @@
 # URL: http://www.nabber.org/projects/
 # E-mail: webmaster@nabber.org
 #
-# Copyright: (C) 2007-2008, Neil McNab
+# Copyright: (C) 2007-2009, Neil McNab
 # License: GNU General Public License Version 2
 #   (http://www.gnu.org/copyleft/gpl.html)
 #
@@ -81,11 +81,11 @@ def run():
     Start a console version of this application.
     '''
     # Command line parser options.
-    usage = "usage: %prog [-c|-d|-j] [options] arg1 arg2 ..."
+    usage = "usage: %prog [-c|-d|-j|--convert|--rconvert] [options] arg1 arg2 ..."
     parser = optparse.OptionParser(version=checker.ABOUT, usage=usage)
     parser.add_option("--download", "-d", action="store_true", dest="download", help=_("Actually download the file(s) in the metalink"))
     parser.add_option("--check", "-c", action="store_true", dest="check", help=_("Check the metalink file URLs"))
-    parser.add_option("--file", "-f", dest="filevar", metavar="FILE", help=_("Metalink file to check or file to download"))
+    #parser.add_option("--file", "-f", dest="filevar", metavar="FILE", help=_("Metalink file to check or file to download"))
     parser.add_option("--timeout", "-t", dest="timeout", metavar="TIMEOUT", help=_("Set timeout in seconds to wait for response (default=10)"))
     parser.add_option("--os", "-o", dest="os", metavar="OS", help=_("Operating System preference"))
     parser.add_option("--no-segmented", "-s", action="store_true", dest="nosegmented", help=_("Do not use the segmented download method"))
@@ -97,9 +97,15 @@ def run():
     parser.add_option("--convert-jigdo", "-j", action="store_true", dest="jigdo", help=_("Convert Jigdo format file to Metalink"))
     parser.add_option("--port", dest="port", help=_("Streaming server port to use (default: No streaming server)"))
     parser.add_option("--html", dest="html", help=_("Extract links from HTML webpage"))
+    parser.add_option("--convert", dest="convert", action="store_true", help="Conversion from 3 to 4 (IETF RFC)")
+    parser.add_option("--rconvert", dest="rev", action="store_true", help="Reverses conversion from 4 (IETF RFC) to 3")
+    parser.add_option("--output", dest="output", metavar="OUTFILE", help=_("Output conversion result to this file instead of screen"))
     (options, args) = parser.parse_args()
+    
+    #if options.filevar != None:
+    #   args.append(options.filevar)
 
-    if options.filevar == None and len(args) == 0 and options.html == None:
+    if len(args) == 0:
         parser.print_help()
         return
 
@@ -127,8 +133,28 @@ def run():
         print _("Invalid country length, must be 2 letter code")
         return
 
-    if options.jigdo and len(args) >= 1:
+    if options.jigdo:
         print download.convert_jigdo(args[0])
+        return
+        
+    if options.convert:
+        text = download.parse_metalink(args[0], ver=4).generate()
+        if options.output:
+            handle = open(options.output, "w")
+            handle.write(text)
+            handle.close()
+        else:
+            print text
+        return
+        
+    if options.rev:
+        text = download.parse_metalink(args[0], ver=3).generate()
+        if options.output:
+            handle = open(options.output, "w")
+            handle.write(text)
+            handle.close()
+        else:
+            print text
         return
 
     if options.html:
@@ -152,10 +178,10 @@ def run():
 
     if options.check:
         # remove filevar eventually
-        mcheck = checker.Checker()
-        mcheck.check_metalink(options.filevar)
-        results = mcheck.get_results()
-        print_totals(results)
+        #mcheck = checker.Checker()
+        #mcheck.check_metalink(options.filevar)
+        #results = mcheck.get_results()
+        #print_totals(results)
         for item in args:
             print "=" * 79
             print item
@@ -167,12 +193,12 @@ def run():
             
     if options.download:
         # remove filevar eventually
-        if options.filevar != None:
-            progress = ProgressBar()
-            result = download.get(options.filevar, os.getcwd(), handlers={"status": progress.download_update, "bitrate": progress.set_bitrate}, segmented = not options.nosegmented)
-            progress.download_end()
-            if not result:
-                sys.exit(-1)
+        #if options.filevar != None:
+        #    progress = ProgressBar()
+        #    result = download.get(options.filevar, os.getcwd(), handlers={"status": progress.download_update, "bitrate": progress.set_bitrate}, segmented = not options.nosegmented)
+        #    progress.download_end()
+        #    if not result:
+        #        sys.exit(-1)
 
         for item in args:
             progress = ProgressBar()
@@ -183,17 +209,17 @@ def run():
                 
     # remove eventually
     elif not options.check:
-        if options.filevar != None:
-            mcheck = checker.Checker()
-            mcheck.check_metalink(options.filevar)
-            results = mcheck.get_results()
-            print_totals(results)
+        #if options.filevar != None:
+        #    mcheck = checker.Checker()
+        #    mcheck.check_metalink(options.filevar)
+        #    results = mcheck.get_results()
+        #    print_totals(results)
         for item in args:
             mcheck = checker.Checker()
             mcheck.check_metalink(item)
             results = mcheck.get_results()
             print_totals(results)
-            
+                        
     sys.exit(0)
     
 def print_totals(results):

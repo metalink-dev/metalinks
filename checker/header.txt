@@ -76,6 +76,13 @@
 #
 # CHANGELOG:
 #
+# Version 5.0
+# -----------
+# - Added support for Metalink v4 (IETF RFC)
+# - Changed executable name from metalink to metalinkc
+# - Removed unneeded -f options
+# - Added conversion options
+#
 # Version 4.4
 # -----------
 # - Bugfix for when HTTP 302 redirect code is issued during download
