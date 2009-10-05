@@ -59,7 +59,7 @@ import urllib2
 import urlparse
 import hashlib
 import os.path
-import xmlutils
+import metalink
 import locale
 import threading
 #import thread
@@ -84,7 +84,7 @@ import BaseHTTPServer
 try: import win32api
 except: pass
 
-USER_AGENT = "Metalink Checker/4.3 +http://www.nabber.org/projects/"
+USER_AGENT = "Metalink Checker/5.0 +http://www.nabber.org/projects/"
 
 SEGMENTED = True
 LIMIT_PER_HOST = 1
@@ -262,7 +262,7 @@ def translate():
 
 _ = translate()
     
-def urlopen(url, data = None, metalink=False, headers = {}):
+def urlopen(url, data = None, metalink_header=False, headers = {}):
     #print "URLOPEN:", url, headers
     url = complete_url(url)
     req = urllib2.Request(url, data, headers)
@@ -270,18 +270,18 @@ def urlopen(url, data = None, metalink=False, headers = {}):
     req.add_header('Cache-Control', "no-cache")
     req.add_header('Pragma', "no-cache")
     req.add_header('Accept-Encoding', 'gzip')
-    if metalink:
+    if metalink_header:
         req.add_header('Accept', MIME_TYPE + ", */*")
 
     fp = urllib2.urlopen(req) 
     try:
         if fp.headers['Content-Encoding'] == "gzip":
-            return xmlutils.open_compressed(fp)
+            return metalink.open_compressed(fp)
     except KeyError: pass
 
     return fp
 
-def urlhead(url, metalink=False, headers = {}):
+def urlhead(url, metalink_header=False, headers = {}):
     '''
     raise IOError for example if the URL does not exist
     '''
@@ -291,7 +291,7 @@ def urlhead(url, metalink=False, headers = {}):
     req.add_header('User-agent', USER_AGENT)
     req.add_header('Cache-Control', "no-cache")
     req.add_header('Pragma', "no-cache")
-    if metalink:
+    if metalink_header:
         req.add_header('Accept', MIME_TYPE + ", */*")
 
     req.get_method = lambda: "HEAD"
@@ -340,7 +340,7 @@ def get(src, path, checksums = {}, force = False, handlers = {}, segmented = SEG
         # also a WindowsError is thrown if a local file does not exist
         try:
             # add head check for metalink type, if MIME_TYPE or application/xml? treat as metalink
-            myheaders = urlhead(src, metalink=True, headers = headers)
+            myheaders = urlhead(src, metalink_header=True, headers = headers)
             if myheaders["content-type"].startswith(MIME_TYPE):
                 print _("Metalink content-type detected.")
                 return download_metalink(src, path, force, handlers, segmented, headers)
@@ -349,7 +349,7 @@ def get(src, path, checksums = {}, force = False, handlers = {}, segmented = SEG
                 # does not check for describedby urls but we can't use any of those anyway
                 # TODO this should be more robust and ignore commas in <> for urls
                 links = myheaders['link'].split(",")
-                fileobj = xmlutils.MetalinkFile(os.path.join(path, os.path.basename(src)))
+                fileobj = metalink.MetalinkFile(os.path.join(path, os.path.basename(src)))
                 fileobj.set_size(myheaders["content-length"])
                 for link in links:
                     parts = link.split(";")
@@ -425,7 +425,7 @@ def download_file(url, local_file, size=0, checksums={}, force = False,
     #urllist = {}
     #urllist[url] = URL(url)
 
-    fileobj = xmlutils.MetalinkFile(local_file)
+    fileobj = metalink.MetalinkFile(local_file)
     fileobj.set_size(size)
     fileobj.hashlist = checksums
     fileobj.pieces = chunksums
@@ -701,14 +701,13 @@ def filecheck(local_file, checksums, size, handler = None):
 def parse_metalink(src, headers = {}):
     src = complete_url(src)
     try:
-        datasource = urlopen(src, metalink=True, headers = headers)
+        datasource = urlopen(src, metalink_header=True, headers = headers)
     except:
         return False
 
-    metalink = xmlutils.Metalink()
-    metalink.parsehandle(datasource)
+    metalinkobj = metalink.parsehandle(datasource)
     datasource.close()
-    return metalink
+    return metalinkobj
     
 def download_metalink(src, path, force = False, handlers = {}, segmented = SEGMENTED, headers = {}):
     '''
@@ -720,19 +719,19 @@ def download_metalink(src, path, force = False, handlers = {}, segmented = SEGME
     Returns list of file paths if download(s) is successful
     Returns False otherwise (checksum fails)
     '''
-    metalink = parse_metalink(src, headers)
-    if metalink == False:
+    metalinkobj = parse_metalink(src, headers)
+    if metalinkobj == False:
         return False
 
-    if metalink.type == "dynamic":
-        origin = metalink.origin
+    if metalinkobj.type == "dynamic":
+        origin = metalinkobj.origin
         if origin != src and origin != "":
             print _("Downloading update from %s") % origin
             try:
                 return download_metalink(origin, path, force, handlers, segmented, headers)
             except: pass
 
-    urllist = metalink.files
+    urllist = metalinkobj.files
     if len(urllist) == 0:
         print _("No urls to download file from.")
         return False
@@ -765,11 +764,11 @@ def download_jigdo(src, path, force = False, handlers = {}, segmented = SEGMENTE
     '''
     newsrc = complete_url(src)
     try:
-        datasource = urlopen(newsrc, metalink=True, headers = headers)
+        datasource = urlopen(newsrc, metalink_header=True, headers = headers)
     except:
         return False
 
-    jigdo = xmlutils.Jigdo()
+    jigdo = metalink.Jigdo()
     jigdo.parsehandle(datasource)
     datasource.close()
 
@@ -807,15 +806,15 @@ def convert_jigdo(src, headers = {}):
     
     newsrc = complete_url(src)
     try:
-        datasource = urlopen(newsrc, metalink=True, headers = headers)
+        datasource = urlopen(newsrc, metalink_header=True, headers = headers)
     except:
         return False
 
-    jigdo = xmlutils.Jigdo()
+    jigdo = metalink.Jigdo()
     jigdo.parsehandle(datasource)
     datasource.close()
 
-    fileobj = xmlutils.MetalinkFile(jigdo.template)
+    fileobj = metalink.MetalinkFile(jigdo.template)
     fileobj.add_url(os.path.dirname(src) + "/" + jigdo.template)
     fileobj.add_checksum("md5", jigdo.template_md5)
     jigdo.files.insert(0, fileobj)

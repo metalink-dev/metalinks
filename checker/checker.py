@@ -57,14 +57,14 @@ import threading
 import time
 import binascii
 
-import xmlutils
+import metalink
 import download
 
 import locale
 import gettext
 
 NAME="Metalink Checker"
-VERSION="4.3"
+VERSION="5.0"
 
 #WEBSITE="http://www.metalinker.org"
 WEBSITE="http://www.nabber.org/projects/checker/"
@@ -146,14 +146,14 @@ class Checker:
         
         try:
             # add head check for metalink type, if MIME_TYPE or application/xml? treat as metalink
-            myheaders = download.urlhead(src, metalink=True)
+            myheaders = download.urlhead(src, metalink_header=True)
             if myheaders["link"]:
                 # Metalink HTTP Link headers implementation
                 # TODO support metalink describedby type
                 # TODO support openpgp describedby type
                 # TODO this should be more robust and ignore commas in <> for urls
                 links = myheaders['link'].split(",")
-                fileobj = xmlutils.MetalinkFile(os.path.basename(src))
+                fileobj = metalink.MetalinkFile(os.path.basename(src))
                 fileobj.set_size(myheaders["content-length"])
                 for link in links:
                     parts = link.split(";")
@@ -190,20 +190,19 @@ class Checker:
                             fileobj.hashlist[parts[0].strip().replace("-", "")] = binascii.hexlify(binascii.a2b_base64(parts[1]).strip())
                 except KeyError: pass
                 print _("Using Metalink HTTP Link headers.")
-                metalink = xmlutils.Metalink()
-                metalink.files.append(fileobj)
+                metalinkobj = metalink.Metalink()
+                metalinkobj.files.append(fileobj)
         except KeyError:
             datasource = urllib2.urlopen(src)
             try:
-                metalink = xmlutils.Metalink()
-                metalink.parsehandle(datasource)
+                metalinkobj = metalink.parsehandle(datasource)
             except:
                 print _("ERROR parsing XML.")
                 raise
             datasource.close()
         
-        if metalink.type == "dynamic":
-            origin = metalink.origin
+        if metalinkobj.type == "dynamic":
+            origin = metalinkobj.origin
             if origin != src and origin != "":
                 try:
                     result = self.check_metalink(origin)
@@ -212,7 +211,7 @@ class Checker:
                 except:
                     print "Error downloading from origin %s, not using." % origin
         
-        urllist = metalink.files
+        urllist = metalinkobj.files
         if len(urllist) == 0:
             print _("No urls to download file from.")
             self.running = False
