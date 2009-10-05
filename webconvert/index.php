@@ -93,12 +93,12 @@ class curl {
 
     $v4 = stristr($lines, "urn:ietf:params:xml:ns:metalink") !== FALSE;
     if ($v4 AND ($ver == 3)) {
-        $lines = metalink4to3($lines);
+        $lines = metalink4to3(trim($lines));
     } elseif(!$v4 AND $ver == 4) {
-        $lines = metalink3to4($lines);
+        $lines = metalink3to4(trim($lines));
     }
 
-    $lines = split("\n", $lines);
+    $lines = split("\n", trim($lines));
 
     $i = 0;
     foreach ($lines as $line) {

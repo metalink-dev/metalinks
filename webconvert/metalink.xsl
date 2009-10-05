@@ -5,7 +5,7 @@
 		xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 		xmlns:metalink="http://www.metalinker.org/"
                 xmlns:metalink4="urn:ietf:params:xml:ns:metalink"
-		version="2.0">
+		version="1.0">
 
   <xsl:output method="xml" encoding="utf-8"
 	doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"
@@ -143,7 +143,7 @@ License:
                 <xsl:value-of select="@type"/>
         </td>
         <td>
-                <xsl:value-of select="."/>
+                <pre><xsl:value-of select="."/></pre>
         </td>
 </tr>
 </xsl:for-each>
@@ -325,19 +325,19 @@ Keywords: <xsl:value-of select="metalink:tags"/>
 
 
 <!-- Signature Table -->
-<xsl:if test="metalink:signature">
+<xsl:if test="metalink:verification/metalink:signature">
         <table border="1">
             <tr>
                 <th>Signature Type</th>
                 <th>Signature Value</th>
             </tr>
-<xsl:for-each select="metalink:signature">
+<xsl:for-each select="metalink:verification/metalink:signature">
 <tr>
 	<td style="text-transform: uppercase">
 		<xsl:value-of select="@type"/>
 	</td>
 	<td>
-		<xsl:value-of select="."/>
+		<pre><xsl:value-of select="."/></pre>
 	</td>
 </tr>
 </xsl:for-each>
