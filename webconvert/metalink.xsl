@@ -159,9 +159,9 @@ License:
                 <th>URL</th>
             </tr>
 <xsl:for-each select="metalink4:url">
-                <xsl:sort select="@preference"
+                <xsl:sort select="@priority"
                           data-type="number"
-                          order="descending"/>
+                          order="ascending"/>
                 <tr>
                     <td>
                         <xsl:value-of select="@priority"/>
