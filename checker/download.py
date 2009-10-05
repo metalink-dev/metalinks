@@ -58,7 +58,7 @@
 import urllib2
 import urlparse
 import hashlib
-import os.path
+import os
 import metalink
 import locale
 import threading
@@ -658,7 +658,7 @@ def parse_metalink(src, headers = {}, nocheck = False, ver=3):
             # does not check for describedby urls but we can't use any of those anyway
             # TODO this should be more robust and ignore commas in <> for urls
             links = myheaders['link'].split(",")
-            fileobj = metalink.MetalinkFile(os.path.join(path, os.path.basename(src)))
+            fileobj = metalink.MetalinkFile4(os.path.basename(src))
             fileobj.set_size(myheaders["content-length"])
             for link in links:
                 parts = link.split(";")
@@ -676,9 +676,7 @@ def parse_metalink(src, headers = {}, nocheck = False, ver=3):
                     type = mydict["type"]
                 except KeyError: pass
                 try:
-                    if mydict['rel'] == '"duplicate"':
-                        fileobj.add_url(parts[0].strip(" <>"), preference=pri)
-                    elif mydict['rel'] == '"describedby"' and type=="application/metalink4+xml":
+                    if mydict['rel'] == '"describedby"' and type=="application/metalink4+xml":
                         # TODO support metalink describedby type
                         #fileobj.add_url(parts[0].strip(" <>"), preference=pri)
                         pass
@@ -687,20 +685,20 @@ def parse_metalink(src, headers = {}, nocheck = False, ver=3):
                         fp = urlopen(parts[0].strip(" <>"), headers = {"referer": src})
                         fileobj.hashlist['pgp'] = fp.read()
                         fp.close()
-                    elif mydict['rel'] == '"describedby"':
-                        fileobj.add_url(parts[0].strip(" <>"), preference=pri)
+                    elif mydict['rel'] == '"describedby"' or mydict['rel'] == '"duplicate"':
+                        fileobj.add_url(parts[0].strip(" <>"), type=type, priority=pri)
                 except KeyError: pass
             try:
                 hashes = myheaders['digest'].split(",")
                 for hash in hashes:
                     parts = hash.split("=", 1)
                     if parts[0].strip() == 'sha':
-                        fileobj.hashlist['sha1'] = binascii.hexlify(binascii.a2b_base64(parts[1].strip()))
+                        fileobj.hashlist['sha-1'] = binascii.hexlify(binascii.a2b_base64(parts[1].strip()))
                     else:
-                        fileobj.hashlist[parts[0].strip().replace("-", "")] = binascii.hexlify(binascii.a2b_base64(parts[1]).strip())
+                        fileobj.hashlist[parts[0].strip()] = binascii.hexlify(binascii.a2b_base64(parts[1].strip()))
             except KeyError: pass
             print _("Using Metalink HTTP Link headers.")
-            mobj = metalink.Metalink()
+            mobj = metalink.Metalink4()
             mobj.files.append(fileobj)
             return metalink.convert(mobj, ver)
     except KeyError:

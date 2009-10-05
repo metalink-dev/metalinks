@@ -388,8 +388,8 @@ class MetalinkFile4(MetalinkFileBase):
             except KeyError: pass
         return False
         
-    def add_url(self, url, type="", location="", preference="", attrs={}):
-        self.resources.append(Resource4(url, type, location, preference, attrs))
+    def add_url(self, url, type="", location="", priority="", attrs={}):
+        self.resources.append(Resource4(url, type, location, priority, attrs))
     
     def validate(self):
         valid = True
