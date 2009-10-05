@@ -15,21 +15,21 @@
     <front>        
       <title abbrev="Metalink Download Description Format">The Metalink Download Description Format</title>		
       <author initials="A." surname="Bryan" fullname="Anthony Bryan" role="editor">
-	    <organization>Metalinker Project</organization>
+	    <organization></organization>
 	    <address>		
 	      <email>anthonybryan@gmail.com</email>	
 	      <uri>http://www.metalinker.org</uri>		
 	    </address>
       </author>
       <author initials="T." surname="Tsujikawa" fullname="Tatsuhiro Tsujikawa">
-        <organization>Metalinker Project</organization>
+        <organization></organization>
         <address>
           <email>tatsuhiro.t@gmail.com</email>
           <uri>http://aria2.sourceforge.net</uri>
         </address>
       </author>
       <author initials="N." surname="McNab" fullname="Neil McNab">
-        <organization>Metalinker Project</organization>
+        <organization></organization>
         <address>
           <email>neil@nabber.org</email>
           <uri>http://www.nabber.org</uri>

@@ -15,14 +15,14 @@
     <front>        
       <title abbrev="Metalink/HTTP: Mirrors and Checksums">Metalink/HTTP: Mirrors and Checksums in HTTP Headers</title>		
       <author initials="A." surname="Bryan" fullname="Anthony Bryan" role="editor">
-	    <organization>Metalinker Project</organization>
+	    <organization></organization>
 	    <address>		
 	      <email>anthonybryan@gmail.com</email>	
 	      <uri>http://www.metalinker.org</uri>		
 	    </address>
       </author>
 	  <author initials="N." surname="McNab" fullname="Neil McNab">
-        <organization>Metalinker Project</organization>
+        <organization></organization>
         <address>
           <email>neil@nabber.org</email>
           <uri>http://www.nabber.org</uri>
