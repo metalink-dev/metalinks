@@ -14,7 +14,7 @@
 <rfc category="std" docName="draft-bryan-metalinkhttp-09" ipr="trust200902">
     <front>        
       <title abbrev="Metalink/HTTP: Mirrors and Checksums">Metalink/HTTP: Mirrors and Checksums in HTTP Headers</title>		
-      <author initials="A." surname="Bryan" fullname="Anthony Bryan" role="editor">
+      <author initials="A." surname="Bryan" fullname="Anthony Bryan">
 	    <organization></organization>
 	    <address>		
 	      <email>anthonybryan@gmail.com</email>	

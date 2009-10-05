@@ -1,7 +1,7 @@
 
 
 
-Network Working Group                                      A. Bryan, Ed.
+Network Working Group                                           A. Bryan
 Internet-Draft                                                  N. McNab
 Intended status: Standards Track                            H. Nordstrom
 Expires: April 8, 2010
@@ -799,7 +799,7 @@ Internet-Draft    Metalink/HTTP: Mirrors and Checksums      October 2009
 
 Authors' Addresses
 
-   Anthony Bryan (editor)
+   Anthony Bryan
 
    Email: anthonybryan@gmail.com
    URI:   http://www.metalinker.org

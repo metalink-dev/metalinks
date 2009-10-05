@@ -141,7 +141,7 @@
 <body>
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <table summary="layout" width="66%" border="0" cellpadding="0" cellspacing="0"><tr><td><table summary="layout" width="100%" border="0" cellpadding="2" cellspacing="1">
-<tr><td class="header">Network Working Group</td><td class="header">A. Bryan, Ed.</td></tr>
+<tr><td class="header">Network Working Group</td><td class="header">A. Bryan</td></tr>
 <tr><td class="header">Internet-Draft</td><td class="header">T. Tsujikawa</td></tr>
 <tr><td class="header">Intended status: Standards Track</td><td class="header">N. McNab</td></tr>
 <tr><td class="header">Expires: April 8, 2010</td><td class="header">&nbsp;</td></tr>
@@ -1588,7 +1588,7 @@ Cryptographic Hashes</h3>
 
 <p>Currently, some of the hash types defined in the IANA registry named "Hash Function Textual Names" are considered insecure. These include the whole Message Digest family of algorithms which are not suitable for cryptographically strong verification. Malicious people could provide files that appear to be identical to another file because of a collision, i.e. the weak cryptographic hashes of the intended file and a substituted malicious file could match.
 </p>
-<p>If a Metalink Document contains hashes, it SHOULD include "sha-1" which is SHA-1, as specified in <a class='info' href='#RFC3174'>[RFC3174]<span> (</span><span class='info'>Eastlake, D. and P. Jones, &ldquo;US Secure Hash Algorithm 1 (SHA1),&rdquo; September&nbsp;2001.</span><span>)</span></a>, or stronger.  It MAY also include other hashes.
+<p>If a Metalink Document contains hashes, it SHOULD include "sha-1" which is SHA-1, as specified in <a class='info' href='#RFC3174'>[RFC3174]<span> (</span><span class='info'>Eastlake, D. and P. Jones, &ldquo;US Secure Hash Algorithm 1 (SHA1),&rdquo; September&nbsp;2001.</span><span>)</span></a>, or stronger.  It MAY also include other hashes from the IANA registry named "Hash Function Textual Names".
 </p>
 <a name="anchor28"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
@@ -1956,6 +1956,14 @@ Document History (to be removed by RFC Editor before publication)</h3>
 </li>
 </ul>
 
+<p>-19 : October 5, 2009.
+	    
+	    </p>
+<ul class="text">
+<li>Remove organization for independent authors.
+</li>
+</ul>
+
 <p>-18 : October 4, 2009.
 	    
 	    </p>
@@ -2271,7 +2279,7 @@ Document History (to be removed by RFC Editor before publication)</h3>
 <h3>Authors' Addresses</h3>
 <table width="99%" border="0" cellpadding="0" cellspacing="0">
 <tr><td class="author-text">&nbsp;</td>
-<td class="author-text">Anthony Bryan (editor)</td></tr>
+<td class="author-text">Anthony Bryan</td></tr>
 <tr><td class="author" align="right">Email:&nbsp;</td>
 <td class="author-text"><a href="mailto:anthonybryan@gmail.com">anthonybryan@gmail.com</a></td></tr>
 <tr><td class="author" align="right">URI:&nbsp;</td>
