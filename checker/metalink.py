@@ -56,7 +56,7 @@ import StringIO
 import binascii
 import zlib
 
-current_version = "1.1.0"
+current_version = "5.0"
 
 RFC3339 = "%Y-%m-%dT%H:%M:%SZ"
 RFC822 = "%a, %d %b %Y %H:%M:%S +0000"
@@ -636,7 +636,7 @@ class Metalink(MetalinkBase):
         typetext = ""
         if self.type.strip() != "":
             typetext = 'type="'+self.type+'" '
-        text += '<metalink version="3.0" '+origin + typetext +'generator="Metalink Editor version '+current_version+'" xmlns="http://www.metalinker.org/">\n'
+        text += '<metalink version="3.0" '+origin + typetext +'generator="Metalink Checker version '+current_version+'" xmlns="http://www.metalinker.org/">\n'
         text += self.generate_info()
         text += '  <files>\n'
         for fileobj in self.files:

@@ -333,69 +333,10 @@ def get(src, path, checksums = {}, force = False, handlers = {}, segmented = SEG
     if src.endswith(".jigdo"):
         return download_jigdo(src, path, force, handlers, segmented, headers)
     # assume metalink if ends with .metalink
-    if src.endswith(".metalink"):
-        return download_metalink(src, path, force, handlers, segmented, headers)
-    else:
-        # not all servers support HEAD where GET is also supported
-        # also a WindowsError is thrown if a local file does not exist
-        try:
-            # add head check for metalink type, if MIME_TYPE or application/xml? treat as metalink
-            myheaders = urlhead(src, metalink_header=True, headers = headers)
-            if myheaders["content-type"].startswith(MIME_TYPE):
-                print _("Metalink content-type detected.")
-                return download_metalink(src, path, force, handlers, segmented, headers)
-            elif myheaders["link"]:
-                # Metalink HTTP Link headers implementation
-                # does not check for describedby urls but we can't use any of those anyway
-                # TODO this should be more robust and ignore commas in <> for urls
-                links = myheaders['link'].split(",")
-                fileobj = metalink.MetalinkFile(os.path.join(path, os.path.basename(src)))
-                fileobj.set_size(myheaders["content-length"])
-                for link in links:
-                    parts = link.split(";")
-                    mydict = {}
-                    for part in parts[1:]:
-                        part1, part2 = part.split("=", 1)
-                        mydict[part1.strip()] = part2.strip()
-                    
-                    pri = ""
-                    try:
-                        pri = mydict["pri"]
-                    except KeyError: pass
-                    type = ""
-                    try:
-                        type = mydict["type"]
-                    except KeyError: pass
-                    try:
-                        if mydict['rel'] == '"duplicate"':
-                            fileobj.add_url(parts[0].strip(" <>"), preference=pri)
-                        elif mydict['rel'] == '"describedby"' and type=="application/metalink4+xml":
-                            # TODO support metalink describedby type
-                            #fileobj.add_url(parts[0].strip(" <>"), preference=pri)
-                            pass
-                        elif mydict['rel'] == '"describedby"' and type=="application/pgp-signature":
-                            # support openpgp describedby type
-                            fp = urlopen(parts[0].strip(" <>"), headers = {"referer": src})
-                            fileobj.hashlist['pgp'] = fp.read()
-                            fp.close()
-                        elif mydict['rel'] == '"describedby"':
-                            fileobj.add_url(parts[0].strip(" <>"), preference=pri)
-                    except KeyError: pass
-                try:
-                    hashes = myheaders['digest'].split(",")
-                    for hash in hashes:
-                        parts = hash.split("=", 1)
-                        if parts[0].strip() == 'sha':
-                            fileobj.hashlist['sha1'] = binascii.hexlify(binascii.a2b_base64(parts[1].strip()))
-                        else:
-                            fileobj.hashlist[parts[0].strip().replace("-", "")] = binascii.hexlify(binascii.a2b_base64(parts[1]).strip())
-                except KeyError: pass
-                print _("Using Metalink HTTP Link headers.")
-                # set referer header
-                headers['referer'] = src
-                return download_file_urls(fileobj, force, handlers, segmented = segmented, headers = headers)
-        except KeyError:
-            pass
+
+    result = download_metalink(src, path, force, handlers, segmented, headers)
+    if result != False:
+        return result
             
     # assume normal file download here
     # parse out filename portion here
@@ -698,30 +639,102 @@ def filecheck(local_file, checksums, size, handler = None):
     print "\n" + _("Checksum failed for %s.") % os.path.basename(local_file)
     return False
 
-def parse_metalink(src, headers = {}):
+def parse_metalink(src, headers = {}, nocheck = False, ver=3):
     src = complete_url(src)
+    is_metalink = nocheck
+    
+    # not all servers support HEAD where GET is also supported
+    # also a WindowsError is thrown if a local file does not exist
+    if src.endswith(".metalink") or src.endswith(".meta4"):
+        is_metalink = True
+    try:
+        # add head check for metalink type, if MIME_TYPE or application/xml? treat as metalink
+        myheaders = urlhead(src, metalink_header=True, headers = headers)
+        if myheaders["content-type"].startswith(MIME_TYPE):
+            print _("Metalink content-type detected.")
+            is_metalink = True
+        elif myheaders["link"]:
+            # Metalink HTTP Link headers implementation
+            # does not check for describedby urls but we can't use any of those anyway
+            # TODO this should be more robust and ignore commas in <> for urls
+            links = myheaders['link'].split(",")
+            fileobj = metalink.MetalinkFile(os.path.join(path, os.path.basename(src)))
+            fileobj.set_size(myheaders["content-length"])
+            for link in links:
+                parts = link.split(";")
+                mydict = {}
+                for part in parts[1:]:
+                    part1, part2 = part.split("=", 1)
+                    mydict[part1.strip()] = part2.strip()
+                
+                pri = ""
+                try:
+                    pri = mydict["pri"]
+                except KeyError: pass
+                type = ""
+                try:
+                    type = mydict["type"]
+                except KeyError: pass
+                try:
+                    if mydict['rel'] == '"duplicate"':
+                        fileobj.add_url(parts[0].strip(" <>"), preference=pri)
+                    elif mydict['rel'] == '"describedby"' and type=="application/metalink4+xml":
+                        # TODO support metalink describedby type
+                        #fileobj.add_url(parts[0].strip(" <>"), preference=pri)
+                        pass
+                    elif mydict['rel'] == '"describedby"' and type=="application/pgp-signature":
+                        # support openpgp describedby type
+                        fp = urlopen(parts[0].strip(" <>"), headers = {"referer": src})
+                        fileobj.hashlist['pgp'] = fp.read()
+                        fp.close()
+                    elif mydict['rel'] == '"describedby"':
+                        fileobj.add_url(parts[0].strip(" <>"), preference=pri)
+                except KeyError: pass
+            try:
+                hashes = myheaders['digest'].split(",")
+                for hash in hashes:
+                    parts = hash.split("=", 1)
+                    if parts[0].strip() == 'sha':
+                        fileobj.hashlist['sha1'] = binascii.hexlify(binascii.a2b_base64(parts[1].strip()))
+                    else:
+                        fileobj.hashlist[parts[0].strip().replace("-", "")] = binascii.hexlify(binascii.a2b_base64(parts[1]).strip())
+            except KeyError: pass
+            print _("Using Metalink HTTP Link headers.")
+            mobj = metalink.Metalink()
+            mobj.files.append(fileobj)
+            return metalink.convert(mobj, ver)
+    except KeyError:
+        pass
+    
+    if not is_metalink:
+        return False
+        
     try:
         datasource = urlopen(src, metalink_header=True, headers = headers)
     except:
         return False
 
-    metalinkobj = metalink.parsehandle(datasource)
+    metalinkobj = metalink.parsehandle(datasource, ver)
     datasource.close()
     return metalinkobj
     
-def download_metalink(src, path, force = False, handlers = {}, segmented = SEGMENTED, headers = {}):
+def download_metalink(src, path, force = False, handlers = {}, segmented = SEGMENTED, headers = {}, nocheck = False):
     '''
     Decode a metalink file, can be local or remote
-    First parameter, file to download, URL or file path to download from
+    First parameter, file to download, URL, file path or Metalink object to download from
     Second parameter, file path to save to
     Third parameter, optional, force a new download even if a valid copy already exists
     Fouth parameter, optional, progress handler callback
     Returns list of file paths if download(s) is successful
     Returns False otherwise (checksum fails)
     '''
-    metalinkobj = parse_metalink(src, headers)
+
+    metalinkobj = parse_metalink(src, headers, nocheck)
     if metalinkobj == False:
         return False
+        
+    if is_remote(src):
+        headers['referer'] = src
 
     if metalinkobj.type == "dynamic":
         origin = metalinkobj.origin
