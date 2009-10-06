@@ -144,10 +144,10 @@
 <tr><td class="header">Network Working Group</td><td class="header">A. Bryan</td></tr>
 <tr><td class="header">Internet-Draft</td><td class="header">N. McNab</td></tr>
 <tr><td class="header">Intended status: Standards Track</td><td class="header">H. Nordstrom</td></tr>
-<tr><td class="header">Expires: April 8, 2010</td><td class="header">&nbsp;</td></tr>
+<tr><td class="header">Expires: April 9, 2010</td><td class="header">&nbsp;</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">A. Ford</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">Roke Manor Research</td></tr>
-<tr><td class="header">&nbsp;</td><td class="header">October 5, 2009</td></tr>
+<tr><td class="header">&nbsp;</td><td class="header">October 6, 2009</td></tr>
 </table></td></tr></table>
 <h1><br />Metalink/HTTP: Mirrors and Checksums in HTTP Headers<br />draft-bryan-metalinkhttp-09</h1>
 
@@ -172,7 +172,7 @@ The list of current Internet-Drafts can be accessed at
 The list of Internet-Draft Shadow Directories can be accessed at
 <a href='http://www.ietf.org/shadow.html'>http://www.ietf.org/shadow.html</a>.</p>
 <p>
-This Internet-Draft will expire on April 8, 2010.</p>
+This Internet-Draft will expire on April 9, 2010.</p>
 
 <h3>Copyright Notice</h3>
 <p>
@@ -203,6 +203,14 @@ Notational Conventions<br />
 Requirements<br />
 <a href="#mirrors">3.</a>&nbsp;
 Mirrors / Multiple Download Locations<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor4">3.1.</a>&nbsp;
+Mirror Priority<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor5">3.2.</a>&nbsp;
+Mirror Geographical Location<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor6">3.3.</a>&nbsp;
+Coordinated Mirror Policies<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor7">3.4.</a>&nbsp;
+Mirror Depth<br />
 <a href="#p2p">4.</a>&nbsp;
 Peer-to-Peer Metainfo<br />
 <a href="#openpgp">5.</a>&nbsp;
@@ -211,27 +219,27 @@ OpenPGP Signatures<br />
 Checksums of Whole Files<br />
 <a href="#clientserver">7.</a>&nbsp;
 Client / Server Multi-source Download Interaction<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor4">7.1.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor8">7.1.</a>&nbsp;
 Error Prevention, Detection, and Correction<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor5">7.1.1.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor9">7.1.1.</a>&nbsp;
 Error Prevention (Early File Mismatch Detection)<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor6">7.1.2.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor10">7.1.2.</a>&nbsp;
 Error Correction<br />
 <a href="#IANA">8.</a>&nbsp;
 IANA Considerations<br />
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="#duplicate">8.1.</a>&nbsp;
 Link Relation Type Registration: &#34;duplicate&#34;<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor7">8.2.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor11">8.2.</a>&nbsp;
 Hypertext Transfer Protocol (HTTP) Digest Algorithm Values Registration<br />
-<a href="#anchor8">9.</a>&nbsp;
+<a href="#anchor12">9.</a>&nbsp;
 Security Considerations<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor9">9.1.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor13">9.1.</a>&nbsp;
 URIs and IRIs<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor10">9.2.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor14">9.2.</a>&nbsp;
 Spoofing<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor11">9.3.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor15">9.3.</a>&nbsp;
 Cryptographic Hashes<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor12">9.4.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor16">9.4.</a>&nbsp;
 Signing<br />
 <a href="#rfc.references1">10.</a>&nbsp;
 References<br />
@@ -239,11 +247,11 @@ References<br />
 Normative References<br />
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="#rfc.references2">10.2.</a>&nbsp;
 Informative References<br />
-<a href="#anchor15">Appendix&nbsp;A.</a>&nbsp;
+<a href="#anchor19">Appendix&nbsp;A.</a>&nbsp;
 Acknowledgements and Contributors<br />
-<a href="#anchor16">Appendix&nbsp;B.</a>&nbsp;
+<a href="#anchor20">Appendix&nbsp;B.</a>&nbsp;
 Comparisons to Similar Options (to be removed by RFC Editor before publication)<br />
-<a href="#anchor17">Appendix&nbsp;C.</a>&nbsp;
+<a href="#anchor21">Appendix&nbsp;C.</a>&nbsp;
 Document History (to be removed by RFC Editor before publication)<br />
 <a href="#rfc.authors">&#167;</a>&nbsp;
 Authors' Addresses<br />
@@ -341,15 +349,55 @@ Mirrors / Multiple Download Locations</h3>
 </p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
 Link: &lt;http://www2.example.com/example.ext&gt;; rel="duplicate";
 pri=1; pref=1
-Link: &lt;ftp://ftp.example.com/example.ext&gt;; rel="duplicate"; pri=2
+Link: &lt;ftp://ftp.example.com/example.ext&gt;; rel="duplicate";
+pri=2; geo="uk"; depth=1
 </pre></div>
+
+<p>[[Some organizations have many mirrors. Only send a few mirrors, or only use the Link header if Want-Digest is used?]]
+</p>
+<a name="anchor4"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.3.1"></a><h3>3.1.&nbsp;
+Mirror Priority</h3>
 
 <p>Mirror servers are listed in order of priority or have a "pri" value, where mirrors with lower values are used first.
 </p>
+<a name="anchor5"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.3.2"></a><h3>3.2.&nbsp;
+Mirror Geographical Location</h3>
+
+<p>Mirror servers MAY have a "geo" value, which
+		is a <a class='info' href='#ISO3166-1'>[ISO3166&#8209;1]<span> (</span><span class='info'>International Organization for Standardization, &ldquo;ISO 3166-1:2006.  Codes for the representation of names of countries and their subdivisions -- Part 1: Country codes,&rdquo; November&nbsp;2006.</span><span>)</span></a> alpha-2 two letter country code for the geographical location of the physical server an IRI is used
+		to access.
+		
+</p>
+<a name="anchor6"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.3.3"></a><h3>3.3.&nbsp;
+Coordinated Mirror Policies</h3>
+
 <p>There are two types of mirror servers: preferred and normal. Optimally, HTTP mirror servers will share the same ETag policy as the Metalink server, provide Instance Digests, or both. These mirrors are preferred, and make it possible to detect early on, before data is transferred, if the file requested matches the desired file.  Preferred mirror servers
 	  MUST share the same ETag policy or MUST support Instance Digests. Preferred HTTP mirror servers have a "pref" value of 1.
 </p>
-<p>[[Some organizations have many mirrors. Only send a few mirrors, or only use the Link header if Want-Digest is used?]]
+<a name="anchor7"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.3.4"></a><h3>3.4.&nbsp;
+Mirror Depth</h3>
+
+<p>Some mirrors may mirror single files, whole directories, or multiple directories.
+</p>
+<p>Mirror servers MAY have a "depth" value, where "depth=0" is the default. A value of 0 means ONLY that file is mirrored. A value of 1 means that file and all other files and subdirectories in the
+directory are mirrored. A value of 2 means the directory above, and all files and subdirectories, are mirrored.
+</p>
+<p>
+<p>A mirror with a depth value of 4:
+</p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
+Link: &lt;http://www2.example.com/dir1/dir2/dir3/dir4/dir5/example.ext&gt;;
+rel="duplicate"; pri=1; pref=1; depth=4
+</pre></div>
+
+<p>Is the above example, 4 directories up are mirrored, from /dir2/ on down.
 </p>
 <a name="p2p"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
@@ -491,7 +539,7 @@ Digest: SHA=thvDyvhfIqlvFe+A9MYgxAfm1q5=
 </p>
 <p>Once the download has completed, the Metalink client MUST verify the checksum of the file.
 </p>
-<a name="anchor4"></a><br /><hr />
+<a name="anchor8"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.7.1"></a><h3>7.1.&nbsp;
 Error Prevention, Detection, and Correction</h3>
@@ -499,7 +547,7 @@ Error Prevention, Detection, and Correction</h3>
 <p>Error prevention, or early file mismatch detection, is possible before file transfers with the use of file sizes, ETags, and Instance Digests. Error dectection requires Instance Digests, or checksums, to
 determine after transfers if there has been an error. Error correction, or download repair, is possible with partial file checksums.
 </p>
-<a name="anchor5"></a><br /><hr />
+<a name="anchor9"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.7.1.1"></a><h3>7.1.1.&nbsp;
 Error Prevention (Early File Mismatch Detection)</h3>
@@ -551,7 +599,7 @@ detection of mismatches. If none is provided then early detection of
 mismatches is not possible unless the file length also differs, but the
 error is still detected when the merged response is verified.
 </p>
-<a name="anchor6"></a><br /><hr />
+<a name="anchor10"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.7.1.2"></a><h3>7.1.2.&nbsp;
 Error Correction</h3>
@@ -586,7 +634,7 @@ Link Relation Type Registration: &#34;duplicate&#34;</h3>
 </p>
 <p>o  Notes: This relation is for static resources. That is, an HTTP GET request on any duplicate will return the same representation. It does not make sense for dynamic or POSTable resources and should not be used for them.
 </p>
-<a name="anchor7"></a><br /><hr />
+<a name="anchor11"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.8.2"></a><h3>8.2.&nbsp;
 Hypertext Transfer Protocol (HTTP) Digest Algorithm Values Registration</h3>
@@ -635,12 +683,12 @@ Hypertext Transfer Protocol (HTTP) Digest Algorithm Values Registration</h3>
 </p>
 </blockquote>
 
-<a name="anchor8"></a><br /><hr />
+<a name="anchor12"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.9"></a><h3>9.&nbsp;
 Security Considerations</h3>
 
-<a name="anchor9"></a><br /><hr />
+<a name="anchor13"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.9.1"></a><h3>9.1.&nbsp;
 URIs and IRIs</h3>
@@ -648,7 +696,7 @@ URIs and IRIs</h3>
 <p>Metalink clients handle URIs and IRIs. See Section 7 of <a class='info' href='#RFC3986'>[RFC3986]<span> (</span><span class='info'>Berners-Lee, T., Fielding, R., and L. Masinter, &ldquo;Uniform Resource Identifier (URI): Generic Syntax,&rdquo; January&nbsp;2005.</span><span>)</span></a> and Section 8 of <a class='info' href='#RFC3987'>[RFC3987]<span> (</span><span class='info'>Duerst, M. and M. Suignard, &ldquo;Internationalized Resource Identifiers (IRIs),&rdquo; January&nbsp;2005.</span><span>)</span></a> for security
           considerations related to their handling and use.
 </p>
-<a name="anchor10"></a><br /><hr />
+<a name="anchor14"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.9.2"></a><h3>9.2.&nbsp;
 Spoofing</h3>
@@ -656,7 +704,7 @@ Spoofing</h3>
 <p>There is potential for spoofing attacks where the attacker publishes Metalinks with false information.
           In that case, this could deceive unaware downloaders that they are downloading a malicious or worthless file. Also, malicious publishers could attempt a distributed denial of service attack by inserting unrelated IRIs into Metalinks.
 </p>
-<a name="anchor11"></a><br /><hr />
+<a name="anchor15"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.9.3"></a><h3>9.3.&nbsp;
 Cryptographic Hashes</h3>
@@ -667,7 +715,7 @@ Cryptographic Hashes</h3>
 </p>
 <p>If a Metalink contains whole file hashes as described in <a class='info' href='#wholechecksums'>Section&nbsp;6<span> (</span><span class='info'>Checksums of Whole Files</span><span>)</span></a>, it SHOULD include "sha" which is SHA-1, as specified in <a class='info' href='#RFC3174'>[RFC3174]<span> (</span><span class='info'>Eastlake, D. and P. Jones, &ldquo;US Secure Hash Algorithm 1 (SHA1),&rdquo; September&nbsp;2001.</span><span>)</span></a>, or stronger. It MAY also include other hashes.
 </p>
-<a name="anchor12"></a><br /><hr />
+<a name="anchor16"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.9.4"></a><h3>9.4.&nbsp;
 Signing</h3>
@@ -685,6 +733,8 @@ References</h3>
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <h3>10.1.&nbsp;Normative References</h3>
 <table width="99%" border="0">
+<tr><td class="author-text" valign="top"><a name="ISO3166-1">[ISO3166-1]</a></td>
+<td class="author-text">International Organization for Standardization, &ldquo;ISO 3166-1:2006.  Codes for the representation of names of countries and their subdivisions -- Part 1: Country codes,&rdquo; November&nbsp;2006.</td></tr>
 <tr><td class="author-text" valign="top"><a name="RFC2045">[RFC2045]</a></td>
 <td class="author-text">Freed, N. and N. Borenstein, &ldquo;<a href="http://tools.ietf.org/html/rfc2045">Multipurpose Internet Mail Extensions (MIME) Part One: Format of Internet Message Bodies</a>,&rdquo; RFC&nbsp;2045, November&nbsp;1996.</td></tr>
 <tr><td class="author-text" valign="top"><a name="RFC2119">[RFC2119]</a></td>
@@ -713,14 +763,14 @@ References</h3>
 <td class="author-text"><a href="mailto:anthonybryan@gmail.com">Bryan, A., Ed.</a>, <a href="mailto:tatsuhiro.t@gmail.com">Tsujikawa, T.</a>, <a href="mailto:nabber00@gmail.com">McNab, N.</a>, and <a href="mailto:info@mirrorbrain.org">P. Poeml</a>, &ldquo;<a href="http://www.ietf.org/internet-drafts/draft-bryan-metalink-16.txt">The Metalink Download Description Format</a>,&rdquo; draft-bryan-metalink-16 (work in progress), August&nbsp;2009.</td></tr>
 </table>
 
-<a name="anchor15"></a><br /><hr />
+<a name="anchor19"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.A"></a><h3>Appendix A.&nbsp;
 Acknowledgements and Contributors</h3>
 
 <p>Thanks to the Metalink community, Mark Handley, Mark Nottingham, Daniel Stenberg, Tatsuhiro Tsujikawa, Peter Poeml, and Matt Domsch.
 </p>
-<a name="anchor16"></a><br /><hr />
+<a name="anchor20"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.B"></a><h3>Appendix B.&nbsp;
 Comparisons to Similar Options (to be removed by RFC Editor before publication)</h3>
@@ -777,7 +827,7 @@ Comparisons to Similar Options (to be removed by RFC Editor before publication)<
 </li>
 </ul>
 
-<a name="anchor17"></a><br /><hr />
+<a name="anchor21"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.C"></a><h3>Appendix C.&nbsp;
 Document History (to be removed by RFC Editor before publication)</h3>
@@ -789,17 +839,25 @@ Document History (to be removed by RFC Editor before publication)</h3>
 <ul class="text">
 <li>Use of Link header to describe Mirrors. Only send a few mirrors with Link header, or only send them if Want-Digest is used? Some organizations have many mirrors.
 </li>
-<li>A way to differentiate between mirrors that have synchronized ETags and those that don't.
+<li>ADDRESSED IN THIS DRAFT: A way to differentiate between mirrors that have synchronized ETags and those that don't.
 </li>
-<li>Do we want a way to show that whole directories are mirrored, instead of individual files?
+<li>ADDRESSED IN THIS DRAFT: Do we want a way to show that whole directories are mirrored, instead of individual files?
 </li>
 <li>Will we use Metalink/XML for partial file checksums? That would add XML dependency to apps for an important feature.
 </li>
-<li>Need an official MIME type for .torrent files or allow "application/x-bittorrent"?
+<li>Do we need an official MIME type for .torrent files or allow "application/x-bittorrent"?
 </li>
 </ul>
 
-<p>-08 : October , 2009.
+<p>-09 : October , 2009.
+	    
+	    </p>
+<ul class="text">
+<li>Mirror location, coordination, and depth.
+</li>
+</ul>
+
+<p>-08 : October 4, 2009.
 	    
 	    </p>
 <ul class="text">
@@ -879,6 +937,10 @@ Document History (to be removed by RFC Editor before publication)</h3>
 <table width="99%" border="0" cellpadding="0" cellspacing="0">
 <tr><td class="author-text">&nbsp;</td>
 <td class="author-text">Anthony Bryan</td></tr>
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text">Pompano Beach, FL</td></tr>
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text">USA</td></tr>
 <tr><td class="author" align="right">Email:&nbsp;</td>
 <td class="author-text"><a href="mailto:anthonybryan@gmail.com">anthonybryan@gmail.com</a></td></tr>
 <tr><td class="author" align="right">URI:&nbsp;</td>
