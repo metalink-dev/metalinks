@@ -16,7 +16,13 @@
       <title abbrev="Metalink Download Description Format">The Metalink Download Description Format</title>		
       <author initials="A." surname="Bryan" fullname="Anthony Bryan">
 	    <organization></organization>
-	    <address>		
+	    <address>
+		  <postal>
+			<street></street>
+		    <city>Pompano Beach</city>
+			<region>FL</region>
+			<country>USA</country>
+		  </postal>
 	      <email>anthonybryan@gmail.com</email>	
 	      <uri>http://www.metalinker.org</uri>		
 	    </address>
@@ -45,7 +51,7 @@
 	<date month="October" year="2009"/>        
 
       <abstract>
-	<t>This document specifies Metalink, an XML-based download description format. Metalink describes alternate download locations (mirrors), checksums, and other information. Clients can transparently use this information to reliably transfer files.</t>
+	<t>This document specifies Metalink, an XML-based download description format. Metalink describes multiple download locations (mirrors), checksums, and other information. Clients can transparently use this information to reliably transfer files.</t>
       </abstract>    
 	  
   </front>    

@@ -16,7 +16,13 @@
       <title abbrev="Metalink/HTTP: Mirrors and Checksums">Metalink/HTTP: Mirrors and Checksums in HTTP Headers</title>		
       <author initials="A." surname="Bryan" fullname="Anthony Bryan">
 	    <organization></organization>
-	    <address>		
+	    <address>
+		  <postal>
+			<street></street>
+		    <city>Pompano Beach</city>
+			<region>FL</region>
+			<country>USA</country>
+		  </postal>
 	      <email>anthonybryan@gmail.com</email>	
 	      <uri>http://www.metalinker.org</uri>		
 	    </address>
@@ -137,15 +143,43 @@ Digest: SHA=thvDyvhfIqlvFe+A9MYgxAfm1q5=
 	  <artwork type="example">
 Link: &lt;http://www2.example.com/example.ext&gt;; rel="duplicate"; 
 pri=1; pref=1
-Link: &lt;ftp://ftp.example.com/example.ext&gt;; rel="duplicate"; pri=2
+Link: &lt;ftp://ftp.example.com/example.ext&gt;; rel="duplicate"; 
+pri=2; geo="uk"; depth=1
 </artwork></figure></t>
 
+	  <t>[[Some organizations have many mirrors. Only send a few mirrors, or only use the Link header if Want-Digest is used?]]</t>
+
+<section title="Mirror Priority">
       <t>Mirror servers are listed in order of priority or have a "pri" value, where mirrors with lower values are used first.</t>
-	  
+</section>
+
+<section title="Mirror Geographical Location">
+	    <t>Mirror servers MAY have a "geo" value, which
+		is a <xref target="ISO3166-1"/> alpha-2 two letter country code for the geographical location of the physical server an IRI is used
+		to access.
+		</t>
+</section>
+
+<section title="Coordinated Mirror Policies">
 	  <t>There are two types of mirror servers: preferred and normal. Optimally, HTTP mirror servers will share the same ETag policy as the Metalink server, provide Instance Digests, or both. These mirrors are preferred, and make it possible to detect early on, before data is transferred, if the file requested matches the desired file.  Preferred mirror servers
 	  MUST share the same ETag policy or MUST support Instance Digests. Preferred HTTP mirror servers have a "pref" value of 1.</t>
-	  
-	  <t>[[Some organizations have many mirrors. Only send a few mirrors, or only use the Link header if Want-Digest is used?]]</t>
+</section>
+
+<section title="Mirror Depth">
+      <t>Some mirrors may mirror single files, whole directories, or multiple directories.</t>
+      <t>Mirror servers MAY have a "depth" value, where "depth=0" is the default. A value of 0 means ONLY that file is mirrored. A value of 1 means that file and all other files and subdirectories in the
+directory are mirrored. A value of 2 means the directory above, and all files and subdirectories, are mirrored.</t>
+
+<t><figure> 
+	  <preamble>A mirror with a depth value of 4:</preamble>	  
+	  <artwork type="example">
+Link: &lt;http://www2.example.com/dir1/dir2/dir3/dir4/dir5/example.ext&gt;; 
+rel="duplicate"; pri=1; pref=1; depth=4
+</artwork></figure></t>
+
+      <t>Is the above example, 4 directories up are mirrored, from /dir2/ on down.</t>
+
+</section>
 
 	  </section>
 
@@ -580,18 +614,22 @@ a trusted Metalink server.</t>
 <reference anchor="SHS" target="http://csrc.nist.gov/publications/fips/fips180-3/fips180-3_final.pdf">
 <front>
 <title>Secure Hash Standard</title>
-
 <author>
-
     <organization>National Institute of Standards and Technology (NIST)</organization>
 </author>
-
-
-
 <date year="2008" month="October"></date>
 </front>
-
 <seriesInfo name="FIPS PUB" value="180-3"></seriesInfo>
+</reference>
+
+<reference anchor="ISO3166-1">
+
+<front>
+<title>ISO 3166-1:2006.  Codes for the representation of names of countries and their subdivisions -- Part 1: Country codes</title>
+<author>
+<organization>International Organization for Standardization</organization>
+</author>
+<date month="November" year="2006"/></front>
 </reference>
 
 
@@ -684,13 +722,20 @@ a trusted Metalink server.</t>
 	    <list style="symbols"> 
 	      
 	      <t>Use of Link header to describe Mirrors. Only send a few mirrors with Link header, or only send them if Want-Digest is used? Some organizations have many mirrors.</t>
-		  <t>A way to differentiate between mirrors that have synchronized ETags and those that don't.</t>
-		  <t>Do we want a way to show that whole directories are mirrored, instead of individual files?</t>
+		  <t>ADDRESSED IN THIS DRAFT: A way to differentiate between mirrors that have synchronized ETags and those that don't.</t>
+		  <t>ADDRESSED IN THIS DRAFT: Do we want a way to show that whole directories are mirrored, instead of individual files?</t>
 		  <t>Will we use Metalink/XML for partial file checksums? That would add XML dependency to apps for an important feature.</t>
-		  <t>Need an official MIME type for .torrent files or allow "application/x-bittorrent"?</t>
+		  <t>Do we need an official MIME type for .torrent files or allow "application/x-bittorrent"?</t>
 	    </list></t>
 
-<t>-08 : October , 2009.
+<t>-09 : October , 2009.
+	    
+	    <list style="symbols">
+
+	      <t>Mirror location, coordination, and depth.</t>
+	    </list></t>
+		
+<t>-08 : October 4, 2009.
 	    
 	    <list style="symbols">
 

@@ -4,10 +4,10 @@
 Network Working Group                                           A. Bryan
 Internet-Draft                                              T. Tsujikawa
 Intended status: Standards Track                                N. McNab
-Expires: April 8, 2010
+Expires: April 9, 2010
                                                                 P. Poeml
                                                             Novell, Inc.
-                                                         October 5, 2009
+                                                         October 6, 2009
 
 
                 The Metalink Download Description Format
@@ -44,7 +44,7 @@ Status of this Memo
    The list of Internet-Draft Shadow Directories can be accessed at
    http://www.ietf.org/shadow.html.
 
-   This Internet-Draft will expire on April 8, 2010.
+   This Internet-Draft will expire on April 9, 2010.
 
 Copyright Notice
 
@@ -52,7 +52,7 @@ Copyright Notice
 
 
 
-Bryan, et al.             Expires April 8, 2010                 [Page 1]
+Bryan, et al.             Expires April 9, 2010                 [Page 1]
 
 Internet-Draft    Metalink Download Description Format      October 2009
 
@@ -68,7 +68,7 @@ Internet-Draft    Metalink Download Description Format      October 2009
 Abstract
 
    This document specifies Metalink, an XML-based download description
-   format.  Metalink describes alternate download locations (mirrors),
+   format.  Metalink describes multiple download locations (mirrors),
    checksums, and other information.  Clients can transparently use this
    information to reliably transfer files.
 
@@ -108,7 +108,7 @@ Table of Contents
 
 
 
-Bryan, et al.             Expires April 8, 2010                 [Page 2]
+Bryan, et al.             Expires April 9, 2010                 [Page 2]
 
 Internet-Draft    Metalink Download Description Format      October 2009
 
@@ -164,7 +164,7 @@ Internet-Draft    Metalink Download Description Format      October 2009
 
 
 
-Bryan, et al.             Expires April 8, 2010                 [Page 3]
+Bryan, et al.             Expires April 9, 2010                 [Page 3]
 
 Internet-Draft    Metalink Download Description Format      October 2009
 
@@ -220,7 +220,7 @@ Internet-Draft    Metalink Download Description Format      October 2009
 
 
 
-Bryan, et al.             Expires April 8, 2010                 [Page 4]
+Bryan, et al.             Expires April 9, 2010                 [Page 4]
 
 Internet-Draft    Metalink Download Description Format      October 2009
 
@@ -276,7 +276,7 @@ Internet-Draft    Metalink Download Description Format      October 2009
 
 
 
-Bryan, et al.             Expires April 8, 2010                 [Page 5]
+Bryan, et al.             Expires April 9, 2010                 [Page 5]
 
 Internet-Draft    Metalink Download Description Format      October 2009
 
@@ -332,7 +332,7 @@ Internet-Draft    Metalink Download Description Format      October 2009
 
 
 
-Bryan, et al.             Expires April 8, 2010                 [Page 6]
+Bryan, et al.             Expires April 9, 2010                 [Page 6]
 
 Internet-Draft    Metalink Download Description Format      October 2009
 
@@ -388,7 +388,7 @@ Internet-Draft    Metalink Download Description Format      October 2009
 
 
 
-Bryan, et al.             Expires April 8, 2010                 [Page 7]
+Bryan, et al.             Expires April 9, 2010                 [Page 7]
 
 Internet-Draft    Metalink Download Description Format      October 2009
 
@@ -444,7 +444,7 @@ Internet-Draft    Metalink Download Description Format      October 2009
 
 
 
-Bryan, et al.             Expires April 8, 2010                 [Page 8]
+Bryan, et al.             Expires April 9, 2010                 [Page 8]
 
 Internet-Draft    Metalink Download Description Format      October 2009
 
@@ -500,7 +500,7 @@ Internet-Draft    Metalink Download Description Format      October 2009
 
 
 
-Bryan, et al.             Expires April 8, 2010                 [Page 9]
+Bryan, et al.             Expires April 9, 2010                 [Page 9]
 
 Internet-Draft    Metalink Download Description Format      October 2009
 
@@ -556,7 +556,7 @@ Internet-Draft    Metalink Download Description Format      October 2009
 
 
 
-Bryan, et al.             Expires April 8, 2010                [Page 10]
+Bryan, et al.             Expires April 9, 2010                [Page 10]
 
 Internet-Draft    Metalink Download Description Format      October 2009
 
@@ -612,7 +612,7 @@ Internet-Draft    Metalink Download Description Format      October 2009
 
 
 
-Bryan, et al.             Expires April 8, 2010                [Page 11]
+Bryan, et al.             Expires April 9, 2010                [Page 11]
 
 Internet-Draft    Metalink Download Description Format      October 2009
 
@@ -668,7 +668,7 @@ Internet-Draft    Metalink Download Description Format      October 2009
 
 
 
-Bryan, et al.             Expires April 8, 2010                [Page 12]
+Bryan, et al.             Expires April 9, 2010                [Page 12]
 
 Internet-Draft    Metalink Download Description Format      October 2009
 
@@ -724,7 +724,7 @@ Internet-Draft    Metalink Download Description Format      October 2009
 
 
 
-Bryan, et al.             Expires April 8, 2010                [Page 13]
+Bryan, et al.             Expires April 9, 2010                [Page 13]
 
 Internet-Draft    Metalink Download Description Format      October 2009
 
@@ -780,7 +780,7 @@ Internet-Draft    Metalink Download Description Format      October 2009
 
 
 
-Bryan, et al.             Expires April 8, 2010                [Page 14]
+Bryan, et al.             Expires April 9, 2010                [Page 14]
 
 Internet-Draft    Metalink Download Description Format      October 2009
 
@@ -836,7 +836,7 @@ Internet-Draft    Metalink Download Description Format      October 2009
 
 
 
-Bryan, et al.             Expires April 8, 2010                [Page 15]
+Bryan, et al.             Expires April 9, 2010                [Page 15]
 
 Internet-Draft    Metalink Download Description Format      October 2009
 
@@ -892,7 +892,7 @@ Internet-Draft    Metalink Download Description Format      October 2009
 
 
 
-Bryan, et al.             Expires April 8, 2010                [Page 16]
+Bryan, et al.             Expires April 9, 2010                [Page 16]
 
 Internet-Draft    Metalink Download Description Format      October 2009
 
@@ -948,7 +948,7 @@ Internet-Draft    Metalink Download Description Format      October 2009
 
 
 
-Bryan, et al.             Expires April 8, 2010                [Page 17]
+Bryan, et al.             Expires April 9, 2010                [Page 17]
 
 Internet-Draft    Metalink Download Description Format      October 2009
 
@@ -1004,7 +1004,7 @@ Internet-Draft    Metalink Download Description Format      October 2009
 
 
 
-Bryan, et al.             Expires April 8, 2010                [Page 18]
+Bryan, et al.             Expires April 9, 2010                [Page 18]
 
 Internet-Draft    Metalink Download Description Format      October 2009
 
@@ -1060,7 +1060,7 @@ Internet-Draft    Metalink Download Description Format      October 2009
 
 
 
-Bryan, et al.             Expires April 8, 2010                [Page 19]
+Bryan, et al.             Expires April 9, 2010                [Page 19]
 
 Internet-Draft    Metalink Download Description Format      October 2009
 
@@ -1116,7 +1116,7 @@ Internet-Draft    Metalink Download Description Format      October 2009
 
 
 
-Bryan, et al.             Expires April 8, 2010                [Page 20]
+Bryan, et al.             Expires April 9, 2010                [Page 20]
 
 Internet-Draft    Metalink Download Description Format      October 2009
 
@@ -1172,7 +1172,7 @@ Internet-Draft    Metalink Download Description Format      October 2009
 
 
 
-Bryan, et al.             Expires April 8, 2010                [Page 21]
+Bryan, et al.             Expires April 9, 2010                [Page 21]
 
 Internet-Draft    Metalink Download Description Format      October 2009
 
@@ -1228,7 +1228,7 @@ Internet-Draft    Metalink Download Description Format      October 2009
 
 
 
-Bryan, et al.             Expires April 8, 2010                [Page 22]
+Bryan, et al.             Expires April 9, 2010                [Page 22]
 
 Internet-Draft    Metalink Download Description Format      October 2009
 
@@ -1284,7 +1284,7 @@ Internet-Draft    Metalink Download Description Format      October 2009
 
 
 
-Bryan, et al.             Expires April 8, 2010                [Page 23]
+Bryan, et al.             Expires April 9, 2010                [Page 23]
 
 Internet-Draft    Metalink Download Description Format      October 2009
 
@@ -1340,7 +1340,7 @@ Internet-Draft    Metalink Download Description Format      October 2009
 
 
 
-Bryan, et al.             Expires April 8, 2010                [Page 24]
+Bryan, et al.             Expires April 9, 2010                [Page 24]
 
 Internet-Draft    Metalink Download Description Format      October 2009
 
@@ -1396,7 +1396,7 @@ Internet-Draft    Metalink Download Description Format      October 2009
 
 
 
-Bryan, et al.             Expires April 8, 2010                [Page 25]
+Bryan, et al.             Expires April 9, 2010                [Page 25]
 
 Internet-Draft    Metalink Download Description Format      October 2009
 
@@ -1452,7 +1452,7 @@ Internet-Draft    Metalink Download Description Format      October 2009
 
 
 
-Bryan, et al.             Expires April 8, 2010                [Page 26]
+Bryan, et al.             Expires April 9, 2010                [Page 26]
 
 Internet-Draft    Metalink Download Description Format      October 2009
 
@@ -1508,7 +1508,7 @@ Appendix B.  RELAX NG Compact Schema
 
 
 
-Bryan, et al.             Expires April 8, 2010                [Page 27]
+Bryan, et al.             Expires April 9, 2010                [Page 27]
 
 Internet-Draft    Metalink Download Description Format      October 2009
 
@@ -1564,7 +1564,7 @@ Internet-Draft    Metalink Download Description Format      October 2009
 
 
 
-Bryan, et al.             Expires April 8, 2010                [Page 28]
+Bryan, et al.             Expires April 9, 2010                [Page 28]
 
 Internet-Draft    Metalink Download Description Format      October 2009
 
@@ -1620,7 +1620,7 @@ Internet-Draft    Metalink Download Description Format      October 2009
 
 
 
-Bryan, et al.             Expires April 8, 2010                [Page 29]
+Bryan, et al.             Expires April 9, 2010                [Page 29]
 
 Internet-Draft    Metalink Download Description Format      October 2009
 
@@ -1676,7 +1676,7 @@ Internet-Draft    Metalink Download Description Format      October 2009
 
 
 
-Bryan, et al.             Expires April 8, 2010                [Page 30]
+Bryan, et al.             Expires April 9, 2010                [Page 30]
 
 Internet-Draft    Metalink Download Description Format      October 2009
 
@@ -1732,7 +1732,7 @@ Internet-Draft    Metalink Download Description Format      October 2009
 
 
 
-Bryan, et al.             Expires April 8, 2010                [Page 31]
+Bryan, et al.             Expires April 9, 2010                [Page 31]
 
 Internet-Draft    Metalink Download Description Format      October 2009
 
@@ -1788,7 +1788,7 @@ Appendix C.  Document History (to be removed by RFC Editor before
 
 
 
-Bryan, et al.             Expires April 8, 2010                [Page 32]
+Bryan, et al.             Expires April 9, 2010                [Page 32]
 
 Internet-Draft    Metalink Download Description Format      October 2009
 
@@ -1844,7 +1844,7 @@ Internet-Draft    Metalink Download Description Format      October 2009
 
 
 
-Bryan, et al.             Expires April 8, 2010                [Page 33]
+Bryan, et al.             Expires April 9, 2010                [Page 33]
 
 Internet-Draft    Metalink Download Description Format      October 2009
 
@@ -1900,7 +1900,7 @@ Internet-Draft    Metalink Download Description Format      October 2009
 
 
 
-Bryan, et al.             Expires April 8, 2010                [Page 34]
+Bryan, et al.             Expires April 9, 2010                [Page 34]
 
 Internet-Draft    Metalink Download Description Format      October 2009
 
@@ -1956,7 +1956,7 @@ Index
 
 
 
-Bryan, et al.             Expires April 8, 2010                [Page 35]
+Bryan, et al.             Expires April 9, 2010                [Page 35]
 
 Internet-Draft    Metalink Download Description Format      October 2009
 
@@ -2012,7 +2012,7 @@ Internet-Draft    Metalink Download Description Format      October 2009
 
 
 
-Bryan, et al.             Expires April 8, 2010                [Page 36]
+Bryan, et al.             Expires April 9, 2010                [Page 36]
 
 Internet-Draft    Metalink Download Description Format      October 2009
 
@@ -2057,20 +2057,30 @@ Internet-Draft    Metalink Download Description Format      October 2009
          version  20
 
 
+
+
+
+
+
+
+
+
+
+
+
+Bryan, et al.             Expires April 9, 2010                [Page 37]
+
+Internet-Draft    Metalink Download Description Format      October 2009
+
+
 Authors' Addresses
 
    Anthony Bryan
+   Pompano Beach, FL
+   USA
 
    Email: anthonybryan@gmail.com
    URI:   http://www.metalinker.org
-
-
-
-
-
-Bryan, et al.             Expires April 8, 2010                [Page 37]
-
-Internet-Draft    Metalink Download Description Format      October 2009
 
 
    Tatsuhiro Tsujikawa
@@ -2114,15 +2124,5 @@ Internet-Draft    Metalink Download Description Format      October 2009
 
 
 
-
-
-
-
-
-
-
-
-
-
-Bryan, et al.             Expires April 8, 2010                [Page 38]
+Bryan, et al.             Expires April 9, 2010                [Page 38]
 
