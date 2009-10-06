@@ -745,7 +745,7 @@ metalinkIdentity =
     <iref item="language XML element" primary="true"/> 
 	      
 	  <t>The "<xref target="element.language" format="none">metalink:language</xref>" element is a Text construct that conveys a
-	  code for the language of a file, per <xref target="RFC4646"/>.
+	  code for the language of a file, per <xref target="RFC5646"/>.
 	  
 	    <figure>
         <iref item="metalinkLanguage grammar production" primary="true"/>
@@ -1552,7 +1552,7 @@ structuredExtensionElement =
 <seriesInfo name="RFC" value="3987"/>
 </reference>
 
-<reference anchor="RFC4646">
+<reference anchor="RFC5646">
 
 <front>
 <title>Tags for Identifying Languages</title>
@@ -1560,10 +1560,10 @@ structuredExtensionElement =
 <organization/></author>
 <author initials="M." surname="Davis" fullname="M. Davis">
 <organization/></author>
-<date year="2006" month="September"/></front>
+<date year="2009" month="September"/></front>
 
 <seriesInfo name="BCP" value="47"/>
-<seriesInfo name="RFC" value="4646"/>
+<seriesInfo name="RFC" value="5646"/>
 </reference>
 
 <reference anchor="REC-xml-infoset" target="http://www.w3.org/TR/2004/REC-xml-infoset-20040204">
@@ -2014,7 +2014,7 @@ metalinkVersion =
       metalinkTextConstruct
    }
 
-# As defined in RFC 3066 and compatible with RFC 4646
+# As defined in RFC 3066 and compatible with RFC 5646
 metalinkLanguageTag = xsd:string {
    pattern = "[A-Za-z]{1,8}(-[A-Za-z0-9]{1,8})*"
 }
@@ -2079,6 +2079,13 @@ anyForeignElement =
 
 	    </list></t>
 
+<t>-20 : October 5, 2009.
+	    
+	    <list style="symbols">
+		
+		  <t>RFC 5646 updates RFC 4646.</t>
+	   </list></t>
+	   
 <t>-19 : October 5, 2009.
 	    
 	    <list style="symbols">
