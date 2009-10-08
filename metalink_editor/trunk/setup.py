@@ -6,7 +6,7 @@ import os
 import shutil
 
 APP_NAME = 'Metalink Editor'
-VERSION = '1.2'
+VERSION = '1.3'
 LICENSE = 'GPL'
 DESC = ''
 AUTHOR_NAME = 'Hampus Wessman'
