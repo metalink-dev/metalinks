@@ -1,23 +1,78 @@
-#    Copyright (c) 2007 Hampus Wessman, Sweden.
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+########################################################################
 #
-#    This program is free software; you can redistribute it and/or modify
-#    it under the terms of the GNU General Public License as published by
-#    the Free Software Foundation; either version 2 of the License, or
-#    (at your option) any later version.
+# Project: Metalink Checker
+# URL: http://www.nabber.org/projects/
+# E-mail: webmaster@nabber.org
 #
-#    This program is distributed in the hope that it will be useful,
-#    but WITHOUT ANY WARRANTY; without even the implied warranty of
-#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#    GNU General Public License for more details.
+# Copyright: (C) 2007-2009, Hampus Wessman, Neil McNab
+# License: GNU General Public License Version 2
+#   (http://www.gnu.org/copyleft/gpl.html)
 #
-#    You should have received a copy of the GNU General Public License
-#    along with this program; if not, write to the Free Software
-#    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+#
+# Filename: $URL: https://metalinks.svn.sourceforge.net/svnroot/metalinks/checker/metalink.py $
+# Last Updated: $Date: 2009-10-05 00:16:28 -0700 (Mon, 05 Oct 2009) $
+# Author(s): Hampus Wessman, Neil McNab
+#
+# Description:
+#   Functions for accessing XML formatted data.
+#
+########################################################################
 
-import os, os.path, md5, sha, re, xml.dom, math, time, binascii, base64
-from xml.dom.minidom import parse, Node
+import os
+import os.path
+import md5
+import sha
+import re
+import math
+import time
+import rfc822
+import calendar
+import xml.parsers.expat
 
-current_version = "1.2.0"
+# for jigdo only
+import gzip
+
+# handle missing module in jython
+try: import bz2
+except ImportError: pass
+
+import base64
+import StringIO
+import binascii
+import zlib
+
+GENERATOR = "Metalink Checker Version 5.0"
+
+RFC3339 = "%Y-%m-%dT%H:%M:%SZ"
+RFC822 = "%a, %d %b %Y %H:%M:%S +0000"
+
+HASHMAP = { "sha256": "sha-256", 
+            "sha1": "sha-1",
+            "sha512": "sha-512",
+            "sha224": "sha-224",
+            "sha384": "sha-384",
+            }
+
+def hashlookup(text):
+    try:
+        return HASHMAP[text]
+    except KeyError:
+        return text
 
 def get_first(x):
     try:
@@ -25,8 +80,9 @@ def get_first(x):
     except:
         return x
 
+
 class Resource:
-    def __init__(self, url, type="default", location="", preference="", conns=""):
+    def __init__(self, url, type="default", location="", preference="", maxconnections="", attrs = {}):
         self.errors = []
         self.url = url
         self.location = location
@@ -39,11 +95,24 @@ class Resource:
         else:
             self.type = type
         self.preference = str(preference)
-        if conns.strip() == "-" or conns.strip() == "":
-            self.conns = "-"
+        if maxconnections.strip() == "-" or maxconnections.strip() == "":
+            self.maxconnections = "-"
         else:
-            self.conns = conns
-    
+            self.maxconnections = maxconnections
+
+        for attr in attrs:
+            setattr(self, attr, attrs[attr])
+            
+    def generate(self):
+        details = ''
+        text = ''
+        if self.location.strip() != "":
+            details += ' location="'+self.location.lower()+'"'
+        if self.preference.strip() != "": details += ' preference="'+self.preference+'"'
+        if self.maxconnections.strip() != ""and self.maxconnections.strip() != "-" : details += ' maxconnections="'+self.maxconnections+'"'
+        text += '        <url type="'+self.type+'"'+details+'>'+self.url+'</url>\n'
+        return text
+            
     def validate(self):
         valid = True
         if self.url.strip() == "":
@@ -72,64 +141,137 @@ class Resource:
             except:
                 self.errors.append("Preference must be a number, between 0 and 100.")
                 valid = False
-        if self.conns.strip() != "" and self.conns.strip() != "-":
+        if self.maxconnections.strip() != "" and self.maxconnections.strip() != "-":
             try:
-                conns = int(self.conns)
+                conns = int(self.maxconnections)
                 if conns < 1:
-                    self.errors.append("Max connections must be at least 1, not " + self.conns + '.')
+                    self.errors.append("Max connections must be at least 1, not " + self.maxconnections + '.')
                     valid = False
                 elif conns > 20:
-                    self.errors.append("You probably don't want max connections to be as high as " + self.conns + '!')
+                    self.errors.append("You probably don't want max connections to be as high as " + self.maxconnections + '!')
                     valid = False
             except:
-                self.errors.append("Max connections must be a positive integer, not " + self.conns + ".")
+                self.errors.append("Max connections must be a positive integer, not " + self.maxconnections + ".")
+                valid = False
+        return valid
+        
+class Resource4:
+    def __init__(self, url, type="", location="", priority="", attrs = {}):
+        self.errors = []
+        self.url = url
+        self.location = location
+        if url.endswith(".torrent"):
+            self.type = "torrent"
+        else:
+            self.type = type
+        self.priority = str(priority)
+        
+        for attr in attrs:
+            setattr(self, attr, attrs[attr])
+            
+    def generate(self):
+        details = ''
+        text = ""
+        if self.location.strip() != "":
+            details += ' location="'+self.location.lower()+'"'
+        if self.priority.strip() != "": details += ' priority="'+self.priority+'"'
+        if self.type != "":
+            text += '      <metaurl type="' + self.type + '"'+details+'>'+self.url+'</metaurl>\n'
+        else:
+            text += '      <url'+details+'>'+self.url+'</url>\n'
+            
+        return text
+        
+    def validate(self):
+        valid = True
+        if self.url.strip() == "":
+            self.errors.append("Empty URLs are not allowed!")
+            valid = False
+        allowed_types = ["torrent"]
+        if not self.type in allowed_types and self.type.strip() != "":
+            self.errors.append("Invalid URL: " + self.url + '.')
+            valid = False
+        elif self.type in allowed_types:
+            m = re.search(r'\w+://.+\..+/.*', self.url)
+            if m == None:
+                self.errors.append("Invalid URL: " + self.url + '.')
+                valid = False
+        if self.location.strip() != "":
+            iso_locations = ["AF", "AX", "AL", "DZ", "AS", "AD", "AO", "AI", "AQ", "AG", "AR", "AM", "AW", "AU", "AT", "AZ", "BS", "BH", "BD", "BB", "BY", "BE", "BZ", "BJ", "BM", "BT", "BO", "BA", "BW", "BV", "BR", "IO", "BN", "BG", "BF", "BI", "KH", "CM", "CA", "CV", "KY", "CF", "TD", "CL", "CN", "CX", "CC", "CO", "KM", "CG", "CD", "CK", "CR", "CI", "HR", "CU", "CY", "CZ", "DK", "DJ", "DM", "DO", "EC", "EG", "SV", "GQ", "ER", "EE", "ET", "FK", "FO", "FJ", "FI", "FR", "GF", "PF", "TF", "GA", "GM", "GE", "DE", "GH", "GI", "GR", "GL", "GD", "GP", "GU", "GT", "GG", "GN", "GW", "GY", "HT", "HM", "VA", "HN", "HK", "HU", "IS", "IN", "ID", "IR", "IQ", "IE", "IM", "IL", "IT", "JM", "JP", "JE", "JO", "KZ", "KE", "KI", "KP", "KR", "KW", "KG", "LA", "LV", "LB", "LS", "LR", "LY", "LI", "LT", "LU", "MO", "MK", "MG", "MW", "MY", "MV", "ML", "MT", "MH", "MQ", "MR", "MU", "YT", "MX", "FM", "MD", "MC", "MN", "ME", "MS", "MA", "MZ", "MM", "NA", "NR", "NP", "NL", "AN", "NC", "NZ", "NI", "NE", "NG", "NU", "NF", "MP", "NO", "OM", "PK", "PW", "PS", "PA", "PG", "PY", "PE", "PH", "PN", "PL", "PT", "PR", "QA", "RE", "RO", "RU", "RW", "SH", "KN", "LC", "PM", "VC", "WS", "SM", "ST", "SA", "SN", "RS", "SC", "SL", "SG", "SK", "SI", "SB", "SO", "ZA", "GS", "ES", "LK", "SD", "SR", "SJ", "SZ", "SE", "CH", "SY", "TW", "TJ", "TZ", "TH", "TL", "TG", "TK", "TO", "TT", "TN", "TR", "TM", "TC", "TV", "UG", "UA", "AE", "GB", "US", "UM", "UY", "UZ", "VU", "VE", "VN", "VG", "VI", "WF", "EH", "YE", "ZM", "ZW", "UK"]
+            if not self.location.upper() in iso_locations:
+                self.errors.append(self.location + " is not a valid country code.")
+                valid = False
+        if self.priority != "":
+            try:
+                pref = int(self.priority)
+                if pref < 1 or pref > 100:
+                    self.errors.append("Priority must be between 1 and 100, not " + self.priority + '.')
+                    valid = False
+            except:
+                self.errors.append("Priority must be a number, between 1 and 100.")
                 valid = False
         return valid
 
-class Metalink:
-    def __init__(self, do_ed2k=True, do_magnet=True):
+class MetalinkFileBase:
+    def __init__(self, filename, attrs = {}, do_ed2k=True, do_magnet=False):
+        self.filename = filename
         self.errors = []
-        self.filename = ""
-        self.identity = ""
-        self.publisher_name = ""
-        self.publisher_url = ""
-        self.copyright = ""
-        self.description = ""
-        self.license_name = ""
-        self.license_url = ""
-        self.size = ""
-        self.version = ""
-        self.language = ""
-        self.maxconn_total = ""
-        self.os = ""
-        self.origin = ""
-        self.hash_md5 = ""
-        self.hash_sha1 = ""
-        self.hash_sha256 = ""
-        self.sig = ""
-        self.ed2k = ""
-        self.magnet = ""
+        self.hashlist = {}
         self.pieces = []
         self.piecelength = 0
         self.piecetype = ""
         self.resources = []
+        self.language = ""
+        self.os = ""
+        self.size = 0
+        self.ed2k = ""
+        self.magnet = ""
         self.do_ed2k = do_ed2k
         self.do_magnet = do_magnet
+        
+        for attr in attrs:
+            setattr(self, attr, attrs[attr])
+
+    def get_filename(self):
+        return self.filename
+
+    def get_checksums(self):
+        return self.hashlist
+
+    def add_checksum(self, name, value):
+        self.hashlist[name] = value
+
+    def set_checksums(self, hashlist):
+        self.hashlist = hashlist
+
+    def get_piece_dict(self):
+        temp = {}
+        temp[self.piecetype] = self.pieces
+        return temp
+
+    def get_url_dict(self):
+        temp = {}
+        for url in self.resources:
+            temp[url.url] = url
+        return temp
+
+    def set_size(self, size):
+        self.size = int(size)
+
+    def get_size(self):
+        return self.size
     
     def clear_res(self):
         self.resources = []
-        
-    def add_url(self, url, type="default", location="", preference="", conns=""):
-        self.resources.append(Resource(url, type, location, preference, conns))
     
     def add_res(self, res):
         self.resources.append(res)
-    
+
     def scan_file(self, filename, use_chunks=True, max_chunks=255, chunk_size=256, progresslistener=None):
         print "\nScanning file..."
         # Filename and size
         self.filename = os.path.basename(filename)
-        self.size = os.stat(filename).st_size
+        self.size = int(os.stat(filename).st_size)
         # Calculate piece length
         if use_chunks:
             minlength = chunk_size*1024
@@ -203,10 +345,10 @@ class Metalink:
                 piecehash = sha.new()
             print "Total number of pieces:", len(self.pieces)
         fp.close()
-        self.hash_md5 = md5hash.hexdigest()
-        self.hash_sha1 = sha1hash.hexdigest()
+        self.hashlist["md5"] = md5hash.hexdigest()
+        self.hashlist["sha1"] = sha1hash.hexdigest()
         if sha256hash != None:
-            self.hash_sha256 = sha256hash.hexdigest()
+            self.hashlist["sha256"] = sha256hash.hexdigest()
 
         # automatically add an ed2k url here
         ed2khash = ed2k_hash(filename)
@@ -217,7 +359,7 @@ class Metalink:
                 self.add_url(self.ed2k)
 
         if self.do_magnet:
-            self.magnet = compute_magnet(filename, self.size, self.hash_md5, self.hash_sha1, ed2khash)
+            self.magnet = compute_magnet(filename, self.size, self.hashlist["md5"], self.hashlist["sha1"], ed2khash)
             if self.magnet != "":
                 self.add_url(self.magnet)
 
@@ -225,58 +367,253 @@ class Metalink:
             
         if len(self.pieces) < 2: self.pieces = []
         # Convert to strings
-        self.size = str(self.size)
-        self.piecelength = str(self.piecelength)
+        #self.size = str(self.size)
+        #self.piecelength = str(self.piecelength)
         print "done"
         if progresslistener: progresslistener.Update(100)
         return True
+
+class MetalinkFile4(MetalinkFileBase):
+    def __init__(self, filename, attrs = {}):
+        self.description = ""
+        self.identity = ""
+        self.license_name = ""
+        self.license_url = ""
+        self.publisher_name = ""
+        self.publisher_url = ""
+        self.version = ""
+        self.logo = ""
+        MetalinkFileBase.__init__(self, filename, attrs)
+
+    def compare_checksums(self, checksums):
+        for key in ("sha-512","sha-384","sha-256","sha-1","md5"):
+            try:
+                if self.hashlist[key].lower() == checksums[key].lower():
+                    return True
+            except KeyError: pass
+        return False
+        
+    def add_url(self, url, type="", location="", priority="", attrs={}):
+        self.resources.append(Resource4(url, type, location, priority, attrs))
     
     def validate(self):
         valid = True
         if len(self.resources) == 0:
             self.errors.append("You need to add at least one URL!")
             valid = False
-        if self.hash_md5.strip() != "":
-            m = re.search(r'[^0-9a-fA-F]', self.hash_md5)
-            if len(self.hash_md5) != 32 or m != None:
+        if self.hashlist["md5"].strip() != "":
+            m = re.search(r'[^0-9a-fA-F]', self.hashlist["md5"])
+            if len(self.hashlist["md5"]) != 32 or m != None:
                 self.errors.append("Invalid md5 hash.")                    
                 valid = False
-        if self.hash_sha1.strip() != "":
-            m = re.search(r'[^0-9a-fA-F]', self.hash_sha1)
-            if len(self.hash_sha1) != 40 or m != None:
+        if self.hashlist["sha-1"].strip() != "":
+            m = re.search(r'[^0-9a-fA-F]', self.hashlist["sha-1"])
+            if len(self.hashlist["sha-1"]) != 40 or m != None:
                 self.errors.append("Invalid sha-1 hash.")
                 valid = False
-        if self.publisher_url.strip() != "":
-            if not self.validate_url(self.publisher_url):
-                self.errors.append("Invalid URL: " + self.publisher_url + '.')
-                valid = False
-        if self.license_url.strip() != "":
-            if not self.validate_url(self.license_url):
-                self.errors.append("Invalid URL: " + self.license_url + '.')
-                valid = False
-        if self.size.strip() != "":
+        if str(self.size).strip() != "":
             try:
                 size = int(self.size)
                 if size < 0:
-                    self.errors.append("File size must be at least 0, not " + self.size + '.')
+                    self.errors.append("File size must be at least 0, not " + str(self.size) + '.')
                     valid = False
             except:
-                self.errors.append("File size must be an integer, not " + self.size + ".")
-                valid = False
-        if self.maxconn_total.strip() != "" and self.maxconn_total.strip() != "-":
-            try:
-                conns = int(self.maxconn_total)
-                if conns < 1:
-                    self.errors.append("Max connections must be at least 1, not " + self.maxconn_total + '.')
-                    valid = False
-                elif conns > 20:
-                    self.errors.append("You probably don't want max connections to be as high as " + self.maxconn_total + '!')
-                    valid = False
-            except:
-                self.errors.append("Max connections must be a positive integer, not " + self.maxconn_total + ".")
+                self.errors.append("File size must be an integer, not " + str(self.size) + ".")
                 valid = False
         return valid
+
+    def generate_file(self):
+        if self.filename.strip() != "":
+            text = '  <file name="' + self.filename + '">\n'
+        else:
+            text = '  <file>\n'
+        # Publisher info
+        if self.publisher_name.strip() != "" or self.publisher_url.strip() != "":
+            lictext = ""
+            if self.publisher_name.strip() != "":
+                lictext += ' name="' + self.publisher_name + '"'
+            if self.publisher_url.strip() != "":
+                lictext += ' url="' + self.publisher_url + '"'
+            text += '      <publisher%s></publisher>\n' % lictext
+        # License info
+        if self.license_name.strip() != "" or self.license_url.strip() != "":
+            #text += '  <license>\n'
+            lictext = ""
+            if self.license_name.strip() != "":
+                lictext += ' name="' + self.license_name + '"'
+            if self.license_url.strip() != "":
+                lictext += ' url="' + self.license_url + '"'
+            text += '      <license%s></license>\n' % lictext
+        # Release info
+        if self.identity.strip() != "":
+            text += '      <identity>'+self.identity+'</identity>\n'
+        if self.version.strip() != "":
+            text += '      <version>'+self.version+'</version>\n'
+        if self.description.strip() != "":
+            text += '      <description>'+self.description+'</description>\n'
+        # File info
+        if self.size != 0:
+            text += '      <size>'+str(self.size)+'</size>\n'
+        if self.language.strip() != "":
+            text += '      <language>'+self.language+'</language>\n'
+        if self.os.strip() != "":
+            text += '      <os>'+self.os+'</os>\n'
+        # Verification
+        for key in self.hashlist.keys():
+            text += '      <hash type="%s">' % hashlookup(key) + self.hashlist[key].lower() + '</hash>\n'
+        if len(self.pieces) > 1:
+            text += '      <pieces type="'+hashlookup(self.piecetype)+'" length="'+self.piecelength+'">\n'
+            for id in range(len(self.pieces)):
+                text += '        <hash>'+self.pieces[id]+'</hash>\n'
+            text += '      </pieces>\n'
+        # File list
+        for res in self.resources:
+            text += res.generate()
+        text += '  </file>\n'
+        return text
+        
+class MetalinkFile(MetalinkFileBase):
+    def __init__(self, filename, attrs = {}):
+        self.maxconnections = ""
+        MetalinkFileBase.__init__(self, filename, attrs)
+
+    def compare_checksums(self, checksums):
+        for key in ("sha512","sha384","sha256","sha1","md5"):
+            try:
+                if self.hashlist[key].lower() == checksums[key].lower():
+                    return True
+            except KeyError: pass
+        return False
+        
+    def add_url(self, url, type="default", location="", preference="", conns="", attrs={}):
+        self.resources.append(Resource(url, type, location, preference, conns, attrs))
     
+    def validate(self):
+        valid = True
+        if len(self.resources) == 0:
+            self.errors.append("You need to add at least one URL!")
+            valid = False
+        if self.hashlist["md5"].strip() != "":
+            m = re.search(r'[^0-9a-fA-F]', self.hashlist["md5"])
+            if len(self.hashlist["md5"]) != 32 or m != None:
+                self.errors.append("Invalid md5 hash.")                    
+                valid = False
+        if self.hashlist["sha1"].strip() != "":
+            m = re.search(r'[^0-9a-fA-F]', self.hashlist["sha1"])
+            if len(self.hashlist["sha1"]) != 40 or m != None:
+                self.errors.append("Invalid sha-1 hash.")
+                valid = False
+        if str(self.size).strip() != "":
+            try:
+                size = int(self.size)
+                if size < 0:
+                    self.errors.append("File size must be at least 0, not " + str(self.size) + '.')
+                    valid = False
+            except:
+                self.errors.append("File size must be an integer, not " + str(self.size) + ".")
+                valid = False
+        if self.maxconnections.strip() != "" and self.maxconnections.strip() != "-":
+            try:
+                conns = int(self.maxconnections)
+                if conns < 1:
+                    self.errors.append("Max connections must be at least 1, not " + self.maxconnections + '.')
+                    valid = False
+                elif conns > 20:
+                    self.errors.append("You probably don't want max connections to be as high as " + self.maxconnections + '!')
+                    valid = False
+            except:
+                self.errors.append("Max connections must be a positive integer, not " + self.maxconnections + ".")
+                valid = False
+        return valid
+
+    def generate_file(self):
+        if self.filename.strip() != "":
+            text = '    <file name="' + self.filename + '">\n'
+        else:
+            text = '    <file>\n'
+        # File info
+        if self.size != 0:
+            text += '      <size>'+str(self.size)+'</size>\n'
+        if self.language.strip() != "":
+            text += '      <language>'+self.language+'</language>\n'
+        if self.os.strip() != "":
+            text += '      <os>'+self.os+'</os>\n'
+        # Verification
+#        if self.hashlist["md5"].strip() != "" or self.hashlist["sha1"].strip() != "":
+        if len(self.hashlist) > 0 or len(self.pieces) > 0:
+            text += '      <verification>\n'
+            for key in self.hashlist.keys():
+                text += '        <hash type="%s">' % key + self.hashlist[key].lower() + '</hash>\n'
+            if len(self.pieces) > 1:
+                text += '        <pieces type="'+self.piecetype+'" length="'+self.piecelength+'">\n'
+                for id in range(len(self.pieces)):
+                    text += '          <hash piece="'+str(id)+'">'+self.pieces[id]+'</hash>\n'
+                text += '        </pieces>\n'
+            text += '      </verification>\n'
+        # File list
+        if self.maxconnections.strip() != "" and self.maxconnections.strip() != "-":
+            maxconns = ' maxconnections="'+self.maxconnections+'"'
+        else:
+            maxconns = ""
+        text += '      <resources'+maxconns+'>\n'
+        for res in self.resources:
+            text += res.generate()
+
+        text += '      </resources>\n'
+        text += '    </file>\n'
+        return text
+
+class XMLTag:
+    def __init__(self, name, attrs={}):
+        self.name = name
+        self.attrs = attrs
+
+    def get_attr(self, name):
+        return self.attrs[name]
+
+class MetalinkBase:
+    '''
+    This is a base class and should not be used directly
+    '''
+    def __init__(self):
+        self.errors = []
+        self.files = []
+        self.generator = GENERATOR
+        self.origin = ""
+
+        self.p = xml.parsers.expat.ParserCreate()
+        self.parent = []
+
+        self.p.StartElementHandler = self.start_element
+        self.p.EndElementHandler = self.end_element
+        self.p.CharacterDataHandler = self.char_data
+            
+    def char_data(self, data):
+        self.data += data #.strip()
+
+    def parsefile(self, filename):
+        handle = open(filename, "rb")
+        self.parsehandle(handle)
+        handle.close()
+
+    def parsehandle(self, handle):
+        return self.p.ParseFile(handle)
+
+    def parse(self, text):
+        self.p.Parse(text)
+
+    def download_size(self):
+        total = 0
+        for fileobj in self.files:
+            total += fileobj.get_size()
+        return total
+
+    def get_file_by_hash(self, hashtype, value):
+        for index in range(len(self.files)):
+            if self.files[index].hashlist[hashtype] == value:
+                return index
+        return None
+
     def validate_url(self, url):
         if url.endswith(".torrent"):
             type = "bittorrent"
@@ -291,68 +628,48 @@ class Metalink:
             if m == None:
                 return False
         return True
+
     
+class Metalink(MetalinkBase):
+    def __init__(self):
+        self.ver = 3
+        self.identity = ""
+        self.publisher_name = ""
+        self.publisher_url = ""
+        self.copyright = ""
+        self.description = ""
+        self.license_name = ""
+        self.license_url = ""
+        self.version = ""
+        self.upgrade = ""
+        self.tags = ""
+        self.type = ""
+        self.pubdate = ""
+        self.refreshdate = ""
+        MetalinkBase.__init__(self)
+        
     def generate(self):
         text = '<?xml version="1.0" encoding="utf-8"?>\n'
         origin = ""
         if self.origin.strip() != "":
             origin = 'origin="'+self.origin+'" '
-        text += '<metalink version="3.0" '+origin+'generator="Metalink Editor version '+current_version+'" xmlns="http://www.metalinker.org/">\n'
+        typetext = ""
+        if self.type.strip() != "":
+            typetext = 'type="'+self.type+'" '
+        gentext = ""
+        if self.generator.strip() != "":
+            gentext = 'generator="'+self.generator+'" '
+        text += '<metalink version="3.0" '+origin + typetext + gentext + 'xmlns="http://www.metalinker.org/">\n'
         text += self.generate_info()
         text += '  <files>\n'
-        text += self.generate_file()
+        for fileobj in self.files:
+            text += fileobj.generate_file()
         text += '  </files>\n'
         text += '</metalink>'
         try:
             return text.encode('utf-8')
         except:
             return text.decode('latin1').encode('utf-8')
-    
-    def generate_file(self):
-        if self.filename.strip() != "":
-            text = '    <file name="' + self.filename + '">\n'
-        else:
-            text = '    <file>\n'
-        # File info
-        if self.size.strip() != "":
-            text += '      <size>'+self.size+'</size>\n'
-        if self.language.strip() != "":
-            text += '      <language>'+self.language+'</language>\n'
-        if self.os.strip() != "":
-            text += '      <os>'+self.os+'</os>\n'
-        # Verification
-        if self.hash_md5.strip() != "" or self.hash_sha1.strip() != "":
-            text += '      <verification>\n'
-            if self.sig.strip() != "":
-                text += '        <signature type="pgp">\n'+self.sig+'        </signature>\n'
-            if self.hash_md5.strip() != "":
-                text += '        <hash type="md5">'+self.hash_md5.lower()+'</hash>\n'
-            if self.hash_sha1.strip() != "":
-                text += '        <hash type="sha1">'+self.hash_sha1.lower()+'</hash>\n'
-            if self.hash_sha256.strip() != "":
-                text += '        <hash type="sha256">'+self.hash_sha256.lower()+'</hash>\n'
-            if len(self.pieces) > 1:
-                text += '        <pieces type="'+self.piecetype+'" length="'+self.piecelength+'">\n'
-                for id in range(len(self.pieces)):
-                    text += '          <hash piece="'+str(id)+'">'+self.pieces[id]+'</hash>\n'
-                text += '        </pieces>\n'
-            text += '      </verification>\n'
-        # File list
-        if self.maxconn_total.strip() != "" and self.maxconn_total.strip() != "-":
-            maxconns = ' maxconnections="'+self.maxconn_total+'"'
-        else:
-            maxconns = ""
-        text += '      <resources'+maxconns+'>\n'
-        for res in self.resources:
-            details = ''
-            if res.location.strip() != "":
-                details += ' location="'+res.location.lower()+'"'
-            if res.preference.strip() != "": details += ' preference="'+res.preference+'"'
-            if res.conns.strip() != ""and res.conns.strip() != "-" : details += ' maxconnections="'+res.conns+'"'
-            text += '        <url type="'+res.type+'"'+details+'>'+res.url+'</url>\n'
-        text += '      </resources>\n'
-        text += '    </file>\n'
-        return text
     
     def generate_info(self):
         text = ""
@@ -381,102 +698,554 @@ class Metalink:
             text += '  <copyright>'+self.copyright+'</copyright>\n'
         if self.description.strip() != "":
             text += '  <description>'+self.description+'</description>\n'
+        if self.upgrade.strip() != "":
+            text += '  <upgrade>'+self.upgrade+'</upgrade>\n'
         return text
-    
-    def load_file(self, filename):
+            
+    # 3 handler functions
+    def start_element(self, name, attrs):
+        self.data = ""
+        self.parent.append(XMLTag(name, attrs))
+        if name == "file":
+            fileobj = MetalinkFile(attrs["name"], attrs)
+            self.files.append(fileobj)
+            
+        if name == "metalink":
+            for attrname in ("origin", "type", "pubdate", "refreshdate"):
+                try:
+                    setattr(self, attrname, attrs[attrname])
+                except KeyError: pass
+            
+    def end_element(self, name):
+        tag = self.parent.pop()
+
         try:
-            doc = parse(filename)
+            if name == "url" and self.parent[-1].name == "resources":
+                fileobj = self.files[-1]
+                fileobj.add_url(self.data.strip(), attrs=tag.attrs)
+            elif name == "tags" and self.parent[-1].name != "file":
+                setattr(self, "tags", self.data.strip())
+            elif name in ("name", "url"):
+                setattr(self, self.parent[-1].name + "_" + name, self.data.strip())
+            elif name in ("identity", "copyright", "description", "version", "upgrade"):
+                setattr(self, name, self.data.strip())
+            elif name == "hash" and self.parent[-1].name == "verification":
+                hashtype = tag.attrs["type"]
+                fileobj = self.files[-1]
+                #setattr(fileobj, "hash_" + hashtype, self.data)
+                fileobj.hashlist[hashtype] = self.data.strip()
+            elif name == "signature" and self.parent[-1].name == "verification":
+                hashtype = tag.attrs["type"]
+                fileobj = self.files[-1]
+                #setattr(fileobj, "hash_" + hashtype, self.data)
+                fileobj.hashlist[hashtype] = self.data
+            elif name == "pieces":
+                fileobj = self.files[-1]
+                fileobj.piecetype = tag.attrs["type"]
+                fileobj.piecelength = tag.attrs["length"]
+            elif name == "hash" and self.parent[-1].name == "pieces":
+                fileobj = self.files[-1]
+                fileobj.pieces.append(self.data.strip())
+            elif name in ("os", "language", "tags"):
+                fileobj = self.files[-1]
+                setattr(fileobj, name, self.data.strip())
+            elif name in ("size"):
+                fileobj = self.files[-1]
+                if self.data.strip() != "":
+                    setattr(fileobj, name, int(self.data.strip()))
+            if name == "resources":
+                fileobj = self.files[-1]
+                try:
+                    fileobj.maxconnections = tag.attrs['maxconnections']
+                except KeyError: pass
+        except IndexError: pass
+            
+    def validate(self, *args):
+        valid = True
+        if self.publisher_url.strip() != "":
+            if not self.validate_url(self.publisher_url):
+                self.errors.append("Invalid URL: " + self.publisher_url + '.')
+                valid = False
+        if self.license_url.strip() != "":
+            if not self.validate_url(self.license_url):
+                self.errors.append("Invalid URL: " + self.license_url + '.')
+                valid = False
+                
+        for fileobj in self.files:
+            result = fileobj.validate()
+            valid = valid and result
+            self.errors.extend(fileobj.errors)
+        return valid
+    
+class Metalink4(MetalinkBase):
+    def __init__(self):
+        self.ver = 4
+        self.dynamic=""
+        self.published=""
+        self.updated=""
+        MetalinkBase.__init__(self)
+
+    def generate(self):
+        text = '<?xml version="1.0" encoding="utf-8"?>\n'
+        text += '<metalink xmlns="urn:ietf:params:xml:ns:metalink">\n'
+        if self.origin.strip() != "":
+            text += '<origin>'+self.origin+'</origin>\n'
+        if self.dynamic.lower() == "true":
+            text += '<dynamic>true</dynamic>\n'
+       
+        for fileobj in self.files:
+            text += fileobj.generate_file()
+        text += '</metalink>'
+        try:
+            return text.encode('utf-8')
         except:
-            raise Exception("Failed to parse metalink file! Please select a valid metalink.")
-        try:
-            publisher = self.get_tag(doc, "publisher")
-            if publisher != None:
-                self.publisher_name = self.get_tagvalue(publisher, "name")
-                self.publisher_url = self.get_tagvalue(publisher, "url")
-            license = self.get_tag(doc, "license")
-            if license != None:
-                self.license_name = self.get_tagvalue(license, "name")
-                self.license_url = self.get_tagvalue(license, "url")
-            self.identity = self.get_tagvalue(doc, "identity")
-            self.version = self.get_tagvalue(doc, "version")
-            self.copyright = self.get_tagvalue(doc, "copyright")
-            self.description = self.get_tagvalue(doc, "description")
-            files = self.get_tag(doc, "files")
-            if files == None:
-                raise Exception("Failed to parse metalink. Found no <files></files> tag.")
-            else:
-                file = self.get_tag(files, "file")
-                if file == None:
-                    raise Exception("Failed to parse metalink. It must contain exactly one file description.")
-                else:
-                    if file.hasAttribute("name"): self.filename = file.getAttribute("name")
-                    self.size = self.get_tagvalue(file, "size")
-                    if self.version == "":
-                        self.version = self.get_tagvalue(file, "version")
-                    self.language = self.get_tagvalue(file, "language")
-                    self.os = self.get_tagvalue(file, "os")
-                    verification = self.get_tag(file, "verification")
-                    if verification != None:
-                        for hash in verification.getElementsByTagName("hash"):
-                            if hash in verification.childNodes:
-                                if hash.hasAttribute("type"):
-                                    if hash.getAttribute("type").lower() == "md5": self.hash_md5 = self.get_text(hash).lower()
-                                    if hash.getAttribute("type").lower() == "sha1": self.hash_sha1 = self.get_text(hash).lower()
-                        pieces = self.get_tag(file, "pieces")
-                        if pieces != None:
-                            if pieces.hasAttribute("type") and pieces.hasAttribute("length"):
-                                self.piecetype = pieces.getAttribute("type")
-                                self.piecelength = pieces.getAttribute("length")
-                                self.pieces = []
-                                for hash in pieces.getElementsByTagName("hash"):
-                                    self.pieces.append(self.get_text(hash).lower())
-                            else:
-                                print "Load error: missing attributes in <pieces>"
-                    resources = self.get_tag(file, "resources")
-                    num_urls = 0
-                    if resources != None:
-                        self.maxconn_total = self.get_attribute(resources, "maxconnections")
-                        if self.maxconn_total.strip() == "": self.maxconn_total = "-"
-                        for resource in resources.getElementsByTagName("url"):
-                            type = self.get_attribute(resource, "type")
-                            location = self.get_attribute(resource, "location")
-                            preference = self.get_attribute(resource, "preference")
-                            conns = self.get_attribute(resource, "maxconnections")
-                            url = self.get_text(resource)
-                            self.add_url(url, type, location, preference, conns)
-                            num_urls += 1
-                    if num_urls == 0:
-                        raise Exception("Failed to parse metalink. Found no URLs!")
-            doc.unlink()
-        except xml.dom.DOMException, e:
-            raise Exception("Failed to load metalink: " + str(e))
-    
-    def get_attribute(self, element, attribute):
-        if element.hasAttribute(attribute):
-            return element.getAttribute(attribute)
-        else:
-            return ""
-    
-    def get_tagvalue(self, node, tag):
-        nodelist = node.getElementsByTagName(tag)
-        if len(nodelist) == 1:
-            return self.get_text(nodelist[0])
-        else:
-            return ""
-    
-    def get_tag(self, node, tag):
-        nodelist = node.getElementsByTagName(tag)
-        if len(nodelist) == 1:
-            return nodelist[0]
-        else:
-            return None
+            return text.decode('latin1').encode('utf-8')
         
-    def get_text(self, node):
+    # handler functions
+    def start_element(self, name, attrs):
+        xmlns = ""
+        self.data = ""
+        self.parent.append(XMLTag(name, attrs))
+        if name == "file":
+            fileobj = MetalinkFile4(attrs["name"], attrs)
+            self.files.append(fileobj)
+            
+        if name == "metalink":
+            try:
+                xmlns = attrs["xmlns"]
+            except KeyError: pass
+            if xmlns != "urn:ietf:params:xml:ns:metalink":
+                raise AssertionError, "Not a valid Metalink 4 (RFC) file."
+        
+    def end_element(self, name):
+        tag = self.parent.pop()
+
+        try:
+            if name in ("dynamic", "generator", "origin", "published", "updated"):
+                setattr(self, name, self.data.strip())
+            elif name in ("url", "metaurl"):
+                fileobj = self.files[-1]
+                fileobj.add_url(self.data.strip(), attrs=tag.attrs)
+            elif name in ("publisher", "license"):
+                fileobj = self.files[-1]
+                try:
+                    setattr(fileobj, name + "_name", tag.attrs["name"])
+                except KeyError: pass
+                try:
+                    setattr(fileobj, name + "_url", tag.attrs["url"])
+                except KeyError: pass
+            elif name == "hash" and self.parent[-1].name == "file":
+                hashtype = tag.attrs["type"]
+                fileobj = self.files[-1]
+                #setattr(fileobj, "hash_" + hashtype, self.data)
+                fileobj.hashlist[hashtype] = self.data.strip()
+            elif name == "signature":
+                hashtype = tag.attrs["type"]
+                fileobj = self.files[-1]
+                #setattr(fileobj, "hash_" + hashtype, self.data)
+                fileobj.hashlist[hashtype] = self.data
+            elif name == "pieces":
+                fileobj = self.files[-1]
+                fileobj.piecetype = tag.attrs["type"]
+                fileobj.piecelength = tag.attrs["length"]
+            elif name == "hash" and self.parent[-1].name == "pieces":
+                fileobj = self.files[-1]
+                fileobj.pieces.append(self.data.strip())
+            elif name in ("os", "language", "identity", "description", "version"):
+                fileobj = self.files[-1]
+                setattr(fileobj, name, self.data.strip())
+            elif name in ("size"):
+                fileobj = self.files[-1]
+                if self.data.strip() != "":
+                    setattr(fileobj, name, int(self.data.strip()))
+        except IndexError: pass
+            
+   
+    def validate(self, *args):
+        valid = True
+                
+        for fileobj in self.files:
+            result = fileobj.validate()
+            valid = valid and result
+            self.errors.extend(fileobj.errors)
+        return valid
+
+############### Jigdo ######################
+
+class DecompressFile(gzip.GzipFile):
+    def __init__(self, fp):
+        self.fp = fp
+        self.geturl = fp.geturl
+
+        gzip.GzipFile.__init__(self, fileobj=fp)
+
+    def info(self):
+        info = self.fp.info()
+        # store current position, must reset if in middle of read operation
+        reset = self.tell()
+        # reset to start
+        self.seek(0)
+        newsize = str(len(self.read()))
+        # reset to original position
+        self.seek(reset)
+        info["Content-Length"] = newsize
+        return info
+
+class URLInfo(StringIO.StringIO):
+    def __init__(self, fp):
+        self.fp = fp
+        self.geturl = fp.geturl
+
+        StringIO.StringIO.__init__(self)
+        self.write(fp.read())
+        self.seek(0)
+
+    def info(self):
+        info = self.fp.info()
+        # store current position, must reset if in middle of read operation
+        reset = self.tell()
+        # reset to start
+        self.seek(0)
+        newsize = str(len(self.read()))
+        # reset to original position
+        self.seek(reset)
+        info["Content-Length"] = newsize
+        return info
+
+def open_compressed(fp):
+    compressedfp = URLInfo(fp)
+    newfp = DecompressFile(compressedfp)
+
+    try:
+    	newfp.info()
+    	return newfp
+    except IOError:
+        compressedfp.seek(0)
+        return compressedfp
+
+class Jigdo(Metalink):
+    def __init__(self):
+        self.template = ""
+        self.template_md5 = ""
+        self.filename = ""
+        self.mirrordict = {}
+        self.compression_type = None
+        Metalink.__init__(self)
+        self.p = ParseINI()
+
+    def parsefile(self, filename):
+        handle = gzip.open(filename, "rb")
+        self.parsehandle(handle)
+        handle.close()
+
+    def parsehandle(self, handle):
+        # need to gunzip here if needed
+        newhandle = open_compressed(handle)
+        self.p.readfp(newhandle)
+
+        self.decode(self.p)
+
+    def parse(self, text):
+        raise AssertionError, "Not implemented"
+
+    def decode(self, configobj):
+        serverdict = {}
+        for item in configobj.items("Servers"):
+            serverdict[item[0]] = [item[1].split(" ")[0].strip()]
+
+        for item in configobj.items("Mirrorlists"):
+            self.mirrordict[item[0]] = item[1].split(" ")[0]
+            try:
+                import download
+                temp = []
+                fp = download.urlopen(self.mirrordict[item[0]])
+                line = fp.readline()
+                while line:
+                    if not line.startswith("#"):
+                        temp.append(line.strip())
+                    line = fp.readline()
+                serverdict[item[0]] = temp
+            except ImportError: pass
+        
+        for item in configobj.items("Image"):
+            if item[0].lower() == "template":
+                self.template = item[1]
+            if item[0].lower() == "template-md5sum":
+                self.template_md5 = binascii.hexlify(self.base64hash2bin(item[1]))
+            if item[0].lower() == "filename":
+                self.filename = item[1]
+            if item[0].lower() == "shortinfo":
+                self.identity = item[1]
+            if item[0].lower() == "info":
+                self.description = item[1]
+                
+        for item in configobj.items("Parts"):
+            base64hash = item[0]
+            binaryhash = self.base64hash2bin(base64hash)
+            hexhash = binascii.hexlify(binaryhash)
+            url = item[1]
+            parts = url.split(":", 1)
+            urls = []
+            if len(parts) == 1:
+                urls = [parts[0]]
+                local = parts[0]
+            else:
+                for server in serverdict[parts[0]]:
+                    urls.append(server + parts[1])
+                local = parts[1]
+
+            index = self.get_file_by_hash("md5", hexhash)
+            if index == None:
+                myfile = MetalinkFile(local)
+                myfile.add_checksum("md5", hexhash)
+                self.files.append(myfile)
+                index = -1
+
+            for url in urls:
+                self.files[index].add_url(url)
+
+    def base64hash2bin(self, base64hash):
+        # need to pad hash out to multiple of both 6 (base 64) and 8 bits (1 byte characters)
+        return base64.b64decode(base64hash + "AA", "-_")[:-2]
+
+    def temp2iso(self):
+        '''
+        load template into string in memory
+        '''
+        handle = open(os.path.basename(self.template), "rb")
+        
+        # read text comments first, then switch to binary data
+        data = handle.readline()
+        while data.strip() != "":
+            data = handle.readline()
+
+        data = handle.read(1024*1024)
         text = ""
-        for n in node.childNodes:
-            if n.nodeType == Node.TEXT_NODE:
-                text += n.data
-        return text.strip()
+
+        #decompress = bz2.BZ2Decompressor()
+        #zdecompress = zlib.decompressobj()
+        bzip = False
+        gzip = False
+        while data:
+            if data.startswith("BZIP"):
+                bzip = True
+                self.compression_type = "BZIP"
+                data = data[16:]
+            if data.startswith("DATA"):
+                gzip = True
+                self.compression_type = "GZIP"
+                #print self.get_size(data[4:10])
+                #print self.get_size(data[10:16])
+                data = data[16:]
+            if data.startswith("DESC"):
+                gzip = False
+                bzip = False
+
+            if bzip or gzip:
+                #newdata = decompress.decompress(data)
+                text += data
+                data = handle.read(1024*1024)
+            else:
+                data = handle.readline()
+        handle.close()
+        #print text
+        return text
+
+    def get_size(self, string):
+        total = 0
+        for i in range(len(string)):
+            temp = ord(string[i]) << (8 * i)
+            total += temp
+        return total
+
+    def mkiso(self):
+        text = self.temp2iso()
+
+        found = {}
+        for fileobj in self.files:
+            hexhash = fileobj.get_checksums()["md5"]
+            loc = text.find(binascii.unhexlify(hexhash))
+            if loc != -1:
+                if fileobj.filename.find("dists") != -1:
+                    print "FOUND:", fileobj.filename
+                found[loc] = fileobj.filename
+
+        decompressor = None
+        if self.compression_type == "BZIP":
+            decompressor = bz2.BZ2Decompressor()
+        elif self.compression_type == "GZIP":
+            decompressor = zlib.decompressobj()
+
+        handle = open(self.filename, "wb")
+
+        keys = found.keys()
+        keys.sort()
+        start = 0
+        for loc in keys:
+            #print start, loc, found[loc]
+            #print "Adding %s to image..." % found[loc]
+            #sys.stdout.write(".")
+            lead = decompressor.decompress(text[start:loc])
+            if found[loc].find("dists") != -1:
+                print "Writing:", found[loc]
+            filedata = open(found[loc], "rb").read()
+            handle.write(lead + filedata)
+            start = loc + 16
+
+        handle.close()
+
+class ParseINI(dict):
+    '''
+    Similiar to what is available in ConfigParser, but case sensitive
+    '''
+    def __init__(self):
+        pass
+
+    def readfp(self, fp):
+        line = fp.readline()
+        section = None
+        while line:
+            if not line.startswith("#") and line.strip() != "":
+                if line.startswith("["):
+                    section = line[1:-2]
+                    self[section] = []
+                else:
+                    parts = line.split("=", 1)
+                    self[section].append((parts[0], parts[1].strip()))
+            line = fp.readline()
+
+    def items(self, section):
+        try:
+            return self[section]
+        except KeyError:
+            return []
+
+def convert_4to3(metalinkobj4):
+    metalinkobj3 = Metalink()
+    
+    for attr in ('generator', 'origin'):
+        setattr(metalinkobj3, attr, getattr(metalinkobj4, attr))
+    if getattr(metalinkobj4, 'dynamic').lower() == "true":
+        setattr(metalinkobj3, 'type', 'dynamic')
+        
+    if metalinkobj4.published != "":
+        metalinkobj3.pubdate = time.strftime(RFC822, rfc3339_parsedate(metalinkobj4.published))
+    if metalinkobj4.updated != "":
+        metalinkobj3.refreshdate = time.strftime(RFC822, rfc3339_parsedate(metalinkobj4.updated))
+        
+    for fileobj4 in metalinkobj4.files:
+        fileobj3 = MetalinkFile(fileobj4.filename)
+        # copy common attributes
+        for attr in ('filename', 'pieces', 'piecelength', 'piecetype', 'language', 'os', 'size'):
+            setattr(fileobj3, attr, getattr(fileobj4, attr))
+        for attr in ('description', 'version', 'identity', 'license_url', 'license_name', 'publisher_url', 'publisher_name'):
+            setattr(metalinkobj3, attr, getattr(fileobj4, attr))
+        # copy hashlist, change key names
+        for key in fileobj4.hashlist.keys():
+            fileobj3.hashlist[key.replace("-", "")] = fileobj4.hashlist[key]
+        for res4 in fileobj4.resources:
+            if res4.priority != "":
+                fileobj3.add_url(res4.url, "", res4.location, str(101-int(res4.priority)))
+            else:
+                fileobj3.add_url(res4.url, "", res4.location)
+        metalinkobj3.files.append(fileobj3)
+    return metalinkobj3
+
+def convert_3to4(metalinkobj3):
+    metalinkobj4 = Metalink4()
+    # copy common attributes
+    for attr in ('origin', 'generator'):
+        setattr(metalinkobj4, attr, getattr(metalinkobj3, attr))
+    if getattr(metalinkobj3, 'type') == 'dynamic':
+        setattr(metalinkobj4, 'dynamic', "true")
+    else:
+        setattr(metalinkobj4, 'dynamic', "false")
+
+    if metalinkobj3.pubdate != "":
+        metalinkobj4.published = time.strftime(RFC3339, rfc822.parsedate(metalinkobj3.pubdate))
+    if metalinkobj3.refreshdate != "":
+        metalinkobj4.updated = time.strftime(RFC3339, rfc822.parsedate(metalinkobj3.refreshdate))
+        
+    for fileobj3 in metalinkobj3.files:
+        fileobj4 = MetalinkFile4(fileobj3.filename)
+        # copy common attributes
+        for attr in ('filename', 'pieces', 'piecelength', 'piecetype', 'language', 'os', 'size'):
+            setattr(fileobj4, attr, getattr(fileobj3, attr))
+        for attr in ('description', 'identity', 'version', 'license_url', 'license_name', 'publisher_url', 'publisher_name'):
+            setattr(fileobj4, attr, getattr(metalinkobj3, attr))
+        # copy hashlist, change key names
+        for key in fileobj3.hashlist.keys():
+            fileobj4.hashlist[hashlookup(key)] = fileobj3.hashlist[key]
+        for res3 in fileobj3.resources:
+            if res3.preference != "":
+                fileobj4.add_url(res3.url, "", res3.location, str(101-int(res3.preference)))
+            else:
+                fileobj4.add_url(res3.url, "", res3.location)
+        metalinkobj4.files.append(fileobj4)
+    return metalinkobj4
+    
+def convert(metalinkobj, ver=4):
+    ver = int(ver)
+    if metalinkobj.ver == ver:
+        return metalinkobj
+    elif metalinkobj.ver == 3 and ver == 4:
+        return convert_3to4(metalinkobj)
+    elif metalinkobj.ver == 4 and ver == 3:
+        return convert_4to3(metalinkobj)
+    else:
+        raise AssertionError, "Cannot do conversion %s to %s!" % (metalinkobj.ver, ver)
+
+def rfc3339_parsedate(datestr):
+    offset = "+00:00"
+    if datestr.endswith("Z"):   
+        datestr = datestr[:-1]
+    else:
+        offset = datestr[-6:]
+        datestr = datestr[:-6]
+    # remove milliseconds, strptime breaks otherwise
+    datestr = datestr.split(".")[0]
+    offset = __convert_offset(offset)
+    # Convert to UNIX epoch time to add offset and then convert back to Python time tuple
+    unixtime = calendar.timegm(time.strptime(datestr, "%Y-%m-%dT%H:%M:%S"))
+    unixtime += offset
+    return time.gmtime(unixtime)
+
+def __convert_offset(offsetstr):
+    '''
+    Convert string offset of the form "-08:00" to an int of seconds for
+    use with UNIX epoch time.
+    '''
+    offsetstr = offsetstr.replace(":", "")
+    operator = offsetstr[0]
+    hour = offsetstr[1:3]
+    minute = offsetstr[3:5]
+    offsetsecs = 0
+    offsetsecs += int(hour) * 3600
+    offsetsecs += int(minute) * 60
+    if operator == "+":
+        offsetsecs *= -1
+    return offsetsecs
+
+def parsefile(filename, ver=3):
+    xml = Metalink4()
+    try:
+        xml.parsefile(filename)
+    except AssertionError:
+        xml = Metalink()
+        xml.parsefile(filename)
+    xml = convert(xml, ver)
+    return xml
+    
+def parsehandle(handle, ver=3):
+    text = handle.read()
+    xml = Metalink4()
+    try:
+        xml.parse(text)
+    except AssertionError:
+        xml = Metalink()
+        xml.parse(text)
+    xml = convert(xml, ver)
+    return xml
 
 
 def read_sig(filename):
@@ -606,3 +1375,4 @@ def compute_magnet(filename, size = None, md5 = None, sha1 = None, ed2khash = No
     if sha1 == None:
         sha1 = file_hash(filename, 'sha1')
     return "magnet:?dn=%s&amp;xl=%s&amp;xt=urn:sha1:%s&amp;xt=urn:md5:%s&amp;xt=urn:ed2k:%s" % (os.path.basename(filename), size, base64.b32encode(binascii.unhexlify(sha1)), md5.upper(), ed2khash.upper())
+
