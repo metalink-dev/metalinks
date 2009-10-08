@@ -5,7 +5,7 @@
 # URL: http://www.metamirrors.nl/node/59
 # E-mail: webmaster@nabber.org
 #
-# Copyright: (C) 2008, Neil McNab
+# Copyright: (C) 2008-2009 Neil McNab
 # License: GNU General Public License Version 2
 #   (http://www.gnu.org/copyleft/gpl.html)
 #
@@ -38,6 +38,8 @@ import optparse
 import os.path
 import sys
 
+metalink.GENERATOR = "Metalink Editor version 1.3"
+
 # This value is used by the ProgressBar class. Set it to False if the
 # current console doesn't support \b
 CONSOLE_SUPPORTS_BACKSPACE = True
@@ -54,7 +56,7 @@ def xml_encode(data):
             tempstr += char
     return tempstr
 
-def build(xml, urls, output=None, localfile=None, download=True):
+def build(xml, urls, output=None, localfile=None, download=True, do_ed2k=True, do_magnet=False, v4=False):
     '''
     urls - RFC 2396 encoded urls
     '''
@@ -73,9 +75,11 @@ def build(xml, urls, output=None, localfile=None, download=True):
             urllib.urlretrieve(url, localfile, progress.download_update)
             progress.download_end()
 
-    xml.scan_file(localfile)
+    xmlfile = metalink.MetalinkFile(localfile, do_ed2k=do_ed2k, do_magnet=do_magnet)
+    xml.files.append(xmlfile)
+    xmlfile.scan_file(localfile)
     for item in urls:
-        xml.add_url(item)
+        xmlfile.add_url(item)
 
     if not xml.validate():
         for line in xml.errors:
@@ -85,34 +89,30 @@ def build(xml, urls, output=None, localfile=None, download=True):
     print "Generating XML..."
     if output == None:
         output = localfile + ".metalink"
+    
+    if output.endswith(".meta4") or v4:
+        xml = metalink.convert(xml, 4)
     handle = open(output, "wb")
     handle.write(xml.generate())
     handle.close()
     return xml
     #print xml.generate()
 
-def merge(master, args):
+def merge(master, args, v4=False):
     '''
-    A master Metalink object with non <files> information and a list of files to merge together.
+    A master Metalink object with no <files> information and a list of files to merge together.
     '''
-    xmlfiles = ""
+    master = metalink.convert(master, 3)
+    master.files = []
     for item in args:
-        xml = metalink.Metalink()
-        xml.load_file(item)
-        xmlfiles += xml.generate_file()
-
-    text = '<?xml version="1.0" encoding="utf-8"?>\n'
-    origin = ""
-    if master.origin.strip() != "":
-        origin = 'origin="'+master.origin+'" '
-    text += '<metalink version="3.0" '+origin+'generator="Metalink Editor version '+metalink.current_version+'" xmlns="http://www.metalinker.org/">\n'
-    text += master.generate_info()
-    text += '  <files>\n'
-    text += xmlfiles
-    text += '  </files>\n'
-    text += '</metalink>'
-
-    return text
+        xml = metalink.parsefile(item)
+        for fileobj in xml.files:
+            master.files.append(fileobj)
+    
+    if v4:
+        master = metalink.convert(master, 4)
+        return master.generate()
+    return master.generate()
 
 def run():
     # Command line parser options.
@@ -122,7 +122,7 @@ def run():
     parser.add_option("-d", dest="download", action="store_true", help="Don't download the file again")
     parser.add_option("--merge", "-m", dest="merge", action="store_true", help="Use merge mode, urls are .metalink files to merge")
     parser.add_option("--clear_urls", dest="clear_urls", action="store_true", help="Remove any existing urls when opening a file")
-    
+    parser.add_option("-4", dest="v4", action="store_true", help="Force output to Metalink v4")    
     parser.add_option("-i", dest="identity", help="Identity")
     parser.add_option("-v", dest="version", help="Version Number")
     #parser.add_option("--os", dest="os", help="Operating System")
@@ -142,7 +142,7 @@ def run():
         
     #parser.add_option("-s", "--size", dest="size", help="File size")
 
-    parser.set_defaults(identity=None,version=None,os=None,publisher_name=None,publisher_url=None,copyright=None,description=None,license_name=None,license_url=None,language=None,maxconn_total=None,origin=None)
+    parser.set_defaults(identity=None,version=None,os=None,publisher_name=None,publisher_url=None,copyright=None,description=None,license_name=None,license_url=None,language=None,maxconn_total=None,origin=None,v4=False)
     (options, args) = parser.parse_args()
     if len(args) <= 0:
         print "ERROR: Specify a URL."
@@ -153,10 +153,11 @@ def run():
         # RFC 822 format
     #    options.pubdate = time.strftime("%a, %d %b %Y %H:%M:%S +0000", time.gmtime())
 
-    xml = metalink.Metalink(options.ed2k, options.magnet)
+    xml = metalink.Metalink()
+    #options.ed2k, options.magnet)
 
     if options.open != None:
-        xml.load_file(options.open)
+        xml = metalink.parsefile(options.open)
         if options.clear_urls:
             xml.clear_res()
 
@@ -173,14 +174,14 @@ def run():
             parser.print_help()
             return
 
-        print merge(xml, args)
+        print merge(xml, args, options.v4)
         return
 
     download = True
     if options.download:
         download = False
     
-    build(xml, args, None, options.output, download)
+    build(xml, args, None, options.output, download, options.v4)
 
 class ProgressBar:
     def __init__(self, length = 68):

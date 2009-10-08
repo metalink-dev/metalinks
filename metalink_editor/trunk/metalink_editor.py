@@ -1,6 +1,6 @@
 #!/usr/bin/python
 #
-#    Copyright (c) 2007 Hampus Wessman, Sweden.
+#    Copyright (c) 2007-2009 Hampus Wessman, Sweden.
 #
 #    This program is free software; you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -20,11 +20,13 @@ import wxversion
 wxversion.ensureMinimal("2.6")
 import wx, metalink, sys, os.path
 
-current_version = "1.2.0"
+current_version = "1.3.0"
 
 use_chunks_default = True
 max_chunks_default = 100
 chunk_size_default = 256
+
+metalink.GENERATOR = "Metalink Editor version "+current_version
 
 # Just a simple hack... (used to locate the icon)
 try:
@@ -106,6 +108,8 @@ class MainFrame(wx.Frame):
         self.new_file = True
         self.locked = False
         self.ml = metalink.Metalink()
+        self.mlfile = metalink.MetalinkFile(self.filename)
+        self.ml.files.append(self.mlfile)
         self.update()
 
     def create_gui(self):
@@ -392,10 +396,11 @@ class MainFrame(wx.Frame):
         self.txtctrl_sha1.SetEditable(enabled)
         self.txtctrl_sha256.SetEditable(enabled)
         # Status text
-        if len(self.ml.pieces) > 0:
-            self.SetStatusText(str(len(self.ml.pieces)) + " chunk checksums.", 1)
+        if len(self.mlfile.pieces) > 0:
+            self.SetStatusText(str(len(self.ml.files[0].pieces)) + " chunk checksums.", 1)
         else:
             self.SetStatusText("No chunk checksums.", 1)
+
     
     def onMenuAbout(self, evt):
         wx.MessageBox("Metalink Editor is an editor for metalink files (www.metalinker.org).\n\nThe application was programmed by Hampus Wessman.\nWeb site: http://hampus.vox.nu/metalink/\n\nAnthony Bryan has helped alot with ideas and comments. Thanks!", "About Metalink Editor", wx.ICON_INFORMATION)
@@ -424,22 +429,22 @@ class MainFrame(wx.Frame):
             use_chunks = config.ReadBool("use_chunk_checksums", use_chunks_default)
             max_chunks = config.ReadInt("max_chunk_checksums", max_chunks_default)
             size_chunks = config.ReadInt("min_chunk_size", chunk_size_default)
-            old_filename = self.ml.filename
+            old_filename = self.mlfile.filename
             progressdlg = wx.ProgressDialog("Scanning file...", "Please wait while Metalink Editor scans the selected file. This can take some time for very large files.",
                 100, self, wx.PD_AUTO_HIDE | wx.PD_APP_MODAL | wx.PD_CAN_ABORT | wx.PD_ELAPSED_TIME | wx.PD_REMAINING_TIME | wx.PD_ESTIMATED_TIME)
-            success = self.ml.scan_file(filename, use_chunks, max_chunks, size_chunks, progressdlg)
+            success = self.mlfile.scan_file(filename, use_chunks, max_chunks, size_chunks, progressdlg)
             progressdlg.Destroy()
             if not success: return
-            self.txtctrl_size.SetValue(self.ml.size)
-            self.txtctrl_filename.SetValue(self.ml.filename)
-            self.txtctrl_md5.SetValue(self.ml.hash_md5)
-            self.txtctrl_sha1.SetValue(self.ml.hash_sha1)
-            self.txtctrl_sha256.SetValue(self.ml.hash_sha256)
-            if self.ml.hash_sha256 == "":
+            self.txtctrl_size.SetValue(str(self.mlfile.size))
+            self.txtctrl_filename.SetValue(self.mlfile.filename)
+            self.txtctrl_md5.SetValue(self.mlfile.hashlist['md5'])
+            self.txtctrl_sha1.SetValue(self.mlfile.hashlist['sha1'])
+            self.txtctrl_sha256.SetValue(self.mlfile.hashlist['sha256'])
+            if self.mlfile.hashlist['sha256'] == "":
                 self.txtctrl_sha256.Enable(False) # No support for SHA-256
             # Update URLs
             num_urls = self.filelist.GetItemCount()
-            new_filename = self.ml.filename
+            new_filename = self.mlfile.filename
             if num_urls > 0 and new_filename != old_filename:
                 answer = wx.MessageBox("Would you like to update your URLs, so that they use the new filename instead of the old?", "Update mirrors?", wx.ICON_QUESTION | wx.YES_NO, self)
                 if answer == wx.YES:
@@ -474,8 +479,8 @@ class MainFrame(wx.Frame):
                     self.filelist.DeleteItem(item)
                                 
             # add ed2k and magnet link to GUI for this file
-            self.addurl(metalink.Resource(self.ml.ed2k))
-            self.addurl(metalink.Resource(self.ml.magnet))
+            self.addurl(metalink.Resource(self.mlfile.ed2k))
+            self.addurl(metalink.Resource(self.mlfile.magnet))
             
             self.filename = filename + ".metalink"
             self.new_file = True
@@ -499,7 +504,7 @@ class MainFrame(wx.Frame):
             self.filelist.InsertStringItem(num_items, res.url)
             self.filelist.SetStringItem(num_items, 1, res.location)
             self.filelist.SetStringItem(num_items, 2, res.preference)
-            self.filelist.SetStringItem(num_items, 3, res.conns)
+            self.filelist.SetStringItem(num_items, 3, res.maxconnections)
             self.clear_urlfields()
             self.update()
 
@@ -558,7 +563,7 @@ class MainFrame(wx.Frame):
             default_path, default_name = os.path.split(self.filename)
         else:
             default_path, default_name = "", ""
-        filename = wx.FileSelector("Save as...", default_path, default_name, ".metalink", "All files (*.*)|*.*|Metalink files (*.metalink)|*.metalink", wx.SAVE)
+        filename = wx.FileSelector("Save as...", default_path, default_name, ".metalink", "All files (*.*)|*.*|Metalink files (*.metalink)|*.metalink|Metalink4 files (*.meta4)|*.meta4", wx.SAVE)
         if filename == "":
             return False
         else:
@@ -570,26 +575,27 @@ class MainFrame(wx.Frame):
     
     def save(self):
         # Generate the file
-        self.ml.filename = self.txtctrl_filename.GetValue()
-        self.ml.identity = self.txtctrl_identity.GetValue()
-        self.ml.publisher_name = self.txtctrl_pub_name.GetValue()
-        self.ml.publisher_url = self.txtctrl_pub_url.GetValue()
-        self.ml.copyright = self.txtctrl_copy.GetValue()
-        self.ml.description = self.txtctrl_desc.GetValue()
-        self.ml.license_name = self.combo_license_name.GetValue()
-        if self.ml.license_name == 'Unknown': self.ml.license_name = ""
-        self.ml.license_url = self.txtctrl_license_url.GetValue()
-        self.ml.size = self.txtctrl_size.GetValue()
-        self.ml.version = self.txtctrl_version.GetValue()
-        self.ml.os = self.combo_os.GetValue()
-        if self.ml.os == 'Unknown': self.ml.os = ""
-        self.ml.language = self.txtctrl_lang.GetValue()
-        self.ml.maxconn_total = self.combo_maxconn_total.GetValue()
-        self.ml.origin = ""
-        self.ml.hash_md5 = self.txtctrl_md5.GetValue()
-        self.ml.hash_sha1 = self.txtctrl_sha1.GetValue()
-        self.ml.hash_sha256 = self.txtctrl_sha256.GetValue()
-        self.ml.clear_res()
+        mlfile = self.ml
+        mlfile.filename = self.txtctrl_filename.GetValue()
+        mlfile.identity = self.txtctrl_identity.GetValue()
+        mlfile.publisher_name = self.txtctrl_pub_name.GetValue()
+        mlfile.publisher_url = self.txtctrl_pub_url.GetValue()
+        mlfile.copyright = self.txtctrl_copy.GetValue()
+        mlfile.description = self.txtctrl_desc.GetValue()
+        mlfile.license_name = self.combo_license_name.GetValue()
+        if mlfile.license_name == 'Unknown': mlfile.license_name = ""
+        mlfile.license_url = self.txtctrl_license_url.GetValue()
+        mlfile.size = self.txtctrl_size.GetValue()
+        mlfile.version = self.txtctrl_version.GetValue()
+        self.mlfile.os = self.combo_os.GetValue()
+        if self.mlfile.os == 'Unknown': self.mlfile.os = ""
+        self.mlfile.language = self.txtctrl_lang.GetValue()
+        self.mlfile.maxconnections = self.combo_maxconn_total.GetValue()
+        mlfile.origin = ""
+        self.mlfile.hashlist['md5'] = self.txtctrl_md5.GetValue()
+        self.mlfile.hashlist['sha1'] = self.txtctrl_sha1.GetValue()
+        self.mlfile.hashlist['sha256'] = self.txtctrl_sha256.GetValue()
+        self.mlfile.clear_res()
         item = -1
         while True:
             item = self.filelist.GetNextItem(item, wx.LIST_NEXT_ALL, wx.LIST_STATE_DONTCARE)
@@ -603,14 +609,18 @@ class MainFrame(wx.Frame):
                 for e in res.errors:
                     answer = wx.MessageBox(e + " Continue anyway?", "Confirm", wx.ICON_ERROR | wx.OK | wx.CANCEL, self)
                     if answer != wx.OK: return
-            self.ml.add_res(res)
-        if not self.ml.validate():
-            for e in self.ml.errors:
+            self.mlfile.add_res(res)
+            
+        ml = self.ml
+        if self.filename.endswith("meta4"):
+            ml = metalink.convert(self.ml, 4)
+        if not ml.validate():
+            for e in sml.errors:
                 answer = wx.MessageBox(e + " Continue anyway?", "Confirm", wx.ICON_ERROR | wx.OK | wx.CANCEL, self)
                 if answer != wx.OK: return
-            self.ml.errors = []
+            ml.errors = []
         try:
-            text = self.ml.generate()
+            text = ml.generate()
         except Exception, e:
             wx.MessageBox(str(e), "Error!", wx.ICON_ERROR)
             return
@@ -637,15 +647,15 @@ class MainFrame(wx.Frame):
         self.SetStatusText("Saved file as " + outfilename)
 
     def onMenuOpen(self, evt):
-        filename = wx.FileSelector("Choose metalink file to load", "", "", ".metalink", "All files (*.*)|*.*|Metalink files (*.metalink)|*.metalink", wx.OPEN)
+        filename = wx.FileSelector("Choose metalink file to load", "", "", ".metalink", "All files (*.*)|*.*|Metalink files (*.metalink)|*.metalink|Metalink4 files (*.meta4)|*.meta4", wx.OPEN)
         if filename != "":
             try:
-                self.ml = metalink.Metalink()
-                self.ml.load_file(filename)
+                self.ml = metalink.parsefile(filename)
+                self.mlfile = self.ml.files[0]
             except Exception, e:
                 wx.MessageBox(str(e), "Error!", wx.ICON_ERROR)
                 return
-            self.txtctrl_filename.SetValue(self.ml.filename)
+            self.txtctrl_filename.SetValue(self.mlfile.filename)
             self.txtctrl_identity.SetValue(self.ml.identity)
             self.txtctrl_pub_name.SetValue(self.ml.publisher_name)
             self.txtctrl_pub_url.SetValue(self.ml.publisher_url)
@@ -653,25 +663,32 @@ class MainFrame(wx.Frame):
             self.txtctrl_desc.SetValue(self.ml.description)
             self.combo_license_name.SetValue(self.ml.license_name)
             self.txtctrl_license_url.SetValue(self.ml.license_url)
-            self.txtctrl_size.SetValue(self.ml.size)
+            self.txtctrl_size.SetValue(str(self.mlfile.size))
             self.txtctrl_version.SetValue(self.ml.version)
-            self.combo_os.SetValue(self.ml.os)
-            self.txtctrl_lang.SetValue(self.ml.language)
-            self.combo_maxconn_total.SetValue(self.ml.maxconn_total)
-            self.txtctrl_md5.SetValue(self.ml.hash_md5)
-            self.txtctrl_sha1.SetValue(self.ml.hash_sha1)
-            self.txtctrl_sha256.SetValue(self.ml.hash_sha256)
+            self.combo_os.SetValue(self.mlfile.os)
+            self.txtctrl_lang.SetValue(self.mlfile.language)
+            self.combo_maxconn_total.SetValue(self.mlfile.maxconnections)
+            try:
+                self.txtctrl_md5.SetValue(self.mlfile.hashlist['md5'])
+            except KeyError: pass
+            try:
+                self.txtctrl_sha1.SetValue(self.mlfile.hashlist['sha1'])
+            except KeyError: pass
+            try:
+                self.txtctrl_sha256.SetValue(self.mlfile.hashlist['sha256'])
+            except KeyError: pass
+            
             self.txtctrl_url.Clear()
             self.txtctrl_loc.Clear()
             self.txtctrl_pref.Clear()
             self.init_filelist()
-            for res in self.ml.resources:
+            for res in self.mlfile.resources:
                 num_items = self.filelist.GetItemCount()
                 self.filelist.InsertStringItem(num_items, res.url)
                 self.filelist.SetStringItem(num_items, 1, res.location)
                 self.filelist.SetStringItem(num_items, 2, res.preference)
-                self.filelist.SetStringItem(num_items, 3, res.conns)
-            if len(self.ml.pieces) > 0 or self.ml.hash_md5 != "" or self.ml.hash_sha1 != "" or self.ml.hash_sha256 != "":
+                self.filelist.SetStringItem(num_items, 3, res.maxconnections)
+            if len(self.mlfile.pieces) > 0 or self.txtctrl_md5.GetValue() != "" or self.txtctrl_sha1.GetValue() != "" or self.txtctrl_sha256.GetValue() != "":
                 self.locked = True
             else:
                 self.locked = False
