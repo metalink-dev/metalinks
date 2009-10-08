@@ -1,6 +1,9 @@
 Metalink Editor Changelog
 by Hampus Wessman
 
+Version 1.3.0
+* Support for Metalink v4 (IETF RFC)
+
 Version 1.2.0
 * Lots of small changes.
 
