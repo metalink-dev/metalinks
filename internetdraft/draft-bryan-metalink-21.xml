@@ -1,0 +1,2261 @@
+<?xml version="1.0" encoding="UTF-8"?><?rfc linefile="1:draft-bryan-metalink-21.xml"?>
+<?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
+<?rfc toc="yes" ?>
+<?rfc tocdepth="3" ?>
+<?rfc tocindent="yes" ?>
+<?rfc symrefs="yes" ?>
+<?rfc sortrefs="yes"?>
+<?rfc iprnotified="no" ?>
+<?rfc compact="yes" ?>
+<?rfc comments="yes" ?>
+<?rfc inline="yes" ?>
+<!DOCTYPE rfc
+  PUBLIC "" "rfc2629.dtd">
+<rfc category="std" docName="draft-bryan-metalink-21" ipr="pre5378Trust200902">
+    <front>        
+      <title abbrev="Metalink Download Description Format">The Metalink Download Description Format</title>		
+      <author initials="A." surname="Bryan" fullname="Anthony Bryan">
+	    <organization></organization>
+	    <address>
+		  <postal>
+			<street></street>
+		    <city>Pompano Beach</city>
+			<region>FL</region>
+			<country>USA</country>
+		  </postal>
+	      <email>anthonybryan@gmail.com</email>	
+	      <uri>http://www.metalinker.org</uri>		
+	    </address>
+      </author>
+      <author initials="T." surname="Tsujikawa" fullname="Tatsuhiro Tsujikawa">
+        <organization></organization>
+        <address>
+          <email>tatsuhiro.t@gmail.com</email>
+          <uri>http://aria2.sourceforge.net</uri>
+        </address>
+      </author>
+      <author initials="N." surname="McNab" fullname="Neil McNab">
+        <organization></organization>
+        <address>
+          <email>neil@nabber.org</email>
+          <uri>http://www.nabber.org</uri>
+        </address>
+      </author>
+      <author initials="P." surname="Poeml" fullname="Peter Poeml">
+        <organization>Novell, Inc.</organization>
+        <address>
+          <email>poeml@mirrorbrain.org</email>
+          <uri>http://www.mirrorbrain.org/</uri>
+        </address>
+      </author>
+	<date month="October" year="2009"/>        
+
+      <abstract>
+	<t>This document specifies Metalink, an XML-based download description format. Metalink describes multiple download locations (mirrors), checksums, and other information. Clients can transparently use this information to reliably transfer files.</t>
+      </abstract>    
+	  
+  </front>    
+
+  <middle>
+    <section title="Introduction">
+      
+      <t>Metalink is an XML-based document format that describes a file or list of files to be added to a download queue. Metalinks can list a number of files,
+      each with an extensible set of attached
+      metadata. For example, each file can have a description, checksum, and list of URIs that it is available from.</t>
+      
+      <t>Identical copies of a file are frequently accessible in multiple locations on the Internet over a variety of protocols (FTP, HTTP, and Peer-to-Peer).
+      In some cases, Users are shown a list of these multiple download locations (mirrors) and must manually select a single one on the basis of geographical location, priority, or bandwidth.
+      This distributes the load across multiple servers. At times, individual servers can be slow, outdated, or unreachable, but this can not be determined until the download has been initiated.
+      This can lead to the user canceling the download and needing to restart it. During downloads, errors in transmission can corrupt the file.
+      There are no easy ways to repair these files. For large downloads this can be extremely troublesome.
+      Any of the number of problems that can occur during a download lead to frustration on the part of users.</t>
+
+      <t>All the information about a download, including mirrors, checksums, digital signatures, and more can be stored in a machine-readable Metalink file.
+      This Metalink file transfers the knowledge of the download server (and mirror database) to the client. Clients can fall back to alternate mirrors if the current one has an issue. With this knowledge, the client is enabled to work its way to a successful download even under adverse circumstances. 
+      All this is done transparently to the user and the download is much more reliable and efficient.
+      In contrast, a traditional HTTP redirect to a mirror conveys only extremely minimal information - one link to one server, and there is no provision in the HTTP protocol to handle failures.
+      Other features that some clients provide include multi-source downloads, where chunks of a file are downloaded from multiple mirrors (and optionally, Peer-to-Peer) simultaneously, which frequently results in a faster download. Metalinks also provide structured information about downloads that can be indexed by search engines.</t>
+
+      <t>[[ Discussion of this draft should take place on discuss@apps.ietf.org or the Metalink discussion mailing list
+   located at metalink-discussion@googlegroups.com. To join the list, visit
+   http://groups.google.com/group/metalink-discussion . ]]</t>
+      <section title="Examples"><t><figure> 
+	  <preamble>A brief, single file Metalink Document:</preamble>
+	  
+	  <artwork type="example">
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;metalink xmlns="urn:ietf:params:xml:ns:metalink"&gt;
+  &lt;file name="example.ext"&gt;
+    &lt;size&gt;14471447&lt;/size&gt;
+    &lt;url&gt;ftp://ftp.example.com/example.ext&lt;/url&gt;
+    &lt;url&gt;http://example.com/example.ext&lt;/url&gt; 
+    &lt;metaurl type="torrent"&gt;
+    http://example.com/example.ext.torrent
+    &lt;/metaurl&gt;
+  &lt;/file&gt;
+&lt;/metalink&gt;
+</artwork></figure></t>
+      <t>
+	<figure>
+	  <preamble>A more extensive, single file Metalink Document:</preamble>
+	  <artwork type="example">
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;metalink xmlns="urn:ietf:params:xml:ns:metalink"&gt;
+  &lt;published&gt;2009-05-15T12:23:23Z&lt;/published&gt;
+  &lt;file name="example.ext"&gt;
+    &lt;size&gt;14471447&lt;/size&gt;
+    &lt;identity&gt;Example&lt;/identity&gt;
+    &lt;version&gt;1.0&lt;/version&gt;
+    &lt;language&gt;en&lt;/language&gt;	  
+    &lt;description&gt;A description of the example file for 
+download.&lt;/description&gt;
+    &lt;hash type="sha-1"&gt;
+    80bc95fd391772fa61c91ed68567f0980bb45fd9&lt;/hash&gt;
+    &lt;url location="de" priority="1"&gt;
+    ftp://ftp.example.com/example.ext&lt;/url&gt;
+    &lt;url location="fr" priority="1"&gt;
+    http://example.com/example.ext&lt;/url&gt; 
+    &lt;metaurl type="torrent" priority="2"&gt;
+    http://example.com/example.ext.torrent
+    &lt;/metaurl&gt;
+  &lt;/file&gt;
+&lt;/metalink&gt;</artwork>
+	</figure>
+      </t>
+      </section>
+
+
+
+      <section title="Namespace and Version" anchor="namespace.and.version">
+
+	<t>The XML Namespaces URI <xref target="REC-xml-names"/> for the XML data
+	format described in this specification is:</t>
+
+	<t>urn:ietf:params:xml:ns:metalink</t>
+	 
+	<t>For convenience, this data format may be referred to as
+	"Metalink", which this specification uses internally.</t>
+
+      </section>
+
+      <section title="Notational Conventions"> 
+
+	<t>This specification describes conformance of Metalink
+	Documents. Additionally, it places some requirements on Metalink
+	Processors.</t>
+     
+	<t>This specification uses the namespace prefix "metalink:" for
+	the Namespace URI identified in <xref target="namespace.and.version"/>, above.  Note that
+	the choice of namespace prefix is arbitrary and not
+	semantically significant.</t>
+      
+	<t>Metalink is specified using terms from the XML Infoset <xref target="REC-xml-infoset"/>. However, this
+	specification uses a shorthand for two common terms: the
+	phrase "Information Item" is omitted when naming Element
+	Information Items and Attribute Information Items. Therefore,
+	when this specification uses the term "element," it is
+	referring to an Element Information Item in Infoset
+	terms. Likewise, when it uses the term "attribute," it is
+	referring to an Attribute Information Item.</t>
+
+	<t>Some sections of this specification are illustrated with fragments
+	of a non-normative RELAX NG Compact schema <xref target="RELAX-NG"/>. However, the text of this specification provides the definition of
+	conformance. A complete schema appears in <xref target="schema"/>.
+	</t>
+	
+	<t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+	"SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+	document are to be interpreted as described in BCP 14, <xref target="RFC2119"/>, as scoped to those conformance targets.</t>
+
+
+      </section> 
+    
+    </section> 
+
+    <section title="Metalink Documents" anchor="metalink.documents">
+       
+
+      <t>This specification describes Metalink Documents.</t> 
+
+      <t>A Metalink Document describes a file or group of files, 
+	  how to access them, and metadata that identifies them. Its root is the <xref target="element.metalink" format="none">metalink:metalink</xref> element.</t>
+
+      <figure>
+	<artwork type="rnc">
+namespace metalink = "urn:ietf:params:xml:ns:metalink"	 		
+start = metalinkMetalink</artwork>
+      </figure> 
+      
+      <t>Metalink Documents are specified in terms of the
+      XML Information Set, serialized as XML 1.0 <xref target="REC-xml"/> and identified with the
+      "application/metalink4+xml" media type.</t>
+	  
+      <t>Metalink Documents MUST be
+      well-formed XML. This specification does not define a DTD for
+      Metalink Documents, and hence does not require them to be valid (in
+      the sense used by XML).</t>
+	  
+      <t>Metalink allows the use of IRIs, encoded according to <xref target="RFC3987"/>. Every
+      URI <xref target="RFC3986"/> is also an IRI, so a URI may be
+      used wherever below an IRI is named. There is one special
+      consideration: when an IRI that is not also a URI is given for
+      dereferencing, it MUST be mapped to a URI using the steps in
+      Section 3.1 of <xref target="RFC3987"/>.</t>
+
+      <t>Any element defined by this specification MAY have an
+      xml:base attribute <xref target="REC-xmlbase"/>.
+      When xml:base is used in an Metalink Document, it serves the
+      function described in Section 5.1.1 of <xref target="RFC3986"/>,
+      establishing the base URI (or IRI) for resolving any relative
+      references found within the effective scope of the xml:base
+      attribute.</t>
+      
+      <t>Any element defined by this specification MAY have an
+      xml:lang attribute, whose content indicates the natural language
+      for the element and its descendents.  The language context is only
+      significant for elements and attributes declared to be
+      "Language-Sensitive" by this specification. Requirements
+      regarding the content and interpretation of xml:lang are
+      specified in <xref target="REC-xml">XML 1.0</xref>,
+      Section 2.12.
+
+      <figure> 
+      <iref item="metalinkCommonAttributes grammar production" primary="true"/>
+      <iref item="Grammar" subitem="metalinkCommonAttributes" primary="true"/>
+	<artwork type="rnc">
+metalinkCommonAttributes =
+   attribute xml:base { metalinkUri }?,
+   attribute xml:lang { metalinkLanguageTag }?,
+   undefinedAttribute*</artwork>  </figure></t>	  
+	  
+      <t>Metalink is an extensible format. See <xref target="extending_metalink"/>
+      of this document for a full description of how Metalink Documents can
+      be extended.</t>
+
+
+    </section> 
+
+    <section title="Common Metalink Constructs"> 
+
+      <t>Many of Metalink's elements share a few common structures. This section
+      defines those structures and their requirements for convenient
+      reference by the appropriate element definitions.</t>
+
+      <t>When an element is identified as being a particular kind of
+      construct, it inherits the corresponding requirements from that
+      construct's definition in this section.</t>
+
+      <t>Note that there MUST NOT be any white space in a Date construct
+      or in any IRI. Some XML-emitting implementations erroneously insert
+      white space around values by default, and such implementations will emit
+      invalid Metalink Documents.</t>
+      
+      <section title="Text Constructs" anchor="text.constructs">
+         
+         
+         
+
+	<t>A Text construct contains human-readable text, usually in
+	small quantities. The content of Text constructs is
+	Language-Sensitive.
+
+	  <figure>
+      <iref item="metalinkTextConstruct grammar production" primary="true"/>
+      <iref item="Grammar" subitem="metalinkTextConstruct" primary="true"/>
+	    <artwork type="rnc">
+metalinkTextConstruct =
+   metalinkCommonAttributes,
+   text</artwork></figure></t>
+   
+	  <section title="Text">
+
+	    <t>Example <xref target="element.description" format="none">metalink:description</xref> with text content:
+	    
+
+	      <figure>
+		<artwork type="example">
+...
+&lt;description&gt;
+A description of the example file for download.
+&lt;/description&gt;
+...</artwork>
+	      </figure>
+	    </t>
+
+	    <t>The content of the Text
+	    construct MUST NOT contain child elements. Such text is
+	    intended to be presented to humans in a readable fashion.
+	    Thus, white space could be collapsed (including
+	    line breaks) and text could be displayed using typographic
+	    techniques such as justification and proportional
+	    fonts.</t>
+	  
+      </section>
+	
+    </section>
+	
+      <section title="Date Constructs" anchor="date.constructs"> 
+        
+
+	<t>A Date construct is an element whose content MUST conform
+	to the "date-time" production in <xref target="RFC3339"/>. In addition, an uppercase "T" character 
+	MUST be used to separate date and time, and an uppercase "Z"
+	character MUST be present in the absence of a numeric time zone
+	offset.
+	
+	  <figure>
+      <iref item="metalinkDateConstruct grammar production" primary="true"/>
+      <iref item="Grammar" subitem="metalinkDateConstruct" primary="true"/>
+	    <artwork type="rnc">
+metalinkDateConstruct =
+   metalinkCommonAttributes,
+   xsd:dateTime</artwork></figure></t>
+	
+
+	<t>Such date values happen to be compatible with the following
+	specifications:
+	<xref target="ISO.8601.1988"/>, 
+	<xref target="W3C.NOTE-datetime-19980827"/>,
+	and <xref target="W3C.REC-xmlschema-2-20041028"/>.</t>
+	
+	<t>Example Date constructs:
+
+	<figure>
+	  <artwork type="example">
+&lt;updated&gt;2009-05-15T18:30:02Z&lt;/updated&gt;
+&lt;updated&gt;2009-05-15T18:30:02.25Z&lt;/updated&gt;
+&lt;updated&gt;2009-05-15T18:30:02+01:00&lt;/updated&gt;
+&lt;updated&gt;2009-05-15T18:30:02.25+01:00&lt;/updated&gt;
+</artwork>
+		   
+	</figure>
+	</t>
+
+	<t>Date values SHOULD be as accurate as possible. For
+	example, it would be generally inappropriate for a publishing
+	system to apply the same timestamp to several Metalink Documents that
+	were published during the course of a single day.</t>
+
+
+      </section>
+
+    </section>
+
+    <section title="Metalink Element Definitions">
+    
+      <section title="Container Elements">
+
+	<section anchor="element.metalink" title="The &#34;metalink:metalink&#34; Element">
+    
+    
+    <iref item="XML Elements" subitem="metalink" primary="true"/>
+    <iref item="metalink XML element" primary="true"/> 
+
+	  <t>The "metalink:metalink" element is the document (i.e., top-level) element
+	  of a Metalink Document, acting as a container for metadata and
+	  data associated with the listed files.  It contains one or more <xref target="element.file" format="none">metalink:file</xref> child elements which consist of
+	  metadata elements.
+	  
+	    <figure> 
+        <iref item="metalinkMetalink grammar production" primary="true"/>
+        <iref item="Grammar" subitem="metalinkMetalink" primary="true"/>
+	      <artwork type="rnc">
+metalinkMetalink =
+   element metalink:metalink {
+      metalinkCommonAttributes,
+      (metalinkDynamic?
+       &amp; metalinkFile+
+       &amp; metalinkGenerator?
+       &amp; metalinkOrigin?
+       &amp; metalinkPublished?
+       &amp; metalinkUpdated?
+       &amp; extensionElement*)
+   }</artwork></figure></t> 
+	
+	  <t>The following child elements are defined by this specification
+	  (note that the presence of some of these elements is required):</t>
+
+	  <t> 
+	    
+	    <list style="symbols"> 
+	      
+
+          <t><xref target="element.metalink" format="none">metalink:metalink</xref> elements MAY contain exactly one <xref target="element.dynamic" format="none">metalink:dynamic</xref> element.</t>
+		  
+          <t><xref target="element.metalink" format="none">metalink:metalink</xref> elements MUST contain one or more <xref target="element.file" format="none">metalink:file</xref> elements.</t>
+
+	      <t><xref target="element.metalink" format="none">metalink:metalink</xref> elements MAY contain exactly one <xref target="element.generator" format="none">metalink:generator</xref> element.</t>
+
+	      <t><xref target="element.metalink" format="none">metalink:metalink</xref> elements SHOULD contain exactly one <xref target="element.origin" format="none">metalink:origin</xref> element.</t>
+
+	      <t><xref target="element.metalink" format="none">metalink:metalink</xref> elements MAY contain exactly one <xref target="element.published" format="none">metalink:published</xref> element.</t>
+	  
+	    </list></t> 
+
+
+	  <section toc="exclude" title="Providing Textual Content">
+	    <t>Experience teaches that downloads providing textual
+	    content are in general more useful than those that do
+	    not. Some applications (one example is full-text indexers)
+	    require a minimum amount of text to function
+	    reliably and predictably. Metalink publishers should be aware
+	    of these issues. It is advisable that each <xref target="element.file" format="none">metalink:file</xref>
+	    element contain a non-empty <xref target="element.description" format="none">metalink:description</xref> element, a
+	    non-empty <xref target="element.identity" format="none">metalink:identity</xref> element when that element is
+	    present, and a non-empty <xref target="element.version" format="none">metalink:version</xref> element, and a non-empty
+		<xref target="element.publisher" format="none">metalink:publisher</xref> element. However, the
+	    absence of <xref target="element.description" format="none">metalink:description</xref> is not an error, and Metalink
+	    Processors MUST NOT fail to function correctly as a
+	    consequence of such an absence.</t>
+	  </section>
+
+	</section> 
+	
+	<section anchor="element.file" title="The &#34;metalink:file&#34; Element">
+    
+    
+    <iref item="XML Elements" subitem="entry" primary="true"/>
+    <iref item="file XML element" primary="true"/> 
+
+	  <t>The "<xref target="element.file" format="none">metalink:file</xref>" element represents an individual file,
+	  acting as a container for metadata and data associated with
+	  the file.</t>  
+	  
+	  <t>All <xref target="element.url" format="none">metalink:url</xref> elements SHOULD lead to identical files. That is,
+	  each <xref target="element.url" format="none">metalink:url</xref> element should be an alternative location for the same file and each 
+	  <xref target="element.metaurl" format="none">metalink:metaurl</xref> element should provide metadata to retrieve the same file in another way, such as a peer to peer network.
+
+	    <figure> 
+        <iref item="metalinkFile grammar production" primary="true"/>
+        <iref item="Grammar" subitem="metalinkFile" primary="true"/>
+	      <artwork type="rnc">
+metalinkFile =
+   element metalink:file {
+      metalinkCommonAttributes,
+      attribute name { text },
+      (metalinkCopyright?
+       &amp; metalinkDescription?
+       &amp; metalinkHash*
+       &amp; metalinkIdentity?
+       &amp; metalinkLanguage?
+       &amp; metalinkLicense?
+       &amp; metalinkLogo?
+       &amp; metalinkMetaURL*
+       &amp; metalinkURL*
+       &amp; metalinkOS*
+       &amp; metalinkPieces*
+       &amp; metalinkPublisher?
+       &amp; metalinkSignature?
+       &amp; metalinkSize?
+       &amp; metalinkVersion?
+       &amp; extensionElement*)
+   }</artwork></figure></t>
+
+   <t>This specification assigns no significance to the order of
+	  <xref target="element.file" format="none">metalink:file</xref> elements or to the order of
+	  <xref target="element.url" format="none">metalink:url</xref> or <xref target="element.metaurl" format="none">metalink:metaurl</xref> elements. Significance is determined by the value of the "priority" attribute of the <xref target="element.url" format="none">metalink:url</xref> or <xref target="element.metaurl" format="none">metalink:metaurl</xref> elements.</t>
+
+	  <t>The following child elements are defined by this specification
+	  (note that it requires the presence of some of these elements):</t>
+
+	  <t> 
+	
+	    <list style="symbols"> 
+
+	      <t><xref target="element.file" format="none">metalink:file</xref> elements MAY contain exactly one <xref target="element.copyright" format="none">metalink:copyright</xref>
+	      element.</t>	
+
+	      <t><xref target="element.file" format="none">metalink:file</xref> elements MAY contain exactly one <xref target="element.description" format="none">metalink:description</xref>
+	      element.</t>	
+
+	      <t><xref target="element.file" format="none">metalink:file</xref> elements MAY contain exactly one <xref target="element.identity" format="none">metalink:identity</xref>
+	      element.</t>	
+
+	      <t><xref target="element.file" format="none">metalink:file</xref> elements MAY contain one or more <xref target="element.hash" format="none">metalink:hash</xref> elements.</t>
+
+	      <t><xref target="element.file" format="none">metalink:file</xref> elements MAY contain exactly one <xref target="element.language" format="none">metalink:language</xref>
+	      element.</t>	
+
+	      <t><xref target="element.file" format="none">metalink:file</xref> elements MAY contain exactly one <xref target="element.license" format="none">metalink:license</xref>
+	      element.</t>	
+
+	      <t><xref target="element.file" format="none">metalink:file</xref> elements MAY contain exactly one <xref target="element.logo" format="none">metalink:logo</xref>
+	      element.</t>	
+
+	      <t><xref target="element.file" format="none">metalink:file</xref> elements MAY contain one or more <xref target="element.os" format="none">metalink:os</xref>
+	      element.</t>	
+
+	      <t><xref target="element.file" format="none">metalink:file</xref> elements MUST contain at least one <xref target="element.url" format="none">metalink:url</xref> element or at least one <xref target="element.metaurl" format="none">metalink:metaurl</xref> element. Typically, <xref target="element.file" format="none">metalink:file</xref> elements contain more than one <xref target="element.url" format="none">metalink:url</xref> element to provide multiple download sources.</t>		 
+
+	      <t><xref target="element.file" format="none">metalink:file</xref> elements MAY contain one or more <xref target="element.pieces" format="none">metalink:pieces</xref> elements.</t>
+		  
+          <t><xref target="element.file" format="none">metalink:file</xref> elements MAY contain exactly one <xref target="element.publisher" format="none">metalink:publisher</xref>
+	      element.</t>	
+
+	      <t><xref target="element.file" format="none">metalink:file</xref> elements MAY contain one or more <xref target="element.signature" format="none">metalink:signature</xref> elements.</t>
+		  
+	      <t><xref target="element.file" format="none">metalink:file</xref> elements SHOULD contain exactly one <xref target="element.size" format="none">metalink:size</xref>
+	      element.</t>
+		  
+	      <t><xref target="element.file" format="none">metalink:file</xref> elements MAY contain exactly one <xref target="element.version" format="none">metalink:version</xref>
+	      element.</t>	
+      
+	    </list> 
+
+    </t> 
+
+	  <section title="The &#34;name&#34; Attribute"> 
+
+	    <t><xref target="element.file" format="none">metalink:file</xref> elements MUST have a "name" attribute, which contains the filename of the file to be downloaded.
+	<figure>
+	  <preamble>Directory information can also be contained in a "path/file" format only, as in:</preamble>
+	  <artwork type="example">
+&lt;file name="debian-amd64/sarge/Contents-amd64.gz"&gt;
+</artwork></figure></t>
+        <t>In this example, a subdirectory "debian-amd64/sarge/" will be created
+           and a file named "Contents-amd64.gz" will be created inside it.  The path MUST NOT contain any directory traversal directives or
+           information. The path MUST be relative.  The path MUST NOT begin with a "/", "./" or
+           "../", contain "/../", or end with "/..".</t>
+	  </section> 
+
+
+	</section>
+	
+	<section anchor="element.pieces" title="The &#34;metalink:pieces&#34; Element">
+    
+    
+    <iref item="XML Elements" subitem="pieces" primary="true"/>
+    <iref item="pieces XML element" primary="true"/> 
+	      
+	  <t>The "<xref target="element.pieces" format="none">metalink:pieces</xref>" element acts as a container for a list of checksums of
+non-overlapping pieces of the file. The checksums MUST be listed in the same order as the corresponding pieces appear in the file, starting at
+      the beginning of the file. 
+	  
+	    <figure>
+        <iref item="metalinkPieces grammar production" primary="true"/>
+        <iref item="Grammar" subitem="metalinkPieces" primary="true"/>
+	      <artwork type="rnc">
+metalinkPieces =
+   element metalink:pieces {
+      attribute length { xsd:integer },
+      attribute type { text },
+      metalinkHash+
+   }</artwork></figure></t>
+   
+	  <section title="The &#34;type&#34; Attribute"> 
+
+	    <t><xref target="element.pieces" format="none">metalink:pieces</xref> elements MUST have a "type" attribute.
+		</t>
+    
+
+	    <t>The IANA registry named "Hash Function Textual Names" defines values for hash types. If a Metalink Document contains hashes, it SHOULD
+        include "sha-1" which is SHA-1 as specified in <xref target="RFC3174"/>, or a stronger hash.  It MAY also
+        include other hashes.</t>		
+	  </section>
+
+	  <section title="The &#34;length&#34; Attribute"> 
+
+	    <t><xref target="element.pieces" format="none">metalink:pieces</xref> elements MUST have a "length" attribute, which is an integer
+        that describes the length of the pieces of the file in octets. The whole file is divided into non-overlapping pieces of this length,
+        starting from the beginning of the file. That is, every piece should be the same size, apart from
+        the last piece which is the remainder. The last piece extends to the end of the file, and can therefore be shorter than the other pieces.
+		</t>
+		
+	  </section> 
+	  
+	</section>
+	
+	
+      </section>
+
+
+      <section title="Metadata Elements">
+	
+
+	<section anchor="element.copyright" title="The &#34;metalink:copyright&#34; Element">
+    
+    
+    <iref item="XML Elements" subitem="copyright" primary="true"/>
+    <iref item="copyright XML element" primary="true"/> 
+	      
+	  <t>The "<xref target="element.copyright" format="none">metalink:copyright</xref>" element is a Text construct that conveys a
+	  human-readable copyright for a file.
+	  
+	    <figure>
+        <iref item="metalinkCopyright grammar production" primary="true"/>
+        <iref item="Grammar" subitem="metalinkCopyright" primary="true"/>
+	      <artwork type="rnc">
+metalinkCopyright =
+   element metalink:copyright {
+     metalinkTextConstruct
+   }</artwork></figure></t>
+	  
+	</section> 	
+
+	<section anchor="element.description" title="The &#34;metalink:description&#34; Element">
+    
+    
+    <iref item="XML Elements" subitem="description" primary="true"/>
+    <iref item="description XML element" primary="true"/> 
+	      
+	  <t>The "<xref target="element.description" format="none">metalink:description</xref>" element is a Text construct that conveys a
+	  human-readable description for a file.
+	  
+	    <figure>
+        <iref item="metalinkDescription grammar production" primary="true"/>
+        <iref item="Grammar" subitem="metalinkDescription" primary="true"/>
+	      <artwork type="rnc">
+metalinkDescription =
+   element metalink:description {
+     metalinkTextConstruct
+   }</artwork></figure></t>
+	  
+	</section>
+
+	<section anchor="element.dynamic" title="The &#34;metalink:dynamic&#34; Element">
+    
+    
+    <iref item="XML Elements" subitem="type" primary="true"/>
+    <iref item="type XML element" primary="true"/> 
+	      
+	  <t>The "<xref target="element.dynamic" format="none">metalink:dynamic</xref>" element is a Text construct that describes
+	  whether the IRI from "<xref target="element.origin" format="none">metalink:origin</xref>" in a Metalink will contain dynamic updated information or if it is static and not likely to be updated.
+	  
+	    <figure>
+        <iref item="metalinkType grammar production" primary="true"/>
+        <iref item="Grammar" subitem="metalinkType" primary="true"/>
+	      <artwork type="rnc">
+metalinkDynamic =
+   element metalink:dynamic {
+      "true" | "false"
+   }</artwork></figure></t> 
+	  
+	</section>
+	
+
+	<section anchor="element.generator" title="The &#34;metalink:generator&#34; Element">
+    
+    
+    <iref item="XML Elements" subitem="generator" primary="true"/>
+    <iref item="generator XML element" primary="true"/>
+	      
+	  <t>The "<xref target="element.generator" format="none">metalink:generator</xref>" element's content identifies the generating agent name and version, separated by a "/", used
+	  to generate a Metalink Document, for debugging and other purposes.
+      
+	    <figure> 
+        <iref item="metalinkGenerator grammar production" primary="true"/>
+        <iref item="Grammar" subitem="metalinkGenerator" primary="true"/>
+	      <artwork type="rnc">
+metalinkGenerator = 
+   element metalink:generator {
+     metalinkTextConstruct
+   }</artwork></figure></t> 
+
+	  <t>The content of this element, when present, MUST be a
+	  string that is a human-readable name and version, separated by a "/", for the generating
+	  agent.  For example, "MirrorBrain/2.9.2", where "MirrorBrain" is the name and "2.9.2" is the version. Entities such as "&amp;amp;" and "&amp;lt;"
+	  represent their corresponding characters ("&amp;" and "&lt;"
+	  respectively), not markup.</t>
+
+
+	</section>	
+
+	<section anchor="element.hash" title="The &#34;metalink:hash&#34; Element">
+    
+    
+    <iref item="XML Elements" subitem="hash" primary="true"/>
+    <iref item="hash XML element" primary="true"/> 
+	      
+	  <t>The "<xref target="element.hash" format="none">metalink:hash</xref>" element is a Text construct that conveys a
+	  hash for a file. All hashes are encoded in lowercase hexadecimal format. Hashes are used to verify the integrity of a complete file or portion of a file to determine if the file has been transferred without any errors.
+	  
+	    <figure>
+        <iref item="metalinkHash grammar production" primary="true"/>
+        <iref item="Grammar" subitem="metalinkHash" primary="true"/>
+	      <artwork type="rnc">
+metalinkHash =
+   element metalink:hash {
+     attribute type { text }?, 
+     text
+   }</artwork></figure></t>
+      <t><xref target="element.hash" format="none">metalink:hash</xref> elements
+      with a "type" attribute MUST contain a hash of the complete file. Metalink Documents can contain one or multiples hashes of a complete file. In this example, both SHA-1 and SHA-256 hashes are included. 
+	  
+	      <figure>
+		<artwork type="example">
+...
+  &lt;hash type="sha-1">a97fcf6ba9358f8a6f62beee4421863d3e52b080&lt;/hash&gt;
+  &lt;hash type="sha-256">fc87941af7fd7f03e53b34af393f4c14923d74
+  825f51116ff591336af4880227&lt;/hash&gt;
+...</artwork>
+	      </figure>
+      </t>
+      <t>Metalink Documents can also contain hashes for individual pieces of a file.  <xref target="element.hash" format="none">metalink:hash</xref> elements that are inside a <xref target="element.pieces" format="none">metalink:pieces</xref> container element have a hash for that specific piece or chunk of the file, and are of the same hash type as the <xref target="element.pieces" format="none">metalink:pieces</xref> element they are contained in.
+      <xref target="element.hash" format="none">metalink:hash</xref> elements without a "type" attribute MUST contain a hash for that specific piece or chunk of the file and MUST be listed in the
+      same order as the corresponding pieces appear in the file, starting at the beginning of the file. The size of the piece is equal to the value of the "length" attribute of the <xref target="element.pieces" format="none">metalink:pieces</xref> element. The whole file is divided into non-overlapping pieces of this length, starting from the beginning of the file. That is, every piece should be the same size, apart from the last piece which is the remainder. The last piece extends to the end of the file, and can therefore be shorter than the other pieces.
+
+
+	      <figure>
+		<artwork type="example">
+...
+  &lt;hash type="sha-1">a97fcf6ba9358f8a6f62beee4421863d3e52b080&lt;/hash&gt;
+  &lt;hash type="sha-256">fc87941af7fd7f03e53b34af393f4c14923d74
+  825f51116ff591336af4880227&lt;/hash&gt;
+  &lt;pieces length="1048576" type="sha-1"&gt;
+    &lt;hash&gt;d96b9a4b92a899c2099b7b31bddb5ca423bb9b30&lt;/hash&gt;
+    &lt;hash&gt;10d68f4b1119014c123da2a0a6baf5c8a6d5ba1e&lt;/hash&gt;
+    &lt;hash&gt;3e84219096435c34e092b17b70a011771c52d87a&lt;/hash&gt;
+    &lt;hash&gt;67183e4c3ab892d3ebe8326b7d79eb62d077f487&lt;/hash&gt;
+  &lt;/pieces&gt;
+...</artwork>
+	      </figure>
+      </t>
+ 
+	  <section title="The &#34;type&#34; Attribute"> 
+
+
+
+	    <t><xref target="element.hash" format="none">metalink:hash</xref> elements MUST have a "type" attribute, if and only if
+        it contains a hash of the complete file. The IANA registry named "Hash Function Textual Names" defines values for hash types. If a Metalink Document contains hashes, it SHOULD
+include "sha-1" which is SHA-1 as specified in <xref target="RFC3174"/>, or a stronger hash.  It MAY also include additional hash types.</t>
+		
+	  </section>
+
+	  
+	</section> 	
+
+	<section anchor="element.identity" title="The &#34;metalink:identity&#34; Element">
+    
+    
+    <iref item="XML Elements" subitem="identity" primary="true"/>
+    <iref item="identity XML element" primary="true"/> 
+	      
+	  <t>The "<xref target="element.identity" format="none">metalink:identity</xref>" element is a Text construct that conveys a
+	  human-readable identity for a file. The identity of OpenOffice.org 3.0 would be "OpenOffice.org".
+	  
+	    <figure>
+        <iref item="metalinkIdentity grammar production" primary="true"/>
+        <iref item="Grammar" subitem="metalinkIdentity" primary="true"/>
+	      <artwork type="rnc">
+metalinkIdentity =
+   element metalink:identity {
+     metalinkTextConstruct
+   }</artwork></figure></t>
+	  
+	</section> 	
+
+	<section anchor="element.language" title="The &#34;metalink:language&#34; Element">
+    
+    
+    <iref item="XML Elements" subitem="language" primary="true"/>
+    <iref item="language XML element" primary="true"/> 
+	      
+	  <t>The "<xref target="element.language" format="none">metalink:language</xref>" element is a Text construct that conveys a
+	  code for the language of a file, per <xref target="RFC5646"/>.
+	  
+	    <figure>
+        <iref item="metalinkLanguage grammar production" primary="true"/>
+        <iref item="Grammar" subitem="metalinkLanguage" primary="true"/>
+	      <artwork type="rnc">
+metalinkLanguage =
+   element metalink:language {
+     metalinkTextConstruct
+   }</artwork></figure></t>
+   
+	</section>
+
+	<section anchor="element.license" title="The &#34;metalink:license&#34; Element">
+    
+    
+    <iref item="XML Elements" subitem="license" primary="true"/>
+    <iref item="license XML element" primary="true"/> 
+	      
+	  <t>The "<xref target="element.license" format="none">metalink:license</xref>" element is a Text construct that conveys a
+	  human-readable license name for a file.
+	  
+	    <figure>
+        <iref item="metalinkLicense grammar production" primary="true"/>
+        <iref item="Grammar" subitem="metalinkLicense" primary="true"/>
+	      <artwork type="rnc">
+metalinkLicense =
+   element metalink:license {
+     metalinkCommonAttributes,
+     attribute url { metalinkUri }?,
+     attribute name { text }?
+   }</artwork></figure></t>
+
+	  <t>The <xref target="element.license" format="none">metalink:license</xref> element MAY have a "url" attribute
+	  whose value MUST be an IRI reference <xref target="RFC3987"/>. When dereferenced, the resulting URI (mapped from an
+	  IRI, if necessary) SHOULD produce a representation that is
+	  relevant to that agent.</t>
+
+	  <t>The <xref target="element.license" format="none">metalink:license</xref> element MAY have a "name" attribute that
+	  indicates the name of the license.</t>
+
+   
+	</section> 
+
+	<section anchor="element.logo" title="The &#34;metalink:logo&#34; Element">
+    
+    
+    <iref item="XML Elements" subitem="logo" primary="true"/>
+    <iref item="logo XML element" primary="true"/>
+
+	  <t>The "<xref target="element.logo" format="none">metalink:logo</xref>" element's content is an IRI reference <xref target="RFC3987"/> that identifies an image that provides visual
+	  identification for a file.
+
+	    <figure> 
+        <iref item="metalinkLogo grammar production" primary="true"/>
+        <iref item="Grammar" subitem="metalinkLogo" primary="true"/>
+	      <artwork type="rnc">
+metalinkLogo =
+   element metalink:logo {
+     metalinkCommonAttributes,
+     (metalinkUri)
+   }</artwork></figure></t> 
+
+	  <t>The image SHOULD have an aspect ratio of one (horizontal)
+	  to one (vertical) and SHOULD be suitable for presentation
+	  at a small size.</t>
+	</section>
+
+	<section anchor="element.metaurl" title="The &#34;metalink:metaurl&#34; Element">
+    
+    
+    <iref item="XML Elements" subitem="metadata" primary="true"/>
+    <iref item="metadata XML element" primary="true"/> 
+	  
+	  <t>The "<xref target="element.metaurl" format="none">metalink:metaurl</xref>" element contains the IRI of metadata about a resource to download. For example, this could be the IRI of a BitTorrent .torrent file or a Metalink Document. Note that
+	  the information in the <xref target="element.hash" format="none">metalink:hash</xref> element does not apply to these files, but to the files that are described by them.
+
+	    <figure>
+        <iref item="metalinkURL grammar production" primary="true"/>
+        <iref item="Grammar" subitem="metalinkURL" primary="true"/>
+	      <artwork type="rnc">
+metalinkMetaURL =
+   element metalink:metaurl {
+      metalinkCommonAttributes,
+      attribute priority { xsd:integer }?,
+      attribute type { text },
+      attribute name { text }?,
+      metalinkUri
+   }</artwork></figure></t> 
+
+	  <section title="The &#34;priority&#34; Attribute"> 
+
+	    <t><xref target="element.metaurl" format="none">metalink:metaurl</xref>
+	    elements MAY have a priority attribute. Lower values indicate a higher priority. Multiple <xref target="element.metaurl" format="none">metalink:metaurl</xref> elements can have the same
+		priority, i.e. three BitTorrent .torrent files could have priority="1". See also the "priority" attribute of the <xref target="element.url" format="none">metalink:url</xref> element.</t>
+
+	  </section> 
+
+	  <section title="The &#34;type&#34; Attribute"> 
+
+	    <t><xref target="element.metaurl" format="none">metalink:metaurl</xref> elements MUST have a "type" attribute that indicates
+	    the MIME type of the metadata available at the IRI. In the case of BitTorrent as specified in <xref target="BITTORRENT"/>, the value "torrent" is required. Types without "/" are reserved. Currently, "torrent" is the only reserved value.</t>
+
+	  </section>
+	  <section title="The &#34;name&#34; Attribute"> 
+
+	    <t><xref target="element.metaurl" format="none">metalink:metaurl</xref> elements MAY have a "name" attribute that indicates
+	    a specific file in a BitTorrent .torrent file or a Metalink Document that describes multiple files.</t>
+		
+        <t>
+		<figure>
+		<preamble>Directory information can also be contained in a "path/file" format only, as in:</preamble>
+	  <artwork type="example">
+&lt;metaurl type="torrent" name="debian-amd64/sarge/Contents-amd64.gz"&gt;
+</artwork></figure></t>
+        <t>In this example, a file named "Contents-amd64.gz" is indicated, in a "debian-amd64/sarge/" subdirectory.
+           The path MUST NOT contain any directory traversal directives or
+           information. The path MUST be relative.  The path MUST NOT begin with a "/", "./" or
+           "../", contain "/../", or end with "/..".</t>
+	  </section> 	  
+	</section>
+	
+	<section anchor="element.origin" title="The &#34;metalink:origin&#34; Element">
+    
+    
+    <iref item="XML Elements" subitem="origin" primary="true"/>
+    <iref item="origin XML element" primary="true"/> 
+	      
+	  <t>The "<xref target="element.origin" format="none">metalink:origin</xref>" element is an IRI where the Metalink Document was originally published. If <xref target="element.dynamic" format="none">metalink:dynamic</xref> is "true", then updated
+      versions of the Metalink can be found at this IRI.
+
+	    <figure> 
+        <iref item="metalinkOrigin grammar production" primary="true"/>
+        <iref item="Grammar" subitem="metalinkOrigin" primary="true"/>
+	      <artwork type="rnc">
+metalinkOrigin =
+   element metalink:origin {
+     metalinkCommonAttributes,
+     (metalinkUri)
+   }</artwork></figure></t> 
+	  
+	</section>
+
+	<section anchor="element.os" title="The &#34;metalink:os&#34; Element">
+    
+    
+    <iref item="XML Elements" subitem="os" primary="true"/>
+    <iref item="os XML element" primary="true"/> 
+	      
+	  <t>The "<xref target="element.os" format="none">metalink:os</xref>" element is a Text construct that conveys a
+	  human-readable Operating System for a file. The IANA registry named "Operating System Names" defines values for OS types.
+	  
+	    <figure>
+        <iref item="metalinkOS grammar production" primary="true"/>
+        <iref item="Grammar" subitem="metalinkOS" primary="true"/>
+	      <artwork type="rnc">
+metalinkOS =
+   element metalink:os {
+     metalinkTextConstruct
+   }</artwork></figure></t>
+	  
+	</section>
+	
+	<section anchor="element.published" title="The &#34;metalink:published&#34; Element">
+    
+    
+    <iref item="XML Elements" subitem="published" primary="true"/>
+    <iref item="published XML element" primary="true"/> 
+
+	  <t>The "<xref target="element.published" format="none">metalink:published</xref>" element is a Date construct indicating an
+	  instant in time associated with an event early in the life cycle of
+	  the entry.
+
+	    <figure> 
+        <iref item="metalinkPublished grammar production" primary="true"/>
+        <iref item="Grammar" subitem="metalinkPublished" primary="true"/>
+	      <artwork type="rnc">
+metalinkPublished =
+   element metalink:published { 
+     metalinkDateConstruct
+   }</artwork></figure></t>
+
+	   <t>Typically, <xref target="element.published" format="none">metalink:published</xref> will be associated with the
+	   initial creation or first availability of the resource.</t>
+
+	</section>
+	
+	
+	<section anchor="element.publisher" title="The &#34;metalink:publisher&#34; Element">
+    
+    
+    <iref item="XML Elements" subitem="publisher" primary="true"/>
+    <iref item="publisher XML element" primary="true"/>
+ 
+	  <t>The "<xref target="element.publisher" format="none">metalink:publisher</xref>" element
+	  indicates a group or other entity which has published the file described in the Metalink Document.
+	  
+	    <figure>
+        <iref item="metalinkPublisher grammar production" primary="true"/>
+        <iref item="Grammar" subitem="metalinkPublisher" primary="true"/>
+	      <artwork type="rnc">
+metalinkPublisher =
+   element metalink:publisher {
+     metalinkCommonAttributes,
+     attribute url { metalinkUri }?,
+     attribute name { text }?
+   }</artwork></figure></t>
+
+	  <t>The <xref target="element.publisher" format="none">metalink:publisher</xref> element MAY have a "url" attribute
+	  whose value MUST be an IRI reference <xref target="RFC3987"/>. When dereferenced, the resulting URI (mapped from an
+	  IRI, if necessary) SHOULD produce a representation that is
+	  relevant to that agent.</t>
+
+	  <t>The <xref target="element.publisher" format="none">metalink:publisher</xref> element MAY have a "name" attribute that
+	  indicates the name of the publisher.</t>
+ 
+	</section> 
+
+	<section anchor="element.signature" title="The &#34;metalink:signature&#34; Element">
+    
+    
+    <iref item="XML Elements" subitem="signature" primary="true"/>
+    <iref item="signature XML element" primary="true"/> 
+	      
+	  <t>The "<xref target="element.signature" format="none">metalink:signature</xref>" element is a Text construct that conveys a
+	  digital signature for a file described in a Metalink Document. Digital signatures verify that a file is from the entity that has signed it.
+	  
+	    <figure>
+        <iref item="metalinkSignature grammar production" primary="true"/>
+        <iref item="Grammar" subitem="metalinkSignature" primary="true"/>
+	      <artwork type="rnc">
+metalinkSignature =
+   element metalink:signature {
+     attribute type { "pgp" },
+     metalinkTextConstruct
+   }</artwork></figure></t>
+
+	  <section title="The &#34;type&#34; Attribute"> 
+
+	    <t><xref target="element.signature" format="none">metalink:signature</xref> elements MUST have a "type" attribute.
+		The initial value of "type" is the string that is non-empty and matches "pgp". It may be useful to extend Metalink documents with new types of
+digital signatures, so unknown types are allowed.
+		</t>
+
+	  </section> 	  
+	  
+	</section> 	
+		
+	<section anchor="element.size" title="The &#34;metalink:size&#34; Element">
+    
+    
+    <iref item="XML Elements" subitem="size" primary="true"/>
+    <iref item="size XML element" primary="true"/> 
+	      
+	  <t>The "<xref target="element.size" format="none">metalink:size</xref>" element indicates the length of
+	    the linked content in octets; it is a hint about the
+	    content length of the representation returned when the IRI
+	    is mapped to a URI and 
+	    dereferenced.	  
+	    <figure>
+        <iref item="metalinkSize grammar production" primary="true"/>
+        <iref item="Grammar" subitem="metalinkSize" primary="true"/>
+	      <artwork type="rnc">
+metalinkSize =
+   element metalink:size {
+     metalinkTextConstruct
+   }</artwork></figure></t> 
+	  
+	</section> 
+	
+	<section anchor="element.updated" title="The &#34;metalink:updated&#34; Element">
+    
+    
+    <iref item="XML Elements" subitem="updated" primary="true"/>
+    <iref item="updated XML element" primary="true"/> 
+
+	  <t>The "<xref target="element.updated" format="none">metalink:updated</xref>" element is a Date construct indicating the
+	  most recent instant in time when a Metalink was modified in a
+	  way the publisher considers significant. Therefore, not all
+	  modifications necessarily result in a changed <xref target="element.updated" format="none">metalink:updated</xref>
+	  value.
+
+	    <figure> 
+        <iref item="metalinkUpdated grammar production" primary="true"/>
+        <iref item="Grammar" subitem="metalinkUpdated" primary="true"/>
+	      <artwork type="rnc">
+metalinkUpdated =
+   element metalink:updated { 
+     metalinkDateConstruct
+   }</artwork></figure></t>
+
+	  <t>Publishers MAY change the value of this element over time.</t>
+ 
+	</section> 
+
+	<section anchor="element.url" title="The &#34;metalink:url&#34; Element">
+    
+    
+    <iref item="XML Elements" subitem="url" primary="true"/>
+    <iref item="url XML element" primary="true"/> 
+	  
+	  <t>The "<xref target="element.url" format="none">metalink:url</xref>" element contains the IRI of a file.
+	  Most Metalink Documents will contain multiple <xref target="element.url" format="none">metalink:url</xref> elements,
+	  and each one SHOULD be a valid alternative to download the same file.
+
+	    <figure>
+        <iref item="metalinkURL grammar production" primary="true"/>
+        <iref item="Grammar" subitem="metalinkURL" primary="true"/>
+	      <artwork type="rnc">
+metalinkURL =
+   element metalink:url {
+      metalinkCommonAttributes,
+      attribute location { xsd:string {
+        minLength = "2"  maxLength="2"}
+      }?,
+      attribute priority { xsd:integer }?,
+      metalinkUri
+   }</artwork></figure></t> 
+
+	  <section title="The &#34;priority&#34; Attribute"> 
+
+	    <t><xref target="element.url" format="none">metalink:url</xref>
+	    elements MAY have a priority attribute. Lower values indicate a higher priority. Multiple <xref target="element.url" format="none">metalink:url</xref> elements can have the same
+		priority, i.e. ten mirrors could have priority="1".</t>
+
+	  </section> 
+
+	  <section title="The &#34;location&#34; Attribute"> 
+
+	    <t><xref target="element.url" format="none">metalink:url</xref> elements MAY have a "location" attribute, which
+		is a <xref target="ISO3166-1"/> alpha-2 two letter country code for the geographical location of the physical server an IRI is used
+		to access.
+		</t>
+
+	  </section> 
+	      
+	</section> 
+	
+	
+	<section anchor="element.version" title="The &#34;metalink:version&#34; Element">
+    
+    
+    <iref item="XML Elements" subitem="version" primary="true"/>
+    <iref item="version XML element" primary="true"/> 
+	      
+	  <t>The "<xref target="element.version" format="none">metalink:version</xref>" element is a Text construct that conveys a
+	  human-readable version for a file. The version of OpenOffice.org 3.0 would be "3.0".
+	  
+	    <figure>
+        <iref item="metalinkVersion grammar production" primary="true"/>
+        <iref item="Grammar" subitem="metalinkVersion" primary="true"/>
+	      <artwork type="rnc">
+metalinkVersion =
+   element metalink:version {
+     metalinkTextConstruct
+   }</artwork></figure></t> 
+	  
+	</section> 
+
+	
+
+      </section> 
+
+    </section>  
+	
+      <section title="Securing Metalink Documents"> 
+
+	    <t>Because Metalink is an XML-based format, existing XML security
+	    mechanisms can be used to secure its content.</t>
+
+	    
+	    <t>Producers of Metalink Documents may have sound reasons for signing
+	    otherwise-unprotected content. For example, a merchant
+	    might digitally sign a Metalink that lists a file download to verify its origin. Other merchants may wish to sign and encrypt Metalink Documents that list digital songs that have been purchased. Of course,
+	    many other examples are conceivable as well.</t>
+
+
+	    <t>The algorithm requirements in this section pertain to
+	    the Metalink Processor. They require that a recipient, at a
+	    minimum, be able to handle messages that use the specified
+	    cryptographic algorithms.  These requirements do not limit the
+	    algorithms that the sender can choose.</t>
+		
+		<t>Metalink Processors that verify signed Metalink Documents MUST at least support <xref target="REC-xmldsig-core">XML-Signature and
+	      Syntax Processing</xref>.</t>
+
+
+	  </section>
+
+	  <section title="Extending Metalink" anchor="extending_metalink"> 
+
+	    <section title="Extensions from Non-Metalink Vocabularies">
+	    
+	      <t>This specification describes Metalink's XML markup
+	      vocabulary. Markup from other vocabularies ("foreign markup")
+	      can be used in an Metalink Document.</t>
+	    
+	    </section>
+	    
+	    <section title="Extensions to the Metalink Vocabulary" anchor="extensions.to.the.metalink.vocabulary">
+
+	      <t>The Metalink namespace is reserved for future
+	      forward-compatible revisions of Metalink. Future versions
+	      of this specification could add new elements and
+	      attributes to the Metalink markup vocabulary. Software
+	      written to conform to this version of the specification
+	      will not be able to process such markup correctly and,
+	      in fact, will not be able to distinguish it from markup
+	      error. For the purposes of this discussion, unrecognized
+	      markup from the Metalink vocabulary will be considered
+	      "foreign markup".</t>
+
+	    </section>
+	    
+	    <section title="Processing Foreign Markup" anchor="processing.foreign.markup">
+	      
+	      <t>Metalink Processors that encounter foreign markup in a
+	      location that is legal according to this specification
+	      MUST NOT stop processing or signal an error. It might be
+	      the case that the Metalink Processor is able to process the
+	      foreign markup correctly and does so. Otherwise, such
+	      markup is termed "unknown foreign markup".</t>
+        
+	      <t>When unknown foreign markup is encountered as a child of
+	      <xref target="element.file" format="none">metalink:file</xref>, <xref target="element.metalink" format="none">metalink:metalink</xref>, Metalink Processors MAY
+	      bypass the markup and any textual content and MUST NOT change
+	      their behavior as a result of the markup's presence.</t>
+        
+	      <t>When unknown foreign markup is encountered in a Text
+	      Construct, software SHOULD ignore
+	      the markup and process any text content of foreign
+	      elements as though the surrounding markup were not
+	      present.</t>
+
+	    </section>
+
+	    <section title="Extension Elements" anchor="extension">
+        
+        
+	      <t>Metalink allows foreign markup anywhere in an Metalink
+	      document, except where it is explicitly forbidden.
+	      Child elements of <xref target="element.file" format="none">metalink:file</xref> and <xref target="element.metalink" format="none">metalink:metalink</xref>
+	      are considered Metadata elements and
+	      are described below. Child elements of Person constructs
+	      are considered to apply to the construct. The role of
+	      other foreign markup is undefined by this
+	      specification.</t>
+
+	      <section title="Simple Extension Elements" anchor="simple.extension.elements">
+          
+
+		<t>A Simple Extension element MUST NOT have any
+		attributes or child elements.  The element MAY contain
+		character data or be empty. Simple Extension elements
+		are not Language-Sensitive.
+
+		<figure> 
+      <iref item="simpleExtensionElement grammar production" primary="true"/>
+      <iref item="Grammar" subitem="simpleExtensionElement" primary="true"/>
+		  <artwork type="rnc">
+simpleExtensionElement =
+   element * - metalink:* {
+      text
+   }</artwork></figure></t>
+
+
+		<t>The element can be interpreted as a simple property (or
+		name/value pair) of the parent element that encloses it.  The
+		pair consisting of the namespace-URI of the element and the
+		local name of the element can be interpreted as the name of
+		the property.  The character data content of the element can
+		be interpreted as the value of the property.  If the element
+		is empty, then the property value can be interpreted as an
+		empty string.</t>
+
+	      </section>
+
+	      <section title="Structured Extension Elements" anchor="structured.extension.elements">
+          
+
+		<t>The root element of a Structured Extension element
+		MUST have at least one attribute or child element.  It
+		MAY have attributes, it MAY contain well-formed XML
+		content (including character data), or it MAY be
+		empty. Structured Extension elements are
+		Language-Sensitive.
+
+		<figure> 
+      <iref item="structuredExtensionElement grammar production" primary="true"/>
+      <iref item="Grammar" subitem="structuredExtensionElement" primary="true"/>
+		  <artwork type="rnc">
+structuredExtensionElement =
+   element * - metalink:* {
+      (attribute * { text }+,
+         (text|anyElement)*)
+    | (attribute * { text }*,
+       (text?, anyElement+, (text|anyElement)*))
+   }</artwork></figure></t>
+
+
+		<t>The structure of a Structured Extension element, including
+		the order of its child elements, could be significant.</t>
+
+		<t>This specification does not provide an interpretation of a
+		Structured Extension element.  The syntax of the XML contained
+		in the element (and an interpretation of how the element
+		relates to its containing element) is defined by the
+		specification of the Metalink extension.</t>
+
+	      </section>
+
+	    </section>
+
+	  </section>
+
+     
+	  <section title="IANA Considerations" anchor="IANA"> 
+
+	    <section title="XML Namespace Registration">
+
+<t>This document makes use of the XML registry specified in <xref target="RFC3688"/>.  Accordingly, IANA has made the following registration:</t>
+<t>Registration request for the Metalink namespace:</t>
+
+<t>URI: urn:ietf:params:xml:ns:metalink</t>
+
+<t>Registrant Contact: See the "Author's Address" section of this
+   document.</t>
+
+<t>XML: None.  Namespace URIs do not represent an XML specification.</t>
+        </section>
+		
+	    <section title="application/metalink4+xml MIME type">
+	  
+	  
+    <iref item="Media Type" subitem="application/metalink4+xml" primary="true"/>
+    <iref item="application/metalink4+xml Media Type" primary="true"/>
+    
+	    <t>A Metalink Document, when serialized as XML 1.0, can be identified
+	    with the following media type:</t>
+
+	    <t>
+	      <list style="hanging"> 
+		<t hangText="MIME media type name:"> application</t>
+		<t hangText="MIME subtype name:"> metalink4+xml</t>
+		<t hangText="Mandatory parameters:"> None.</t> 
+		<t hangText="Optional parameters:"> 
+		  <list style="hanging"> 
+		    <t hangText="&#34;charset&#34;:"> This parameter has semantics identical
+        to the charset parameter of the
+		    "application/xml" media type as specified in <xref target="RFC3023"/>.</t>
+		  </list> 
+		</t>
+		
+		<t hangText="Encoding considerations:"> Identical to those of
+		"application/xml" as described in <xref target="RFC3023"/>, Section 3.2.</t>
+
+		<t hangText="Security considerations:"> As defined in this
+		specification.</t>
+
+		<t>In addition, as this media type uses the "+xml" convention,
+		it shares the same security considerations as described in
+		<xref target="RFC3023"/>, Section 10.</t>
+
+		<t hangText="Interoperability considerations:"> There are no
+		known interoperability issues.</t>
+
+		<t hangText="Published specification:"> This
+		specification.</t>
+		
+		<t hangText="Applications that use this media type:"> No known
+		applications currently use this media type.</t>
+
+	      </list>
+	    </t>
+
+	    <t>Additional information:</t> 
+
+	    <t>
+	      <list style="hanging"> 
+		
+		<t hangText="Magic number(s):"> As specified for
+		"application/xml" in <xref target="RFC3023"/>, Section 3.2.</t>
+
+		<t hangText="File extension:"> .meta4</t> 
+
+		<t hangText="Fragment identifiers:"> As specified for
+		"application/xml" in <xref target="RFC3023"/>, Section 5.</t>
+
+		<t hangText="Base URI:"> As specified in <xref target="RFC3023"/>, Section 6.</t> 
+
+		<t hangText="Macintosh File Type code:"> TEXT</t>
+
+		<t hangText="Person and email address to contact for further information:"> Anthony Bryan &lt;anthonybryan@gmail.com&gt;</t>
+
+		<t hangText="Intended usage:">
+		COMMON</t> <t hangText="Author/Change controller:">IESG</t>
+		</list></t>
+        </section>
+
+	  </section> 
+
+	  <section title="Security Considerations">
+	    <t>Publishers are encouraged to offer Metalink documents via authenticated HTTP under TLS as specified in <xref target="RFC2818"/>. Publishers are also encouraged to include digital signatures of the files within the Metalink Documents if they are available.</t>
+
+
+
+	    <section title="URIs and IRIs">
+
+	      <t>Metalink Processors handle URIs and IRIs. See Section 7 of <xref target="RFC3986"/> and Section 8 of <xref target="RFC3987"/> for security
+          considerations related to their handling and use.</t>
+
+	    </section>
+
+	    <section title="Spoofing">
+
+	      <t>There is potential for spoofing attacks where the attacker publishes
+          Metalink Documents with false information. Malicious publishers might create Metalink Documents containing inaccurate information anywhere in the document.
+          Unaware downloaders could be deceived into downloading a malicious or worthless file. Malicious publishers could attempt a distributed denial of service attack by inserting unrelated IRIs into Metalink Documents.</t>
+
+	    </section>	
+		
+	    <section title="Cryptographic Hashes">
+
+	      <t>Currently, some of the hash types defined in the IANA registry named "Hash Function Textual Names" are considered insecure. These include the whole Message Digest family of algorithms which are not suitable for cryptographically strong verification. Malicious people could provide files that appear to be identical to another file because of a collision, i.e. the weak cryptographic hashes of the intended file and a substituted malicious file could match.</t>
+          <t>If a Metalink Document contains hashes, it SHOULD include "sha-1" which is SHA-1, as specified in <xref target="RFC3174"/>, or stronger.  It MAY also include other hashes from the IANA registry named "Hash Function Textual Names".</t>
+
+	    </section>	
+		
+		
+	    <section title="Signing">
+
+	      <t>Metalink Documents SHOULD be signed using <xref target="REC-xmldsig-core"/> and are
+	      subject to the security considerations implied by its
+	      use. This addresses the issue of spoofing.</t>
+
+	      <t>Digital signatures provide authentication, message
+	      integrity, and non-repudiation with proof of
+	      origin.</t>
+
+	    </section>
+
+	  </section>
+    
+	</middle> 
+
+	<back> 
+	  
+	  <references title="Normative References">
+	  
+<reference anchor="BITTORRENT" target="http://www.bittorrent.org/beps/bep_0003.html">
+<front>
+<title>The BitTorrent Protocol Specification</title>
+
+<author initials="B" surname="Cohen" fullname="Bram Cohen">
+    <organization/>
+</author>
+
+
+<date month="February" day="28" year="2008"/>
+</front>
+
+<seriesInfo name="BITTORRENT" value="11031"/>
+</reference>	  
+
+
+<reference anchor="RFC2119">
+
+<front>
+<title abbrev="RFC Key Words">Key words for use in RFCs to Indicate Requirement Levels</title>
+<author initials="S." surname="Bradner" fullname="Scott Bradner">
+<organization>Harvard University</organization>
+<address>
+<postal>
+<street>1350 Mass. Ave.</street>
+<street>Cambridge</street>
+<street>MA 02138</street></postal>
+<phone>- +1 617 495 3864</phone>
+<email>sob@harvard.edu</email></address></author>
+<date year="1997" month="March"/>
+<area>General</area>
+<keyword>keyword</keyword>
+<abstract>
+<t>
+   In many standards track documents several words are used to signify
+   the requirements in the specification.  These words are often
+   capitalized.  This document defines these words as they should be
+   interpreted in IETF documents.  Authors who follow these guidelines
+   should incorporate this phrase near the beginning of their document:
+
+<list>
+<t>
+      The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL
+      NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED",  "MAY", and
+      "OPTIONAL" in this document are to be interpreted as described in
+      RFC 2119.
+</t></list></t>
+<t>
+   Note that the force of these words is modified by the requirement
+   level of the document in which they are used.
+</t></abstract></front>
+
+<seriesInfo name="BCP" value="14"/>
+<seriesInfo name="RFC" value="2119"/>
+</reference>
+ 
+ 
+<reference anchor="RFC2818">
+<front>
+<title>HTTP Over TLS</title>
+
+<author fullname="E. Rescorla" surname="Rescorla" initials="E.">
+<organization></organization></author>
+<date month="May" year="2000"></date>
+</front>
+<seriesInfo name="RFC" value="2818"></seriesInfo>
+</reference>
+
+<reference anchor="RFC3023">
+
+<front>
+<title>XML Media Types</title>
+<author initials="M." surname="Murata" fullname="M. Murata">
+<organization/></author>
+<author initials="S." surname="St. Laurent" fullname="S. St. Laurent">
+<organization/></author>
+<author initials="D." surname="Kohn" fullname="D. Kohn">
+<organization/></author>
+<date year="2001" month="January"/>
+<abstract>
+<t>This document standardizes five new media types -- text/xml, application/xml, text/xml-external-parsed-entity, application/xml-external-parsed-entity, and application/xml-dtd -- for use in exchanging network entities that are related to the Extensible Markup Language (XML).  This document also standardizes a convention (using the suffix '+xml') for naming media types outside of these five types when those media types represent XML MIME (Multipurpose Internet Mail Extensions) entities.</t></abstract></front>
+
+<seriesInfo name="RFC" value="3023"/>
+</reference>
+ 
+<reference anchor="RFC3174">
+
+<front>
+<title>US Secure Hash Algorithm 1 (SHA1)</title>
+<author initials="D." surname="Eastlake" fullname="D. Eastlake">
+<organization/></author>
+<author initials="P." surname="Jones" fullname="P. Jones">
+<organization/></author>
+<date year="2001" month="September"/></front>
+
+<seriesInfo name="RFC" value="3174"/>
+</reference> 
+
+
+
+<reference anchor="RFC3339">
+
+<front>
+<title>Date and Time on the Internet: Timestamps</title>
+<author initials="G." surname="Klyne" fullname="G. Klyne">
+<organization/></author>
+<author initials="C." surname="Newman" fullname="C. Newman">
+<organization/></author>
+<date year="2002" month="July"/>
+<abstract>
+<t>This document defines a date and time format for use in Internet protocols that is a profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.</t></abstract></front>
+
+<seriesInfo name="RFC" value="3339"/>
+</reference>
+ 
+
+<reference anchor="RFC3688">
+
+<front>
+<title>The IETF XML Registry</title>
+<author initials="M." surname="Mealling" fullname="M. Mealling">
+<organization/></author>
+<date year="2004" month="January"/></front>
+
+<seriesInfo name="BCP" value="81"/>
+<seriesInfo name="RFC" value="3688"/>
+</reference>
+
+<reference anchor="RFC3986">
+
+<front>
+<title>Uniform Resource Identifier (URI): Generic Syntax</title>
+<author initials="T." surname="Berners-Lee" fullname="T. Berners-Lee">
+<organization/></author>
+<author initials="R." surname="Fielding" fullname="R. Fielding">
+<organization/></author>
+<author initials="L." surname="Masinter" fullname="L. Masinter">
+<organization/></author>
+<date year="2005" month="January"/></front>
+
+<seriesInfo name="STD" value="66"/>
+<seriesInfo name="RFC" value="3986"/>
+</reference>
+ 
+
+<reference anchor="RFC3987">
+
+<front>
+<title>Internationalized Resource Identifiers (IRIs)</title>
+<author initials="M." surname="Duerst" fullname="M. Duerst">
+<organization/></author>
+<author initials="M." surname="Suignard" fullname="M. Suignard">
+<organization/></author>
+<date year="2005" month="January"/></front>
+
+<seriesInfo name="RFC" value="3987"/>
+</reference>
+
+<reference anchor="RFC5646">
+
+<front>
+<title>Tags for Identifying Languages</title>
+<author initials="A." surname="Phillips" fullname="A. Phillips">
+<organization/></author>
+<author initials="M." surname="Davis" fullname="M. Davis">
+<organization/></author>
+<date year="2009" month="September"/></front>
+
+<seriesInfo name="BCP" value="47"/>
+<seriesInfo name="RFC" value="5646"/>
+</reference>
+
+<reference anchor="REC-xml-infoset" target="http://www.w3.org/TR/2004/REC-xml-infoset-20040204">
+<front>
+<title>XML Information Set (Second Edition)</title>
+
+<author fullname="John Cowan" surname="Cowan" initials="J.">
+
+    <organization></organization>
+</author>
+
+<author fullname="Richard Tobin" surname="Tobin" initials="R.">
+    <organization></organization>
+</author>
+
+<date year="2004" day="4" month="February"></date>
+</front>
+
+<seriesInfo name="World Wide Web Consortium Recommendation" value="REC-xml-infoset-20040204"></seriesInfo>
+</reference>
+
+ 
+
+<reference anchor="REC-xmlbase" target="http://www.w3.org/TR/2001/REC-xmlbase-20010627">
+<front>
+<title>XML Base</title>
+
+<author fullname="J. Marsh" surname="Marsh" initials="J">
+
+    <organization></organization>
+</author>
+
+<date year="2001" day="27" month="June"></date>
+</front>
+
+<seriesInfo name="W3C REC" value="W3C.REC-xmlbase-20010627"></seriesInfo>
+</reference>
+
+ 
+<reference anchor="REC-xml-names" target="http://www.w3.org/TR/2006/REC-xml-names-20060816">
+<front>
+<title>Namespaces in XML 1.0 (Second Edition)</title>
+
+<author fullname="Dave Hollander" surname="Hollander" initials="D.">
+    <organization></organization>
+</author>
+
+<author fullname="Tim Bray" surname="Bray" initials="T.">
+    <organization></organization>
+</author>
+
+<author fullname="Richard Tobin" surname="Tobin" initials="R.">
+    <organization></organization>
+</author>
+
+<author fullname="Andrew Layman" surname="Layman" initials="A.">
+
+    <organization></organization>
+</author>
+
+<date year="2006" day="16" month="August"></date>
+</front>
+
+<seriesInfo name="World Wide Web Consortium Recommendation" value="REC-xml-names-20060816"></seriesInfo>
+</reference>
+
+ 
+<reference anchor="REC-xml" target="http://www.w3.org/TR/2006/REC-xml-20060816">
+<front>
+<title>Extensible Markup Language (XML) 1.0 (Fourth Edition)</title>
+
+<author fullname="Francois Yergeau" surname="Yergeau" initials="F.">
+
+    <organization></organization>
+</author>
+
+<author fullname="Jean Paoli" surname="Paoli" initials="J.">
+    <organization></organization>
+</author>
+
+<author fullname="Tim Bray" surname="Bray" initials="T.">
+    <organization></organization>
+</author>
+
+<author fullname="C. M. Sperberg-McQueen" surname="Sperberg-McQueen" initials="C.">
+    <organization></organization>
+
+</author>
+
+<author fullname="Eve Maler" surname="Maler" initials="E.">
+    <organization></organization>
+</author>
+
+<date year="2006" day="16" month="August"></date>
+</front>
+
+<seriesInfo name="World Wide Web Consortium Recommendation" value="REC-xml-20060816"></seriesInfo>
+</reference>
+
+ 
+<reference anchor="REC-xmldsig-core" target="http://www.w3.org/TR/2008/REC-xmldsig-core-20080610">
+
+<front>
+<title>XML-Signature Syntax and Processing (Second Edition)</title>
+
+<author fullname="David Solo" surname="Solo" initials="D.">
+    <organization></organization>
+</author>
+
+<author fullname="Joseph Reagle" surname="Reagle" initials="J.">
+    <organization></organization>
+</author>
+
+<author fullname="Donald Eastlake" surname="Eastlake" initials="D.">
+    <organization></organization>
+
+</author>
+
+<date year="2008" day="10" month="June"></date>
+</front>
+
+<seriesInfo name="World Wide Web Consortium Recommendation" value="REC-xmldsig-core-20080610"></seriesInfo>
+</reference>
+
+
+<reference anchor="ISO3166-1">
+
+<front>
+<title>ISO 3166-1:2006.  Codes for the representation of names of countries and their subdivisions -- Part 1: Country codes</title>
+<author>
+<organization>International Organization for Standardization</organization>
+</author>
+<date month="November" year="2006"/></front>
+</reference>
+
+
+
+	  </references>
+	  
+	  <references title="Informative References">
+
+
+<reference anchor="ISO.8601.1988">
+<front>
+<title>Data elements and interchange formats - Information interchange - Representation of dates and times</title>
+<author>
+<organization>International Organization for Standardization</organization>
+</author>
+<date month="June" year="1988"/>
+</front>
+<seriesInfo name="ISO" value="Standard 8601"/>
+</reference>
+
+      
+
+<reference anchor="W3C.REC-xmlschema-2-20041028" target="http://www.w3.org/TR/2004/REC-xmlschema-2-20041028">
+<front>
+<title>XML Schema Part 2: Datatypes Second Edition</title>
+
+<author initials="A" surname="Malhotra" fullname="Ashok Malhotra">
+    <organization/>
+</author>
+
+<author initials="P" surname="Biron" fullname="Paul V. Biron">
+    <organization/>
+</author>
+
+<date month="October" day="28" year="2004"/>
+</front>
+
+<seriesInfo name="W3C REC" value="REC-xmlschema-2-20041028"/>
+</reference>
+
+      
+
+<reference anchor="W3C.NOTE-datetime-19980827" target="http://www.w3.org/TR/1998/NOTE-datetime-19980827">
+<front>
+<title>Date and Time Formats</title>
+
+<author initials="M" surname="Wolf" fullname="Misha Wolf">
+    <organization/>
+</author>
+
+<author initials="C" surname="Wicksteed" fullname="Charles Wicksteed">
+    <organization/>
+</author>
+
+<date month="August" day="27" year="1998"/>
+</front>
+
+<seriesInfo name="W3C NOTE" value="NOTE-datetime-19980827"/>
+</reference>
+
+
+	    <reference anchor="RELAX-NG" target="http://www.oasis-open.org/committees/relax-ng/compact-20021121.html"> 
+	      
+	      <front> 
+		
+		<title>RELAX NG Compact Syntax</title>
+		
+	
+		<author initials="J" surname="Clark" fullname="James Clark">
+		  <organization>OASIS Technical Committee: RELAX NG</organization> 
+		</author> 
+
+		<date year="2001" month="December" day="03"/>
+	      </front> 
+
+	    </reference>
+
+<reference anchor="RFC4287">
+
+<front>
+<title>The Atom Syndication Format</title>
+<author fullname="M. Nottingham" surname="Nottingham" initials="M.">
+<organization></organization></author>
+<author fullname="R. Sayre" surname="Sayre" initials="R.">
+<organization></organization></author>
+<date month="December" year="2005"></date></front>
+<seriesInfo name="RFC" value="4287"></seriesInfo>
+</reference>
+
+
+
+
+	    </references> 
+
+	    <section title="Acknowledgements and Contributors">
+		  <t>The layout and content of this document relies heavily on work pioneered in the Atom Syndication Format as specified in <xref target="RFC4287"/>.</t>
+	    
+          <t>The content and concepts within are a product of the Metalink community.</t>
+
+	      <t>The Metalink community has dozens of contributors who proposed ideas and wording for this
+	      document, or contributed to the evolution of Metalink, including:</t>
+
+          <t>Paul Burkhead, Kristian Weston, Darius Liktorius, Michael Burford,
+          Giorgio Maone, Manuel Subredu, A. Bram Neijt, Max Velasques, Manolo Valdes, Urs Wolfer,
+          Frederick Cheung, Nils Maier, Hampus Wessman, Hayden
+          Legendre, Danny Ayers, Nick Dominguez, Rene Leonhardt, Per Oyvind Karlsen, Gary Zellerbach, 
+		  James Clark, Daniel Stenberg, Matt Domsch, Yazsoft, 
+		  KGet developers, FDM Team, Orbit Team, Arne Babenhauserheide, Mathias Berchtold, 
+          Xienzhenyu and TheWorld Browser Team, Xi Software, Nicolas Alvarez, Patrick Ruckstuhl, Sebastien Willemijns, Micah Cowan, Bridget and Ethan Fletcher, Ruben Kerkhof, Agostino Russo,  
+          Salvatore Musumeci, Steve Eshelman, 
+          Lucas Hewett, Ryan Cronin, Dave Winquist, Bob Denison,
+          Wes Shelton, Kees Cook, Josh Colbert, Steve Kleisath, Chad Neptune, Nick Carrabba, Chris
+          Carrabba, Erin Solari, Derick Cordoba, Ryan Alexander, John & Sandra Sowder,
+          Tom Mainville, Janie Wargo, Jason Hansen, Tim Bray, Dan Brickley, Markus Hofmann, 
+          Dan Connolly, Tim Berners-Lee, Louis Suarez-Potts, Ross Smith, Jeff Covey, 
+          Ed Lee, Shawn Wilsher, Mike Connor, Johan Svedberg, Dedric Carter, James Antill, Debi
+          Goulding, Chris Newman, Lisa Dusseault, 
+		  Ian Macfarlane, Dave Cridland, Julian Reschke, Barry Leiba, Uri Blumenthal, Paul Hoffman, Felix Sasaki, Matthias Fuchs,
+		  Eran Hammer-Lahav, and Mark Nottingham. We also thank the Anthony Family, the Bryan Family, Juanita Anthony and Zimmy Bryan.</t>
+
+	    </section> 
+
+	    <section title="RELAX NG Compact Schema" anchor="schema"> 
+	      <t>This appendix is informative.</t>
+	      
+	      <t>The Relax NG schema explicitly excludes elements in
+	      the Metalink namespace that are not defined in this
+	      revision of the specification. Requirements for Metalink
+	      Processors encountering such markup are given in Sections
+        <xref target="extensions.to.the.metalink.vocabulary" format="counter"/> and <xref target="processing.foreign.markup" format="counter"/>.
+        </t>
+        
+	      <figure> 
+		<artwork type="rnc">
+# -*- rnc -*-
+# RELAX NG Compact Syntax Grammar for the
+# Metalink Format Specification Version 4
+
+namespace local = ""
+namespace metalink = "urn:ietf:params:xml:ns:metalink"
+namespace xsd = "http://www.w3.org/2001/XMLSchema"
+
+# Common attributes
+
+metalinkCommonAttributes =
+   attribute xml:base { metalinkUri }?,
+   attribute xml:lang { metalinkLanguageTag }?,
+   undefinedAttribute*
+
+# Text Constructs
+
+metalinkTextConstruct =
+   metalinkCommonAttributes,
+   text
+
+# Date Construct
+
+metalinkDateConstruct =
+   metalinkCommonAttributes,
+   xsd:dateTime
+
+start = metalinkMetalink
+
+metalinkMetalink =
+   element metalink:metalink {
+      metalinkCommonAttributes,
+      (metalinkDynamic?
+       & metalinkFile+
+       & metalinkGenerator?
+       & metalinkOrigin?
+       & metalinkPublished?
+       & metalinkUpdated?
+       & extensionElement*)
+   }
+
+metalinkFile =
+   element metalink:file {
+      metalinkCommonAttributes,
+      attribute name { text },
+      (metalinkCopyright?
+       & metalinkDescription?
+       & metalinkIdentity?
+       & metalinkHash*
+       & metalinkLanguage?
+       & metalinkLicense?
+       & metalinkLogo?
+       & metalinkMetaURL*
+       & metalinkURL*
+       & metalinkOS*
+       & metalinkPieces*
+       & metalinkPublisher?
+       & metalinkSignature?
+       & metalinkSize?
+       & metalinkVersion?
+       & extensionElement*)
+   }
+
+metalinkPieces =
+   element metalink:pieces {
+      attribute length { xsd:integer },
+      attribute type { text },
+      metalinkHash+
+   }
+
+metalinkCopyright =
+   element metalink:copyright {
+      metalinkTextConstruct
+   }
+
+metalinkDescription =
+   element metalink:description {
+      metalinkTextConstruct
+   }
+
+metalinkDynamic =
+   element metalink:dynamic {
+      "true" | "false"
+   }
+
+metalinkGenerator =
+   element metalink:generator {
+      metalinkTextConstruct
+   }
+
+metalinkHash =
+     element metalink:hash {
+       attribute type { text }?,
+       text
+     }
+
+metalinkIdentity =
+   element metalink:identity {
+      metalinkTextConstruct
+   }
+
+metalinkLanguage =
+   element metalink:language {
+      metalinkTextConstruct
+   }
+
+metalinkLicense =
+   element metalink:license {
+      metalinkCommonAttributes,
+      attribute url { metalinkUri }?,
+      attribute name { text }?
+   }
+
+metalinkLogo =
+   element metalink:logo {
+      metalinkCommonAttributes,
+      (metalinkUri)
+   }
+
+metalinkMetaURL =
+   element metalink:metaurl {
+      metalinkCommonAttributes,
+      attribute priority { xsd:integer }?,
+      attribute type { text },
+      attribute name { text }?,
+      metalinkUri
+   }
+
+metalinkOrigin =
+   element metalink:origin {
+      metalinkCommonAttributes,
+      (metalinkUri)
+   }
+
+metalinkOS =
+   element metalink:os {
+      metalinkTextConstruct
+   }
+
+metalinkPublished =
+   element metalink:published {
+      metalinkDateConstruct
+   }
+
+metalinkPublisher =
+   element metalink:publisher {
+      metalinkCommonAttributes,
+      attribute url { metalinkUri }?,
+      attribute name { text }?
+   }
+
+metalinkSignature =
+   element metalink:signature {
+      attribute type { "pgp" },
+      metalinkTextConstruct
+   }
+
+metalinkSize =
+   element metalink:size {
+      metalinkTextConstruct
+   }
+
+metalinkUpdated =
+   element metalink:updated {
+      metalinkDateConstruct
+   }
+
+metalinkURL =
+   element metalink:url {
+      metalinkCommonAttributes,
+      attribute location { xsd:string {
+         minLength = "2"  maxLength="2"}
+      }?,
+      attribute priority { xsd:integer }?,
+      metalinkUri
+   }
+
+metalinkVersion =
+   element metalink:version {
+      metalinkTextConstruct
+   }
+
+# As defined in RFC 3066 and compatible with RFC 5646
+metalinkLanguageTag = xsd:string {
+   pattern = "[A-Za-z]{1,8}(-[A-Za-z0-9]{1,8})*"
+}
+
+# Unconstrained; it's not entirely clear how IRI fit into
+# xsd:anyURI so let's not try to constrain it here
+metalinkUri = text
+
+# Simple Extension
+
+simpleExtensionElement =
+   element * - metalink:* {
+      text
+   }
+
+# Structured Extension
+
+structuredExtensionElement =
+   element * - metalink:* {
+      (attribute * { text }+,
+         (text|anyElement)*)
+    | (attribute * { text }*,
+       (text?, anyElement+, (text|anyElement)*))
+   }
+
+# Other Extensibility
+
+extensionElement =
+   simpleExtensionElement | structuredExtensionElement
+
+undefinedAttribute =
+  attribute * - (xml:base | xml:lang | local:*) { text }
+
+undefinedContent = (text|anyForeignElement)*
+
+anyElement =
+   element * {
+      (attribute * { text }
+       | text
+       | anyElement)*
+   }
+
+anyForeignElement =
+   element * - metalink:* {
+      (attribute * { text }
+       | text
+       | anyElement)*
+}
+
+# EOF</artwork>
+	      </figure>
+
+		</section>
+		  
+	    <section title="Document History (to be removed by RFC Editor before publication)">
+		<t>[[ to be removed by the RFC editor before publication as an RFC. ]]</t>
+		<t>Updated versions can be found at http://tools.ietf.org/html/draft-bryan-metalink with frequent updates in Subversion at http://metalinks.svn.sourceforge.net/viewvc/metalinks/internetdraft/ </t>
+		<t>Known issues concerning this draft:
+	    <list style="symbols"> 
+	      
+	      <t>None.</t>
+
+	    </list></t>
+
+<t>-21 : October 13, 2009.
+	    
+	    <list style="symbols">
+		
+		  <t>Update author details.</t>
+	   </list></t>
+	   
+<t>-20 : October 12, 2009.
+	    
+	    <list style="symbols">
+		
+		  <t>RFC 5646 updates RFC 4646.</t>
+	   </list></t>
+	   
+<t>-19 : October 5, 2009.
+	    
+	    <list style="symbols">
+		
+		  <t>Remove organization for independent authors.</t>
+	   </list></t>
+
+<t>-18 : October 4, 2009.
+	    
+	    <list style="symbols">
+		
+		  <t>File extension: .meta4</t>	      
+		  <t>Hashes clarification, modified to allow multiple metalink:os elements, add size element to example.</t>
+	   </list></t>
+
+<t>-17 : September 28, 2009.
+	    
+	    <list style="symbols"> 
+	      
+		  <t>Typo correction.</t>
+	   </list></t>
+
+<t>-16 : August 31, 2009.
+	    
+	    <list style="symbols"> 
+	      
+		  <t>Clarifications.</t>
+	   </list></t>
+		
+<t>-15 : August 26, 2009.
+	    
+	    <list style="symbols"> 
+	      
+		  <t>Rename "preference" attribute of metaurl and url elements to "priority", where lower values indicate higher priority.</t>
+	   </list></t>
+
+<t>-14 : August 24, 2009.
+	    
+	    <list style="symbols"> 
+	      
+		  <t>Update abstract and introduction.</t>
+	   </list></t>
+
+<t>-13 : August 21, 2009.
+	    
+	    <list style="symbols"> 
+	      
+		  <t>Remove files, resources, verification container elements.</t>
+          <t>MIME type: application/metalink4+xml</t>
+	   </list></t>
+		
+<t>-12 : August 18, 2009.
+	    
+	    <list style="symbols"> 
+	      
+		  <t>Remove "piece" attribute from hash elements in pieces container elements.</t>
+          <t>Rename "uri" attribute of license and publisher elements to "url".</t>
+	   </list></t>
+		
+<t>-11 : August 08, 2009.
+	    
+	    <list style="symbols"> 
+	      
+		  <t>Renamed type element (static or dynamic values) to dynamic element (true or false values).</t>
+		  <t>Removed metadata inheritance and most other elements from files element.</t>
+	   </list></t>
+
+<t>-10 : July 28, 2009.
+	    
+	    <list style="symbols"> 
+	      
+		  <t>Schema fixes.</t>
+	      <t>Rename metadata element to metaurl, add name attribute to it similar to file element's name attribute.</t>
+		  <t>Update REC-xmldsig-core reference to second edition.</t>
+	   </list></t>
+	   
+<t>-09 : July 11, 2009.
+	    
+	    <list style="symbols"> 
+	      
+	      <t>Replace ISO639-2 references with RFC 4646.</t>
+		  <t>Add ISO3166-1.</t>
+	   </list></t>
+
+<t>-08 : July  04, 2009.
+	    
+	    <list style="symbols"> 
+	      
+	      <t>Clarifications.</t>
+		  <t>Remove "uri" and "version" attributes from generator element.</t>
+	   </list></t>
+		
+<t>-07 : June 18, 2009.
+	    
+	    <list style="symbols"> 
+	      
+	      <t>This ID describes the Metalink document format/schema.</t>
+	      <t>Remove "Client Implementation Considerations" section.</t>
+	      <t>Expand "Known issues" section of Document History.</t>
+	   </list></t>
+	   
+<t>-06 : March 3, 2009.
+	    
+	    <list style="symbols">	      
+
+	      <t>Add authors and this Document History section.</t>
+	    </list></t>
+		
+<t>-05 : January 13, 2009.
+	    
+	    <list style="symbols">	      
+
+	      <t>Clarifications.</t>
+	    </list></t>
+		
+<t>-04 : December 31, 2008.
+	    
+	    <list style="symbols">	      
+
+	      <t>New IPR notice as required by IETF.</t>
+		  <t>Correct "metalink:pieces" Element text.</t>
+		  <t>Add hash examples.</t>
+		  <t>Slim down "Securing Metalink Documents" section.</t>
+		  <t>Recommend at least SHA-1.</t>
+	    </list></t> 
+
+<t>-03 : September 19, 2008.
+	    
+	    <list style="symbols">	      
+
+	      <t>New namespace - urn:ietf:params:xml:ns:metalink</t>
+		  <t>Use the IANA registry named "Operating System Names" to define values for OS types.</t>
+		  <t>Add "Client Implementation Considerations" section, which includes Content Negotiation.</t>
+	    </list></t>
+		
+<t>-02 : September 4, 2008.
+	    
+	    <list style="symbols">	      
+
+	      <t>Use the IANA registry named "Hash Function Textual Names" for hash types.</t>
+		  <t>metadata Element for listing .torrent, .metalink, etc.</t>
+		  <t>Remove type attribute for url Element.</t>
+	    </list></t>
+		
+<t>-01 : August 28, 2008.
+	    
+	    <list style="symbols">	      
+
+	      <t>Clarify directory info in name attribute, hash types, add text for preference attribute.</t>
+	    </list></t>
+		
+<t>-00 : August 23, 2008.
+	    
+	    <list style="symbols">	      
+
+	      <t>Initial draft; Text largely based on RFC 4287, ideas from Metalink 3.0 specification.</t>
+	    </list></t>
+		
+	    </section> 		  
+	  </back> 
+	</rfc>
