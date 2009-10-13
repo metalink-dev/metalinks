@@ -58,39 +58,48 @@
 	<date month="October" year="2009"/>        
 
       <abstract>
-	<t>This document specifies Metalink/HTTP: Mirrors and Checksums in HTTP Headers, an alternative to the Metalink XML-based download description format. 
-    Metalink/HTTP describes multiple download locations (mirrors), Peer-to-Peer, checksums, digital signatures, and other information using existing standards. Clients can transparently 
+    <t>This document specifies Metalink/HTTP: Mirrors and Checksums in HTTP Headers, an alternative to the Metalink XML-based download description format. 
+    Metalink/HTTP describes multiple download locations (mirrors), Peer-to-Peer, checksums, digital signatures, and other information using existing standards for HTTP headers. Clients can transparently 
     use this information to make file transfers more robust and reliable.</t>
-      </abstract>    
+      </abstract>      
 	  
   </front>    
 
   <middle>
     <section title="Introduction">
       
-      <t>Metalink/HTTP is an alternative to Metalink, usually an XML-based document format <xref target="draft-bryan-metalink"/>. 
+      <t>Metalink/HTTP is an alternative representation of Metalink information, which is usually presented as an XML-based document format <xref target="draft-bryan-metalink"/>. 
       Metalink/HTTP attempts to provide as much functionality as the Metalink/XML format by using existing standards such as Web Linking <xref target="draft-nottingham-http-link-header"/>, 
       Instance Digests in HTTP <xref target="RFC3230"/>, and ETags. Metalink/HTTP is used to list
-      information about a file to be downloaded. This includes lists of multiple URIs (mirrors), Peer-to-Peer information, checksums, and digital signatures.</t>
+      information about a file to be downloaded. This can include lists of multiple URIs (mirrors), Peer-to-Peer information, checksums, and digital signatures.</t>
       
-      <t>Identical copies of a file are frequently accessible in multiple locations on the Internet over a variety of protocols (FTP, HTTP, and Peer-to-Peer).
-      In some cases, Users are shown a list of these multiple download locations (mirrors) and must manually select a single one on the basis of geographical location, priority, or bandwidth.
-      This distributes the load across multiple servers. At times, individual servers can be slow, outdated, or unreachable, but this can not be determined until the download has been initiated.
-      This can lead to the user canceling the download and needing to restart it. During downloads, errors in transmission can corrupt the file.
+      <t>Identical copies of a file are frequently accessible in multiple locations on the Internet over a variety of protocols (such as FTP, HTTP, and Peer-to-Peer).
+      In some cases, users are shown a list of these multiple download locations (mirrors) and must manually select a single one on the basis of geographical location, priority, or bandwidth.
+      This distributes the load across multiple servers, and should also increase throughput and resilience. At times, however, individual servers can be slow, outdated, or unreachable, but this can not be determined until the download has been initiated. Users will rarely have sufficient information to choose the most appropriate server, and will often choose the first in a list which may not be optimal for their needs, and will lead to a particular server getting a disproportionate share of load.
+      The use of suboptimal mirrors can lead to the user canceling and restarting the download to try to manually find a better source. During downloads, errors in transmission can corrupt the file.
       There are no easy ways to repair these files. For large downloads this can be extremely troublesome.
       Any of the number of problems that can occur during a download lead to frustration on the part of users.</t>
 
-      <t>All the information about a download, including mirrors, checksums, digital signatures, and more can be transferred in coordinated HTTP Headers.
+      <t>Some popular sites automate the process of selecting mirrors using DNS load balancing, both to approximately balance load between servers, and to direct clients to nearby servers with the hope that this improves throughput.  Indeed, DNS load balancing can balance long-term server load fairly effectively, but it is less effective at delivering the best throughput to users when the bottleneck is not the server but the network.</t>
+
+      <t>This document describes a mechanism by which the benefit of mirrors can be automatically and more effectively realized. All the information about a download, including mirrors, checksums, digital signatures, and more can be transferred in coordinated HTTP Headers.
       This Metalink transfers the knowledge of the download server (and mirror database) to the client. Clients can fallback to other mirrors if the current one has an issue. With this knowledge, 
       the client is enabled to work its way to a successful download even under adverse circumstances. 
       All this is done transparently to the user and the download is much more reliable and efficient.
       In contrast, a traditional HTTP redirect to a mirror conveys only extremely minimal information - one link to one server, and there is no provision in the HTTP protocol to handle failures.
-      Other features that some clients provide include multi-source downloads, where portions of a file are downloaded from multiple mirrors (and optionally, Peer-to-Peer) simultaneously, 
-      which frequently results in a faster download.</t>
+      Furthermore, in order to provide better load distribution across servers and potentially faster downloads to users, Metalink/HTTP facilitates multi-source downloads, where portions of a file are downloaded from multiple mirrors (and optionally, Peer-to-Peer) simultaneously.</t>
+
 
       <t>[[ Discussion of this draft should take place on IETF HTTP WG mailing list at ietf-http-wg@w3.org or the Metalink discussion mailing list
    located at metalink-discussion@googlegroups.com. To join the list, visit
    http://groups.google.com/group/metalink-discussion . ]]</t>
+   
+      <section title="Operation Overview">
+        <t>Detailed discussion of Metalink operation is covered in <xref target="req"/>; this section will present a very brief, high-level overview of how Metalink achieves its goals.</t>
+
+        <t>Upon connection to a Metalink/HTTP server, a client will receive information about other sources of the same resource and a checksum of the whole resource. The client will then be able to request chunks of the file from the various sources, scheduling appropriately in order to maximise the download rate.</t>
+      </section>   
+
       <section title="Examples"><t><figure> 
 	  <preamble>A brief Metalink server response with checksum, mirrors, .metalink, and OpenPGP signature:</preamble>
 	  
@@ -119,24 +128,24 @@ Digest: SHA=thvDyvhfIqlvFe+A9MYgxAfm1q5=
     </section>
 
     <section title="Requirements" anchor="req">
-	  <t>In this context, "Metalink" refers to Metalink/HTTP which consists of mirrors and checksums in HTTP Headers as described in this document. "Metalink/XML" refers to the XML format described in <xref target="draft-bryan-metalink"/>.</t>
-      <t>Metalink servers are HTTP servers that MUST have lists of mirrors and use the Link header <xref target="draft-nottingham-http-link-header"/> to indicate them. They also MUST
+      <t>In this context, "Metalink" refers to Metalink/HTTP which consists of mirrors and checksums in HTTP Headers as described in this document. "Metalink/XML" refers to the XML format described in <xref target="draft-bryan-metalink"/>.</t>
+      <t>Metalink servers are HTTP servers that use the Link header <xref target="draft-nottingham-http-link-header"/> to present a list of mirrors of a resource to a client. They MUST
 	  provide checksums of files via Instance Digests in HTTP <xref target="RFC3230"/>, whether requested or not. Mirror and checksum information provided by the originating Metalink server MUST be considered authoritative. Metalink servers and their associated mirror servers
-      SHOULD all share the same ETag policy (ETag Synchronization), i.e. based on the file contents (checksum) and not server-unique filesystem metadata. The emitted ETag may be implemented the same as the Instance Digest for simplicity.</t>
+      MUST all share the same ETag policy (ETag Synchronization), i.e. based on the file contents (checksum) and not server-unique filesystem metadata. The emitted ETag MAY be implemented the same as the Instance Digest for simplicity.</t>
 
 	  <t>Mirror servers are typically FTP or HTTP servers that "mirror" another server. That is, they provide identical copies of (at least some) files that are also on the mirrored server. 
       Mirror servers MAY be Metalink servers. Mirror servers MUST support serving partial content. Mirror servers SHOULD support Instance Digests in HTTP <xref target="RFC3230"/>. Optimally, HTTP mirror servers will share the same ETag policy as the Metalink server, provide Instance Digests, or both. Preferred mirror servers
 	  MUST share the same ETag policy or MUST support Instance Digests.</t>
 
       <t>Metalink clients use the mirrors provided by a Metalink server with Link header <xref target="draft-nottingham-http-link-header"/>. Metalink clients MUST support HTTP and MAY support FTP, BitTorrent, 
-      or other download methods. Metalink clients MUST switch downloads from one mirror to another if the one mirror becomes unreachable. Metalink clients are RECOMMENDED to support multi-source, or parallel, 
+      or other download methods. Metalink clients MUST switch downloads from one mirror to another if the mirror becomes unreachable. Metalink clients SHOULD support multi-source, or parallel, 
       downloads, where portions of a file are downloaded from multiple mirrors simultaneously (and optionally, from Peer-to-Peer sources). Metalink clients MUST support Instance Digests in HTTP <xref target="RFC3230"/> by 
       requesting and verifying checksums. Metalink clients MAY make use of digital signatures if they are offered.</t>
 	  
 	  </section>
 	
     <section title="Mirrors / Multiple Download Locations" anchor="mirrors">
-      <t>Mirrors are specified with the Link header <xref target="draft-nottingham-http-link-header"/> and a relation type of "duplicate" as defined in <xref target="duplicate"/>.</t>
+      <t>Mirrors are specified with the Link header <xref target="draft-nottingham-http-link-header"/> and a relation type of "duplicate" as defined in <xref target="IANA"/>.</t>
 
 <t><figure> 
 	  <preamble>A brief Metalink server response with two mirrors only:</preamble>	  
@@ -144,25 +153,35 @@ Digest: SHA=thvDyvhfIqlvFe+A9MYgxAfm1q5=
 Link: &lt;http://www2.example.com/example.ext&gt;; rel="duplicate"; 
 pri=1; pref=1
 Link: &lt;ftp://ftp.example.com/example.ext&gt;; rel="duplicate"; 
-pri=2; geo="uk"; depth=1
+pri=2; geo="gb"; depth=1
 </artwork></figure></t>
 
 	  <t>[[Some organizations have many mirrors. Only send a few mirrors, or only use the Link header if Want-Digest is used?]]</t>
+	  
+      <t>It is up to the server to choose how many Link headers to send. Such a decision could be a hard-coded limit, a random selection, based on file size, or based on server load.</t>
 
 <section title="Mirror Priority">
-      <t>Mirror servers are listed in order of priority or have a "pri" value, where mirrors with lower values are used first.</t>
+      <t>Mirror servers are listed in order of priority (from most preferred to least) or have a "pri" value, where mirrors with lower values are used first.</t>
+      <t>This is purely an expression of the server's preferences; it is up to the client what it does with this information, particularly with reference to how many servers to use at any one time. A client MUST respect the server's priority ordering, however.</t>
+
+      <t>[[Would it make more sense to use qvalue-style policies here, i.e. q=1.0 through q=0.0 ?]]</t>
 </section>
 
 <section title="Mirror Geographical Location">
-	    <t>Mirror servers MAY have a "geo" value, which
-		is a <xref target="ISO3166-1"/> alpha-2 two letter country code for the geographical location of the physical server an IRI is used
-		to access.
-		</t>
+        <t>Mirror servers MAY have a "geo" value, which
+        is a <xref target="ISO3166-1"/> alpha-2 two letter country code for the geographical location of the physical server the IRI is used
+        to access. A client may use this information to select a mirror, or set of mirrors, that are geographically near (if the client has access to such information), with the aim of reducing network load at inter-country bottlenecks.
+        </t>
 </section>
 
 <section title="Coordinated Mirror Policies">
-	  <t>There are two types of mirror servers: preferred and normal. Optimally, HTTP mirror servers will share the same ETag policy as the Metalink server, provide Instance Digests, or both. These mirrors are preferred, and make it possible to detect early on, before data is transferred, if the file requested matches the desired file.  Preferred mirror servers
-	  MUST share the same ETag policy or MUST support Instance Digests. Preferred HTTP mirror servers have a "pref" value of 1.</t>
+      <t>There are two types of mirror servers: preferred and normal. Optimally, HTTP mirror servers will share the same ETag policy as the Metalink server, provide Instance Digests, or both. These mirrors are preferred, and make it possible to detect early on, before data is transferred, if the file requested matches the desired file.  Preferred mirror servers
+      MUST share the same ETag policy or MUST support Instance Digests. Preferred HTTP mirror servers have a "pref" value of 1.</t>
+      <t>[[Suggestion to relax earlier MUSTs: In order for clients to identify servers that have coordinated ETag policies, the ETag MUST begin with "Metalink:", e.g.
+        <figure><artwork type="example">
+ETag: "Metalink:SHA=thvDyvhfIqlvFe+A9MYgxAfm1q5="
+        </artwork></figure>
+      ]]</t>
 </section>
 
 <section title="Mirror Depth">
@@ -183,7 +202,7 @@ rel="duplicate"; pri=1; pref=1; depth=4
 
 	  </section>
 
-    <section title="Peer-to-Peer Metainfo" anchor="p2p">
+    <section title="Peer-to-Peer / Metainfo" anchor="p2p">
       <t>Metainfo files, which describe ways to download a file over Peer-to-Peer networks or otherwise, are specified with the Link header <xref target="draft-nottingham-http-link-header"/> and a relation type of "describedby" and a type parameter that indicates
    the MIME type of the metadata available at the IRI.</t>
 <t><figure> 
@@ -194,6 +213,12 @@ type="application/x-bittorrent"
 Link: &lt;http://example.com/example.ext.metalink&gt;; rel="describedby";
 type="application/metalink4+xml"
 </artwork></figure></t>
+
+    <section title="Metalink/XML Files" anchor="metalinkxml">
+      <t>Full Metalink/XML files for a given resource can be specified as shown in <xref target="p2p"/>.
+      This is particularly useful for providing metadata such as checksums of chunks, allowing a
+      client to recover from partial errors (see <xref target="errorcorrection"/>).</t>
+    </section>
 	
     </section>
 
@@ -223,7 +248,7 @@ Digest: SHA=thvDyvhfIqlvFe+A9MYgxAfm1q5=
     </section>
 
     <section title="Client / Server Multi-source Download Interaction" anchor="clientserver">
-      <t>Metalink clients begin a download with a standard HTTP <xref target="RFC2616"/> GET request to the Metalink server. A Range limit is optional, not required. Alternatively, Metalink clients can begin with a HEAD request to the Metalink server to discover mirrors via Link headers. After that, the client follows with a GET request to the desired mirrors.</t>
+      <t>Metalink clients begin a download with a standard HTTP <xref target="RFC2616"/> GET request to the Metalink server. A Range limit is optional, not required.</t>
 <t><figure> 
 	  <artwork type="example">
 GET /distribution/example.ext HTTP/1.1
@@ -250,7 +275,7 @@ type="application/pgp-signature"
 Digest: SHA=thvDyvhfIqlvFe+A9MYgxAfm1q5=
 </artwork></figure></t>
 
-<t>From the Metalink server response the client learns the following metadata
+<t>From the Metalink server response the client learns some or all of the following metadata
 about the requested object, in addition to also starting to receive the
 object:</t>
 <t>
@@ -264,10 +289,13 @@ object:</t>
 <t>Metalink/XML, which can include partial file checksums to repair a file.</t>
 </list></t>
 
+<t>(Alternatively, the client could have requested a HEAD only, and then skipped to making the following decisions on every available mirror server found via the Link headers)</t>
 
 <t>If the object is large and gets delivered slower than expected then the Metalink client starts a number of parallel ranged downloads (one per selected mirror server other than the
-first) using mirrors provided by the Link header with "duplicate" relation type, using the location of the original GET request in the "Referer" header field. 
-If no Range limit was given in the original request then work from the tail of the object (the first request is still running and will eventually catch up), otherwise continue after the range requested in the first request.</t>
+first) using mirrors provided by the Link header with "duplicate" relation type, using the location of the original GET request in the "Referer" header field. The size and number of ranges requested from each server is for the client to decide, based upon the performance observed from each server. Further discussion of performance considerations is presented in <xref target="multiserver"/>.</t>
+
+<t>If no Range limit was given in the original request then work from the tail of the object (the first request is still running and will eventually catch up), otherwise continue after the range requested in the first request. If no Range was provided, the original connection must be terminated once all parts of the resource have been retrieved. It is recommended that a HEAD request is undertaken first, so that the client can find out if there are any Link headers, and then Range-based requests are undertaken to the mirror servers as well as on the original connection.</t>
+
 <t>If ETags are coordinated between mirrors, If-Match conditions based on the ETag SHOULD be used to quickly detect out-of-date mirrors by using the ETag from the Metalink server response. If no indication of ETag syncronisation/knowledge is given then If-Match
 should not be used, and optimally there will be an Instance Digest in the mirror response which we can use to detect a mismatch early, and if not then a mismatch won't be detected until the completed object is verified.
 
@@ -358,7 +386,7 @@ error is still detected when the merged response is verified.</t>
 
 </section>
 
-<section title="Error Correction">
+<section title="Error Correction" anchor="errorcorrection">
 
 <t>If the object checksum does not match the Instance Digest then fetch the Metalink/XML or other recovery profile link, where partial file checksums can be found,
 allowing detection of which server returned bad information.
@@ -376,48 +404,54 @@ a trusted Metalink server.</t>
 
     </section>
 	
+    <section title="Multi-server Performance" anchor="multiserver">
+      <t>When opting to download simultaneously from multiple mirrors, there are a number of factors (both within and outside the influence of the client software) that are relevant to the performance achieved:</t>
+      <t>
+        <list style="symbols">
+          <t>The number of servers used simultaneously.</t>
+        	<t>The ability to pipeline sufficient or sufficiently large range requests to each server so as to avoid connections going idle.</t>
+	        <t>The ability to pipeline sufficiently few or sufficiently small range requests to servers so that all the servers finish their final chunks simultaneously.</t>
+	        <t>The ability to switch between mirrors dynamically so as to use the fastest mirrors at any moment in time</t> 
+        </list>
+      </t>
+      	<t>Obviously we do not want to use too many simultaneous
+	connections, or other traffic sharing a bottleneck link will
+	be starved.  But at the same time, good performance requires
+	that the client can simultaneously download from at least one
+	fast mirror while exploring whether any other mirror is
+	faster.  Based on laboratory experiments, we suggest a good
+	default number of simultaneous connections is probably four,
+	with three of these being used for the best three mirrors
+	found so far, and one being used to evaluate whether any other
+	mirror might offer better performance.</t>
 
+	<t>The size of chunks chosen by the client should be sufficiently
+	large that the chunk request headers and reponse headers
+	represent neglible overhead, and sufficiently large that they
+	can be pipelined effectively without needing a very high rate
+	of chunk requests.  At the same time, the amount of time
+	wasted waiting for the last chunk to download from the last
+	server after all the other servers have finished should be
+	minimized.  Thus we currently recommend that a chunk size of
+	at least 10KBytes should be used.  If the file being
+	transfered is very large, or the download speed very high,
+	this can be increased to perhaps 1MByte.  As network
+	bandwidths increase, we expect these numbers to increase
+	appropriately, so that the time to transfer a chunk remains
+	significantly larger than the latency of requesting a chunk
+	from a server.</t>
+    </section>
 
 	<section title="IANA Considerations" anchor="IANA">
 
-	<t>Accordingly, IANA has made the following registrations.</t>
+	<t>Accordingly, IANA has made the following registration to the Link Relation Type registry.</t>
 	
-    <section title="Link Relation Type Registration: &#34;duplicate&#34;" anchor="duplicate">
 <t>o  Relation Name: duplicate</t>
 <t>o  Description: Refers to a resource whose available representations are byte-for-byte identical with the corresponding representations of the context IRI.</t>
 <t>o  Reference: This specification.</t>
 <t>o  Notes: This relation is for static resources. That is, an HTTP GET request on any duplicate will return the same representation. It does not make sense for dynamic or POSTable resources and should not be used for them.</t>
 
-    </section>
-	<section title="Hypertext Transfer Protocol (HTTP) Digest Algorithm Values Registration">
-	
-	<t>This document makes use of the IANA registry named "Hypertext Transfer Protocol (HTTP) Digest Algorithm Values" specified in <xref target="RFC3230"/>.</t>
 
-   <t><list>
-   <t>Digest Algorithm: SHA-224</t>
-   <t>Description: The SHA-224 algorithm <xref target="SHS"/>. The output of this algorithm is encoded using the base64 encoding <xref target="RFC2045"/>.</t>
-   <t>Reference: <xref target="SHS"/> <xref target="RFC2045"/></t>
-   </list></t>
-<t></t>
-   <t><list>   
-   <t>Digest Algorithm: SHA-256</t>
-   <t>Description: The SHA-256 algorithm <xref target="SHS"/>. The output of this algorithm is encoded using the base64 encoding <xref target="RFC2045"/>.</t>
-   <t>Reference: <xref target="SHS"/> <xref target="RFC2045"/></t>
-   </list></t>
-   
-   <t><list>
-   <t>Digest Algorithm: SHA-384</t>
-   <t>Description: The SHA-384 algorithm <xref target="SHS"/>. The output of this algorithm is encoded using the base64 encoding <xref target="RFC2045"/>.</t>
-   <t>Reference: <xref target="SHS"/> <xref target="RFC2045"/></t>
-   </list></t>
-   
-   <t><list>
-   <t>Digest Algorithm: SHA-512</t>
-   <t>Description: The SHA-512 algorithm <xref target="SHS"/>. The output of this algorithm is encoded using the base64 encoding <xref target="RFC2045"/>.</t>
-   <t>Reference: <xref target="SHS"/> <xref target="RFC2045"/></t>   
-   </list></t>
-
-    </section>
 	</section>
 
 	  <section title="Security Considerations">
@@ -462,22 +496,6 @@ a trusted Metalink server.</t>
 	  
 	  <references title="Normative References">
 	  
-
-
-
-<reference anchor="RFC2045">
-
-<front>
-<title>Multipurpose Internet Mail Extensions (MIME) Part One: Format of Internet Message Bodies</title>
-<author initials="N." surname="Freed" fullname="N. Freed">
-<organization/></author>
-<author initials="N." surname="Borenstein" fullname="N. Borenstein">
-<organization/></author>
-<date year="1996" month="November"/></front>
-
-<seriesInfo name="RFC" value="2045"/>
-</reference>
-
 
 <reference anchor="RFC2119">
 
@@ -611,16 +629,6 @@ a trusted Metalink server.</t>
   <seriesInfo name="Internet-Draft" value="draft-nottingham-http-link-header-06"/>
 </reference>
 
-<reference anchor="SHS" target="http://csrc.nist.gov/publications/fips/fips180-3/fips180-3_final.pdf">
-<front>
-<title>Secure Hash Standard</title>
-<author>
-    <organization>National Institute of Standards and Technology (NIST)</organization>
-</author>
-<date year="2008" month="October"></date>
-</front>
-<seriesInfo name="FIPS PUB" value="180-3"></seriesInfo>
-</reference>
 
 <reference anchor="ISO3166-1">
 
@@ -657,14 +665,14 @@ a trusted Metalink server.</t>
       <author initials="N." surname="McNab" fullname="Neil McNab">
         <organization>Metalinker Project</organization>
         <address>
-          <email>nabber00@gmail.com</email>
+          <email>neil@nabber.org</email>
           <uri>http://www.nabber.org</uri>
         </address>
       </author>
       <author initials="P." surname="Poeml" fullname="Peter Poeml">
         <organization>Novell, Inc.</organization>
         <address>
-          <email>info@mirrorbrain.org</email>
+          <email>poeml@mirrorbrain.org</email>
           <uri>http://www.mirrorbrain.org/</uri>
         </address>
       </author>
@@ -677,7 +685,8 @@ a trusted Metalink server.</t>
 
 	    <section title="Acknowledgements and Contributors">
 		  <t>Thanks to the Metalink community, Mark Handley, Mark Nottingham, Daniel Stenberg, Tatsuhiro Tsujikawa, Peter Poeml, and Matt Domsch.</t>
-    
+		  
+          <t>Support for simultaneous download from multiple mirrors is based upon work by Mark Handley and Javier Vela Diago, who also provided validation of the benefits of this approach.</t>
 
 	    </section> 
 
@@ -700,19 +709,6 @@ a trusted Metalink server.</t>
 	      <t>(-) Not as rich metadata.</t>
 	      <t>(-) Not able to add multiple files to a download queue or create directory structure.</t>
 	    </list></t>
-
-		<t>draft-ford-http-multi-server compared to this draft :</t>
-        <t>
-	    <list style="symbols">
-
-	      <t>(+) Plans to define mirrors for whole directories.</t>
-	      <t>(---) Requires changes to server software.</t>
-	      <t>(---) Requires coordination of all mirror servers, which may be difficult or impossible unless you are in control of all servers on the mirror network.</t>
-		  <t>(---) Doesn't tie in p2p.</t>
-	      <t>(-) Defines new headers. Doesn't reuse existing standards.</t>
-	      <t>(-) No way to show mirror/p2p priority or geographical location (yet).</t>
-	    </list></t>
-		
 		
 	    </section>
 
@@ -728,11 +724,12 @@ a trusted Metalink server.</t>
 		  <t>Do we need an official MIME type for .torrent files or allow "application/x-bittorrent"?</t>
 	    </list></t>
 
-<t>-09 : October , 2009.
+<t>-09 : October 12, 2009.
 	    
 	    <list style="symbols">
 
 	      <t>Mirror location, coordination, and depth.</t>
+		  <t>Split HTTP Digest Algorithm Values Registration into draft-bryan-http-digest-algorithm-values-update.</t>
 	    </list></t>
 		
 <t>-08 : October 4, 2009.
