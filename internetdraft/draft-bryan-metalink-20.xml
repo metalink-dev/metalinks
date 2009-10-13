@@ -45,7 +45,7 @@
         <organization>Novell, Inc.</organization>
         <address>
           <email>poeml@mirrorbrain.org</email>
-          <uri>http://mirrorbrain.org/</uri>
+          <uri>http://www.mirrorbrain.org/</uri>
         </address>
       </author>
 	<date month="October" year="2009"/>        
@@ -1800,8 +1800,7 @@ structuredExtensionElement =
 	    <section title="Acknowledgements and Contributors">
 		  <t>The layout and content of this document relies heavily on work pioneered in the Atom Syndication Format as specified in <xref target="RFC4287"/>.</t>
 	    
-          <t>The content and concepts within are a product of the Metalink
-	      community.</t>
+          <t>The content and concepts within are a product of the Metalink community.</t>
 
 	      <t>The Metalink community has dozens of contributors who proposed ideas and wording for this
 	      document, or contributed to the evolution of Metalink, including:</t>
@@ -1816,7 +1815,7 @@ structuredExtensionElement =
           Salvatore Musumeci, Steve Eshelman, 
           Lucas Hewett, Ryan Cronin, Dave Winquist, Bob Denison,
           Wes Shelton, Kees Cook, Josh Colbert, Steve Kleisath, Chad Neptune, Nick Carrabba, Chris
-          Carrabba, Erin Solari, Derick Cordoba, Ryan Alexander, John Sowder, Sandra Amisano,
+          Carrabba, Erin Solari, Derick Cordoba, Ryan Alexander, John & Sandra Sowder,
           Tom Mainville, Janie Wargo, Jason Hansen, Tim Bray, Dan Brickley, Markus Hofmann, 
           Dan Connolly, Tim Berners-Lee, Louis Suarez-Potts, Ross Smith, Jeff Covey, 
           Ed Lee, Shawn Wilsher, Mike Connor, Johan Svedberg, Dedric Carter, James Antill, Debi
@@ -2085,7 +2084,7 @@ anyForeignElement =
 
 	    </list></t>
 
-<t>-20 : October 5, 2009.
+<t>-20 : October 12, 2009.
 	    
 	    <list style="symbols">
 		
