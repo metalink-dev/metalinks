@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?><?rfc linefile="1:draft-bryan-http-digest-algorithm-values-update-00.xml"?>
+<?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
+<?rfc toc="yes" ?>
+<?rfc tocdepth="3" ?>
+<?rfc tocindent="yes" ?>
+<?rfc symrefs="yes" ?>
+<?rfc sortrefs="yes"?>
+<?rfc iprnotified="no" ?>
+<?rfc compact="yes" ?>
+<?rfc comments="yes" ?>
+<?rfc inline="yes" ?>
+<!DOCTYPE rfc
+  PUBLIC "" "rfc2629.dtd">
+<rfc category="info" docName="draft-bryan-http-digest-algorithm-values-update-00" ipr="trust200902">
+    <front>        
+      <title abbrev="HTTP Digest Algorithm Values Registry">Hypertext Transfer Protocol (HTTP) Digest Algorithm Values Registry Update</title>
+      <author initials="A." surname="Bryan" fullname="Anthony Bryan">
+	    <organization></organization>
+	    <address>
+		  <postal>
+			<street></street>
+		    <city>Pompano Beach</city>
+			<region>FL</region>
+			<country>USA</country>
+		  </postal>
+	      <email>anthonybryan@gmail.com</email>	
+	      <uri>http://www.metalinker.org</uri>		
+	    </address>
+      </author>
+	<date month="October" year="2009"/>        
+
+      <abstract>
+	<t><xref target="RFC3230"/> created the IANA registry named "Hypertext Transfer Protocol (HTTP) Digest Algorithm Values" which defines values for digest algorithms used in HTTP.
+	This draft adds new values to the registry.
+</t>
+      </abstract>    
+	  
+  </front>    
+
+  <middle>
+    <section title="Introduction">
+      <t>The IANA registry named "Hypertext Transfer Protocol (HTTP) Digest Algorithm Values" defines values for digest algorithms used in HTTP.</t>
+	  <t>This registry was created by <xref target="RFC3230"/> in 2002 and some useful values could be added to it.</t> 
+
+      <t>[[ Discussion of this draft should take place on IETF HTTP WG mailing list at ietf-http-wg@w3.org or directly to the author. ]]</t>
+      <section title="Examples"><t><figure> 
+	  <preamble>Examples of Instance Digest for SHA-256:</preamble>
+	  
+	  <artwork type="example">
+Digest: SHA-256=MWVkMWQxYTRiMzk5MDQ0MzI3NGU5NDEyZTk5OWY1ZGFmNzgyZTJlO
+DYzYjRjYzFhOTlmNTQwYzI2M2QwM2U2MQ==
+</artwork></figure></t>
+      </section> 
+
+    </section>
+
+	<section title="IANA Considerations" anchor="IANA">
+	<t>This document makes use of the IANA registry named "Hypertext Transfer Protocol (HTTP) Digest Algorithm Values" specified in <xref target="RFC3230"/>.</t>
+	<t>Accordingly, IANA has made the following registrations:</t>
+   <t><list>
+   <t>Digest Algorithm: SHA-224</t>
+   <t>Description: The SHA-224 algorithm <xref target="SHS"/>. The output of this algorithm is encoded using the base64 encoding <xref target="RFC2045"/>.</t>
+   <t>Reference: <xref target="SHS"/> <xref target="RFC2045"/></t>
+   </list></t>
+<t></t>
+   <t><list>   
+   <t>Digest Algorithm: SHA-256</t>
+   <t>Description: The SHA-256 algorithm <xref target="SHS"/>. The output of this algorithm is encoded using the base64 encoding <xref target="RFC2045"/>.</t>
+   <t>Reference: <xref target="SHS"/> <xref target="RFC2045"/></t>
+   </list></t>
+   
+   <t><list>
+   <t>Digest Algorithm: SHA-384</t>
+   <t>Description: The SHA-384 algorithm <xref target="SHS"/>. The output of this algorithm is encoded using the base64 encoding <xref target="RFC2045"/>.</t>
+   <t>Reference: <xref target="SHS"/> <xref target="RFC2045"/></t>
+   </list></t>
+   
+   <t><list>
+   <t>Digest Algorithm: SHA-512</t>
+   <t>Description: The SHA-512 algorithm <xref target="SHS"/>. The output of this algorithm is encoded using the base64 encoding <xref target="RFC2045"/>.</t>
+   <t>Reference: <xref target="SHS"/> <xref target="RFC2045"/></t>   
+   </list></t>
+
+   
+	</section>
+
+
+	
+	  <section title="Security Considerations">
+
+        <t>Same as <xref target="RFC3230"/>.</t>
+		
+	  </section>
+
+	</middle> 
+
+	<back> 
+	  
+	  <references title="Normative References">
+
+
+
+<reference anchor="RFC2045">
+
+<front>
+<title>Multipurpose Internet Mail Extensions (MIME) Part One: Format of Internet Message Bodies</title>
+<author initials="N." surname="Freed" fullname="N. Freed">
+<organization/></author>
+<author initials="N." surname="Borenstein" fullname="N. Borenstein">
+<organization/></author>
+<date year="1996" month="November"/></front>
+
+<seriesInfo name="RFC" value="2045"/>
+</reference>
+
+
+<reference anchor="SHS" target="http://csrc.nist.gov/publications/fips/fips180-3/fips180-3_final.pdf">
+<front>
+<title>Secure Hash Standard</title>
+
+<author>
+
+    <organization>National Institute of Standards and Technology (NIST)</organization>
+</author>
+
+
+
+<date year="2008" month="October"></date>
+</front>
+
+<seriesInfo name="FIPS PUB" value="180-3"></seriesInfo>
+</reference>
+
+<reference anchor="RFC3230">
+
+<front>
+<title>Instance Digests in HTTP</title>
+<author initials="J." surname="Mogul" fullname="J. Mogul">
+<organization/></author>
+<author initials="A." surname="Van Hoff" fullname="A. Van Hoff">
+<organization/></author>
+<date year="2002" month="January"/></front>
+
+<seriesInfo name="RFC" value="3230"/>
+</reference>
+
+	  </references>
+	  
+
+		
+	    <section title="Acknowledgements and Contributors">
+		  <t>Thanks to Mark Nottingham, Eran Hammer-Lahav, and Nils Maier.</t>
+    </section>
+
+	    <section title="Document History (to be removed by RFC Editor before publication)">
+		<t>[[ to be removed by the RFC editor before publication as an RFC. ]]</t>
+		<t>Known issues concerning this draft:
+	    <list style="symbols"> 
+	      
+	      <t>Current registry: MD5 lists both RFC1521 and RFC20456 for base64 encoding. Should this draft update it to refer to just one?</t>
+		  <t>Current registry: SHA link ( http://csrc.nist.gov/fips/fip180-1.txt ) is no longer valid. Should this draft update it?</t>
+		  <t>If we update SHA in the registry, should this draft refer to SHS or RFC3174?</t>
+
+	    </list></t>
+
+<t>-00 : September 08, 2009.
+	    
+	    <list style="symbols">
+
+	      <t>Initial draft.</t>
+	    </list></t>
+		
+	    </section>
+	  </back> 
+	</rfc>
