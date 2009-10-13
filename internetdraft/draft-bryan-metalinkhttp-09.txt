@@ -81,7 +81,7 @@ Table of Contents
      3.3.  Coordinated Mirror Policies  . . . . . . . . . . . . . . .  6
      3.4.  Mirror Depth . . . . . . . . . . . . . . . . . . . . . . .  7
    4.  Peer-to-Peer / Metainfo  . . . . . . . . . . . . . . . . . . .  7
-     4.1.  Metalink/XML Files . . . . . . . . . . . . . . . . . . . .  8
+     4.1.  Metalink/XML Files . . . . . . . . . . . . . . . . . . . .  7
    5.  OpenPGP Signatures . . . . . . . . . . . . . . . . . . . . . .  8
    6.  Checksums of Whole Files . . . . . . . . . . . . . . . . . . .  8
    7.  Client / Server Multi-source Download Interaction  . . . . . .  8
@@ -252,10 +252,8 @@ Internet-Draft    Metalink/HTTP: Mirrors and Checksums      October 2009
    some) files that are also on the mirrored server.  Mirror servers MAY
    be Metalink servers.  Mirror servers MUST support serving partial
    content.  Mirror servers SHOULD support Instance Digests in HTTP
-   [RFC3230].  Optimally, HTTP mirror servers will share the same ETag
-   policy as the Metalink server, provide Instance Digests, or both.
-   Preferred mirror servers MUST share the same ETag policy or MUST
-   support Instance Digests.
+   [RFC3230].  HTTP mirror servers MUST share the same ETag policy as
+   the originating Metalink server.
 
    Metalink clients use the mirrors provided by a Metalink server with
    Link header [draft-nottingham-http-link-header].  Metalink clients
@@ -273,6 +271,8 @@ Internet-Draft    Metalink/HTTP: Mirrors and Checksums      October 2009
 3.  Mirrors / Multiple Download Locations
 
    Mirrors are specified with the Link header
+   [draft-nottingham-http-link-header] and a relation type of
+   "duplicate" as defined in Section 9.
 
 
 
@@ -280,9 +280,6 @@ Bryan, et al.            Expires April 15, 2010                 [Page 5]
 
 Internet-Draft    Metalink/HTTP: Mirrors and Checksums      October 2009
 
-
-   [draft-nottingham-http-link-header] and a relation type of
-   "duplicate" as defined in Section 9.
 
    A brief Metalink server response with two mirrors only:
 
@@ -329,6 +326,9 @@ Internet-Draft    Metalink/HTTP: Mirrors and Checksums      October 2009
    are preferred, and make it possible to detect early on, before data
    is transferred, if the file requested matches the desired file.
    Preferred mirror servers MUST share the same ETag policy or MUST
+   support Instance Digests.  Preferred HTTP mirror servers have a
+   "pref" value of 1.
+
 
 
 
@@ -336,9 +336,6 @@ Bryan, et al.            Expires April 15, 2010                 [Page 6]
 
 Internet-Draft    Metalink/HTTP: Mirrors and Checksums      October 2009
 
-
-   support Instance Digests.  Preferred HTTP mirror servers have a
-   "pref" value of 1.
 
    [[Suggestion to relax earlier MUSTs: In order for clients to identify
    servers that have coordinated ETag policies, the ETag MUST begin with
@@ -383,8 +380,11 @@ Internet-Draft    Metalink/HTTP: Mirrors and Checksums      October 2009
    Link: <http://example.com/example.ext.metalink>; rel="describedby";
    type="application/metalink4+xml"
 
+4.1.  Metalink/XML Files
 
-
+   Full Metalink/XML files for a given resource can be specified as
+   shown in Section 4.  This is particularly useful for providing
+   metadata such as checksums of chunks, allowing a client to recover
 
 
 
@@ -393,11 +393,6 @@ Bryan, et al.            Expires April 15, 2010                 [Page 7]
 Internet-Draft    Metalink/HTTP: Mirrors and Checksums      October 2009
 
 
-4.1.  Metalink/XML Files
-
-   Full Metalink/XML files for a given resource can be specified as
-   shown in Section 4.  This is particularly useful for providing
-   metadata such as checksums of chunks, allowing a client to recover
    from partial errors (see Section 7.1.2).
 
 
@@ -434,6 +429,11 @@ Internet-Draft    Metalink/HTTP: Mirrors and Checksums      October 2009
    Host: www.example.com
 
    The Metalink server responds with the data and these headers:
+
+
+
+
+
 
 
 

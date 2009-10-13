@@ -133,9 +133,9 @@ Digest: SHA=thvDyvhfIqlvFe+A9MYgxAfm1q5=
 	  provide checksums of files via Instance Digests in HTTP <xref target="RFC3230"/>, whether requested or not. Mirror and checksum information provided by the originating Metalink server MUST be considered authoritative. Metalink servers and their associated mirror servers
       MUST all share the same ETag policy (ETag Synchronization), i.e. based on the file contents (checksum) and not server-unique filesystem metadata. The emitted ETag MAY be implemented the same as the Instance Digest for simplicity.</t>
 
-	  <t>Mirror servers are typically FTP or HTTP servers that "mirror" another server. That is, they provide identical copies of (at least some) files that are also on the mirrored server. 
-      Mirror servers MAY be Metalink servers. Mirror servers MUST support serving partial content. Mirror servers SHOULD support Instance Digests in HTTP <xref target="RFC3230"/>. Optimally, HTTP mirror servers will share the same ETag policy as the Metalink server, provide Instance Digests, or both. Preferred mirror servers
-	  MUST share the same ETag policy or MUST support Instance Digests.</t>
+      <t>Mirror servers are typically FTP or HTTP servers that "mirror" another server. That is, they provide identical copies of (at least some) files that are also on the mirrored server. 
+      Mirror servers MAY be Metalink servers. Mirror servers MUST support serving partial content. Mirror servers SHOULD support Instance Digests in HTTP <xref target="RFC3230"/>. HTTP mirror servers MUST share the same ETag policy as the originating Metalink server.</t>
+
 
       <t>Metalink clients use the mirrors provided by a Metalink server with Link header <xref target="draft-nottingham-http-link-header"/>. Metalink clients MUST support HTTP and MAY support FTP, BitTorrent, 
       or other download methods. Metalink clients MUST switch downloads from one mirror to another if the mirror becomes unreachable. Metalink clients SHOULD support multi-source, or parallel, 
