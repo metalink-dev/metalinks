@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en"><head><title>Hypertext Transfer Protocol (HTTP) Digest Algorithm Values Registry Update</title>
+<html lang="en"><head><title>Additional Hash Algorithms for HTTP Instance Digests</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="Hypertext Transfer Protocol (HTTP) Digest Algorithm Values Registry Update">
+<meta name="description" content="Additional Hash Algorithms for HTTP Instance Digests">
 <meta name="generator" content="xml2rfc v1.34pre5 (http://xml.resource.org/)">
 <style type='text/css'><!--
         body {
@@ -142,11 +142,11 @@
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <table summary="layout" width="66%" border="0" cellpadding="0" cellspacing="0"><tr><td><table summary="layout" width="100%" border="0" cellpadding="2" cellspacing="1">
 <tr><td class="header">Network Working Group</td><td class="header">A. Bryan</td></tr>
-<tr><td class="header">Internet-Draft</td><td class="header">October 12, 2009</td></tr>
+<tr><td class="header">Internet-Draft</td><td class="header">October 15, 2009</td></tr>
 <tr><td class="header">Intended status: Informational</td><td class="header">&nbsp;</td></tr>
-<tr><td class="header">Expires: April 15, 2010</td><td class="header">&nbsp;</td></tr>
+<tr><td class="header">Expires: April 18, 2010</td><td class="header">&nbsp;</td></tr>
 </table></td></tr></table>
-<h1><br />Hypertext Transfer Protocol (HTTP) Digest Algorithm Values Registry Update<br />draft-bryan-http-digest-algorithm-values-update-02</h1>
+<h1><br />Additional Hash Algorithms for HTTP Instance Digests<br />draft-bryan-http-digest-algorithm-values-update-02</h1>
 
 <h3>Status of this Memo</h3>
 <p>
@@ -169,7 +169,7 @@ The list of current Internet-Drafts can be accessed at
 The list of Internet-Draft Shadow Directories can be accessed at
 <a href='http://www.ietf.org/shadow.html'>http://www.ietf.org/shadow.html</a>.</p>
 <p>
-This Internet-Draft will expire on April 15, 2010.</p>
+This Internet-Draft will expire on April 18, 2010.</p>
 
 <h3>Copyright Notice</h3>
 <p>
@@ -218,7 +218,8 @@ Author's Address<br />
 <a name="rfc.section.1"></a><h3>1.&nbsp;
 Introduction</h3>
 
-<p>The IANA registry named "Hypertext Transfer Protocol (HTTP) Digest Algorithm Values" defines values for digest algorithms used in HTTP.
+<p>The IANA registry named "Hypertext Transfer Protocol (HTTP) Digest Algorithm Values" defines values for digest algorithms used in HTTP. Note: This is unrelated to HTTP
+      Digest Authentication.
 </p>
 <p>The registry was created by <a class='info' href='#RFC3230'>[RFC3230]<span> (</span><span class='info'>Mogul, J. and A. Van Hoff, &ldquo;Instance Digests in HTTP,&rdquo; January&nbsp;2002.</span><span>)</span></a> in 2002. This draft adds new values to the registry and updates previous values.
 </p>
@@ -279,29 +280,9 @@ New Registrations</h3>
 </p>
 <p></p>
 <blockquote class="text">
-<p>Digest Algorithm: SHA-224
-</p>
-<p>Description: The SHA-224 algorithm <a class='info' href='#FIPS-180-3'>[FIPS&#8209;180&#8209;3]<span> (</span><span class='info'>National Institute of Standards and Technology (NIST), &ldquo;Secure Hash Standard (SHS),&rdquo; October&nbsp;2008.</span><span>)</span></a>. The output of this algorithm is encoded using the base64 encoding <a class='info' href='#RFC4648'>[RFC4648]<span> (</span><span class='info'>Josefsson, S., &ldquo;The Base16, Base32, and Base64 Data Encodings,&rdquo; October&nbsp;2006.</span><span>)</span></a>.
-</p>
-<p>Reference: <a class='info' href='#FIPS-180-3'>[FIPS&#8209;180&#8209;3]<span> (</span><span class='info'>National Institute of Standards and Technology (NIST), &ldquo;Secure Hash Standard (SHS),&rdquo; October&nbsp;2008.</span><span>)</span></a> <a class='info' href='#RFC4648'>[RFC4648]<span> (</span><span class='info'>Josefsson, S., &ldquo;The Base16, Base32, and Base64 Data Encodings,&rdquo; October&nbsp;2006.</span><span>)</span></a>
-</p>
-</blockquote>
-
-<p></p>
-<blockquote class="text">
 <p>Digest Algorithm: SHA-256
 </p>
 <p>Description: The SHA-256 algorithm <a class='info' href='#FIPS-180-3'>[FIPS&#8209;180&#8209;3]<span> (</span><span class='info'>National Institute of Standards and Technology (NIST), &ldquo;Secure Hash Standard (SHS),&rdquo; October&nbsp;2008.</span><span>)</span></a>. The output of this algorithm is encoded using the base64 encoding <a class='info' href='#RFC4648'>[RFC4648]<span> (</span><span class='info'>Josefsson, S., &ldquo;The Base16, Base32, and Base64 Data Encodings,&rdquo; October&nbsp;2006.</span><span>)</span></a>.
-</p>
-<p>Reference: <a class='info' href='#FIPS-180-3'>[FIPS&#8209;180&#8209;3]<span> (</span><span class='info'>National Institute of Standards and Technology (NIST), &ldquo;Secure Hash Standard (SHS),&rdquo; October&nbsp;2008.</span><span>)</span></a> <a class='info' href='#RFC4648'>[RFC4648]<span> (</span><span class='info'>Josefsson, S., &ldquo;The Base16, Base32, and Base64 Data Encodings,&rdquo; October&nbsp;2006.</span><span>)</span></a>
-</p>
-</blockquote>
-
-<p></p>
-<blockquote class="text">
-<p>Digest Algorithm: SHA-384
-</p>
-<p>Description: The SHA-384 algorithm <a class='info' href='#FIPS-180-3'>[FIPS&#8209;180&#8209;3]<span> (</span><span class='info'>National Institute of Standards and Technology (NIST), &ldquo;Secure Hash Standard (SHS),&rdquo; October&nbsp;2008.</span><span>)</span></a>. The output of this algorithm is encoded using the base64 encoding <a class='info' href='#RFC4648'>[RFC4648]<span> (</span><span class='info'>Josefsson, S., &ldquo;The Base16, Base32, and Base64 Data Encodings,&rdquo; October&nbsp;2006.</span><span>)</span></a>.
 </p>
 <p>Reference: <a class='info' href='#FIPS-180-3'>[FIPS&#8209;180&#8209;3]<span> (</span><span class='info'>National Institute of Standards and Technology (NIST), &ldquo;Secure Hash Standard (SHS),&rdquo; October&nbsp;2008.</span><span>)</span></a> <a class='info' href='#RFC4648'>[RFC4648]<span> (</span><span class='info'>Josefsson, S., &ldquo;The Base16, Base32, and Base64 Data Encodings,&rdquo; October&nbsp;2006.</span><span>)</span></a>
 </p>
@@ -343,7 +324,7 @@ Security Considerations</h3>
 <a name="rfc.section.A"></a><h3>Appendix A.&nbsp;
 Acknowledgements and Contributors</h3>
 
-<p>Thanks to Mark Nottingham, Eran Hammer-Lahav, Nils Maier, Lisa Dusseault, and Alfred Hoenes.
+<p>Thanks to Mark Nottingham, Eran Hammer-Lahav, Nils Maier, Lisa Dusseault, Alfred Hoenes, and Pasi Eronen.
 </p>
 <a name="anchor8"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
@@ -356,6 +337,18 @@ Document History (to be removed by RFC Editor before publication)</h3>
 	    </p>
 <ul class="text">
 <li>None known.
+</li>
+</ul>
+
+<p>-02 : October 14, 2009.
+	    
+	    </p>
+<ul class="text">
+<li>Update title.
+</li>
+<li>Remove SHA-224 and SHA-384.
+</li>
+<li>"Note: This is unrelated to HTTP Digest Authentication."
 </li>
 </ul>
 
