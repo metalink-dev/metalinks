@@ -2,13 +2,12 @@
 
 
 Network Working Group                                           A. Bryan
-Internet-Draft                                          October 12, 2009
+Internet-Draft                                          October 15, 2009
 Intended status: Informational
-Expires: April 15, 2010
+Expires: April 18, 2010
 
 
-  Hypertext Transfer Protocol (HTTP) Digest Algorithm Values Registry
-                                 Update
+          Additional Hash Algorithms for HTTP Instance Digests
            draft-bryan-http-digest-algorithm-values-update-02
 
 Status of this Memo
@@ -32,7 +31,7 @@ Status of this Memo
    The list of Internet-Draft Shadow Directories can be accessed at
    http://www.ietf.org/shadow.html.
 
-   This Internet-Draft will expire on April 15, 2010.
+   This Internet-Draft will expire on April 18, 2010.
 
 Copyright Notice
 
@@ -49,15 +48,15 @@ Abstract
 
    [RFC3230] created the IANA registry named "Hypertext Transfer
    Protocol (HTTP) Digest Algorithm Values" which defines values for
-
-
-
-Bryan                    Expires April 15, 2010                 [Page 1]
-
-Internet-Draft    HTTP Digest Algorithm Values Registry     October 2009
-
-
    digest algorithms used in HTTP.  This draft adds new values to the
+
+
+
+Bryan                    Expires April 18, 2010                 [Page 1]
+
+Internet-Draft    Algorithms for HTTP Instance Digests      October 2009
+
+
    registry and updates previous values.
 
 
@@ -72,7 +71,7 @@ Table of Contents
    4.  Normative References  . . . . . . . . . . . . . . . . . . . . . 4
    Appendix A.  Acknowledgements and Contributors  . . . . . . . . . . 4
    Appendix B.  Document History (to be removed by RFC Editor
-                before publication)  . . . . . . . . . . . . . . . . . 5
+                before publication)  . . . . . . . . . . . . . . . . . 4
    Author's Address  . . . . . . . . . . . . . . . . . . . . . . . . . 5
 
 
@@ -108,15 +107,17 @@ Table of Contents
 
 
 
-Bryan                    Expires April 15, 2010                 [Page 2]
+
+Bryan                    Expires April 18, 2010                 [Page 2]
 
-Internet-Draft    HTTP Digest Algorithm Values Registry     October 2009
+Internet-Draft    Algorithms for HTTP Instance Digests      October 2009
 
 
 1.  Introduction
 
    The IANA registry named "Hypertext Transfer Protocol (HTTP) Digest
    Algorithm Values" defines values for digest algorithms used in HTTP.
+   Note: This is unrelated to HTTP Digest Authentication.
 
    The registry was created by [RFC3230] in 2002.  This draft adds new
    values to the registry and updates previous values.
@@ -157,27 +158,18 @@ Internet-Draft    HTTP Digest Algorithm Values Registry     October 2009
 
    Accordingly, IANA has made the following registrations:
 
-      Digest Algorithm: SHA-224
-      Description: The SHA-224 algorithm [FIPS-180-3].  The output of
-      this algorithm is encoded using the base64 encoding [RFC4648].
-
-
-
-
-Bryan                    Expires April 15, 2010                 [Page 3]
-
-Internet-Draft    HTTP Digest Algorithm Values Registry     October 2009
-
-
-      Reference: [FIPS-180-3] [RFC4648]
-
       Digest Algorithm: SHA-256
-      Description: The SHA-256 algorithm [FIPS-180-3].  The output of
-      this algorithm is encoded using the base64 encoding [RFC4648].
-      Reference: [FIPS-180-3] [RFC4648]
 
-      Digest Algorithm: SHA-384
-      Description: The SHA-384 algorithm [FIPS-180-3].  The output of
+
+
+
+
+Bryan                    Expires April 18, 2010                 [Page 3]
+
+Internet-Draft    Algorithms for HTTP Instance Digests      October 2009
+
+
+      Description: The SHA-256 algorithm [FIPS-180-3].  The output of
       this algorithm is encoded using the base64 encoding [RFC4648].
       Reference: [FIPS-180-3] [RFC4648]
 
@@ -212,17 +204,7 @@ Internet-Draft    HTTP Digest Algorithm Values Registry     October 2009
 Appendix A.  Acknowledgements and Contributors
 
    Thanks to Mark Nottingham, Eran Hammer-Lahav, Nils Maier, Lisa
-   Dusseault, and Alfred Hoenes.
-
-
-
-
-
-
-
-Bryan                    Expires April 15, 2010                 [Page 4]
-
-Internet-Draft    HTTP Digest Algorithm Values Registry     October 2009
+   Dusseault, Alfred Hoenes, and Pasi Eronen.
 
 
 Appendix B.  Document History (to be removed by RFC Editor before
@@ -232,6 +214,20 @@ Appendix B.  Document History (to be removed by RFC Editor before
 
    Known issues concerning this draft:
    o  None known.
+
+   -02 : October 14, 2009.
+
+
+
+
+Bryan                    Expires April 18, 2010                 [Page 4]
+
+Internet-Draft    Algorithms for HTTP Instance Digests      October 2009
+
+
+   o  Update title.
+   o  Remove SHA-224 and SHA-384.
+   o  "Note: This is unrelated to HTTP Digest Authentication."
 
    -01 : October 07, 2009.
    o  Update previous values that are outdated.
@@ -276,5 +272,9 @@ Author's Address
 
 
 
-Bryan                    Expires April 15, 2010                 [Page 5]
+
+
+
+
+Bryan                    Expires April 18, 2010                 [Page 5]
 

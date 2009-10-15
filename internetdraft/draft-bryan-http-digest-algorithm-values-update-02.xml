@@ -13,7 +13,7 @@
   PUBLIC "" "rfc2629.dtd">
 <rfc category="info" docName="draft-bryan-http-digest-algorithm-values-update-02" ipr="trust200902">
     <front>        
-      <title abbrev="HTTP Digest Algorithm Values Registry">Hypertext Transfer Protocol (HTTP) Digest Algorithm Values Registry Update</title>
+      <title abbrev="Algorithms for HTTP Instance Digests">Additional Hash Algorithms for HTTP Instance Digests</title>
       <author initials="A." surname="Bryan" fullname="Anthony Bryan">
 	    <organization></organization>
 	    <address>
@@ -39,7 +39,8 @@
 
   <middle>
     <section title="Introduction">
-      <t>The IANA registry named "Hypertext Transfer Protocol (HTTP) Digest Algorithm Values" defines values for digest algorithms used in HTTP.</t>
+      <t>The IANA registry named "Hypertext Transfer Protocol (HTTP) Digest Algorithm Values" defines values for digest algorithms used in HTTP. Note: This is unrelated to HTTP
+      Digest Authentication.</t>
 	  <t>The registry was created by <xref target="RFC3230"/> in 2002. This draft adds new values to the registry and updates previous values.</t> 
 
       <t>[[ Discussion of this draft should take place on IETF HTTP WG mailing list at ietf-http-wg@w3.org or directly to the author. ]]</t>
@@ -74,24 +75,13 @@ DYzYjRjYzFhOTlmNTQwYzI2M2QwM2U2MQ==
 </section>
 <section title="New Registrations">
 	<t>Accordingly, IANA has made the following registrations:</t>
-   <t><list>
-   <t>Digest Algorithm: SHA-224</t>
-   <t>Description: The SHA-224 algorithm <xref target="FIPS-180-3"/>. The output of this algorithm is encoded using the base64 encoding <xref target="RFC4648"/>.</t>
-   <t>Reference: <xref target="FIPS-180-3"/> <xref target="RFC4648"/></t>
-   </list></t>
 
    <t><list>   
    <t>Digest Algorithm: SHA-256</t>
    <t>Description: The SHA-256 algorithm <xref target="FIPS-180-3"/>. The output of this algorithm is encoded using the base64 encoding <xref target="RFC4648"/>.</t>
    <t>Reference: <xref target="FIPS-180-3"/> <xref target="RFC4648"/></t>
    </list></t>
-   
-   <t><list>
-   <t>Digest Algorithm: SHA-384</t>
-   <t>Description: The SHA-384 algorithm <xref target="FIPS-180-3"/>. The output of this algorithm is encoded using the base64 encoding <xref target="RFC4648"/>.</t>
-   <t>Reference: <xref target="FIPS-180-3"/> <xref target="RFC4648"/></t>
-   </list></t>
-   
+    
    <t><list>
    <t>Digest Algorithm: SHA-512</t>
    <t>Description: The SHA-512 algorithm <xref target="FIPS-180-3"/>. The output of this algorithm is encoded using the base64 encoding <xref target="RFC4648"/>.</t>
@@ -169,7 +159,7 @@ DYzYjRjYzFhOTlmNTQwYzI2M2QwM2U2MQ==
 
 		
 	    <section title="Acknowledgements and Contributors">
-		  <t>Thanks to Mark Nottingham, Eran Hammer-Lahav, Nils Maier, Lisa Dusseault, and Alfred Hoenes.</t>
+		  <t>Thanks to Mark Nottingham, Eran Hammer-Lahav, Nils Maier, Lisa Dusseault, Alfred Hoenes, and Pasi Eronen.</t>
     </section>
 
 	    <section title="Document History (to be removed by RFC Editor before publication)">
@@ -181,6 +171,15 @@ DYzYjRjYzFhOTlmNTQwYzI2M2QwM2U2MQ==
 
 	    </list></t>
 
+<t>-02 : October 14, 2009.
+	    
+	    <list style="symbols">
+
+	      <t>Update title.</t>
+	      <t>Remove SHA-224 and SHA-384.</t>
+		  <t>"Note: This is unrelated to HTTP Digest Authentication."</t>
+	    </list></t>
+		
 <t>-01 : October 07, 2009.
 	    
 	    <list style="symbols">
