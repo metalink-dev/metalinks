@@ -202,11 +202,13 @@ Previous Registrations Updated<br />
 New Registrations<br />
 <a href="#anchor5">3.</a>&nbsp;
 Security Considerations<br />
-<a href="#rfc.references1">4.</a>&nbsp;
+<a href="#anchor6">4.</a>&nbsp;
+Changes compared to RFC3230<br />
+<a href="#rfc.references1">5.</a>&nbsp;
 Normative References<br />
-<a href="#anchor7">Appendix&nbsp;A.</a>&nbsp;
+<a href="#anchor8">Appendix&nbsp;A.</a>&nbsp;
 Acknowledgements and Contributors<br />
-<a href="#anchor8">Appendix&nbsp;B.</a>&nbsp;
+<a href="#anchor9">Appendix&nbsp;B.</a>&nbsp;
 Document History (to be removed by RFC Editor before publication)<br />
 <a href="#rfc.authors">&#167;</a>&nbsp;
 Author's Address<br />
@@ -218,10 +220,11 @@ Author's Address<br />
 <a name="rfc.section.1"></a><h3>1.&nbsp;
 Introduction</h3>
 
-<p>The IANA registry named "Hypertext Transfer Protocol (HTTP) Digest Algorithm Values" defines values for digest algorithms used in HTTP. Note: This is unrelated to HTTP
-      Digest Authentication.
+<p>The IANA registry named "Hypertext Transfer Protocol (HTTP) Digest Algorithm Values" defines values for digest algorithms used in HTTP.
 </p>
-<p>The registry was created by <a class='info' href='#RFC3230'>[RFC3230]<span> (</span><span class='info'>Mogul, J. and A. Van Hoff, &ldquo;Instance Digests in HTTP,&rdquo; January&nbsp;2002.</span><span>)</span></a> in 2002. This draft adds new values to the registry and updates previous values.
+<p>Note: This is unrelated to HTTP Digest Authentication.
+</p>
+<p>The registry was created by <a class='info' href='#RFC3230'>[RFC3230]<span> (</span><span class='info'>Mogul, J. and A. Van Hoff, &ldquo;Instance Digests in HTTP,&rdquo; January&nbsp;2002.</span><span>)</span></a> in 2002. This draft adds new values to the registry and updates previous values which had redundant or outdated references.
 </p>
 <p>[[ Discussion of this draft should take place on IETF HTTP WG mailing list at ietf-http-wg@w3.org or directly to the author. ]]
 </p>
@@ -305,9 +308,20 @@ Security Considerations</h3>
 
 <p>Same as <a class='info' href='#RFC3230'>[RFC3230]<span> (</span><span class='info'>Mogul, J. and A. Van Hoff, &ldquo;Instance Digests in HTTP,&rdquo; January&nbsp;2002.</span><span>)</span></a>.
 </p>
+<a name="anchor6"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.4"></a><h3>4.&nbsp;
+Changes compared to RFC3230</h3>
+
+<p>All previous values to the registry are still valid.
+</p>
+<p>The reference for base64 encoding has been updated for both MD5 and SHA.
+</p>
+<p>The reference for SHA has been updated.
+</p>
 <a name="rfc.references1"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<h3>4.&nbsp;Normative References</h3>
+<h3>5.&nbsp;Normative References</h3>
 <table width="99%" border="0">
 <tr><td class="author-text" valign="top"><a name="FIPS-180-3">[FIPS-180-3]</a></td>
 <td class="author-text">National Institute of Standards and Technology (NIST), &ldquo;Secure Hash Standard (SHS),&rdquo; FIPS PUB&nbsp;180-3, October&nbsp;2008.</td></tr>
@@ -319,14 +333,14 @@ Security Considerations</h3>
 <td class="author-text">Josefsson, S., &ldquo;<a href="http://tools.ietf.org/html/rfc4648">The Base16, Base32, and Base64 Data Encodings</a>,&rdquo; RFC&nbsp;4648, October&nbsp;2006.</td></tr>
 </table>
 
-<a name="anchor7"></a><br /><hr />
+<a name="anchor8"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.A"></a><h3>Appendix A.&nbsp;
 Acknowledgements and Contributors</h3>
 
 <p>Thanks to Mark Nottingham, Eran Hammer-Lahav, Nils Maier, Lisa Dusseault, Alfred Hoenes, and Pasi Eronen.
 </p>
-<a name="anchor8"></a><br /><hr />
+<a name="anchor9"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.B"></a><h3>Appendix B.&nbsp;
 Document History (to be removed by RFC Editor before publication)</h3>
@@ -340,15 +354,17 @@ Document History (to be removed by RFC Editor before publication)</h3>
 </li>
 </ul>
 
-<p>-02 : October 14, 2009.
+<p>-02 : October 15, 2009.
 	    
 	    </p>
 <ul class="text">
-<li>Update title.
+<li>New title.
+</li>
+<li>"Note: This is unrelated to HTTP Digest Authentication."
 </li>
 <li>Remove SHA-224 and SHA-384.
 </li>
-<li>"Note: This is unrelated to HTTP Digest Authentication."
+<li>"Changes compared to RFC3230" section added.
 </li>
 </ul>
 

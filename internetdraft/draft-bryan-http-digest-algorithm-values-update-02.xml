@@ -13,7 +13,7 @@
   PUBLIC "" "rfc2629.dtd">
 <rfc category="info" docName="draft-bryan-http-digest-algorithm-values-update-02" ipr="trust200902">
     <front>        
-      <title abbrev="Algorithms for HTTP Instance Digests">Additional Hash Algorithms for HTTP Instance Digests</title>
+      <title abbrev="More Algorithms for HTTP Instance Digests">Additional Hash Algorithms for HTTP Instance Digests</title>
       <author initials="A." surname="Bryan" fullname="Anthony Bryan">
 	    <organization></organization>
 	    <address>
@@ -39,9 +39,10 @@
 
   <middle>
     <section title="Introduction">
-      <t>The IANA registry named "Hypertext Transfer Protocol (HTTP) Digest Algorithm Values" defines values for digest algorithms used in HTTP. Note: This is unrelated to HTTP
-      Digest Authentication.</t>
-	  <t>The registry was created by <xref target="RFC3230"/> in 2002. This draft adds new values to the registry and updates previous values.</t> 
+      <t>The IANA registry named "Hypertext Transfer Protocol (HTTP) Digest Algorithm Values" defines values for digest algorithms used in HTTP.</t>
+	  
+	  <t>Note: This is unrelated to HTTP Digest Authentication.</t>
+	  <t>The registry was created by <xref target="RFC3230"/> in 2002. This draft adds new values to the registry and updates previous values which had redundant or outdated references.</t> 
 
       <t>[[ Discussion of this draft should take place on IETF HTTP WG mailing list at ietf-http-wg@w3.org or directly to the author. ]]</t>
       <section title="Examples"><t><figure> 
@@ -97,6 +98,12 @@ DYzYjRjYzFhOTlmNTQwYzI2M2QwM2U2MQ==
 
         <t>Same as <xref target="RFC3230"/>.</t>
 		
+	  </section>
+	  
+	  <section title="Changes compared to RFC3230">
+	    <t>All previous values to the registry are still valid.</t>
+	    <t>The reference for base64 encoding has been updated for both MD5 and SHA.</t>
+		<t>The reference for SHA has been updated.</t>		
 	  </section>
 
 	</middle> 
@@ -171,13 +178,14 @@ DYzYjRjYzFhOTlmNTQwYzI2M2QwM2U2MQ==
 
 	    </list></t>
 
-<t>-02 : October 14, 2009.
+<t>-02 : October 15, 2009.
 	    
 	    <list style="symbols">
 
-	      <t>Update title.</t>
-	      <t>Remove SHA-224 and SHA-384.</t>
+	      <t>New title.</t>
 		  <t>"Note: This is unrelated to HTTP Digest Authentication."</t>
+	      <t>Remove SHA-224 and SHA-384.</t>
+		  <t>"Changes compared to RFC3230" section added.</t>
 	    </list></t>
 		
 <t>-01 : October 07, 2009.

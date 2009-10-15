@@ -54,7 +54,7 @@ Abstract
 
 Bryan                    Expires April 18, 2010                 [Page 1]
 
-Internet-Draft    Algorithms for HTTP Instance Digests      October 2009
+Internet-Draft  More Algorithms for HTTP Instance Digests   October 2009
 
 
    registry and updates previous values.
@@ -68,12 +68,12 @@ Table of Contents
      2.1.  Previous Registrations Updated  . . . . . . . . . . . . . . 3
      2.2.  New Registrations . . . . . . . . . . . . . . . . . . . . . 3
    3.  Security Considerations . . . . . . . . . . . . . . . . . . . . 4
-   4.  Normative References  . . . . . . . . . . . . . . . . . . . . . 4
+   4.  Changes compared to RFC3230 . . . . . . . . . . . . . . . . . . 4
+   5.  Normative References  . . . . . . . . . . . . . . . . . . . . . 4
    Appendix A.  Acknowledgements and Contributors  . . . . . . . . . . 4
    Appendix B.  Document History (to be removed by RFC Editor
-                before publication)  . . . . . . . . . . . . . . . . . 4
+                before publication)  . . . . . . . . . . . . . . . . . 5
    Author's Address  . . . . . . . . . . . . . . . . . . . . . . . . . 5
-
 
 
 
@@ -110,17 +110,19 @@ Table of Contents
 
 Bryan                    Expires April 18, 2010                 [Page 2]
 
-Internet-Draft    Algorithms for HTTP Instance Digests      October 2009
+Internet-Draft  More Algorithms for HTTP Instance Digests   October 2009
 
 
 1.  Introduction
 
    The IANA registry named "Hypertext Transfer Protocol (HTTP) Digest
    Algorithm Values" defines values for digest algorithms used in HTTP.
+
    Note: This is unrelated to HTTP Digest Authentication.
 
    The registry was created by [RFC3230] in 2002.  This draft adds new
-   values to the registry and updates previous values.
+   values to the registry and updates previous values which had
+   redundant or outdated references.
 
    [[ Discussion of this draft should take place on IETF HTTP WG mailing
    list at ietf-http-wg@w3.org or directly to the author. ]]
@@ -158,17 +160,16 @@ Internet-Draft    Algorithms for HTTP Instance Digests      October 2009
 
    Accordingly, IANA has made the following registrations:
 
-      Digest Algorithm: SHA-256
-
 
 
 
 
 Bryan                    Expires April 18, 2010                 [Page 3]
 
-Internet-Draft    Algorithms for HTTP Instance Digests      October 2009
+Internet-Draft  More Algorithms for HTTP Instance Digests   October 2009
 
 
+      Digest Algorithm: SHA-256
       Description: The SHA-256 algorithm [FIPS-180-3].  The output of
       this algorithm is encoded using the base64 encoding [RFC4648].
       Reference: [FIPS-180-3] [RFC4648]
@@ -184,7 +185,17 @@ Internet-Draft    Algorithms for HTTP Instance Digests      October 2009
    Same as [RFC3230].
 
 
-4.  Normative References
+4.  Changes compared to RFC3230
+
+   All previous values to the registry are still valid.
+
+   The reference for base64 encoding has been updated for both MD5 and
+   SHA.
+
+   The reference for SHA has been updated.
+
+
+5.  Normative References
 
    [FIPS-180-3]
               National Institute of Standards and Technology (NIST),
@@ -207,6 +218,13 @@ Appendix A.  Acknowledgements and Contributors
    Dusseault, Alfred Hoenes, and Pasi Eronen.
 
 
+
+
+Bryan                    Expires April 18, 2010                 [Page 4]
+
+Internet-Draft  More Algorithms for HTTP Instance Digests   October 2009
+
+
 Appendix B.  Document History (to be removed by RFC Editor before
              publication)
 
@@ -215,19 +233,11 @@ Appendix B.  Document History (to be removed by RFC Editor before
    Known issues concerning this draft:
    o  None known.
 
-   -02 : October 14, 2009.
-
-
-
-
-Bryan                    Expires April 18, 2010                 [Page 4]
-
-Internet-Draft    Algorithms for HTTP Instance Digests      October 2009
-
-
-   o  Update title.
-   o  Remove SHA-224 and SHA-384.
+   -02 : October 15, 2009.
+   o  New title.
    o  "Note: This is unrelated to HTTP Digest Authentication."
+   o  Remove SHA-224 and SHA-384.
+   o  "Changes compared to RFC3230" section added.
 
    -01 : October 07, 2009.
    o  Update previous values that are outdated.
@@ -245,16 +255,6 @@ Author's Address
 
    Email: anthonybryan@gmail.com
    URI:   http://www.metalinker.org
-
-
-
-
-
-
-
-
-
-
 
 
 
