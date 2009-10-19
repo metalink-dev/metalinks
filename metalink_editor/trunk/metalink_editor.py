@@ -479,8 +479,10 @@ class MainFrame(wx.Frame):
                     self.filelist.DeleteItem(item)
                                 
             # add ed2k and magnet link to GUI for this file
-            self.addurl(metalink.Resource(self.mlfile.ed2k))
-            self.addurl(metalink.Resource(self.mlfile.magnet))
+            if self.mlfile.ed2k != "":
+                self.addurl(metalink.Resource(self.mlfile.ed2k))
+            if self.mlfile.magnet != "":
+		        self.addurl(metalink.Resource(self.mlfile.magnet))
             
             self.filename = filename + ".metalink"
             self.new_file = True
