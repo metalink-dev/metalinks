@@ -460,7 +460,7 @@ class MetalinkFile4(MetalinkFileBase):
             text += '      <os>'+self.os+'</os>\n'
         # Verification
         for key in self.hashlist.keys():
-            text += '      <hash type="%s">' % hashlookup(key) + self.hashlist[key].lower() + '</hash>\n'
+            text += '      <hash type="%s">' % hashlookup(key) + self.hashlist[key] + '</hash>\n'
         if len(self.pieces) > 1:
             text += '      <pieces type="'+hashlookup(self.piecetype)+'" length="'+self.piecelength+'">\n'
             for id in range(len(self.pieces)):
