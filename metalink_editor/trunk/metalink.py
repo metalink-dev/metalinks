@@ -363,7 +363,7 @@ class MetalinkFileBase:
             if self.magnet != "":
                 self.add_url(self.magnet)
 
-        self.sig = read_sig(filename)
+        self.hashlist['pgp'] = read_sig(filename)
             
         if len(self.pieces) < 2: self.pieces = []
         # Convert to strings
@@ -460,7 +460,10 @@ class MetalinkFile4(MetalinkFileBase):
             text += '      <os>'+self.os+'</os>\n'
         # Verification
         for key in self.hashlist.keys():
-            text += '      <hash type="%s">' % hashlookup(key) + self.hashlist[key] + '</hash>\n'
+            if key == 'pgp' and self.hashlist[key] != "":
+                text += '      <signature type="%s">' % key + self.hashlist[key] + '</signature>\n'
+            else:
+                text += '      <hash type="%s">' % hashlookup(key) + self.hashlist[key].lower() + '</hash>\n'
         if len(self.pieces) > 1:
             text += '      <pieces type="'+hashlookup(self.piecetype)+'" length="'+self.piecelength+'">\n'
             for id in range(len(self.pieces)):
@@ -543,7 +546,10 @@ class MetalinkFile(MetalinkFileBase):
         if len(self.hashlist) > 0 or len(self.pieces) > 0:
             text += '      <verification>\n'
             for key in self.hashlist.keys():
-                text += '        <hash type="%s">' % key + self.hashlist[key].lower() + '</hash>\n'
+                if key == 'pgp' and self.hashlist[key] != "":
+                    text += '      <signature type="%s">' % key + self.hashlist[key] + '</signature>\n'
+                else:
+                    text += '      <hash type="%s">' % hashlookup(key) + self.hashlist[key].lower() + '</hash>\n'
             if len(self.pieces) > 1:
                 text += '        <pieces type="'+self.piecetype+'" length="'+self.piecelength+'">\n'
                 for id in range(len(self.pieces)):
