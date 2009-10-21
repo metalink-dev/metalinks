@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?><?rfc linefile="1:draft-bryan-http-digest-algorithm-values-update-03.xml"?>
+<?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
+<?rfc toc="yes" ?>
+<?rfc tocdepth="3" ?>
+<?rfc tocindent="yes" ?>
+<?rfc symrefs="yes" ?>
+<?rfc sortrefs="yes"?>
+<?rfc iprnotified="no" ?>
+<?rfc compact="yes" ?>
+<?rfc comments="yes" ?>
+<?rfc inline="yes" ?>
+<!DOCTYPE rfc
+  PUBLIC "" "rfc2629.dtd">
+<rfc category="info" docName="draft-bryan-http-digest-algorithm-values-update-03" ipr="trust200902">
+    <front>        
+      <title abbrev="More Algorithms for HTTP Instance Digests">Additional Hash Algorithms for HTTP Instance Digests</title>
+      <author initials="A." surname="Bryan" fullname="Anthony Bryan">
+	    <organization></organization>
+	    <address>
+		  <postal>
+			<street></street>
+		    <city>Pompano Beach</city>
+			<region>FL</region>
+			<country>USA</country>
+		  </postal>
+	      <email>anthonybryan@gmail.com</email>	
+	      <uri>http://www.metalinker.org</uri>		
+	    </address>
+      </author>
+	<date month="October" year="2009"/>        
+
+      <abstract>
+	<t><xref target="RFC3230"/> created the IANA registry named "Hypertext Transfer Protocol (HTTP) Digest Algorithm Values" which defines values for digest algorithms used in HTTP.
+	This draft adds new values to the registry and updates previous values.
+</t>
+      </abstract>    
+	  
+  </front>    
+
+  <middle>
+    <section title="Introduction">
+      <t>The IANA registry named "Hypertext Transfer Protocol (HTTP) Digest Algorithm Values" defines values for digest algorithms used in HTTP.</t>
+	  
+	  <t>Note: This is unrelated to HTTP Digest Authentication.</t>
+	  <t>The registry was created by <xref target="RFC3230"/> in 2002. This draft adds new values to the registry and updates previous values which had redundant or outdated references.</t> 
+
+      <t>[[ Discussion of this draft should take place on IETF HTTP WG mailing list at ietf-http-wg@w3.org or directly to the author. ]]</t>
+      <section title="Examples"><t><figure> 
+	  <preamble>Examples of Instance Digest for SHA-256:</preamble>
+	  
+	  <artwork type="example">
+Digest: SHA-256=MWVkMWQxYTRiMzk5MDQ0MzI3NGU5NDEyZTk5OWY1ZGFmNzgyZTJlO
+DYzYjRjYzFhOTlmNTQwYzI2M2QwM2U2MQ==
+</artwork></figure></t>
+      </section> 
+
+    </section>
+
+	<section title="IANA Considerations" anchor="IANA">
+	<t>This document makes use of the IANA registry named "Hypertext Transfer Protocol (HTTP) Digest Algorithm Values" specified in <xref target="RFC3230"/>.</t>
+<section title="Previous Registrations Updated">
+
+	<t>Accordingly, IANA has updated the following registrations:</t>
+   <t><list>
+   <t>Digest Algorithm: MD5</t>
+   <t>Description: The MD5 algorithm, as specified in <xref target="RFC1321"/>. The output of this algorithm is encoded using the base64 encoding <xref target="RFC4648"/>.</t>
+   <t>Reference: <xref target="RFC1321"/> <xref target="RFC4648"/></t>
+   </list></t>
+
+   <t><list>   
+   <t>Digest Algorithm: SHA</t>
+   <t>Description: The SHA-1 algorithm <xref target="FIPS-180-3"/>. The output of this algorithm is encoded using the base64 encoding <xref target="RFC4648"/>.</t>
+   <t>Reference: <xref target="FIPS-180-3"/> <xref target="RFC4648"/></t>
+   </list></t>
+
+</section>
+<section title="New Registrations">
+	<t>Accordingly, IANA has made the following registrations:</t>
+
+   <t><list>   
+   <t>Digest Algorithm: SHA-256</t>
+   <t>Description: The SHA-256 algorithm <xref target="FIPS-180-3"/>. The output of this algorithm is encoded using the base64 encoding <xref target="RFC4648"/>.</t>
+   <t>Reference: <xref target="FIPS-180-3"/> <xref target="RFC4648"/></t>
+   </list></t>
+    
+   <t><list>
+   <t>Digest Algorithm: SHA-512</t>
+   <t>Description: The SHA-512 algorithm <xref target="FIPS-180-3"/>. The output of this algorithm is encoded using the base64 encoding <xref target="RFC4648"/>.</t>
+   <t>Reference: <xref target="FIPS-180-3"/> <xref target="RFC4648"/></t>   
+   </list></t>
+</section>
+   
+	</section>
+
+
+	
+	  <section title="Security Considerations">
+
+        <t>Same as <xref target="RFC3230"/>.</t>
+		
+	  </section>
+	  
+	  <section title="Changes compared to RFC 3230">
+	    <t>All previous values to the registry are still valid.</t>
+	    <t>The reference for base64 encoding has been updated for both MD5 and SHA.</t>
+		<t>The reference for SHA has been updated.</t>		
+	  </section>
+
+	</middle> 
+
+	<back> 
+	  
+	  <references title="Normative References">
+
+<reference anchor="RFC1321">
+
+<front>
+<title>The MD5 Message-Digest Algorithm</title>
+<author initials="R." surname="Rivest" fullname="R. Rivest">
+<organization/></author>
+<date year="1992" month="April"/></front>
+
+<seriesInfo name="RFC" value="1321"/>
+</reference>
+
+<reference anchor="RFC3230">
+
+<front>
+<title>Instance Digests in HTTP</title>
+<author initials="J." surname="Mogul" fullname="J. Mogul">
+<organization/></author>
+<author initials="A." surname="Van Hoff" fullname="A. Van Hoff">
+<organization/></author>
+<date year="2002" month="January"/></front>
+
+<seriesInfo name="RFC" value="3230"/>
+</reference>
+
+<reference anchor="RFC4648">
+
+<front>
+<title>The Base16, Base32, and Base64 Data Encodings</title>
+<author initials="S." surname="Josefsson" fullname="S. Josefsson">
+<organization/></author>
+<date year="2006" month="October"/></front>
+
+<seriesInfo name="RFC" value="4648"/>
+</reference>
+
+
+<reference anchor="FIPS-180-3">
+<front>
+<title>Secure Hash Standard (SHS)</title>
+<author>
+    <organization>National Institute of Standards and Technology (NIST)</organization>
+</author>
+<date year="2008" month="October"></date>
+</front>
+<seriesInfo name="FIPS PUB" value="180-3"></seriesInfo>
+</reference>
+
+
+
+	  </references>
+	  
+
+		
+	    <section title="Acknowledgements and Contributors">
+		  <t>Thanks to Mark Nottingham, Eran Hammer-Lahav, Nils Maier, Lisa Dusseault, Alfred Hoenes, and Pasi Eronen.</t>
+    </section>
+
+	    <section title="Document History">
+		<t>[[ to be removed by the RFC editor before publication as an RFC. ]]</t>
+		<t>Known issues concerning this draft:
+	    <list style="symbols"> 
+	      
+		  <t>None known.</t>
+
+	    </list></t>
+
+<t>-02 : October 15, 2009.
+	    
+	    <list style="symbols">
+
+	      <t>New title.</t>
+		  <t>"Note: This is unrelated to HTTP Digest Authentication."</t>
+	      <t>Remove SHA-224 and SHA-384.</t>
+		  <t>"Changes compared to RFC 3230" section added.</t>
+	    </list></t>
+		
+<t>-01 : October 07, 2009.
+	    
+	    <list style="symbols">
+
+	      <t>Update previous values that are outdated.</t>
+	      <t>RFC 4648 for Base64 encoding.</t>
+	    </list></t>
+		
+<t>-00 : September 08, 2009.
+	    
+	    <list style="symbols">
+
+	      <t>Initial draft.</t>
+	    </list></t>
+		
+	    </section>
+	  </back> 
+	</rfc>
