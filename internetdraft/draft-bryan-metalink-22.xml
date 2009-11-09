@@ -48,7 +48,7 @@
           <uri>http://www.mirrorbrain.org/</uri>
         </address>
       </author>
-	<date month="October" year="2009"/>        
+	<date month="November" year="2009"/>        
 
       <abstract>
 	<t>This document specifies Metalink, an XML-based download description format. Metalink describes multiple download locations (mirrors), checksums, and other information. Clients can transparently use this information to reliably transfer files.</t>
@@ -2100,7 +2100,7 @@ anyForeignElement =
 
 	    </list></t>
 
-<t>-22 : October 30, 2009.
+<t>-22 : November 09, 2009.
 	    
 	    <list style="symbols">
 		
