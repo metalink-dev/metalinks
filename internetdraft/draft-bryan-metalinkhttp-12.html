@@ -2,7 +2,7 @@
 <html lang="en"><head><title>Metalink/HTTP: Mirrors and Checksums in HTTP Headers</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="Metalink/HTTP: Mirrors and Checksums in HTTP Headers">
-<meta name="generator" content="xml2rfc v1.34pre5 (http://xml.resource.org/)">
+<meta name="generator" content="xml2rfc v1.34 (http://xml.resource.org/)">
 <style type='text/css'><!--
         body {
                 font-family: verdana, charcoal, helvetica, arial, sans-serif;
@@ -144,10 +144,10 @@
 <tr><td class="header">Network Working Group</td><td class="header">A. Bryan</td></tr>
 <tr><td class="header">Internet-Draft</td><td class="header">N. McNab</td></tr>
 <tr><td class="header">Intended status: Standards Track</td><td class="header">H. Nordstrom</td></tr>
-<tr><td class="header">Expires: May 11, 2010</td><td class="header">&nbsp;</td></tr>
+<tr><td class="header">Expires: May 14, 2010</td><td class="header">&nbsp;</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">A. Ford</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">Roke Manor Research</td></tr>
-<tr><td class="header">&nbsp;</td><td class="header">November 7, 2009</td></tr>
+<tr><td class="header">&nbsp;</td><td class="header">November 10, 2009</td></tr>
 </table></td></tr></table>
 <h1><br />Metalink/HTTP: Mirrors and Checksums in HTTP Headers<br />draft-bryan-metalinkhttp-11</h1>
 
@@ -178,7 +178,7 @@ The list of current Internet-Drafts can be accessed at
 The list of Internet-Draft Shadow Directories can be accessed at
 <a href='http://www.ietf.org/shadow.html'>http://www.ietf.org/shadow.html</a>.</p>
 <p>
-This Internet-Draft will expire on May 11, 2010.</p>
+This Internet-Draft will expire on May 14, 2010.</p>
 
 <h3>Copyright Notice</h3>
 <p>
@@ -337,8 +337,8 @@ Requirements</h3>
 
 <p>In this context, "Metalink" refers to Metalink/HTTP which consists of mirrors and checksums in HTTP Headers as described in this document. "Metalink/XML" refers to the XML format described in <a class='info' href='#draft-bryan-metalink'>[draft&#8209;bryan&#8209;metalink]<span> (</span><span class='info'>Bryan, A., Ed., Tsujikawa, T., McNab, N., and P. Poeml, &ldquo;The Metalink Download Description Format,&rdquo; August&nbsp;2009.</span><span>)</span></a>.
 </p>
-<p>Metalink servers are HTTP servers that use the Link header <a class='info' href='#draft-nottingham-http-link-header'>[draft&#8209;nottingham&#8209;http&#8209;link&#8209;header]<span> (</span><span class='info'>Nottingham, M., &ldquo;Web Linking,&rdquo; July&nbsp;2009.</span><span>)</span></a> to present a list of mirrors of a resource to a client. They MUST
-	  provide checksums of files via Instance Digests in HTTP <a class='info' href='#RFC3230'>[RFC3230]<span> (</span><span class='info'>Mogul, J. and A. Van Hoff, &ldquo;Instance Digests in HTTP,&rdquo; January&nbsp;2002.</span><span>)</span></a>, whether requested or not. Mirror and checksum information provided by the originating Metalink server MUST be considered authoritative. Metalink servers and their associated mirror servers
+<p>Metalink servers are HTTP servers that use the Link header <a class='info' href='#draft-nottingham-http-link-header'>[draft&#8209;nottingham&#8209;http&#8209;link&#8209;header]<span> (</span><span class='info'>Nottingham, M., &ldquo;Web Linking,&rdquo; July&nbsp;2009.</span><span>)</span></a> to present a list of mirrors of certain specific resources to a client. They MUST
+	  provide checksums of certain specific files via Instance Digests in HTTP <a class='info' href='#RFC3230'>[RFC3230]<span> (</span><span class='info'>Mogul, J. and A. Van Hoff, &ldquo;Instance Digests in HTTP,&rdquo; January&nbsp;2002.</span><span>)</span></a>, whether requested or not. That is, Metalink servers are not required to provide mirrors and checksums for all files, only certain specific files. Mirror and checksum information provided by the originating Metalink server MUST be considered authoritative. Metalink servers and their associated mirror servers
       SHOULD all share the same ETag policy (ETag Synchronization), i.e. based on the file contents (checksum) and not server-unique filesystem metadata. The emitted ETag MAY be implemented the same as the Instance Digest for simplicity.
 </p>
 <p>Mirror servers are typically FTP or HTTP servers that "mirror" another server. That is, they provide identical copies of (at least some) files that are also on the mirrored server. 
@@ -386,7 +386,7 @@ Mirror Priority</h3>
 Mirror Geographical Location</h3>
 
 <p>Mirror servers MAY have a "geo" value, which
-        is a <a class='info' href='#ISO3166-1'>[ISO3166&#8209;1]<span> (</span><span class='info'>International Organization for Standardization, &ldquo;ISO 3166-1:2006.  Codes for the representation of names of countries and their subdivisions -- Part 1: Country codes,&rdquo; November&nbsp;2006.</span><span>)</span></a> alpha-2 two letter country code for the geographical location of the physical server the IRI is used
+        is a <a class='info' href='#ISO3166-1'>[ISO3166&#8209;1]<span> (</span><span class='info'>International Organization for Standardization, &ldquo;ISO 3166-1:2006.  Codes for the representation of names of countries and their subdivisions -- Part 1: Country codes,&rdquo; November&nbsp;2006.</span><span>)</span></a> alpha-2 two letter country code for the geographical location of the physical server the URI is used
         to access. A client may use this information to select a mirror, or set of mirrors, that are geographically near (if the client has access to such information), with the aim of reducing network load at inter-country bottlenecks.
         
 </p>
@@ -433,7 +433,7 @@ rel="duplicate"; pri=1; pref=1; depth=4
 Peer-to-Peer / Metainfo</h3>
 
 <p>Metainfo files, which describe ways to download a file over Peer-to-Peer networks or otherwise, are specified with the Link header <a class='info' href='#draft-nottingham-http-link-header'>[draft&#8209;nottingham&#8209;http&#8209;link&#8209;header]<span> (</span><span class='info'>Nottingham, M., &ldquo;Web Linking,&rdquo; July&nbsp;2009.</span><span>)</span></a> and a relation type of "describedby" and a type parameter that indicates
-   the MIME type of the metadata available at the IRI.
+   the MIME type of the metadata available at the URI.
 </p>
 <p>
 <p>A brief Metalink server response with .torrent and .metalink:
@@ -444,6 +444,8 @@ Link: &lt;http://example.com/example.ext.metalink&gt;; rel="describedby";
 type="application/metalink4+xml"
 </pre></div>
 
+<p>Metalink clients MAY support the use of metainfo files for downloading files, but that is not required.
+</p>
 <a name="metalinkxml"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.1"></a><h3>4.1.&nbsp;
@@ -467,6 +469,8 @@ Link: &lt;http://example.com/example.ext.asc&gt;; rel="describedby";
 type="application/pgp-signature"
 </pre></div>
 
+<p>Metalink clients MAY support the use of OpenPGP signatures, but that is not required.
+</p>
 <a name="wholechecksums"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.6"></a><h3>6.&nbsp;
@@ -736,7 +740,7 @@ URIs and IRIs</h3>
 Spoofing</h3>
 
 <p>There is potential for spoofing attacks where the attacker publishes Metalinks with false information.
-          In that case, this could deceive unaware downloaders that they are downloading a malicious or worthless file. Also, malicious publishers could attempt a distributed denial of service attack by inserting unrelated IRIs into Metalinks.
+          In that case, this could deceive unaware downloaders that they are downloading a malicious or worthless file. Also, malicious publishers could attempt a distributed denial of service attack by inserting unrelated URIs into Metalinks.
 </p>
 <a name="anchor12"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
