@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><?rfc linefile="1:draft-bryan-metalinkhttp-12.xml"?>
+<?xml version="1.0" encoding="UTF-8"?><?rfc linefile="1:draft-bryan-metalinkhttp-13.xml"?>
 <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
 <?rfc toc="yes" ?>
 <?rfc tocdepth="3" ?>
@@ -11,7 +11,7 @@
 <?rfc inline="yes" ?>
 <!DOCTYPE rfc
   PUBLIC "" "rfc2629.dtd">
-<rfc category="std" docName="draft-bryan-metalinkhttp-12" ipr="trust200902">
+<rfc category="std" docName="draft-bryan-metalinkhttp-13" ipr="trust200902">
     <front>        
       <title abbrev="Metalink/HTTP: Mirrors and Checksums">Metalink/HTTP: Mirrors and Checksums in HTTP Headers</title>		
       <author initials="A." surname="Bryan" fullname="Anthony Bryan">

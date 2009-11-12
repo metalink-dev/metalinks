@@ -144,12 +144,12 @@
 <tr><td class="header">Network Working Group</td><td class="header">A. Bryan</td></tr>
 <tr><td class="header">Internet-Draft</td><td class="header">N. McNab</td></tr>
 <tr><td class="header">Intended status: Standards Track</td><td class="header">H. Nordstrom</td></tr>
-<tr><td class="header">Expires: May 14, 2010</td><td class="header">&nbsp;</td></tr>
+<tr><td class="header">Expires: May 15, 2010</td><td class="header">&nbsp;</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">A. Ford</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">Roke Manor Research</td></tr>
-<tr><td class="header">&nbsp;</td><td class="header">November 10, 2009</td></tr>
+<tr><td class="header">&nbsp;</td><td class="header">November 11, 2009</td></tr>
 </table></td></tr></table>
-<h1><br />Metalink/HTTP: Mirrors and Checksums in HTTP Headers<br />draft-bryan-metalinkhttp-11</h1>
+<h1><br />Metalink/HTTP: Mirrors and Checksums in HTTP Headers<br />draft-bryan-metalinkhttp-12</h1>
 
 <h3>Abstract</h3>
 
@@ -178,7 +178,7 @@ The list of current Internet-Drafts can be accessed at
 The list of Internet-Draft Shadow Directories can be accessed at
 <a href='http://www.ietf.org/shadow.html'>http://www.ietf.org/shadow.html</a>.</p>
 <p>
-This Internet-Draft will expire on May 14, 2010.</p>
+This Internet-Draft will expire on May 15, 2010.</p>
 
 <h3>Copyright Notice</h3>
 <p>
@@ -337,8 +337,10 @@ Requirements</h3>
 
 <p>In this context, "Metalink" refers to Metalink/HTTP which consists of mirrors and checksums in HTTP Headers as described in this document. "Metalink/XML" refers to the XML format described in <a class='info' href='#draft-bryan-metalink'>[draft&#8209;bryan&#8209;metalink]<span> (</span><span class='info'>Bryan, A., Ed., Tsujikawa, T., McNab, N., and P. Poeml, &ldquo;The Metalink Download Description Format,&rdquo; August&nbsp;2009.</span><span>)</span></a>.
 </p>
-<p>Metalink servers are HTTP servers that use the Link header <a class='info' href='#draft-nottingham-http-link-header'>[draft&#8209;nottingham&#8209;http&#8209;link&#8209;header]<span> (</span><span class='info'>Nottingham, M., &ldquo;Web Linking,&rdquo; July&nbsp;2009.</span><span>)</span></a> to present a list of mirrors of certain specific resources to a client. They MUST
-	  provide checksums of certain specific files via Instance Digests in HTTP <a class='info' href='#RFC3230'>[RFC3230]<span> (</span><span class='info'>Mogul, J. and A. Van Hoff, &ldquo;Instance Digests in HTTP,&rdquo; January&nbsp;2002.</span><span>)</span></a>, whether requested or not. That is, Metalink servers are not required to provide mirrors and checksums for all files, only certain specific files. Mirror and checksum information provided by the originating Metalink server MUST be considered authoritative. Metalink servers and their associated mirror servers
+<p>Metalink resources include a Link header <a class='info' href='#draft-nottingham-http-link-header'>[draft&#8209;nottingham&#8209;http&#8209;link&#8209;header]<span> (</span><span class='info'>Nottingham, M., &ldquo;Web Linking,&rdquo; July&nbsp;2009.</span><span>)</span></a> to present a list of mirrors in the response to a client request for the resource. The checksum of a resource must be included via Instance Digests in HTTP <a class='info' href='#RFC3230'>[RFC3230]<span> (</span><span class='info'>Mogul, J. and A. Van Hoff, &ldquo;Instance Digests in HTTP,&rdquo; January&nbsp;2002.</span><span>)</span></a>.
+</p>
+<p>Metalink servers are HTTP servers with one or more Metalink
+ resources. Mirror and checksum information provided by the originating Metalink server MUST be considered authoritative. Metalink servers and their associated mirror servers
       SHOULD all share the same ETag policy (ETag Synchronization), i.e. based on the file contents (checksum) and not server-unique filesystem metadata. The emitted ETag MAY be implemented the same as the Instance Digest for simplicity.
 </p>
 <p>Mirror servers are typically FTP or HTTP servers that "mirror" another server. That is, they provide identical copies of (at least some) files that are also on the mirrored server. 
@@ -802,7 +804,7 @@ References</h3>
 <a name="rfc.section.A"></a><h3>Appendix A.&nbsp;
 Acknowledgements and Contributors</h3>
 
-<p>Thanks to the Metalink community, Mark Handley, Mark Nottingham, Daniel Stenberg, Tatsuhiro Tsujikawa, Peter Poeml, Matt Domsch, and Micah Cowan.
+<p>Thanks to the Metalink community, Mark Handley, Mark Nottingham, Daniel Stenberg, Tatsuhiro Tsujikawa, Peter Poeml, Matt Domsch, Micah Cowan, and David Morris.
 </p>
 <p>Support for simultaneous download from multiple mirrors is based upon work by Mark Handley and Javier Vela Diago, who also provided validation of the benefits of this approach.
 </p>
@@ -861,6 +863,14 @@ Document History</h3>
 <li>Will we use Metalink/XML for partial file checksums? That would add XML dependency to apps for an important feature.
 </li>
 <li>Do we need an official MIME type for .torrent files or allow "application/x-bittorrent"?
+</li>
+</ul>
+
+<p>-12 : November 11, 2009.
+	    
+	    </p>
+<ul class="text">
+<li>Clarifications.
 </li>
 </ul>
 
