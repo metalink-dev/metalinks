@@ -1195,8 +1195,7 @@ metalinkVersion =
 	      document, except where it is explicitly forbidden.
 	      Child elements of <xref target="element.file" format="none">metalink:file</xref> and <xref target="element.metalink" format="none">metalink:metalink</xref>
 	      are considered Metadata elements and
-	      are described below. Child elements of Person constructs
-	      are considered to apply to the construct. The role of
+	      are described below. The role of
 	      other foreign markup is undefined by this
 	      specification.</t>
 
