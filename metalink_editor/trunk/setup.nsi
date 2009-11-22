@@ -53,8 +53,8 @@ var ICONS_GROUP
 
 ; MUI end ------
 
-Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
-OutFile "metalink_editor-${PRODUCT_VERSION}.exe"
+Name "${PRODUCT_NAME}"
+OutFile "${PRODUCT_NAME}-${PRODUCT_VERSION}.exe"
 InstallDir "$PROGRAMFILES\Metalink Editor"
 InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" ""
 ShowInstDetails show
@@ -103,35 +103,7 @@ FunctionEnd
 
 Section Uninstall
   !insertmacro MUI_STARTMENU_GETFOLDER "Application" $ICONS_GROUP
-  Delete "$INSTDIR\uninst.exe"
-  Delete "$INSTDIR\_controls_.pyd"
-  Delete "$INSTDIR\_core_.pyd"
-  Delete "$INSTDIR\_gdi_.pyd"
-  Delete "$INSTDIR\_hashlib.pyd"
-  Delete "$INSTDIR\_misc_.pyd"
-  Delete "$INSTDIR\_socket.pyd"
-  Delete "$INSTDIR\_ssl.pyd"
-  Delete "$INSTDIR\_windows_.pyd"
-  Delete "$INSTDIR\bz2.pyd"
-  Delete "$INSTDIR\changelog.txt"
-  Delete "$INSTDIR\library.zip"
-  Delete "$INSTDIR\license.txt"
-  Delete "$INSTDIR\metalink.png"
-  Delete "$INSTDIR\metalink_editor.exe"
-  Delete "$INSTDIR\meditor.exe"
-  Delete "$INSTDIR\metalink_small.ico"
-  Delete "$INSTDIR\metalink_small.png"
-  Delete "$INSTDIR\MSVCR71.dll"
-  Delete "$INSTDIR\pyexpat.pyd"
-  Delete "$INSTDIR\python25.dll"
-  Delete "$INSTDIR\readme.txt"
-  Delete "$INSTDIR\unicodedata.pyd"
-  Delete "$INSTDIR\w9xpopen.exe"
-  Delete "$INSTDIR\wxmsw26uh_vc.dll"
-
-  Delete "$SMPROGRAMS\$ICONS_GROUP\Uninstall.lnk"
   Delete "$DESKTOP\Metalink Editor.lnk"
-  Delete "$SMPROGRAMS\$ICONS_GROUP\Metalink Editor.lnk"
 
   RMDir "$SMPROGRAMS\$ICONS_GROUP"
   RMDir "$INSTDIR"

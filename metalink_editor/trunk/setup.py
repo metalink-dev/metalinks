@@ -106,6 +106,13 @@ if sys.argv[1] == 'py2exe':
         ],
         console = ["meditor.py"],
         data_files=[('', ["metalink_small.png", "metalink_small.ico", "metalink.png", "license.txt", "changelog.txt", "readme.txt"])],
+        name = APP_NAME,
+        version = VERSION,
+        license = LICENSE,
+        description = DESC,
+        author = AUTHOR_NAME,
+        author_email = EMAIL,
+        url = URL        
     )
 
 elif sys.argv[1] == 'clean':
