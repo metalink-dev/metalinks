@@ -15,7 +15,7 @@ Building on Windows
 sample_setenv.bat - edit this file as appropriate for your system and rename to setenv.bat
 py2exe.bat - calls py2exe to make executable files for windows and .zip package
 pyinstexe.bat - calls pyinstaller to make executable files for windows and .zip package
-make_installer.bat - makes the NSIS Windows installer (should only be called after py2exe.bat)
+make_installer.bat - calls py2exe.bat and makes the NSIS Windows installer
 sdist.bat - creates a .zip file with the source code
 
 Building on UNIX/Linux
