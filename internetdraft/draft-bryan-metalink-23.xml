@@ -538,7 +538,7 @@ non-overlapping pieces of the file. The checksums MUST be listed in the same ord
 	      <artwork type="rnc">
 metalinkPieces =
    element metalink:pieces {
-      attribute length { xsd:integer },
+      attribute length { xsd:positiveInteger },
       attribute type { text },
       metalinkHash+
    }</artwork></figure></t>
@@ -556,7 +556,7 @@ metalinkPieces =
 
 	  <section title="The &#34;length&#34; Attribute"> 
 
-	    <t><xref target="element.pieces" format="none">metalink:pieces</xref> elements MUST have a "length" attribute, which is an integer
+	    <t><xref target="element.pieces" format="none">metalink:pieces</xref> elements MUST have a "length" attribute, which is an positive integer
         that describes the length of the pieces of the file in octets. The whole file is divided into non-overlapping pieces of this length,
         starting from the beginning of the file. That is, every piece should be the same size, apart from
         the last piece which is the remainder. The last piece extends to the end of the file, and can therefore be shorter than the other pieces.
@@ -836,7 +836,7 @@ metalinkLogo =
 metalinkMetaURL =
    element metalink:metaurl {
       metalinkCommonAttributes,
-      attribute priority { xsd:integer }?,
+      attribute priority { xsd:positiveInteger }?,
       attribute type { text },
       attribute name { text }?,
       metalinkUri
@@ -1067,7 +1067,7 @@ metalinkURL =
       attribute location { xsd:string {
         minLength = "2"  maxLength="2"}
       }?,
-      attribute priority { xsd:integer }?,
+      attribute priority { xsd:positiveInteger }?,
       metalinkUri
    }</artwork></figure></t> 
 
@@ -1836,7 +1836,7 @@ structuredExtensionElement =
           Ed Lee, Shawn Wilsher, Mike Connor, Johan Svedberg, Dedric Carter, James Antill, Debi
           Goulding, Chris Newman, Lisa Dusseault, 
 		  Ian Macfarlane, Dave Cridland, Julian Reschke, Barry Leiba, Uri Blumenthal, Paul Hoffman, Felix Sasaki, Matthias Fuchs, Mark Baker,
-		  Eran Hammer-Lahav, and Mark Nottingham. We also thank the Anthony Family, the Bryan Family, Juanita Anthony and Zimmy Bryan.</t>
+		  Eran Hammer-Lahav, Mark Nottingham, and Peter Saint-Andre. We also thank the Anthony Family, the Bryan Family, Juanita Anthony and Zimmy Bryan.</t>
 
 	    </section> 
 
@@ -1917,7 +1917,7 @@ metalinkFile =
 
 metalinkPieces =
    element metalink:pieces {
-      attribute length { xsd:integer },
+      attribute length { xsd:positiveInteger },
       attribute type { text },
       metalinkHash+
    }
@@ -1974,7 +1974,7 @@ metalinkLogo =
 metalinkMetaURL =
    element metalink:metaurl {
       metalinkCommonAttributes,
-      attribute priority { xsd:integer }?,
+      attribute priority { xsd:positiveInteger }?,
       attribute type { text },
       attribute name { text }?,
       metalinkUri
@@ -2025,7 +2025,7 @@ metalinkURL =
       attribute location { xsd:string {
          minLength = "2"  maxLength="2"}
       }?,
-      attribute priority { xsd:integer }?,
+      attribute priority { xsd:positiveInteger }?,
       metalinkUri
    }
 
