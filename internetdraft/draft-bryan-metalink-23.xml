@@ -76,9 +76,8 @@
       In contrast, a traditional HTTP redirect to a mirror conveys only extremely minimal information - one link to one server, and there is no provision in the HTTP protocol to handle failures.
       Other features that some clients provide include multi-source downloads, where chunks of a file are downloaded from multiple mirrors (and optionally, Peer-to-Peer) simultaneously, which frequently results in a faster download. Metalinks also provide structured information about downloads that can be indexed by search engines.</t>
 
-      <t>[[ Discussion of this draft should take place on discuss@apps.ietf.org or the Metalink discussion mailing list
-   located at metalink-discussion@googlegroups.com. To join the list, visit
-   http://groups.google.com/group/metalink-discussion . ]]</t>
+      <t>[[ Discussion of this draft should take place on discuss@apps.ietf.org. Past discussion has gone on at the Metalink discussion mailing list
+   located at metalink-discussion@googlegroups.com / http://groups.google.com/group/metalink-discussion . ]]</t>
       <section title="Examples"><t><figure> 
 	  <preamble>A brief, single file Metalink Document:</preamble>
 	  
@@ -1516,18 +1515,6 @@ structuredExtensionElement =
 </reference>
  
 
-<reference anchor="RFC3688">
-
-<front>
-<title>The IETF XML Registry</title>
-<author initials="M." surname="Mealling" fullname="M. Mealling">
-<organization/></author>
-<date year="2004" month="January"/></front>
-
-<seriesInfo name="BCP" value="81"/>
-<seriesInfo name="RFC" value="3688"/>
-</reference>
-
 <reference anchor="RFC3986">
 
 <front>
@@ -1794,6 +1781,19 @@ structuredExtensionElement =
 	      </front> 
 
 	    </reference>
+		
+<reference anchor="RFC3688">
+
+<front>
+<title>The IETF XML Registry</title>
+<author initials="M." surname="Mealling" fullname="M. Mealling">
+<organization/></author>
+<date year="2004" month="January"/></front>
+
+<seriesInfo name="BCP" value="81"/>
+<seriesInfo name="RFC" value="3688"/>
+</reference>
+
 
 <reference anchor="RFC4287">
 

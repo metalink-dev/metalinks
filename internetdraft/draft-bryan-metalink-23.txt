@@ -4,10 +4,10 @@
 Network Working Group                                           A. Bryan
 Internet-Draft                                              T. Tsujikawa
 Intended status: Standards Track                                N. McNab
-Expires: May 27, 2010
+Expires: May 29, 2010
                                                                 P. Poeml
                                                             Novell, Inc.
-                                                       November 23, 2009
+                                                       November 25, 2009
 
 
                 The Metalink Download Description Format
@@ -41,7 +41,7 @@ Status of this Memo
    The list of Internet-Draft Shadow Directories can be accessed at
    http://www.ietf.org/shadow.html.
 
-   This Internet-Draft will expire on May 27, 2010.
+   This Internet-Draft will expire on May 29, 2010.
 
 Copyright Notice
 
@@ -52,7 +52,7 @@ Copyright Notice
 
 
 
-Bryan, et al.             Expires May 27, 2010                  [Page 1]
+Bryan, et al.             Expires May 29, 2010                  [Page 1]
 
 Internet-Draft    Metalink Download Description Format     November 2009
 
@@ -108,7 +108,7 @@ Internet-Draft    Metalink Download Description Format     November 2009
 
 
 
-Bryan, et al.             Expires May 27, 2010                  [Page 2]
+Bryan, et al.             Expires May 29, 2010                  [Page 2]
 
 Internet-Draft    Metalink Download Description Format     November 2009
 
@@ -164,7 +164,7 @@ Table of Contents
 
 
 
-Bryan, et al.             Expires May 27, 2010                  [Page 3]
+Bryan, et al.             Expires May 29, 2010                  [Page 3]
 
 Internet-Draft    Metalink Download Description Format     November 2009
 
@@ -220,7 +220,7 @@ Internet-Draft    Metalink Download Description Format     November 2009
 
 
 
-Bryan, et al.             Expires May 27, 2010                  [Page 4]
+Bryan, et al.             Expires May 29, 2010                  [Page 4]
 
 Internet-Draft    Metalink Download Description Format     November 2009
 
@@ -267,16 +267,16 @@ Internet-Draft    Metalink Download Description Format     November 2009
    engines.
 
    [[ Discussion of this draft should take place on
-   discuss@apps.ietf.org or the Metalink discussion mailing list located
-   at metalink-discussion@googlegroups.com.  To join the list, visit
+   discuss@apps.ietf.org.  Past discussion has gone on at the Metalink
+   discussion mailing list located at
+   metalink-discussion@googlegroups.com /
    http://groups.google.com/group/metalink-discussion . ]]
 
 
 
 
 
-
-Bryan, et al.             Expires May 27, 2010                  [Page 5]
+Bryan, et al.             Expires May 29, 2010                  [Page 5]
 
 Internet-Draft    Metalink Download Description Format     November 2009
 
@@ -332,7 +332,7 @@ Internet-Draft    Metalink Download Description Format     November 2009
 
 
 
-Bryan, et al.             Expires May 27, 2010                  [Page 6]
+Bryan, et al.             Expires May 29, 2010                  [Page 6]
 
 Internet-Draft    Metalink Download Description Format     November 2009
 
@@ -388,7 +388,7 @@ Internet-Draft    Metalink Download Description Format     November 2009
 
 
 
-Bryan, et al.             Expires May 27, 2010                  [Page 7]
+Bryan, et al.             Expires May 29, 2010                  [Page 7]
 
 Internet-Draft    Metalink Download Description Format     November 2009
 
@@ -444,7 +444,7 @@ Internet-Draft    Metalink Download Description Format     November 2009
 
 
 
-Bryan, et al.             Expires May 27, 2010                  [Page 8]
+Bryan, et al.             Expires May 29, 2010                  [Page 8]
 
 Internet-Draft    Metalink Download Description Format     November 2009
 
@@ -500,7 +500,7 @@ Internet-Draft    Metalink Download Description Format     November 2009
 
 
 
-Bryan, et al.             Expires May 27, 2010                  [Page 9]
+Bryan, et al.             Expires May 29, 2010                  [Page 9]
 
 Internet-Draft    Metalink Download Description Format     November 2009
 
@@ -556,7 +556,7 @@ Internet-Draft    Metalink Download Description Format     November 2009
 
 
 
-Bryan, et al.             Expires May 27, 2010                 [Page 10]
+Bryan, et al.             Expires May 29, 2010                 [Page 10]
 
 Internet-Draft    Metalink Download Description Format     November 2009
 
@@ -612,7 +612,7 @@ Internet-Draft    Metalink Download Description Format     November 2009
 
 
 
-Bryan, et al.             Expires May 27, 2010                 [Page 11]
+Bryan, et al.             Expires May 29, 2010                 [Page 11]
 
 Internet-Draft    Metalink Download Description Format     November 2009
 
@@ -668,7 +668,7 @@ Internet-Draft    Metalink Download Description Format     November 2009
 
 
 
-Bryan, et al.             Expires May 27, 2010                 [Page 12]
+Bryan, et al.             Expires May 29, 2010                 [Page 12]
 
 Internet-Draft    Metalink Download Description Format     November 2009
 
@@ -688,7 +688,7 @@ Internet-Draft    Metalink Download Description Format     November 2009
 
    metalinkPieces =
       element metalink:pieces {
-         attribute length { xsd:integer },
+         attribute length { xsd:positiveInteger },
          attribute type { text },
          metalinkHash+
       }
@@ -705,8 +705,8 @@ Internet-Draft    Metalink Download Description Format     November 2009
 4.1.3.2.  The "length" Attribute
 
    metalink:pieces elements MUST have a "length" attribute, which is an
-   integer that describes the length of the pieces of the file in
-   octets.  The whole file is divided into non-overlapping pieces of
+   positive integer that describes the length of the pieces of the file
+   in octets.  The whole file is divided into non-overlapping pieces of
    this length, starting from the beginning of the file.  That is, every
    piece should be the same size, apart from the last piece which is the
    remainder.  The last piece extends to the end of the file, and can
@@ -724,7 +724,7 @@ Internet-Draft    Metalink Download Description Format     November 2009
 
 
 
-Bryan, et al.             Expires May 27, 2010                 [Page 13]
+Bryan, et al.             Expires May 29, 2010                 [Page 13]
 
 Internet-Draft    Metalink Download Description Format     November 2009
 
@@ -780,7 +780,7 @@ Internet-Draft    Metalink Download Description Format     November 2009
 
 
 
-Bryan, et al.             Expires May 27, 2010                 [Page 14]
+Bryan, et al.             Expires May 29, 2010                 [Page 14]
 
 Internet-Draft    Metalink Download Description Format     November 2009
 
@@ -836,7 +836,7 @@ Internet-Draft    Metalink Download Description Format     November 2009
 
 
 
-Bryan, et al.             Expires May 27, 2010                 [Page 15]
+Bryan, et al.             Expires May 29, 2010                 [Page 15]
 
 Internet-Draft    Metalink Download Description Format     November 2009
 
@@ -892,7 +892,7 @@ Internet-Draft    Metalink Download Description Format     November 2009
 
 
 
-Bryan, et al.             Expires May 27, 2010                 [Page 16]
+Bryan, et al.             Expires May 29, 2010                 [Page 16]
 
 Internet-Draft    Metalink Download Description Format     November 2009
 
@@ -938,7 +938,7 @@ Internet-Draft    Metalink Download Description Format     November 2009
    metalinkMetaURL =
       element metalink:metaurl {
          metalinkCommonAttributes,
-         attribute priority { xsd:integer }?,
+         attribute priority { xsd:positiveInteger }?,
          attribute type { text },
          attribute name { text }?,
          metalinkUri
@@ -948,7 +948,7 @@ Internet-Draft    Metalink Download Description Format     November 2009
 
 
 
-Bryan, et al.             Expires May 27, 2010                 [Page 17]
+Bryan, et al.             Expires May 29, 2010                 [Page 17]
 
 Internet-Draft    Metalink Download Description Format     November 2009
 
@@ -1004,7 +1004,7 @@ Internet-Draft    Metalink Download Description Format     November 2009
 
 
 
-Bryan, et al.             Expires May 27, 2010                 [Page 18]
+Bryan, et al.             Expires May 29, 2010                 [Page 18]
 
 Internet-Draft    Metalink Download Description Format     November 2009
 
@@ -1060,7 +1060,7 @@ Internet-Draft    Metalink Download Description Format     November 2009
 
 
 
-Bryan, et al.             Expires May 27, 2010                 [Page 19]
+Bryan, et al.             Expires May 29, 2010                 [Page 19]
 
 Internet-Draft    Metalink Download Description Format     November 2009
 
@@ -1116,7 +1116,7 @@ Internet-Draft    Metalink Download Description Format     November 2009
 
 
 
-Bryan, et al.             Expires May 27, 2010                 [Page 20]
+Bryan, et al.             Expires May 29, 2010                 [Page 20]
 
 Internet-Draft    Metalink Download Description Format     November 2009
 
@@ -1133,7 +1133,7 @@ Internet-Draft    Metalink Download Description Format     November 2009
          attribute location { xsd:string {
            minLength = "2"  maxLength="2"}
          }?,
-         attribute priority { xsd:integer }?,
+         attribute priority { xsd:positiveInteger }?,
          metalinkUri
       }
 
@@ -1172,7 +1172,7 @@ Internet-Draft    Metalink Download Description Format     November 2009
 
 
 
-Bryan, et al.             Expires May 27, 2010                 [Page 21]
+Bryan, et al.             Expires May 29, 2010                 [Page 21]
 
 Internet-Draft    Metalink Download Description Format     November 2009
 
@@ -1228,7 +1228,7 @@ Internet-Draft    Metalink Download Description Format     November 2009
 
 
 
-Bryan, et al.             Expires May 27, 2010                 [Page 22]
+Bryan, et al.             Expires May 29, 2010                 [Page 22]
 
 Internet-Draft    Metalink Download Description Format     November 2009
 
@@ -1284,7 +1284,7 @@ Internet-Draft    Metalink Download Description Format     November 2009
 
 
 
-Bryan, et al.             Expires May 27, 2010                 [Page 23]
+Bryan, et al.             Expires May 29, 2010                 [Page 23]
 
 Internet-Draft    Metalink Download Description Format     November 2009
 
@@ -1340,7 +1340,7 @@ Internet-Draft    Metalink Download Description Format     November 2009
 
 
 
-Bryan, et al.             Expires May 27, 2010                 [Page 24]
+Bryan, et al.             Expires May 29, 2010                 [Page 24]
 
 Internet-Draft    Metalink Download Description Format     November 2009
 
@@ -1396,7 +1396,7 @@ Internet-Draft    Metalink Download Description Format     November 2009
 
 
 
-Bryan, et al.             Expires May 27, 2010                 [Page 25]
+Bryan, et al.             Expires May 29, 2010                 [Page 25]
 
 Internet-Draft    Metalink Download Description Format     November 2009
 
@@ -1452,7 +1452,7 @@ Internet-Draft    Metalink Download Description Format     November 2009
 
 
 
-Bryan, et al.             Expires May 27, 2010                 [Page 26]
+Bryan, et al.             Expires May 29, 2010                 [Page 26]
 
 Internet-Draft    Metalink Download Description Format     November 2009
 
@@ -1482,9 +1482,6 @@ Internet-Draft    Metalink Download Description Format     November 2009
    [RFC3339]  Klyne, G. and C. Newman, "Date and Time on the Internet:
               Timestamps", RFC 3339, July 2002.
 
-   [RFC3688]  Mealling, M., "The IETF XML Registry", BCP 81, RFC 3688,
-              January 2004.
-
    [RFC3986]  Berners-Lee, T., Fielding, R., and L. Masinter, "Uniform
               Resource Identifier (URI): Generic Syntax", STD 66,
               RFC 3986, January 2005.
@@ -1506,17 +1503,21 @@ Internet-Draft    Metalink Download Description Format     November 2009
               - Representation of dates and times", ISO Standard 8601,
               June 1988.
 
+   [RELAX-NG]
+              Clark, J., "RELAX NG Compact Syntax", December 2001, <http
 
 
-Bryan, et al.             Expires May 27, 2010                 [Page 27]
+
+Bryan, et al.             Expires May 29, 2010                 [Page 27]
 
 Internet-Draft    Metalink Download Description Format     November 2009
 
 
-   [RELAX-NG]
-              Clark, J., "RELAX NG Compact Syntax", December 2001, <http
               ://www.oasis-open.org/committees/relax-ng/
               compact-20021121.html>.
+
+   [RFC3688]  Mealling, M., "The IETF XML Registry", BCP 81, RFC 3688,
+              January 2004.
 
    [RFC4287]  Nottingham, M. and R. Sayre, "The Atom Syndication
               Format", RFC 4287, December 2005.
@@ -1560,15 +1561,15 @@ Appendix A.  Acknowledgements and Contributors
    Erin Solari, Derick Cordoba, Ryan Alexander, John & Sandra Sowder,
    Tom Mainville, Janie Wargo, Jason Hansen, Tim Bray, Dan Brickley,
    Markus Hofmann, Dan Connolly, Tim Berners-Lee, Louis Suarez-Potts,
-   Ross Smith, Jeff Covey, Ed Lee, Shawn Wilsher, Mike Connor, Johan
 
 
 
-Bryan, et al.             Expires May 27, 2010                 [Page 28]
+Bryan, et al.             Expires May 29, 2010                 [Page 28]
 
 Internet-Draft    Metalink Download Description Format     November 2009
 
 
+   Ross Smith, Jeff Covey, Ed Lee, Shawn Wilsher, Mike Connor, Johan
    Svedberg, Dedric Carter, James Antill, Debi Goulding, Chris Newman,
    Lisa Dusseault, Ian Macfarlane, Dave Cridland, Julian Reschke, Barry
    Leiba, Uri Blumenthal, Paul Hoffman, Felix Sasaki, Matthias Fuchs,
@@ -1616,15 +1617,15 @@ Appendix B.  RELAX NG Compact Schema
    start = metalinkMetalink
 
    metalinkMetalink =
-      element metalink:metalink {
 
 
 
-Bryan, et al.             Expires May 27, 2010                 [Page 29]
+Bryan, et al.             Expires May 29, 2010                 [Page 29]
 
 Internet-Draft    Metalink Download Description Format     November 2009
 
 
+      element metalink:metalink {
          metalinkCommonAttributes,
          (metalinkDynamic?
           & metalinkFile+
@@ -1659,7 +1660,7 @@ Internet-Draft    Metalink Download Description Format     November 2009
 
    metalinkPieces =
       element metalink:pieces {
-         attribute length { xsd:integer },
+         attribute length { xsd:positiveInteger },
          attribute type { text },
          metalinkHash+
       }
@@ -1672,14 +1673,15 @@ Internet-Draft    Metalink Download Description Format     November 2009
    metalinkDescription =
       element metalink:description {
          metalinkTextConstruct
-      }
 
 
 
-Bryan, et al.             Expires May 27, 2010                 [Page 30]
+Bryan, et al.             Expires May 29, 2010                 [Page 30]
 
 Internet-Draft    Metalink Download Description Format     November 2009
 
+
+      }
 
    metalinkDynamic =
       element metalink:dynamic {
@@ -1723,19 +1725,19 @@ Internet-Draft    Metalink Download Description Format     November 2009
    metalinkMetaURL =
       element metalink:metaurl {
          metalinkCommonAttributes,
-         attribute priority { xsd:integer }?,
+         attribute priority { xsd:positiveInteger }?,
          attribute type { text },
          attribute name { text }?,
          metalinkUri
-      }
 
 
 
-
-Bryan, et al.             Expires May 27, 2010                 [Page 31]
+Bryan, et al.             Expires May 29, 2010                 [Page 31]
 
 Internet-Draft    Metalink Download Description Format     November 2009
 
+
+      }
 
    metalinkOrigin =
       element metalink:origin {
@@ -1782,16 +1784,17 @@ Internet-Draft    Metalink Download Description Format     November 2009
          attribute location { xsd:string {
             minLength = "2"  maxLength="2"}
          }?,
-         attribute priority { xsd:integer }?,
-         metalinkUri
-      }
+         attribute priority { xsd:positiveInteger }?,
 
 
 
-Bryan, et al.             Expires May 27, 2010                 [Page 32]
+Bryan, et al.             Expires May 29, 2010                 [Page 32]
 
 Internet-Draft    Metalink Download Description Format     November 2009
 
+
+         metalinkUri
+      }
 
    metalinkVersion =
       element metalink:version {
@@ -1838,16 +1841,16 @@ Internet-Draft    Metalink Download Description Format     November 2009
       element * {
          (attribute * { text }
           | text
-          | anyElement)*
-      }
 
 
 
-
-Bryan, et al.             Expires May 27, 2010                 [Page 33]
+Bryan, et al.             Expires May 29, 2010                 [Page 33]
 
 Internet-Draft    Metalink Download Description Format     November 2009
 
+
+          | anyElement)*
+      }
 
    anyForeignElement =
       element * - metalink:* {
@@ -1893,18 +1896,18 @@ Appendix C.  Document History (to be removed by RFC Editor before
    o  Typo correction.
 
    -16 : August 31, 2009.
-   o  Clarifications.
-
-   -15 : August 26, 2009.
 
 
 
 
-Bryan, et al.             Expires May 27, 2010                 [Page 34]
+Bryan, et al.             Expires May 29, 2010                 [Page 34]
 
 Internet-Draft    Metalink Download Description Format     November 2009
 
 
+   o  Clarifications.
+
+   -15 : August 26, 2009.
    o  Rename "preference" attribute of metaurl and url elements to
       "priority", where lower values indicate higher priority.
 
@@ -1949,18 +1952,18 @@ Internet-Draft    Metalink Download Description Format     November 2009
    o  Add authors and this Document History section.
 
    -05 : January 13, 2009.
-   o  Clarifications.
-
-   -04 : December 31, 2008.
 
 
 
 
-Bryan, et al.             Expires May 27, 2010                 [Page 35]
+Bryan, et al.             Expires May 29, 2010                 [Page 35]
 
 Internet-Draft    Metalink Download Description Format     November 2009
 
 
+   o  Clarifications.
+
+   -04 : December 31, 2008.
    o  New IPR notice as required by IETF.
    o  Correct "metalink:pieces" Element text.
    o  Add hash examples.
@@ -2006,17 +2009,17 @@ Index
    G
       generator XML element  14
       Grammar
-         metalinkCommonAttributes  8
-         metalinkCopyright  14
-         metalinkDateConstruct  9
 
 
 
-Bryan, et al.             Expires May 27, 2010                 [Page 36]
+Bryan, et al.             Expires May 29, 2010                 [Page 36]
 
 Internet-Draft    Metalink Download Description Format     November 2009
 
 
+         metalinkCommonAttributes  8
+         metalinkCopyright  14
+         metalinkDateConstruct  9
          metalinkDescription  14
          metalinkFile  11
          metalinkGenerator  14
@@ -2062,17 +2065,17 @@ Internet-Draft    Metalink Download Description Format     November 2009
       metalinkDateConstruct grammar production  9
       metalinkDescription grammar production  14
       metalinkFile grammar production  11
-      metalinkGenerator grammar production  14
-      metalinkHash grammar production  15
-      metalinkIdentity grammar production  16
 
 
 
-Bryan, et al.             Expires May 27, 2010                 [Page 37]
+Bryan, et al.             Expires May 29, 2010                 [Page 37]
 
 Internet-Draft    Metalink Download Description Format     November 2009
 
 
+      metalinkGenerator grammar production  14
+      metalinkHash grammar production  15
+      metalinkIdentity grammar production  16
       metalinkLanguage grammar production  16
       metalinkLicense grammar production  17
       metalinkLogo grammar production  17
@@ -2118,17 +2121,17 @@ Internet-Draft    Metalink Download Description Format     November 2009
    X
       XML Elements
          copyright  13
-         description  14
-         entry  11
-         generator  14
 
 
 
-Bryan, et al.             Expires May 27, 2010                 [Page 38]
+Bryan, et al.             Expires May 29, 2010                 [Page 38]
 
 Internet-Draft    Metalink Download Description Format     November 2009
 
 
+         description  14
+         entry  11
+         generator  14
          hash  15
          identity  16
          language  16
@@ -2171,6 +2174,17 @@ Authors' Addresses
    URI:   http://www.nabber.org
 
 
+
+
+
+
+
+
+Bryan, et al.             Expires May 29, 2010                 [Page 39]
+
+Internet-Draft    Metalink Download Description Format     November 2009
+
+
    Peter Poeml
    Novell, Inc.
 
@@ -2180,5 +2194,47 @@ Authors' Addresses
 
 
 
-Bryan, et al.             Expires May 27, 2010                 [Page 39]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Bryan, et al.             Expires May 29, 2010                 [Page 40]
 

@@ -144,10 +144,10 @@
 <tr><td class="header">Network Working Group</td><td class="header">A. Bryan</td></tr>
 <tr><td class="header">Internet-Draft</td><td class="header">T. Tsujikawa</td></tr>
 <tr><td class="header">Intended status: Standards Track</td><td class="header">N. McNab</td></tr>
-<tr><td class="header">Expires: May 27, 2010</td><td class="header">&nbsp;</td></tr>
+<tr><td class="header">Expires: May 29, 2010</td><td class="header">&nbsp;</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">P. Poeml</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">Novell, Inc.</td></tr>
-<tr><td class="header">&nbsp;</td><td class="header">November 23, 2009</td></tr>
+<tr><td class="header">&nbsp;</td><td class="header">November 25, 2009</td></tr>
 </table></td></tr></table>
 <h1><br />The Metalink Download Description Format<br />draft-bryan-metalink-23</h1>
 
@@ -176,7 +176,7 @@ The list of current Internet-Drafts can be accessed at
 The list of Internet-Draft Shadow Directories can be accessed at
 <a href='http://www.ietf.org/shadow.html'>http://www.ietf.org/shadow.html</a>.</p>
 <p>
-This Internet-Draft will expire on May 27, 2010.</p>
+This Internet-Draft will expire on May 29, 2010.</p>
 
 <h3>Copyright Notice</h3>
 <p>
@@ -332,9 +332,8 @@ Introduction</h3>
       In contrast, a traditional HTTP redirect to a mirror conveys only extremely minimal information - one link to one server, and there is no provision in the HTTP protocol to handle failures.
       Other features that some clients provide include multi-source downloads, where chunks of a file are downloaded from multiple mirrors (and optionally, Peer-to-Peer) simultaneously, which frequently results in a faster download. Metalinks also provide structured information about downloads that can be indexed by search engines.
 </p>
-<p>[[ Discussion of this draft should take place on discuss@apps.ietf.org or the Metalink discussion mailing list
-   located at metalink-discussion@googlegroups.com. To join the list, visit
-   http://groups.google.com/group/metalink-discussion . ]]
+<p>[[ Discussion of this draft should take place on discuss@apps.ietf.org. Past discussion has gone on at the Metalink discussion mailing list
+   located at metalink-discussion@googlegroups.com / http://groups.google.com/group/metalink-discussion . ]]
 </p>
 <a name="anchor2"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
@@ -783,7 +782,7 @@ non-overlapping pieces of the file. The checksums MUST be listed in the same ord
 <div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
 metalinkPieces =
    element metalink:pieces {
-      attribute length { xsd:integer },
+      attribute length { xsd:positiveInteger },
       attribute type { text },
       metalinkHash+
    }</pre></div><p>
@@ -806,7 +805,7 @@ The &#34;type&#34; Attribute</h3>
 <a name="rfc.section.4.1.3.2"></a><h3>4.1.3.2.&nbsp;
 The &#34;length&#34; Attribute</h3>
 
-<p><a class='info' href='#element.pieces'>metalink:pieces<span> (</span><span class='info'>The &#34;metalink:pieces&#34; Element</span><span>)</span></a> elements MUST have a "length" attribute, which is an integer
+<p><a class='info' href='#element.pieces'>metalink:pieces<span> (</span><span class='info'>The &#34;metalink:pieces&#34; Element</span><span>)</span></a> elements MUST have a "length" attribute, which is an positive integer
         that describes the length of the pieces of the file in octets. The whole file is divided into non-overlapping pieces of this length,
         starting from the beginning of the file. That is, every piece should be the same size, apart from
         the last piece which is the remainder. The last piece extends to the end of the file, and can therefore be shorter than the other pieces.
@@ -1039,7 +1038,7 @@ The &#34;metalink:metaurl&#34; Element</h3>
 metalinkMetaURL =
    element metalink:metaurl {
       metalinkCommonAttributes,
-      attribute priority { xsd:integer }?,
+      attribute priority { xsd:positiveInteger }?,
       attribute type { text },
       attribute name { text }?,
       metalinkUri
@@ -1245,7 +1244,7 @@ metalinkURL =
       attribute location { xsd:string {
         minLength = "2"  maxLength="2"}
       }?,
-      attribute priority { xsd:integer }?,
+      attribute priority { xsd:positiveInteger }?,
       metalinkUri
    }</pre></div><p>
 
@@ -1626,8 +1625,6 @@ References</h3>
 <td class="author-text">Eastlake, D. and P. Jones, &ldquo;<a href="http://tools.ietf.org/html/rfc3174">US Secure Hash Algorithm 1 (SHA1)</a>,&rdquo; RFC&nbsp;3174, September&nbsp;2001.</td></tr>
 <tr><td class="author-text" valign="top"><a name="RFC3339">[RFC3339]</a></td>
 <td class="author-text">Klyne, G. and C. Newman, &ldquo;<a href="http://tools.ietf.org/html/rfc3339">Date and Time on the Internet: Timestamps</a>,&rdquo; RFC&nbsp;3339, July&nbsp;2002.</td></tr>
-<tr><td class="author-text" valign="top"><a name="RFC3688">[RFC3688]</a></td>
-<td class="author-text">Mealling, M., &ldquo;<a href="http://tools.ietf.org/html/rfc3688">The IETF XML Registry</a>,&rdquo; BCP&nbsp;81, RFC&nbsp;3688, January&nbsp;2004.</td></tr>
 <tr><td class="author-text" valign="top"><a name="RFC3986">[RFC3986]</a></td>
 <td class="author-text">Berners-Lee, T., Fielding, R., and L. Masinter, &ldquo;<a href="http://tools.ietf.org/html/rfc3986">Uniform Resource Identifier (URI): Generic Syntax</a>,&rdquo; STD&nbsp;66, RFC&nbsp;3986, January&nbsp;2005.</td></tr>
 <tr><td class="author-text" valign="top"><a name="RFC3987">[RFC3987]</a></td>
@@ -1646,6 +1643,8 @@ References</h3>
 <td class="author-text">International Organization for Standardization, &ldquo;Data elements and interchange formats - Information interchange - Representation of dates and times,&rdquo; ISO&nbsp;Standard 8601, June&nbsp;1988.</td></tr>
 <tr><td class="author-text" valign="top"><a name="RELAX-NG">[RELAX-NG]</a></td>
 <td class="author-text">Clark, J., &ldquo;<a href="http://www.oasis-open.org/committees/relax-ng/compact-20021121.html">RELAX NG Compact Syntax</a>,&rdquo; December&nbsp;2001.</td></tr>
+<tr><td class="author-text" valign="top"><a name="RFC3688">[RFC3688]</a></td>
+<td class="author-text">Mealling, M., &ldquo;<a href="http://tools.ietf.org/html/rfc3688">The IETF XML Registry</a>,&rdquo; BCP&nbsp;81, RFC&nbsp;3688, January&nbsp;2004.</td></tr>
 <tr><td class="author-text" valign="top"><a name="RFC4287">[RFC4287]</a></td>
 <td class="author-text">Nottingham, M. and R. Sayre, &ldquo;<a href="http://tools.ietf.org/html/rfc4287">The Atom Syndication Format</a>,&rdquo; RFC&nbsp;4287, December&nbsp;2005.</td></tr>
 <tr><td class="author-text" valign="top"><a name="W3C.NOTE-datetime-19980827">[W3C.NOTE-datetime-19980827]</a></td>
@@ -1763,7 +1762,7 @@ metalinkFile =
 
 metalinkPieces =
    element metalink:pieces {
-      attribute length { xsd:integer },
+      attribute length { xsd:positiveInteger },
       attribute type { text },
       metalinkHash+
    }
@@ -1820,7 +1819,7 @@ metalinkLogo =
 metalinkMetaURL =
    element metalink:metaurl {
       metalinkCommonAttributes,
-      attribute priority { xsd:integer }?,
+      attribute priority { xsd:positiveInteger }?,
       attribute type { text },
       attribute name { text }?,
       metalinkUri
@@ -1871,7 +1870,7 @@ metalinkURL =
       attribute location { xsd:string {
          minLength = "2"  maxLength="2"}
       }?,
-      attribute priority { xsd:integer }?,
+      attribute priority { xsd:positiveInteger }?,
       metalinkUri
    }
 
