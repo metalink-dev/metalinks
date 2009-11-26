@@ -144,16 +144,20 @@
 <tr><td class="header">Network Working Group</td><td class="header">A. Bryan</td></tr>
 <tr><td class="header">Internet-Draft</td><td class="header">T. Tsujikawa</td></tr>
 <tr><td class="header">Intended status: Standards Track</td><td class="header">N. McNab</td></tr>
-<tr><td class="header">Expires: May 29, 2010</td><td class="header">&nbsp;</td></tr>
+<tr><td class="header">Expires: May 30, 2010</td><td class="header">&nbsp;</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">P. Poeml</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">Novell, Inc.</td></tr>
-<tr><td class="header">&nbsp;</td><td class="header">November 25, 2009</td></tr>
+<tr><td class="header">&nbsp;</td><td class="header">November 26, 2009</td></tr>
 </table></td></tr></table>
 <h1><br />The Metalink Download Description Format<br />draft-bryan-metalink-23</h1>
 
 <h3>Abstract</h3>
 
-<p>This document specifies Metalink, an XML-based download description format. Metalink describes multiple download locations (mirrors), checksums, and other information. Clients can transparently use this information to reliably transfer files.
+<p>This document specifies Metalink, an XML-based download description
+		format. Metalink describes download locations
+		(mirrors), checksums, and other information. Clients can
+		transparently use this information to reliably transfer
+		files.
 </p>
 <h3>Status of this Memo</h3>
 <p>
@@ -176,7 +180,7 @@ The list of current Internet-Drafts can be accessed at
 The list of Internet-Draft Shadow Directories can be accessed at
 <a href='http://www.ietf.org/shadow.html'>http://www.ietf.org/shadow.html</a>.</p>
 <p>
-This Internet-Draft will expire on May 29, 2010.</p>
+This Internet-Draft will expire on May 30, 2010.</p>
 
 <h3>Copyright Notice</h3>
 <p>
@@ -315,25 +319,59 @@ Authors' Addresses<br />
 <a name="rfc.section.1"></a><h3>1.&nbsp;
 Introduction</h3>
 
-<p>Metalink is an XML-based document format that describes a file or list of files to be added to a download queue. Metalinks can list a number of files,
-      each with an extensible set of attached
-      metadata. For example, each file can have a description, checksum, and list of URIs that it is available from.
+<p>Metalink is an XML-based document format that describes a file or list
+      of files to be downloaded from a server. Metalinks can list a number of
+      files, each with an extensible set of attached metadata. 
+      Each listed file can have a description, checksum, and a list of URIs that it is 
+      available from.
 </p>
-<p>Identical copies of a file are frequently accessible in multiple locations on the Internet over a variety of protocols (FTP, HTTP, and Peer-to-Peer).
-      In some cases, Users are shown a list of these multiple download locations (mirrors) and must manually select a single one on the basis of geographical location, priority, or bandwidth.
-      This distributes the load across multiple servers. At times, individual servers can be slow, outdated, or unreachable, but this can not be determined until the download has been initiated.
-      This can lead to the user canceling the download and needing to restart it. During downloads, errors in transmission can corrupt the file.
-      There are no easy ways to repair these files. For large downloads this can be extremely troublesome.
-      Any of the number of problems that can occur during a download lead to frustration on the part of users.
+<p>Often, identical copies of a file are accessible in multiple locations
+      on the Internet over a variety of protocols (FTP, HTTP, and
+      Peer-to-Peer).  In some cases, users are shown a list of these multiple
+      download locations (mirror servers) and must manually select one based on
+      geographical location, priority, or bandwidth.  This is done to distribute
+      the load across multiple servers, and to give human users the opportunity
+      to choose a download location that they expect to work best for them.
 </p>
-<p>All the information about a download, including mirrors, checksums, digital signatures, and more can be stored in a machine-readable Metalink file.
-      This Metalink file transfers the knowledge of the download server (and mirror database) to the client. Clients can fall back to alternate mirrors if the current one has an issue. With this knowledge, the client is enabled to work its way to a successful download even under adverse circumstances. 
-      All this is done transparently to the user and the download is much more reliable and efficient.
-      In contrast, a traditional HTTP redirect to a mirror conveys only extremely minimal information - one link to one server, and there is no provision in the HTTP protocol to handle failures.
-      Other features that some clients provide include multi-source downloads, where chunks of a file are downloaded from multiple mirrors (and optionally, Peer-to-Peer) simultaneously, which frequently results in a faster download. Metalinks also provide structured information about downloads that can be indexed by search engines.
+<p>At times, individual servers can be
+      slow, outdated, or unreachable, but this can not be determined until the
+      download has been initiated.  This can lead to the user canceling the
+      download and needing to restart it. During downloads, errors in
+      transmission can corrupt the file.  There are no easy ways to repair
+      these files. For large downloads this can be especially troublesome.  Any
+      of the number of problems that can occur during a download lead to
+      frustration on the part of users, and bandwith wasted with retransmission.
 </p>
-<p>[[ Discussion of this draft should take place on discuss@apps.ietf.org. Past discussion has gone on at the Metalink discussion mailing list
-   located at metalink-discussion@googlegroups.com / http://groups.google.com/group/metalink-discussion . ]]
+<p>Knowledge about availability of a download on mirror servers can be
+      acquired and maintained by the operators of the origin server, or by third
+      a party.  This knowledge, together with checksums,
+      digital signatures, and more can be stored in a machine-readable Metalink
+      file.  The Metalink file can transfer this knowledge to the user agent,
+      which can peruse it in automatic ways or present the information to a human user. 
+      User agents can fall back to alternate
+      mirrors if the current one has an issue.  Thereby, clients
+      are enabled to work their way to a successful download even under adverse
+      circumstances.  All this can be done transparently to the human user and the
+      download is much more reliable and efficient.  In contrast, a traditional
+      HTTP redirect to one mirror conveys only comparatively minimal information -
+      a referral to a single server, and there is no provision in the HTTP protocol to
+      handle failures.
+</p>
+<p>Other features that some clients provide include multi-source
+      downloads, where chunks of a file are downloaded from multiple mirrors
+      (and optionally, Peer-to-Peer) simultaneously, which frequently results
+      in a faster download.  Metalinks can leverage HTTP, FTP and Peer-to-Peer
+      protocols together, because regardless over which protocol the Metalink
+      was obtained, it can make a resource accessible through other protocols.
+      If the Metalink was obtained from a trusted source, included verification
+      metadata can solve trust issues when downloading files from replica
+      servers operated by third parties.  Metalinks also provide structured
+      information about downloads that can be indexed by search engines.
+</p>
+<p>[[ Discussion of this draft should take place on
+      discuss@apps.ietf.org. Past discussion has gone on at the Metalink
+      discussion mailing list located at metalink-discussion@googlegroups.com /
+      http://groups.google.com/group/metalink-discussion . ]]
 </p>
 <a name="anchor2"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
@@ -341,16 +379,22 @@ Introduction</h3>
 Examples</h3>
 
 <p>
-<p>A brief, single file Metalink Document:
+<p>A brief, Metalink Document that describes a single file:
 </p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
 &lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;metalink xmlns="urn:ietf:params:xml:ns:metalink"&gt;
   &lt;file name="example.ext"&gt;
-    &lt;size&gt;14471447&lt;/size&gt;
-    &lt;url&gt;ftp://ftp.example.com/example.ext&lt;/url&gt;
-    &lt;url&gt;http://example.com/example.ext&lt;/url&gt;
+    &lt;size&gt;
+      14471447
+    &lt;/size&gt;
+    &lt;url&gt;
+       ftp://ftp.example.com/example.ext
+    &lt;/url&gt;
+    &lt;url&gt;
+       http://example.com/example.ext
+    &lt;/url&gt;
     &lt;metaurl type="torrent"&gt;
-    http://example.com/example.ext.torrent
+       http://example.com/example.ext.torrent
     &lt;/metaurl&gt;
   &lt;/file&gt;
 &lt;/metalink&gt;
@@ -358,26 +402,69 @@ Examples</h3>
 
 <p>
 	
-<p>A more extensive, single file Metalink Document:
+<p>A more extensive, Metalink Document that describes two files:
 </p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
 &lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;metalink xmlns="urn:ietf:params:xml:ns:metalink"&gt;
-  &lt;published&gt;2009-05-15T12:23:23Z&lt;/published&gt;
+  &lt;published&gt;
+     2009-05-15T12:23:23Z
+  &lt;/published&gt;
   &lt;file name="example.ext"&gt;
-    &lt;size&gt;14471447&lt;/size&gt;
-    &lt;identity&gt;Example&lt;/identity&gt;
-    &lt;version&gt;1.0&lt;/version&gt;
-    &lt;language&gt;en&lt;/language&gt;
-    &lt;description&gt;A description of the example file for
-download.&lt;/description&gt;
+    &lt;size&gt;
+       14471447
+    &lt;/size&gt;
+    &lt;identity&gt;
+       Example
+    &lt;/identity&gt;
+    &lt;version&gt;
+       1.0
+    &lt;/version&gt;
+    &lt;language&gt;
+       en
+    &lt;/language&gt;
+    &lt;description&gt;
+       A description of the example file for download.
+    &lt;/description&gt;
     &lt;hash type="sha-1"&gt;
-    80bc95fd391772fa61c91ed68567f0980bb45fd9&lt;/hash&gt;
+       80bc95fd391772fa61c91ed68567f0980bb45fd9
+    &lt;/hash&gt;
     &lt;url location="de" priority="1"&gt;
-    ftp://ftp.example.com/example.ext&lt;/url&gt;
+       ftp://ftp.example.com/example.ext
+    &lt;/url&gt;
     &lt;url location="fr" priority="1"&gt;
-    http://example.com/example.ext&lt;/url&gt;
+       http://example.com/example.ext
+    &lt;/url&gt;
     &lt;metaurl type="torrent" priority="2"&gt;
-    http://example.com/example.ext.torrent
+       http://example.com/example.ext.torrent
+    &lt;/metaurl&gt;
+  &lt;/file&gt;
+  &lt;file name="example2.ext"&gt;
+    &lt;size&gt;
+       14471447
+    &lt;/size&gt;
+    &lt;identity&gt;
+       Example
+    &lt;/identity&gt;
+    &lt;version&gt;
+       1.0
+    &lt;/version&gt;
+    &lt;language&gt;
+       en
+    &lt;/language&gt;
+    &lt;description&gt;
+       Another description for a second file.
+    &lt;/description&gt;
+    &lt;hash type="sha-1"&gt;
+       7f4afdc84bd1b79238703fb45cd045efd08bee4b
+    &lt;/hash&gt;
+    &lt;url location="de" priority="1"&gt;
+       ftp://ftp.example.com/example2.ext
+    &lt;/url&gt;
+    &lt;url location="fr" priority="1"&gt;
+       http://example.com/example2.ext
+    &lt;/url&gt;
+    &lt;metaurl type="torrent" priority="2"&gt;
+       http://example.com/example2.ext.torrent
     &lt;/metaurl&gt;
   &lt;/file&gt;
 &lt;/metalink&gt;</pre></div>
@@ -1051,7 +1138,7 @@ metalinkMetaURL =
 The &#34;priority&#34; Attribute</h3>
 
 <p><a class='info' href='#element.metaurl'>metalink:metaurl<span> (</span><span class='info'>The &#34;metalink:metaurl&#34; Element</span><span>)</span></a>
-	    elements MAY have a priority attribute. Lower values indicate a higher priority. Multiple <a class='info' href='#element.metaurl'>metalink:metaurl<span> (</span><span class='info'>The &#34;metalink:metaurl&#34; Element</span><span>)</span></a> elements can have the same
+	    elements MAY have a priority attribute. Values MUST be positive integers. Lower values indicate a higher priority. Multiple <a class='info' href='#element.metaurl'>metalink:metaurl<span> (</span><span class='info'>The &#34;metalink:metaurl&#34; Element</span><span>)</span></a> elements can have the same
 		priority, i.e. three BitTorrent .torrent files could have priority="1". See also the "priority" attribute of the <a class='info' href='#element.url'>metalink:url<span> (</span><span class='info'>The &#34;metalink:url&#34; Element</span><span>)</span></a> element.
 </p>
 <a name="anchor15"></a><br /><hr />
@@ -1197,12 +1284,12 @@ The &#34;metalink:size&#34; Element</h3>
 	    the linked content in octets; it is a hint about the
 	    content length of the representation returned when the IRI
 	    is mapped to a URI and 
-	    dereferenced.	  
+	    dereferenced. This value MUST be a non-negative integer.
 	    <a name='anchor113'></a><a name='anchor114'></a></p>
 <div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
 metalinkSize =
    element metalink:size {
-     metalinkTextConstruct
+     xsd:nonNegativeInteger
    }</pre></div><p>
 
 </p>
@@ -1255,7 +1342,7 @@ metalinkURL =
 The &#34;priority&#34; Attribute</h3>
 
 <p><a class='info' href='#element.url'>metalink:url<span> (</span><span class='info'>The &#34;metalink:url&#34; Element</span><span>)</span></a>
-	    elements MAY have a priority attribute. Lower values indicate a higher priority. Multiple <a class='info' href='#element.url'>metalink:url<span> (</span><span class='info'>The &#34;metalink:url&#34; Element</span><span>)</span></a> elements can have the same
+	    elements MAY have a priority attribute. Values MUST be positive integers. Lower values indicate a higher priority. Multiple <a class='info' href='#element.url'>metalink:url<span> (</span><span class='info'>The &#34;metalink:url&#34; Element</span><span>)</span></a> elements can have the same
 		priority, i.e. ten mirrors could have priority="1".
 </p>
 <a name="anchor19"></a><br /><hr />
@@ -1856,7 +1943,7 @@ metalinkSignature =
 
 metalinkSize =
    element metalink:size {
-      metalinkTextConstruct
+      xsd:nonNegativeInteger
    }
 
 metalinkUpdated =
@@ -1943,6 +2030,16 @@ Document History (to be removed by RFC Editor before publication)</h3>
 	    </p>
 <ul class="text">
 <li>None.
+</li>
+</ul>
+
+<p>-23 : November 26, 2009.
+	    
+	    </p>
+<ul class="text">
+<li>Apps Area AD review changes, Change RFC3688 from Normative to Informative Reference.
+</li>
+<li>Schema: integer changed to positiveInteger or nonNegativeInteger where fitting.
 </li>
 </ul>
 

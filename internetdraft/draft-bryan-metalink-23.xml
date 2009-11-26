@@ -52,7 +52,7 @@
 
       <abstract>
 	<t>This document specifies Metalink, an XML-based download description
-		format. Metalink describes multiple download locations
+		format. Metalink describes download locations
 		(mirrors), checksums, and other information. Clients can
 		transparently use this information to reliably transfer
 		files.</t>
@@ -72,11 +72,12 @@
       <t>Often, identical copies of a file are accessible in multiple locations
       on the Internet over a variety of protocols (FTP, HTTP, and
       Peer-to-Peer).  In some cases, users are shown a list of these multiple
-      download locations (mirror servers) and must manually select a single one on the
-      basis of geographical location, priority, or bandwidth.  This is done to distribute
+      download locations (mirror servers) and must manually select one based on
+      geographical location, priority, or bandwidth.  This is done to distribute
       the load across multiple servers, and to give human users the opportunity
-      to choose a download location that they expect to work best for them. 
-      At times, individual servers can be
+      to choose a download location that they expect to work best for them.</t>
+	  
+      <t>At times, individual servers can be
       slow, outdated, or unreachable, but this can not be determined until the
       download has been initiated.  This can lead to the user canceling the
       download and needing to restart it. During downloads, errors in
@@ -91,7 +92,7 @@
       digital signatures, and more can be stored in a machine-readable Metalink
       file.  The Metalink file can transfer this knowledge to the user agent,
       which can peruse it in automatic ways or present the information to a human user. 
-      This guidance provided, user agents can fall back to alternate
+      User agents can fall back to alternate
       mirrors if the current one has an issue.  Thereby, clients
       are enabled to work their way to a successful download even under adverse
       circumstances.  All this can be done transparently to the human user and the
@@ -117,43 +118,92 @@
       http://groups.google.com/group/metalink-discussion . ]]</t>
 
       <section title="Examples"><t><figure> 
-	  <preamble>A brief, single file Metalink Document:</preamble>
+	  <preamble>A brief, Metalink Document that describes a single file:</preamble>
 	  
 	  <artwork type="example">
 &lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;metalink xmlns="urn:ietf:params:xml:ns:metalink"&gt;
   &lt;file name="example.ext"&gt;
-    &lt;size&gt;14471447&lt;/size&gt;
-    &lt;url&gt;ftp://ftp.example.com/example.ext&lt;/url&gt;
-    &lt;url&gt;http://example.com/example.ext&lt;/url&gt; 
+    &lt;size&gt;
+      14471447
+    &lt;/size&gt;
+    &lt;url&gt;
+       ftp://ftp.example.com/example.ext
+    &lt;/url&gt;
+    &lt;url&gt;
+       http://example.com/example.ext
+    &lt;/url&gt; 
     &lt;metaurl type="torrent"&gt;
-    http://example.com/example.ext.torrent
+       http://example.com/example.ext.torrent
     &lt;/metaurl&gt;
   &lt;/file&gt;
 &lt;/metalink&gt;
 </artwork></figure></t>
       <t>
 	<figure>
-	  <preamble>A more extensive, single file Metalink Document:</preamble>
+	  <preamble>A more extensive, Metalink Document that describes two files:</preamble>
 	  <artwork type="example">
 &lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;metalink xmlns="urn:ietf:params:xml:ns:metalink"&gt;
-  &lt;published&gt;2009-05-15T12:23:23Z&lt;/published&gt;
+  &lt;published&gt;
+     2009-05-15T12:23:23Z
+  &lt;/published&gt;
   &lt;file name="example.ext"&gt;
-    &lt;size&gt;14471447&lt;/size&gt;
-    &lt;identity&gt;Example&lt;/identity&gt;
-    &lt;version&gt;1.0&lt;/version&gt;
-    &lt;language&gt;en&lt;/language&gt;	  
-    &lt;description&gt;A description of the example file for 
-download.&lt;/description&gt;
+    &lt;size&gt;
+       14471447
+    &lt;/size&gt;
+    &lt;identity&gt;
+       Example
+    &lt;/identity&gt;
+    &lt;version&gt;
+       1.0
+    &lt;/version&gt;
+    &lt;language&gt;
+       en
+    &lt;/language&gt;	  
+    &lt;description&gt;
+       A description of the example file for download.
+    &lt;/description&gt;
     &lt;hash type="sha-1"&gt;
-    80bc95fd391772fa61c91ed68567f0980bb45fd9&lt;/hash&gt;
+       80bc95fd391772fa61c91ed68567f0980bb45fd9
+    &lt;/hash&gt;
     &lt;url location="de" priority="1"&gt;
-    ftp://ftp.example.com/example.ext&lt;/url&gt;
+       ftp://ftp.example.com/example.ext
+    &lt;/url&gt;
     &lt;url location="fr" priority="1"&gt;
-    http://example.com/example.ext&lt;/url&gt; 
+       http://example.com/example.ext
+    &lt;/url&gt; 
     &lt;metaurl type="torrent" priority="2"&gt;
-    http://example.com/example.ext.torrent
+       http://example.com/example.ext.torrent
+    &lt;/metaurl&gt;
+  &lt;/file&gt;
+  &lt;file name="example2.ext"&gt;
+    &lt;size&gt;
+       14471447
+    &lt;/size&gt;
+    &lt;identity&gt;
+       Example
+    &lt;/identity&gt;
+    &lt;version&gt;
+       1.0
+    &lt;/version&gt;
+    &lt;language&gt;
+       en
+    &lt;/language&gt;	  
+    &lt;description&gt;
+       Another description for a second file.
+    &lt;/description&gt;
+    &lt;hash type="sha-1"&gt;
+       7f4afdc84bd1b79238703fb45cd045efd08bee4b
+    &lt;/hash&gt;
+    &lt;url location="de" priority="1"&gt;
+       ftp://ftp.example.com/example2.ext
+    &lt;/url&gt;
+    &lt;url location="fr" priority="1"&gt;
+       http://example.com/example2.ext
+    &lt;/url&gt; 
+    &lt;metaurl type="torrent" priority="2"&gt;
+       http://example.com/example2.ext.torrent
     &lt;/metaurl&gt;
   &lt;/file&gt;
 &lt;/metalink&gt;</artwork>
@@ -882,7 +932,7 @@ metalinkMetaURL =
 	  <section title="The &#34;priority&#34; Attribute"> 
 
 	    <t><xref target="element.metaurl" format="none">metalink:metaurl</xref>
-	    elements MAY have a priority attribute. Lower values indicate a higher priority. Multiple <xref target="element.metaurl" format="none">metalink:metaurl</xref> elements can have the same
+	    elements MAY have a priority attribute. Values MUST be positive integers. Lower values indicate a higher priority. Multiple <xref target="element.metaurl" format="none">metalink:metaurl</xref> elements can have the same
 		priority, i.e. three BitTorrent .torrent files could have priority="1". See also the "priority" attribute of the <xref target="element.url" format="none">metalink:url</xref> element.</t>
 
 	  </section> 
@@ -1047,7 +1097,7 @@ digital signatures, so unknown types are allowed.
 	    the linked content in octets; it is a hint about the
 	    content length of the representation returned when the IRI
 	    is mapped to a URI and 
-	    dereferenced.	  
+	    dereferenced. This value MUST be a non-negative integer.
 	    <figure>
         <iref item="metalinkSize grammar production" primary="true"/>
         <iref item="Grammar" subitem="metalinkSize" primary="true"/>
@@ -1111,7 +1161,7 @@ metalinkURL =
 	  <section title="The &#34;priority&#34; Attribute"> 
 
 	    <t><xref target="element.url" format="none">metalink:url</xref>
-	    elements MAY have a priority attribute. Lower values indicate a higher priority. Multiple <xref target="element.url" format="none">metalink:url</xref> elements can have the same
+	    elements MAY have a priority attribute. Values MUST be positive integers. Lower values indicate a higher priority. Multiple <xref target="element.url" format="none">metalink:url</xref> elements can have the same
 		priority, i.e. ten mirrors could have priority="1".</t>
 
 	  </section> 
@@ -2137,6 +2187,14 @@ anyForeignElement =
 
 	    </list></t>
 
+<t>-23 : November 26, 2009.
+	    
+	    <list style="symbols">
+		
+		  <t>Apps Area AD review changes, Change RFC3688 from Normative to Informative Reference.</t>
+		  <t>Schema: integer changed to positiveInteger or nonNegativeInteger where fitting.</t>
+	   </list></t>
+	   
 <t>-22 : November 09, 2009.
 	    
 	    <list style="symbols">
