@@ -825,8 +825,8 @@ metalinkLogo =
     <iref item="XML Elements" subitem="metadata" primary="true"/>
     <iref item="metadata XML element" primary="true"/> 
 	  
-	  <t>The "<xref target="element.metaurl" format="none">metalink:metaurl</xref>" element contains the IRI of metadata about a resource to download. For example, this could be the IRI of a BitTorrent .torrent file or a Metalink Document. Note that
-	  the information in the <xref target="element.hash" format="none">metalink:hash</xref> element does not apply to these files, but to the files that are described by them.
+	  <t>The "<xref target="element.metaurl" format="none">metalink:metaurl</xref>" element contains the IRI of a metadata file, also known as a metainfo file, about a resource to download. For example, this could be the IRI of a BitTorrent .torrent file, a Metalink Document, or other type of metadata file. Note that
+	  the information in the <xref target="element.hash" format="none">metalink:hash</xref> element does not apply to these metadata files, but to the files that are described by them.
 
 	    <figure>
         <iref item="metalinkURL grammar production" primary="true"/>
@@ -1016,7 +1016,7 @@ digital signatures, so unknown types are allowed.
 	      <artwork type="rnc">
 metalinkSize =
    element metalink:size {
-     metalinkTextConstruct
+     xsd:nonNegativeInteger
    }</artwork></figure></t> 
 	  
 	</section> 
@@ -2011,7 +2011,7 @@ metalinkSignature =
 
 metalinkSize =
    element metalink:size {
-      metalinkTextConstruct
+      xsd:nonNegativeInteger
    }
 
 metalinkUpdated =

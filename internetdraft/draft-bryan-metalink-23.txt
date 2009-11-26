@@ -929,11 +929,12 @@ Internet-Draft    Metalink Download Description Format     November 2009
 
 4.2.10.  The "metalink:metaurl" Element
 
-   The "metalink:metaurl" element contains the IRI of metadata about a
-   resource to download.  For example, this could be the IRI of a
-   BitTorrent .torrent file or a Metalink Document.  Note that the
+   The "metalink:metaurl" element contains the IRI of a metadata file,
+   also known as a metainfo file, about a resource to download.  For
+   example, this could be the IRI of a BitTorrent .torrent file, a
+   Metalink Document, or other type of metadata file.  Note that the
    information in the metalink:hash element does not apply to these
-   files, but to the files that are described by them.
+   metadata files, but to the files that are described by them.
 
    metalinkMetaURL =
       element metalink:metaurl {
@@ -943,7 +944,6 @@ Internet-Draft    Metalink Download Description Format     November 2009
          attribute name { text }?,
          metalinkUri
       }
-
 
 
 
