@@ -51,33 +51,60 @@
 	<date month="November" year="2009"/>        
 
       <abstract>
-	<t>This document specifies Metalink, an XML-based download description format. Metalink describes multiple download locations (mirrors), checksums, and other information. Clients can transparently use this information to reliably transfer files.</t>
+	<t>This document specifies Metalink, an XML-based download description
+		format. Metalink describes multiple download locations
+		(mirrors), checksums, and other information. Clients can
+		transparently use this information to reliably transfer
+		files.</t>
       </abstract>    
 	  
   </front>    
 
   <middle>
     <section title="Introduction">
-      
-      <t>Metalink is an XML-based document format that describes a file or list of files to be added to a download queue. Metalinks can list a number of files,
-      each with an extensible set of attached
-      metadata. For example, each file can have a description, checksum, and list of URIs that it is available from.</t>
-      
-      <t>Identical copies of a file are frequently accessible in multiple locations on the Internet over a variety of protocols (FTP, HTTP, and Peer-to-Peer).
-      In some cases, Users are shown a list of these multiple download locations (mirrors) and must manually select a single one on the basis of geographical location, priority, or bandwidth.
-      This distributes the load across multiple servers. At times, individual servers can be slow, outdated, or unreachable, but this can not be determined until the download has been initiated.
-      This can lead to the user canceling the download and needing to restart it. During downloads, errors in transmission can corrupt the file.
-      There are no easy ways to repair these files. For large downloads this can be extremely troublesome.
-      Any of the number of problems that can occur during a download lead to frustration on the part of users.</t>
 
-      <t>All the information about a download, including mirrors, checksums, digital signatures, and more can be stored in a machine-readable Metalink file.
-      This Metalink file transfers the knowledge of the download server (and mirror database) to the client. Clients can fall back to alternate mirrors if the current one has an issue. With this knowledge, the client is enabled to work its way to a successful download even under adverse circumstances. 
-      All this is done transparently to the user and the download is much more reliable and efficient.
-      In contrast, a traditional HTTP redirect to a mirror conveys only extremely minimal information - one link to one server, and there is no provision in the HTTP protocol to handle failures.
-      Other features that some clients provide include multi-source downloads, where chunks of a file are downloaded from multiple mirrors (and optionally, Peer-to-Peer) simultaneously, which frequently results in a faster download. Metalinks also provide structured information about downloads that can be indexed by search engines.</t>
+      <t>Metalink is an XML-based document format that describes a file or list
+      of files to be added to a download queue. Metalinks can list a number of
+      files, each with an extensible set of attached metadata. For example,
+      each file can have a description, checksum, and list of URIs that it is
+      available from.</t>
 
-      <t>[[ Discussion of this draft should take place on discuss@apps.ietf.org. Past discussion has gone on at the Metalink discussion mailing list
-   located at metalink-discussion@googlegroups.com / http://groups.google.com/group/metalink-discussion . ]]</t>
+      <t>Identical copies of a file are frequently accessible in multiple
+      locations on the Internet over a variety of protocols (FTP, HTTP, and
+      Peer-to-Peer).  In some cases, Users are shown a list of these multiple
+      download locations (mirrors) and must manually select a single one on the
+      basis of geographical location, priority, or bandwidth.  This distributes
+      the load across multiple servers. At times, individual servers can be
+      slow, outdated, or unreachable, but this can not be determined until the
+      download has been initiated.  This can lead to the user canceling the
+      download and needing to restart it. During downloads, errors in
+      transmission can corrupt the file.  There are no easy ways to repair
+      these files. For large downloads this can be extremely troublesome.  Any
+      of the number of problems that can occur during a download lead to
+      frustration on the part of users.</t>
+
+      <t>All the information about a download, including mirrors, checksums,
+      digital signatures, and more can be stored in a machine-readable Metalink
+      file.  This Metalink file transfers the knowledge of the download server
+      (and mirror database) to the client. Clients can fall back to alternate
+      mirrors if the current one has an issue.  With this knowledge, the client
+      is enabled to work its way to a successful download even under adverse
+      circumstances.  All this is done transparently to the user and the
+      download is much more reliable and efficient.  In contrast, a traditional
+      HTTP redirect to a mirror conveys only extremely minimal information -
+      one link to one server, and there is no provision in the HTTP protocol to
+      handle failures.  Other features that some clients provide include
+      multi-source downloads, where chunks of a file are downloaded from
+      multiple mirrors (and optionally, Peer-to-Peer) simultaneously, which
+      frequently results in a faster download.  Metalinks also provide
+      structured information about downloads that can be indexed by search
+      engines.</t>
+
+      <t>[[ Discussion of this draft should take place on
+      discuss@apps.ietf.org. Past discussion has gone on at the Metalink
+      discussion mailing list located at metalink-discussion@googlegroups.com /
+      http://groups.google.com/group/metalink-discussion . ]]</t>
+
       <section title="Examples"><t><figure> 
 	  <preamble>A brief, single file Metalink Document:</preamble>
 	  
