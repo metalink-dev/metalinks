@@ -408,10 +408,18 @@ metalinkDateConstruct =
 
 	<figure>
 	  <artwork type="example">
-&lt;updated&gt;2009-05-15T18:30:02Z&lt;/updated&gt;
-&lt;updated&gt;2009-05-15T18:30:02.25Z&lt;/updated&gt;
-&lt;updated&gt;2009-05-15T18:30:02+01:00&lt;/updated&gt;
-&lt;updated&gt;2009-05-15T18:30:02.25+01:00&lt;/updated&gt;
+&lt;updated&gt;
+   2009-05-15T18:30:02Z
+&lt;/updated&gt;
+&lt;updated&gt;
+   2009-05-15T18:30:02.25Z
+&lt;/updated&gt;
+&lt;updated&gt;
+   2009-05-15T18:30:02+01:00
+   &lt;/updated&gt;
+&lt;updated&gt;
+   2009-05-15T18:30:02.25+01:00
+&lt;/updated&gt;
 </artwork>
 		   
 	</figure>
@@ -869,8 +877,8 @@ metalinkLanguage =
     <iref item="XML Elements" subitem="license" primary="true"/>
     <iref item="license XML element" primary="true"/> 
 	      
-	  <t>The "<xref target="element.license" format="none">metalink:license</xref>" element is a Text construct that conveys a
-	  human-readable license name for a file.
+	  <t>The "<xref target="element.license" format="none">metalink:license</xref>" element contains a
+	  human-readable license name for a file and a URI for more information.
 	  
 	    <figure>
         <iref item="metalinkLicense grammar production" primary="true"/>
@@ -879,18 +887,18 @@ metalinkLanguage =
 metalinkLicense =
    element metalink:license {
      metalinkCommonAttributes,
+     attribute name { text },
      attribute url { metalinkUri }?,
-     attribute name { text }?
    }</artwork></figure></t>
 
-	  <t>The <xref target="element.license" format="none">metalink:license</xref> element MAY have a "url" attribute
+	  <t>The <xref target="element.license" format="none">metalink:license</xref> element MUST have a "name" attribute that
+	  indicates the name of the license.</t>
+
+
+      <t>The <xref target="element.license" format="none">metalink:license</xref> element MAY have a "url" attribute
 	  whose value MUST be an IRI reference <xref target="RFC3987"/>. When dereferenced, the resulting URI (mapped from an
 	  IRI, if necessary) SHOULD produce a representation that is
 	  relevant to that agent.</t>
-
-	  <t>The <xref target="element.license" format="none">metalink:license</xref> element MAY have a "name" attribute that
-	  indicates the name of the license.</t>
-
    
 	</section> 
 
@@ -1956,6 +1964,7 @@ structuredExtensionElement =
 # -*- rnc -*-
 # RELAX NG Compact Syntax Grammar for the
 # Metalink Format Specification Version 4
+# Based on RFC 4287 schema
 
 namespace local = ""
 namespace metalink = "urn:ietf:params:xml:ns:metalink"
@@ -2062,8 +2071,8 @@ metalinkLanguage =
 metalinkLicense =
    element metalink:license {
       metalinkCommonAttributes,
+      attribute name { text },
       attribute url { metalinkUri }?,
-      attribute name { text }?
    }
 
 metalinkLogo =
@@ -2199,7 +2208,15 @@ anyForeignElement =
 	      <t>None.</t>
 
 	    </list></t>
-
+		
+<t>-24 : November xx, 2009.
+	    
+	    <list style="symbols">
+		
+		  <t>Document Shepherd review changes.</t>
+		  <t>Example XML indentation.</t>
+	   </list></t>
+	   
 <t>-23 : November 26, 2009.
 	    
 	    <list style="symbols">
