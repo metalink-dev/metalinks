@@ -641,25 +641,25 @@ Internet-Draft    Metalink Download Description Format     November 2009
    function reliably and predictably.  Metalink publishers should be
    aware of these issues.  It is advisable that each metalink:file
    element contain a non-empty metalink:description element, a non-empty
-   metalink:identity element when that element is present, and a non-
-   empty metalink:version element, and a non-empty metalink:publisher
-   element.  However, the absence of metalink:description is not an
-   error, and Metalink Processors MUST NOT fail to function correctly as
-   a consequence of such an absence.
+   metalink:identity element, a non-empty metalink:version element, and
+   a non-empty metalink:publisher element when these elements are
+   present.  However, the absence of metalink:description, metalink:
+   identity, metalink:version, and metalink:publisher is not an error,
+   and Metalink Processors MUST NOT fail to function correctly as a
+   consequence of such an absence.
 
 4.1.2.  The "metalink:file" Element
 
    The "metalink:file" element represents an individual file, acting as
-   a container for metadata and data associated with the file.
+   a container for metadata and data associated with the file.  Each
+   unique file described in a Metalink Document MUST have its own
+   metalink:file element.
 
-   All metalink:url elements SHOULD lead to identical files.  That is,
-   each metalink:url element should be an alternative location for the
-   same file and each metalink:metaurl element should provide metadata
-   to retrieve the same file in another way, such as a peer to peer
-   network.
-
-
-
+   All metalink:url elements contained in each metalink:file element
+   SHOULD lead to identical files.  That is, each metalink:url element
+   should be an alternative location for the same file and each
+   metalink:metaurl element should provide metadata to retrieve the same
+   file in another way, such as a peer to peer network.
 
 
 
@@ -747,7 +747,9 @@ Internet-Draft    Metalink Download Description Format     November 2009
 4.1.2.1.  The "name" Attribute
 
    metalink:file elements MUST have a "name" attribute, which contains
-   the filename of the file to be downloaded.
+   the local filename that the downloaded file will be written to.
+   Hence, if a Metalink Document contains multiple metalink:file
+   elements, the value of the "name" attribute MUST be unique for each.
 
    Directory information can also be contained in a "path/file" format
    only, as in:
@@ -773,8 +775,6 @@ Internet-Draft    Metalink Download Description Format     November 2009
          attribute type { text },
          metalinkHash+
       }
-
-
 
 
 
@@ -866,11 +866,11 @@ Internet-Draft    Metalink Download Description Format     November 2009
 
 4.2.5.  The "metalink:hash" Element
 
-   The "metalink:hash" element is a Text construct that conveys a hash
-   for a file.  All hashes are encoded in lowercase hexadecimal format.
-   Hashes are used to verify the integrity of a complete file or portion
-   of a file to determine if the file has been transferred without any
-   errors.
+   The "metalink:hash" element is a Text construct that conveys a hash,
+   also known as a checksum, for a file.  All hashes are encoded in
+   lowercase hexadecimal format.  Hashes are used to verify the
+   integrity of a complete file or portion of a file to determine if the
+   file has been transferred without any errors.
 
    metalinkHash =
       element metalink:hash {
@@ -1208,9 +1208,9 @@ Internet-Draft    Metalink Download Description Format     November 2009
 
 4.2.18.  The "metalink:url" Element
 
-   The "metalink:url" element contains a file IRI.  Most Metalink
-   Documents will contain multiple metalink:url elements, and each one
-   SHOULD be a valid alternative to download the same file.
+   The "metalink:url" element contains a file IRI.  Most metalink:file
+   container elements will contain multiple metalink:url elements, and
+   each one SHOULD be a valid alternative to download the same file.
 
    metalinkURL =
       element metalink:url {

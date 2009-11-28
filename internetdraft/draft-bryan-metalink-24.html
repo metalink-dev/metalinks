@@ -742,10 +742,9 @@ Providing Textual Content</h3>
 	    reliably and predictably. Metalink publishers should be aware
 	    of these issues. It is advisable that each <a class='info' href='#element.file'>metalink:file<span> (</span><span class='info'>The &#34;metalink:file&#34; Element</span><span>)</span></a>
 	    element contain a non-empty <a class='info' href='#element.description'>metalink:description<span> (</span><span class='info'>The &#34;metalink:description&#34; Element</span><span>)</span></a> element, a
-	    non-empty <a class='info' href='#element.identity'>metalink:identity<span> (</span><span class='info'>The &#34;metalink:identity&#34; Element</span><span>)</span></a> element when that element is
-	    present, and a non-empty <a class='info' href='#element.version'>metalink:version<span> (</span><span class='info'>The &#34;metalink:version&#34; Element</span><span>)</span></a> element, and a non-empty
-		<a class='info' href='#element.publisher'>metalink:publisher<span> (</span><span class='info'>The &#34;metalink:publisher&#34; Element</span><span>)</span></a> element. However, the
-	    absence of <a class='info' href='#element.description'>metalink:description<span> (</span><span class='info'>The &#34;metalink:description&#34; Element</span><span>)</span></a> is not an error, and Metalink
+	    non-empty <a class='info' href='#element.identity'>metalink:identity<span> (</span><span class='info'>The &#34;metalink:identity&#34; Element</span><span>)</span></a> element, a non-empty <a class='info' href='#element.version'>metalink:version<span> (</span><span class='info'>The &#34;metalink:version&#34; Element</span><span>)</span></a> element, and a non-empty
+		<a class='info' href='#element.publisher'>metalink:publisher<span> (</span><span class='info'>The &#34;metalink:publisher&#34; Element</span><span>)</span></a> element when these elements are present. However, the
+	    absence of <a class='info' href='#element.description'>metalink:description<span> (</span><span class='info'>The &#34;metalink:description&#34; Element</span><span>)</span></a>, <a class='info' href='#element.identity'>metalink:identity<span> (</span><span class='info'>The &#34;metalink:identity&#34; Element</span><span>)</span></a>, <a class='info' href='#element.version'>metalink:version<span> (</span><span class='info'>The &#34;metalink:version&#34; Element</span><span>)</span></a>, and <a class='info' href='#element.publisher'>metalink:publisher<span> (</span><span class='info'>The &#34;metalink:publisher&#34; Element</span><span>)</span></a> is not an error, and Metalink
 	    Processors MUST NOT fail to function correctly as a
 	    consequence of such an absence.
 </p>
@@ -756,9 +755,9 @@ The &#34;metalink:file&#34; Element</h3>
 <a name='anchor40'></a><a name='anchor41'></a>
 <p>The "<a class='info' href='#element.file'>metalink:file<span> (</span><span class='info'>The &#34;metalink:file&#34; Element</span><span>)</span></a>" element represents an individual file,
 	  acting as a container for metadata and data associated with
-	  the file.
+	  the file. Each unique file described in a Metalink Document MUST have its own <a class='info' href='#element.file'>metalink:file<span> (</span><span class='info'>The &#34;metalink:file&#34; Element</span><span>)</span></a> element.
 </p>
-<p>All <a class='info' href='#element.url'>metalink:url<span> (</span><span class='info'>The &#34;metalink:url&#34; Element</span><span>)</span></a> elements SHOULD lead to identical files. That is,
+<p>All <a class='info' href='#element.url'>metalink:url<span> (</span><span class='info'>The &#34;metalink:url&#34; Element</span><span>)</span></a> elements contained in each <a class='info' href='#element.file'>metalink:file<span> (</span><span class='info'>The &#34;metalink:file&#34; Element</span><span>)</span></a> element SHOULD lead to identical files. That is,
 	  each <a class='info' href='#element.url'>metalink:url<span> (</span><span class='info'>The &#34;metalink:url&#34; Element</span><span>)</span></a> element should be an alternative location for the same file and each 
 	  <a class='info' href='#element.metaurl'>metalink:metaurl<span> (</span><span class='info'>The &#34;metalink:metaurl&#34; Element</span><span>)</span></a> element should provide metadata to retrieve the same file in another way, such as a peer to peer network.
 
@@ -845,7 +844,7 @@ metalinkFile =
 <a name="rfc.section.4.1.2.1"></a><h3>4.1.2.1.&nbsp;
 The &#34;name&#34; Attribute</h3>
 
-<p><a class='info' href='#element.file'>metalink:file<span> (</span><span class='info'>The &#34;metalink:file&#34; Element</span><span>)</span></a> elements MUST have a "name" attribute, which contains the filename of the file to be downloaded.
+<p><a class='info' href='#element.file'>metalink:file<span> (</span><span class='info'>The &#34;metalink:file&#34; Element</span><span>)</span></a> elements MUST have a "name" attribute, which contains the local filename that the downloaded file will be written to. Hence, if a Metalink Document contains multiple <a class='info' href='#element.file'>metalink:file<span> (</span><span class='info'>The &#34;metalink:file&#34; Element</span><span>)</span></a> elements, the value of the "name" attribute MUST be unique for each.
 	
 <p>Directory information can also be contained in a "path/file" format only, as in:
 </p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
@@ -978,7 +977,7 @@ metalinkGenerator =
 The &#34;metalink:hash&#34; Element</h3>
 <a name='anchor64'></a><a name='anchor65'></a>
 <p>The "<a class='info' href='#element.hash'>metalink:hash<span> (</span><span class='info'>The &#34;metalink:hash&#34; Element</span><span>)</span></a>" element is a Text construct that conveys a
-	  hash for a file. All hashes are encoded in lowercase hexadecimal format. Hashes are used to verify the integrity of a complete file or portion of a file to determine if the file has been transferred without any errors.
+	  hash, also known as a checksum, for a file. All hashes are encoded in lowercase hexadecimal format. Hashes are used to verify the integrity of a complete file or portion of a file to determine if the file has been transferred without any errors.
 	  
 	    <a name='anchor66'></a><a name='anchor67'></a></p>
 <div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
@@ -1334,7 +1333,7 @@ metalinkUpdated =
 The &#34;metalink:url&#34; Element</h3>
 <a name='anchor116'></a><a name='anchor117'></a>
 <p>The "<a class='info' href='#element.url'>metalink:url<span> (</span><span class='info'>The &#34;metalink:url&#34; Element</span><span>)</span></a>" element contains a file IRI.
-	  Most Metalink Documents will contain multiple <a class='info' href='#element.url'>metalink:url<span> (</span><span class='info'>The &#34;metalink:url&#34; Element</span><span>)</span></a> elements,
+	  Most <a class='info' href='#element.file'>metalink:file<span> (</span><span class='info'>The &#34;metalink:file&#34; Element</span><span>)</span></a> container elements will contain multiple <a class='info' href='#element.url'>metalink:url<span> (</span><span class='info'>The &#34;metalink:url&#34; Element</span><span>)</span></a> elements,
 	  and each one SHOULD be a valid alternative to download the same file.
 
 	    <a name='anchor118'></a><a name='anchor119'></a></p>
