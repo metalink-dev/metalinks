@@ -144,10 +144,10 @@
 <tr><td class="header">Network Working Group</td><td class="header">A. Bryan</td></tr>
 <tr><td class="header">Internet-Draft</td><td class="header">T. Tsujikawa</td></tr>
 <tr><td class="header">Intended status: Standards Track</td><td class="header">N. McNab</td></tr>
-<tr><td class="header">Expires: May 31, 2010</td><td class="header">&nbsp;</td></tr>
+<tr><td class="header">Expires: June 1, 2010</td><td class="header">&nbsp;</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">P. Poeml</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">Novell, Inc.</td></tr>
-<tr><td class="header">&nbsp;</td><td class="header">November 27, 2009</td></tr>
+<tr><td class="header">&nbsp;</td><td class="header">November 28, 2009</td></tr>
 </table></td></tr></table>
 <h1><br />The Metalink Download Description Format<br />draft-bryan-metalink-24</h1>
 
@@ -180,7 +180,7 @@ The list of current Internet-Drafts can be accessed at
 The list of Internet-Draft Shadow Directories can be accessed at
 <a href='http://www.ietf.org/shadow.html'>http://www.ietf.org/shadow.html</a>.</p>
 <p>
-This Internet-Draft will expire on May 31, 2010.</p>
+This Internet-Draft will expire on June 1, 2010.</p>
 
 <h3>Copyright Notice</h3>
 <p>
@@ -655,10 +655,18 @@ metalinkDateConstruct =
 
 	</p>
 <div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
-&lt;updated&gt;2009-05-15T18:30:02Z&lt;/updated&gt;
-&lt;updated&gt;2009-05-15T18:30:02.25Z&lt;/updated&gt;
-&lt;updated&gt;2009-05-15T18:30:02+01:00&lt;/updated&gt;
-&lt;updated&gt;2009-05-15T18:30:02.25+01:00&lt;/updated&gt;
+&lt;updated&gt;
+   2009-05-15T18:30:02Z
+&lt;/updated&gt;
+&lt;updated&gt;
+   2009-05-15T18:30:02.25Z
+&lt;/updated&gt;
+&lt;updated&gt;
+   2009-05-15T18:30:02+01:00
+   &lt;/updated&gt;
+&lt;updated&gt;
+   2009-05-15T18:30:02.25+01:00
+&lt;/updated&gt;
 </pre></div><p>
 
 	
@@ -1077,26 +1085,26 @@ metalinkLanguage =
 <a name="rfc.section.4.2.8"></a><h3>4.2.8.&nbsp;
 The &#34;metalink:license&#34; Element</h3>
 <a name='anchor76'></a><a name='anchor77'></a>
-<p>The "<a class='info' href='#element.license'>metalink:license<span> (</span><span class='info'>The &#34;metalink:license&#34; Element</span><span>)</span></a>" element is a Text construct that conveys a
-	  human-readable license name for a file.
+<p>The "<a class='info' href='#element.license'>metalink:license<span> (</span><span class='info'>The &#34;metalink:license&#34; Element</span><span>)</span></a>" element contains a
+	  human-readable license name for a file and a URI for more information.
 	  
 	    <a name='anchor78'></a><a name='anchor79'></a></p>
 <div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
 metalinkLicense =
    element metalink:license {
      metalinkCommonAttributes,
+     attribute name { text },
      attribute url { metalinkUri }?,
-     attribute name { text }?
    }</pre></div><p>
 
+</p>
+<p>The <a class='info' href='#element.license'>metalink:license<span> (</span><span class='info'>The &#34;metalink:license&#34; Element</span><span>)</span></a> element MUST have a "name" attribute that
+	  indicates the name of the license.
 </p>
 <p>The <a class='info' href='#element.license'>metalink:license<span> (</span><span class='info'>The &#34;metalink:license&#34; Element</span><span>)</span></a> element MAY have a "url" attribute
 	  whose value MUST be an IRI reference <a class='info' href='#RFC3987'>[RFC3987]<span> (</span><span class='info'>Duerst, M. and M. Suignard, &ldquo;Internationalized Resource Identifiers (IRIs),&rdquo; January&nbsp;2005.</span><span>)</span></a>. When dereferenced, the resulting URI (mapped from an
 	  IRI, if necessary) SHOULD produce a representation that is
 	  relevant to that agent.
-</p>
-<p>The <a class='info' href='#element.license'>metalink:license<span> (</span><span class='info'>The &#34;metalink:license&#34; Element</span><span>)</span></a> element MAY have a "name" attribute that
-	  indicates the name of the license.
 </p>
 <a name="element.logo"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
@@ -1794,6 +1802,7 @@ RELAX NG Compact Schema</h3>
 # -*- rnc -*-
 # RELAX NG Compact Syntax Grammar for the
 # Metalink Format Specification Version 4
+# Based on RFC 4287 schema
 
 namespace local = ""
 namespace metalink = "urn:ietf:params:xml:ns:metalink"
@@ -1900,8 +1909,8 @@ metalinkLanguage =
 metalinkLicense =
    element metalink:license {
       metalinkCommonAttributes,
+      attribute name { text },
       attribute url { metalinkUri }?,
-      attribute name { text }?
    }
 
 metalinkLogo =
@@ -2037,6 +2046,16 @@ Document History (to be removed by RFC Editor before publication)</h3>
 	    </p>
 <ul class="text">
 <li>None.
+</li>
+</ul>
+
+<p>-24 : November xx, 2009.
+	    
+	    </p>
+<ul class="text">
+<li>Document Shepherd review changes.
+</li>
+<li>Example XML indentation.
 </li>
 </ul>
 
