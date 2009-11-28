@@ -888,7 +888,7 @@ metalinkLicense =
    element metalink:license {
      metalinkCommonAttributes,
      attribute name { text },
-     attribute url { metalinkUri }?,
+     attribute url { metalinkUri }?
    }</artwork></figure></t>
 
 	  <t>The <xref target="element.license" format="none">metalink:license</xref> element MUST have a "name" attribute that
@@ -1062,7 +1062,7 @@ metalinkPublisher =
    element metalink:publisher {
      metalinkCommonAttributes,
      attribute name { text },
-     attribute url { metalinkUri }?,
+     attribute url { metalinkUri }?
    }</artwork></figure></t>
 
 	  <t>The <xref target="element.publisher" format="none">metalink:publisher</xref> element MUST have a "name" attribute that
@@ -2072,7 +2072,7 @@ metalinkLicense =
    element metalink:license {
       metalinkCommonAttributes,
       attribute name { text },
-      attribute url { metalinkUri }?,
+      attribute url { metalinkUri }?
    }
 
 metalinkLogo =
@@ -2110,7 +2110,7 @@ metalinkPublisher =
    element metalink:publisher {
       metalinkCommonAttributes,
       attribute name { text },
-      attribute url { metalinkUri }?,
+      attribute url { metalinkUri }?
    }
 
 metalinkSignature =
