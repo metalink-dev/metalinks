@@ -990,7 +990,7 @@ Internet-Draft    Metalink Download Description Format     November 2009
       element metalink:license {
         metalinkCommonAttributes,
         attribute name { text },
-        attribute url { metalinkUri }?,
+        attribute url { metalinkUri }?
       }
 
    The metalink:license element MUST have a "name" attribute that
@@ -1141,7 +1141,7 @@ Internet-Draft    Metalink Download Description Format     November 2009
       element metalink:publisher {
         metalinkCommonAttributes,
         attribute name { text },
-        attribute url { metalinkUri }?,
+        attribute url { metalinkUri }?
       }
 
    The metalink:publisher element MUST have a "name" attribute that
@@ -1817,7 +1817,7 @@ Internet-Draft    Metalink Download Description Format     November 2009
       element metalink:license {
          metalinkCommonAttributes,
          attribute name { text },
-         attribute url { metalinkUri }?,
+         attribute url { metalinkUri }?
       }
 
    metalinkLogo =
@@ -1863,7 +1863,7 @@ Internet-Draft    Metalink Download Description Format     November 2009
       element metalink:publisher {
          metalinkCommonAttributes,
          attribute name { text },
-         attribute url { metalinkUri }?,
+         attribute url { metalinkUri }?
       }
 
    metalinkSignature =
