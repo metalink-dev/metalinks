@@ -113,7 +113,7 @@
       information about downloads that can be indexed by search engines.</t>
 
       <t>[[ Discussion of this draft should take place on
-      discuss@apps.ietf.org. Past discussion has gone on at the Metalink
+      apps-discuss@ietf.org. Past discussion has gone on at the Metalink
       discussion mailing list located at metalink-discussion@googlegroups.com /
       http://groups.google.com/group/metalink-discussion . ]]</t>
 
@@ -325,7 +325,7 @@ metalinkCommonAttributes =
 
     <section title="Common Metalink Constructs"> 
 
-      <t>Many of Metalink's elements share a few common structures. This section
+      <t>Many Metalink elements share common structures. This section
       defines those structures and their requirements for convenient
       reference by the appropriate element definitions.</t>
 
@@ -334,8 +334,8 @@ metalinkCommonAttributes =
       construct's definition in this section.</t>
 
       <t>Note that there MUST NOT be any white space in a Date construct
-      or in any IRI. Some XML-emitting implementations erroneously insert
-      white space around values by default, and such implementations will emit
+      or in any IRI. Some XML-generating implementations erroneously insert
+      white space around values by default, and such implementations will generate
       invalid Metalink Documents.</t>
       
       <section title="Text Constructs" anchor="text.constructs">
@@ -343,8 +343,8 @@ metalinkCommonAttributes =
          
          
 
-	<t>A Text construct contains human-readable text, usually in
-	small quantities. The content of Text constructs is
+	<t>A Text construct contains human-readable text, usually short
+    in length. The content of Text constructs is
 	Language-Sensitive.
 
 	  <figure>
@@ -355,9 +355,8 @@ metalinkTextConstruct =
    metalinkCommonAttributes,
    text</artwork></figure></t>
    
-	  <section title="Text">
 
-	    <t>Example <xref target="element.description" format="none">metalink:description</xref> with text content:
+	    <t>For example, a <xref target="element.description" format="none">metalink:description</xref> with text content:
 	    
 
 	      <figure>
@@ -378,7 +377,6 @@ metalinkTextConstruct =
 	    techniques such as justification and proportional
 	    fonts.</t>
 	  
-      </section>
 	
     </section>
 	
@@ -636,12 +634,10 @@ metalinkPieces =
 		</t>
     
 
-	    <t>The IANA registry named "Hash Function Textual Names" defines values for hash types. If a Metalink Document contains hashes, it SHOULD
-        include "sha-1" which is SHA-1 as specified in <xref target="RFC3174"/>, or a stronger hash.  It MAY also
-        include other hashes.</t>		
+	    <t>The IANA registry named "Hash Function Textual Names" defines values for hash types. See <xref target="security.hash"/> for security implications.</t>		
 	  </section>
 
-	  <section title="The &#34;length&#34; Attribute"> 
+	  <section title="The &#34;length&#34; Attribute" anchor="piece.length">
 
 	    <t><xref target="element.pieces" format="none">metalink:pieces</xref> elements MUST have a "length" attribute, which is a positive integer
         that describes the length of the pieces of the file in octets. The whole file is divided into non-overlapping pieces of this length,
@@ -687,7 +683,7 @@ metalinkCopyright =
     <iref item="description XML element" primary="true"/> 
 	      
 	  <t>The "<xref target="element.description" format="none">metalink:description</xref>" element is a Text construct that conveys a
-	  human-readable description for a file.
+	  human-readable file description.
 	  
 	    <figure>
         <iref item="metalinkDescription grammar production" primary="true"/>
@@ -782,9 +778,9 @@ metalinkHash =
 ...</artwork>
 	      </figure>
       </t>
-      <t>Metalink Documents can also contain hashes for individual pieces of a file.  <xref target="element.hash" format="none">metalink:hash</xref> elements that are inside a <xref target="element.pieces" format="none">metalink:pieces</xref> container element have a hash for that specific piece or chunk of the file, and are of the same hash type as the <xref target="element.pieces" format="none">metalink:pieces</xref> element they are contained in.
-      <xref target="element.hash" format="none">metalink:hash</xref> elements without a "type" attribute MUST contain a hash for that specific piece or chunk of the file and MUST be listed in the
-      same order as the corresponding pieces appear in the file, starting at the beginning of the file. The size of the piece is equal to the value of the "length" attribute of the <xref target="element.pieces" format="none">metalink:pieces</xref> element. The whole file is divided into non-overlapping pieces of this length, starting from the beginning of the file. That is, every piece should be the same size, apart from the last piece which is the remainder. The last piece extends to the end of the file, and can therefore be shorter than the other pieces.
+      <t>Metalink Documents can also contain hashes for individual pieces of a file.  <xref target="element.hash" format="none">metalink:hash</xref> elements that are inside a <xref target="element.pieces" format="none">metalink:pieces</xref> container element have a hash for that specific piece or chunk of the file, and are of the same hash type as the <xref target="element.pieces" format="none">metalink:pieces</xref> element they are contained in.</t>
+      <t><xref target="element.hash" format="none">metalink:hash</xref> elements without a "type" attribute MUST contain a hash for that specific piece or chunk of the file and MUST be listed in the
+      same order as the corresponding pieces appear in the file, starting at the beginning of the file. The size of the piece is equal to the value of the "length" attribute of the <xref target="element.pieces" format="none">metalink:pieces</xref> element. See <xref target="piece.length"/> for more information on the size of pieces.
 
 
 	      <figure>
@@ -820,8 +816,7 @@ metalinkHash =
 
 
 	    <t><xref target="element.hash" format="none">metalink:hash</xref> elements MUST have a "type" attribute, if and only if
-        it contains a hash of the complete file. The IANA registry named "Hash Function Textual Names" defines values for hash types. If a Metalink Document contains hashes, it SHOULD
-include "sha-1" which is SHA-1 as specified in <xref target="RFC3174"/>, or a stronger hash.  It MAY also include additional hash types.</t>
+        it contains a hash of the complete file. The IANA registry named "Hash Function Textual Names" defines values for hash types. See <xref target="security.hash"/> for security implications.</t>
 		
 	  </section>
 
@@ -1004,8 +999,8 @@ metalinkOrigin =
     <iref item="XML Elements" subitem="os" primary="true"/>
     <iref item="os XML element" primary="true"/> 
 	      
-	  <t>The "<xref target="element.os" format="none">metalink:os</xref>" element is a Text construct that conveys a
-	  human-readable Operating System for a file. The IANA registry named "Operating System Names" defines values for OS types.
+	  <t>The "<xref target="element.os" format="none">metalink:os</xref>" element is a Text construct that conveys an
+	  Operating System for a file. The IANA registry named "Operating System Names" defines values for OS types.
 	  
 	    <figure>
         <iref item="metalinkOS grammar production" primary="true"/>
@@ -1038,7 +1033,7 @@ metalinkPublished =
    }</artwork></figure></t>
 
 	   <t>Typically, <xref target="element.published" format="none">metalink:published</xref> will be associated with the
-	   initial creation or first availability of the resource.</t>
+	   initial creation or first availability of the resource. The <xref target="element.updated" format="none">metalink:updated</xref> element is used when a Metalink Document has been updated after initial publication.</t>
 
 	</section>
 	
@@ -1049,8 +1044,7 @@ metalinkPublished =
     <iref item="XML Elements" subitem="publisher" primary="true"/>
     <iref item="publisher XML element" primary="true"/>
  
-	  <t>The "<xref target="element.publisher" format="none">metalink:publisher</xref>" element
-	  indicates a group or other entity which has published the file described in the Metalink Document.
+	  <t>The "<xref target="element.publisher" format="none">metalink:publisher</xref>" element contains a human-readable group or other entity which has published the file described in the Metalink Document and a URI for more information.
 	  
 	    <figure>
         <iref item="metalinkPublisher grammar production" primary="true"/>
@@ -1059,17 +1053,18 @@ metalinkPublished =
 metalinkPublisher =
    element metalink:publisher {
      metalinkCommonAttributes,
+     attribute name { text },
      attribute url { metalinkUri }?,
-     attribute name { text }?
    }</artwork></figure></t>
 
-	  <t>The <xref target="element.publisher" format="none">metalink:publisher</xref> element MAY have a "url" attribute
+	  <t>The <xref target="element.publisher" format="none">metalink:publisher</xref> element MUST have a "name" attribute that
+	  indicates the human-readable name of the publisher.</t>
+
+
+      <t>The <xref target="element.publisher" format="none">metalink:publisher</xref> element MAY have a "url" attribute
 	  whose value MUST be an IRI reference <xref target="RFC3987"/>. When dereferenced, the resulting URI (mapped from an
 	  IRI, if necessary) SHOULD produce a representation that is
 	  relevant to that agent.</t>
-
-	  <t>The <xref target="element.publisher" format="none">metalink:publisher</xref> element MAY have a "name" attribute that
-	  indicates the name of the publisher.</t>
  
 	</section> 
 
@@ -1156,7 +1151,7 @@ metalinkUpdated =
     <iref item="XML Elements" subitem="url" primary="true"/>
     <iref item="url XML element" primary="true"/> 
 	  
-	  <t>The "<xref target="element.url" format="none">metalink:url</xref>" element contains the IRI of a file.
+	  <t>The "<xref target="element.url" format="none">metalink:url</xref>" element contains a file IRI.
 	  Most Metalink Documents will contain multiple <xref target="element.url" format="none">metalink:url</xref> elements,
 	  and each one SHOULD be a valid alternative to download the same file.
 
@@ -1475,7 +1470,7 @@ structuredExtensionElement =
 
 	    </section>	
 		
-	    <section title="Cryptographic Hashes">
+	    <section title="Cryptographic Hashes" anchor="security.hash">
 
 	      <t>Currently, some of the hash types defined in the IANA registry named "Hash Function Textual Names" are considered insecure. These include the whole Message Digest family of algorithms which are not suitable for cryptographically strong verification. Malicious people could provide files that appear to be identical to another file because of a collision, i.e. the weak cryptographic hashes of the intended file and a substituted malicious file could match.</t>
           <t>If a Metalink Document contains hashes, it SHOULD include "sha-1" which is SHA-1, as specified in <xref target="RFC3174"/>, or stronger.  It MAY also include other hashes from the IANA registry named "Hash Function Textual Names".</t>
@@ -1937,10 +1932,12 @@ structuredExtensionElement =
           Carrabba, Erin Solari, Derick Cordoba, Ryan Alexander, John & Sandra Sowder,
           Tom Mainville, Janie Wargo, Jason Hansen, Tim Bray, Dan Brickley, Markus Hofmann, 
           Dan Connolly, Tim Berners-Lee, Louis Suarez-Potts, Ross Smith, Jeff Covey, 
-          Ed Lee, Shawn Wilsher, Mike Connor, Johan Svedberg, Dedric Carter, James Antill, Debi
-          Goulding, Chris Newman, Lisa Dusseault, 
-		  Ian Macfarlane, Dave Cridland, Julian Reschke, Barry Leiba, Uri Blumenthal, Paul Hoffman, Felix Sasaki, Matthias Fuchs, Mark Baker,
-		  Eran Hammer-Lahav, Mark Nottingham, and Peter Saint-Andre. We also thank the Anthony Family, the Bryan Family, Juanita Anthony and Zimmy Bryan.</t>
+          Ed Lee, Shawn Wilsher, Mike Connor, Johan Svedberg, Dedric Carter, James Antill, and Debi
+          Goulding. We also thank the Anthony Family, the Bryan Family, Juanita Anthony and Zimmy Bryan.</t>
+		  
+		  <t>We also thank the following contributors for assistance and review: Eran Hammer-Lahav, Lisa Dusseault, Mark Nottingham, Peter Saint-Andre, Chris Newman,
+		  Ian Macfarlane, Dave Cridland, Julian Reschke, Barry Leiba, Uri Blumenthal, Paul Hoffman, Felix Sasaki, Matthias Fuchs, and Mark Baker.</t>
+		  
 
 	    </section> 
 
@@ -2103,8 +2100,8 @@ metalinkPublished =
 metalinkPublisher =
    element metalink:publisher {
       metalinkCommonAttributes,
+      attribute name { text },
       attribute url { metalinkUri }?,
-      attribute name { text }?
    }
 
 metalinkSignature =

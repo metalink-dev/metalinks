@@ -144,10 +144,10 @@
 <tr><td class="header">Network Working Group</td><td class="header">A. Bryan</td></tr>
 <tr><td class="header">Internet-Draft</td><td class="header">T. Tsujikawa</td></tr>
 <tr><td class="header">Intended status: Standards Track</td><td class="header">N. McNab</td></tr>
-<tr><td class="header">Expires: May 30, 2010</td><td class="header">&nbsp;</td></tr>
+<tr><td class="header">Expires: May 31, 2010</td><td class="header">&nbsp;</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">P. Poeml</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">Novell, Inc.</td></tr>
-<tr><td class="header">&nbsp;</td><td class="header">November 26, 2009</td></tr>
+<tr><td class="header">&nbsp;</td><td class="header">November 27, 2009</td></tr>
 </table></td></tr></table>
 <h1><br />The Metalink Download Description Format<br />draft-bryan-metalink-24</h1>
 
@@ -180,7 +180,7 @@ The list of current Internet-Drafts can be accessed at
 The list of Internet-Draft Shadow Directories can be accessed at
 <a href='http://www.ietf.org/shadow.html'>http://www.ietf.org/shadow.html</a>.</p>
 <p>
-This Internet-Draft will expire on May 30, 2010.</p>
+This Internet-Draft will expire on May 31, 2010.</p>
 
 <h3>Copyright Notice</h3>
 <p>
@@ -209,13 +209,11 @@ Metalink Documents<br />
 Common Metalink Constructs<br />
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="#text.constructs">3.1.</a>&nbsp;
 Text Constructs<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor5">3.1.1.</a>&nbsp;
-Text<br />
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="#date.constructs">3.2.</a>&nbsp;
 Date Constructs<br />
-<a href="#anchor6">4.</a>&nbsp;
+<a href="#anchor5">4.</a>&nbsp;
 Metalink Element Definitions<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor7">4.1.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor6">4.1.</a>&nbsp;
 Container Elements<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#element.metalink">4.1.1.</a>&nbsp;
 The &#34;metalink:metalink&#34; Element<br />
@@ -223,7 +221,7 @@ The &#34;metalink:metalink&#34; Element<br />
 The &#34;metalink:file&#34; Element<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#element.pieces">4.1.3.</a>&nbsp;
 The &#34;metalink:pieces&#34; Element<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor12">4.2.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor10">4.2.</a>&nbsp;
 Metadata Elements<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#element.copyright">4.2.1.</a>&nbsp;
 The &#34;metalink:copyright&#34; Element<br />
@@ -263,11 +261,11 @@ The &#34;metalink:updated&#34; Element<br />
 The &#34;metalink:url&#34; Element<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#element.version">4.2.19.</a>&nbsp;
 The &#34;metalink:version&#34; Element<br />
-<a href="#anchor20">5.</a>&nbsp;
+<a href="#anchor18">5.</a>&nbsp;
 Securing Metalink Documents<br />
 <a href="#extending_metalink">6.</a>&nbsp;
 Extending Metalink<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor21">6.1.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor19">6.1.</a>&nbsp;
 Extensions from Non-Metalink Vocabularies<br />
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="#extensions.to.the.metalink.vocabulary">6.2.</a>&nbsp;
 Extensions to the Metalink Vocabulary<br />
@@ -281,19 +279,19 @@ Simple Extension Elements<br />
 Structured Extension Elements<br />
 <a href="#IANA">7.</a>&nbsp;
 IANA Considerations<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor22">7.1.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor20">7.1.</a>&nbsp;
 XML Namespace Registration<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor23">7.2.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor21">7.2.</a>&nbsp;
 application/metalink4+xml MIME type<br />
-<a href="#anchor24">8.</a>&nbsp;
+<a href="#anchor22">8.</a>&nbsp;
 Security Considerations<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor25">8.1.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor23">8.1.</a>&nbsp;
 URIs and IRIs<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor26">8.2.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor24">8.2.</a>&nbsp;
 Spoofing<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor27">8.3.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#security.hash">8.3.</a>&nbsp;
 Cryptographic Hashes<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor28">8.4.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor25">8.4.</a>&nbsp;
 Signing<br />
 <a href="#rfc.references1">9.</a>&nbsp;
 References<br />
@@ -301,11 +299,11 @@ References<br />
 Normative References<br />
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="#rfc.references2">9.2.</a>&nbsp;
 Informative References<br />
-<a href="#anchor31">Appendix&nbsp;A.</a>&nbsp;
+<a href="#anchor28">Appendix&nbsp;A.</a>&nbsp;
 Acknowledgements and Contributors<br />
 <a href="#schema">Appendix&nbsp;B.</a>&nbsp;
 RELAX NG Compact Schema<br />
-<a href="#anchor32">Appendix&nbsp;C.</a>&nbsp;
+<a href="#anchor29">Appendix&nbsp;C.</a>&nbsp;
 Document History (to be removed by RFC Editor before publication)<br />
 <a href="#rfc.index">&#167;</a>&nbsp;
 Index<br />
@@ -369,7 +367,7 @@ Introduction</h3>
       information about downloads that can be indexed by search engines.
 </p>
 <p>[[ Discussion of this draft should take place on
-      discuss@apps.ietf.org. Past discussion has gone on at the Metalink
+      apps-discuss@ietf.org. Past discussion has gone on at the Metalink
       discussion mailing list located at metalink-discussion@googlegroups.com /
       http://groups.google.com/group/metalink-discussion . ]]
 </p>
@@ -560,7 +558,7 @@ start = metalinkMetalink</pre></div>
       specified in <a class='info' href='#REC-xml'>XML 1.0<span> (</span><span class='info'>Yergeau, F., Paoli, J., Bray, T., Sperberg-McQueen, C., and E. Maler, &ldquo;Extensible Markup Language (XML) 1.0 (Fourth Edition),&rdquo; August&nbsp;2006.</span><span>)</span></a> [REC&#8209;xml],
       Section 2.12.
 
-      <a name='anchor33'></a><a name='anchor34'></a></p>
+      <a name='anchor30'></a><a name='anchor31'></a></p>
 <div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
 metalinkCommonAttributes =
    attribute xml:base { metalinkUri }?,
@@ -579,7 +577,7 @@ metalinkCommonAttributes =
 <a name="rfc.section.3"></a><h3>3.&nbsp;
 Common Metalink Constructs</h3>
 
-<p>Many of Metalink's elements share a few common structures. This section
+<p>Many Metalink elements share common structures. This section
       defines those structures and their requirements for convenient
       reference by the appropriate element definitions.
 </p>
@@ -588,8 +586,8 @@ Common Metalink Constructs</h3>
       construct's definition in this section.
 </p>
 <p>Note that there MUST NOT be any white space in a Date construct
-      or in any IRI. Some XML-emitting implementations erroneously insert
-      white space around values by default, and such implementations will emit
+      or in any IRI. Some XML-generating implementations erroneously insert
+      white space around values by default, and such implementations will generate
       invalid Metalink Documents.
 </p>
 <a name="text.constructs"></a><br /><hr />
@@ -597,23 +595,18 @@ Common Metalink Constructs</h3>
 <a name="rfc.section.3.1"></a><h3>3.1.&nbsp;
 Text Constructs</h3>
 
-<p>A Text construct contains human-readable text, usually in
-	small quantities. The content of Text constructs is
+<p>A Text construct contains human-readable text, usually short
+    in length. The content of Text constructs is
 	Language-Sensitive.
 
-	  <a name='anchor35'></a><a name='anchor36'></a></p>
+	  <a name='anchor32'></a><a name='anchor33'></a></p>
 <div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
 metalinkTextConstruct =
    metalinkCommonAttributes,
    text</pre></div><p>
 
 </p>
-<a name="anchor5"></a><br /><hr />
-<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.3.1.1"></a><h3>3.1.1.&nbsp;
-Text</h3>
-
-<p>Example <a class='info' href='#element.description'>metalink:description<span> (</span><span class='info'>The &#34;metalink:description&#34; Element</span><span>)</span></a> with text content:
+<p>For example, a <a class='info' href='#element.description'>metalink:description<span> (</span><span class='info'>The &#34;metalink:description&#34; Element</span><span>)</span></a> with text content:
 	    
 
 	      </p>
@@ -645,7 +638,7 @@ Date Constructs</h3>
 	character MUST be present in the absence of a numeric time zone
 	offset.
 	
-	  <a name='anchor37'></a><a name='anchor38'></a></p>
+	  <a name='anchor34'></a><a name='anchor35'></a></p>
 <div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
 metalinkDateConstruct =
    metalinkCommonAttributes,
@@ -675,12 +668,12 @@ metalinkDateConstruct =
 	system to apply the same timestamp to several Metalink Documents that
 	were published during the course of a single day.
 </p>
-<a name="anchor6"></a><br /><hr />
+<a name="anchor5"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4"></a><h3>4.&nbsp;
 Metalink Element Definitions</h3>
 
-<a name="anchor7"></a><br /><hr />
+<a name="anchor6"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.1"></a><h3>4.1.&nbsp;
 Container Elements</h3>
@@ -689,13 +682,13 @@ Container Elements</h3>
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.1.1"></a><h3>4.1.1.&nbsp;
 The &#34;metalink:metalink&#34; Element</h3>
-<a name='anchor39'></a><a name='anchor40'></a>
+<a name='anchor36'></a><a name='anchor37'></a>
 <p>The "metalink:metalink" element is the document (i.e., top-level) element
 	  of a Metalink Document, acting as a container for metadata and
 	  data associated with the listed files.  It contains one or more <a class='info' href='#element.file'>metalink:file<span> (</span><span class='info'>The &#34;metalink:file&#34; Element</span><span>)</span></a> child elements which consist of
 	  metadata elements.
 	  
-	    <a name='anchor41'></a><a name='anchor42'></a></p>
+	    <a name='anchor38'></a><a name='anchor39'></a></p>
 <div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
 metalinkMetalink =
    element metalink:metalink {
@@ -729,7 +722,7 @@ metalinkMetalink =
 </li>
 </ul>
 
-<a name="anchor8"></a><br /><hr />
+<a name="anchor7"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.1.1.1"></a><h3>4.1.1.1.&nbsp;
 Providing Textual Content</h3>
@@ -752,7 +745,7 @@ Providing Textual Content</h3>
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.1.2"></a><h3>4.1.2.&nbsp;
 The &#34;metalink:file&#34; Element</h3>
-<a name='anchor43'></a><a name='anchor44'></a>
+<a name='anchor40'></a><a name='anchor41'></a>
 <p>The "<a class='info' href='#element.file'>metalink:file<span> (</span><span class='info'>The &#34;metalink:file&#34; Element</span><span>)</span></a>" element represents an individual file,
 	  acting as a container for metadata and data associated with
 	  the file.
@@ -761,7 +754,7 @@ The &#34;metalink:file&#34; Element</h3>
 	  each <a class='info' href='#element.url'>metalink:url<span> (</span><span class='info'>The &#34;metalink:url&#34; Element</span><span>)</span></a> element should be an alternative location for the same file and each 
 	  <a class='info' href='#element.metaurl'>metalink:metaurl<span> (</span><span class='info'>The &#34;metalink:metaurl&#34; Element</span><span>)</span></a> element should provide metadata to retrieve the same file in another way, such as a peer to peer network.
 
-	    <a name='anchor45'></a><a name='anchor46'></a></p>
+	    <a name='anchor42'></a><a name='anchor43'></a></p>
 <div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
 metalinkFile =
    element metalink:file {
@@ -839,7 +832,7 @@ metalinkFile =
 
     
 </p>
-<a name="anchor9"></a><br /><hr />
+<a name="anchor8"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.1.2.1"></a><h3>4.1.2.1.&nbsp;
 The &#34;name&#34; Attribute</h3>
@@ -860,12 +853,12 @@ The &#34;name&#34; Attribute</h3>
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.1.3"></a><h3>4.1.3.&nbsp;
 The &#34;metalink:pieces&#34; Element</h3>
-<a name='anchor47'></a><a name='anchor48'></a>
+<a name='anchor44'></a><a name='anchor45'></a>
 <p>The "<a class='info' href='#element.pieces'>metalink:pieces<span> (</span><span class='info'>The &#34;metalink:pieces&#34; Element</span><span>)</span></a>" element acts as a container for a list of checksums of
 non-overlapping pieces of the file. The checksums MUST be listed in the same order as the corresponding pieces appear in the file, starting at
       the beginning of the file. 
 	  
-	    <a name='anchor49'></a><a name='anchor50'></a></p>
+	    <a name='anchor46'></a><a name='anchor47'></a></p>
 <div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
 metalinkPieces =
    element metalink:pieces {
@@ -875,7 +868,7 @@ metalinkPieces =
    }</pre></div><p>
 
 </p>
-<a name="anchor10"></a><br /><hr />
+<a name="anchor9"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.1.3.1"></a><h3>4.1.3.1.&nbsp;
 The &#34;type&#34; Attribute</h3>
@@ -883,11 +876,9 @@ The &#34;type&#34; Attribute</h3>
 <p><a class='info' href='#element.pieces'>metalink:pieces<span> (</span><span class='info'>The &#34;metalink:pieces&#34; Element</span><span>)</span></a> elements MUST have a "type" attribute.
 		
 </p>
-<p>The IANA registry named "Hash Function Textual Names" defines values for hash types. If a Metalink Document contains hashes, it SHOULD
-        include "sha-1" which is SHA-1 as specified in <a class='info' href='#RFC3174'>[RFC3174]<span> (</span><span class='info'>Eastlake, D. and P. Jones, &ldquo;US Secure Hash Algorithm 1 (SHA1),&rdquo; September&nbsp;2001.</span><span>)</span></a>, or a stronger hash.  It MAY also
-        include other hashes.
+<p>The IANA registry named "Hash Function Textual Names" defines values for hash types. See <a class='info' href='#security.hash'>Section&nbsp;8.3<span> (</span><span class='info'>Cryptographic Hashes</span><span>)</span></a> for security implications.
 </p>
-<a name="anchor11"></a><br /><hr />
+<a name="piece.length"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.1.3.2"></a><h3>4.1.3.2.&nbsp;
 The &#34;length&#34; Attribute</h3>
@@ -898,7 +889,7 @@ The &#34;length&#34; Attribute</h3>
         the last piece which is the remainder. The last piece extends to the end of the file, and can therefore be shorter than the other pieces.
 		
 </p>
-<a name="anchor12"></a><br /><hr />
+<a name="anchor10"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.2"></a><h3>4.2.&nbsp;
 Metadata Elements</h3>
@@ -907,11 +898,11 @@ Metadata Elements</h3>
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.2.1"></a><h3>4.2.1.&nbsp;
 The &#34;metalink:copyright&#34; Element</h3>
-<a name='anchor51'></a><a name='anchor52'></a>
+<a name='anchor48'></a><a name='anchor49'></a>
 <p>The "<a class='info' href='#element.copyright'>metalink:copyright<span> (</span><span class='info'>The &#34;metalink:copyright&#34; Element</span><span>)</span></a>" element is a Text construct that conveys a
 	  human-readable copyright for a file.
 	  
-	    <a name='anchor53'></a><a name='anchor54'></a></p>
+	    <a name='anchor50'></a><a name='anchor51'></a></p>
 <div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
 metalinkCopyright =
    element metalink:copyright {
@@ -923,11 +914,11 @@ metalinkCopyright =
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.2.2"></a><h3>4.2.2.&nbsp;
 The &#34;metalink:description&#34; Element</h3>
-<a name='anchor55'></a><a name='anchor56'></a>
+<a name='anchor52'></a><a name='anchor53'></a>
 <p>The "<a class='info' href='#element.description'>metalink:description<span> (</span><span class='info'>The &#34;metalink:description&#34; Element</span><span>)</span></a>" element is a Text construct that conveys a
-	  human-readable description for a file.
+	  human-readable file description.
 	  
-	    <a name='anchor57'></a><a name='anchor58'></a></p>
+	    <a name='anchor54'></a><a name='anchor55'></a></p>
 <div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
 metalinkDescription =
    element metalink:description {
@@ -939,11 +930,11 @@ metalinkDescription =
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.2.3"></a><h3>4.2.3.&nbsp;
 The &#34;metalink:dynamic&#34; Element</h3>
-<a name='anchor59'></a><a name='anchor60'></a>
+<a name='anchor56'></a><a name='anchor57'></a>
 <p>The "<a class='info' href='#element.dynamic'>metalink:dynamic<span> (</span><span class='info'>The &#34;metalink:dynamic&#34; Element</span><span>)</span></a>" element is a Text construct that describes
 	  whether the IRI from "<a class='info' href='#element.origin'>metalink:origin<span> (</span><span class='info'>The &#34;metalink:origin&#34; Element</span><span>)</span></a>" in a Metalink will contain dynamic updated information or if it is static and not likely to be updated.
 	  
-	    <a name='anchor61'></a><a name='anchor62'></a></p>
+	    <a name='anchor58'></a><a name='anchor59'></a></p>
 <div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
 metalinkDynamic =
    element metalink:dynamic {
@@ -955,11 +946,11 @@ metalinkDynamic =
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.2.4"></a><h3>4.2.4.&nbsp;
 The &#34;metalink:generator&#34; Element</h3>
-<a name='anchor63'></a><a name='anchor64'></a>
+<a name='anchor60'></a><a name='anchor61'></a>
 <p>The "<a class='info' href='#element.generator'>metalink:generator<span> (</span><span class='info'>The &#34;metalink:generator&#34; Element</span><span>)</span></a>" element's content identifies the generating agent name and version, separated by a "/", used
 	  to generate a Metalink Document, for debugging and other purposes.
       
-	    <a name='anchor65'></a><a name='anchor66'></a></p>
+	    <a name='anchor62'></a><a name='anchor63'></a></p>
 <div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
 metalinkGenerator =
    element metalink:generator {
@@ -977,11 +968,11 @@ metalinkGenerator =
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.2.5"></a><h3>4.2.5.&nbsp;
 The &#34;metalink:hash&#34; Element</h3>
-<a name='anchor67'></a><a name='anchor68'></a>
+<a name='anchor64'></a><a name='anchor65'></a>
 <p>The "<a class='info' href='#element.hash'>metalink:hash<span> (</span><span class='info'>The &#34;metalink:hash&#34; Element</span><span>)</span></a>" element is a Text construct that conveys a
 	  hash for a file. All hashes are encoded in lowercase hexadecimal format. Hashes are used to verify the integrity of a complete file or portion of a file to determine if the file has been transferred without any errors.
 	  
-	    <a name='anchor69'></a><a name='anchor70'></a></p>
+	    <a name='anchor66'></a><a name='anchor67'></a></p>
 <div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
 metalinkHash =
    element metalink:hash {
@@ -1008,8 +999,9 @@ metalinkHash =
       
 </p>
 <p>Metalink Documents can also contain hashes for individual pieces of a file.  <a class='info' href='#element.hash'>metalink:hash<span> (</span><span class='info'>The &#34;metalink:hash&#34; Element</span><span>)</span></a> elements that are inside a <a class='info' href='#element.pieces'>metalink:pieces<span> (</span><span class='info'>The &#34;metalink:pieces&#34; Element</span><span>)</span></a> container element have a hash for that specific piece or chunk of the file, and are of the same hash type as the <a class='info' href='#element.pieces'>metalink:pieces<span> (</span><span class='info'>The &#34;metalink:pieces&#34; Element</span><span>)</span></a> element they are contained in.
-      <a class='info' href='#element.hash'>metalink:hash<span> (</span><span class='info'>The &#34;metalink:hash&#34; Element</span><span>)</span></a> elements without a "type" attribute MUST contain a hash for that specific piece or chunk of the file and MUST be listed in the
-      same order as the corresponding pieces appear in the file, starting at the beginning of the file. The size of the piece is equal to the value of the "length" attribute of the <a class='info' href='#element.pieces'>metalink:pieces<span> (</span><span class='info'>The &#34;metalink:pieces&#34; Element</span><span>)</span></a> element. The whole file is divided into non-overlapping pieces of this length, starting from the beginning of the file. That is, every piece should be the same size, apart from the last piece which is the remainder. The last piece extends to the end of the file, and can therefore be shorter than the other pieces.
+</p>
+<p><a class='info' href='#element.hash'>metalink:hash<span> (</span><span class='info'>The &#34;metalink:hash&#34; Element</span><span>)</span></a> elements without a "type" attribute MUST contain a hash for that specific piece or chunk of the file and MUST be listed in the
+      same order as the corresponding pieces appear in the file, starting at the beginning of the file. The size of the piece is equal to the value of the "length" attribute of the <a class='info' href='#element.pieces'>metalink:pieces<span> (</span><span class='info'>The &#34;metalink:pieces&#34; Element</span><span>)</span></a> element. See <a class='info' href='#piece.length'>Section&nbsp;4.1.3.2<span> (</span><span class='info'>The &#34;length&#34; Attribute</span><span>)</span></a> for more information on the size of pieces.
 
 
 	      </p>
@@ -1040,24 +1032,23 @@ metalinkHash =
 
       
 </p>
-<a name="anchor13"></a><br /><hr />
+<a name="anchor11"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.2.5.1"></a><h3>4.2.5.1.&nbsp;
 The &#34;type&#34; Attribute</h3>
 
 <p><a class='info' href='#element.hash'>metalink:hash<span> (</span><span class='info'>The &#34;metalink:hash&#34; Element</span><span>)</span></a> elements MUST have a "type" attribute, if and only if
-        it contains a hash of the complete file. The IANA registry named "Hash Function Textual Names" defines values for hash types. If a Metalink Document contains hashes, it SHOULD
-include "sha-1" which is SHA-1 as specified in <a class='info' href='#RFC3174'>[RFC3174]<span> (</span><span class='info'>Eastlake, D. and P. Jones, &ldquo;US Secure Hash Algorithm 1 (SHA1),&rdquo; September&nbsp;2001.</span><span>)</span></a>, or a stronger hash.  It MAY also include additional hash types.
+        it contains a hash of the complete file. The IANA registry named "Hash Function Textual Names" defines values for hash types. See <a class='info' href='#security.hash'>Section&nbsp;8.3<span> (</span><span class='info'>Cryptographic Hashes</span><span>)</span></a> for security implications.
 </p>
 <a name="element.identity"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.2.6"></a><h3>4.2.6.&nbsp;
 The &#34;metalink:identity&#34; Element</h3>
-<a name='anchor71'></a><a name='anchor72'></a>
+<a name='anchor68'></a><a name='anchor69'></a>
 <p>The "<a class='info' href='#element.identity'>metalink:identity<span> (</span><span class='info'>The &#34;metalink:identity&#34; Element</span><span>)</span></a>" element is a Text construct that conveys a
 	  human-readable identity for a file. For example, the identity of Firefox 3.5 would be "Firefox".
 	  
-	    <a name='anchor73'></a><a name='anchor74'></a></p>
+	    <a name='anchor70'></a><a name='anchor71'></a></p>
 <div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
 metalinkIdentity =
    element metalink:identity {
@@ -1069,11 +1060,11 @@ metalinkIdentity =
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.2.7"></a><h3>4.2.7.&nbsp;
 The &#34;metalink:language&#34; Element</h3>
-<a name='anchor75'></a><a name='anchor76'></a>
+<a name='anchor72'></a><a name='anchor73'></a>
 <p>The "<a class='info' href='#element.language'>metalink:language<span> (</span><span class='info'>The &#34;metalink:language&#34; Element</span><span>)</span></a>" element is a Text construct that conveys a
 	  code for the language of a file, per <a class='info' href='#RFC5646'>[RFC5646]<span> (</span><span class='info'>Phillips, A. and M. Davis, &ldquo;Tags for Identifying Languages,&rdquo; September&nbsp;2009.</span><span>)</span></a>.
 	  
-	    <a name='anchor77'></a><a name='anchor78'></a></p>
+	    <a name='anchor74'></a><a name='anchor75'></a></p>
 <div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
 metalinkLanguage =
    element metalink:language {
@@ -1085,11 +1076,11 @@ metalinkLanguage =
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.2.8"></a><h3>4.2.8.&nbsp;
 The &#34;metalink:license&#34; Element</h3>
-<a name='anchor79'></a><a name='anchor80'></a>
+<a name='anchor76'></a><a name='anchor77'></a>
 <p>The "<a class='info' href='#element.license'>metalink:license<span> (</span><span class='info'>The &#34;metalink:license&#34; Element</span><span>)</span></a>" element is a Text construct that conveys a
 	  human-readable license name for a file.
 	  
-	    <a name='anchor81'></a><a name='anchor82'></a></p>
+	    <a name='anchor78'></a><a name='anchor79'></a></p>
 <div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
 metalinkLicense =
    element metalink:license {
@@ -1111,11 +1102,11 @@ metalinkLicense =
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.2.9"></a><h3>4.2.9.&nbsp;
 The &#34;metalink:logo&#34; Element</h3>
-<a name='anchor83'></a><a name='anchor84'></a>
+<a name='anchor80'></a><a name='anchor81'></a>
 <p>The "<a class='info' href='#element.logo'>metalink:logo<span> (</span><span class='info'>The &#34;metalink:logo&#34; Element</span><span>)</span></a>" element's content is an IRI reference <a class='info' href='#RFC3987'>[RFC3987]<span> (</span><span class='info'>Duerst, M. and M. Suignard, &ldquo;Internationalized Resource Identifiers (IRIs),&rdquo; January&nbsp;2005.</span><span>)</span></a> that identifies an image that provides visual
 	  identification for a file.
 
-	    <a name='anchor85'></a><a name='anchor86'></a></p>
+	    <a name='anchor82'></a><a name='anchor83'></a></p>
 <div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
 metalinkLogo =
    element metalink:logo {
@@ -1132,11 +1123,11 @@ metalinkLogo =
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.2.10"></a><h3>4.2.10.&nbsp;
 The &#34;metalink:metaurl&#34; Element</h3>
-<a name='anchor87'></a><a name='anchor88'></a>
+<a name='anchor84'></a><a name='anchor85'></a>
 <p>The "<a class='info' href='#element.metaurl'>metalink:metaurl<span> (</span><span class='info'>The &#34;metalink:metaurl&#34; Element</span><span>)</span></a>" element contains the IRI of a metadata file, also known as a metainfo file, about a resource to download. For example, this could be the IRI of a BitTorrent .torrent file, a Metalink Document, or other type of metadata file. Note that
 	  the information in the <a class='info' href='#element.hash'>metalink:hash<span> (</span><span class='info'>The &#34;metalink:hash&#34; Element</span><span>)</span></a> element does not apply to these metadata files, but to the files that are described by them.
 
-	    <a name='anchor89'></a><a name='anchor90'></a></p>
+	    <a name='anchor86'></a><a name='anchor87'></a></p>
 <div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
 metalinkMetaURL =
    element metalink:metaurl {
@@ -1148,7 +1139,7 @@ metalinkMetaURL =
    }</pre></div><p>
 
 </p>
-<a name="anchor14"></a><br /><hr />
+<a name="anchor12"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.2.10.1"></a><h3>4.2.10.1.&nbsp;
 The &#34;priority&#34; Attribute</h3>
@@ -1157,7 +1148,7 @@ The &#34;priority&#34; Attribute</h3>
 	    elements MAY have a priority attribute. Values MUST be positive integers. Lower values indicate a higher priority. Multiple <a class='info' href='#element.metaurl'>metalink:metaurl<span> (</span><span class='info'>The &#34;metalink:metaurl&#34; Element</span><span>)</span></a> elements can have the same
 		priority, i.e. three BitTorrent .torrent files could have priority="1". See also the "priority" attribute of the <a class='info' href='#element.url'>metalink:url<span> (</span><span class='info'>The &#34;metalink:url&#34; Element</span><span>)</span></a> element.
 </p>
-<a name="anchor15"></a><br /><hr />
+<a name="anchor13"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.2.10.2"></a><h3>4.2.10.2.&nbsp;
 The &#34;type&#34; Attribute</h3>
@@ -1165,7 +1156,7 @@ The &#34;type&#34; Attribute</h3>
 <p><a class='info' href='#element.metaurl'>metalink:metaurl<span> (</span><span class='info'>The &#34;metalink:metaurl&#34; Element</span><span>)</span></a> elements MUST have a "type" attribute that indicates
 	    the MIME media type <a class='info' href='#RFC4288'>[RFC4288]<span> (</span><span class='info'>Freed, N. and J. Klensin, &ldquo;Media Type Specifications and Registration Procedures,&rdquo; December&nbsp;2005.</span><span>)</span></a> of the metadata available at the IRI. In the case of BitTorrent as specified in <a class='info' href='#BITTORRENT'>[BITTORRENT]<span> (</span><span class='info'>Cohen, B., &ldquo;The BitTorrent Protocol Specification,&rdquo; February&nbsp;2008.</span><span>)</span></a>, the value "torrent" is required. Types without "/" are reserved. Currently, "torrent" is the only reserved value.
 </p>
-<a name="anchor16"></a><br /><hr />
+<a name="anchor14"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.2.10.3"></a><h3>4.2.10.3.&nbsp;
 The &#34;name&#34; Attribute</h3>
@@ -1189,11 +1180,11 @@ The &#34;name&#34; Attribute</h3>
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.2.11"></a><h3>4.2.11.&nbsp;
 The &#34;metalink:origin&#34; Element</h3>
-<a name='anchor91'></a><a name='anchor92'></a>
+<a name='anchor88'></a><a name='anchor89'></a>
 <p>The "<a class='info' href='#element.origin'>metalink:origin<span> (</span><span class='info'>The &#34;metalink:origin&#34; Element</span><span>)</span></a>" element is an IRI where the Metalink Document was originally published. If <a class='info' href='#element.dynamic'>metalink:dynamic<span> (</span><span class='info'>The &#34;metalink:dynamic&#34; Element</span><span>)</span></a> is "true", then updated
       versions of the Metalink can be found at this IRI.
 
-	    <a name='anchor93'></a><a name='anchor94'></a></p>
+	    <a name='anchor90'></a><a name='anchor91'></a></p>
 <div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
 metalinkOrigin =
    element metalink:origin {
@@ -1206,11 +1197,11 @@ metalinkOrigin =
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.2.12"></a><h3>4.2.12.&nbsp;
 The &#34;metalink:os&#34; Element</h3>
-<a name='anchor95'></a><a name='anchor96'></a>
-<p>The "<a class='info' href='#element.os'>metalink:os<span> (</span><span class='info'>The &#34;metalink:os&#34; Element</span><span>)</span></a>" element is a Text construct that conveys a
-	  human-readable Operating System for a file. The IANA registry named "Operating System Names" defines values for OS types.
+<a name='anchor92'></a><a name='anchor93'></a>
+<p>The "<a class='info' href='#element.os'>metalink:os<span> (</span><span class='info'>The &#34;metalink:os&#34; Element</span><span>)</span></a>" element is a Text construct that conveys an
+	  Operating System for a file. The IANA registry named "Operating System Names" defines values for OS types.
 	  
-	    <a name='anchor97'></a><a name='anchor98'></a></p>
+	    <a name='anchor94'></a><a name='anchor95'></a></p>
 <div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
 metalinkOS =
    element metalink:os {
@@ -1222,12 +1213,12 @@ metalinkOS =
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.2.13"></a><h3>4.2.13.&nbsp;
 The &#34;metalink:published&#34; Element</h3>
-<a name='anchor99'></a><a name='anchor100'></a>
+<a name='anchor96'></a><a name='anchor97'></a>
 <p>The "<a class='info' href='#element.published'>metalink:published<span> (</span><span class='info'>The &#34;metalink:published&#34; Element</span><span>)</span></a>" element is a Date construct indicating an
 	  instant in time associated with an event early in the life cycle of
 	  the entry.
 
-	    <a name='anchor101'></a><a name='anchor102'></a></p>
+	    <a name='anchor98'></a><a name='anchor99'></a></p>
 <div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
 metalinkPublished =
    element metalink:published {
@@ -1236,43 +1227,42 @@ metalinkPublished =
 
 </p>
 <p>Typically, <a class='info' href='#element.published'>metalink:published<span> (</span><span class='info'>The &#34;metalink:published&#34; Element</span><span>)</span></a> will be associated with the
-	   initial creation or first availability of the resource.
+	   initial creation or first availability of the resource. The <a class='info' href='#element.updated'>metalink:updated<span> (</span><span class='info'>The &#34;metalink:updated&#34; Element</span><span>)</span></a> element is used when a Metalink Document has been updated after initial publication.
 </p>
 <a name="element.publisher"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.2.14"></a><h3>4.2.14.&nbsp;
 The &#34;metalink:publisher&#34; Element</h3>
-<a name='anchor103'></a><a name='anchor104'></a>
-<p>The "<a class='info' href='#element.publisher'>metalink:publisher<span> (</span><span class='info'>The &#34;metalink:publisher&#34; Element</span><span>)</span></a>" element
-	  indicates a group or other entity which has published the file described in the Metalink Document.
+<a name='anchor100'></a><a name='anchor101'></a>
+<p>The "<a class='info' href='#element.publisher'>metalink:publisher<span> (</span><span class='info'>The &#34;metalink:publisher&#34; Element</span><span>)</span></a>" element contains a human-readable group or other entity which has published the file described in the Metalink Document and a URI for more information.
 	  
-	    <a name='anchor105'></a><a name='anchor106'></a></p>
+	    <a name='anchor102'></a><a name='anchor103'></a></p>
 <div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
 metalinkPublisher =
    element metalink:publisher {
      metalinkCommonAttributes,
+     attribute name { text },
      attribute url { metalinkUri }?,
-     attribute name { text }?
    }</pre></div><p>
 
+</p>
+<p>The <a class='info' href='#element.publisher'>metalink:publisher<span> (</span><span class='info'>The &#34;metalink:publisher&#34; Element</span><span>)</span></a> element MUST have a "name" attribute that
+	  indicates the human-readable name of the publisher.
 </p>
 <p>The <a class='info' href='#element.publisher'>metalink:publisher<span> (</span><span class='info'>The &#34;metalink:publisher&#34; Element</span><span>)</span></a> element MAY have a "url" attribute
 	  whose value MUST be an IRI reference <a class='info' href='#RFC3987'>[RFC3987]<span> (</span><span class='info'>Duerst, M. and M. Suignard, &ldquo;Internationalized Resource Identifiers (IRIs),&rdquo; January&nbsp;2005.</span><span>)</span></a>. When dereferenced, the resulting URI (mapped from an
 	  IRI, if necessary) SHOULD produce a representation that is
 	  relevant to that agent.
 </p>
-<p>The <a class='info' href='#element.publisher'>metalink:publisher<span> (</span><span class='info'>The &#34;metalink:publisher&#34; Element</span><span>)</span></a> element MAY have a "name" attribute that
-	  indicates the name of the publisher.
-</p>
 <a name="element.signature"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.2.15"></a><h3>4.2.15.&nbsp;
 The &#34;metalink:signature&#34; Element</h3>
-<a name='anchor107'></a><a name='anchor108'></a>
+<a name='anchor104'></a><a name='anchor105'></a>
 <p>The "<a class='info' href='#element.signature'>metalink:signature<span> (</span><span class='info'>The &#34;metalink:signature&#34; Element</span><span>)</span></a>" element is a Text construct that conveys a
 	  digital signature for a file described in a Metalink Document. Digital signatures verify that a file is from the entity that has signed it.
 	  
-	    <a name='anchor109'></a><a name='anchor110'></a></p>
+	    <a name='anchor106'></a><a name='anchor107'></a></p>
 <div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
 metalinkSignature =
    element metalink:signature {
@@ -1281,7 +1271,7 @@ metalinkSignature =
    }</pre></div><p>
 
 </p>
-<a name="anchor17"></a><br /><hr />
+<a name="anchor15"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.2.15.1"></a><h3>4.2.15.1.&nbsp;
 The &#34;type&#34; Attribute</h3>
@@ -1295,13 +1285,13 @@ digital signatures, so unknown types are allowed.
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.2.16"></a><h3>4.2.16.&nbsp;
 The &#34;metalink:size&#34; Element</h3>
-<a name='anchor111'></a><a name='anchor112'></a>
+<a name='anchor108'></a><a name='anchor109'></a>
 <p>The "<a class='info' href='#element.size'>metalink:size<span> (</span><span class='info'>The &#34;metalink:size&#34; Element</span><span>)</span></a>" element indicates the length of
 	    the linked content in octets; it is a hint about the
 	    content length of the representation returned when the IRI
 	    is mapped to a URI and 
 	    dereferenced. This value MUST be a non-negative integer.
-	    <a name='anchor113'></a><a name='anchor114'></a></p>
+	    <a name='anchor110'></a><a name='anchor111'></a></p>
 <div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
 metalinkSize =
    element metalink:size {
@@ -1313,14 +1303,14 @@ metalinkSize =
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.2.17"></a><h3>4.2.17.&nbsp;
 The &#34;metalink:updated&#34; Element</h3>
-<a name='anchor115'></a><a name='anchor116'></a>
+<a name='anchor112'></a><a name='anchor113'></a>
 <p>The "<a class='info' href='#element.updated'>metalink:updated<span> (</span><span class='info'>The &#34;metalink:updated&#34; Element</span><span>)</span></a>" element is a Date construct indicating the
 	  most recent instant in time when a Metalink was modified in a
 	  way the publisher considers significant. Therefore, not all
 	  modifications necessarily result in a changed <a class='info' href='#element.updated'>metalink:updated<span> (</span><span class='info'>The &#34;metalink:updated&#34; Element</span><span>)</span></a>
 	  value.
 
-	    <a name='anchor117'></a><a name='anchor118'></a></p>
+	    <a name='anchor114'></a><a name='anchor115'></a></p>
 <div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
 metalinkUpdated =
    element metalink:updated {
@@ -1334,12 +1324,12 @@ metalinkUpdated =
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.2.18"></a><h3>4.2.18.&nbsp;
 The &#34;metalink:url&#34; Element</h3>
-<a name='anchor119'></a><a name='anchor120'></a>
-<p>The "<a class='info' href='#element.url'>metalink:url<span> (</span><span class='info'>The &#34;metalink:url&#34; Element</span><span>)</span></a>" element contains the IRI of a file.
+<a name='anchor116'></a><a name='anchor117'></a>
+<p>The "<a class='info' href='#element.url'>metalink:url<span> (</span><span class='info'>The &#34;metalink:url&#34; Element</span><span>)</span></a>" element contains a file IRI.
 	  Most Metalink Documents will contain multiple <a class='info' href='#element.url'>metalink:url<span> (</span><span class='info'>The &#34;metalink:url&#34; Element</span><span>)</span></a> elements,
 	  and each one SHOULD be a valid alternative to download the same file.
 
-	    <a name='anchor121'></a><a name='anchor122'></a></p>
+	    <a name='anchor118'></a><a name='anchor119'></a></p>
 <div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
 metalinkURL =
    element metalink:url {
@@ -1352,7 +1342,7 @@ metalinkURL =
    }</pre></div><p>
 
 </p>
-<a name="anchor18"></a><br /><hr />
+<a name="anchor16"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.2.18.1"></a><h3>4.2.18.1.&nbsp;
 The &#34;priority&#34; Attribute</h3>
@@ -1361,7 +1351,7 @@ The &#34;priority&#34; Attribute</h3>
 	    elements MAY have a priority attribute. Values MUST be positive integers. Lower values indicate a higher priority. Multiple <a class='info' href='#element.url'>metalink:url<span> (</span><span class='info'>The &#34;metalink:url&#34; Element</span><span>)</span></a> elements can have the same
 		priority, i.e. ten mirrors could have priority="1".
 </p>
-<a name="anchor19"></a><br /><hr />
+<a name="anchor17"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.2.18.2"></a><h3>4.2.18.2.&nbsp;
 The &#34;location&#34; Attribute</h3>
@@ -1375,11 +1365,11 @@ The &#34;location&#34; Attribute</h3>
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.2.19"></a><h3>4.2.19.&nbsp;
 The &#34;metalink:version&#34; Element</h3>
-<a name='anchor123'></a><a name='anchor124'></a>
+<a name='anchor120'></a><a name='anchor121'></a>
 <p>The "<a class='info' href='#element.version'>metalink:version<span> (</span><span class='info'>The &#34;metalink:version&#34; Element</span><span>)</span></a>" element is a Text construct that conveys a
 	  human-readable version for a file. The version of Firefox 3.5 would be "3.5".
 	  
-	    <a name='anchor125'></a><a name='anchor126'></a></p>
+	    <a name='anchor122'></a><a name='anchor123'></a></p>
 <div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
 metalinkVersion =
    element metalink:version {
@@ -1387,7 +1377,7 @@ metalinkVersion =
    }</pre></div><p>
 
 </p>
-<a name="anchor20"></a><br /><hr />
+<a name="anchor18"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.5"></a><h3>5.&nbsp;
 Securing Metalink Documents</h3>
@@ -1414,7 +1404,7 @@ Securing Metalink Documents</h3>
 <a name="rfc.section.6"></a><h3>6.&nbsp;
 Extending Metalink</h3>
 
-<a name="anchor21"></a><br /><hr />
+<a name="anchor19"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.6.1"></a><h3>6.1.&nbsp;
 Extensions from Non-Metalink Vocabularies</h3>
@@ -1485,7 +1475,7 @@ Simple Extension Elements</h3>
 		character data or be empty. Simple Extension elements
 		are not Language-Sensitive.
 
-		<a name='anchor127'></a><a name='anchor128'></a></p>
+		<a name='anchor124'></a><a name='anchor125'></a></p>
 <div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
 simpleExtensionElement =
    element * - metalink:* {
@@ -1514,7 +1504,7 @@ Structured Extension Elements</h3>
 		empty. Structured Extension elements are
 		Language-Sensitive.
 
-		<a name='anchor129'></a><a name='anchor130'></a></p>
+		<a name='anchor126'></a><a name='anchor127'></a></p>
 <div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
 structuredExtensionElement =
    element * - metalink:* {
@@ -1539,7 +1529,7 @@ structuredExtensionElement =
 <a name="rfc.section.7"></a><h3>7.&nbsp;
 IANA Considerations</h3>
 
-<a name="anchor22"></a><br /><hr />
+<a name="anchor20"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.7.1"></a><h3>7.1.&nbsp;
 XML Namespace Registration</h3>
@@ -1555,11 +1545,11 @@ XML Namespace Registration</h3>
 </p>
 <p>XML: None.  Namespace URIs do not represent an XML specification.
 </p>
-<a name="anchor23"></a><br /><hr />
+<a name="anchor21"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.7.2"></a><h3>7.2.&nbsp;
 application/metalink4+xml MIME type</h3>
-<a name='anchor131'></a><a name='anchor132'></a>
+<a name='anchor128'></a><a name='anchor129'></a>
 <p>A Metalink Document, when serialized as XML 1.0, can be identified
 	    with the following media type:
 </p>
@@ -1649,14 +1639,14 @@ application/metalink4+xml MIME type</h3>
 </dd>
 </dl></blockquote>
 
-<a name="anchor24"></a><br /><hr />
+<a name="anchor22"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.8"></a><h3>8.&nbsp;
 Security Considerations</h3>
 
 <p>Publishers are encouraged to offer Metalink documents via authenticated HTTP under TLS as specified in <a class='info' href='#RFC2818'>[RFC2818]<span> (</span><span class='info'>Rescorla, E., &ldquo;HTTP Over TLS,&rdquo; May&nbsp;2000.</span><span>)</span></a>. Publishers are also encouraged to include digital signatures of the files within the Metalink Documents if they are available.
 </p>
-<a name="anchor25"></a><br /><hr />
+<a name="anchor23"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.8.1"></a><h3>8.1.&nbsp;
 URIs and IRIs</h3>
@@ -1664,7 +1654,7 @@ URIs and IRIs</h3>
 <p>Metalink Processors handle URIs and IRIs. See Section 7 of <a class='info' href='#RFC3986'>[RFC3986]<span> (</span><span class='info'>Berners-Lee, T., Fielding, R., and L. Masinter, &ldquo;Uniform Resource Identifier (URI): Generic Syntax,&rdquo; January&nbsp;2005.</span><span>)</span></a> and Section 8 of <a class='info' href='#RFC3987'>[RFC3987]<span> (</span><span class='info'>Duerst, M. and M. Suignard, &ldquo;Internationalized Resource Identifiers (IRIs),&rdquo; January&nbsp;2005.</span><span>)</span></a> for security
           considerations related to their handling and use.
 </p>
-<a name="anchor26"></a><br /><hr />
+<a name="anchor24"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.8.2"></a><h3>8.2.&nbsp;
 Spoofing</h3>
@@ -1673,7 +1663,7 @@ Spoofing</h3>
           Metalink Documents with false information. Malicious publishers might create Metalink Documents containing inaccurate information anywhere in the document.
           Unaware downloaders could be deceived into downloading a malicious or worthless file. Malicious publishers could attempt a distributed denial of service attack by inserting unrelated IRIs into Metalink Documents.
 </p>
-<a name="anchor27"></a><br /><hr />
+<a name="security.hash"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.8.3"></a><h3>8.3.&nbsp;
 Cryptographic Hashes</h3>
@@ -1682,7 +1672,7 @@ Cryptographic Hashes</h3>
 </p>
 <p>If a Metalink Document contains hashes, it SHOULD include "sha-1" which is SHA-1, as specified in <a class='info' href='#RFC3174'>[RFC3174]<span> (</span><span class='info'>Eastlake, D. and P. Jones, &ldquo;US Secure Hash Algorithm 1 (SHA1),&rdquo; September&nbsp;2001.</span><span>)</span></a>, or stronger.  It MAY also include other hashes from the IANA registry named "Hash Function Textual Names".
 </p>
-<a name="anchor28"></a><br /><hr />
+<a name="anchor25"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.8.4"></a><h3>8.4.&nbsp;
 Signing</h3>
@@ -1756,7 +1746,7 @@ References</h3>
 <td class="author-text">Malhotra, A. and P. Biron, &ldquo;<a href="http://www.w3.org/TR/2004/REC-xmlschema-2-20041028">XML Schema Part 2: Datatypes Second Edition</a>,&rdquo; W3C REC&nbsp;REC-xmlschema-2-20041028, October&nbsp;2004.</td></tr>
 </table>
 
-<a name="anchor31"></a><br /><hr />
+<a name="anchor28"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.A"></a><h3>Appendix A.&nbsp;
 Acknowledgements and Contributors</h3>
@@ -1781,10 +1771,11 @@ Acknowledgements and Contributors</h3>
           Carrabba, Erin Solari, Derick Cordoba, Ryan Alexander, John & Sandra Sowder,
           Tom Mainville, Janie Wargo, Jason Hansen, Tim Bray, Dan Brickley, Markus Hofmann, 
           Dan Connolly, Tim Berners-Lee, Louis Suarez-Potts, Ross Smith, Jeff Covey, 
-          Ed Lee, Shawn Wilsher, Mike Connor, Johan Svedberg, Dedric Carter, James Antill, Debi
-          Goulding, Chris Newman, Lisa Dusseault, 
-		  Ian Macfarlane, Dave Cridland, Julian Reschke, Barry Leiba, Uri Blumenthal, Paul Hoffman, Felix Sasaki, Matthias Fuchs, Mark Baker,
-		  Eran Hammer-Lahav, Mark Nottingham, and Peter Saint-Andre. We also thank the Anthony Family, the Bryan Family, Juanita Anthony and Zimmy Bryan.
+          Ed Lee, Shawn Wilsher, Mike Connor, Johan Svedberg, Dedric Carter, James Antill, and Debi
+          Goulding. We also thank the Anthony Family, the Bryan Family, Juanita Anthony and Zimmy Bryan.
+</p>
+<p>We also thank the following contributors for assistance and review: Eran Hammer-Lahav, Lisa Dusseault, Mark Nottingham, Peter Saint-Andre, Chris Newman,
+		  Ian Macfarlane, Dave Cridland, Julian Reschke, Barry Leiba, Uri Blumenthal, Paul Hoffman, Felix Sasaki, Matthias Fuchs, and Mark Baker.
 </p>
 <a name="schema"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
@@ -1947,8 +1938,8 @@ metalinkPublished =
 metalinkPublisher =
    element metalink:publisher {
       metalinkCommonAttributes,
+      attribute name { text },
       attribute url { metalinkUri }?,
-      attribute name { text }?
    }
 
 metalinkSignature =
@@ -2033,7 +2024,7 @@ anyForeignElement =
 }
 
 # EOF</pre></div>
-<a name="anchor32"></a><br /><hr />
+<a name="anchor29"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.C"></a><h3>Appendix C.&nbsp;
 Document History (to be removed by RFC Editor before publication)</h3>
@@ -2283,122 +2274,122 @@ Document History (to be removed by RFC Editor before publication)</h3>
 <h3>Index</h3>
 <table>
 <tr><td><strong>A</strong></td><td>&nbsp;</td></tr>
-<tr><td>&nbsp;</td><td><a href="#anchor132"><b>application/metalink4+xml Media Type</b></a></td></tr>
+<tr><td>&nbsp;</td><td><a href="#anchor129"><b>application/metalink4+xml Media Type</b></a></td></tr>
 <tr><td><strong>C</strong></td><td>&nbsp;</td></tr>
-<tr><td>&nbsp;</td><td><a href="#anchor52"><b>copyright XML element</b></a></td></tr>
+<tr><td>&nbsp;</td><td><a href="#anchor49"><b>copyright XML element</b></a></td></tr>
 <tr><td><strong>D</strong></td><td>&nbsp;</td></tr>
-<tr><td>&nbsp;</td><td><a href="#anchor56"><b>description XML element</b></a></td></tr>
+<tr><td>&nbsp;</td><td><a href="#anchor53"><b>description XML element</b></a></td></tr>
 <tr><td><strong>F</strong></td><td>&nbsp;</td></tr>
-<tr><td>&nbsp;</td><td><a href="#anchor44"><b>file XML element</b></a></td></tr>
+<tr><td>&nbsp;</td><td><a href="#anchor41"><b>file XML element</b></a></td></tr>
 <tr><td><strong>G</strong></td><td>&nbsp;</td></tr>
-<tr><td>&nbsp;</td><td><a href="#anchor64"><b>generator XML element</b></a></td></tr>
+<tr><td>&nbsp;</td><td><a href="#anchor61"><b>generator XML element</b></a></td></tr>
 <tr><td>&nbsp;</td><td>Grammar</td></tr>
-<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor34"><b>metalinkCommonAttributes</b></a></td></tr>
-<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor54"><b>metalinkCopyright</b></a></td></tr>
-<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor38"><b>metalinkDateConstruct</b></a></td></tr>
-<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor58"><b>metalinkDescription</b></a></td></tr>
-<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor46"><b>metalinkFile</b></a></td></tr>
-<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor66"><b>metalinkGenerator</b></a></td></tr>
-<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor70"><b>metalinkHash</b></a></td></tr>
-<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor74"><b>metalinkIdentity</b></a></td></tr>
-<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor78"><b>metalinkLanguage</b></a></td></tr>
-<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor82"><b>metalinkLicense</b></a></td></tr>
-<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor86"><b>metalinkLogo</b></a></td></tr>
-<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor42"><b>metalinkMetalink</b></a></td></tr>
-<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor94"><b>metalinkOrigin</b></a></td></tr>
-<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor98"><b>metalinkOS</b></a></td></tr>
-<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor50"><b>metalinkPieces</b></a></td></tr>
-<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor102"><b>metalinkPublished</b></a></td></tr>
-<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor106"><b>metalinkPublisher</b></a></td></tr>
-<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor110"><b>metalinkSignature</b></a></td></tr>
-<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor114"><b>metalinkSize</b></a></td></tr>
-<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor36"><b>metalinkTextConstruct</b></a></td></tr>
-<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor62"><b>metalinkType</b></a></td></tr>
-<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor118"><b>metalinkUpdated</b></a></td></tr>
-<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<b>metalinkURL</b>  <a href="#anchor90">1</a>, <a href="#anchor122">2</a></td></tr>
-<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor126"><b>metalinkVersion</b></a></td></tr>
-<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor128"><b>simpleExtensionElement</b></a></td></tr>
-<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor130"><b>structuredExtensionElement</b></a></td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor31"><b>metalinkCommonAttributes</b></a></td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor51"><b>metalinkCopyright</b></a></td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor35"><b>metalinkDateConstruct</b></a></td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor55"><b>metalinkDescription</b></a></td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor43"><b>metalinkFile</b></a></td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor63"><b>metalinkGenerator</b></a></td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor67"><b>metalinkHash</b></a></td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor71"><b>metalinkIdentity</b></a></td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor75"><b>metalinkLanguage</b></a></td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor79"><b>metalinkLicense</b></a></td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor83"><b>metalinkLogo</b></a></td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor39"><b>metalinkMetalink</b></a></td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor91"><b>metalinkOrigin</b></a></td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor95"><b>metalinkOS</b></a></td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor47"><b>metalinkPieces</b></a></td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor99"><b>metalinkPublished</b></a></td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor103"><b>metalinkPublisher</b></a></td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor107"><b>metalinkSignature</b></a></td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor111"><b>metalinkSize</b></a></td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor33"><b>metalinkTextConstruct</b></a></td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor59"><b>metalinkType</b></a></td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor115"><b>metalinkUpdated</b></a></td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<b>metalinkURL</b>  <a href="#anchor87">1</a>, <a href="#anchor119">2</a></td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor123"><b>metalinkVersion</b></a></td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor125"><b>simpleExtensionElement</b></a></td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor127"><b>structuredExtensionElement</b></a></td></tr>
 <tr><td><strong>H</strong></td><td>&nbsp;</td></tr>
-<tr><td>&nbsp;</td><td><a href="#anchor68"><b>hash XML element</b></a></td></tr>
+<tr><td>&nbsp;</td><td><a href="#anchor65"><b>hash XML element</b></a></td></tr>
 <tr><td><strong>I</strong></td><td>&nbsp;</td></tr>
-<tr><td>&nbsp;</td><td><a href="#anchor72"><b>identity XML element</b></a></td></tr>
+<tr><td>&nbsp;</td><td><a href="#anchor69"><b>identity XML element</b></a></td></tr>
 <tr><td><strong>L</strong></td><td>&nbsp;</td></tr>
-<tr><td>&nbsp;</td><td><a href="#anchor76"><b>language XML element</b></a></td></tr>
-<tr><td>&nbsp;</td><td><a href="#anchor80"><b>license XML element</b></a></td></tr>
-<tr><td>&nbsp;</td><td><a href="#anchor84"><b>logo XML element</b></a></td></tr>
+<tr><td>&nbsp;</td><td><a href="#anchor73"><b>language XML element</b></a></td></tr>
+<tr><td>&nbsp;</td><td><a href="#anchor77"><b>license XML element</b></a></td></tr>
+<tr><td>&nbsp;</td><td><a href="#anchor81"><b>logo XML element</b></a></td></tr>
 <tr><td><strong>M</strong></td><td>&nbsp;</td></tr>
 <tr><td>&nbsp;</td><td>Media Type</td></tr>
-<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor131"><b>application/metalink4+xml</b></a></td></tr>
-<tr><td>&nbsp;</td><td><a href="#anchor88"><b>metadata XML element</b></a></td></tr>
-<tr><td>&nbsp;</td><td><a href="#anchor40"><b>metalink XML element</b></a></td></tr>
-<tr><td>&nbsp;</td><td><a href="#anchor33"><b>metalinkCommonAttributes grammar production</b></a></td></tr>
-<tr><td>&nbsp;</td><td><a href="#anchor53"><b>metalinkCopyright grammar production</b></a></td></tr>
-<tr><td>&nbsp;</td><td><a href="#anchor37"><b>metalinkDateConstruct grammar production</b></a></td></tr>
-<tr><td>&nbsp;</td><td><a href="#anchor57"><b>metalinkDescription grammar production</b></a></td></tr>
-<tr><td>&nbsp;</td><td><a href="#anchor45"><b>metalinkFile grammar production</b></a></td></tr>
-<tr><td>&nbsp;</td><td><a href="#anchor65"><b>metalinkGenerator grammar production</b></a></td></tr>
-<tr><td>&nbsp;</td><td><a href="#anchor69"><b>metalinkHash grammar production</b></a></td></tr>
-<tr><td>&nbsp;</td><td><a href="#anchor73"><b>metalinkIdentity grammar production</b></a></td></tr>
-<tr><td>&nbsp;</td><td><a href="#anchor77"><b>metalinkLanguage grammar production</b></a></td></tr>
-<tr><td>&nbsp;</td><td><a href="#anchor81"><b>metalinkLicense grammar production</b></a></td></tr>
-<tr><td>&nbsp;</td><td><a href="#anchor85"><b>metalinkLogo grammar production</b></a></td></tr>
-<tr><td>&nbsp;</td><td><a href="#anchor41"><b>metalinkMetalink grammar production</b></a></td></tr>
-<tr><td>&nbsp;</td><td><a href="#anchor93"><b>metalinkOrigin grammar production</b></a></td></tr>
-<tr><td>&nbsp;</td><td><a href="#anchor97"><b>metalinkOS grammar production</b></a></td></tr>
-<tr><td>&nbsp;</td><td><a href="#anchor49"><b>metalinkPieces grammar production</b></a></td></tr>
-<tr><td>&nbsp;</td><td><a href="#anchor101"><b>metalinkPublished grammar production</b></a></td></tr>
-<tr><td>&nbsp;</td><td><a href="#anchor105"><b>metalinkPublisher grammar production</b></a></td></tr>
-<tr><td>&nbsp;</td><td><a href="#anchor109"><b>metalinkSignature grammar production</b></a></td></tr>
-<tr><td>&nbsp;</td><td><a href="#anchor113"><b>metalinkSize grammar production</b></a></td></tr>
-<tr><td>&nbsp;</td><td><a href="#anchor35"><b>metalinkTextConstruct grammar production</b></a></td></tr>
-<tr><td>&nbsp;</td><td><a href="#anchor61"><b>metalinkType grammar production</b></a></td></tr>
-<tr><td>&nbsp;</td><td><a href="#anchor117"><b>metalinkUpdated grammar production</b></a></td></tr>
-<tr><td>&nbsp;</td><td><b>metalinkURL grammar production</b>  <a href="#anchor89">1</a>, <a href="#anchor121">2</a></td></tr>
-<tr><td>&nbsp;</td><td><a href="#anchor125"><b>metalinkVersion grammar production</b></a></td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor128"><b>application/metalink4+xml</b></a></td></tr>
+<tr><td>&nbsp;</td><td><a href="#anchor85"><b>metadata XML element</b></a></td></tr>
+<tr><td>&nbsp;</td><td><a href="#anchor37"><b>metalink XML element</b></a></td></tr>
+<tr><td>&nbsp;</td><td><a href="#anchor30"><b>metalinkCommonAttributes grammar production</b></a></td></tr>
+<tr><td>&nbsp;</td><td><a href="#anchor50"><b>metalinkCopyright grammar production</b></a></td></tr>
+<tr><td>&nbsp;</td><td><a href="#anchor34"><b>metalinkDateConstruct grammar production</b></a></td></tr>
+<tr><td>&nbsp;</td><td><a href="#anchor54"><b>metalinkDescription grammar production</b></a></td></tr>
+<tr><td>&nbsp;</td><td><a href="#anchor42"><b>metalinkFile grammar production</b></a></td></tr>
+<tr><td>&nbsp;</td><td><a href="#anchor62"><b>metalinkGenerator grammar production</b></a></td></tr>
+<tr><td>&nbsp;</td><td><a href="#anchor66"><b>metalinkHash grammar production</b></a></td></tr>
+<tr><td>&nbsp;</td><td><a href="#anchor70"><b>metalinkIdentity grammar production</b></a></td></tr>
+<tr><td>&nbsp;</td><td><a href="#anchor74"><b>metalinkLanguage grammar production</b></a></td></tr>
+<tr><td>&nbsp;</td><td><a href="#anchor78"><b>metalinkLicense grammar production</b></a></td></tr>
+<tr><td>&nbsp;</td><td><a href="#anchor82"><b>metalinkLogo grammar production</b></a></td></tr>
+<tr><td>&nbsp;</td><td><a href="#anchor38"><b>metalinkMetalink grammar production</b></a></td></tr>
+<tr><td>&nbsp;</td><td><a href="#anchor90"><b>metalinkOrigin grammar production</b></a></td></tr>
+<tr><td>&nbsp;</td><td><a href="#anchor94"><b>metalinkOS grammar production</b></a></td></tr>
+<tr><td>&nbsp;</td><td><a href="#anchor46"><b>metalinkPieces grammar production</b></a></td></tr>
+<tr><td>&nbsp;</td><td><a href="#anchor98"><b>metalinkPublished grammar production</b></a></td></tr>
+<tr><td>&nbsp;</td><td><a href="#anchor102"><b>metalinkPublisher grammar production</b></a></td></tr>
+<tr><td>&nbsp;</td><td><a href="#anchor106"><b>metalinkSignature grammar production</b></a></td></tr>
+<tr><td>&nbsp;</td><td><a href="#anchor110"><b>metalinkSize grammar production</b></a></td></tr>
+<tr><td>&nbsp;</td><td><a href="#anchor32"><b>metalinkTextConstruct grammar production</b></a></td></tr>
+<tr><td>&nbsp;</td><td><a href="#anchor58"><b>metalinkType grammar production</b></a></td></tr>
+<tr><td>&nbsp;</td><td><a href="#anchor114"><b>metalinkUpdated grammar production</b></a></td></tr>
+<tr><td>&nbsp;</td><td><b>metalinkURL grammar production</b>  <a href="#anchor86">1</a>, <a href="#anchor118">2</a></td></tr>
+<tr><td>&nbsp;</td><td><a href="#anchor122"><b>metalinkVersion grammar production</b></a></td></tr>
 <tr><td><strong>O</strong></td><td>&nbsp;</td></tr>
-<tr><td>&nbsp;</td><td><a href="#anchor92"><b>origin XML element</b></a></td></tr>
-<tr><td>&nbsp;</td><td><a href="#anchor96"><b>os XML element</b></a></td></tr>
+<tr><td>&nbsp;</td><td><a href="#anchor89"><b>origin XML element</b></a></td></tr>
+<tr><td>&nbsp;</td><td><a href="#anchor93"><b>os XML element</b></a></td></tr>
 <tr><td><strong>P</strong></td><td>&nbsp;</td></tr>
-<tr><td>&nbsp;</td><td><a href="#anchor48"><b>pieces XML element</b></a></td></tr>
-<tr><td>&nbsp;</td><td><a href="#anchor100"><b>published XML element</b></a></td></tr>
-<tr><td>&nbsp;</td><td><a href="#anchor104"><b>publisher XML element</b></a></td></tr>
+<tr><td>&nbsp;</td><td><a href="#anchor45"><b>pieces XML element</b></a></td></tr>
+<tr><td>&nbsp;</td><td><a href="#anchor97"><b>published XML element</b></a></td></tr>
+<tr><td>&nbsp;</td><td><a href="#anchor101"><b>publisher XML element</b></a></td></tr>
 <tr><td><strong>S</strong></td><td>&nbsp;</td></tr>
-<tr><td>&nbsp;</td><td><a href="#anchor108"><b>signature XML element</b></a></td></tr>
-<tr><td>&nbsp;</td><td><a href="#anchor127"><b>simpleExtensionElement grammar production</b></a></td></tr>
-<tr><td>&nbsp;</td><td><a href="#anchor112"><b>size XML element</b></a></td></tr>
-<tr><td>&nbsp;</td><td><a href="#anchor129"><b>structuredExtensionElement grammar production</b></a></td></tr>
+<tr><td>&nbsp;</td><td><a href="#anchor105"><b>signature XML element</b></a></td></tr>
+<tr><td>&nbsp;</td><td><a href="#anchor124"><b>simpleExtensionElement grammar production</b></a></td></tr>
+<tr><td>&nbsp;</td><td><a href="#anchor109"><b>size XML element</b></a></td></tr>
+<tr><td>&nbsp;</td><td><a href="#anchor126"><b>structuredExtensionElement grammar production</b></a></td></tr>
 <tr><td><strong>T</strong></td><td>&nbsp;</td></tr>
-<tr><td>&nbsp;</td><td><a href="#anchor60"><b>type XML element</b></a></td></tr>
+<tr><td>&nbsp;</td><td><a href="#anchor57"><b>type XML element</b></a></td></tr>
 <tr><td><strong>U</strong></td><td>&nbsp;</td></tr>
-<tr><td>&nbsp;</td><td><a href="#anchor116"><b>updated XML element</b></a></td></tr>
-<tr><td>&nbsp;</td><td><a href="#anchor120"><b>url XML element</b></a></td></tr>
+<tr><td>&nbsp;</td><td><a href="#anchor113"><b>updated XML element</b></a></td></tr>
+<tr><td>&nbsp;</td><td><a href="#anchor117"><b>url XML element</b></a></td></tr>
 <tr><td><strong>V</strong></td><td>&nbsp;</td></tr>
-<tr><td>&nbsp;</td><td><a href="#anchor124"><b>version XML element</b></a></td></tr>
+<tr><td>&nbsp;</td><td><a href="#anchor121"><b>version XML element</b></a></td></tr>
 <tr><td><strong>X</strong></td><td>&nbsp;</td></tr>
 <tr><td>&nbsp;</td><td>XML Elements</td></tr>
-<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor51"><b>copyright</b></a></td></tr>
-<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor55"><b>description</b></a></td></tr>
-<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor43"><b>entry</b></a></td></tr>
-<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor63"><b>generator</b></a></td></tr>
-<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor67"><b>hash</b></a></td></tr>
-<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor71"><b>identity</b></a></td></tr>
-<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor75"><b>language</b></a></td></tr>
-<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor79"><b>license</b></a></td></tr>
-<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor83"><b>logo</b></a></td></tr>
-<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor87"><b>metadata</b></a></td></tr>
-<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor39"><b>metalink</b></a></td></tr>
-<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor91"><b>origin</b></a></td></tr>
-<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor95"><b>os</b></a></td></tr>
-<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor47"><b>pieces</b></a></td></tr>
-<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor99"><b>published</b></a></td></tr>
-<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor103"><b>publisher</b></a></td></tr>
-<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor107"><b>signature</b></a></td></tr>
-<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor111"><b>size</b></a></td></tr>
-<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor59"><b>type</b></a></td></tr>
-<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor115"><b>updated</b></a></td></tr>
-<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor119"><b>url</b></a></td></tr>
-<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor123"><b>version</b></a></td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor48"><b>copyright</b></a></td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor52"><b>description</b></a></td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor40"><b>entry</b></a></td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor60"><b>generator</b></a></td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor64"><b>hash</b></a></td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor68"><b>identity</b></a></td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor72"><b>language</b></a></td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor76"><b>license</b></a></td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor80"><b>logo</b></a></td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor84"><b>metadata</b></a></td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor36"><b>metalink</b></a></td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor88"><b>origin</b></a></td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor92"><b>os</b></a></td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor44"><b>pieces</b></a></td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor96"><b>published</b></a></td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor100"><b>publisher</b></a></td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor104"><b>signature</b></a></td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor108"><b>size</b></a></td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor56"><b>type</b></a></td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor112"><b>updated</b></a></td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor116"><b>url</b></a></td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor120"><b>version</b></a></td></tr>
 </table>
 
 <a name="rfc.authors"></a><br /><hr />
