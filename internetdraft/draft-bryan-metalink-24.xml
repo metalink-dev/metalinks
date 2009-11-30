@@ -941,7 +941,8 @@ metalinkLogo =
 metalinkMetaURL =
    element metalink:metaurl {
       metalinkCommonAttributes,
-      attribute priority { xsd:positiveInteger }?,
+      attribute priority { xsd:positiveInteger {
+         maxInclusive = "255"}
       attribute type { text },
       attribute name { text }?,
       metalinkUri
@@ -950,8 +951,8 @@ metalinkMetaURL =
 	  <section title="The &#34;priority&#34; Attribute"> 
 
 	    <t><xref target="element.metaurl" format="none">metalink:metaurl</xref>
-	    elements MAY have a priority attribute. Values MUST be positive integers. Lower values indicate a higher priority. Multiple <xref target="element.metaurl" format="none">metalink:metaurl</xref> elements can have the same
-		priority, i.e. three BitTorrent .torrent files could have priority="1". See also the "priority" attribute of the <xref target="element.url" format="none">metalink:url</xref> element.</t>
+	    elements MAY have a priority attribute. Values MUST be positive integers. Lower values indicate a higher priority. The priority values of <xref target="element.metaurl" format="none">metalink:metaurl</xref> and <xref target="element.url" format="none">metalink:url</xref> elements are compared and the lowest ones are used first. Multiple <xref target="element.metaurl" format="none">metalink:metaurl</xref> and <xref target="element.url" format="none">metalink:url</xref> elements MAY have the same
+		priority, i.e. one BitTorrent .torrent file and three FTP URIs could have priority="1". See also the "priority" attribute of the <xref target="element.url" format="none">metalink:url</xref> element.</t>
 
 	  </section> 
 
@@ -1170,9 +1171,10 @@ metalinkURL =
    element metalink:url {
       metalinkCommonAttributes,
       attribute location { xsd:string {
-        minLength = "2"  maxLength="2"}
+         minLength = "2"  maxLength="2"}
       }?,
-      attribute priority { xsd:positiveInteger }?,
+      attribute priority { xsd:positiveInteger {
+         maxInclusive = "255"}
       metalinkUri
    }</artwork></figure></t> 
 
@@ -2083,7 +2085,8 @@ metalinkLogo =
 metalinkMetaURL =
    element metalink:metaurl {
       metalinkCommonAttributes,
-      attribute priority { xsd:positiveInteger }?,
+      attribute priority { xsd:positiveInteger {
+         maxInclusive = "255"}
       attribute type { text },
       attribute name { text }?,
       metalinkUri
@@ -2134,7 +2137,8 @@ metalinkURL =
       attribute location { xsd:string {
          minLength = "2"  maxLength="2"}
       }?,
-      attribute priority { xsd:positiveInteger }?,
+      attribute priority { xsd:positiveInteger {
+         maxInclusive = "255"}
       metalinkUri
    }
 
