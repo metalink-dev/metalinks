@@ -17,6 +17,7 @@ py2exe.bat - calls py2exe to make executable files for windows and .zip package
 pyinstexe.bat - calls pyinstaller to make executable files for windows and .zip package
 make_installer.bat - calls py2exe.bat and makes the NSIS Windows installer
 sdist.bat - creates a .zip file with the source code
+nightly.bat - makes a datestamped build for all build types, calls make_installer.bat, sdist.bat
 
 Building on UNIX/Linux
 ----------------------
