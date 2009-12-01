@@ -2,7 +2,7 @@ How to build Metalink Checker
 
 You will need the following:
 
-Python 2.5.2 - http://www.python.org
+Python 2.5.4 - http://www.python.org
 
 py2exe 0.6.6 - http://www.py2exe.org
  -OR-
@@ -27,3 +27,4 @@ pyinstexe.bat - calls pyinstaller to make executable files for windows and .zip 
 py2exe.bat - calls py2exe to make executable files for windows and .zip package
 setup.py merge - generates a single metalink.py script from the library
 setup.py clean - cleans up the built files from your directory
+nightly.bat - makes a datestamped build for all build types, calls py2exe.bat, setup.py merge, and sdist.bat

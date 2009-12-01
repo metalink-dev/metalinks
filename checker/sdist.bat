@@ -10,4 +10,4 @@ SET PYTHONPATH=%PYTHONDIR%\python.exe
 rem ***** create the .zip
 %PYTHONPATH% setup.py sdist
 
-pause "done...hit a key to exit"
+echo "done..."
