@@ -13,4 +13,4 @@ rem --packages=libappupdater
 
 %PYTHONPATH% setup.py zip
 
-pause "done...hit a key to exit"
+echo "done..."
