@@ -5,4 +5,4 @@ call py2exe.bat
 
 "%NSISDIR%\makensis.exe" setup.nsi
 
-pause "done...hit a key to exit"
+echo "done..."
