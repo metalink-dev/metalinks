@@ -4,11 +4,11 @@ call setenv.bat
 mkdir "%BUILDS%"
 
 call sdist.bat
-xcopy /Y "dist\*.zip" "%BUILDS%\."
-move "%BUILDS%\*.zip" "%BUILDS%\%DATE%_Metalink_Checker.zip"
+xcopy /Y "dist\metalink-checker-*.zip" "%BUILDS%\."
+move "%BUILDS%\metalink-checker-*.zip" "%BUILDS%\%DATE%_Metalink_Checker.zip"
 call py2exe.bat
-xcopy /Y "*-win32.zip" "%BUILDS%\."
-move "%BUILDS%\*-win32.zip" "%BUILDS%\%DATE%_Metalink_Checker-win32.zip"
+xcopy /Y "metalink-checker-*-win32.zip" "%BUILDS%\."
+move "%BUILDS%\metalink-checker-*-win32.zip" "%BUILDS%\%DATE%_Metalink_Checker-win32.zip"
 
 SET PYTHONPATH=%PYTHONDIR%\python.exe
 %PYTHONPATH% setup.py merge
