@@ -48,7 +48,7 @@
           <uri>http://www.mirrorbrain.org/</uri>
         </address>
       </author>
-	<date month="November" year="2009"/>        
+	<date month="December" year="2009"/>        
 
       <abstract>
 	<t>This document specifies Metalink, an XML-based download description
@@ -164,8 +164,9 @@
     &lt;description&gt;
        A description of the example file for download.
     &lt;/description&gt;
-    &lt;hash type="sha-1"&gt;
-       80bc95fd391772fa61c91ed68567f0980bb45fd9
+    &lt;hash type="sha-256"&gt;
+       f0ad929cd259957e160ea442eb80986b5f01
+daaffdbcc7e5a1840a666c4447c7
     &lt;/hash&gt;
     &lt;url location="de" priority="1"&gt;
        ftp://ftp.example.com/example.ext
@@ -193,8 +194,9 @@
     &lt;description&gt;
        Another description for a second file.
     &lt;/description&gt;
-    &lt;hash type="sha-1"&gt;
-       7f4afdc84bd1b79238703fb45cd045efd08bee4b
+    &lt;hash type="sha-256"&gt;
+       2f548ce50c459a0270e85a7d63b2383c5523
+9bf6aead9314a0f887f3623ddace
     &lt;/hash&gt;
     &lt;url location="de" priority="1"&gt;
        ftp://ftp.example.com/example2.ext
@@ -1482,7 +1484,7 @@ structuredExtensionElement =
 	    <section title="Cryptographic Hashes" anchor="security.hash">
 
 	      <t>Currently, some of the hash types defined in the IANA registry named "Hash Function Textual Names" are considered insecure. These include the whole Message Digest family of algorithms which are not suitable for cryptographically strong verification. Malicious people could provide files that appear to be identical to another file because of a collision, i.e. the weak cryptographic hashes of the intended file and a substituted malicious file could match.</t>
-          <t>If a Metalink Document contains hashes, it SHOULD include "sha-1" which is SHA-1, as specified in <xref target="RFC3174"/>, or stronger.  It MAY also include other hashes from the IANA registry named "Hash Function Textual Names".</t>
+          <t>If a Metalink Document contains hashes, it SHOULD include "sha-256" which is SHA-256, as specified in <xref target="FIPS-180-3"/>, or stronger.  It MAY also include other hashes from the IANA registry named "Hash Function Textual Names".</t>
 
 	    </section>	
 		
@@ -1592,22 +1594,8 @@ structuredExtensionElement =
 <seriesInfo name="RFC" value="3023"/>
 </reference>
  
-<reference anchor="RFC3174">
 
-<front>
-<title>US Secure Hash Algorithm 1 (SHA1)</title>
-<author initials="D." surname="Eastlake" fullname="D. Eastlake">
-<organization/></author>
-<author initials="P." surname="Jones" fullname="P. Jones">
-<organization/></author>
-<date year="2001" month="September"/></front>
-
-<seriesInfo name="RFC" value="3174"/>
-</reference> 
-
-
-
-<reference anchor="RFC3339">
+ <reference anchor="RFC3339">
 
 <front>
 <title>Date and Time on the Internet: Timestamps</title>
@@ -1815,7 +1803,16 @@ structuredExtensionElement =
 <date month="November" year="2006"/></front>
 </reference>
 
-
+<reference anchor="FIPS-180-3">
+<front>
+<title>Secure Hash Standard (SHS)</title>
+<author>
+    <organization>National Institute of Standards and Technology (NIST)</organization>
+</author>
+<date year="2008" month="October"></date>
+</front>
+<seriesInfo name="FIPS PUB" value="180-3"></seriesInfo>
+</reference>
 
 	  </references>
 	  
@@ -1945,7 +1942,7 @@ structuredExtensionElement =
           Goulding. We also thank the Anthony Family, the Bryan Family, Juanita Anthony and Zimmy Bryan.</t>
 		  
 		  <t>We also thank the following contributors for assistance and review: Eran Hammer-Lahav, Lisa Dusseault, Mark Nottingham, Peter Saint-Andre, Chris Newman,
-		  Ian Macfarlane, Dave Cridland, Julian Reschke, Barry Leiba, Uri Blumenthal, Paul Hoffman, Felix Sasaki, Matthias Fuchs, and Mark Baker.</t>
+		  Ian Macfarlane, Dave Cridland, Julian Reschke, Barry Leiba, Uri Blumenthal, Paul Hoffman, Felix Sasaki, Matthias Fuchs, Mark Baker, and Scott Cantor.</t>
 		  
 
 	    </section> 
@@ -2212,12 +2209,13 @@ anyForeignElement =
 
 	    </list></t>
 		
-<t>-24 : November xx, 2009.
+<t>-24 : December xx, 2009.
 	    
 	    <list style="symbols">
 		
 		  <t>Document Shepherd review changes.</t>
 		  <t>Example XML indentation.</t>
+		  <t>Baseline file hash: SHA-256.</t>
 	   </list></t>
 	   
 <t>-23 : November 26, 2009.

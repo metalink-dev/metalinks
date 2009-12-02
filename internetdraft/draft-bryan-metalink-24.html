@@ -144,10 +144,10 @@
 <tr><td class="header">Network Working Group</td><td class="header">A. Bryan</td></tr>
 <tr><td class="header">Internet-Draft</td><td class="header">T. Tsujikawa</td></tr>
 <tr><td class="header">Intended status: Standards Track</td><td class="header">N. McNab</td></tr>
-<tr><td class="header">Expires: June 3, 2010</td><td class="header">&nbsp;</td></tr>
+<tr><td class="header">Expires: June 5, 2010</td><td class="header">&nbsp;</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">P. Poeml</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">Novell, Inc.</td></tr>
-<tr><td class="header">&nbsp;</td><td class="header">November 30, 2009</td></tr>
+<tr><td class="header">&nbsp;</td><td class="header">December 2, 2009</td></tr>
 </table></td></tr></table>
 <h1><br />The Metalink Download Description Format<br />draft-bryan-metalink-24</h1>
 
@@ -180,7 +180,7 @@ The list of current Internet-Drafts can be accessed at
 The list of Internet-Draft Shadow Directories can be accessed at
 <a href='http://www.ietf.org/shadow.html'>http://www.ietf.org/shadow.html</a>.</p>
 <p>
-This Internet-Draft will expire on June 3, 2010.</p>
+This Internet-Draft will expire on June 5, 2010.</p>
 
 <h3>Copyright Notice</h3>
 <p>
@@ -423,8 +423,9 @@ Examples</h3>
     &lt;description&gt;
        A description of the example file for download.
     &lt;/description&gt;
-    &lt;hash type="sha-1"&gt;
-       80bc95fd391772fa61c91ed68567f0980bb45fd9
+    &lt;hash type="sha-256"&gt;
+       f0ad929cd259957e160ea442eb80986b5f01
+daaffdbcc7e5a1840a666c4447c7
     &lt;/hash&gt;
     &lt;url location="de" priority="1"&gt;
        ftp://ftp.example.com/example.ext
@@ -452,8 +453,9 @@ Examples</h3>
     &lt;description&gt;
        Another description for a second file.
     &lt;/description&gt;
-    &lt;hash type="sha-1"&gt;
-       7f4afdc84bd1b79238703fb45cd045efd08bee4b
+    &lt;hash type="sha-256"&gt;
+       2f548ce50c459a0270e85a7d63b2383c5523
+9bf6aead9314a0f887f3623ddace
     &lt;/hash&gt;
     &lt;url location="de" priority="1"&gt;
        ftp://ftp.example.com/example2.ext
@@ -1139,7 +1141,8 @@ The &#34;metalink:metaurl&#34; Element</h3>
 metalinkMetaURL =
    element metalink:metaurl {
       metalinkCommonAttributes,
-      attribute priority { xsd:positiveInteger }?,
+      attribute priority { xsd:positiveInteger {
+         maxInclusive = "255"}
       attribute type { text },
       attribute name { text }?,
       metalinkUri
@@ -1342,9 +1345,10 @@ metalinkURL =
    element metalink:url {
       metalinkCommonAttributes,
       attribute location { xsd:string {
-        minLength = "2"  maxLength="2"}
+         minLength = "2"  maxLength="2"}
       }?,
-      attribute priority { xsd:positiveInteger }?,
+      attribute priority { xsd:positiveInteger {
+         maxInclusive = "255"}
       metalinkUri
    }</pre></div><p>
 
@@ -1677,7 +1681,7 @@ Cryptographic Hashes</h3>
 
 <p>Currently, some of the hash types defined in the IANA registry named "Hash Function Textual Names" are considered insecure. These include the whole Message Digest family of algorithms which are not suitable for cryptographically strong verification. Malicious people could provide files that appear to be identical to another file because of a collision, i.e. the weak cryptographic hashes of the intended file and a substituted malicious file could match.
 </p>
-<p>If a Metalink Document contains hashes, it SHOULD include "sha-1" which is SHA-1, as specified in <a class='info' href='#RFC3174'>[RFC3174]<span> (</span><span class='info'>Eastlake, D. and P. Jones, &ldquo;US Secure Hash Algorithm 1 (SHA1),&rdquo; September&nbsp;2001.</span><span>)</span></a>, or stronger.  It MAY also include other hashes from the IANA registry named "Hash Function Textual Names".
+<p>If a Metalink Document contains hashes, it SHOULD include "sha-256" which is SHA-256, as specified in <a class='info' href='#FIPS-180-3'>[FIPS&#8209;180&#8209;3]<span> (</span><span class='info'>National Institute of Standards and Technology (NIST), &ldquo;Secure Hash Standard (SHS),&rdquo; October&nbsp;2008.</span><span>)</span></a>, or stronger.  It MAY also include other hashes from the IANA registry named "Hash Function Textual Names".
 </p>
 <a name="anchor25"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
@@ -1703,6 +1707,8 @@ References</h3>
 <table width="99%" border="0">
 <tr><td class="author-text" valign="top"><a name="BITTORRENT">[BITTORRENT]</a></td>
 <td class="author-text">Cohen, B., &ldquo;<a href="http://www.bittorrent.org/beps/bep_0003.html">The BitTorrent Protocol Specification</a>,&rdquo; BITTORRENT&nbsp;11031, February&nbsp;2008.</td></tr>
+<tr><td class="author-text" valign="top"><a name="FIPS-180-3">[FIPS-180-3]</a></td>
+<td class="author-text">National Institute of Standards and Technology (NIST), &ldquo;Secure Hash Standard (SHS),&rdquo; FIPS PUB&nbsp;180-3, October&nbsp;2008.</td></tr>
 <tr><td class="author-text" valign="top"><a name="ISO3166-1">[ISO3166-1]</a></td>
 <td class="author-text">International Organization for Standardization, &ldquo;ISO 3166-1:2006.  Codes for the representation of names of countries and their subdivisions -- Part 1: Country codes,&rdquo; November&nbsp;2006.</td></tr>
 <tr><td class="author-text" valign="top"><a name="REC-xml">[REC-xml]</a></td>
@@ -1721,8 +1727,6 @@ References</h3>
 <td class="author-text">Rescorla, E., &ldquo;<a href="http://tools.ietf.org/html/rfc2818">HTTP Over TLS</a>,&rdquo; RFC&nbsp;2818, May&nbsp;2000.</td></tr>
 <tr><td class="author-text" valign="top"><a name="RFC3023">[RFC3023]</a></td>
 <td class="author-text">Murata, M., St. Laurent, S., and D. Kohn, &ldquo;<a href="http://tools.ietf.org/html/rfc3023">XML Media Types</a>,&rdquo; RFC&nbsp;3023, January&nbsp;2001.</td></tr>
-<tr><td class="author-text" valign="top"><a name="RFC3174">[RFC3174]</a></td>
-<td class="author-text">Eastlake, D. and P. Jones, &ldquo;<a href="http://tools.ietf.org/html/rfc3174">US Secure Hash Algorithm 1 (SHA1)</a>,&rdquo; RFC&nbsp;3174, September&nbsp;2001.</td></tr>
 <tr><td class="author-text" valign="top"><a name="RFC3339">[RFC3339]</a></td>
 <td class="author-text">Klyne, G. and C. Newman, &ldquo;<a href="http://tools.ietf.org/html/rfc3339">Date and Time on the Internet: Timestamps</a>,&rdquo; RFC&nbsp;3339, July&nbsp;2002.</td></tr>
 <tr><td class="author-text" valign="top"><a name="RFC3986">[RFC3986]</a></td>
@@ -1782,7 +1786,7 @@ Acknowledgements and Contributors</h3>
           Goulding. We also thank the Anthony Family, the Bryan Family, Juanita Anthony and Zimmy Bryan.
 </p>
 <p>We also thank the following contributors for assistance and review: Eran Hammer-Lahav, Lisa Dusseault, Mark Nottingham, Peter Saint-Andre, Chris Newman,
-		  Ian Macfarlane, Dave Cridland, Julian Reschke, Barry Leiba, Uri Blumenthal, Paul Hoffman, Felix Sasaki, Matthias Fuchs, and Mark Baker.
+		  Ian Macfarlane, Dave Cridland, Julian Reschke, Barry Leiba, Uri Blumenthal, Paul Hoffman, Felix Sasaki, Matthias Fuchs, Mark Baker, and Scott Cantor.
 </p>
 <a name="schema"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
@@ -1921,7 +1925,8 @@ metalinkLogo =
 metalinkMetaURL =
    element metalink:metaurl {
       metalinkCommonAttributes,
-      attribute priority { xsd:positiveInteger }?,
+      attribute priority { xsd:positiveInteger {
+         maxInclusive = "255"}
       attribute type { text },
       attribute name { text }?,
       metalinkUri
@@ -1972,7 +1977,8 @@ metalinkURL =
       attribute location { xsd:string {
          minLength = "2"  maxLength="2"}
       }?,
-      attribute priority { xsd:positiveInteger }?,
+      attribute priority { xsd:positiveInteger {
+         maxInclusive = "255"}
       metalinkUri
    }
 
@@ -2048,13 +2054,15 @@ Document History (to be removed by RFC Editor before publication)</h3>
 </li>
 </ul>
 
-<p>-24 : November xx, 2009.
+<p>-24 : December xx, 2009.
 	    
 	    </p>
 <ul class="text">
 <li>Document Shepherd review changes.
 </li>
 <li>Example XML indentation.
+</li>
+<li>Baseline file hash: SHA-256.
 </li>
 </ul>
 
