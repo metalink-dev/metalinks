@@ -144,10 +144,10 @@
 <tr><td class="header">Network Working Group</td><td class="header">A. Bryan</td></tr>
 <tr><td class="header">Internet-Draft</td><td class="header">N. McNab</td></tr>
 <tr><td class="header">Intended status: Standards Track</td><td class="header">H. Nordstrom</td></tr>
-<tr><td class="header">Expires: May 26, 2010</td><td class="header">&nbsp;</td></tr>
+<tr><td class="header">Expires: June 10, 2010</td><td class="header">&nbsp;</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">A. Ford</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">Roke Manor Research</td></tr>
-<tr><td class="header">&nbsp;</td><td class="header">November 22, 2009</td></tr>
+<tr><td class="header">&nbsp;</td><td class="header">December 7, 2009</td></tr>
 </table></td></tr></table>
 <h1><br />Metalink/HTTP: Mirrors and Checksums in HTTP Headers<br />draft-bryan-metalinkhttp-14</h1>
 
@@ -178,7 +178,7 @@ The list of current Internet-Drafts can be accessed at
 The list of Internet-Draft Shadow Directories can be accessed at
 <a href='http://www.ietf.org/shadow.html'>http://www.ietf.org/shadow.html</a>.</p>
 <p>
-This Internet-Draft will expire on May 26, 2010.</p>
+This Internet-Draft will expire on June 10, 2010.</p>
 
 <h3>Copyright Notice</h3>
 <p>
@@ -244,16 +244,12 @@ Cryptographic Hashes<br />
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor13">10.4.</a>&nbsp;
 Signing<br />
 <a href="#rfc.references1">11.</a>&nbsp;
-References<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#rfc.references1">11.1.</a>&nbsp;
 Normative References<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#rfc.references2">11.2.</a>&nbsp;
-Informative References<br />
-<a href="#anchor16">Appendix&nbsp;A.</a>&nbsp;
+<a href="#anchor15">Appendix&nbsp;A.</a>&nbsp;
 Acknowledgements and Contributors<br />
-<a href="#anchor17">Appendix&nbsp;B.</a>&nbsp;
+<a href="#anchor16">Appendix&nbsp;B.</a>&nbsp;
 Comparisons to Similar Options<br />
-<a href="#anchor18">Appendix&nbsp;C.</a>&nbsp;
+<a href="#anchor17">Appendix&nbsp;C.</a>&nbsp;
 Document History<br />
 <a href="#rfc.authors">&#167;</a>&nbsp;
 Authors' Addresses<br />
@@ -316,7 +312,8 @@ Link: &lt;http://example.com/example.ext.metalink&gt;; rel="describedby";
 type="application/metalink4+xml"
 Link: &lt;http://example.com/example.ext.asc&gt;; rel="describedby";
 type="application/pgp-signature"
-Digest: SHA=thvDyvhfIqlvFe+A9MYgxAfm1q5=
+Digest: SHA-256=MWVkMWQxYTRiMzk5MDQ0MzI3NGU5NDEyZTk5OWY1ZGFmNzgyZTJlO
+DYzYjRjYzFhOTlmNTQwYzI2M2QwM2U2MQ==
 </pre></div>
 
 <a name="anchor4"></a><br /><hr />
@@ -483,7 +480,8 @@ Checksums of Whole Files</h3>
 <p>
 <p>A brief Metalink server response with checksum:
 </p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
-Digest: SHA=thvDyvhfIqlvFe+A9MYgxAfm1q5=
+Digest: SHA-256=MWVkMWQxYTRiMzk5MDQ0MzI3NGU5NDEyZTk5OWY1ZGFmNzgyZTJlO
+DYzYjRjYzFhOTlmNTQwYzI2M2QwM2U2MQ==
 </pre></div>
 
 <a name="clientserver"></a><br /><hr />
@@ -753,7 +751,7 @@ Cryptographic Hashes</h3>
           These include the whole Message Digest family of algorithms which are not suitable for cryptographically strong verification. Malicious people could provide files that appear to be 
           identical to another file because of a collision, i.e. the weak cryptographic hashes of the intended file and a substituted malicious file could match.
 </p>
-<p>If a Metalink contains whole file hashes as described in <a class='info' href='#wholechecksums'>Section&nbsp;6<span> (</span><span class='info'>Checksums of Whole Files</span><span>)</span></a>, it SHOULD include "sha" which is SHA-1, as specified in <a class='info' href='#RFC3174'>[RFC3174]<span> (</span><span class='info'>Eastlake, D. and P. Jones, &ldquo;US Secure Hash Algorithm 1 (SHA1),&rdquo; September&nbsp;2001.</span><span>)</span></a>, or stronger. It MAY also include other hashes.
+<p>If a Metalink contains whole file hashes as described in <a class='info' href='#wholechecksums'>Section&nbsp;6<span> (</span><span class='info'>Checksums of Whole Files</span><span>)</span></a>, it SHOULD include "sha-256" which is SHA-256, as specified in <a class='info' href='#FIPS-180-3'>[FIPS&#8209;180&#8209;3]<span> (</span><span class='info'>National Institute of Standards and Technology (NIST), &ldquo;Secure Hash Standard (SHS),&rdquo; October&nbsp;2008.</span><span>)</span></a>, or stronger. It MAY also include other hashes.
 </p>
 <a name="anchor13"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
@@ -764,42 +762,31 @@ Signing</h3>
 </p>
 <p>Digital signatures provide authentication, message integrity, and non-repudiation with proof of origin.
 </p>
-<a name="rfc.references"></a><br /><hr />
-<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.11"></a><h3>11.&nbsp;
-References</h3>
-
 <a name="rfc.references1"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<h3>11.1.&nbsp;Normative References</h3>
+<h3>11.&nbsp;Normative References</h3>
 <table width="99%" border="0">
+<tr><td class="author-text" valign="top"><a name="FIPS-180-3">[FIPS-180-3]</a></td>
+<td class="author-text">National Institute of Standards and Technology (NIST), &ldquo;Secure Hash Standard (SHS),&rdquo; FIPS PUB&nbsp;180-3, October&nbsp;2008.</td></tr>
 <tr><td class="author-text" valign="top"><a name="ISO3166-1">[ISO3166-1]</a></td>
 <td class="author-text">International Organization for Standardization, &ldquo;ISO 3166-1:2006.  Codes for the representation of names of countries and their subdivisions -- Part 1: Country codes,&rdquo; November&nbsp;2006.</td></tr>
 <tr><td class="author-text" valign="top"><a name="RFC2119">[RFC2119]</a></td>
 <td class="author-text"><a href="mailto:sob@harvard.edu">Bradner, S.</a>, &ldquo;<a href="http://tools.ietf.org/html/rfc2119">Key words for use in RFCs to Indicate Requirement Levels</a>,&rdquo; BCP&nbsp;14, RFC&nbsp;2119, March&nbsp;1997.</td></tr>
 <tr><td class="author-text" valign="top"><a name="RFC2616">[RFC2616]</a></td>
 <td class="author-text">Fielding, R., Gettys, J., Mogul, J., Frystyk, H., Masinter, L., Leach, P., and T. Berners-Lee, &ldquo;<a href="http://tools.ietf.org/html/rfc2616">Hypertext Transfer Protocol -- HTTP/1.1</a>,&rdquo; RFC&nbsp;2616, June&nbsp;1999.</td></tr>
-<tr><td class="author-text" valign="top"><a name="RFC3174">[RFC3174]</a></td>
-<td class="author-text">Eastlake, D. and P. Jones, &ldquo;<a href="http://tools.ietf.org/html/rfc3174">US Secure Hash Algorithm 1 (SHA1)</a>,&rdquo; RFC&nbsp;3174, September&nbsp;2001.</td></tr>
 <tr><td class="author-text" valign="top"><a name="RFC3230">[RFC3230]</a></td>
 <td class="author-text">Mogul, J. and A. Van Hoff, &ldquo;<a href="http://tools.ietf.org/html/rfc3230">Instance Digests in HTTP</a>,&rdquo; RFC&nbsp;3230, January&nbsp;2002.</td></tr>
 <tr><td class="author-text" valign="top"><a name="RFC3986">[RFC3986]</a></td>
 <td class="author-text">Berners-Lee, T., Fielding, R., and L. Masinter, &ldquo;<a href="http://tools.ietf.org/html/rfc3986">Uniform Resource Identifier (URI): Generic Syntax</a>,&rdquo; STD&nbsp;66, RFC&nbsp;3986, January&nbsp;2005.</td></tr>
 <tr><td class="author-text" valign="top"><a name="RFC3987">[RFC3987]</a></td>
 <td class="author-text">Duerst, M. and M. Suignard, &ldquo;<a href="http://tools.ietf.org/html/rfc3987">Internationalized Resource Identifiers (IRIs)</a>,&rdquo; RFC&nbsp;3987, January&nbsp;2005.</td></tr>
+<tr><td class="author-text" valign="top"><a name="draft-bryan-metalink">[draft-bryan-metalink]</a></td>
+<td class="author-text"><a href="mailto:anthonybryan@gmail.com">Bryan, A., Ed.</a>, <a href="mailto:tatsuhiro.t@gmail.com">Tsujikawa, T.</a>, <a href="mailto:neil@nabber.org">McNab, N.</a>, and <a href="mailto:poeml@mirrorbrain.org">P. Poeml</a>, &ldquo;<a href="http://www.ietf.org/internet-drafts/draft-bryan-metalink-16.txt">The Metalink Download Description Format</a>,&rdquo; draft-bryan-metalink-16 (work in progress), August&nbsp;2009.</td></tr>
 <tr><td class="author-text" valign="top"><a name="draft-nottingham-http-link-header">[draft-nottingham-http-link-header]</a></td>
 <td class="author-text"><a href="mailto:mnot@mnot.net">Nottingham, M.</a>, &ldquo;<a href="http://www.ietf.org/internet-drafts/draft-nottingham-http-link-header-06.txt">Web Linking</a>,&rdquo; draft-nottingham-http-link-header-06 (work in progress), July&nbsp;2009.</td></tr>
 </table>
 
-<a name="rfc.references2"></a><br /><hr />
-<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<h3>11.2.&nbsp;Informative References</h3>
-<table width="99%" border="0">
-<tr><td class="author-text" valign="top"><a name="draft-bryan-metalink">[draft-bryan-metalink]</a></td>
-<td class="author-text"><a href="mailto:anthonybryan@gmail.com">Bryan, A., Ed.</a>, <a href="mailto:tatsuhiro.t@gmail.com">Tsujikawa, T.</a>, <a href="mailto:neil@nabber.org">McNab, N.</a>, and <a href="mailto:poeml@mirrorbrain.org">P. Poeml</a>, &ldquo;<a href="http://www.ietf.org/internet-drafts/draft-bryan-metalink-16.txt">The Metalink Download Description Format</a>,&rdquo; draft-bryan-metalink-16 (work in progress), August&nbsp;2009.</td></tr>
-</table>
-
-<a name="anchor16"></a><br /><hr />
+<a name="anchor15"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.A"></a><h3>Appendix A.&nbsp;
 Acknowledgements and Contributors</h3>
@@ -808,7 +795,7 @@ Acknowledgements and Contributors</h3>
 </p>
 <p>Support for simultaneous download from multiple mirrors is based upon work by Mark Handley and Javier Vela Diago, who also provided validation of the benefits of this approach.
 </p>
-<a name="anchor17"></a><br /><hr />
+<a name="anchor16"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.B"></a><h3>Appendix B.&nbsp;
 Comparisons to Similar Options</h3>
@@ -846,7 +833,7 @@ Comparisons to Similar Options</h3>
 </li>
 </ul>
 
-<a name="anchor18"></a><br /><hr />
+<a name="anchor17"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.C"></a><h3>Appendix C.&nbsp;
 Document History</h3>

@@ -55,7 +55,7 @@
           <email>alan.ford@roke.co.uk</email>
         </address>
       </author>
-	<date month="November" year="2009"/>        
+	<date month="December" year="2009"/>        
 
       <abstract>
     <t>This document specifies Metalink/HTTP: Mirrors and Checksums in HTTP Headers, a different way to get information that is usually contained in the Metalink XML-based download description format. 
@@ -113,7 +113,8 @@ Link: &lt;http://example.com/example.ext.metalink&gt;; rel="describedby";
 type="application/metalink4+xml"
 Link: &lt;http://example.com/example.ext.asc&gt;; rel="describedby";
 type="application/pgp-signature"
-Digest: SHA=thvDyvhfIqlvFe+A9MYgxAfm1q5=
+Digest: SHA-256=MWVkMWQxYTRiMzk5MDQ0MzI3NGU5NDEyZTk5OWY1ZGFmNzgyZTJlO
+DYzYjRjYzFhOTlmNTQwYzI2M2QwM2U2MQ==
 </artwork></figure></t>
       </section> 
       <section title="Notational Conventions"> 
@@ -250,7 +251,8 @@ type="application/pgp-signature"
 <t><figure> 
 	  <preamble>A brief Metalink server response with checksum:</preamble>	
 	  <artwork type="example">
-Digest: SHA=thvDyvhfIqlvFe+A9MYgxAfm1q5=
+Digest: SHA-256=MWVkMWQxYTRiMzk5MDQ0MzI3NGU5NDEyZTk5OWY1ZGFmNzgyZTJlO
+DYzYjRjYzFhOTlmNTQwYzI2M2QwM2U2MQ==
 </artwork></figure></t>
 
 
@@ -484,7 +486,7 @@ other mirrors.</t>
 	      <t>Currently, some of the digest values defined in Instance Digests in HTTP <xref target="RFC3230"/> are considered insecure. 
           These include the whole Message Digest family of algorithms which are not suitable for cryptographically strong verification. Malicious people could provide files that appear to be 
           identical to another file because of a collision, i.e. the weak cryptographic hashes of the intended file and a substituted malicious file could match.</t>
-          <t>If a Metalink contains whole file hashes as described in <xref target="wholechecksums"/>, it SHOULD include "sha" which is SHA-1, as specified in <xref target="RFC3174"/>, or stronger. It MAY also include other hashes.</t>
+          <t>If a Metalink contains whole file hashes as described in <xref target="wholechecksums"/>, it SHOULD include "sha-256" which is SHA-256, as specified in <xref target="FIPS-180-3"/>, or stronger. It MAY also include other hashes.</t>
 
 	    </section>	
 		
@@ -569,18 +571,6 @@ other mirrors.</t>
 <seriesInfo name="RFC" value="2616"/>
 </reference>
 
-<reference anchor="RFC3174">
-
-<front>
-<title>US Secure Hash Algorithm 1 (SHA1)</title>
-<author initials="D." surname="Eastlake" fullname="D. Eastlake">
-<organization/></author>
-<author initials="P." surname="Jones" fullname="P. Jones">
-<organization/></author>
-<date year="2001" month="September"/></front>
-
-<seriesInfo name="RFC" value="3174"/>
-</reference> 
 
 <reference anchor="RFC3230">
 
@@ -649,10 +639,16 @@ other mirrors.</t>
 <date month="November" year="2006"/></front>
 </reference>
 
-
-	  </references>
-	  
-	  <references title="Informative References">
+<reference anchor="FIPS-180-3">
+<front>
+<title>Secure Hash Standard (SHS)</title>
+<author>
+    <organization>National Institute of Standards and Technology (NIST)</organization>
+</author>
+<date year="2008" month="October"></date>
+</front>
+<seriesInfo name="FIPS PUB" value="180-3"></seriesInfo>
+</reference>
 
 <reference anchor="draft-bryan-metalink">
   <front>
@@ -690,7 +686,9 @@ other mirrors.</t>
   <seriesInfo name="Internet-Draft" value="draft-bryan-metalink-16"/>
 </reference>
 
-	    </references> 
+	  </references>
+	  
+
 
 	    <section title="Acknowledgements and Contributors">
 		  <t>Thanks to the Metalink community, Mark Handley, Mark Nottingham, Daniel Stenberg, Tatsuhiro Tsujikawa, Peter Poeml, Matt Domsch, Micah Cowan, and David Morris.</t>
