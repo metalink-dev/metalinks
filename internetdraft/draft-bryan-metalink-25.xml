@@ -84,7 +84,7 @@
       transmission can corrupt the file.  There are no easy ways to repair
       these files. For large downloads this can be especially troublesome.  Any
       of the number of problems that can occur during a download lead to
-      frustration on the part of users, and bandwith wasted with retransmission.</t>
+      frustration on the part of users, and bandwidth wasted with retransmission.</t>
 
       <t>Knowledge about availability of a download on mirror servers can be
       acquired and maintained by the operators of the origin server, or by third
