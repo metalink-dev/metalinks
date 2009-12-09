@@ -144,10 +144,10 @@
 <tr><td class="header">Network Working Group</td><td class="header">A. Bryan</td></tr>
 <tr><td class="header">Internet-Draft</td><td class="header">T. Tsujikawa</td></tr>
 <tr><td class="header">Intended status: Standards Track</td><td class="header">N. McNab</td></tr>
-<tr><td class="header">Expires: June 5, 2010</td><td class="header">&nbsp;</td></tr>
+<tr><td class="header">Expires: June 11, 2010</td><td class="header">&nbsp;</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">P. Poeml</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">Novell, Inc.</td></tr>
-<tr><td class="header">&nbsp;</td><td class="header">December 2, 2009</td></tr>
+<tr><td class="header">&nbsp;</td><td class="header">December 8, 2009</td></tr>
 </table></td></tr></table>
 <h1><br />The Metalink Download Description Format<br />draft-bryan-metalink-24</h1>
 
@@ -180,7 +180,7 @@ The list of current Internet-Drafts can be accessed at
 The list of Internet-Draft Shadow Directories can be accessed at
 <a href='http://www.ietf.org/shadow.html'>http://www.ietf.org/shadow.html</a>.</p>
 <p>
-This Internet-Draft will expire on June 5, 2010.</p>
+This Internet-Draft will expire on June 11, 2010.</p>
 
 <h3>Copyright Notice</h3>
 <p>
@@ -1142,7 +1142,7 @@ metalinkMetaURL =
    element metalink:metaurl {
       metalinkCommonAttributes,
       attribute priority { xsd:positiveInteger {
-         maxInclusive = "255"}
+         maxInclusive = "999999"}
       attribute type { text },
       attribute name { text }?,
       metalinkUri
@@ -1155,7 +1155,7 @@ metalinkMetaURL =
 The &#34;priority&#34; Attribute</h3>
 
 <p><a class='info' href='#element.metaurl'>metalink:metaurl<span> (</span><span class='info'>The &#34;metalink:metaurl&#34; Element</span><span>)</span></a>
-	    elements MAY have a priority attribute. Values MUST be positive integers. Lower values indicate a higher priority. The priority values of <a class='info' href='#element.metaurl'>metalink:metaurl<span> (</span><span class='info'>The &#34;metalink:metaurl&#34; Element</span><span>)</span></a> and <a class='info' href='#element.url'>metalink:url<span> (</span><span class='info'>The &#34;metalink:url&#34; Element</span><span>)</span></a> elements are compared and the lowest ones are used first. Multiple <a class='info' href='#element.metaurl'>metalink:metaurl<span> (</span><span class='info'>The &#34;metalink:metaurl&#34; Element</span><span>)</span></a> and <a class='info' href='#element.url'>metalink:url<span> (</span><span class='info'>The &#34;metalink:url&#34; Element</span><span>)</span></a> elements MAY have the same
+	    elements MAY have a priority attribute. Values MUST be positive integers between 1 and 999999. Lower values indicate a higher priority. The priority values of <a class='info' href='#element.metaurl'>metalink:metaurl<span> (</span><span class='info'>The &#34;metalink:metaurl&#34; Element</span><span>)</span></a> and <a class='info' href='#element.url'>metalink:url<span> (</span><span class='info'>The &#34;metalink:url&#34; Element</span><span>)</span></a> elements are compared and the lowest ones are used first. Multiple <a class='info' href='#element.metaurl'>metalink:metaurl<span> (</span><span class='info'>The &#34;metalink:metaurl&#34; Element</span><span>)</span></a> and <a class='info' href='#element.url'>metalink:url<span> (</span><span class='info'>The &#34;metalink:url&#34; Element</span><span>)</span></a> elements MAY have the same
 		priority, i.e. one BitTorrent .torrent file and three FTP URIs could have priority="1". See also the "priority" attribute of the <a class='info' href='#element.url'>metalink:url<span> (</span><span class='info'>The &#34;metalink:url&#34; Element</span><span>)</span></a> element.
 </p>
 <a name="anchor13"></a><br /><hr />
@@ -1276,7 +1276,7 @@ The &#34;metalink:signature&#34; Element</h3>
 <div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
 metalinkSignature =
    element metalink:signature {
-     attribute type { "pgp" },
+     attribute type { text },
      metalinkTextConstruct
    }</pre></div><p>
 
@@ -1348,7 +1348,7 @@ metalinkURL =
          minLength = "2"  maxLength="2"}
       }?,
       attribute priority { xsd:positiveInteger {
-         maxInclusive = "255"}
+         maxInclusive = "999999"}
       metalinkUri
    }</pre></div><p>
 
@@ -1359,7 +1359,7 @@ metalinkURL =
 The &#34;priority&#34; Attribute</h3>
 
 <p><a class='info' href='#element.url'>metalink:url<span> (</span><span class='info'>The &#34;metalink:url&#34; Element</span><span>)</span></a>
-	    elements MAY have a priority attribute. Values MUST be positive integers. Lower values indicate a higher priority. Multiple <a class='info' href='#element.url'>metalink:url<span> (</span><span class='info'>The &#34;metalink:url&#34; Element</span><span>)</span></a> elements can have the same
+	    elements MAY have a priority attribute. Values MUST be positive integers between 1 and 999999. Lower values indicate a higher priority. Multiple <a class='info' href='#element.url'>metalink:url<span> (</span><span class='info'>The &#34;metalink:url&#34; Element</span><span>)</span></a> elements can have the same
 		priority, i.e. ten mirrors could have priority="1".
 </p>
 <a name="anchor17"></a><br /><hr />
@@ -1926,7 +1926,7 @@ metalinkMetaURL =
    element metalink:metaurl {
       metalinkCommonAttributes,
       attribute priority { xsd:positiveInteger {
-         maxInclusive = "255"}
+         maxInclusive = "999999"}
       attribute type { text },
       attribute name { text }?,
       metalinkUri
@@ -1957,7 +1957,7 @@ metalinkPublisher =
 
 metalinkSignature =
    element metalink:signature {
-      attribute type { "pgp" },
+      attribute type { text },
       metalinkTextConstruct
    }
 
@@ -1978,7 +1978,7 @@ metalinkURL =
          minLength = "2"  maxLength="2"}
       }?,
       attribute priority { xsd:positiveInteger {
-         maxInclusive = "255"}
+         maxInclusive = "999999"}
       metalinkUri
    }
 
