@@ -87,8 +87,8 @@
       frustration on the part of users, and bandwidth wasted with retransmission.</t>
 
       <t>Knowledge about availability of a download on mirror servers can be
-      acquired and maintained by the operators of the origin server, or by third
-      a party.  This knowledge, together with checksums,
+      acquired and maintained by the operators of the origin server, or by a third
+      party.  This knowledge, together with checksums,
       digital signatures, and more can be stored in a machine-readable Metalink
       file.  The Metalink file can transfer this knowledge to the user agent,
       which can peruse it in automatic ways or present the information to a human user. 
