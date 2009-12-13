@@ -568,6 +568,9 @@ metalinkCommonAttributes =
    undefinedAttribute*</pre></div><p>
 
 </p>
+<p>All leading and trailing whitespace is part of the element content, and MUST be ignored. Consequently, it is disallowed for elements where the defined type does not allow whitespace, such as dates, integers, or IRIs.
+	  Some XML-generating implementations erroneously insert white space around values by default, and such implementations will generate invalid Metalink Documents.
+</p>
 <p>Metalink Documents that do not follow this specification are invalid, and partially or wholly unusable to Metalink Processors.
 </p>
 <p>Metalink is an extensible format. See <a class='info' href='#extending_metalink'>Section&nbsp;6<span> (</span><span class='info'>Extending Metalink</span><span>)</span></a>
@@ -586,11 +589,6 @@ Common Metalink Constructs</h3>
 <p>When an element is identified as being a particular kind of
       construct, it inherits the corresponding requirements from that
       construct's definition in this section.
-</p>
-<p>Note that there MUST NOT be any white space in a Date construct
-      or in any IRI. Some XML-generating implementations erroneously insert
-      white space around values by default, and such implementations will generate
-      invalid Metalink Documents.
 </p>
 <a name="text.constructs"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
@@ -1712,15 +1710,15 @@ References</h3>
 <tr><td class="author-text" valign="top"><a name="ISO3166-1">[ISO3166-1]</a></td>
 <td class="author-text">International Organization for Standardization, &ldquo;ISO 3166-1:2006.  Codes for the representation of names of countries and their subdivisions -- Part 1: Country codes,&rdquo; November&nbsp;2006.</td></tr>
 <tr><td class="author-text" valign="top"><a name="REC-xml">[REC-xml]</a></td>
-<td class="author-text">Yergeau, F., Paoli, J., Bray, T., Sperberg-McQueen, C., and E. Maler, &ldquo;<a href="http://www.w3.org/TR/2008/REC-xml-20081126">Extensible Markup Language (XML) 1.0 (Fifth Edition)</a>,&rdquo; World Wide Web Consortium Recommendation&nbsp;REC-xml-20081126, November&nbsp;2008.</td></tr>
+<td class="author-text">Yergeau, F., Paoli, J., Bray, T., Sperberg-McQueen, C., and E. Maler, &ldquo;<a href="http://www.w3.org/TR/2008/REC-xml-20081126/">Extensible Markup Language (XML) 1.0 (Fifth Edition)</a>,&rdquo; W3C&nbsp;REC-xml-20081126, November&nbsp;2008.</td></tr>
 <tr><td class="author-text" valign="top"><a name="REC-xml-infoset">[REC-xml-infoset]</a></td>
-<td class="author-text">Cowan, J. and R. Tobin, &ldquo;<a href="http://www.w3.org/TR/2004/REC-xml-infoset-20040204">XML Information Set (Second Edition)</a>,&rdquo; World Wide Web Consortium Recommendation&nbsp;REC-xml-infoset-20040204, February&nbsp;2004.</td></tr>
+<td class="author-text">Cowan, J. and R. Tobin, &ldquo;<a href="http://www.w3.org/TR/2004/REC-xml-infoset-20040204/">XML Information Set (Second Edition)</a>,&rdquo; W3C&nbsp;REC-xml-infoset-20040204, February&nbsp;2004.</td></tr>
 <tr><td class="author-text" valign="top"><a name="REC-xml-names">[REC-xml-names]</a></td>
-<td class="author-text">Hollander, D., Bray, T., Tobin, R., and A. Layman, &ldquo;<a href="http://www.w3.org/TR/2009/REC-xml-names-20091208">Namespaces in XML 1.0 (Third Edition)</a>,&rdquo; World Wide Web Consortium Recommendation&nbsp;REC-xml-names-20091208, December&nbsp;2009.</td></tr>
+<td class="author-text">Hollander, D., Bray, T., Tobin, R., and A. Layman, &ldquo;<a href="http://www.w3.org/TR/2009/REC-xml-names-20091208/">Namespaces in XML 1.0 (Third Edition)</a>,&rdquo; W3C&nbsp;REC-xml-names-20091208, December&nbsp;2009.</td></tr>
 <tr><td class="author-text" valign="top"><a name="REC-xmlbase">[REC-xmlbase]</a></td>
-<td class="author-text">Marsh, J. and R. Tobin, &ldquo;<a href="http://www.w3.org/TR/2009/REC-xmlbase-20090128">XML Base (Second Edition)</a>,&rdquo; World Wide Web Consortium Recommendation&nbsp;REC-xmlbase-20090128, January&nbsp;2009.</td></tr>
+<td class="author-text">Marsh, J. and R. Tobin, &ldquo;<a href="http://www.w3.org/TR/2009/REC-xmlbase-20090128/">XML Base (Second Edition)</a>,&rdquo; W3C&nbsp;REC-xmlbase-20090128, January&nbsp;2009.</td></tr>
 <tr><td class="author-text" valign="top"><a name="REC-xmldsig-core">[REC-xmldsig-core]</a></td>
-<td class="author-text">Solo, D., Reagle, J., and D. Eastlake, &ldquo;<a href="http://www.w3.org/TR/2008/REC-xmldsig-core-20080610">XML-Signature Syntax and Processing (Second Edition)</a>,&rdquo; World Wide Web Consortium Recommendation&nbsp;REC-xmldsig-core-20080610, June&nbsp;2008.</td></tr>
+<td class="author-text">Solo, D., Reagle, J., and D. Eastlake, &ldquo;<a href="http://www.w3.org/TR/2008/REC-xmldsig-core-20080610/">XML-Signature Syntax and Processing (Second Edition)</a>,&rdquo; W3C&nbsp;REC-xmldsig-core-20080610, June&nbsp;2008.</td></tr>
 <tr><td class="author-text" valign="top"><a name="RFC2119">[RFC2119]</a></td>
 <td class="author-text"><a href="mailto:sob@harvard.edu">Bradner, S.</a>, &ldquo;<a href="http://tools.ietf.org/html/rfc2119">Key words for use in RFCs to Indicate Requirement Levels</a>,&rdquo; BCP&nbsp;14, RFC&nbsp;2119, March&nbsp;1997.</td></tr>
 <tr><td class="author-text" valign="top"><a name="RFC2818">[RFC2818]</a></td>
@@ -1752,9 +1750,9 @@ References</h3>
 <tr><td class="author-text" valign="top"><a name="RFC4287">[RFC4287]</a></td>
 <td class="author-text">Nottingham, M. and R. Sayre, &ldquo;<a href="http://tools.ietf.org/html/rfc4287">The Atom Syndication Format</a>,&rdquo; RFC&nbsp;4287, December&nbsp;2005.</td></tr>
 <tr><td class="author-text" valign="top"><a name="W3C.NOTE-datetime-19980827">[W3C.NOTE-datetime-19980827]</a></td>
-<td class="author-text">Wolf, M. and C. Wicksteed, &ldquo;<a href="http://www.w3.org/TR/1998/NOTE-datetime-19980827">Date and Time Formats</a>,&rdquo; World Wide Web Consortium NOTE&nbsp;NOTE-datetime-19980827, August&nbsp;1998.</td></tr>
+<td class="author-text">Wolf, M. and C. Wicksteed, &ldquo;<a href="http://www.w3.org/TR/1998/NOTE-datetime-19980827">Date and Time Formats</a>,&rdquo; W3C&nbsp;NOTE-datetime-19980827, August&nbsp;1998.</td></tr>
 <tr><td class="author-text" valign="top"><a name="W3C.REC-xmlschema-2-20041028">[W3C.REC-xmlschema-2-20041028]</a></td>
-<td class="author-text">Malhotra, A. and P. Biron, &ldquo;<a href="http://www.w3.org/TR/2004/REC-xmlschema-2-20041028">XML Schema Part 2: Datatypes Second Edition</a>,&rdquo; World Wide Web Consortium Recommendation&nbsp;REC-xmlschema-2-20041028, October&nbsp;2004.</td></tr>
+<td class="author-text">Malhotra, A. and P. Biron, &ldquo;<a href="http://www.w3.org/TR/2004/REC-xmlschema-2-20041028/">XML Schema Part 2: Datatypes Second Edition</a>,&rdquo; W3C&nbsp;REC-xmlschema-2-20041028, October&nbsp;2004.</td></tr>
 </table>
 
 <a name="anchor28"></a><br /><hr />
