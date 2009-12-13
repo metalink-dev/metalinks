@@ -316,6 +316,8 @@ metalinkCommonAttributes =
    attribute xml:base { metalinkUri }?,
    attribute xml:lang { metalinkLanguageTag }?,
    undefinedAttribute*</artwork>  </figure></t>
+      <t>All leading and trailing whitespace is part of the element content, and MUST be ignored. Consequently, it is disallowed for elements where the defined type does not allow whitespace, such as dates, integers, or IRIs.
+	  Some XML-generating implementations erroneously insert white space around values by default, and such implementations will generate invalid Metalink Documents.</t>
       <t>Metalink Documents that do not follow this specification are invalid, and partially or wholly unusable to Metalink Processors.</t>
 	  
       <t>Metalink is an extensible format. See <xref target="extending_metalink"/>
@@ -334,12 +336,7 @@ metalinkCommonAttributes =
       <t>When an element is identified as being a particular kind of
       construct, it inherits the corresponding requirements from that
       construct's definition in this section.</t>
-
-      <t>Note that there MUST NOT be any white space in a Date construct
-      or in any IRI. Some XML-generating implementations erroneously insert
-      white space around values by default, and such implementations will generate
-      invalid Metalink Documents.</t>
-      
+    
       <section title="Text Constructs" anchor="text.constructs">
          
          
@@ -1670,7 +1667,7 @@ structuredExtensionElement =
 <seriesInfo name="RFC" value="5646"/>
 </reference>
 
-<reference anchor="REC-xml-infoset" target="http://www.w3.org/TR/2004/REC-xml-infoset-20040204">
+<reference anchor="REC-xml-infoset" target="http://www.w3.org/TR/2004/REC-xml-infoset-20040204/">
 <front>
 <title>XML Information Set (Second Edition)</title>
 
@@ -1686,12 +1683,12 @@ structuredExtensionElement =
 <date year="2004" day="4" month="February"></date>
 </front>
 
-<seriesInfo name="World Wide Web Consortium Recommendation" value="REC-xml-infoset-20040204"></seriesInfo>
+<seriesInfo name="W3C" value="REC-xml-infoset-20040204"></seriesInfo>
 </reference>
 
  
 
-<reference anchor="REC-xmlbase" target="http://www.w3.org/TR/2009/REC-xmlbase-20090128">
+<reference anchor="REC-xmlbase" target="http://www.w3.org/TR/2009/REC-xmlbase-20090128/">
 <front>
 <title>XML Base (Second Edition)</title>
 
@@ -1707,11 +1704,11 @@ structuredExtensionElement =
 <date year="2009" day="28" month="January"></date>
 </front>
 
-<seriesInfo name="World Wide Web Consortium Recommendation" value="REC-xmlbase-20090128"></seriesInfo>
+<seriesInfo name="W3C" value="REC-xmlbase-20090128"></seriesInfo>
 </reference>
 
  
-<reference anchor="REC-xml-names" target="http://www.w3.org/TR/2009/REC-xml-names-20091208">
+<reference anchor="REC-xml-names" target="http://www.w3.org/TR/2009/REC-xml-names-20091208/">
 <front>
 <title>Namespaces in XML 1.0 (Third Edition)</title>
 
@@ -1735,11 +1732,11 @@ structuredExtensionElement =
 <date year="2009" day="08" month="December"></date>
 </front>
 
-<seriesInfo name="World Wide Web Consortium Recommendation" value="REC-xml-names-20091208"></seriesInfo>
+<seriesInfo name="W3C" value="REC-xml-names-20091208"></seriesInfo>
 </reference>
 
  
-<reference anchor="REC-xml" target="http://www.w3.org/TR/2008/REC-xml-20081126">
+<reference anchor="REC-xml" target="http://www.w3.org/TR/2008/REC-xml-20081126/">
 <front>
 <title>Extensible Markup Language (XML) 1.0 (Fifth Edition)</title>
 
@@ -1768,11 +1765,11 @@ structuredExtensionElement =
 <date year="2008" day="26" month="November"></date>
 </front>
 
-<seriesInfo name="World Wide Web Consortium Recommendation" value="REC-xml-20081126"></seriesInfo>
+<seriesInfo name="W3C" value="REC-xml-20081126"></seriesInfo>
 </reference>
 
  
-<reference anchor="REC-xmldsig-core" target="http://www.w3.org/TR/2008/REC-xmldsig-core-20080610">
+<reference anchor="REC-xmldsig-core" target="http://www.w3.org/TR/2008/REC-xmldsig-core-20080610/">
 
 <front>
 <title>XML-Signature Syntax and Processing (Second Edition)</title>
@@ -1793,7 +1790,7 @@ structuredExtensionElement =
 <date year="2008" day="10" month="June"></date>
 </front>
 
-<seriesInfo name="World Wide Web Consortium Recommendation" value="REC-xmldsig-core-20080610"></seriesInfo>
+<seriesInfo name="W3C" value="REC-xmldsig-core-20080610"></seriesInfo>
 </reference>
 
 
@@ -1836,7 +1833,7 @@ structuredExtensionElement =
 
       
 
-<reference anchor="W3C.REC-xmlschema-2-20041028" target="http://www.w3.org/TR/2004/REC-xmlschema-2-20041028">
+<reference anchor="W3C.REC-xmlschema-2-20041028" target="http://www.w3.org/TR/2004/REC-xmlschema-2-20041028/">
 <front>
 <title>XML Schema Part 2: Datatypes Second Edition</title>
 
@@ -1851,7 +1848,7 @@ structuredExtensionElement =
 <date month="October" day="28" year="2004"/>
 </front>
 
-<seriesInfo name="World Wide Web Consortium Recommendation" value="REC-xmlschema-2-20041028"/>
+<seriesInfo name="W3C" value="REC-xmlschema-2-20041028"/>
 </reference>
 
       
@@ -1871,7 +1868,7 @@ structuredExtensionElement =
 <date month="August" day="27" year="1998"/>
 </front>
 
-<seriesInfo name="World Wide Web Consortium NOTE" value="NOTE-datetime-19980827"/>
+<seriesInfo name="W3C" value="NOTE-datetime-19980827"/>
 </reference>
 
 
