@@ -400,8 +400,8 @@ metalinkDateConstruct =
 	<t>Such date values happen to be compatible with the following
 	specifications:
 	<xref target="ISO.8601.1988"/>, 
-	<xref target="W3C.NOTE-datetime-19980827"/>,
-	and <xref target="W3C.REC-xmlschema-2-20041028"/>.</t>
+	<xref target="NOTE-datetime-19980827"/>,
+	and <xref target="REC-xmlschema-2-20041028"/>.</t>
 	
 	<t>Example Date constructs:
 
@@ -941,7 +941,7 @@ metalinkMetaURL =
    element metalink:metaurl {
       metalinkCommonAttributes,
       attribute priority { xsd:positiveInteger {
-         maxInclusive = "999999"}
+         maxInclusive = "999999"}},
       attribute type { text },
       attribute name { text }?,
       metalinkUri
@@ -1173,7 +1173,7 @@ metalinkURL =
          minLength = "2"  maxLength="2"}
       }?,
       attribute priority { xsd:positiveInteger {
-         maxInclusive = "999999"}
+         maxInclusive = "999999"}},
       metalinkUri
    }</artwork></figure></t> 
 
@@ -1833,7 +1833,7 @@ structuredExtensionElement =
 
       
 
-<reference anchor="W3C.REC-xmlschema-2-20041028" target="http://www.w3.org/TR/2004/REC-xmlschema-2-20041028/">
+<reference anchor="REC-xmlschema-2-20041028" target="http://www.w3.org/TR/2004/REC-xmlschema-2-20041028/">
 <front>
 <title>XML Schema Part 2: Datatypes Second Edition</title>
 
@@ -1853,7 +1853,7 @@ structuredExtensionElement =
 
       
 
-<reference anchor="W3C.NOTE-datetime-19980827" target="http://www.w3.org/TR/1998/NOTE-datetime-19980827">
+<reference anchor="NOTE-datetime-19980827" target="http://www.w3.org/TR/1998/NOTE-datetime-19980827">
 <front>
 <title>Date and Time Formats</title>
 
@@ -2008,8 +2008,8 @@ metalinkFile =
       attribute name { text },
       (metalinkCopyright?
        &amp; metalinkDescription?
-       &amp; metalinkIdentity?
        &amp; metalinkHash*
+       &amp; metalinkIdentity?
        &amp; metalinkLanguage?
        &amp; metalinkLicense?
        &amp; metalinkLogo?
@@ -2084,7 +2084,7 @@ metalinkMetaURL =
    element metalink:metaurl {
       metalinkCommonAttributes,
       attribute priority { xsd:positiveInteger {
-         maxInclusive = "999999"}
+         maxInclusive = "999999"}},
       attribute type { text },
       attribute name { text }?,
       metalinkUri
@@ -2136,7 +2136,7 @@ metalinkURL =
          minLength = "2"  maxLength="2"}
       }?,
       attribute priority { xsd:positiveInteger {
-         maxInclusive = "999999"}
+         maxInclusive = "999999"}},
       metalinkUri
    }
 

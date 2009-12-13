@@ -648,8 +648,8 @@ metalinkDateConstruct =
 <p>Such date values happen to be compatible with the following
 	specifications:
 	<a class='info' href='#ISO.8601.1988'>[ISO.8601.1988]<span> (</span><span class='info'>International Organization for Standardization, &ldquo;Data elements and interchange formats - Information interchange - Representation of dates and times,&rdquo; June&nbsp;1988.</span><span>)</span></a>, 
-	<a class='info' href='#W3C.NOTE-datetime-19980827'>[W3C.NOTE&#8209;datetime&#8209;19980827]<span> (</span><span class='info'>Wolf, M. and C. Wicksteed, &ldquo;Date and Time Formats,&rdquo; August&nbsp;1998.</span><span>)</span></a>,
-	and <a class='info' href='#W3C.REC-xmlschema-2-20041028'>[W3C.REC&#8209;xmlschema&#8209;2&#8209;20041028]<span> (</span><span class='info'>Malhotra, A. and P. Biron, &ldquo;XML Schema Part 2: Datatypes Second Edition,&rdquo; October&nbsp;2004.</span><span>)</span></a>.
+	<a class='info' href='#NOTE-datetime-19980827'>[NOTE&#8209;datetime&#8209;19980827]<span> (</span><span class='info'>Wolf, M. and C. Wicksteed, &ldquo;Date and Time Formats,&rdquo; August&nbsp;1998.</span><span>)</span></a>,
+	and <a class='info' href='#REC-xmlschema-2-20041028'>[REC&#8209;xmlschema&#8209;2&#8209;20041028]<span> (</span><span class='info'>Malhotra, A. and P. Biron, &ldquo;XML Schema Part 2: Datatypes Second Edition,&rdquo; October&nbsp;2004.</span><span>)</span></a>.
 </p>
 <p>Example Date constructs:
 
@@ -1140,7 +1140,7 @@ metalinkMetaURL =
    element metalink:metaurl {
       metalinkCommonAttributes,
       attribute priority { xsd:positiveInteger {
-         maxInclusive = "999999"}
+         maxInclusive = "999999"}},
       attribute type { text },
       attribute name { text }?,
       metalinkUri
@@ -1346,7 +1346,7 @@ metalinkURL =
          minLength = "2"  maxLength="2"}
       }?,
       attribute priority { xsd:positiveInteger {
-         maxInclusive = "999999"}
+         maxInclusive = "999999"}},
       metalinkUri
    }</pre></div><p>
 
@@ -1743,16 +1743,16 @@ References</h3>
 <table width="99%" border="0">
 <tr><td class="author-text" valign="top"><a name="ISO.8601.1988">[ISO.8601.1988]</a></td>
 <td class="author-text">International Organization for Standardization, &ldquo;Data elements and interchange formats - Information interchange - Representation of dates and times,&rdquo; ISO&nbsp;Standard 8601, June&nbsp;1988.</td></tr>
+<tr><td class="author-text" valign="top"><a name="NOTE-datetime-19980827">[NOTE-datetime-19980827]</a></td>
+<td class="author-text">Wolf, M. and C. Wicksteed, &ldquo;<a href="http://www.w3.org/TR/1998/NOTE-datetime-19980827">Date and Time Formats</a>,&rdquo; W3C&nbsp;NOTE-datetime-19980827, August&nbsp;1998.</td></tr>
+<tr><td class="author-text" valign="top"><a name="REC-xmlschema-2-20041028">[REC-xmlschema-2-20041028]</a></td>
+<td class="author-text">Malhotra, A. and P. Biron, &ldquo;<a href="http://www.w3.org/TR/2004/REC-xmlschema-2-20041028/">XML Schema Part 2: Datatypes Second Edition</a>,&rdquo; W3C&nbsp;REC-xmlschema-2-20041028, October&nbsp;2004.</td></tr>
 <tr><td class="author-text" valign="top"><a name="RELAX-NG">[RELAX-NG]</a></td>
 <td class="author-text">Clark, J., &ldquo;<a href="http://www.oasis-open.org/committees/relax-ng/compact-20021121.html">RELAX NG Compact Syntax</a>,&rdquo; December&nbsp;2001.</td></tr>
 <tr><td class="author-text" valign="top"><a name="RFC3688">[RFC3688]</a></td>
 <td class="author-text">Mealling, M., &ldquo;<a href="http://tools.ietf.org/html/rfc3688">The IETF XML Registry</a>,&rdquo; BCP&nbsp;81, RFC&nbsp;3688, January&nbsp;2004.</td></tr>
 <tr><td class="author-text" valign="top"><a name="RFC4287">[RFC4287]</a></td>
 <td class="author-text">Nottingham, M. and R. Sayre, &ldquo;<a href="http://tools.ietf.org/html/rfc4287">The Atom Syndication Format</a>,&rdquo; RFC&nbsp;4287, December&nbsp;2005.</td></tr>
-<tr><td class="author-text" valign="top"><a name="W3C.NOTE-datetime-19980827">[W3C.NOTE-datetime-19980827]</a></td>
-<td class="author-text">Wolf, M. and C. Wicksteed, &ldquo;<a href="http://www.w3.org/TR/1998/NOTE-datetime-19980827">Date and Time Formats</a>,&rdquo; W3C&nbsp;NOTE-datetime-19980827, August&nbsp;1998.</td></tr>
-<tr><td class="author-text" valign="top"><a name="W3C.REC-xmlschema-2-20041028">[W3C.REC-xmlschema-2-20041028]</a></td>
-<td class="author-text">Malhotra, A. and P. Biron, &ldquo;<a href="http://www.w3.org/TR/2004/REC-xmlschema-2-20041028/">XML Schema Part 2: Datatypes Second Edition</a>,&rdquo; W3C&nbsp;REC-xmlschema-2-20041028, October&nbsp;2004.</td></tr>
 </table>
 
 <a name="anchor28"></a><br /><hr />
@@ -1848,8 +1848,8 @@ metalinkFile =
       attribute name { text },
       (metalinkCopyright?
        &amp; metalinkDescription?
-       &amp; metalinkIdentity?
        &amp; metalinkHash*
+       &amp; metalinkIdentity?
        &amp; metalinkLanguage?
        &amp; metalinkLicense?
        &amp; metalinkLogo?
@@ -1924,7 +1924,7 @@ metalinkMetaURL =
    element metalink:metaurl {
       metalinkCommonAttributes,
       attribute priority { xsd:positiveInteger {
-         maxInclusive = "999999"}
+         maxInclusive = "999999"}},
       attribute type { text },
       attribute name { text }?,
       metalinkUri
@@ -1976,7 +1976,7 @@ metalinkURL =
          minLength = "2"  maxLength="2"}
       }?,
       attribute priority { xsd:positiveInteger {
-         maxInclusive = "999999"}
+         maxInclusive = "999999"}},
       metalinkUri
    }
 
