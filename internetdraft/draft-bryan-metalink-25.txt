@@ -566,8 +566,8 @@ Internet-Draft    Metalink Download Description Format     December 2009
       xsd:dateTime
 
    Such date values happen to be compatible with the following
-   specifications: [ISO.8601.1988], [W3C.NOTE-datetime-19980827], and
-   [W3C.REC-xmlschema-2-20041028].
+   specifications: [ISO.8601.1988], [NOTE-datetime-19980827], and
+   [REC-xmlschema-2-20041028].
 
    Example Date constructs:
 
@@ -1037,7 +1037,7 @@ Internet-Draft    Metalink Download Description Format     December 2009
       element metalink:metaurl {
          metalinkCommonAttributes,
          attribute priority { xsd:positiveInteger {
-            maxInclusive = "999999"}
+            maxInclusive = "999999"}},
          attribute type { text },
          attribute name { text }?,
          metalinkUri
@@ -1240,7 +1240,7 @@ Internet-Draft    Metalink Download Description Format     December 2009
             minLength = "2"  maxLength="2"}
          }?,
          attribute priority { xsd:positiveInteger {
-            maxInclusive = "999999"}
+            maxInclusive = "999999"}},
          metalinkUri
       }
 
@@ -1612,10 +1612,10 @@ Internet-Draft    Metalink Download Description Format     December 2009
               - Representation of dates and times", ISO Standard 8601,
               June 1988.
 
-   [RELAX-NG]
-              Clark, J., "RELAX NG Compact Syntax", December 2001, <http
-              ://www.oasis-open.org/committees/relax-ng/
-              compact-20021121.html>.
+   [NOTE-datetime-19980827]
+              Wolf, M. and C. Wicksteed, "Date and Time Formats",
+              W3C NOTE-datetime-19980827, August 1998,
+              <http://www.w3.org/TR/1998/NOTE-datetime-19980827>.
 
 
 
@@ -1625,22 +1625,22 @@ Bryan, et al.             Expires June 16, 2010                [Page 29]
 Internet-Draft    Metalink Download Description Format     December 2009
 
 
+   [REC-xmlschema-2-20041028]
+              Malhotra, A. and P. Biron, "XML Schema Part 2: Datatypes
+              Second Edition", W3C REC-xmlschema-2-20041028,
+              October 2004,
+              <http://www.w3.org/TR/2004/REC-xmlschema-2-20041028/>.
+
+   [RELAX-NG]
+              Clark, J., "RELAX NG Compact Syntax", December 2001, <http
+              ://www.oasis-open.org/committees/relax-ng/
+              compact-20021121.html>.
+
    [RFC3688]  Mealling, M., "The IETF XML Registry", BCP 81, RFC 3688,
               January 2004.
 
    [RFC4287]  Nottingham, M. and R. Sayre, "The Atom Syndication
               Format", RFC 4287, December 2005.
-
-   [W3C.NOTE-datetime-19980827]
-              Wolf, M. and C. Wicksteed, "Date and Time Formats",
-              W3C NOTE-datetime-19980827, August 1998,
-              <http://www.w3.org/TR/1998/NOTE-datetime-19980827>.
-
-   [W3C.REC-xmlschema-2-20041028]
-              Malhotra, A. and P. Biron, "XML Schema Part 2: Datatypes
-              Second Edition", W3C REC-xmlschema-2-20041028,
-              October 2004,
-              <http://www.w3.org/TR/2004/REC-xmlschema-2-20041028/>.
 
 
 Appendix A.  Acknowledgements and Contributors
@@ -1755,8 +1755,8 @@ Internet-Draft    Metalink Download Description Format     December 2009
          attribute name { text },
          (metalinkCopyright?
           & metalinkDescription?
-          & metalinkIdentity?
           & metalinkHash*
+          & metalinkIdentity?
           & metalinkLanguage?
           & metalinkLicense?
           & metalinkLogo?
@@ -1839,7 +1839,7 @@ Internet-Draft    Metalink Download Description Format     December 2009
       element metalink:metaurl {
          metalinkCommonAttributes,
          attribute priority { xsd:positiveInteger {
-            maxInclusive = "999999"}
+            maxInclusive = "999999"}},
          attribute type { text },
 
 
@@ -1907,7 +1907,7 @@ Internet-Draft    Metalink Download Description Format     December 2009
 
          }?,
          attribute priority { xsd:positiveInteger {
-            maxInclusive = "999999"}
+            maxInclusive = "999999"}},
          metalinkUri
       }
 
