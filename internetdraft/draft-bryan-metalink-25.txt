@@ -491,7 +491,7 @@ Internet-Draft    Metalink Download Description Format     December 2009
       undefinedAttribute*
 
    All leading and trailing whitespace is part of the element content,
-   and MUST be ignored.  Consequently, it is disallowed for elements
+   and MUST NOT be ignored.  Consequently, it is disallowed for elements
    where the defined type does not allow whitespace, such as dates,
    integers, or IRIs.  Some XML-generating implementations erroneously
    insert white space around values by default, and such implementations
