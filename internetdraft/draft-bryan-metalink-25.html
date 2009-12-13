@@ -568,7 +568,7 @@ metalinkCommonAttributes =
    undefinedAttribute*</pre></div><p>
 
 </p>
-<p>All leading and trailing whitespace is part of the element content, and MUST be ignored. Consequently, it is disallowed for elements where the defined type does not allow whitespace, such as dates, integers, or IRIs.
+<p>All leading and trailing whitespace is part of the element content, and MUST NOT be ignored. Consequently, it is disallowed for elements where the defined type does not allow whitespace, such as dates, integers, or IRIs.
 	  Some XML-generating implementations erroneously insert white space around values by default, and such implementations will generate invalid Metalink Documents.
 </p>
 <p>Metalink Documents that do not follow this specification are invalid, and partially or wholly unusable to Metalink Processors.
