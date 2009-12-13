@@ -128,13 +128,13 @@
       14471447
     &lt;/size&gt;
     &lt;url&gt;
-       ftp://ftp.example.com/example.ext
+    ftp://ftp.example.com/example.ext
     &lt;/url&gt;
     &lt;url&gt;
-       http://example.com/example.ext
+    http://example.com/example.ext
     &lt;/url&gt; 
     &lt;metaurl type="torrent"&gt;
-       http://example.com/example.ext.torrent
+    http://example.com/example.ext.torrent
     &lt;/metaurl&gt;
   &lt;/file&gt;
 &lt;/metalink&gt;
@@ -146,7 +146,7 @@
 &lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;metalink xmlns="urn:ietf:params:xml:ns:metalink"&gt;
   &lt;published&gt;
-     2009-05-15T12:23:23Z
+  2009-05-15T12:23:23Z
   &lt;/published&gt;
   &lt;file name="example.ext"&gt;
     &lt;size&gt;
@@ -169,13 +169,13 @@
 daaffdbcc7e5a1840a666c4447c7
     &lt;/hash&gt;
     &lt;url location="de" priority="1"&gt;
-       ftp://ftp.example.com/example.ext
+    ftp://ftp.example.com/example.ext
     &lt;/url&gt;
     &lt;url location="fr" priority="1"&gt;
-       http://example.com/example.ext
+    http://example.com/example.ext
     &lt;/url&gt; 
     &lt;metaurl type="torrent" priority="2"&gt;
-       http://example.com/example.ext.torrent
+    http://example.com/example.ext.torrent
     &lt;/metaurl&gt;
   &lt;/file&gt;
   &lt;file name="example2.ext"&gt;
@@ -199,13 +199,13 @@ daaffdbcc7e5a1840a666c4447c7
 9bf6aead9314a0f887f3623ddace
     &lt;/hash&gt;
     &lt;url location="de" priority="1"&gt;
-       ftp://ftp.example.com/example2.ext
+    ftp://ftp.example.com/example2.ext
     &lt;/url&gt;
     &lt;url location="fr" priority="1"&gt;
-       http://example.com/example2.ext
+    http://example.com/example2.ext
     &lt;/url&gt; 
     &lt;metaurl type="torrent" priority="2"&gt;
-       http://example.com/example2.ext.torrent
+    http://example.com/example2.ext.torrent
     &lt;/metaurl&gt;
   &lt;/file&gt;
 &lt;/metalink&gt;</artwork>
@@ -270,7 +270,7 @@ daaffdbcc7e5a1840a666c4447c7
 	  how to access them, and metadata that identifies them. Its root is the <xref target="element.metalink" format="none">metalink:metalink</xref> element.</t>
 
       <figure>
-	<artwork type="rnc">
+	<artwork type="application/relax-ng-compact-syntax">
 namespace metalink = "urn:ietf:params:xml:ns:metalink"	 		
 start = metalinkMetalink</artwork>
       </figure> 
@@ -311,7 +311,7 @@ start = metalinkMetalink</artwork>
       <figure> 
       <iref item="metalinkCommonAttributes grammar production" primary="true"/>
       <iref item="Grammar" subitem="metalinkCommonAttributes" primary="true"/>
-	<artwork type="rnc">
+	<artwork type="application/relax-ng-compact-syntax">
 metalinkCommonAttributes =
    attribute xml:base { metalinkUri }?,
    attribute xml:lang { metalinkLanguageTag }?,
@@ -352,7 +352,7 @@ metalinkCommonAttributes =
 	  <figure>
       <iref item="metalinkTextConstruct grammar production" primary="true"/>
       <iref item="Grammar" subitem="metalinkTextConstruct" primary="true"/>
-	    <artwork type="rnc">
+	    <artwork type="application/relax-ng-compact-syntax">
 metalinkTextConstruct =
    metalinkCommonAttributes,
    text</artwork></figure></t>
@@ -394,7 +394,7 @@ metalinkTextConstruct =
 	  <figure>
       <iref item="metalinkDateConstruct grammar production" primary="true"/>
       <iref item="Grammar" subitem="metalinkDateConstruct" primary="true"/>
-	    <artwork type="rnc">
+	    <artwork type="application/relax-ng-compact-syntax">
 metalinkDateConstruct =
    metalinkCommonAttributes,
    xsd:dateTime</artwork></figure></t>
@@ -411,16 +411,16 @@ metalinkDateConstruct =
 	<figure>
 	  <artwork type="example">
 &lt;updated&gt;
-   2009-05-15T18:30:02Z
+2009-05-15T18:30:02Z
 &lt;/updated&gt;
 &lt;updated&gt;
-   2009-05-15T18:30:02.25Z
+2009-05-15T18:30:02.25Z
 &lt;/updated&gt;
 &lt;updated&gt;
-   2009-05-15T18:30:02+01:00
-   &lt;/updated&gt;
+2009-05-15T18:30:02+01:00
+&lt;/updated&gt;
 &lt;updated&gt;
-   2009-05-15T18:30:02.25+01:00
+2009-05-15T18:30:02.25+01:00
 &lt;/updated&gt;
 </artwork>
 		   
@@ -455,7 +455,7 @@ metalinkDateConstruct =
 	    <figure> 
         <iref item="metalinkMetalink grammar production" primary="true"/>
         <iref item="Grammar" subitem="metalinkMetalink" primary="true"/>
-	      <artwork type="rnc">
+	      <artwork type="application/relax-ng-compact-syntax">
 metalinkMetalink =
    element metalink:metalink {
       metalinkCommonAttributes,
@@ -523,7 +523,7 @@ metalinkMetalink =
 	    <figure> 
         <iref item="metalinkFile grammar production" primary="true"/>
         <iref item="Grammar" subitem="metalinkFile" primary="true"/>
-	      <artwork type="rnc">
+	      <artwork type="application/relax-ng-compact-syntax">
 metalinkFile =
    element metalink:file {
       metalinkCommonAttributes,
@@ -629,7 +629,7 @@ non-overlapping pieces of the file. The checksums MUST be listed in the same ord
 	    <figure>
         <iref item="metalinkPieces grammar production" primary="true"/>
         <iref item="Grammar" subitem="metalinkPieces" primary="true"/>
-	      <artwork type="rnc">
+	      <artwork type="application/relax-ng-compact-syntax">
 metalinkPieces =
    element metalink:pieces {
       attribute length { xsd:positiveInteger },
@@ -677,7 +677,7 @@ metalinkPieces =
 	    <figure>
         <iref item="metalinkCopyright grammar production" primary="true"/>
         <iref item="Grammar" subitem="metalinkCopyright" primary="true"/>
-	      <artwork type="rnc">
+	      <artwork type="application/relax-ng-compact-syntax">
 metalinkCopyright =
    element metalink:copyright {
      metalinkTextConstruct
@@ -697,7 +697,7 @@ metalinkCopyright =
 	    <figure>
         <iref item="metalinkDescription grammar production" primary="true"/>
         <iref item="Grammar" subitem="metalinkDescription" primary="true"/>
-	      <artwork type="rnc">
+	      <artwork type="application/relax-ng-compact-syntax">
 metalinkDescription =
    element metalink:description {
      metalinkTextConstruct
@@ -717,7 +717,7 @@ metalinkDescription =
 	    <figure>
         <iref item="metalinkType grammar production" primary="true"/>
         <iref item="Grammar" subitem="metalinkType" primary="true"/>
-	      <artwork type="rnc">
+	      <artwork type="application/relax-ng-compact-syntax">
 metalinkDynamic =
    element metalink:dynamic {
       "true" | "false"
@@ -738,7 +738,7 @@ metalinkDynamic =
 	    <figure> 
         <iref item="metalinkGenerator grammar production" primary="true"/>
         <iref item="Grammar" subitem="metalinkGenerator" primary="true"/>
-	      <artwork type="rnc">
+	      <artwork type="application/relax-ng-compact-syntax">
 metalinkGenerator = 
    element metalink:generator {
      metalinkTextConstruct
@@ -765,7 +765,7 @@ metalinkGenerator =
 	    <figure>
         <iref item="metalinkHash grammar production" primary="true"/>
         <iref item="Grammar" subitem="metalinkHash" primary="true"/>
-	      <artwork type="rnc">
+	      <artwork type="application/relax-ng-compact-syntax">
 metalinkHash =
    element metalink:hash {
      attribute type { text }?, 
@@ -844,7 +844,7 @@ metalinkHash =
 	    <figure>
         <iref item="metalinkIdentity grammar production" primary="true"/>
         <iref item="Grammar" subitem="metalinkIdentity" primary="true"/>
-	      <artwork type="rnc">
+	      <artwork type="application/relax-ng-compact-syntax">
 metalinkIdentity =
    element metalink:identity {
      metalinkTextConstruct
@@ -864,7 +864,7 @@ metalinkIdentity =
 	    <figure>
         <iref item="metalinkLanguage grammar production" primary="true"/>
         <iref item="Grammar" subitem="metalinkLanguage" primary="true"/>
-	      <artwork type="rnc">
+	      <artwork type="application/relax-ng-compact-syntax">
 metalinkLanguage =
    element metalink:language {
      metalinkTextConstruct
@@ -884,7 +884,7 @@ metalinkLanguage =
 	    <figure>
         <iref item="metalinkLicense grammar production" primary="true"/>
         <iref item="Grammar" subitem="metalinkLicense" primary="true"/>
-	      <artwork type="rnc">
+	      <artwork type="application/relax-ng-compact-syntax">
 metalinkLicense =
    element metalink:license {
      metalinkCommonAttributes,
@@ -915,7 +915,7 @@ metalinkLicense =
 	    <figure> 
         <iref item="metalinkLogo grammar production" primary="true"/>
         <iref item="Grammar" subitem="metalinkLogo" primary="true"/>
-	      <artwork type="rnc">
+	      <artwork type="application/relax-ng-compact-syntax">
 metalinkLogo =
    element metalink:logo {
      metalinkCommonAttributes,
@@ -939,7 +939,7 @@ metalinkLogo =
 	    <figure>
         <iref item="metalinkURL grammar production" primary="true"/>
         <iref item="Grammar" subitem="metalinkURL" primary="true"/>
-	      <artwork type="rnc">
+	      <artwork type="application/relax-ng-compact-syntax">
 metalinkMetaURL =
    element metalink:metaurl {
       metalinkCommonAttributes,
@@ -994,7 +994,7 @@ metalinkMetaURL =
 	    <figure> 
         <iref item="metalinkOrigin grammar production" primary="true"/>
         <iref item="Grammar" subitem="metalinkOrigin" primary="true"/>
-	      <artwork type="rnc">
+	      <artwork type="application/relax-ng-compact-syntax">
 metalinkOrigin =
    element metalink:origin {
      metalinkCommonAttributes,
@@ -1015,7 +1015,7 @@ metalinkOrigin =
 	    <figure>
         <iref item="metalinkOS grammar production" primary="true"/>
         <iref item="Grammar" subitem="metalinkOS" primary="true"/>
-	      <artwork type="rnc">
+	      <artwork type="application/relax-ng-compact-syntax">
 metalinkOS =
    element metalink:os {
      metalinkTextConstruct
@@ -1036,7 +1036,7 @@ metalinkOS =
 	    <figure> 
         <iref item="metalinkPublished grammar production" primary="true"/>
         <iref item="Grammar" subitem="metalinkPublished" primary="true"/>
-	      <artwork type="rnc">
+	      <artwork type="application/relax-ng-compact-syntax">
 metalinkPublished =
    element metalink:published { 
      metalinkDateConstruct
@@ -1059,7 +1059,7 @@ metalinkPublished =
 	    <figure>
         <iref item="metalinkPublisher grammar production" primary="true"/>
         <iref item="Grammar" subitem="metalinkPublisher" primary="true"/>
-	      <artwork type="rnc">
+	      <artwork type="application/relax-ng-compact-syntax">
 metalinkPublisher =
    element metalink:publisher {
      metalinkCommonAttributes,
@@ -1090,7 +1090,7 @@ metalinkPublisher =
 	    <figure>
         <iref item="metalinkSignature grammar production" primary="true"/>
         <iref item="Grammar" subitem="metalinkSignature" primary="true"/>
-	      <artwork type="rnc">
+	      <artwork type="application/relax-ng-compact-syntax">
 metalinkSignature =
    element metalink:signature {
      attribute type { text },
@@ -1122,7 +1122,7 @@ digital signatures, so unknown types are allowed.
 	    <figure>
         <iref item="metalinkSize grammar production" primary="true"/>
         <iref item="Grammar" subitem="metalinkSize" primary="true"/>
-	      <artwork type="rnc">
+	      <artwork type="application/relax-ng-compact-syntax">
 metalinkSize =
    element metalink:size {
      xsd:nonNegativeInteger
@@ -1145,7 +1145,7 @@ metalinkSize =
 	    <figure> 
         <iref item="metalinkUpdated grammar production" primary="true"/>
         <iref item="Grammar" subitem="metalinkUpdated" primary="true"/>
-	      <artwork type="rnc">
+	      <artwork type="application/relax-ng-compact-syntax">
 metalinkUpdated =
    element metalink:updated { 
      metalinkDateConstruct
@@ -1168,7 +1168,7 @@ metalinkUpdated =
 	    <figure>
         <iref item="metalinkURL grammar production" primary="true"/>
         <iref item="Grammar" subitem="metalinkURL" primary="true"/>
-	      <artwork type="rnc">
+	      <artwork type="application/relax-ng-compact-syntax">
 metalinkURL =
    element metalink:url {
       metalinkCommonAttributes,
@@ -1212,7 +1212,7 @@ metalinkURL =
 	    <figure>
         <iref item="metalinkVersion grammar production" primary="true"/>
         <iref item="Grammar" subitem="metalinkVersion" primary="true"/>
-	      <artwork type="rnc">
+	      <artwork type="application/relax-ng-compact-syntax">
 metalinkVersion =
    element metalink:version {
      metalinkTextConstruct
@@ -1319,7 +1319,7 @@ metalinkVersion =
 		<figure> 
       <iref item="simpleExtensionElement grammar production" primary="true"/>
       <iref item="Grammar" subitem="simpleExtensionElement" primary="true"/>
-		  <artwork type="rnc">
+		  <artwork type="application/relax-ng-compact-syntax">
 simpleExtensionElement =
    element * - metalink:* {
       text
@@ -1350,7 +1350,7 @@ simpleExtensionElement =
 		<figure> 
       <iref item="structuredExtensionElement grammar production" primary="true"/>
       <iref item="Grammar" subitem="structuredExtensionElement" primary="true"/>
-		  <artwork type="rnc">
+		  <artwork type="application/relax-ng-compact-syntax">
 structuredExtensionElement =
    element * - metalink:* {
       (attribute * { text }+,
@@ -1691,25 +1691,29 @@ structuredExtensionElement =
 
  
 
-<reference anchor="REC-xmlbase" target="http://www.w3.org/TR/2001/REC-xmlbase-20010627">
+<reference anchor="REC-xmlbase" target="http://www.w3.org/TR/2009/REC-xmlbase-20090128">
 <front>
-<title>XML Base</title>
+<title>XML Base (Second Edition)</title>
 
 <author fullname="J. Marsh" surname="Marsh" initials="J">
 
     <organization></organization>
 </author>
+<author fullname="R. Tobin" surname="Tobin" initials="R">
 
-<date year="2001" day="27" month="June"></date>
+    <organization></organization>
+</author>
+
+<date year="2009" day="28" month="January"></date>
 </front>
 
-<seriesInfo name="W3C REC" value="W3C.REC-xmlbase-20010627"></seriesInfo>
+<seriesInfo name="World Wide Web Consortium Recommendation" value="REC-xmlbase-20090128"></seriesInfo>
 </reference>
 
  
-<reference anchor="REC-xml-names" target="http://www.w3.org/TR/2006/REC-xml-names-20060816">
+<reference anchor="REC-xml-names" target="http://www.w3.org/TR/2009/REC-xml-names-20091208">
 <front>
-<title>Namespaces in XML 1.0 (Second Edition)</title>
+<title>Namespaces in XML 1.0 (Third Edition)</title>
 
 <author fullname="Dave Hollander" surname="Hollander" initials="D.">
     <organization></organization>
@@ -1728,16 +1732,16 @@ structuredExtensionElement =
     <organization></organization>
 </author>
 
-<date year="2006" day="16" month="August"></date>
+<date year="2009" day="08" month="December"></date>
 </front>
 
-<seriesInfo name="World Wide Web Consortium Recommendation" value="REC-xml-names-20060816"></seriesInfo>
+<seriesInfo name="World Wide Web Consortium Recommendation" value="REC-xml-names-20091208"></seriesInfo>
 </reference>
 
  
-<reference anchor="REC-xml" target="http://www.w3.org/TR/2006/REC-xml-20060816">
+<reference anchor="REC-xml" target="http://www.w3.org/TR/2008/REC-xml-20081126">
 <front>
-<title>Extensible Markup Language (XML) 1.0 (Fourth Edition)</title>
+<title>Extensible Markup Language (XML) 1.0 (Fifth Edition)</title>
 
 <author fullname="Francois Yergeau" surname="Yergeau" initials="F.">
 
@@ -1761,10 +1765,10 @@ structuredExtensionElement =
     <organization></organization>
 </author>
 
-<date year="2006" day="16" month="August"></date>
+<date year="2008" day="26" month="November"></date>
 </front>
 
-<seriesInfo name="World Wide Web Consortium Recommendation" value="REC-xml-20060816"></seriesInfo>
+<seriesInfo name="World Wide Web Consortium Recommendation" value="REC-xml-20081126"></seriesInfo>
 </reference>
 
  
@@ -1847,7 +1851,7 @@ structuredExtensionElement =
 <date month="October" day="28" year="2004"/>
 </front>
 
-<seriesInfo name="W3C REC" value="REC-xmlschema-2-20041028"/>
+<seriesInfo name="World Wide Web Consortium Recommendation" value="REC-xmlschema-2-20041028"/>
 </reference>
 
       
@@ -1867,7 +1871,7 @@ structuredExtensionElement =
 <date month="August" day="27" year="1998"/>
 </front>
 
-<seriesInfo name="W3C NOTE" value="NOTE-datetime-19980827"/>
+<seriesInfo name="World Wide Web Consortium NOTE" value="NOTE-datetime-19980827"/>
 </reference>
 
 
@@ -1935,7 +1939,7 @@ structuredExtensionElement =
           Salvatore Musumeci, Steve Eshelman, 
           Lucas Hewett, Ryan Cronin, Dave Winquist, Bob Denison,
           Wes Shelton, Kees Cook, Josh Colbert, Steve Kleisath, Chad Neptune, Nick Carrabba, Chris
-          Carrabba, Erin Solari, Derick Cordoba, Ryan Alexander, John & Sandra Sowder,
+          Carrabba, Erin Solari, Derick Cordoba, Ryan Alexander, John &amp; Sandra Sowder,
           Tom Mainville, Janie Wargo, Jason Hansen, Tim Bray, Dan Brickley, Markus Hofmann, 
           Dan Connolly, Tim Berners-Lee, Louis Suarez-Potts, Ross Smith, Jeff Covey, 
           Ed Lee, Shawn Wilsher, Mike Connor, Johan Svedberg, Dedric Carter, James Antill, and Debi
@@ -1958,7 +1962,7 @@ structuredExtensionElement =
         </t>
         
 	      <figure> 
-		<artwork type="rnc">
+		<artwork type="application/relax-ng-compact-syntax" name="collected">
 # -*- rnc -*-
 # RELAX NG Compact Syntax Grammar for the
 # Metalink Format Specification Version 4
@@ -1993,12 +1997,12 @@ metalinkMetalink =
    element metalink:metalink {
       metalinkCommonAttributes,
       (metalinkDynamic?
-       & metalinkFile+
-       & metalinkGenerator?
-       & metalinkOrigin?
-       & metalinkPublished?
-       & metalinkUpdated?
-       & extensionElement*)
+       &amp; metalinkFile+
+       &amp; metalinkGenerator?
+       &amp; metalinkOrigin?
+       &amp; metalinkPublished?
+       &amp; metalinkUpdated?
+       &amp; extensionElement*)
    }
 
 metalinkFile =
@@ -2006,21 +2010,21 @@ metalinkFile =
       metalinkCommonAttributes,
       attribute name { text },
       (metalinkCopyright?
-       & metalinkDescription?
-       & metalinkIdentity?
-       & metalinkHash*
-       & metalinkLanguage?
-       & metalinkLicense?
-       & metalinkLogo?
-       & metalinkMetaURL*
-       & metalinkURL*
-       & metalinkOS*
-       & metalinkPieces*
-       & metalinkPublisher?
-       & metalinkSignature?
-       & metalinkSize?
-       & metalinkVersion?
-       & extensionElement*)
+       &amp; metalinkDescription?
+       &amp; metalinkIdentity?
+       &amp; metalinkHash*
+       &amp; metalinkLanguage?
+       &amp; metalinkLicense?
+       &amp; metalinkLogo?
+       &amp; metalinkMetaURL*
+       &amp; metalinkURL*
+       &amp; metalinkOS*
+       &amp; metalinkPieces*
+       &amp; metalinkPublisher?
+       &amp; metalinkSignature?
+       &amp; metalinkSize?
+       &amp; metalinkVersion?
+       &amp; extensionElement*)
    }
 
 metalinkPieces =
@@ -2209,7 +2213,14 @@ anyForeignElement =
 
 	    </list></t>
 		
-<t>-24 : December xx, 2009.
+<t>-25 : December xx, 2009.
+	    
+	    <list style="symbols">
+		
+		  <t>Julian Reschke XML issues.</t>
+	   </list></t>
+		
+<t>-24 : December 08, 2009.
 	    
 	    <list style="symbols">
 		

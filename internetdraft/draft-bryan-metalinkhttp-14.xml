@@ -180,7 +180,7 @@ pri=2; geo="gb"; depth=1
 </section>
 
 <section title="Coordinated Mirror Policies" anchor="coordinatedpolicies">
-      <t>There are two types of mirror servers: preferred and normal. Preferred mirror servers are HTTP mirror servers that MUST share the same ETag policy as the originating Metalink server. Optimally, they will do both. Preferred mirrors make it possible to detect early on, before data is transferred, if the file requested matches the desired file.  Preferred mirror servers
+      <t>There are two types of mirror servers: preferred and normal. Preferred mirror servers are HTTP mirror servers that MUST share the same ETag policy as the originating Metalink server. Optimally, they will do both. Preferred mirrors make it possible to detect early on, before data is transferred, if the file requested matches the desired file.
       Preferred HTTP mirror servers have a "pref" value of 1. By default, if unspecified then mirrors are considered "normal" and do not share the same ETag policy. FTP mirrors, as they do not emit ETags, MUST always be considered "normal".</t>
 	  <t>HTTP Mirror servers SHOULD support Instance Digests in HTTP <xref target="RFC3230"/>.</t>
 	  
@@ -221,7 +221,7 @@ Link: &lt;http://example.com/example.ext.metalink&gt;; rel="describedby";
 type="application/metalink4+xml"
 </artwork></figure></t>
 
-<t>Metalink clients MAY support the use of metainfo files for downloading files, but that is not required.</t>
+<t>Metalink clients MAY support the use of metainfo files for downloading files.</t>
 
     <section title="Metalink/XML Files" anchor="metalinkxml">
       <t>Full Metalink/XML files for a given resource can be specified as shown in <xref target="p2p"/>.
@@ -240,7 +240,7 @@ Link: &lt;http://example.com/example.ext.asc&gt;; rel="describedby";
 type="application/pgp-signature"
 </artwork></figure></t>
     
-<t>Metalink clients MAY support the use of OpenPGP signatures, but that is not required.</t>
+<t>Metalink clients MAY support the use of OpenPGP signatures.</t>
     </section>
 
 
@@ -305,7 +305,7 @@ object:</t>
 <t>If the object is large and gets delivered slower than expected then the Metalink client starts a number of parallel ranged downloads (one per selected mirror server other than the
 first) using mirrors provided by the Link header with "duplicate" relation type, using the location of the original GET request in the "Referer" header field. The size and number of ranges requested from each server is for the client to decide, based upon the performance observed from each server. Further discussion of performance considerations is presented in <xref target="multiserver"/>.</t>
 
-<t>If no Range limit was given in the original request then work from the tail of the object (the first request is still running and will eventually catch up), otherwise continue after the range requested in the first request. If no Range was provided, the original connection must be terminated once all parts of the resource have been retrieved. It is recommended that a HEAD request is undertaken first, so that the client can find out if there are any Link headers, and then Range-based requests are undertaken to the mirror servers as well as on the original connection.</t>
+<t>If no range limit was given in the original request then work from the tail of the object (the first request is still running and will eventually catch up), otherwise continue after the range requested in the first request. If no Range was provided, the original connection must be terminated once all parts of the resource have been retrieved. It is recommended that a HEAD request is undertaken first, so that the client can find out if there are any Link headers, and then Range-based requests are undertaken to the mirror servers as well as on the original connection.</t>
 
 <t>Preferred mirrors have coordinated ETags, as described in <xref target="coordinatedpolicies"/>, and If-Match conditions based on the ETag SHOULD be used to quickly detect out-of-date mirrors by using the ETag from the Metalink server response. If no indication of ETag syncronisation/knowledge is given then If-Match
 should not be used, and optimally there will be an Instance Digest in the mirror response which we can use to detect a mismatch early, and if not then a mismatch won't be detected until the completed object is verified. Early file mismatch detection is described in detail in <xref target="earlyfilemismatchdetection"/>.</t>
