@@ -124,18 +124,10 @@
 &lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;metalink xmlns="urn:ietf:params:xml:ns:metalink"&gt;
   &lt;file name="example.ext"&gt;
-    &lt;size&gt;
-      14471447
-    &lt;/size&gt;
-    &lt;url&gt;
-    ftp://ftp.example.com/example.ext
-    &lt;/url&gt;
-    &lt;url&gt;
-    http://example.com/example.ext
-    &lt;/url&gt; 
-    &lt;metaurl type="torrent"&gt;
-    http://example.com/example.ext.torrent
-    &lt;/metaurl&gt;
+    &lt;size&gt;14471447&lt;/size&gt;
+    &lt;url&gt;ftp://ftp.example.com/example.ext&lt;/url&gt;
+    &lt;url&gt;http://example.com/example.ext&lt;/url&gt; 
+    &lt;metaurl type="torrent"&gt;http://example.com/example.ext.torrent&lt;/metaurl&gt;
   &lt;/file&gt;
 &lt;/metalink&gt;
 </artwork></figure></t>
@@ -145,68 +137,36 @@
 	  <artwork type="example">
 &lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;metalink xmlns="urn:ietf:params:xml:ns:metalink"&gt;
-  &lt;published&gt;
-  2009-05-15T12:23:23Z
-  &lt;/published&gt;
+  &lt;published&gt;2009-05-15T12:23:23Z&lt;/published&gt;
   &lt;file name="example.ext"&gt;
-    &lt;size&gt;
-       14471447
-    &lt;/size&gt;
+    &lt;size&gt;14471447&lt;/size&gt;
     &lt;identity&gt;
        Example
     &lt;/identity&gt;
-    &lt;version&gt;
-       1.0
-    &lt;/version&gt;
-    &lt;language&gt;
-       en
-    &lt;/language&gt;	  
+    &lt;version&gt;1.0&lt;/version&gt;
+    &lt;language&gt;en&lt;/language&gt;	  
     &lt;description&gt;
        A description of the example file for download.
     &lt;/description&gt;
-    &lt;hash type="sha-256"&gt;
-       f0ad929cd259957e160ea442eb80986b5f01
-daaffdbcc7e5a1840a666c4447c7
-    &lt;/hash&gt;
-    &lt;url location="de" priority="1"&gt;
-    ftp://ftp.example.com/example.ext
-    &lt;/url&gt;
-    &lt;url location="fr" priority="1"&gt;
-    http://example.com/example.ext
-    &lt;/url&gt; 
-    &lt;metaurl type="torrent" priority="2"&gt;
-    http://example.com/example.ext.torrent
-    &lt;/metaurl&gt;
+    &lt;hash type="sha-256"&gt;f0ad929cd259957e160ea442eb80986b5f01daaffdbcc7e5a1840a666c4447c7&lt;/hash&gt;
+    &lt;url location="de" priority="1"&gt;ftp://ftp.example.com/example.ext&lt;/url&gt;
+    &lt;url location="fr" priority="1"&gt;http://example.com/example.ext&lt;/url&gt; 
+    &lt;metaurl type="torrent" priority="2"&gt;http://example.com/example.ext.torrent&lt;/metaurl&gt;
   &lt;/file&gt;
   &lt;file name="example2.ext"&gt;
-    &lt;size&gt;
-       14471447
-    &lt;/size&gt;
+    &lt;size&gt;14471447&lt;/size&gt;
     &lt;identity&gt;
        Example
     &lt;/identity&gt;
-    &lt;version&gt;
-       1.0
-    &lt;/version&gt;
-    &lt;language&gt;
-       en
-    &lt;/language&gt;	  
+    &lt;version&gt;1.0&lt;/version&gt;
+    &lt;language&gt;en&lt;/language&gt;	  
     &lt;description&gt;
        Another description for a second file.
     &lt;/description&gt;
-    &lt;hash type="sha-256"&gt;
-       2f548ce50c459a0270e85a7d63b2383c5523
-9bf6aead9314a0f887f3623ddace
-    &lt;/hash&gt;
-    &lt;url location="de" priority="1"&gt;
-    ftp://ftp.example.com/example2.ext
-    &lt;/url&gt;
-    &lt;url location="fr" priority="1"&gt;
-    http://example.com/example2.ext
-    &lt;/url&gt; 
-    &lt;metaurl type="torrent" priority="2"&gt;
-    http://example.com/example2.ext.torrent
-    &lt;/metaurl&gt;
+    &lt;hash type="sha-256"&gt;2f548ce50c459a0270e85a7d63b2383c55239bf6aead9314a0f887f3623ddace&lt;/hash&gt;
+    &lt;url location="de" priority="1"&gt;ftp://ftp.example.com/example2.ext&lt;/url&gt;
+    &lt;url location="fr" priority="1"&gt;http://example.com/example2.ext&lt;/url&gt; 
+    &lt;metaurl type="torrent" priority="2"&gt;http://example.com/example2.ext.torrent&lt;/metaurl&gt;
   &lt;/file&gt;
 &lt;/metalink&gt;</artwork>
 	</figure>
@@ -407,18 +367,10 @@ metalinkDateConstruct =
 
 	<figure>
 	  <artwork type="example">
-&lt;updated&gt;
-2009-05-15T18:30:02Z
-&lt;/updated&gt;
-&lt;updated&gt;
-2009-05-15T18:30:02.25Z
-&lt;/updated&gt;
-&lt;updated&gt;
-2009-05-15T18:30:02+01:00
-&lt;/updated&gt;
-&lt;updated&gt;
-2009-05-15T18:30:02.25+01:00
-&lt;/updated&gt;
+&lt;updated&gt;2009-05-15T18:30:02Z&lt;/updated&gt;
+&lt;updated&gt;2009-05-15T18:30:02.25Z&lt;/updated&gt;
+&lt;updated&gt;2009-05-15T18:30:02+01:00&lt;/updated&gt;
+&lt;updated&gt;2009-05-15T18:30:02.25+01:00&lt;/updated&gt;
 </artwork>
 		   
 	</figure>
@@ -774,13 +726,8 @@ metalinkHash =
 	      <figure>
 		<artwork type="example">
 ...
-  &lt;hash type="sha-1"&gt;
-     a97fcf6ba9358f8a6f62beee4421863d3e52b080
-  &lt;/hash&gt;
-  &lt;hash type="sha-256"&gt;
-     fc87941af7fd7f03e53b34af393f4c14923d74
-825f51116ff591336af4880227
-  &lt;/hash&gt;
+  &lt;hash type="sha-1"&gt;a97fcf6ba9358f8a6f62beee4421863d3e52b080&lt;/hash&gt;
+  &lt;hash type="sha-256"&gt;fc87941af7fd7f03e53b34af393f4c14923d74825f51116ff591336af4880227&lt;/hash&gt;
 ...</artwork>
 	      </figure>
       </t>
@@ -792,26 +739,13 @@ metalinkHash =
 	      <figure>
 		<artwork type="example">
 ...
-  &lt;hash type="sha-1"&gt;
-     a97fcf6ba9358f8a6f62beee4421863d3e52b080
-  &lt;/hash&gt;
-  &lt;hash type="sha-256"&gt;
-     fc87941af7fd7f03e53b34af393f4c14923d74
-825f51116ff591336af4880227
-  &lt;/hash&gt;
+  &lt;hash type="sha-1"&gt;a97fcf6ba9358f8a6f62beee4421863d3e52b080&lt;/hash&gt;
+  &lt;hash type="sha-256"&gt;fc87941af7fd7f03e53b34af393f4c14923d74825f51116ff591336af4880227&lt;/hash&gt;
   &lt;pieces length="1048576" type="sha-1"&gt;
-    &lt;hash&gt;
-      d96b9a4b92a899c2099b7b31bddb5ca423bb9b30
-  &lt;/hash&gt;
-    &lt;hash&gt;
-      10d68f4b1119014c123da2a0a6baf5c8a6d5ba1e
-    &lt;/hash&gt;
-    &lt;hash&gt;
-       3e84219096435c34e092b17b70a011771c52d87a
-    &lt;/hash&gt;
-    &lt;hash&gt;
-       67183e4c3ab892d3ebe8326b7d79eb62d077f487
-    &lt;/hash&gt;
+    &lt;hash&gt;d96b9a4b92a899c2099b7b31bddb5ca423bb9b30&lt;/hash&gt;
+    &lt;hash&gt;10d68f4b1119014c123da2a0a6baf5c8a6d5ba1e&lt;/hash&gt;
+    &lt;hash&gt;3e84219096435c34e092b17b70a011771c52d87a&lt;/hash&gt;
+    &lt;hash&gt;67183e4c3ab892d3ebe8326b7d79eb62d077f487&lt;/hash&gt;
   &lt;/pieces&gt;
 ...</artwork>
 	      </figure>
