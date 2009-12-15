@@ -688,8 +688,7 @@ metalinkDynamic =
     <iref item="XML Elements" subitem="generator" primary="true"/>
     <iref item="generator XML element" primary="true"/>
 	      
-	  <t>The "<xref target="element.generator" format="none">metalink:generator</xref>" element's content identifies the generating agent name and version, separated by a "/", used
-	  to generate a Metalink Document, for debugging and other purposes.
+	  <t>The "<xref target="element.generator" format="none">metalink:generator</xref>" element's content identifies the generating agent name and versionused to generate a Metalink Document, for debugging and other purposes.
       
 	    <figure> 
         <iref item="metalinkGenerator grammar production" primary="true"/>
@@ -700,11 +699,18 @@ metalinkGenerator =
      metalinkTextConstruct
    }</artwork></figure></t> 
 
-	  <t>The content of this element, when present, MUST be a
-	  string that is a human-readable name and version, separated by a "/", for the generating
-	  agent.  For example, "MirrorBrain/2.9.2", where "MirrorBrain" is the name and "2.9.2" is the version. Entities such as "&amp;amp;" and "&amp;lt;"
-	  represent their corresponding characters ("&amp;" and "&lt;"
-	  respectively), not markup.</t>
+      <t>metalink:generator element's content is defined below in ABNF notation <xref target="RFC5234"/>.
+
+	    <figure> 
+        <iref item="metalinkGenerator ABNF" primary="true"/>
+        <iref item="ABNF" subitem="metalinkGenerator" primary="true"/>
+	      <artwork type="ABNF">
+agent         = token ["/" agent-version]
+agent-version = token
+</artwork></figure></t> 
+
+       <t>token is of type text. Although any character allowed in text MAY appear in an agent-version, this token SHOULD only be used for a version identifier (i.e., successive versions of the same agent
+       SHOULD only differ in the agent-version portion of the agent value).</t>
 
 
 	</section>	
@@ -1591,6 +1597,20 @@ structuredExtensionElement =
 
 <seriesInfo name="BCP" value="13"/>
 <seriesInfo name="RFC" value="4288"/>
+</reference>
+
+
+<reference anchor="RFC5234">
+
+<front>
+<title>Augmented BNF for Syntax Specifications: ABNF</title>
+<author initials="D." surname="Crocker" fullname="D. Crocker" role="editor">
+<organization/></author>
+<author initials="P." surname="Overell" fullname="P. Overell">
+<organization/></author>
+<date year="2008" month="January"/></front>
+
+<seriesInfo name="STD" value="68"/>
 </reference>
 
 
