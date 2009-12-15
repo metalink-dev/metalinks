@@ -142,12 +142,12 @@
   &lt;file name="example.ext"&gt;
     &lt;size&gt;14471447&lt;/size&gt;
     &lt;identity&gt;
-       Example
+    Example
     &lt;/identity&gt;
     &lt;version&gt;1.0&lt;/version&gt;
     &lt;language&gt;en&lt;/language&gt;	  
     &lt;description&gt;
-       A description of the example file for download.
+    A description of the example file for download.
     &lt;/description&gt;
     &lt;hash type="sha-256"&gt;f0ad929cd259957e160ea442eb80986b5f01...&lt;/hash&gt;
     &lt;url location="de" 
@@ -160,12 +160,12 @@
   &lt;file name="example2.ext"&gt;
     &lt;size&gt;14471447&lt;/size&gt;
     &lt;identity&gt;
-       Example
+    Example2
     &lt;/identity&gt;
     &lt;version&gt;1.0&lt;/version&gt;
     &lt;language&gt;en&lt;/language&gt;	  
     &lt;description&gt;
-       Another description for a second file.
+    Another description for a second file.
     &lt;/description&gt;
     &lt;hash type="sha-256"&gt;2f548ce50c459a0270e85a7d63b2383c5523...&lt;/hash&gt;
     &lt;url location="de" 
@@ -329,7 +329,7 @@ metalinkTextConstruct =
 		<artwork type="example">
 ...
 &lt;description&gt;
-   A description of the example file for download.
+A description of the example file for download.
 &lt;/description&gt;
 ...</artwork>
 	      </figure>
@@ -489,7 +489,6 @@ metalinkFile =
        &amp; metalinkHash*
        &amp; metalinkIdentity?
        &amp; metalinkLanguage?
-       &amp; metalinkLicense?
        &amp; metalinkLogo?
        &amp; metalinkMetaURL*
        &amp; metalinkURL*
@@ -525,9 +524,6 @@ metalinkFile =
 	      <t><xref target="element.file" format="none">metalink:file</xref> elements MAY contain one or more <xref target="element.hash" format="none">metalink:hash</xref> elements.</t>
 
 	      <t><xref target="element.file" format="none">metalink:file</xref> elements MAY contain exactly one <xref target="element.language" format="none">metalink:language</xref>
-	      element.</t>	
-
-	      <t><xref target="element.file" format="none">metalink:file</xref> elements MAY contain exactly one <xref target="element.license" format="none">metalink:license</xref>
 	      element.</t>	
 
 	      <t><xref target="element.file" format="none">metalink:file</xref> elements MAY contain exactly one <xref target="element.logo" format="none">metalink:logo</xref>
@@ -816,36 +812,6 @@ metalinkLanguage =
    
 	</section>
 
-	<section anchor="element.license" title="The &#34;metalink:license&#34; Element">
-    
-    
-    <iref item="XML Elements" subitem="license" primary="true"/>
-    <iref item="license XML element" primary="true"/> 
-	      
-	  <t>The "<xref target="element.license" format="none">metalink:license</xref>" element contains a
-	  human-readable license name for a file and a URI for more information.
-	  
-	    <figure>
-        <iref item="metalinkLicense grammar production" primary="true"/>
-        <iref item="Grammar" subitem="metalinkLicense" primary="true"/>
-	      <artwork type="application/relax-ng-compact-syntax">
-metalinkLicense =
-   element metalink:license {
-     metalinkCommonAttributes,
-     attribute name { text },
-     attribute url { metalinkUri }?
-   }</artwork></figure></t>
-
-	  <t>The <xref target="element.license" format="none">metalink:license</xref> element MUST have a "name" attribute that
-	  indicates the name of the license.</t>
-
-
-      <t>The <xref target="element.license" format="none">metalink:license</xref> element MAY have a "url" attribute
-	  whose value MUST be an IRI reference <xref target="RFC3987"/>. When dereferenced, the resulting URI (mapped from an
-	  IRI, if necessary) SHOULD produce a representation that is
-	  relevant to that agent.</t>
-   
-	</section> 
 
 	<section anchor="element.logo" title="The &#34;metalink:logo&#34; Element">
     
@@ -1972,7 +1938,6 @@ metalinkFile =
        &amp; metalinkHash*
        &amp; metalinkIdentity?
        &amp; metalinkLanguage?
-       &amp; metalinkLicense?
        &amp; metalinkLogo?
        &amp; metalinkMetaURL*
        &amp; metalinkURL*
@@ -2026,13 +1991,6 @@ metalinkIdentity =
 metalinkLanguage =
    element metalink:language {
       metalinkTextConstruct
-   }
-
-metalinkLicense =
-   element metalink:license {
-      metalinkCommonAttributes,
-      attribute name { text },
-      attribute url { metalinkUri }?
    }
 
 metalinkLogo =
@@ -2176,6 +2134,7 @@ anyForeignElement =
 	    <list style="symbols">
 		
 		  <t>Julian Reschke XML issues.</t>
+		  <t>Generator ABNF & reference. Remove license element.</t>
 	   </list></t>
 		
 <t>-24 : December 08, 2009.
