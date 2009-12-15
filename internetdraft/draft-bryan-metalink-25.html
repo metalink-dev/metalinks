@@ -1205,14 +1205,30 @@ metalinkSignature =
    }</pre></div><p>
 
 </p>
+<p>Example:
+
+	 </p>
+<div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
+&lt;signature type="application/pgp-signature"&gt;
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.10 (GNU/Linux)
+
+iEYEABECAAYFAkrxdXQACgkQeOEcayedXJHqFwCfd1p/HhRf/iDvYhvFbTrQPz+p
+p3oAoO9lKHoOqOE0EMB3zmMcLoYUrNkg
+=ggAf
+-----END PGP SIGNATURE-----
+&lt;/signature&gt;
+</pre></div><p>
+
+	
+</p>
 <a name="anchor15"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.2.14.1"></a><h3>4.2.14.1.&nbsp;
 The &#34;type&#34; Attribute</h3>
 
-<p><a class='info' href='#element.signature'>metalink:signature<span> (</span><span class='info'>The &#34;metalink:signature&#34; Element</span><span>)</span></a> elements MUST have a "type" attribute.
-		The initial value of "type" is the string that is non-empty and matches "pgp". It may be useful to extend Metalink documents with new types of
-digital signatures, so unknown types are allowed.
+<p><a class='info' href='#element.signature'>metalink:signature<span> (</span><span class='info'>The &#34;metalink:signature&#34; Element</span><span>)</span></a> elements MUST have a "type" attribute that indicates
+	    the MIME media type <a class='info' href='#RFC4288'>[RFC4288]<span> (</span><span class='info'>Freed, N. and J. Klensin, &ldquo;Media Type Specifications and Registration Procedures,&rdquo; December&nbsp;2005.</span><span>)</span></a> of the included digital signature.		
 		
 </p>
 <a name="element.size"></a><br /><hr />

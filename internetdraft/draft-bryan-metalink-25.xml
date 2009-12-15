@@ -1019,12 +1019,28 @@ metalinkSignature =
      attribute type { text },
      metalinkTextConstruct
    }</artwork></figure></t>
+   
+     <t>Example:
 
+	 <figure>
+	  <artwork type="example">
+&lt;signature type="application/pgp-signature"&gt;
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.10 (GNU/Linux)
+
+iEYEABECAAYFAkrxdXQACgkQeOEcayedXJHqFwCfd1p/HhRf/iDvYhvFbTrQPz+p
+p3oAoO9lKHoOqOE0EMB3zmMcLoYUrNkg
+=ggAf
+-----END PGP SIGNATURE-----
+&lt;/signature&gt;
+</artwork>
+		   
+	</figure>
+	</t>
 	  <section title="The &#34;type&#34; Attribute"> 
 
-	    <t><xref target="element.signature" format="none">metalink:signature</xref> elements MUST have a "type" attribute.
-		The initial value of "type" is the string that is non-empty and matches "pgp". It may be useful to extend Metalink documents with new types of
-digital signatures, so unknown types are allowed.
+	    <t><xref target="element.signature" format="none">metalink:signature</xref> elements MUST have a "type" attribute that indicates
+	    the MIME media type <xref target="RFC4288"/> of the included digital signature.		
 		</t>
 
 	  </section> 	  
