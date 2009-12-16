@@ -488,7 +488,7 @@ metalinkFile =
        &amp; metalinkDescription?
        &amp; metalinkHash*
        &amp; metalinkIdentity?
-       &amp; metalinkLanguage?
+       &amp; metalinkLanguage*
        &amp; metalinkLogo?
        &amp; metalinkMetaURL*
        &amp; metalinkURL*
@@ -523,7 +523,7 @@ metalinkFile =
 
 	      <t><xref target="element.file" format="none">metalink:file</xref> elements MAY contain one or more <xref target="element.hash" format="none">metalink:hash</xref> elements.</t>
 
-	      <t><xref target="element.file" format="none">metalink:file</xref> elements MAY contain exactly one <xref target="element.language" format="none">metalink:language</xref>
+	      <t><xref target="element.file" format="none">metalink:file</xref> elements MAY contain one or more <xref target="element.language" format="none">metalink:language</xref>
 	      element.</t>	
 
 	      <t><xref target="element.file" format="none">metalink:file</xref> elements MAY contain exactly one <xref target="element.logo" format="none">metalink:logo</xref>
@@ -1966,7 +1966,7 @@ metalinkFile =
        &amp; metalinkDescription?
        &amp; metalinkHash*
        &amp; metalinkIdentity?
-       &amp; metalinkLanguage?
+       &amp; metalinkLanguage*
        &amp; metalinkLogo?
        &amp; metalinkMetaURL*
        &amp; metalinkURL*

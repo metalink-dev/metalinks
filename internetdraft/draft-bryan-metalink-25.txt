@@ -653,7 +653,7 @@ Internet-Draft    Metalink Download Description Format     December 2009
           & metalinkDescription?
           & metalinkHash*
           & metalinkIdentity?
-          & metalinkLanguage?
+          & metalinkLanguage*
           & metalinkLogo?
           & metalinkMetaURL*
           & metalinkURL*
@@ -689,7 +689,7 @@ Internet-Draft    Metalink Download Description Format     December 2009
       element.
    o  metalink:file elements MAY contain one or more metalink:hash
       elements.
-   o  metalink:file elements MAY contain exactly one metalink:language
+   o  metalink:file elements MAY contain one or more metalink:language
       element.
    o  metalink:file elements MAY contain exactly one metalink:logo
       element.
@@ -1703,7 +1703,7 @@ Internet-Draft    Metalink Download Description Format     December 2009
           & metalinkDescription?
           & metalinkHash*
           & metalinkIdentity?
-          & metalinkLanguage?
+          & metalinkLanguage*
           & metalinkLogo?
           & metalinkMetaURL*
           & metalinkURL*
