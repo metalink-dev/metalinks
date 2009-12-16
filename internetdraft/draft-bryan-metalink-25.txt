@@ -858,17 +858,17 @@ Internet-Draft    Metalink Download Description Format     December 2009
         text
       }
 
-   metalink:hash elements with a "type" attribute MUST contain a hash of
-   the complete file.  Metalink Documents can contain one or multiples
-   hashes of a complete file.  In this example, both SHA-1 and SHA-256
-   hashes are included.
+   Metalink Documents MAY contain one or multiples hashes of a complete
+   file. metalink:hash elements with a "type" attribute MUST contain a
+   hash of the complete file.  In this example, both SHA-1 and SHA-256
+   hashes of the complete file are included.
 
  ...
    <hash type="sha-1">a97fcf6ba9358f8a6f62beee4421863d3e52b080</hash>
    <hash type="sha-256">fc87941af7fd7f03e53b34af393f4c14923d74...</hash>
  ...
 
-   Metalink Documents can also contain hashes for individual pieces of a
+   Metalink Documents MAY also contain hashes for individual pieces of a
    file. metalink:hash elements that are inside a metalink:pieces
    container element have a hash for that specific piece or chunk of the
    file, and are of the same hash type as the metalink:pieces element
@@ -882,8 +882,8 @@ Internet-Draft    Metalink Download Description Format     December 2009
    element.  See Section 4.1.3.2 for more information on the size of
    pieces.
 
-
-
+   In this example, SHA-1 and SHA-256 hashes of the complete file are
+   included, along with four SHA-1 piece hashes.
 
 
 

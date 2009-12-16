@@ -742,8 +742,8 @@ metalinkHash =
      attribute type { text }?, 
      text
    }</artwork></figure></t>
-      <t><xref target="element.hash" format="none">metalink:hash</xref> elements
-      with a "type" attribute MUST contain a hash of the complete file. Metalink Documents can contain one or multiples hashes of a complete file. In this example, both SHA-1 and SHA-256 hashes are included. 
+      <t>Metalink Documents MAY contain one or multiples hashes of a complete file. <xref target="element.hash" format="none">metalink:hash</xref> elements
+      with a "type" attribute MUST contain a hash of the complete file. In this example, both SHA-1 and SHA-256 hashes of the complete file are included. 
 	  
 	      <figure>
 		<artwork type="example">
@@ -753,11 +753,11 @@ metalinkHash =
 ...</artwork>
 	      </figure>
       </t>
-      <t>Metalink Documents can also contain hashes for individual pieces of a file.  <xref target="element.hash" format="none">metalink:hash</xref> elements that are inside a <xref target="element.pieces" format="none">metalink:pieces</xref> container element have a hash for that specific piece or chunk of the file, and are of the same hash type as the <xref target="element.pieces" format="none">metalink:pieces</xref> element they are contained in.</t>
+      <t>Metalink Documents MAY also contain hashes for individual pieces of a file.  <xref target="element.hash" format="none">metalink:hash</xref> elements that are inside a <xref target="element.pieces" format="none">metalink:pieces</xref> container element have a hash for that specific piece or chunk of the file, and are of the same hash type as the <xref target="element.pieces" format="none">metalink:pieces</xref> element they are contained in.</t>
       <t><xref target="element.hash" format="none">metalink:hash</xref> elements without a "type" attribute MUST contain a hash for that specific piece or chunk of the file and MUST be listed in the
-      same order as the corresponding pieces appear in the file, starting at the beginning of the file. The size of the piece is equal to the value of the "length" attribute of the <xref target="element.pieces" format="none">metalink:pieces</xref> element. See <xref target="piece.length"/> for more information on the size of pieces.
+      same order as the corresponding pieces appear in the file, starting at the beginning of the file. The size of the piece is equal to the value of the "length" attribute of the <xref target="element.pieces" format="none">metalink:pieces</xref> element. See <xref target="piece.length"/> for more information on the size of pieces.</t>
 
-
+      <t>In this example, SHA-1 and SHA-256 hashes of the complete file are included, along with four SHA-1 piece hashes.
 	      <figure>
 		<artwork type="example">
 ...
