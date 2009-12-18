@@ -1,0 +1,16 @@
+application: metalinkvalidator
+version: 1
+runtime: python
+api_version: 1
+
+handlers:
+- url: /var
+  static_dir: var
+- url: /favicon.ico
+  static_files: var/img/favicon.ico
+  upload: var/img/favicon.ico
+- url: /
+  static_files: index.html
+  upload: index.html
+- url: /.*
+  script: main.py
