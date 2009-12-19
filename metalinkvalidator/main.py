@@ -6,7 +6,7 @@ import logging
 
 application = webapp.WSGIApplication(
                                      [
-                                      #('/', views.Home), <- dynamic homepage is still a todo ;)
+                                      ('/', views.Home),
                                       ('/robots.txt', views.RobotsTXT),
                                      ],
                                      debug = True)
