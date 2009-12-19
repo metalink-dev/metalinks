@@ -4,7 +4,6 @@ Import Jinja2 as a template engine (but take a look at the google docs first to 
 Move index.html to a template, create template directory, make "/" dynamic
 Create an url parsing and validating service.. for there on it should be hacking the validation function.
 License headers (GPLv3) on all code
-Change favicon!
 
 
 Future plans (after the above, more question marks means less likely to happen soon):
@@ -13,3 +12,13 @@ Future plans (after the above, more question marks means less likely to happen s
   Add a database component to cache validation results???
   Add accounts so people can be allerted if their metalinks fail validation??????
 
+
+Development
+===========
+Start the development server above this directory using:
+ dev_appserver.py metalinkvalidator
+
+(I extracted the zip in google_appengine, so I use google_appengine/dev_appserver.py metalinkvalidator)
+
+Update the site using
+  appcfg.py update metalinkvalidator
