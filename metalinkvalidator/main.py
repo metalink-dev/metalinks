@@ -7,6 +7,7 @@ import logging
 application = webapp.WSGIApplication(
                                      [
                                       ('/', views.Home),
+                                      ('/validate', views.Validator),
                                       ('/robots.txt', views.RobotsTXT),
                                      ],
                                      debug = True)
