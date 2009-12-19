@@ -18,13 +18,14 @@
   </div>
 
 <div class="center">
-  <form action="/validate" method="get">
-    <fieldset>
-      <legend>Metalink validator:</legend>
-      URL: <input type="text" name="url" size="80">
-      <input type="submit">
-    </fieldset>
-  </form>
+{% if validator.passed %}
+<h1>Passed!</h1>
+{% else %}
+<h1>Failed :(</h1>
+{% endif %}
+{% for msg in validator.messages %}
+  <div class="message"><em>{{ msg.catagoryName }}</em><br>{{ msg|escape }}</div>
+{% endfor %}
 </div>
 
 </div>
