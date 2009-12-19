@@ -10,9 +10,9 @@ It also checks general validity of the metalink (valid XML).
 # Instructions:
 #   1. You need to have Python installed.
 #   2. To check PGP signatures you need to install gpg (http://www.gnupg.org) or gpg4win (http://www.gpg4win.org/)
-#   3. Run on the command line using: python metalink.py
+#   3. Run on the command line using: python console.py
 #
-#   Usage: metalink.py [-c|-d] [options] arg1 arg2 ...
+#   Usage: console.py [-c|-d] [options] arg1 arg2 ...
 #
 #   Options:
 #     -h, --help            show this help message and exit
