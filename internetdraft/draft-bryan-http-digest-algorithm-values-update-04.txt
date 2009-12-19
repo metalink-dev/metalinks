@@ -2,13 +2,22 @@
 
 
 Network Working Group                                           A. Bryan
-Internet-Draft                                              October 2009
+Internet-Draft                                         December 19, 2009
 Intended status: Informational
-Expires: April 4, 2010
+Expires: June 22, 2010
 
 
           Additional Hash Algorithms for HTTP Instance Digests
            draft-bryan-http-digest-algorithm-values-update-04
+
+Abstract
+
+   The IANA registry named "Hypertext Transfer Protocol (HTTP) Digest
+   Algorithm Values" defines values for digest algorithms used by
+   Instance Digests in HTTP.  Instance Digests in HTTP provide a digest,
+   also known as a checksum or hash, of an entire representation of the
+   current state of a resource.  This draft adds new values to the
+   registry and updates previous values.
 
 Status of this Memo
 
@@ -31,7 +40,7 @@ Status of this Memo
    The list of Internet-Draft Shadow Directories can be accessed at
    http://www.ietf.org/shadow.html.
 
-   This Internet-Draft will expire on April 4, 2010.
+   This Internet-Draft will expire on June 22, 2010.
 
 Copyright Notice
 
@@ -39,27 +48,22 @@ Copyright Notice
    document authors.  All rights reserved.
 
    This document is subject to BCP 78 and the IETF Trust's Legal
-   Provisions Relating to IETF Documents in effect on the date of
-   publication of this document (http://trustee.ietf.org/license-info).
-   Please review these documents carefully, as they describe your rights
-   and restrictions with respect to this document.
-
-Abstract
-
-   The IANA registry named "Hypertext Transfer Protocol (HTTP) Digest
-   Algorithm Values" defines values for digest algorithms used by
-   Instance Digests in HTTP.  Instance Digests in HTTP provide a digest,
+   Provisions Relating to IETF Documents
 
 
 
-Bryan                     Expires April 4, 2010                 [Page 1]
+Bryan                     Expires June 22, 2010                 [Page 1]
 
-Internet-Draft  More Algorithms for HTTP Instance Digests   October 2009
+Internet-Draft  More Algorithms for HTTP Instance Digests  December 2009
 
 
-   also known as a checksum or hash, of an entire representation of the
-   current state of a resource.  This draft adds new values to the
-   registry and updates previous values.
+   (http://trustee.ietf.org/license-info) in effect on the date of
+   publication of this document.  Please review these documents
+   carefully, as they describe your rights and restrictions with respect
+   to this document.  Code Components extracted from this document must
+   include Simplified BSD License text as described in Section 4.e of
+   the Trust Legal Provisions and are provided without warranty as
+   described in the BSD License.
 
 
 Table of Contents
@@ -104,13 +108,9 @@ Table of Contents
 
 
 
-
-
-
-
-Bryan                     Expires April 4, 2010                 [Page 2]
+Bryan                     Expires June 22, 2010                 [Page 2]
 
-Internet-Draft  More Algorithms for HTTP Instance Digests   October 2009
+Internet-Draft  More Algorithms for HTTP Instance Digests  December 2009
 
 
 1.  Introduction
@@ -164,9 +164,9 @@ Internet-Draft  More Algorithms for HTTP Instance Digests   October 2009
 
 
 
-Bryan                     Expires April 4, 2010                 [Page 3]
+Bryan                     Expires June 22, 2010                 [Page 3]
 
-Internet-Draft  More Algorithms for HTTP Instance Digests   October 2009
+Internet-Draft  More Algorithms for HTTP Instance Digests  December 2009
 
 
 2.2.  New Registrations
@@ -220,9 +220,9 @@ Internet-Draft  More Algorithms for HTTP Instance Digests   October 2009
 
 
 
-Bryan                     Expires April 4, 2010                 [Page 4]
+Bryan                     Expires June 22, 2010                 [Page 4]
 
-Internet-Draft  More Algorithms for HTTP Instance Digests   October 2009
+Internet-Draft  More Algorithms for HTTP Instance Digests  December 2009
 
 
 Appendix A.  Acknowledgements and Contributors
@@ -276,5 +276,5 @@ Author's Address
 
 
 
-Bryan                     Expires April 4, 2010                 [Page 5]
+Bryan                     Expires June 22, 2010                 [Page 5]
 

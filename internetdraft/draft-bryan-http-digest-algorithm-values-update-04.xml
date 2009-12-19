@@ -27,7 +27,7 @@
 	      <uri>http://www.metalinker.org</uri>		
 	    </address>
       </author>
-	<date month="October" year="2009"/>        
+	<date month="December" year="2009"/>        
 
       <abstract>
 	<t>The IANA registry named "Hypertext Transfer Protocol (HTTP) Digest Algorithm Values" defines values for digest algorithms used by Instance Digests in HTTP. Instance Digests in HTTP provide a digest, also known as a checksum or hash, of an entire representation of the current state of a
