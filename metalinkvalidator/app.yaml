@@ -9,8 +9,5 @@ handlers:
 - url: /favicon.ico
   static_files: var/img/favicon.ico
   upload: var/img/favicon.ico
-- url: /
-  static_files: index.html
-  upload: index.html
 - url: /.*
   script: main.py
