@@ -23,11 +23,21 @@ class Validator(webapp.RequestHandler, TemplateRenderer):
     v = validator.Validator()
     try:
       page = google.appengine.api.urlfetch.fetch(url)
-      #TODO: handle response values and status codes: http://code.google.com/appengine/docs/python/urlfetch/responseobjects.html
+
+      #Handle response status
+      if page.content_was_truncated:
+        v.addError('The content of the download was truncated, it may be to large. Check the size or try again later.')
+      if page.status_code != 200:
+        v.addError('The status code of the page was not 200 (it was %i instead)' % page.status_code, fatal = True)
+      #We skip page.final_url currently
+      if hasattr(page, 'final_url'):
+        v.addInfo('Final url was: %s' % page.final_url)
+      
+      #Load content into validator
       v.setContent(page.content)
       v.run()
     except google.appengine.api.urlfetch.InvalidURLError, e:
-      v.messages += ['Invalid url given, we got %s' % url]
+      v.addError('Invalid url, "%s" is not considered valid' % url, fatal = True)
     self.write_template('validation_result.html', {'validator': v})
 
 
