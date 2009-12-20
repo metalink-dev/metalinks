@@ -1,7 +1,7 @@
 Currently the following is going to (will have to) happen:
 
-  Extend templates on a common base using extend
-  Change CSS to something more beautifull
+[Bram] Extend templates on a common base using extend
+[Bram] Change CSS to something more beautifull
   Create an url parsing and validating service.. for there on it should be hacking the validation function.
    - Load XML and parse it using XML
    - Detect version of the metalink?
@@ -10,8 +10,6 @@ Currently the following is going to (will have to) happen:
    - Check white space usage according to spec
   Create links to specs and documentation
   Write help texts and fill in the blanks on the homepage (put more text on the landing page)
-  
-[Bram]  License headers (GPLv3) on all code
 
 
 Future plans (after the above, more question marks means less likely to happen soon):

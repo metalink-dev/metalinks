@@ -1,4 +1,18 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
+#    This program is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+
+#    You should have received a copy of the GNU General Public License
+#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 from google.appengine.ext import webapp, db
 import os
 from google.appengine.ext.webapp import template
@@ -37,7 +51,7 @@ class Validator(webapp.RequestHandler, TemplateRenderer):
       v.setContent(page.content)
       v.run()
     except google.appengine.api.urlfetch.InvalidURLError, e:
-      v.addError('Invalid url, "%s" is not considered valid' % url, fatal = True)
+      v.addError('Invalid url, "%s" is not considered valid.' % url, fatal = True)
     self.write_template('validation_result.html', {'validator': v})
 
 

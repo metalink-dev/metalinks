@@ -1,3 +1,18 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+#    This program is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+
+#    You should have received a copy of the GNU General Public License
+#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 
 #This class should be kept independent of Google App engine, so using the url fetch service should be done outside of this file
 
@@ -10,7 +25,10 @@ class Message:
     return self.catagory[0:1].upper() + self.catagory[1:]
   
   def __str__(self):
-    return self.msg
+    
+    if self.msg[-1] == '.': #Add punctuation if needed.
+      return self.msg
+    return self.msg + '.'
 
 '''Validate the given metalink content, collecting as much warnings and messages as possible'''
 class Validator:
