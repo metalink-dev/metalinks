@@ -144,10 +144,10 @@
 <tr><td class="header">Network Working Group</td><td class="header">A. Bryan</td></tr>
 <tr><td class="header">Internet-Draft</td><td class="header">T. Tsujikawa</td></tr>
 <tr><td class="header">Intended status: Standards Track</td><td class="header">N. McNab</td></tr>
-<tr><td class="header">Expires: June 22, 2010</td><td class="header">&nbsp;</td></tr>
+<tr><td class="header">Expires: June 24, 2010</td><td class="header">&nbsp;</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">P. Poeml</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">Novell, Inc.</td></tr>
-<tr><td class="header">&nbsp;</td><td class="header">December 19, 2009</td></tr>
+<tr><td class="header">&nbsp;</td><td class="header">December 21, 2009</td></tr>
 </table></td></tr></table>
 <h1><br />The Metalink Download Description Format<br />draft-bryan-metalink-25</h1>
 
@@ -180,7 +180,7 @@ The list of current Internet-Drafts can be accessed at
 The list of Internet-Draft Shadow Directories can be accessed at
 <a href='http://www.ietf.org/shadow.html'>http://www.ietf.org/shadow.html</a>.</p>
 <p>
-This Internet-Draft will expire on June 22, 2010.</p>
+This Internet-Draft will expire on June 24, 2010.</p>
 
 <h3>Copyright Notice</h3>
 <p>
@@ -679,15 +679,15 @@ metalinkMetalink =
 	    
 	    </p>
 <ul class="text">
-<li><a class='info' href='#element.metalink'>metalink:metalink<span> (</span><span class='info'>The &#34;metalink:metalink&#34; Element</span><span>)</span></a> elements MAY contain exactly one <a class='info' href='#element.dynamic'>metalink:dynamic<span> (</span><span class='info'>The &#34;metalink:dynamic&#34; Element</span><span>)</span></a> element.
+<li><a class='info' href='#element.metalink'>metalink:metalink<span> (</span><span class='info'>The &#34;metalink:metalink&#34; Element</span><span>)</span></a> elements MAY contain exactly one <a class='info' href='#element.dynamic'>metalink:dynamic<span> (</span><span class='info'>The &#34;metalink:dynamic&#34; Element</span><span>)</span></a> element and MUST NOT contain more than one such element.
 </li>
 <li><a class='info' href='#element.metalink'>metalink:metalink<span> (</span><span class='info'>The &#34;metalink:metalink&#34; Element</span><span>)</span></a> elements MUST contain one or more <a class='info' href='#element.file'>metalink:file<span> (</span><span class='info'>The &#34;metalink:file&#34; Element</span><span>)</span></a> elements.
 </li>
-<li><a class='info' href='#element.metalink'>metalink:metalink<span> (</span><span class='info'>The &#34;metalink:metalink&#34; Element</span><span>)</span></a> elements MAY contain exactly one <a class='info' href='#element.generator'>metalink:generator<span> (</span><span class='info'>The &#34;metalink:generator&#34; Element</span><span>)</span></a> element.
+<li><a class='info' href='#element.metalink'>metalink:metalink<span> (</span><span class='info'>The &#34;metalink:metalink&#34; Element</span><span>)</span></a> elements MAY contain exactly one <a class='info' href='#element.generator'>metalink:generator<span> (</span><span class='info'>The &#34;metalink:generator&#34; Element</span><span>)</span></a> element and MUST NOT contain more than one such element.
 </li>
-<li><a class='info' href='#element.metalink'>metalink:metalink<span> (</span><span class='info'>The &#34;metalink:metalink&#34; Element</span><span>)</span></a> elements SHOULD contain exactly one <a class='info' href='#element.origin'>metalink:origin<span> (</span><span class='info'>The &#34;metalink:origin&#34; Element</span><span>)</span></a> element.
+<li><a class='info' href='#element.metalink'>metalink:metalink<span> (</span><span class='info'>The &#34;metalink:metalink&#34; Element</span><span>)</span></a> elements SHOULD contain exactly one <a class='info' href='#element.origin'>metalink:origin<span> (</span><span class='info'>The &#34;metalink:origin&#34; Element</span><span>)</span></a> element and MUST NOT contain more than one such element.
 </li>
-<li><a class='info' href='#element.metalink'>metalink:metalink<span> (</span><span class='info'>The &#34;metalink:metalink&#34; Element</span><span>)</span></a> elements MAY contain exactly one <a class='info' href='#element.published'>metalink:published<span> (</span><span class='info'>The &#34;metalink:published&#34; Element</span><span>)</span></a> element.
+<li><a class='info' href='#element.metalink'>metalink:metalink<span> (</span><span class='info'>The &#34;metalink:metalink&#34; Element</span><span>)</span></a> elements MAY contain exactly one <a class='info' href='#element.published'>metalink:published<span> (</span><span class='info'>The &#34;metalink:published&#34; Element</span><span>)</span></a> element and MUST NOT contain more than one such element.
 </li>
 </ul>
 
@@ -758,13 +758,13 @@ metalinkFile =
 	    </p>
 <ul class="text">
 <li><a class='info' href='#element.file'>metalink:file<span> (</span><span class='info'>The &#34;metalink:file&#34; Element</span><span>)</span></a> elements MAY contain exactly one <a class='info' href='#element.copyright'>metalink:copyright<span> (</span><span class='info'>The &#34;metalink:copyright&#34; Element</span><span>)</span></a>
-	      element.
+	      element and MUST NOT contain more than one such element.
 </li>
 <li><a class='info' href='#element.file'>metalink:file<span> (</span><span class='info'>The &#34;metalink:file&#34; Element</span><span>)</span></a> elements MAY contain exactly one <a class='info' href='#element.description'>metalink:description<span> (</span><span class='info'>The &#34;metalink:description&#34; Element</span><span>)</span></a>
-	      element.
+	      element and MUST NOT contain more than one such element.
 </li>
 <li><a class='info' href='#element.file'>metalink:file<span> (</span><span class='info'>The &#34;metalink:file&#34; Element</span><span>)</span></a> elements MAY contain exactly one <a class='info' href='#element.identity'>metalink:identity<span> (</span><span class='info'>The &#34;metalink:identity&#34; Element</span><span>)</span></a>
-	      element.
+	      element and MUST NOT contain more than one such element.
 </li>
 <li><a class='info' href='#element.file'>metalink:file<span> (</span><span class='info'>The &#34;metalink:file&#34; Element</span><span>)</span></a> elements MAY contain one or more <a class='info' href='#element.hash'>metalink:hash<span> (</span><span class='info'>The &#34;metalink:hash&#34; Element</span><span>)</span></a> elements.
 </li>
@@ -772,7 +772,7 @@ metalinkFile =
 	      element.
 </li>
 <li><a class='info' href='#element.file'>metalink:file<span> (</span><span class='info'>The &#34;metalink:file&#34; Element</span><span>)</span></a> elements MAY contain exactly one <a class='info' href='#element.logo'>metalink:logo<span> (</span><span class='info'>The &#34;metalink:logo&#34; Element</span><span>)</span></a>
-	      element.
+	      element and MUST NOT contain more than one such element.
 </li>
 <li><a class='info' href='#element.file'>metalink:file<span> (</span><span class='info'>The &#34;metalink:file&#34; Element</span><span>)</span></a> elements MAY contain one or more <a class='info' href='#element.os'>metalink:os<span> (</span><span class='info'>The &#34;metalink:os&#34; Element</span><span>)</span></a>
 	      element.
@@ -782,15 +782,15 @@ metalinkFile =
 <li><a class='info' href='#element.file'>metalink:file<span> (</span><span class='info'>The &#34;metalink:file&#34; Element</span><span>)</span></a> elements MAY contain one or more <a class='info' href='#element.pieces'>metalink:pieces<span> (</span><span class='info'>The &#34;metalink:pieces&#34; Element</span><span>)</span></a> elements.
 </li>
 <li><a class='info' href='#element.file'>metalink:file<span> (</span><span class='info'>The &#34;metalink:file&#34; Element</span><span>)</span></a> elements MAY contain exactly one <a class='info' href='#element.publisher'>metalink:publisher<span> (</span><span class='info'>The &#34;metalink:publisher&#34; Element</span><span>)</span></a>
-	      element.
+	      element and MUST NOT contain more than one such element.
 </li>
 <li><a class='info' href='#element.file'>metalink:file<span> (</span><span class='info'>The &#34;metalink:file&#34; Element</span><span>)</span></a> elements MAY contain one or more <a class='info' href='#element.signature'>metalink:signature<span> (</span><span class='info'>The &#34;metalink:signature&#34; Element</span><span>)</span></a> elements.
 </li>
 <li><a class='info' href='#element.file'>metalink:file<span> (</span><span class='info'>The &#34;metalink:file&#34; Element</span><span>)</span></a> elements SHOULD contain exactly one <a class='info' href='#element.size'>metalink:size<span> (</span><span class='info'>The &#34;metalink:size&#34; Element</span><span>)</span></a>
-	      element.
+	      element and MUST NOT contain more than one such element.
 </li>
 <li><a class='info' href='#element.file'>metalink:file<span> (</span><span class='info'>The &#34;metalink:file&#34; Element</span><span>)</span></a> elements MAY contain exactly one <a class='info' href='#element.version'>metalink:version<span> (</span><span class='info'>The &#34;metalink:version&#34; Element</span><span>)</span></a>
-	      element.
+	      element and MUST NOT contain more than one such element.
 </li>
 </ul><p> 
 
@@ -1708,7 +1708,7 @@ References</h3>
 <a name="rfc.section.A"></a><h3>Appendix A.&nbsp;
 Acknowledgements and Contributors</h3>
 
-<p>The layout and content of this document relies heavily on work pioneered in the Atom Syndication Format as specified in <a class='info' href='#RFC4287'>[RFC4287]<span> (</span><span class='info'>Nottingham, M. and R. Sayre, &ldquo;The Atom Syndication Format,&rdquo; December&nbsp;2005.</span><span>)</span></a>.
+<p>The layout and shape of this document relies heavily on work pioneered in the Atom Syndication Format as specified in <a class='info' href='#RFC4287'>[RFC4287]<span> (</span><span class='info'>Nottingham, M. and R. Sayre, &ldquo;The Atom Syndication Format,&rdquo; December&nbsp;2005.</span><span>)</span></a>.
 </p>
 <p>The content and concepts within are a product of the Metalink community.
 </p>
@@ -1725,14 +1725,14 @@ Acknowledgements and Contributors</h3>
           Salvatore Musumeci, Steve Eshelman, 
           Lucas Hewett, Ryan Cronin, Dave Winquist, Bob Denison,
           Wes Shelton, Kees Cook, Josh Colbert, Steve Kleisath, Chad Neptune, Nick Carrabba, Chris
-          Carrabba, Erin Solari, Derick Cordoba, Ryan Alexander, John &amp; Sandra Sowder,
+          Carrabba, Erin Solari, Derick Cordoba, Ryan Alexander, John and Sandra Sowder,
           Tom Mainville, Janie Wargo, Jason Hansen, Tim Bray, Dan Brickley, Markus Hofmann, 
           Dan Connolly, Tim Berners-Lee, Louis Suarez-Potts, Ross Smith, Jeff Covey, 
           Ed Lee, Shawn Wilsher, Mike Connor, Johan Svedberg, Dedric Carter, James Antill, and Debi
           Goulding. We also thank the Anthony Family, the Bryan Family, Juanita Anthony and Zimmy Bryan.
 </p>
 <p>We also thank the following contributors for assistance and review: Eran Hammer-Lahav, Lisa Dusseault, Mark Nottingham, Peter Saint-Andre, Julian Reschke, Chris Newman,
-		  Ian Macfarlane, Dave Cridland, Barry Leiba, Uri Blumenthal, Paul Hoffman, Felix Sasaki, Matthias Fuchs, Mark Baker, and Scott Cantor.
+		  Ian Macfarlane, Dave Cridland, Barry Leiba, Uri Blumenthal, Paul Hoffman, Felix Sasaki, Matthias Fuchs, Mark Baker, Scott Cantor, and Brian Carpenter.
 </p>
 <a name="schema"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
