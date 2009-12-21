@@ -432,15 +432,15 @@ metalinkMetalink =
 	    <list style="symbols"> 
 	      
 
-          <t><xref target="element.metalink" format="none">metalink:metalink</xref> elements MAY contain exactly one <xref target="element.dynamic" format="none">metalink:dynamic</xref> element.</t>
+          <t><xref target="element.metalink" format="none">metalink:metalink</xref> elements MAY contain exactly one <xref target="element.dynamic" format="none">metalink:dynamic</xref> element and MUST NOT contain more than one such element.</t>
 		  
           <t><xref target="element.metalink" format="none">metalink:metalink</xref> elements MUST contain one or more <xref target="element.file" format="none">metalink:file</xref> elements.</t>
 
-	      <t><xref target="element.metalink" format="none">metalink:metalink</xref> elements MAY contain exactly one <xref target="element.generator" format="none">metalink:generator</xref> element.</t>
+	      <t><xref target="element.metalink" format="none">metalink:metalink</xref> elements MAY contain exactly one <xref target="element.generator" format="none">metalink:generator</xref> element and MUST NOT contain more than one such element.</t>
 
-	      <t><xref target="element.metalink" format="none">metalink:metalink</xref> elements SHOULD contain exactly one <xref target="element.origin" format="none">metalink:origin</xref> element.</t>
+	      <t><xref target="element.metalink" format="none">metalink:metalink</xref> elements SHOULD contain exactly one <xref target="element.origin" format="none">metalink:origin</xref> element and MUST NOT contain more than one such element.</t>
 
-	      <t><xref target="element.metalink" format="none">metalink:metalink</xref> elements MAY contain exactly one <xref target="element.published" format="none">metalink:published</xref> element.</t>
+	      <t><xref target="element.metalink" format="none">metalink:metalink</xref> elements MAY contain exactly one <xref target="element.published" format="none">metalink:published</xref> element and MUST NOT contain more than one such element.</t>
 	  
 	    </list></t> 
 
@@ -513,13 +513,13 @@ metalinkFile =
 	    <list style="symbols"> 
 
 	      <t><xref target="element.file" format="none">metalink:file</xref> elements MAY contain exactly one <xref target="element.copyright" format="none">metalink:copyright</xref>
-	      element.</t>	
+	      element and MUST NOT contain more than one such element.</t>	
 
 	      <t><xref target="element.file" format="none">metalink:file</xref> elements MAY contain exactly one <xref target="element.description" format="none">metalink:description</xref>
-	      element.</t>	
+	      element and MUST NOT contain more than one such element.</t>	
 
 	      <t><xref target="element.file" format="none">metalink:file</xref> elements MAY contain exactly one <xref target="element.identity" format="none">metalink:identity</xref>
-	      element.</t>	
+	      element and MUST NOT contain more than one such element.</t>	
 
 	      <t><xref target="element.file" format="none">metalink:file</xref> elements MAY contain one or more <xref target="element.hash" format="none">metalink:hash</xref> elements.</t>
 
@@ -527,7 +527,7 @@ metalinkFile =
 	      element.</t>	
 
 	      <t><xref target="element.file" format="none">metalink:file</xref> elements MAY contain exactly one <xref target="element.logo" format="none">metalink:logo</xref>
-	      element.</t>	
+	      element and MUST NOT contain more than one such element.</t>	
 
 	      <t><xref target="element.file" format="none">metalink:file</xref> elements MAY contain one or more <xref target="element.os" format="none">metalink:os</xref>
 	      element.</t>	
@@ -537,15 +537,15 @@ metalinkFile =
 	      <t><xref target="element.file" format="none">metalink:file</xref> elements MAY contain one or more <xref target="element.pieces" format="none">metalink:pieces</xref> elements.</t>
 		  
           <t><xref target="element.file" format="none">metalink:file</xref> elements MAY contain exactly one <xref target="element.publisher" format="none">metalink:publisher</xref>
-	      element.</t>	
+	      element and MUST NOT contain more than one such element.</t>	
 
 	      <t><xref target="element.file" format="none">metalink:file</xref> elements MAY contain one or more <xref target="element.signature" format="none">metalink:signature</xref> elements.</t>
 		  
 	      <t><xref target="element.file" format="none">metalink:file</xref> elements SHOULD contain exactly one <xref target="element.size" format="none">metalink:size</xref>
-	      element.</t>
+	      element and MUST NOT contain more than one such element.</t>
 		  
 	      <t><xref target="element.file" format="none">metalink:file</xref> elements MAY contain exactly one <xref target="element.version" format="none">metalink:version</xref>
-	      element.</t>	
+	      element and MUST NOT contain more than one such element.</t>	
       
 	    </list> 
 
@@ -1875,7 +1875,7 @@ structuredExtensionElement =
 	    </references> 
 
 	    <section title="Acknowledgements and Contributors">
-		  <t>The layout and content of this document relies heavily on work pioneered in the Atom Syndication Format as specified in <xref target="RFC4287"/>.</t>
+		  <t>The layout and shape of this document relies heavily on work pioneered in the Atom Syndication Format as specified in <xref target="RFC4287"/>.</t>
 	    
           <t>The content and concepts within are a product of the Metalink community.</t>
 
@@ -1892,14 +1892,14 @@ structuredExtensionElement =
           Salvatore Musumeci, Steve Eshelman, 
           Lucas Hewett, Ryan Cronin, Dave Winquist, Bob Denison,
           Wes Shelton, Kees Cook, Josh Colbert, Steve Kleisath, Chad Neptune, Nick Carrabba, Chris
-          Carrabba, Erin Solari, Derick Cordoba, Ryan Alexander, John &amp; Sandra Sowder,
+          Carrabba, Erin Solari, Derick Cordoba, Ryan Alexander, John and Sandra Sowder,
           Tom Mainville, Janie Wargo, Jason Hansen, Tim Bray, Dan Brickley, Markus Hofmann, 
           Dan Connolly, Tim Berners-Lee, Louis Suarez-Potts, Ross Smith, Jeff Covey, 
           Ed Lee, Shawn Wilsher, Mike Connor, Johan Svedberg, Dedric Carter, James Antill, and Debi
           Goulding. We also thank the Anthony Family, the Bryan Family, Juanita Anthony and Zimmy Bryan.</t>
 		  
 		  <t>We also thank the following contributors for assistance and review: Eran Hammer-Lahav, Lisa Dusseault, Mark Nottingham, Peter Saint-Andre, Julian Reschke, Chris Newman,
-		  Ian Macfarlane, Dave Cridland, Barry Leiba, Uri Blumenthal, Paul Hoffman, Felix Sasaki, Matthias Fuchs, Mark Baker, and Scott Cantor.</t>
+		  Ian Macfarlane, Dave Cridland, Barry Leiba, Uri Blumenthal, Paul Hoffman, Felix Sasaki, Matthias Fuchs, Mark Baker, Scott Cantor, and Brian Carpenter.</t>
 		  
 
 	    </section> 
