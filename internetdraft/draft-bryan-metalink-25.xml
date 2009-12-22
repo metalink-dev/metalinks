@@ -415,8 +415,7 @@ metalinkDateConstruct =
 metalinkMetalink =
    element metalink:metalink {
       metalinkCommonAttributes,
-      (metalinkDynamic?
-       &amp; metalinkFile+
+      (metalinkFile+
        &amp; metalinkGenerator?
        &amp; metalinkOrigin?
        &amp; metalinkPublished?
@@ -431,8 +430,6 @@ metalinkMetalink =
 	    
 	    <list style="symbols"> 
 	      
-
-          <t><xref target="element.metalink" format="none">metalink:metalink</xref> elements MAY contain exactly one <xref target="element.dynamic" format="none">metalink:dynamic</xref> element and MUST NOT contain more than one such element.</t>
 		  
           <t><xref target="element.metalink" format="none">metalink:metalink</xref> elements MUST contain one or more <xref target="element.file" format="none">metalink:file</xref> elements.</t>
 
@@ -657,26 +654,6 @@ metalinkDescription =
 	  
 	</section>
 
-	<section anchor="element.dynamic" title="The &#34;metalink:dynamic&#34; Element">
-    
-    
-    <iref item="XML Elements" subitem="type" primary="true"/>
-    <iref item="type XML element" primary="true"/> 
-	      
-	  <t>The "<xref target="element.dynamic" format="none">metalink:dynamic</xref>" element is a Text construct that describes
-	  whether the IRI from "<xref target="element.origin" format="none">metalink:origin</xref>" in a Metalink will contain dynamic updated information or if it is static and not likely to be updated.
-	  
-	    <figure>
-        <iref item="metalinkType grammar production" primary="true"/>
-        <iref item="Grammar" subitem="metalinkType" primary="true"/>
-	      <artwork type="application/relax-ng-compact-syntax">
-metalinkDynamic =
-   element metalink:dynamic {
-      "true" | "false"
-   }</artwork></figure></t> 
-	  
-	</section>
-	
 
 	<section anchor="element.generator" title="The &#34;metalink:generator&#34; Element">
     
@@ -911,7 +888,7 @@ metalinkMetaURL =
     <iref item="XML Elements" subitem="origin" primary="true"/>
     <iref item="origin XML element" primary="true"/> 
 	      
-	  <t>The "<xref target="element.origin" format="none">metalink:origin</xref>" element is an IRI where the Metalink Document was originally published. If <xref target="element.dynamic" format="none">metalink:dynamic</xref> is "true", then updated
+	  <t>The "<xref target="element.origin" format="none">metalink:origin</xref>" element is an IRI where the Metalink Document was originally published. If the dynamic attribute of <xref target="element.origin" format="none">metalink:origin</xref> is "true", then updated
       versions of the Metalink can be found at this IRI.
 
 	    <figure> 
@@ -921,8 +898,17 @@ metalinkMetaURL =
 metalinkOrigin =
    element metalink:origin {
      metalinkCommonAttributes,
+     attribute dynamic { xsd:boolean }?,
      (metalinkUri)
-   }</artwork></figure></t> 
+   }</artwork></figure></t>
+   
+	  <section title="The &#34;dynamic&#34; Attribute"> 
+
+
+
+	    <t>The <xref target="element.origin" format="none">metalink:origin</xref> element MAY have a "dynamic" attribute, set to "true" or "false", which tells if a Metalink at the origin IRI will contain dynamic updated information or if it is static and not likely to be updated.</t>
+		
+	  </section>
 	  
 	</section>
 
@@ -1949,8 +1935,7 @@ start = metalinkMetalink
 metalinkMetalink =
    element metalink:metalink {
       metalinkCommonAttributes,
-      (metalinkDynamic?
-       &amp; metalinkFile+
+      (metalinkFile+
        &amp; metalinkGenerator?
        &amp; metalinkOrigin?
        &amp; metalinkPublished?
@@ -1996,11 +1981,6 @@ metalinkDescription =
       metalinkTextConstruct
    }
 
-metalinkDynamic =
-   element metalink:dynamic {
-      "true" | "false"
-   }
-
 metalinkGenerator =
    element metalink:generator {
       metalinkTextConstruct
@@ -2032,7 +2012,7 @@ metalinkMetaURL =
    element metalink:metaurl {
       metalinkCommonAttributes,
       attribute priority { xsd:positiveInteger {
-         maxInclusive = "999999"}},
+         maxInclusive = "999999"}}?,
       attribute type { text },
       attribute name { text }?,
       metalinkUri
@@ -2041,6 +2021,7 @@ metalinkMetaURL =
 metalinkOrigin =
    element metalink:origin {
       metalinkCommonAttributes,
+      attribute dynamic { xsd:boolean }?,
       (metalinkUri)
    }
 
@@ -2084,7 +2065,7 @@ metalinkURL =
          minLength = "2"  maxLength="2"}
       }?,
       attribute priority { xsd:positiveInteger {
-         maxInclusive = "999999"}},
+         maxInclusive = "999999"}}?,
       metalinkUri
    }
 
@@ -2163,8 +2144,9 @@ anyForeignElement =
 	    <list style="symbols">
 		
 		  <t>Julian Reschke XML issues.</t>
-		  <t>Generator ABNF & reference. Remove license element.</t>
+		  <t>Generator ABNF and reference. Remove license element.</t>
 		  <t>Update IPR to "trust200902".</t>
+		  <t>dynamic element changed to dynamic attribute of origin element.</t>
 	   </list></t>
 		
 <t>-24 : December 08, 2009.
