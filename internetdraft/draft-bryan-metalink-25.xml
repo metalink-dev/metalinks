@@ -844,7 +844,7 @@ metalinkMetaURL =
    element metalink:metaurl {
       metalinkCommonAttributes,
       attribute priority { xsd:positiveInteger {
-         maxInclusive = "999999"}},
+         maxInclusive = "999999"}}?,
       attribute type { text },
       attribute name { text }?,
       metalinkUri
@@ -1101,7 +1101,7 @@ metalinkURL =
          minLength = "2"  maxLength="2"}
       }?,
       attribute priority { xsd:positiveInteger {
-         maxInclusive = "999999"}},
+         maxInclusive = "999999"}}?,
       metalinkUri
    }</artwork></figure></t> 
 
