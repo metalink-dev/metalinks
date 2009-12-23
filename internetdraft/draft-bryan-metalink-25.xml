@@ -857,7 +857,7 @@ metalinkMetaURL =
          maxInclusive = "999999"}}?,
       attribute type { text },
       attribute name { text }?,
-      metalinkUri
+      (metalinkUri)
    }</artwork></figure></t> 
 
 	  <section title="The &#34;priority&#34; Attribute"> 
@@ -1112,7 +1112,7 @@ metalinkURL =
       }?,
       attribute priority { xsd:positiveInteger {
          maxInclusive = "999999"}}?,
-      metalinkUri
+      (metalinkUri)
    }</artwork></figure></t> 
 
 	  <section title="The &#34;priority&#34; Attribute"> 
@@ -2025,7 +2025,7 @@ metalinkMetaURL =
          maxInclusive = "999999"}}?,
       attribute type { text },
       attribute name { text }?,
-      metalinkUri
+      (metalinkUri)
    }
 
 metalinkOrigin =
@@ -2076,7 +2076,7 @@ metalinkURL =
       }?,
       attribute priority { xsd:positiveInteger {
          maxInclusive = "999999"}}?,
-      metalinkUri
+      (metalinkUri)
    }
 
 metalinkVersion =

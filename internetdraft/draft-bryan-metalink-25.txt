@@ -933,7 +933,7 @@ Internet-Draft    Metalink Download Description Format     December 2009
             maxInclusive = "999999"}}?,
          attribute type { text },
          attribute name { text }?,
-         metalinkUri
+         (metalinkUri)
       }
 
 4.2.8.1.  The "priority" Attribute
@@ -1144,7 +1144,7 @@ Internet-Draft    Metalink Download Description Format     December 2009
          }?,
          attribute priority { xsd:positiveInteger {
             maxInclusive = "999999"}}?,
-         metalinkUri
+         (metalinkUri)
       }
 
 4.2.16.1.  The "priority" Attribute
@@ -1742,7 +1742,7 @@ Internet-Draft    Metalink Download Description Format     December 2009
             maxInclusive = "999999"}}?,
          attribute type { text },
          attribute name { text }?,
-         metalinkUri
+         (metalinkUri)
       }
 
    metalinkOrigin =
@@ -1801,7 +1801,7 @@ Internet-Draft    Metalink Download Description Format     December 2009
          }?,
          attribute priority { xsd:positiveInteger {
             maxInclusive = "999999"}}?,
-         metalinkUri
+         (metalinkUri)
       }
 
    metalinkVersion =
