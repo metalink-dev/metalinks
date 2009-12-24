@@ -2,9 +2,9 @@
 
 
 Network Working Group                                           A. Bryan
-Internet-Draft                                         December 19, 2009
+Internet-Draft                                         December 24, 2009
 Intended status: Informational
-Expires: June 22, 2010
+Expires: June 27, 2010
 
 
           Additional Hash Algorithms for HTTP Instance Digests
@@ -40,7 +40,7 @@ Status of this Memo
    The list of Internet-Draft Shadow Directories can be accessed at
    http://www.ietf.org/shadow.html.
 
-   This Internet-Draft will expire on June 22, 2010.
+   This Internet-Draft will expire on June 27, 2010.
 
 Copyright Notice
 
@@ -52,7 +52,7 @@ Copyright Notice
 
 
 
-Bryan                     Expires June 22, 2010                 [Page 1]
+Bryan                     Expires June 27, 2010                 [Page 1]
 
 Internet-Draft  More Algorithms for HTTP Instance Digests  December 2009
 
@@ -108,7 +108,7 @@ Table of Contents
 
 
 
-Bryan                     Expires June 22, 2010                 [Page 2]
+Bryan                     Expires June 27, 2010                 [Page 2]
 
 Internet-Draft  More Algorithms for HTTP Instance Digests  December 2009
 
@@ -164,7 +164,7 @@ Internet-Draft  More Algorithms for HTTP Instance Digests  December 2009
 
 
 
-Bryan                     Expires June 22, 2010                 [Page 3]
+Bryan                     Expires June 27, 2010                 [Page 3]
 
 Internet-Draft  More Algorithms for HTTP Instance Digests  December 2009
 
@@ -220,7 +220,7 @@ Internet-Draft  More Algorithms for HTTP Instance Digests  December 2009
 
 
 
-Bryan                     Expires June 22, 2010                 [Page 4]
+Bryan                     Expires June 27, 2010                 [Page 4]
 
 Internet-Draft  More Algorithms for HTTP Instance Digests  December 2009
 
@@ -228,7 +228,8 @@ Internet-Draft  More Algorithms for HTTP Instance Digests  December 2009
 Appendix A.  Acknowledgements and Contributors
 
    Thanks to Mark Nottingham, Eran Hammer-Lahav, Nils Maier, Lisa
-   Dusseault, Alfred Hoenes, Pasi Eronen, and Gonzalo Camarillo.
+   Dusseault, Alfred Hoenes, Pasi Eronen, Gonzalo Camarillo, and Radia
+   Perlman.
 
 
 Appendix B.  Document History
@@ -275,6 +276,5 @@ Author's Address
 
 
 
-
-Bryan                     Expires June 22, 2010                 [Page 5]
+Bryan                     Expires June 27, 2010                 [Page 5]
 
