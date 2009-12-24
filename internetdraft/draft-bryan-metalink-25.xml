@@ -863,7 +863,8 @@ metalinkMetaURL =
 	  <section title="The &#34;priority&#34; Attribute"> 
 
 	    <t><xref target="element.metaurl" format="none">metalink:metaurl</xref>
-	    elements MAY have a priority attribute. Values MUST be positive integers between 1 and 999999. Lower values indicate a higher priority. The priority values of <xref target="element.metaurl" format="none">metalink:metaurl</xref> and <xref target="element.url" format="none">metalink:url</xref> elements are compared and the lowest ones are used first. Multiple <xref target="element.metaurl" format="none">metalink:metaurl</xref> and <xref target="element.url" format="none">metalink:url</xref> elements MAY have the same
+	    elements MAY have a priority attribute. Values MUST be positive integers between 1 and 999999. Lower values indicate a higher priority. <xref target="element.metaurl" format="none">metalink:metaurl</xref>
+	    elements without a priority attribute are considered to have the lowest priority, i.e. 999999. The priority values of <xref target="element.metaurl" format="none">metalink:metaurl</xref> and <xref target="element.url" format="none">metalink:url</xref> elements are compared and those with the lowest values, starting with 1, are used first. Multiple <xref target="element.metaurl" format="none">metalink:metaurl</xref> and <xref target="element.url" format="none">metalink:url</xref> elements MAY have the same
 		priority, i.e. one BitTorrent .torrent file and three FTP URIs could have priority="1". See also the "priority" attribute of the <xref target="element.url" format="none">metalink:url</xref> element.</t>
 
 	  </section> 
@@ -1118,7 +1119,8 @@ metalinkURL =
 	  <section title="The &#34;priority&#34; Attribute"> 
 
 	    <t><xref target="element.url" format="none">metalink:url</xref>
-	    elements MAY have a priority attribute. Values MUST be positive integers between 1 and 999999. Lower values indicate a higher priority. Multiple <xref target="element.url" format="none">metalink:url</xref> elements can have the same
+	    elements MAY have a priority attribute. Values MUST be positive integers between 1 and 999999. Lower values indicate a higher priority. <xref target="element.url" format="none">metalink:url</xref>
+	    elements without a priority attribute are considered to have the lowest priority, i.e. 999999. Multiple <xref target="element.url" format="none">metalink:url</xref> elements can have the same
 		priority, i.e. ten mirrors could have priority="1".</t>
 
 	  </section> 
