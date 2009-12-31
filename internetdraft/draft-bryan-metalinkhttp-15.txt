@@ -11,7 +11,7 @@ Expires: July 4, 2010
 
 
           Metalink/HTTP: Mirrors and Checksums in HTTP Headers
-                      draft-bryan-metalinkhttp-14
+                      draft-bryan-metalinkhttp-15
 
 Abstract
 
