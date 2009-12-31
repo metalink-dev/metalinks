@@ -1163,29 +1163,7 @@ metalinkVersion =
 
     </section>  
 	
-      <section title="Securing Metalink Documents"> 
 
-	    <t>Because Metalink is an XML-based format, existing XML security
-	    mechanisms can be used to secure its content.</t>
-
-	    
-	    <t>Producers of Metalink Documents may have sound reasons for signing
-	    otherwise-unprotected content. For example, a merchant
-	    might digitally sign a Metalink that lists a file download to verify its origin. Other merchants may wish to sign and encrypt Metalink Documents that list digital songs that have been purchased. Of course,
-	    many other examples are conceivable as well.</t>
-
-
-	    <t>The algorithm requirements in this section pertain to
-	    the Metalink Processor. They require that a recipient, at a
-	    minimum, be able to handle messages that use the specified
-	    cryptographic algorithms.  These requirements do not limit the
-	    algorithms that the sender can choose.</t>
-		
-		<t>Metalink Processors that verify signed Metalink Documents MUST at least support <xref target="REC-xmldsig-core">XML-Signature and
-	      Syntax Processing</xref>.</t>
-
-
-	  </section>
 
 	  <section title="Extending Metalink" anchor="extending_metalink"> 
 
@@ -1399,8 +1377,17 @@ structuredExtensionElement =
 	  </section> 
 
 	  <section title="Security Considerations">
-	    <t>Publishers are encouraged to offer Metalink documents via authenticated HTTP under TLS as specified in <xref target="RFC2818"/>. Publishers are also encouraged to include digital signatures of the files within the Metalink Documents if they are available.</t>
+	  	<t>Because Metalink is an XML-based format, existing XML security
+	    mechanisms can be used to secure its content.</t>
 
+	    
+	    <t>Producers of Metalink Documents may have sound reasons for signing
+	    otherwise-unprotected content. For example, a merchant
+	    might digitally sign a Metalink that lists a file download to verify its origin. Other merchants may wish to sign and encrypt Metalink Documents that list digital songs that have been purchased. Of course,
+	    many other examples are conceivable as well.</t>
+	    <t>Publishers are encouraged to offer Metalink documents via authenticated HTTP under TLS as specified in <xref target="RFC2818"/>. The choice of a secure content layer is entirely possible for content providers.</t>
+		
+		<t>Publishers are also encouraged to include digital signatures of the files within the Metalink Documents, if they are available, as described in <xref target="element.signature"/>.</t>
 
 
 	    <section title="URIs and IRIs">
@@ -1418,17 +1405,11 @@ structuredExtensionElement =
 
 	    </section>	
 		
-	    <section title="Cryptographic Hashes" anchor="security.hash">
-
-	      <t>Currently, some of the hash types defined in the IANA registry named "Hash Function Textual Names" are considered insecure. These include the whole Message Digest family of algorithms which are not suitable for cryptographically strong verification. Malicious people could provide files that appear to be identical to another file because of a collision, i.e. the weak cryptographic hashes of the intended file and a substituted malicious file could match.</t>
-          <t>If a Metalink Document contains hashes, it SHOULD include "sha-256" which is SHA-256, as specified in <xref target="FIPS-180-3"/>, or stronger.  It MAY also include other hashes from the IANA registry named "Hash Function Textual Names".</t>
-
-	    </section>	
-		
-		
+	
 	    <section title="Signing">
 
-	      <t>Metalink Documents SHOULD be signed using <xref target="REC-xmldsig-core"/> and are
+	      <t>Metalink Documents SHOULD be signed using <xref target="REC-xmldsig-core">XML-Signature and
+	      Syntax Processing</xref> and are
 	      subject to the security considerations implied by its
 	      use. This addresses the issue of spoofing.</t>
 
@@ -1438,6 +1419,14 @@ structuredExtensionElement =
 
 	    </section>
 
+	    <section title="Cryptographic Hashes" anchor="security.hash">
+
+	      <t>Currently, some of the hash types defined in the IANA registry named "Hash Function Textual Names" are considered insecure. These include the whole Message Digest family of algorithms which are not suitable for cryptographically strong verification. Malicious people could provide files that appear to be identical to another file because of a collision, i.e. the weak cryptographic hashes of the intended file and a substituted malicious file could match.</t>
+          <t>If a Metalink Document contains hashes, it SHOULD include "sha-256" which is SHA-256, as specified in <xref target="FIPS-180-3"/>, or stronger.  It MAY also include other hashes from the IANA registry named "Hash Function Textual Names".</t>
+
+	    </section>	
+		
+		
 	  </section>
     
 	</middle> 
