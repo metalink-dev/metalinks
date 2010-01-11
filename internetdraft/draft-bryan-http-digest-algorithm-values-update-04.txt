@@ -2,9 +2,9 @@
 
 
 Network Working Group                                           A. Bryan
-Internet-Draft                                         December 24, 2009
+Internet-Draft                                          January 11, 2010
 Intended status: Informational
-Expires: June 27, 2010
+Expires: July 15, 2010
 
 
           Additional Hash Algorithms for HTTP Instance Digests
@@ -40,11 +40,11 @@ Status of this Memo
    The list of Internet-Draft Shadow Directories can be accessed at
    http://www.ietf.org/shadow.html.
 
-   This Internet-Draft will expire on June 27, 2010.
+   This Internet-Draft will expire on July 15, 2010.
 
 Copyright Notice
 
-   Copyright (c) 2009 IETF Trust and the persons identified as the
+   Copyright (c) 2010 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -52,9 +52,9 @@ Copyright Notice
 
 
 
-Bryan                     Expires June 27, 2010                 [Page 1]
+Bryan                     Expires July 15, 2010                 [Page 1]
 
-Internet-Draft  More Algorithms for HTTP Instance Digests  December 2009
+Internet-Draft  More Algorithms for HTTP Instance Digests   January 2010
 
 
    (http://trustee.ietf.org/license-info) in effect on the date of
@@ -108,9 +108,9 @@ Table of Contents
 
 
 
-Bryan                     Expires June 27, 2010                 [Page 2]
+Bryan                     Expires July 15, 2010                 [Page 2]
 
-Internet-Draft  More Algorithms for HTTP Instance Digests  December 2009
+Internet-Draft  More Algorithms for HTTP Instance Digests   January 2010
 
 
 1.  Introduction
@@ -164,9 +164,9 @@ Internet-Draft  More Algorithms for HTTP Instance Digests  December 2009
 
 
 
-Bryan                     Expires June 27, 2010                 [Page 3]
+Bryan                     Expires July 15, 2010                 [Page 3]
 
-Internet-Draft  More Algorithms for HTTP Instance Digests  December 2009
+Internet-Draft  More Algorithms for HTTP Instance Digests   January 2010
 
 
 2.2.  New Registrations
@@ -220,9 +220,9 @@ Internet-Draft  More Algorithms for HTTP Instance Digests  December 2009
 
 
 
-Bryan                     Expires June 27, 2010                 [Page 4]
+Bryan                     Expires July 15, 2010                 [Page 4]
 
-Internet-Draft  More Algorithms for HTTP Instance Digests  December 2009
+Internet-Draft  More Algorithms for HTTP Instance Digests   January 2010
 
 
 Appendix A.  Acknowledgements and Contributors
@@ -276,5 +276,5 @@ Author's Address
 
 
 
-Bryan                     Expires June 27, 2010                 [Page 5]
+Bryan                     Expires July 15, 2010                 [Page 5]
 
