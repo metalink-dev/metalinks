@@ -1,0 +1,1 @@
+This is intended to be a Windows port of GGet.  It is not complete yet.
