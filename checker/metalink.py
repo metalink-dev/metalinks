@@ -213,7 +213,7 @@ class Resource4:
         return valid
 
 class MetalinkFileBase:
-    def __init__(self, filename, attrs = {}):
+    def __init__(self, filename, attrs, do_ed2k, do_magnet):
         self.filename = filename
         self.errors = []
         self.hashlist = {}
@@ -224,6 +224,10 @@ class MetalinkFileBase:
         self.language = ""
         self.os = ""
         self.size = 0
+        self.ed2k = ""
+        self.magnet = ""
+        self.do_ed2k = do_ed2k
+        self.do_magnet = do_magnet
         
         for attr in attrs:
             setattr(self, attr, attrs[attr])
@@ -262,21 +266,6 @@ class MetalinkFileBase:
     
     def add_res(self, res):
         self.resources.append(res)
-
-    def validate_url(self, url):
-        if url.endswith(".torrent"):
-            type = "bittorrent"
-        else:
-            chars = url.find(":")
-            type = url[:chars]
-        allowed_types = ["ftp", "ftps", "http", "https", "rsync", "bittorrent", "magnet", "ed2k"]
-        if not type in allowed_types:
-            return False
-        elif type in ['http', 'https', 'ftp', 'ftps', 'bittorrent']:
-            m = re.search(r'\w+://.+\..+/.*', url)
-            if m == None:
-                return False
-        return True
 
     def scan_file(self, filename, use_chunks=True, max_chunks=255, chunk_size=256, progresslistener=None):
         print "\nScanning file..."
@@ -360,6 +349,22 @@ class MetalinkFileBase:
         self.hashlist["sha1"] = sha1hash.hexdigest()
         if sha256hash != None:
             self.hashlist["sha256"] = sha256hash.hexdigest()
+
+        # automatically add an ed2k url here
+        ed2khash = ed2k_hash(filename)
+        
+        if self.do_ed2k:
+            self.ed2k = compute_ed2k(filename, ed2khash)
+            if self.ed2k != "":
+                self.add_url(self.ed2k)
+
+        if self.do_magnet:
+            self.magnet = compute_magnet(filename, self.size, self.hashlist["md5"], self.hashlist["sha1"], ed2khash)
+            if self.magnet != "":
+                self.add_url(self.magnet)
+
+        self.hashlist['pgp'] = read_sig(filename)
+            
         if len(self.pieces) < 2: self.pieces = []
         # Convert to strings
         #self.size = str(self.size)
@@ -369,7 +374,7 @@ class MetalinkFileBase:
         return True
 
 class MetalinkFile4(MetalinkFileBase):
-    def __init__(self, filename, attrs = {}):
+    def __init__(self, filename, attrs = {}, do_ed2k=True, do_magnet=False):
         self.description = ""
         self.identity = ""
         self.license_name = ""
@@ -378,7 +383,7 @@ class MetalinkFile4(MetalinkFileBase):
         self.publisher_url = ""
         self.version = ""
         self.logo = ""
-        MetalinkFileBase.__init__(self, filename, attrs)
+        MetalinkFileBase.__init__(self, filename, attrs, do_ed2k, do_magnet)
 
     def compare_checksums(self, checksums):
         for key in ("sha-512","sha-384","sha-256","sha-1","md5"):
@@ -455,7 +460,10 @@ class MetalinkFile4(MetalinkFileBase):
             text += '      <os>'+self.os+'</os>\n'
         # Verification
         for key in self.hashlist.keys():
-            text += '      <hash type="%s">' % hashlookup(key) + self.hashlist[key].lower() + '</hash>\n'
+            if key == 'pgp' and self.hashlist[key] != "":
+                text += '      <signature type="%s">' % key + self.hashlist[key] + '</signature>\n'
+            else:
+                text += '      <hash type="%s">' % hashlookup(key) + self.hashlist[key].lower() + '</hash>\n'
         if len(self.pieces) > 1:
             text += '      <pieces type="'+hashlookup(self.piecetype)+'" length="'+self.piecelength+'">\n'
             for id in range(len(self.pieces)):
@@ -468,9 +476,9 @@ class MetalinkFile4(MetalinkFileBase):
         return text
         
 class MetalinkFile(MetalinkFileBase):
-    def __init__(self, filename, attrs = {}):
+    def __init__(self, filename, attrs = {}, do_ed2k=True, do_magnet=False):
         self.maxconnections = ""
-        MetalinkFileBase.__init__(self, filename, attrs)
+        MetalinkFileBase.__init__(self, filename, attrs, do_ed2k, do_magnet)
 
     def compare_checksums(self, checksums):
         for key in ("sha512","sha384","sha256","sha1","md5"):
@@ -538,9 +546,12 @@ class MetalinkFile(MetalinkFileBase):
         if len(self.hashlist) > 0 or len(self.pieces) > 0:
             text += '      <verification>\n'
             for key in self.hashlist.keys():
-                text += '        <hash type="%s">' % key + self.hashlist[key].lower() + '</hash>\n'
+                if key == 'pgp' and self.hashlist[key] != "":
+                    text += '      <signature type="%s">' % key + self.hashlist[key] + '</signature>\n'
+                else:
+                    text += '      <hash type="%s">' % hashlookup(key) + self.hashlist[key].lower() + '</hash>\n'
             if len(self.pieces) > 1:
-                text += '        <pieces type="'+self.piecetype+'" length="'+self.piecelength+'">\n'
+                text += '        <pieces type="'+self.piecetype+'" length="'+str(self.piecelength)+'">\n'
                 for id in range(len(self.pieces)):
                     text += '          <hash piece="'+str(id)+'">'+self.pieces[id]+'</hash>\n'
                 text += '        </pieces>\n'
@@ -608,6 +619,21 @@ class MetalinkBase:
             if self.files[index].hashlist[hashtype] == value:
                 return index
         return None
+
+    def validate_url(self, url):
+        if url.endswith(".torrent"):
+            type = "bittorrent"
+        else:
+            chars = url.find(":")
+            type = url[:chars]
+        allowed_types = ["ftp", "ftps", "http", "https", "rsync", "bittorrent", "magnet", "ed2k"]
+        if not type in allowed_types:
+            return False
+        elif type in ['http', 'https', 'ftp', 'ftps', 'bittorrent']:
+            m = re.search(r'\w+://.+\..+/.*', url)
+            if m == None:
+                return False
+        return True
 
     
 class Metalink(MetalinkBase):
@@ -733,6 +759,11 @@ class Metalink(MetalinkBase):
                 fileobj = self.files[-1]
                 if self.data.strip() != "":
                     setattr(fileobj, name, int(self.data.strip()))
+            if name == "resources":
+                fileobj = self.files[-1]
+                try:
+                    fileobj.maxconnections = tag.attrs['maxconnections']
+                except KeyError: pass
         except IndexError: pass
             
     def validate(self, *args):
@@ -1121,7 +1152,7 @@ def convert_4to3(metalinkobj4):
         # copy common attributes
         for attr in ('filename', 'pieces', 'piecelength', 'piecetype', 'language', 'os', 'size'):
             setattr(fileobj3, attr, getattr(fileobj4, attr))
-        for attr in ('description', 'identity', 'license_url', 'license_name', 'publisher_url', 'publisher_name'):
+        for attr in ('description', 'version', 'identity', 'license_url', 'license_name', 'publisher_url', 'publisher_name'):
             setattr(metalinkobj3, attr, getattr(fileobj4, attr))
         # copy hashlist, change key names
         for key in fileobj4.hashlist.keys():
@@ -1154,7 +1185,7 @@ def convert_3to4(metalinkobj3):
         # copy common attributes
         for attr in ('filename', 'pieces', 'piecelength', 'piecetype', 'language', 'os', 'size'):
             setattr(fileobj4, attr, getattr(fileobj3, attr))
-        for attr in ('description', 'identity', 'license_url', 'license_name', 'publisher_url', 'publisher_name'):
+        for attr in ('description', 'identity', 'version', 'license_url', 'license_name', 'publisher_url', 'publisher_name'):
             setattr(fileobj4, attr, getattr(metalinkobj3, attr))
         # copy hashlist, change key names
         for key in fileobj3.hashlist.keys():
@@ -1230,6 +1261,132 @@ def parsehandle(handle, ver=3):
     xml = convert(xml, ver)
     return xml
 
-#for test in ("2009-05-15T18:30:02Z", "2009-05-15T18:30:02.25Z", "2009-05-15T18:30:02-04:00", "2009-05-15T18:30:02.25-08:00"):
-#    run = time.strftime(RFC822, rfc3339_parsedate(test))
-#    print test, run
+
+def read_sig(filename):
+    '''
+    Checks for signatures for the file.
+    '''
+    sig = read_asc_sig(filename)
+    if sig != "":
+        return sig
+    return read_bin_sig(filename)
+
+def read_bin_sig(filename):
+    '''
+    Converts a binary signature to ASCII
+    '''
+    header = "-----BEGIN PGP SIGNATURE-----\n\n"
+    footer = "-----END PGP SIGNATURE-----\n"
+    filename = filename + ".sig"
+    if os.access(filename, os.R_OK):
+        handle = open(filename, "rb")
+        text = binascii.b2a_base64(handle.read())
+        handle.close()
+        text = header + text + footer
+        return text    
+    return ""
+
+def read_asc_sig(filename):
+    '''
+    Reads a detached ASCII PGP signature from a file.
+    '''
+    filename = filename + ".asc"
+    if os.access(filename, os.R_OK):
+        handle = open(filename, "rb")
+        text = handle.read()
+        handle.close()
+        return text
+    return ""
+
+
+def compute_ed2k(filename, size=None, ed2khash=None):
+    '''
+    Generates an ed2k link for a file on the local filesystem.
+    '''
+    if size == None:
+        size = os.path.getsize(filename)
+    if ed2khash == None:
+        ed2khash = ed2k_hash(filename)
+
+    return "ed2k://|file|%s|%s|%s|/" % (os.path.basename(filename), size, ed2khash)
+
+def ed2k_hash(filename):
+    try:
+        import hashlib
+    except ImportError:
+        return ""
+    
+    blocksize = 9728000
+    size = os.path.getsize(filename)
+
+    handle = open(filename, "rb")
+    data = handle.read(blocksize)
+    hashes = ""
+    md4 = None
+    
+    while data:
+        md4 = hashlib.new('md4')
+        md4.update(data)
+        hashes += md4.digest()
+        data = handle.read(blocksize)
+
+    # handle file size of zero
+    if md4 == None:
+        md4 = hashlib.new('md4')
+    outputhash = md4.hexdigest()
+
+    if size % blocksize == 0:
+        md4 = hashlib.new('md4')
+        md4.update("")
+        hashes += md4.hexdigest()
+
+    if size >= blocksize:
+        md4 = hashlib.new('md4')
+        md4.update(hashes)
+        outputhash = md4.hexdigest()
+        
+    return outputhash
+
+def file_hash(filename, hashtype):
+    '''
+    returns checksum as a hex string
+    '''
+    try:
+        import hashlib
+        hashfunc = getattr(hashlib, hashtype)
+    except ImportError:
+        hashfunc = getattr(hashtype, new)
+
+    hashobj = hashfunc()
+    return filehash(filename, hashobj)
+
+def filehash(thisfile, filesha):
+    '''
+    First parameter, filename
+    Returns sum as a string of hex digits
+    '''
+    try:
+        filehandle = open(thisfile, "rb")
+    except:
+        return ""
+
+    chunksize = 1024*1024
+    data = filehandle.read(chunksize)
+    while(data != ""):
+        filesha.update(data)
+        data = filehandle.read(chunksize)
+
+    filehandle.close()
+    return filesha.hexdigest()
+
+def compute_magnet(filename, size = None, md5 = None, sha1 = None, ed2khash = None):
+    if size == None:
+        size = os.path.getsize(filename)
+    if ed2khash == None:
+        ed2khash = ed2k_hash(filename)
+    if md5 == None:
+        md5 = file_hash(filename, 'md5')
+    if sha1 == None:
+        sha1 = file_hash(filename, 'sha1')
+    return "magnet:?dn=%s&amp;xl=%s&amp;xt=urn:sha1:%s&amp;xt=urn:md5:%s&amp;xt=urn:ed2k:%s" % (os.path.basename(filename), size, base64.b32encode(binascii.unhexlify(sha1)), md5.upper(), ed2khash.upper())
+
