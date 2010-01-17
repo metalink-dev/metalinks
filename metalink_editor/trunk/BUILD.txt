@@ -5,9 +5,11 @@ You will need the following:
 Python - http://www.python.org
 Nullsoft Scriptable Install System (NSIS) - http://nsis.sourceforge.net
 py2exe 0.6.6 - http://www.py2exe.org
+wxPython 2.6 - http://www.wxpython.org
 
-The program can be run as a normal Python script if Python is present.  NSIS and py2exe are not required, these are included only for 
-supporting distribution to the masses without Python.
+The program can be run as a normal Python script if Python is present.  NSIS 
+and py2exe are not required, these are included only for supporting 
+distribution to the masses without Python.
 
 
 Building on Windows
