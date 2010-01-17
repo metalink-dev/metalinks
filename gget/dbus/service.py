@@ -6,7 +6,7 @@ def method(one, in_signature, out_signature):
     return dummy
 
 def signal(one, signature):
-    return dummy    
+    return dummy
     
 def dummy(first):
     return

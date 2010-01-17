@@ -14,6 +14,9 @@ class Client:
         
     def add_dir(self, dir, opt):
         return
+
+    def get_list(self, opt, type):
+        return self.opts[opt]
         
     def get_string(self, opt):
         return str(self.opts[opt])
@@ -35,15 +38,19 @@ class Client:
                 
     def notify_add(self, opt, callback):
         return
-        
-    def get_list(self, one, two):
-        return
 
         
 class DefaultObj:
     def __init__(self, applyto=None, default=None):
         self.applyto = applyto
         self.default = default
+        self.type = None
+        
+    def get_value(self):
+        if self.type == 'list':
+            return []
+        else:
+            return self.default
     
 class ReadDefaults:
     def __init__(self):
@@ -72,7 +79,7 @@ class ReadDefaults:
     def get_dict(self):
         mydict = {}
         for item in self.values:
-            mydict[item.applyto] = item.default
+            mydict[item.applyto] = item.get_value()
         return mydict
 
     # 3 handler functions
@@ -86,6 +93,8 @@ class ReadDefaults:
             self.values[-1].applyto = self.data
         if name == "default":
             self.values[-1].default = self.data
+        if name == "type":
+            self.values[-1].type = self.data
             
     def char_data(self, data):
         self.data += data #.strip()
