@@ -1303,9 +1303,10 @@ def compute_ed2k(filename, size=None, ed2khash=None):
     return "ed2k://|file|%s|%s|%s|/" % (os.path.basename(filename), size, ed2khash)
 
 def ed2k_hash(filename):
-    try:
-        import hashlib
-    except ImportError:
+    try: import hashlib
+    except ImportError: pass
+    
+    if hashlib == None:
         return ""
     
     blocksize = 9728000
