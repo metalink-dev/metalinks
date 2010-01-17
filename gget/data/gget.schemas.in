@@ -1,0 +1,377 @@
+<?xml version="1.0"?>
+<gconfschemafile>
+    <schemalist>
+        <schema>
+            <key>/schemas/apps/gget/general/show_statusbar</key>
+            <applyto>/apps/gget/general/show_statusbar</applyto>
+            <owner>gget</owner>
+            <type>bool</type>
+            <default>true</default>
+            <locale name="C">
+                <short>Show statusbar</short>
+                <long>
+                    Whether GGet should display a statusbar in the main window.
+                </long>
+            </locale>
+        </schema>
+        <schema>
+            <key>/schemas/apps/gget/general/show_toolbar</key>
+            <applyto>/apps/gget/general/show_toolbar</applyto>
+            <owner>gget</owner>
+            <type>bool</type>
+            <default>true</default>
+            <locale name="C">
+                <short>Show toolbar</short>
+                <long>
+                    Whether GGet should display a toolbar in the main window.
+                </long>
+            </locale>
+        </schema>
+        <schema>
+            <key>/schemas/apps/gget/general/show_status_icon</key>
+            <applyto>/apps/gget/general/show_status_icon</applyto>
+            <owner>gget</owner>
+            <type>bool</type>
+            <default>true</default>
+            <locale name="C">
+                <short>Show status icon</short>
+                <long>
+                    Whether GGet should display a status icon in the
+                    notification area.
+                </long>
+            </locale>
+        </schema>
+        <schema>
+            <key>/schemas/apps/gget/general/show_notifications</key>
+            <applyto>/apps/gget/general/show_notifications</applyto>
+            <owner>gget</owner>
+            <type>bool</type>
+            <default>true</default>
+            <locale name="C">
+                <short>Show notifications</short>
+                <long>
+                    Whether GGet should show notifications on completed
+                    downloads.
+                </long>
+            </locale>
+        </schema>
+        <schema>
+            <key>/schemas/apps/gget/general/show_main_window</key>
+            <applyto>/apps/gget/general/show_main_window</applyto>
+            <owner>gget</owner>
+            <type>bool</type>
+            <default>true</default>
+            <locale name="C">
+                <short>Show main window</short>
+                <long>
+                    Whether GGet should display the main window on startup.
+                </long>
+            </locale>
+        </schema>
+        <schema>
+            <key>/schemas/apps/gget/general/show_quit_dialog</key>
+            <applyto>/apps/gget/general/show_quit_dialog</applyto>
+            <owner>gget</owner>
+            <type>bool</type>
+            <default>true</default>
+            <locale name="C">
+                <short>Show quit dialog</short>
+                <long>
+                    Whether GGet should ask for confirmation when quiting with
+                    active downloads.
+                </long>
+            </locale>
+        </schema>
+        <schema>
+            <key>/schemas/apps/gget/general/autostart</key>
+            <applyto>/apps/gget/general/autostart</applyto>
+            <owner>gget</owner>
+            <type>bool</type>
+            <default>false</default>
+            <locale name="C">
+                <short>Autostart at login</short>
+                <long>Whether GGet should start automatically at login.</long>
+            </locale>
+        </schema>
+        <schema>
+            <key>/schemas/apps/gget/general/window_width</key>
+            <applyto>/apps/gget/general/window_width</applyto>
+            <owner>gget</owner>
+            <type>int</type>
+            <default>640</default>
+            <locale name="C">
+                <short>Main window width</short>
+                <long>The width of the main window.</long>
+            </locale>
+        </schema>
+        <schema>
+            <key>/schemas/apps/gget/general/window_height</key>
+            <applyto>/apps/gget/general/window_height</applyto>
+            <owner>gget</owner>
+            <type>int</type>
+            <default>480</default>
+            <locale name="C">
+                <short>Main window height</short>
+                <long>The height of the main window.</long>
+            </locale>
+        </schema>
+        <schema>
+            <key>/schemas/apps/gget/general/window_position_x</key>
+            <applyto>/apps/gget/general/window_position_x</applyto>
+            <owner>gget</owner>
+            <type>int</type>
+            <default>50</default>
+            <locale name="C">
+                <short>Main window x position</short>
+                <long>The x position of the main window.</long>
+            </locale>
+        </schema>
+        <schema>
+            <key>/schemas/apps/gget/general/window_position_y</key>
+            <applyto>/apps/gget/general/window_position_y</applyto>
+            <owner>gget</owner>
+            <type>int</type>
+            <default>50</default>
+            <locale name="C">
+                <short>Main window y position</short>
+                <long>The y position of the main window.</long>
+            </locale>
+        </schema>
+        <schema>
+            <key>/schemas/apps/gget/general/show_status</key>
+            <applyto>/apps/gget/general/show_status</applyto>
+            <owner>gget</owner>
+            <type>bool</type>
+            <default>true</default>
+            <locale name="C">
+                <short>Show status</short>
+                <long>
+                    Whether GGet should display a status column for downloads
+                    in the main window.
+                </long>
+            </locale>
+        </schema>
+        <schema>
+            <key>/schemas/apps/gget/general/show_current_size</key>
+            <applyto>/apps/gget/general/show_current_size</applyto>
+            <owner>gget</owner>
+            <type>bool</type>
+            <default>true</default>
+            <locale name="C">
+                <short>Show current size</short>
+                <long>
+                    Whether GGet should display a current size column for
+                    downloads in the main window.
+                </long>
+            </locale>
+        </schema>
+        <schema>
+            <key>/schemas/apps/gget/general/show_total_size</key>
+            <applyto>/apps/gget/general/show_total_size</applyto>
+            <owner>gget</owner>
+            <type>bool</type>
+            <default>true</default>
+            <locale name="C">
+                <short>Show total size</short>
+                <long>
+                    Whether GGet should display a total size column for
+                    downloads in the main window.
+                </long>
+            </locale>
+        </schema>
+        <schema>
+            <key>/schemas/apps/gget/general/show_progress</key>
+            <applyto>/apps/gget/general/show_progress</applyto>
+            <owner>gget</owner>
+            <type>bool</type>
+            <default>true</default>
+            <locale name="C">
+                <short>Show progress</short>
+                <long>
+                    Whether GGet should display a progress column for
+                    downloads in the main window.
+                </long>
+            </locale>
+        </schema>
+        <schema>
+            <key>/schemas/apps/gget/general/show_speed</key>
+            <applyto>/apps/gget/general/show_speed</applyto>
+            <owner>gget</owner>
+            <type>bool</type>
+            <default>true</default>
+            <locale name="C">
+                <short>Show speed</short>
+                <long>
+                    Whether GGet should display a speed column for
+                    downloads in the main window.
+                </long>
+            </locale>
+        </schema>
+        <schema>
+            <key>/schemas/apps/gget/general/show_eta</key>
+            <applyto>/apps/gget/general/show_eta</applyto>
+            <owner>gget</owner>
+            <type>bool</type>
+            <default>true</default>
+            <locale name="C">
+                <short>Show ETA</short>
+                <long>
+                    Whether GGet should display a ETA (Estimated Time of
+                    Arrival) column for downloads in the main window.
+                </long>
+            </locale>
+        </schema>
+        <schema>
+            <key>/schemas/apps/gget/folders/ask_for_location</key>
+            <applyto>/apps/gget/folders/ask_for_location</applyto>
+            <owner>gget</owner>
+            <type>bool</type>
+            <default>true</default>
+            <locale name="C">
+                <short>Ask for download location</short>
+                <long>
+                    Whether GGet should always ask for the location where to
+                    save downloaded files.
+                </long>
+            </locale>
+        </schema>
+        <schema>
+            <key>/schemas/apps/gget/folders/default_folder</key>
+            <applyto>/apps/gget/folders/default_folder</applyto>
+            <owner>gget</owner>
+            <type>string</type>
+            <default></default>
+            <locale name="C">
+                <short>Default download folder</short>
+                <long>
+                    Default location where GGet will save downloaded
+                    files.
+                </long>
+            </locale>
+        </schema>
+        <schema>
+            <key>/schemas/apps/gget/folders/check_extensions</key>
+            <applyto>/apps/gget/folders/check_extensions</applyto>
+            <owner>gget</owner>
+            <type>bool</type>
+            <default>false</default>
+            <locale name="C">
+                <short>Use exceptions for extensions</short>
+                <long>
+                    Whether to check file extensions to determine download
+                    folder.
+                </long>
+            </locale>
+        </schema>
+        <schema>
+            <key>/schemas/apps/gget/folders/extensions</key>
+            <applyto>/apps/gget/folders/extensions</applyto>
+            <owner>gget</owner>
+            <type>list</type>
+            <list_type>string</list_type>
+            <default>[]</default>
+            <locale name="C">
+                <short>File type extensions</short>
+                <long>
+                    File type extensions which has download associated default
+                    download folders in the extension_folders key.
+                </long>
+            </locale>
+        </schema>
+        <schema>
+            <key>/schemas/apps/gget/folders/extension_folders</key>
+            <applyto>/apps/gget/folders/extension_folders</applyto>
+            <owner>gget</owner>
+            <type>list</type>
+            <list_type>string</list_type>
+            <default>[]</default>
+            <locale name="C">
+                <short>Folders for file type extensions</short>
+                <long>
+                    Default download folders for the file type extensions in
+                    the extensions key.
+                </long>
+            </locale>
+        </schema>
+        <schema>
+            <key>/schemas/apps/gget/network/proxy_mode</key>
+            <applyto>/apps/gget/network/proxy_mode</applyto>
+            <owner>gget</owner>
+            <type>string</type>
+            <default>gnome</default>
+            <locale name="C">
+                <short>Mode for proxy configuration</short>
+                <long>
+                    Mode for proxy configuration, can be either "direct",
+                    "gnome" or "manual".
+                </long>
+            </locale>
+        </schema>
+        <schema>
+            <key>/schemas/apps/gget/network/proxy_host</key>
+            <applyto>/apps/gget/network/proxy_host</applyto>
+            <owner>gget</owner>
+            <type>string</type>
+            <default></default>
+            <locale name="C">
+                <short>HTTP proxy host</short>
+                <long>
+                    Hostname for the HTTP proxy.
+                </long>
+            </locale>
+        </schema>
+        <schema>
+            <key>/schemas/apps/gget/network/proxy_port</key>
+            <applyto>/apps/gget/network/proxy_port</applyto>
+            <owner>gget</owner>
+            <type>int</type>
+            <default>8080</default>
+            <locale name="C">
+                <short>HTTP proxy port</short>
+                <long>
+                    Port number for the HTTP proxy.
+                </long>
+            </locale>
+        </schema>
+        <schema>
+            <key>/schemas/apps/gget/network/proxy_auth</key>
+            <applyto>/apps/gget/network/proxy_auth</applyto>
+            <owner>gget</owner>
+            <type>bool</type>
+            <default>false</default>
+            <locale name="C">
+                <short>Use authentication for HTTP proxy</short>
+                <long>
+                    Whether to use authentication when connecting to the HTTP
+                    proxy.
+                </long>
+            </locale>
+        </schema>
+        <schema>
+            <key>/schemas/apps/gget/network/proxy_user</key>
+            <applyto>/apps/gget/network/proxy_user</applyto>
+            <owner>gget</owner>
+            <type>string</type>
+            <default></default>
+            <locale name="C">
+                <short>HTTP proxy username</short>
+                <long>
+                    The username to use when connecting the the HTTP proxy.
+                </long>
+            </locale>
+        </schema>
+        <schema>
+            <key>/schemas/apps/gget/network/proxy_password</key>
+            <applyto>/apps/gget/network/proxy_password</applyto>
+            <owner>gget</owner>
+            <type>string</type>
+            <default></default>
+            <locale name="C">
+                <short>HTTP proxy password</short>
+                <long>
+                    The password to use when connecting the the HTTP proxy.
+                </long>
+            </locale>
+        </schema>
+    </schemalist>
+</gconfschemafile>
