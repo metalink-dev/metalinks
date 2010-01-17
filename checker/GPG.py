@@ -176,6 +176,9 @@ class ImportResult:
         import_res = value.split()
         for i in range(len(self.counts)):
             setattr(self, self.counts[i], int(import_res[i]))
+			
+    def KEYEXPIRED(self, value):
+        self.error = _("Signature error, signing key expired at %s.") % value
 
     def summary(self):
         l = []
@@ -241,7 +244,7 @@ class GPGSubprocess:
         the default "~/.gnupg/pubring.gpg".
         """
         # If needed, look for the gpg binary along the path
-        if gpg_binary is None:
+        if gpg_binary is None or gpg_binary == "":
             path = DEFAULT_PATH
             if os.environ.has_key('PATH'):
                 temppath = os.environ['PATH']
