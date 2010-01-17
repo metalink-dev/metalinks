@@ -213,7 +213,7 @@ class Resource4:
         return valid
 
 class MetalinkFileBase:
-    def __init__(self, filename, attrs = {}, do_ed2k=True, do_magnet=False):
+    def __init__(self, filename, attrs, do_ed2k, do_magnet):
         self.filename = filename
         self.errors = []
         self.hashlist = {}
@@ -374,7 +374,7 @@ class MetalinkFileBase:
         return True
 
 class MetalinkFile4(MetalinkFileBase):
-    def __init__(self, filename, attrs = {}):
+    def __init__(self, filename, attrs = {}, do_ed2k=True, do_magnet=False):
         self.description = ""
         self.identity = ""
         self.license_name = ""
@@ -383,7 +383,7 @@ class MetalinkFile4(MetalinkFileBase):
         self.publisher_url = ""
         self.version = ""
         self.logo = ""
-        MetalinkFileBase.__init__(self, filename, attrs)
+        MetalinkFileBase.__init__(self, filename, attrs, do_ed2k, do_magnet)
 
     def compare_checksums(self, checksums):
         for key in ("sha-512","sha-384","sha-256","sha-1","md5"):
@@ -476,9 +476,9 @@ class MetalinkFile4(MetalinkFileBase):
         return text
         
 class MetalinkFile(MetalinkFileBase):
-    def __init__(self, filename, attrs = {}):
+    def __init__(self, filename, attrs = {}, do_ed2k=True, do_magnet=False):
         self.maxconnections = ""
-        MetalinkFileBase.__init__(self, filename, attrs)
+        MetalinkFileBase.__init__(self, filename, attrs, do_ed2k, do_magnet)
 
     def compare_checksums(self, checksums):
         for key in ("sha512","sha384","sha256","sha1","md5"):
@@ -551,7 +551,7 @@ class MetalinkFile(MetalinkFileBase):
                 else:
                     text += '      <hash type="%s">' % hashlookup(key) + self.hashlist[key].lower() + '</hash>\n'
             if len(self.pieces) > 1:
-                text += '        <pieces type="'+self.piecetype+'" length="'+self.piecelength+'">\n'
+                text += '        <pieces type="'+self.piecetype+'" length="'+str(self.piecelength)+'">\n'
                 for id in range(len(self.pieces)):
                     text += '          <hash piece="'+str(id)+'">'+self.pieces[id]+'</hash>\n'
                 text += '        </pieces>\n'

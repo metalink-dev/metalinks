@@ -512,7 +512,7 @@ class MainFrame(wx.Frame):
 
     def onBtnChange(self, evt):
         if self.txtctrl_url.GetValue() != "":
-            url = seedlf.txtctrl_url.GetValue()
+            url = self.txtctrl_url.GetValue()
             loc = self.txtctrl_loc.GetValue()
             pref = self.txtctrl_pref.GetValue()
             conns = self.combo_maxconn.GetValue()
@@ -525,7 +525,7 @@ class MainFrame(wx.Frame):
             self.filelist.SetStringItem(item, 0, res.url)
             self.filelist.SetStringItem(item, 1, res.location)
             self.filelist.SetStringItem(item, 2, res.preference)
-            self.filelist.SetStringItem(item, 3, res.conns)
+            self.filelist.SetStringItem(item, 3, res.maxconnections)
             self.clear_urlfields()
 
     def onBtnRemove(self, evt):
