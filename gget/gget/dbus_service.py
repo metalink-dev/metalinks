@@ -137,7 +137,7 @@ class DownloadManagerObject(dbus.service.Object):
         obj_path = DOWNLOADS_OBJ_PATH + "/" + download.id
         for download_obj in self.dbus_service.download_objects:
             if download_obj.download == download:
-                download_obj.remove_from_connection()
+                #download_obj.remove_from_connection()
                 self.dbus_service.download_objects.remove(download_obj)
         self.DownloadRemoved(obj_path)
 
