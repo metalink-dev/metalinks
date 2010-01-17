@@ -1362,19 +1362,19 @@ class Segment_Manager(Manager):
             if protocol == "http":
                 status = httplib.MOVED_PERMANENTLY
                 count = 0
+                size = None
                 while (status == httplib.MOVED_PERMANENTLY or status == httplib.FOUND) and count < MAX_REDIRECTS:
                     http = Http_Host(url)
-                    if http.conn != None:
-                        http.conn.request("HEAD", url, headers = self.headers)
+                    if http.conn != None: 
                         try:
+                            http.conn.request("HEAD", url, headers = self.headers)
                             response = http.conn.getresponse()
                             status = response.status
                             url = response.getheader("Location")
+                            size = response.getheader("content-length")
                         except: pass
                         http.close()
                     count += 1
-
-                size = response.getheader("content-length")
 
                 if (status == httplib.OK) and (size != None):
                     sizes.append(size)
