@@ -869,14 +869,6 @@ class Metalink4(MetalinkBase):
    
     def validate(self, *args):
         valid = True
-        if self.publisher_url.strip() != "":
-            if not self.validate_url(self.publisher_url):
-                self.errors.append("Invalid URL: " + self.publisher_url + '.')
-                valid = False
-        if self.license_url.strip() != "":
-            if not self.validate_url(self.license_url):
-                self.errors.append("Invalid URL: " + self.license_url + '.')
-                valid = False
                 
         for fileobj in self.files:
             result = fileobj.validate()
