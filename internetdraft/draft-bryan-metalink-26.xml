@@ -285,7 +285,8 @@ metalinkCommonAttributes =
    undefinedAttribute*</artwork>  </figure></t>
       <t>All leading and trailing whitespace is part of the element content, and MUST NOT be ignored. Consequently, it is disallowed for elements where the defined type does not allow whitespace, such as dates, integers, or IRIs.
 	  Some XML-generating implementations erroneously insert white space around values by default, and such implementations will generate invalid Metalink Documents.</t>
-      <t>Metalink Documents that do not follow this specification are invalid, and partially or wholly unusable to Metalink Processors.</t>
+	  
+      <t>Metalink Documents that do not follow this specification are invalid, and partially or wholly unusable to Metalink Processors. Metalink Processors MUST attempt to complete downloads with partially unusable Metalink Documents, if at all possible.</t>
 	  
       <t>Metalink is an extensible format. See <xref target="extending_metalink"/>
       of this document for a full description of how Metalink Documents can
@@ -854,7 +855,7 @@ metalinkMetaURL =
       metalinkCommonAttributes,
       attribute priority { xsd:positiveInteger {
          maxInclusive = "999999"}}?,
-      attribute type { text },
+      attribute mediatype { text },
       attribute name { text }?,
       (metalinkUri)
    }</artwork></figure></t> 
@@ -868,9 +869,9 @@ metalinkMetaURL =
 
 	  </section> 
 
-	  <section title="The &#34;type&#34; Attribute"> 
+	  <section title="The &#34;mediatype&#34; Attribute"> 
 
-	    <t><xref target="element.metaurl" format="none">metalink:metaurl</xref> elements MUST have a "type" attribute that indicates
+	    <t><xref target="element.metaurl" format="none">metalink:metaurl</xref> elements MUST have a "mediatype" attribute that indicates
 	    the MIME media type <xref target="RFC4288"/> of the metadata available at the IRI. In the case of BitTorrent as specified in <xref target="BITTORRENT"/>, the value "torrent" is required. Types without "/" are reserved. Currently, "torrent" is the only reserved value.</t>
 
 	  </section>
@@ -1102,7 +1103,9 @@ metalinkUpdated =
 	  Most <xref target="element.file" format="none">metalink:file</xref> container elements will contain multiple <xref target="element.url" format="none">metalink:url</xref> elements,
 	  and each one SHOULD be a valid alternative to download the same file.</t>
 	  
-	  <t>The "<xref target="element.url" format="none">metalink:url</xref>" elements SHOULD be resolvable and, if resolvable, SHOULD lead to identical files.
+	  <t>The "<xref target="element.url" format="none">metalink:url</xref>" elements SHOULD be resolvable and, if resolvable, SHOULD lead to identical files.</t>
+	  
+	  <t>Metalink Processors MUST filter out invalid files obtained from "<xref target="element.url" format="none">metalink:url</xref>" elements by using information in the <xref target="element.size" format="none">metalink:size</xref> element and <xref target="element.hash" format="none">metalink:hash</xref> elements.
 
 	    <figure>
         <iref item="metalinkURL grammar production" primary="true"/>
@@ -1904,7 +1907,7 @@ structuredExtensionElement =
           Goulding. We also thank the Anthony Family, the Bryan Family, Juanita Anthony and Zimmy Bryan.</t>
 		  
 		  <t>We also thank the following contributors for assistance and review: Eran Hammer-Lahav, Lisa Dusseault, Mark Nottingham, Peter Saint-Andre, Julian Reschke, Chris Newman,
-		  Ian Macfarlane, Dave Cridland, Barry Leiba, Uri Blumenthal, Paul Hoffman, Felix Sasaki, Matthias Fuchs, Mark Baker, Scott Cantor, Brian Carpenter, Alexey Melnikov, and Tim Polk.</t>
+		  Ian Macfarlane, Dave Cridland, Barry Leiba, Uri Blumenthal, Paul Hoffman, Felix Sasaki, Matthias Fuchs, Mark Baker, Scott Cantor, Brian Carpenter, Alexey Melnikov, Lars Eggert, and Tim Polk.</t>
 		  
 
 	    </section> 
@@ -2032,7 +2035,7 @@ metalinkMetaURL =
       metalinkCommonAttributes,
       attribute priority { xsd:positiveInteger {
          maxInclusive = "999999"}}?,
-      attribute type { text },
+      attribute mediatype { text },
       attribute name { text }?,
       (metalinkUri)
    }

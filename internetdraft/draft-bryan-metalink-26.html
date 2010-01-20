@@ -536,7 +536,7 @@ metalinkCommonAttributes =
 <p>All leading and trailing whitespace is part of the element content, and MUST NOT be ignored. Consequently, it is disallowed for elements where the defined type does not allow whitespace, such as dates, integers, or IRIs.
 	  Some XML-generating implementations erroneously insert white space around values by default, and such implementations will generate invalid Metalink Documents.
 </p>
-<p>Metalink Documents that do not follow this specification are invalid, and partially or wholly unusable to Metalink Processors.
+<p>Metalink Documents that do not follow this specification are invalid, and partially or wholly unusable to Metalink Processors. Metalink Processors MUST attempt to complete downloads with partially unusable Metalink Documents, if at all possible.
 </p>
 <p>Metalink is an extensible format. See <a class='info' href='#extending_metalink'>Section&nbsp;5<span> (</span><span class='info'>Extending Metalink</span><span>)</span></a>
       of this document for a full description of how Metalink Documents can
@@ -1057,7 +1057,7 @@ metalinkMetaURL =
       metalinkCommonAttributes,
       attribute priority { xsd:positiveInteger {
          maxInclusive = "999999"}}?,
-      attribute type { text },
+      attribute mediatype { text },
       attribute name { text }?,
       (metalinkUri)
    }</pre></div><p>
@@ -1076,9 +1076,9 @@ The &#34;priority&#34; Attribute</h3>
 <a name="anchor13"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.2.8.2"></a><h3>4.2.8.2.&nbsp;
-The &#34;type&#34; Attribute</h3>
+The &#34;mediatype&#34; Attribute</h3>
 
-<p><a class='info' href='#element.metaurl'>metalink:metaurl<span> (</span><span class='info'>The &#34;metalink:metaurl&#34; Element</span><span>)</span></a> elements MUST have a "type" attribute that indicates
+<p><a class='info' href='#element.metaurl'>metalink:metaurl<span> (</span><span class='info'>The &#34;metalink:metaurl&#34; Element</span><span>)</span></a> elements MUST have a "mediatype" attribute that indicates
 	    the MIME media type <a class='info' href='#RFC4288'>[RFC4288]<span> (</span><span class='info'>Freed, N. and J. Klensin, &ldquo;Media Type Specifications and Registration Procedures,&rdquo; December&nbsp;2005.</span><span>)</span></a> of the metadata available at the IRI. In the case of BitTorrent as specified in <a class='info' href='#BITTORRENT'>[BITTORRENT]<span> (</span><span class='info'>Cohen, B., &ldquo;The BitTorrent Protocol Specification,&rdquo; February&nbsp;2008.</span><span>)</span></a>, the value "torrent" is required. Types without "/" are reserved. Currently, "torrent" is the only reserved value.
 </p>
 <a name="anchor14"></a><br /><hr />
@@ -1281,6 +1281,8 @@ The &#34;metalink:url&#34; Element</h3>
 	  and each one SHOULD be a valid alternative to download the same file.
 </p>
 <p>The "<a class='info' href='#element.url'>metalink:url<span> (</span><span class='info'>The &#34;metalink:url&#34; Element</span><span>)</span></a>" elements SHOULD be resolvable and, if resolvable, SHOULD lead to identical files.
+</p>
+<p>Metalink Processors MUST filter out invalid files obtained from "<a class='info' href='#element.url'>metalink:url<span> (</span><span class='info'>The &#34;metalink:url&#34; Element</span><span>)</span></a>" elements by using information in the <a class='info' href='#element.size'>metalink:size<span> (</span><span class='info'>The &#34;metalink:size&#34; Element</span><span>)</span></a> element and <a class='info' href='#element.hash'>metalink:hash<span> (</span><span class='info'>The &#34;metalink:hash&#34; Element</span><span>)</span></a> elements.
 
 	    <a name='anchor112'></a><a name='anchor113'></a></p>
 <div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
@@ -1721,7 +1723,7 @@ Acknowledgements and Contributors</h3>
           Goulding. We also thank the Anthony Family, the Bryan Family, Juanita Anthony and Zimmy Bryan.
 </p>
 <p>We also thank the following contributors for assistance and review: Eran Hammer-Lahav, Lisa Dusseault, Mark Nottingham, Peter Saint-Andre, Julian Reschke, Chris Newman,
-		  Ian Macfarlane, Dave Cridland, Barry Leiba, Uri Blumenthal, Paul Hoffman, Felix Sasaki, Matthias Fuchs, Mark Baker, Scott Cantor, Brian Carpenter, and Alexey Melnikov.
+		  Ian Macfarlane, Dave Cridland, Barry Leiba, Uri Blumenthal, Paul Hoffman, Felix Sasaki, Matthias Fuchs, Mark Baker, Scott Cantor, Brian Carpenter, Alexey Melnikov, Lars Eggert, and Tim Polk.
 </p>
 <a name="schema"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
@@ -1848,7 +1850,7 @@ metalinkMetaURL =
       metalinkCommonAttributes,
       attribute priority { xsd:positiveInteger {
          maxInclusive = "999999"}}?,
-      attribute type { text },
+      attribute mediatype { text },
       attribute name { text }?,
       (metalinkUri)
    }
