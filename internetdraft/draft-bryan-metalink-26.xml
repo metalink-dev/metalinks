@@ -991,9 +991,7 @@ metalinkPublisher =
 
 
       <t>The <xref target="element.publisher" format="none">metalink:publisher</xref> element MAY have a "url" attribute
-	  whose value MUST be an IRI reference <xref target="RFC3987"/>. When dereferenced, the resulting URI (mapped from an
-	  IRI, if necessary) SHOULD produce a representation that is
-	  relevant to that agent.</t>
+	  whose value MUST be an IRI reference <xref target="RFC3987"/>.</t>
  
 	</section> 
 
@@ -1004,7 +1002,9 @@ metalinkPublisher =
     <iref item="signature XML element" primary="true"/> 
 	      
 	  <t>The "<xref target="element.signature" format="none">metalink:signature</xref>" element is a Text construct that conveys a
-	  digital signature for a file described in a Metalink Document. Digital signatures verify that a file is from the entity that has signed it.
+	  digital signature for a file described in a Metalink Document. Digital signatures verify that a file is from the entity that has signed it.</t>
+	  
+	  <t>Metalink Processors are NOT REQUIRED to support digital signatures included in this element.
 	  
 	    <figure>
         <iref item="metalinkSignature grammar production" primary="true"/>
@@ -1016,7 +1016,7 @@ metalinkSignature =
      metalinkTextConstruct
    }</artwork></figure></t>
    
-     <t>Example:
+     <t>Example with an OpenPGP signature <xref target="RFC4880"/>:
 
 	 <figure>
 	  <artwork type="example">
@@ -1050,10 +1050,12 @@ p3oAoO9lKHoOqOE0EMB3zmMcLoYUrNkg
     <iref item="size XML element" primary="true"/> 
 	      
 	  <t>The "<xref target="element.size" format="none">metalink:size</xref>" element indicates the length of
-	    the linked content in octets; it is a hint about the
+	    the linked content in octets. This is the
 	    content length of the representation returned when the IRI
 	    is mapped to a URI and 
-	    dereferenced. This value MUST be a non-negative integer.
+	    dereferenced. Note that the "<xref target="element.size" format="none">metalink:size</xref>" element MUST
+   override the actual content length of the representation as reported
+   by the underlying protocol, and those that do not match will be discarded by Metalink Processors. This value MUST be a non-negative integer.
 	    <figure>
         <iref item="metalinkSize grammar production" primary="true"/>
         <iref item="Grammar" subitem="metalinkSize" primary="true"/>
@@ -1421,8 +1423,8 @@ structuredExtensionElement =
 	    <section title="Cryptographic Hashes" anchor="security.hash">
 
 	      <t>Currently, some of the hash types defined in the IANA registry named "Hash Function Textual Names" are considered insecure. These include the whole Message Digest family of algorithms which are not suitable for cryptographically strong verification. Malicious people could provide files that appear to be identical to another file because of a collision, i.e. the weak cryptographic hashes of the intended file and a substituted malicious file could match.</t>
-		  <t>Metalink Generators and Processors MUST support "sha-256" which is SHA-256, as specified in <xref target="FIPS-180-3"/>, and MAY support stronger.</t>
-          <t>If a Metalink Document contains hashes, it SHOULD include "sha-256" which is SHA-256, as specified in <xref target="FIPS-180-3"/>, or stronger.  It MAY also include other hashes from the IANA registry named "Hash Function Textual Names".</t>
+		  <t>Metalink Generators and Processors MUST support "sha-256" which is SHA-256, as specified in <xref target="FIPS-180-3"/>, and MAY support stronger hashes.</t>
+          <t>If a Metalink Document contains hashes, it SHOULD include "sha-256" which is SHA-256, or stronger.  It MAY also include other hashes from the IANA registry named "Hash Function Textual Names".</t>
 
 	    </section>	
 		
@@ -1856,6 +1858,24 @@ structuredExtensionElement =
 <seriesInfo name="RFC" value="4287"></seriesInfo>
 </reference>
 
+<reference anchor="RFC4880">
+
+<front>
+<title>OpenPGP Message Format</title>
+<author fullname="J. Callas" surname="Callas" initials="J.">
+<organization></organization></author>
+<author fullname="L. Donnerhacke" surname="Donnerhacke" initials="L.">
+<organization></organization></author>
+<author fullname="H. Finney" surname="Finney" initials="H.">
+<organization></organization></author>
+<author fullname="D. Shaw" surname="Shaw" initials="D.">
+<organization></organization></author>
+<author fullname="R. Thayer" surname="Thayer" initials="R.">
+<organization></organization></author>
+<date month="November" year="2007"></date></front>
+<seriesInfo name="RFC" value="4880"></seriesInfo>
+</reference>
+
 
 
 
@@ -1882,7 +1902,7 @@ structuredExtensionElement =
           Goulding. We also thank the Anthony Family, the Bryan Family, Juanita Anthony and Zimmy Bryan.</t>
 		  
 		  <t>We also thank the following contributors for assistance and review: Eran Hammer-Lahav, Lisa Dusseault, Mark Nottingham, Peter Saint-Andre, Julian Reschke, Chris Newman,
-		  Ian Macfarlane, Dave Cridland, Barry Leiba, Uri Blumenthal, Paul Hoffman, Felix Sasaki, Matthias Fuchs, Mark Baker, Scott Cantor, and Brian Carpenter.</t>
+		  Ian Macfarlane, Dave Cridland, Barry Leiba, Uri Blumenthal, Paul Hoffman, Felix Sasaki, Matthias Fuchs, Mark Baker, Scott Cantor, Brian Carpenter, and Alexey Melnikov.</t>
 		  
 
 	    </section> 
@@ -2140,7 +2160,7 @@ anyForeignElement =
 	    
 	    <list style="symbols">
 		
-		  <t>Address IESG Comments and Discuss: Alexey Melnikov</t>
+		  <t>Address IESG Comments and Discuss: Alexey Melnikov.</t>
 	   </list></t>
 
 <t>-25 : January 11, 2010.
