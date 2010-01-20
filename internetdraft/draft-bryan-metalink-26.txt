@@ -807,11 +807,11 @@ Internet-Draft    Metalink Download Description Format      January 2010
 
 4.2.4.  The "metalink:hash" Element
 
-   The "metalink:hash" element is a Text construct that conveys a hash,
-   also known as a checksum, for a file.  All hashes are encoded in
-   lowercase hexadecimal format.  Hashes are used to verify the
-   integrity of a complete file or portion of a file to determine if the
-   file has been transferred without any errors.
+   The "metalink:hash" element is a Text construct that conveys a
+   cryptographic hash for a file.  All hashes are encoded in lowercase
+   hexadecimal format.  Hashes are used to verify the integrity of a
+   complete file or portion of a file to determine if the file has been
+   transferred without any errors.
 
    metalinkHash =
       element metalink:hash {
@@ -1141,6 +1141,9 @@ Internet-Draft    Metalink Download Description Format      January 2010
    container elements will contain multiple metalink:url elements, and
    each one SHOULD be a valid alternative to download the same file.
 
+   The "metalink:url" elements SHOULD be resolvable and, if resolvable,
+   SHOULD lead to identical files.
+
    metalinkURL =
       element metalink:url {
          metalinkCommonAttributes,
@@ -1166,9 +1169,6 @@ Internet-Draft    Metalink Download Description Format      January 2010
    metalink:url elements MAY have a "location" attribute, which is a
    [ISO3166-1] alpha-2 two letter country code for the geographical
    location of the physical server an IRI is used to access.
-
-
-
 
 
 
