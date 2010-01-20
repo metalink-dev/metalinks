@@ -144,10 +144,10 @@
 <tr><td class="header">Network Working Group</td><td class="header">A. Bryan</td></tr>
 <tr><td class="header">Internet-Draft</td><td class="header">T. Tsujikawa</td></tr>
 <tr><td class="header">Intended status: Standards Track</td><td class="header">N. McNab</td></tr>
-<tr><td class="header">Expires: July 23, 2010</td><td class="header">&nbsp;</td></tr>
+<tr><td class="header">Expires: July 24, 2010</td><td class="header">&nbsp;</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">P. Poeml</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">Novell, Inc.</td></tr>
-<tr><td class="header">&nbsp;</td><td class="header">January 19, 2010</td></tr>
+<tr><td class="header">&nbsp;</td><td class="header">January 20, 2010</td></tr>
 </table></td></tr></table>
 <h1><br />The Metalink Download Description Format<br />draft-bryan-metalink-26</h1>
 
@@ -180,7 +180,7 @@ The list of current Internet-Drafts can be accessed at
 The list of Internet-Draft Shadow Directories can be accessed at
 <a href='http://www.ietf.org/shadow.html'>http://www.ietf.org/shadow.html</a>.</p>
 <p>
-This Internet-Draft will expire on July 23, 2010.</p>
+This Internet-Draft will expire on July 24, 2010.</p>
 
 <h3>Copyright Notice</h3>
 <p>
@@ -1183,9 +1183,7 @@ metalinkPublisher =
 	  indicates the human-readable name of the publisher.
 </p>
 <p>The <a class='info' href='#element.publisher'>metalink:publisher<span> (</span><span class='info'>The &#34;metalink:publisher&#34; Element</span><span>)</span></a> element MAY have a "url" attribute
-	  whose value MUST be an IRI reference <a class='info' href='#RFC3987'>[RFC3987]<span> (</span><span class='info'>Duerst, M. and M. Suignard, &ldquo;Internationalized Resource Identifiers (IRIs),&rdquo; January&nbsp;2005.</span><span>)</span></a>. When dereferenced, the resulting URI (mapped from an
-	  IRI, if necessary) SHOULD produce a representation that is
-	  relevant to that agent.
+	  whose value MUST be an IRI reference <a class='info' href='#RFC3987'>[RFC3987]<span> (</span><span class='info'>Duerst, M. and M. Suignard, &ldquo;Internationalized Resource Identifiers (IRIs),&rdquo; January&nbsp;2005.</span><span>)</span></a>.
 </p>
 <a name="element.signature"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
@@ -1194,6 +1192,8 @@ The &#34;metalink:signature&#34; Element</h3>
 <a name='anchor98'></a><a name='anchor99'></a>
 <p>The "<a class='info' href='#element.signature'>metalink:signature<span> (</span><span class='info'>The &#34;metalink:signature&#34; Element</span><span>)</span></a>" element is a Text construct that conveys a
 	  digital signature for a file described in a Metalink Document. Digital signatures verify that a file is from the entity that has signed it.
+</p>
+<p>Metalink Processors are NOT REQUIRED to support digital signatures included in this element.
 	  
 	    <a name='anchor100'></a><a name='anchor101'></a></p>
 <div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
@@ -1204,7 +1204,7 @@ metalinkSignature =
    }</pre></div><p>
 
 </p>
-<p>Example:
+<p>Example with an OpenPGP signature <a class='info' href='#RFC4880'>[RFC4880]<span> (</span><span class='info'>Callas, J., Donnerhacke, L., Finney, H., Shaw, D., and R. Thayer, &ldquo;OpenPGP Message Format,&rdquo; November&nbsp;2007.</span><span>)</span></a>:
 
 	 </p>
 <div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
@@ -1236,10 +1236,12 @@ The &#34;type&#34; Attribute</h3>
 The &#34;metalink:size&#34; Element</h3>
 <a name='anchor102'></a><a name='anchor103'></a>
 <p>The "<a class='info' href='#element.size'>metalink:size<span> (</span><span class='info'>The &#34;metalink:size&#34; Element</span><span>)</span></a>" element indicates the length of
-	    the linked content in octets; it is a hint about the
+	    the linked content in octets. This is the
 	    content length of the representation returned when the IRI
 	    is mapped to a URI and 
-	    dereferenced. This value MUST be a non-negative integer.
+	    dereferenced. Note that the "<a class='info' href='#element.size'>metalink:size<span> (</span><span class='info'>The &#34;metalink:size&#34; Element</span><span>)</span></a>" element MUST
+   override the actual content length of the representation as reported
+   by the underlying protocol, and those that do not match will be discarded by Metalink Processors. This value MUST be a non-negative integer.
 	    <a name='anchor104'></a><a name='anchor105'></a></p>
 <div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
 metalinkSize =
@@ -1623,9 +1625,9 @@ Cryptographic Hashes</h3>
 
 <p>Currently, some of the hash types defined in the IANA registry named "Hash Function Textual Names" are considered insecure. These include the whole Message Digest family of algorithms which are not suitable for cryptographically strong verification. Malicious people could provide files that appear to be identical to another file because of a collision, i.e. the weak cryptographic hashes of the intended file and a substituted malicious file could match.
 </p>
-<p>Metalink Generators and Processors MUST support "sha-256" which is SHA-256, as specified in <a class='info' href='#FIPS-180-3'>[FIPS&#8209;180&#8209;3]<span> (</span><span class='info'>National Institute of Standards and Technology (NIST), &ldquo;Secure Hash Standard (SHS),&rdquo; October&nbsp;2008.</span><span>)</span></a>, and MAY support stronger.
+<p>Metalink Generators and Processors MUST support "sha-256" which is SHA-256, as specified in <a class='info' href='#FIPS-180-3'>[FIPS&#8209;180&#8209;3]<span> (</span><span class='info'>National Institute of Standards and Technology (NIST), &ldquo;Secure Hash Standard (SHS),&rdquo; October&nbsp;2008.</span><span>)</span></a>, and MAY support stronger hashes.
 </p>
-<p>If a Metalink Document contains hashes, it SHOULD include "sha-256" which is SHA-256, as specified in <a class='info' href='#FIPS-180-3'>[FIPS&#8209;180&#8209;3]<span> (</span><span class='info'>National Institute of Standards and Technology (NIST), &ldquo;Secure Hash Standard (SHS),&rdquo; October&nbsp;2008.</span><span>)</span></a>, or stronger.  It MAY also include other hashes from the IANA registry named "Hash Function Textual Names".
+<p>If a Metalink Document contains hashes, it SHOULD include "sha-256" which is SHA-256, or stronger.  It MAY also include other hashes from the IANA registry named "Hash Function Textual Names".
 </p>
 <a name="rfc.references"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
@@ -1688,6 +1690,8 @@ References</h3>
 <td class="author-text">Mealling, M., &ldquo;<a href="http://tools.ietf.org/html/rfc3688">The IETF XML Registry</a>,&rdquo; BCP&nbsp;81, RFC&nbsp;3688, January&nbsp;2004.</td></tr>
 <tr><td class="author-text" valign="top"><a name="RFC4287">[RFC4287]</a></td>
 <td class="author-text">Nottingham, M. and R. Sayre, &ldquo;<a href="http://tools.ietf.org/html/rfc4287">The Atom Syndication Format</a>,&rdquo; RFC&nbsp;4287, December&nbsp;2005.</td></tr>
+<tr><td class="author-text" valign="top"><a name="RFC4880">[RFC4880]</a></td>
+<td class="author-text">Callas, J., Donnerhacke, L., Finney, H., Shaw, D., and R. Thayer, &ldquo;<a href="http://tools.ietf.org/html/rfc4880">OpenPGP Message Format</a>,&rdquo; RFC&nbsp;4880, November&nbsp;2007.</td></tr>
 </table>
 
 <a name="anchor28"></a><br /><hr />
@@ -1715,7 +1719,7 @@ Acknowledgements and Contributors</h3>
           Goulding. We also thank the Anthony Family, the Bryan Family, Juanita Anthony and Zimmy Bryan.
 </p>
 <p>We also thank the following contributors for assistance and review: Eran Hammer-Lahav, Lisa Dusseault, Mark Nottingham, Peter Saint-Andre, Julian Reschke, Chris Newman,
-		  Ian Macfarlane, Dave Cridland, Barry Leiba, Uri Blumenthal, Paul Hoffman, Felix Sasaki, Matthias Fuchs, Mark Baker, Scott Cantor, and Brian Carpenter.
+		  Ian Macfarlane, Dave Cridland, Barry Leiba, Uri Blumenthal, Paul Hoffman, Felix Sasaki, Matthias Fuchs, Mark Baker, Scott Cantor, Brian Carpenter, and Alexey Melnikov.
 </p>
 <a name="schema"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
@@ -1974,7 +1978,7 @@ Document History (to be removed by RFC Editor before publication)</h3>
 	    
 	    </p>
 <ul class="text">
-<li>Address IESG Comments and Discuss: Alexey Melnikov
+<li>Address IESG Comments and Discuss: Alexey Melnikov.
 </li>
 </ul>
 
