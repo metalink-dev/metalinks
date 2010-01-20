@@ -716,8 +716,8 @@ agent-version = token
     <iref item="XML Elements" subitem="hash" primary="true"/>
     <iref item="hash XML element" primary="true"/> 
 	      
-	  <t>The "<xref target="element.hash" format="none">metalink:hash</xref>" element is a Text construct that conveys a
-	  hash, also known as a checksum, for a file. All hashes are encoded in lowercase hexadecimal format. Hashes are used to verify the integrity of a complete file or portion of a file to determine if the file has been transferred without any errors.
+	  <t>The "<xref target="element.hash" format="none">metalink:hash</xref>" element is a Text construct that conveys a cryptographic
+	  hash for a file. All hashes are encoded in lowercase hexadecimal format. Hashes are used to verify the integrity of a complete file or portion of a file to determine if the file has been transferred without any errors.
 	  
 	    <figure>
         <iref item="metalinkHash grammar production" primary="true"/>
@@ -1100,7 +1100,9 @@ metalinkUpdated =
 	  
 	  <t>The "<xref target="element.url" format="none">metalink:url</xref>" element contains a file IRI.
 	  Most <xref target="element.file" format="none">metalink:file</xref> container elements will contain multiple <xref target="element.url" format="none">metalink:url</xref> elements,
-	  and each one SHOULD be a valid alternative to download the same file.
+	  and each one SHOULD be a valid alternative to download the same file.</t>
+	  
+	  <t>The "<xref target="element.url" format="none">metalink:url</xref>" elements SHOULD be resolvable and, if resolvable, SHOULD lead to identical files.
 
 	    <figure>
         <iref item="metalinkURL grammar production" primary="true"/>
@@ -1902,7 +1904,7 @@ structuredExtensionElement =
           Goulding. We also thank the Anthony Family, the Bryan Family, Juanita Anthony and Zimmy Bryan.</t>
 		  
 		  <t>We also thank the following contributors for assistance and review: Eran Hammer-Lahav, Lisa Dusseault, Mark Nottingham, Peter Saint-Andre, Julian Reschke, Chris Newman,
-		  Ian Macfarlane, Dave Cridland, Barry Leiba, Uri Blumenthal, Paul Hoffman, Felix Sasaki, Matthias Fuchs, Mark Baker, Scott Cantor, Brian Carpenter, and Alexey Melnikov.</t>
+		  Ian Macfarlane, Dave Cridland, Barry Leiba, Uri Blumenthal, Paul Hoffman, Felix Sasaki, Matthias Fuchs, Mark Baker, Scott Cantor, Brian Carpenter, Alexey Melnikov, and Tim Polk.</t>
 		  
 
 	    </section> 
