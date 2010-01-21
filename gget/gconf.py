@@ -1,5 +1,7 @@
 CLIENT_PRELOAD_RECURSIVE = 1
 VALUE_STRING = 2
+VALUE_BOOL = 3
+VALUE_INT = 4
 
 import xml.parsers.expat
 
@@ -8,6 +10,9 @@ class Client:
         xml = ReadDefaults()
         xml.parsefile()
         self.opts = xml.get_dict()
+        self.notify = {}
+        #for opt in self.opts.keys():
+        #    self.__notify(opt)
         
     def dir_exists(self, dir):
         return True
@@ -28,17 +33,59 @@ class Client:
         return bool(self.opts[opt])
         
     def set_string(self, opt, value):
+        self.opts[opt] = str(value)
+        self.__notify(opt, VALUE_STRING)
         return
         
     def set_int(self, opt, value):
+        self.opts[opt] = int(value)
+        self.__notify(opt, VALUE_INT)
         return
         
     def set_bool(self, opt, value):
+        self.opts[opt] = bool(value)
+        self.__notify(opt, VALUE_BOOL)
         return
-                
-    def notify_add(self, opt, callback):
+        
+    def __notify(self, opt, type):
+        try:
+            for callback in self.notify[opt]:
+                try:
+                    callback(self, 0, Entry(self.opts[opt], type), 0)
+                except AttributeError:
+                    pass
+        except KeyError:
+            pass
         return
 
+    def set_list(self, opt, value):
+        self.opts[opt] = value
+        return
+        
+    def notify_add(self, opt, callback):
+        try:
+            self.notify[opt].append(callback)
+        except:
+            self.notify[opt] = [callback]
+        return
+
+class Entry:
+    def __init__(self, value, type):
+        self.value = Value(value, type)
+        
+class Value:
+    def __init__(self, value, type):
+        self.value = value
+        self.type = type
+        
+    def get_bool(self):
+        return bool(self.value)
+
+    def to_string(self):
+        return str(self.value)
+        
+    def get_int(self):
+        return int(self.value)
         
 class DefaultObj:
     def __init__(self, applyto=None, default=None):
