@@ -286,7 +286,7 @@ metalinkCommonAttributes =
       <t>All leading and trailing whitespace is part of the element content, and MUST NOT be ignored. Consequently, it is disallowed for elements where the defined type does not allow whitespace, such as dates, integers, or IRIs.
 	  Some XML-generating implementations erroneously insert white space around values by default, and such implementations will generate invalid Metalink Documents.</t>
 	  
-      <t>Metalink Documents that do not follow this specification are invalid, and partially or wholly unusable to Metalink Processors. Metalink Processors MUST attempt to complete downloads with partially unusable Metalink Documents, if at all possible.</t>
+      <t>Metalink Documents that do not follow this specification are invalid and SHOULD NOT be used by Metalink Processors.</t>
 	  
       <t>Metalink is an extensible format. See <xref target="extending_metalink"/>
       of this document for a full description of how Metalink Documents can
