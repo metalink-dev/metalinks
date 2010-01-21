@@ -74,7 +74,7 @@ Table of Contents
      1.2.  Namespace and Version  . . . . . . . . . . . . . . . . . .  6
      1.3.  Notational Conventions . . . . . . . . . . . . . . . . . .  7
    2.  Metalink Documents . . . . . . . . . . . . . . . . . . . . . .  7
-   3.  Common Metalink Constructs . . . . . . . . . . . . . . . . . .  9
+   3.  Common Metalink Constructs . . . . . . . . . . . . . . . . . .  8
      3.1.  Text Constructs  . . . . . . . . . . . . . . . . . . . . .  9
      3.2.  Date Constructs  . . . . . . . . . . . . . . . . . . . . .  9
    4.  Metalink Element Definitions . . . . . . . . . . . . . . . . . 10
@@ -430,17 +430,17 @@ Internet-Draft    Metalink Download Description Format      January 2010
    insert white space around values by default, and such implementations
    will generate invalid Metalink Documents.
 
-   Metalink Documents that do not follow this specification are invalid,
-   and partially or wholly unusable to Metalink Processors.  Metalink
-   Processors MUST attempt to complete downloads with partially unusable
-   Metalink Documents, if at all possible.
+   Metalink Documents that do not follow this specification are invalid
+   and SHOULD NOT be used by Metalink Processors.
 
    Metalink is an extensible format.  See Section 5 of this document for
    a full description of how Metalink Documents can be extended.
 
 
+3.  Common Metalink Constructs
 
-
+   Many Metalink elements share common structures.  This section defines
+   those structures and their requirements for convenient reference by
 
 
 
@@ -449,10 +449,6 @@ Bryan, et al.             Expires July 24, 2010                 [Page 8]
 Internet-Draft    Metalink Download Description Format      January 2010
 
 
-3.  Common Metalink Constructs
-
-   Many Metalink elements share common structures.  This section defines
-   those structures and their requirements for convenient reference by
    the appropriate element definitions.
 
    When an element is identified as being a particular kind of
@@ -498,14 +494,16 @@ Internet-Draft    Metalink Download Description Format      January 2010
    specifications: [ISO.8601.1988], [NOTE-datetime-19980827], and
    [REC-xmlschema-2-20041028].
 
+   Example Date constructs:
+
+
+
 
 
 Bryan, et al.             Expires July 24, 2010                 [Page 9]
 
 Internet-Draft    Metalink Download Description Format      January 2010
 
-
-   Example Date constructs:
 
    ...
    <updated>2009-05-15T18:30:02Z</updated>
@@ -552,6 +550,8 @@ Internet-Draft    Metalink Download Description Format      January 2010
       elements.
    o  metalink:metalink elements MAY contain exactly one metalink:
       generator element and MUST NOT contain more than one such element.
+   o  metalink:metalink elements SHOULD contain exactly one metalink:
+      origin element and MUST NOT contain more than one such element.
 
 
 
@@ -561,8 +561,6 @@ Bryan, et al.             Expires July 24, 2010                [Page 10]
 Internet-Draft    Metalink Download Description Format      January 2010
 
 
-   o  metalink:metalink elements SHOULD contain exactly one metalink:
-      origin element and MUST NOT contain more than one such element.
    o  metalink:metalink elements MAY contain exactly one metalink:
       published element and MUST NOT contain more than one such element.
 
@@ -593,6 +591,8 @@ Internet-Draft    Metalink Download Description Format      January 2010
    should be an alternative location for the same file and each
    metalink:metaurl element should provide metadata to retrieve the same
    file in another way, such as a peer to peer network.
+
+
 
 
 
