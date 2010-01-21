@@ -144,10 +144,10 @@
 <tr><td class="header">Network Working Group</td><td class="header">A. Bryan</td></tr>
 <tr><td class="header">Internet-Draft</td><td class="header">T. Tsujikawa</td></tr>
 <tr><td class="header">Intended status: Standards Track</td><td class="header">N. McNab</td></tr>
-<tr><td class="header">Expires: July 24, 2010</td><td class="header">&nbsp;</td></tr>
+<tr><td class="header">Expires: July 25, 2010</td><td class="header">&nbsp;</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">P. Poeml</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">Novell, Inc.</td></tr>
-<tr><td class="header">&nbsp;</td><td class="header">January 20, 2010</td></tr>
+<tr><td class="header">&nbsp;</td><td class="header">January 21, 2010</td></tr>
 </table></td></tr></table>
 <h1><br />The Metalink Download Description Format<br />draft-bryan-metalink-26</h1>
 
@@ -180,7 +180,7 @@ The list of current Internet-Drafts can be accessed at
 The list of Internet-Draft Shadow Directories can be accessed at
 <a href='http://www.ietf.org/shadow.html'>http://www.ietf.org/shadow.html</a>.</p>
 <p>
-This Internet-Draft will expire on July 24, 2010.</p>
+This Internet-Draft will expire on July 25, 2010.</p>
 
 <h3>Copyright Notice</h3>
 <p>
@@ -1012,6 +1012,9 @@ The &#34;metalink:language&#34; Element</h3>
 <a name='anchor70'></a><a name='anchor71'></a>
 <p>The "<a class='info' href='#element.language'>metalink:language<span> (</span><span class='info'>The &#34;metalink:language&#34; Element</span><span>)</span></a>" element is a Text construct that conveys a
 	  code for the language of a file, per <a class='info' href='#RFC5646'>[RFC5646]<span> (</span><span class='info'>Phillips, A. and M. Davis, &ldquo;Tags for Identifying Languages,&rdquo; September&nbsp;2009.</span><span>)</span></a>.
+</p>
+<p>Multiple <a class='info' href='#element.language'>metalink:language<span> (</span><span class='info'>The &#34;metalink:language&#34; Element</span><span>)</span></a> elements are allowed, for instance, to describe a file such as an binary installation program that provides multiple language options, or a
+      movie with multiple language tracks, or a document in multiple languages.
 	  
 	    <a name='anchor72'></a><a name='anchor73'></a></p>
 <div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
@@ -1280,7 +1283,7 @@ The &#34;metalink:url&#34; Element</h3>
 	  Most <a class='info' href='#element.file'>metalink:file<span> (</span><span class='info'>The &#34;metalink:file&#34; Element</span><span>)</span></a> container elements will contain multiple <a class='info' href='#element.url'>metalink:url<span> (</span><span class='info'>The &#34;metalink:url&#34; Element</span><span>)</span></a> elements,
 	  and each one SHOULD be a valid alternative to download the same file.
 </p>
-<p>The "<a class='info' href='#element.url'>metalink:url<span> (</span><span class='info'>The &#34;metalink:url&#34; Element</span><span>)</span></a>" elements SHOULD be resolvable and, if resolvable, SHOULD lead to identical files.
+<p>The <a class='info' href='#element.url'>metalink:url<span> (</span><span class='info'>The &#34;metalink:url&#34; Element</span><span>)</span></a> elements SHOULD be resolvable and, if resolvable, SHOULD lead to identical files.
 </p>
 <p>Metalink Processors MUST filter out invalid files obtained from "<a class='info' href='#element.url'>metalink:url<span> (</span><span class='info'>The &#34;metalink:url&#34; Element</span><span>)</span></a>" elements by using information in the <a class='info' href='#element.size'>metalink:size<span> (</span><span class='info'>The &#34;metalink:size&#34; Element</span><span>)</span></a> element and <a class='info' href='#element.hash'>metalink:hash<span> (</span><span class='info'>The &#34;metalink:hash&#34; Element</span><span>)</span></a> elements.
 
@@ -1723,7 +1726,7 @@ Acknowledgements and Contributors</h3>
           Goulding. We also thank the Anthony Family, the Bryan Family, Juanita Anthony and Zimmy Bryan.
 </p>
 <p>We also thank the following contributors for assistance and review: Eran Hammer-Lahav, Lisa Dusseault, Mark Nottingham, Peter Saint-Andre, Julian Reschke, Chris Newman,
-		  Ian Macfarlane, Dave Cridland, Barry Leiba, Uri Blumenthal, Paul Hoffman, Felix Sasaki, Matthias Fuchs, Mark Baker, Scott Cantor, Brian Carpenter, Alexey Melnikov, Lars Eggert, and Tim Polk.
+		  Ian Macfarlane, Dave Cridland, Barry Leiba, Uri Blumenthal, Paul Hoffman, Felix Sasaki, Matthias Fuchs, Mark Baker, Scott Cantor, Brian Carpenter, Alexey Melnikov, Lars Eggert, Pasi Eronen, and Tim Polk.
 </p>
 <a name="schema"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>

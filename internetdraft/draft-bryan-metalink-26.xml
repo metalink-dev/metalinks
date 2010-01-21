@@ -799,7 +799,10 @@ metalinkIdentity =
     <iref item="language XML element" primary="true"/> 
 	      
 	  <t>The "<xref target="element.language" format="none">metalink:language</xref>" element is a Text construct that conveys a
-	  code for the language of a file, per <xref target="RFC5646"/>.
+	  code for the language of a file, per <xref target="RFC5646"/>.</t>
+	  
+	  <t>Multiple <xref target="element.language" format="none">metalink:language</xref> elements are allowed, for instance, to describe a file such as an binary installation program that provides multiple language options, or a
+      movie with multiple language tracks, or a document in multiple languages.
 	  
 	    <figure>
         <iref item="metalinkLanguage grammar production" primary="true"/>
@@ -1103,7 +1106,7 @@ metalinkUpdated =
 	  Most <xref target="element.file" format="none">metalink:file</xref> container elements will contain multiple <xref target="element.url" format="none">metalink:url</xref> elements,
 	  and each one SHOULD be a valid alternative to download the same file.</t>
 	  
-	  <t>The "<xref target="element.url" format="none">metalink:url</xref>" elements SHOULD be resolvable and, if resolvable, SHOULD lead to identical files.</t>
+	  <t>The <xref target="element.url" format="none">metalink:url</xref> elements SHOULD be resolvable and, if resolvable, SHOULD lead to identical files.</t>
 	  
 	  <t>Metalink Processors MUST filter out invalid files obtained from "<xref target="element.url" format="none">metalink:url</xref>" elements by using information in the <xref target="element.size" format="none">metalink:size</xref> element and <xref target="element.hash" format="none">metalink:hash</xref> elements.
 
@@ -1907,7 +1910,7 @@ structuredExtensionElement =
           Goulding. We also thank the Anthony Family, the Bryan Family, Juanita Anthony and Zimmy Bryan.</t>
 		  
 		  <t>We also thank the following contributors for assistance and review: Eran Hammer-Lahav, Lisa Dusseault, Mark Nottingham, Peter Saint-Andre, Julian Reschke, Chris Newman,
-		  Ian Macfarlane, Dave Cridland, Barry Leiba, Uri Blumenthal, Paul Hoffman, Felix Sasaki, Matthias Fuchs, Mark Baker, Scott Cantor, Brian Carpenter, Alexey Melnikov, Lars Eggert, and Tim Polk.</t>
+		  Ian Macfarlane, Dave Cridland, Barry Leiba, Uri Blumenthal, Paul Hoffman, Felix Sasaki, Matthias Fuchs, Mark Baker, Scott Cantor, Brian Carpenter, Alexey Melnikov, Lars Eggert, Pasi Eronen, and Tim Polk.</t>
 		  
 
 	    </section> 
