@@ -683,6 +683,7 @@ metalinkGenerator =
         <iref item="metalinkGenerator ABNF" primary="true"/>
         <iref item="ABNF" subitem="metalinkGenerator" primary="true"/>
 	      <artwork type="ABNF">
+token         = 1*&lt;any CHAR except CTLs or separators&gt;
 agent         = token ["/" agent-version]
 agent-version = token
 </artwork></figure></t>
