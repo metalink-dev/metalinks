@@ -785,6 +785,7 @@ Bryan, et al.             Expires July 25, 2010                [Page 14]
 Internet-Draft    Metalink Download Description Format      January 2010
 
 
+   token         = 1*<any CHAR except CTLs or separators>
    agent         = token ["/" agent-version]
    agent-version = token
 
@@ -832,7 +833,6 @@ Internet-Draft    Metalink Download Description Format      January 2010
    Metalink Documents MAY also contain hashes for individual pieces of a
    file. metalink:hash elements that are inside a metalink:pieces
    container element have a hash for that specific piece or chunk of the
-   file, and are of the same hash type as the metalink:pieces element
 
 
 
@@ -841,6 +841,7 @@ Bryan, et al.             Expires July 25, 2010                [Page 15]
 Internet-Draft    Metalink Download Description Format      January 2010
 
 
+   file, and are of the same hash type as the metalink:pieces element
    they are contained in.
 
    metalink:hash elements without a "type" attribute MUST contain a hash
@@ -888,7 +889,6 @@ Internet-Draft    Metalink Download Description Format      January 2010
    The "metalink:language" element is a Text construct that conveys a
    code for the language of a file, per [RFC5646].
 
-   Multiple metalink:language elements are allowed, for instance, to
 
 
 
@@ -897,6 +897,7 @@ Bryan, et al.             Expires July 25, 2010                [Page 16]
 Internet-Draft    Metalink Download Description Format      January 2010
 
 
+   Multiple metalink:language elements are allowed, for instance, to
    describe a file such as an binary installation program that provides
    multiple language options, or a movie with multiple language tracks,
    or a document in multiple languages.
@@ -944,7 +945,6 @@ Internet-Draft    Metalink Download Description Format      January 2010
 
    metalink:metaurl elements MAY have a priority attribute.  Values MUST
    be positive integers between 1 and 999999.  Lower values indicate a
-   higher priority. metalink:metaurl elements without a priority
 
 
 
@@ -953,6 +953,7 @@ Bryan, et al.             Expires July 25, 2010                [Page 17]
 Internet-Draft    Metalink Download Description Format      January 2010
 
 
+   higher priority. metalink:metaurl elements without a priority
    attribute are considered to have the lowest priority, i.e. 999999.
    The priority values of metalink:metaurl and metalink:url elements are
    compared and those with the lowest values, starting with 1, are used
@@ -999,7 +1000,6 @@ Internet-Draft    Metalink Download Description Format      January 2010
         attribute dynamic { xsd:boolean }?,
         (metalinkUri)
       }
-
 
 
 
