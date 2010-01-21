@@ -27,6 +27,7 @@ import gconf
 import gnomevfs
 import gnomedesktop
 import gnome.ui
+import gobject
 
 import config
 import download
