@@ -58,7 +58,7 @@ class Client:
             pass
         return
 
-    def set_list(self, opt, value):
+    def set_list(self, opt, type, value):
         self.opts[opt] = value
         return
         
