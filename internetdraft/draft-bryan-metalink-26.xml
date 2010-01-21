@@ -66,7 +66,7 @@
       <t>Metalink is an XML-based document format that describes a file or list
       of files to be downloaded from a server. Metalinks can list a number of
       files, each with an extensible set of attached metadata. 
-      Each listed file can have a description, checksum, and a list of URIs that it is 
+      Each listed file can have a description, checksum, and a list of URIs (Uniform Resource Identifiers) that it is 
       available from.</t>
 
       <t>Often, identical copies of a file are accessible in multiple locations
@@ -247,11 +247,11 @@ start = metalinkMetalink</artwork>
       "application/metalink4+xml" media type.</t>
 	  
       <t>Metalink Documents MUST be
-      well-formed XML. This specification does not define a DTD for
+      well-formed XML. This specification does not define a DTD (Document Type Definition) for
       Metalink Documents, and hence does not require them to be valid (in
       the sense used by XML).</t>
 	  
-      <t>Metalink allows the use of IRIs, encoded according to <xref target="RFC3987"/>. Every
+      <t>Metalink allows the use of IRIs (Internationalized Resource Identifiers), encoded according to <xref target="RFC3987"/>. Every
       URI <xref target="RFC3986"/> is also an IRI, so a URI may be
       used wherever below an IRI is named. There is one special
       consideration: when an IRI that is not also a URI is given for
@@ -453,7 +453,7 @@ metalinkMetalink =
 	    not. Some applications (one example is full-text indexers)
 	    require a minimum amount of text to function
 	    reliably and predictably. Metalink publishers should be aware
-	    of these issues. It is advisable that each <xref target="element.file" format="none">metalink:file</xref>
+	    of these issues. It is RECOMMENDED that each <xref target="element.file" format="none">metalink:file</xref>
 	    element contain a non-empty <xref target="element.description" format="none">metalink:description</xref> element, a
 	    non-empty <xref target="element.identity" format="none">metalink:identity</xref> element, a non-empty <xref target="element.version" format="none">metalink:version</xref> element, and a non-empty
 		<xref target="element.publisher" format="none">metalink:publisher</xref> element when these elements are present. However, the
@@ -876,7 +876,7 @@ metalinkMetaURL =
 	  <section title="The &#34;mediatype&#34; Attribute"> 
 
 	    <t><xref target="element.metaurl" format="none">metalink:metaurl</xref> elements MUST have a "mediatype" attribute that indicates
-	    the MIME media type <xref target="RFC4288"/> of the metadata available at the IRI. In the case of BitTorrent as specified in <xref target="BITTORRENT"/>, the value "torrent" is required. Types without "/" are reserved. Currently, "torrent" is the only reserved value.</t>
+	    the MIME media type <xref target="RFC4288"/> of the metadata available at the IRI. In the case of BitTorrent as specified in <xref target="BITTORRENT"/>, the value "torrent" is REQUIRED. Types without "/" are reserved. Currently, "torrent" is the only reserved value.</t>
 
 	  </section>
 	  <section title="The &#34;name&#34; Attribute"> 
@@ -1395,7 +1395,7 @@ structuredExtensionElement =
 	    otherwise-unprotected content. For example, a merchant
 	    might digitally sign a Metalink that lists a file download to verify its origin. Other merchants may wish to sign and encrypt Metalink Documents that list digital songs that have been purchased. Of course,
 	    many other examples are conceivable as well.</t>
-	    <t>Publishers are encouraged to offer Metalink documents via authenticated HTTP under TLS as specified in <xref target="RFC2818"/>. The choice of a secure content layer is entirely possible for content providers.</t>
+	    <t>Publishers are encouraged to offer Metalink documents via authenticated HTTP under TLS (Transport Layer Security) as specified in <xref target="RFC2818"/>. The choice of a secure content layer is entirely possible for content providers.</t>
 		
 		<t>Publishers are also encouraged to include digital signatures of the files within the Metalink Documents, if they are available, as described in <xref target="element.signature"/>.</t>
 
@@ -1911,7 +1911,7 @@ structuredExtensionElement =
           Goulding. We also thank the Anthony Family, the Bryan Family, Juanita Anthony and Zimmy Bryan.</t>
 		  
 		  <t>We also thank the following contributors for assistance and review: Eran Hammer-Lahav, Lisa Dusseault, Mark Nottingham, Peter Saint-Andre, Julian Reschke, Chris Newman,
-		  Ian Macfarlane, Dave Cridland, Barry Leiba, Uri Blumenthal, Paul Hoffman, Felix Sasaki, Matthias Fuchs, Mark Baker, Scott Cantor, Brian Carpenter, Alexey Melnikov, Lars Eggert, Pasi Eronen, and Tim Polk.</t>
+		  Ian Macfarlane, Dave Cridland, Barry Leiba, Uri Blumenthal, Paul Hoffman, Felix Sasaki, Matthias Fuchs, Mark Baker, Scott Cantor, Brian Carpenter, Alexey Melnikov, Lars Eggert, Pasi Eronen, Tim Polk, and Dan Romascanu.</t>
 		  
 
 	    </section> 
