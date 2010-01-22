@@ -388,11 +388,6 @@ metalinkDateConstruct =
 	</figure>
 	</t>
 
-	<t>Date values SHOULD be as accurate as possible. For
-	example, it would be generally inappropriate for a publishing
-	system to apply the same timestamp to several Metalink Documents that
-	were published during the course of a single day.</t>
-
 
       </section>
 
