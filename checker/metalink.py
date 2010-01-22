@@ -30,6 +30,7 @@
 #
 # Description:
 #   Functions for accessing XML formatted data.
+#   Last updated for RFC draft 26
 #
 ########################################################################
 
@@ -794,10 +795,13 @@ class Metalink4(MetalinkBase):
     def generate(self):
         text = '<?xml version="1.0" encoding="utf-8"?>\n'
         text += '<metalink xmlns="urn:ietf:params:xml:ns:metalink">\n'
-        if self.origin.strip() != "":
-            text += '<origin>'+self.origin+'</origin>\n'
+
+        attr = 'dynamic="false"'        
         if self.dynamic.lower() == "true":
-            text += '<dynamic>true</dynamic>\n'
+            attr = 'dynamic="true"'
+
+        if self.origin.strip() != "":
+            text += '<origin ' . attr . '>'+self.origin+'</origin>\n'
        
         for fileobj in self.files:
             text += fileobj.generate_file()
@@ -827,8 +831,10 @@ class Metalink4(MetalinkBase):
         tag = self.parent.pop()
 
         try:
-            if name in ("dynamic", "generator", "origin", "published", "updated"):
+            if name in ("generator", "origin", "published", "updated"):
                 setattr(self, name, self.data.strip())
+                if name == "origin" and tag.attrs.has_key("dynamic"):
+                    setattr(self, "dynamic", tag.attrs["dynamic"])
             elif name in ("url", "metaurl"):
                 fileobj = self.files[-1]
                 fileobj.add_url(self.data.strip(), attrs=tag.attrs)
