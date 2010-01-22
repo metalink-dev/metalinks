@@ -55,9 +55,20 @@ Updated to match draft 26
 
 <xsl:for-each select="metalink:verification/metalink:pieces">
 <pieces>
+
+<xsl:if test="@type">
+<xsl:choose>
+<xsl:when test="starts-with(@type, 'sha')">
+<xsl:attribute name="type">sha-<xsl:value-of select="substring-after(@type,'sha')"/></xsl:attribute>
+</xsl:when>
+<xsl:otherwise>
 <xsl:attribute name="type">
 <xsl:value-of select="@type"/>
 </xsl:attribute>
+</xsl:otherwise>
+</xsl:choose>
+</xsl:if>
+
 <xsl:attribute name="length">
 <xsl:value-of select="@length"/>
 </xsl:attribute>
