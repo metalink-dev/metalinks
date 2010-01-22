@@ -1771,7 +1771,7 @@ structuredExtensionElement =
 <seriesInfo name="W3C" value="REC-xml-20081126"></seriesInfo>
 </reference>
 
-<reference anchor="REC-xml-c14n" target="http://www.w3.org/TR/2001/REC-xml-c14n-20010315">
+<reference anchor="REC-xml-c14n" target="http://www.w3.org/TR/2001/REC-xml-c14n-20010315/">
 <front>
 <title>Canonical XML Version 1.0</title>
 
@@ -1786,7 +1786,7 @@ structuredExtensionElement =
 </reference>
  
 
-<reference anchor="REC-xml-exc-c14n" target="http://www.w3.org/TR/2002/REC-xml-exc-c14n-20020718">
+<reference anchor="REC-xml-exc-c14n" target="http://www.w3.org/TR/2002/REC-xml-exc-c14n-20020718/">
 <front>
 <title>Exclusive XML Canonicalization Version 1.0</title>
 
