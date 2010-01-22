@@ -2,8 +2,14 @@ CLIENT_PRELOAD_RECURSIVE = 1
 VALUE_STRING = 2
 VALUE_BOOL = 3
 VALUE_INT = 4
+VALUE_LIST = 5
 
 import xml.parsers.expat
+import ConfigParser
+import os
+
+import gget.config
+
 
 class Client:
     def __init__(self):
@@ -13,6 +19,33 @@ class Client:
         self.notify = {}
         #for opt in self.opts.keys():
         #    self.__notify(opt)
+        
+        self.base_dir = os.path.abspath(os.path.expanduser(os.path.join(gget.config.XDG_CONFIG_DIR, "gget")))
+        if not os.path.exists(self.base_dir):
+            os.makedirs(self.base_dir)
+        
+        self.filename = os.path.join(self.base_dir, "config.ini")
+        self.read_config()
+    
+    def read_config(self):
+        parser = ConfigParser.ConfigParser()
+        parser.read(self.filename)
+        for section in parser.sections():
+            for key in parser.options(section):
+                #print key, parser.get(section, key)
+                self.opts[key] = parser.get(section, key)
+                
+    def write_config(self):
+        parser = ConfigParser.ConfigParser()
+        for key in self.opts.keys():
+            try:
+                parser.set("gget", key, self.opts[key])
+            except ConfigParser.NoSectionError:
+                parser.add_section("gget")
+                parser.set("gget", key, self.opts[key])
+        handle = open(self.filename, "w")
+        parser.write(handle)
+        handle.close()
         
     def dir_exists(self, dir):
         return True
@@ -30,21 +63,31 @@ class Client:
         return int(self.opts[opt])
         
     def get_bool(self, opt):
-        return bool(self.opts[opt])
+        temp = self.opts[opt]
+        if type(temp) == type(""):
+            if temp.lower() == "false":
+                temp = False
+            else:
+                temp = True
+        #print self.opts[opt], bool(temp)
+        return bool(temp)
         
     def set_string(self, opt, value):
         self.opts[opt] = str(value)
         self.__notify(opt, VALUE_STRING)
+        self.write_config()
         return
         
     def set_int(self, opt, value):
         self.opts[opt] = int(value)
         self.__notify(opt, VALUE_INT)
+        self.write_config()
         return
         
     def set_bool(self, opt, value):
         self.opts[opt] = bool(value)
         self.__notify(opt, VALUE_BOOL)
+        self.write_config()
         return
         
     def __notify(self, opt, type):
@@ -60,6 +103,8 @@ class Client:
 
     def set_list(self, opt, type, value):
         self.opts[opt] = value
+        self.__notify(opt, VALUE_LIST)
+        self.write_config()
         return
         
     def notify_add(self, opt, callback):
