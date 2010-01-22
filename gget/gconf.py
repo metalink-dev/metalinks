@@ -10,7 +10,6 @@ import os
 
 import gget.config
 
-
 class Client:
     def __init__(self):
         xml = ReadDefaults()
@@ -53,7 +52,9 @@ class Client:
     def add_dir(self, dir, opt):
         return
 
-    def get_list(self, opt, type):
+    def get_list(self, opt, tpe):
+        if type(self.opts[opt]) == type(""):
+            pass
         return self.opts[opt]
         
     def get_string(self, opt):
@@ -75,19 +76,19 @@ class Client:
     def set_string(self, opt, value):
         self.opts[opt] = str(value)
         self.__notify(opt, VALUE_STRING)
-        self.write_config()
+        #self.write_config()
         return
         
     def set_int(self, opt, value):
         self.opts[opt] = int(value)
         self.__notify(opt, VALUE_INT)
-        self.write_config()
+        #self.write_config()
         return
         
     def set_bool(self, opt, value):
         self.opts[opt] = bool(value)
         self.__notify(opt, VALUE_BOOL)
-        self.write_config()
+        #self.write_config()
         return
         
     def __notify(self, opt, type):
@@ -104,7 +105,7 @@ class Client:
     def set_list(self, opt, type, value):
         self.opts[opt] = value
         self.__notify(opt, VALUE_LIST)
-        self.write_config()
+        #self.write_config()
         return
         
     def notify_add(self, opt, callback):
