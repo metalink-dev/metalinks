@@ -1524,7 +1524,7 @@ Internet-Draft    Metalink Download Description Format      January 2010
    [REC-xml-c14n]
               Boyer, J., "Canonical XML Version 1.0", W3C REC REC-xml-
               c14n-20010315, March 2001,
-              <http://www.w3.org/TR/2001/REC-xml-c14n-20010315/>.
+              <http://www.w3.org/TR/2001/REC-xml-c14n-20010315>.
 
    [REC-xml-exc-c14n]
               Eastlake, D., Boyer, J., and J. Reagle, "Exclusive XML
