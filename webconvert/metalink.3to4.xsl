@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Author: neil@nabber.org -->
+<!-- Author: neil@nabber.org 
+Updated to match draft 26
+-->
 
 <xsl:stylesheet xmlns="urn:ietf:params:xml:ns:metalink"
 		xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -14,12 +16,15 @@
 
 <xsl:if test="@origin">
 <origin>
-<xsl:value-of select="@origin"/>
-</origin>
+<xsl:if test="@type='dynamic'">
+<xsl:attribute name="dynamic">true</xsl:attribute>
+</xsl:if>
+<xsl:if test="@type='static'">
+<xsl:attribute name="dynamic">false</xsl:attribute>
 </xsl:if>
 
-<xsl:if test="@type='dynamic'">
-<dynamic>true</dynamic>
+<xsl:value-of select="@origin"/>
+</origin>
 </xsl:if>
 
 <xsl:if test="@generator">
