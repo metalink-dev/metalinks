@@ -37,4 +37,7 @@ class TrayIcon(gtk.StatusIcon):
         pass
         
     def show_all(self):
-        return
+        self.set_visible(True)
+        
+    def hide_all(self):
+        self.set_visible(False)
