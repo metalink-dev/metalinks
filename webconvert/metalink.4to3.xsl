@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Author: neil@nabber.org -->
+<!-- Author: neil@nabber.org 
+updated to draft 26
+-->
 
 <xsl:stylesheet xmlns="http://www.metalinker.org/"
 		xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
@@ -16,10 +18,9 @@
 <xsl:attribute name="origin">
 <xsl:value-of select="metalink4:origin"/>
 </xsl:attribute>
-</xsl:if>
-
-<xsl:if test="metalink4:dynamic">
+<xsl:if test="metalink4:origin/@dynamic='true'">
 <xsl:attribute name="type">dynamic</xsl:attribute>
+</xsl:if>
 </xsl:if>
 
 <xsl:if test="metalink4:generator">
