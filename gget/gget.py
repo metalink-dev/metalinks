@@ -41,4 +41,5 @@ if __name__ == "__main__":
     application = Application()
     application.run()
 
+    application.config.client.write_config()
 # vim: set sw=4 et sts=4 tw=79 fo+=l:
