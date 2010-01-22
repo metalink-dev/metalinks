@@ -95,18 +95,25 @@ def localecompile():
         if result != 0:
             raise AssertionError, "Generation of .mo file failed for %s." % pofile
             
-def rec_search(end, abspath = True):
+def rec_search(end, abspath = True, ignoredirs = []):
     start = os.path.dirname(__file__)
     mylist = []
     for root, dirs, files in os.walk(start):
-        for filename in files:
-            if filename.endswith(end):
-                if abspath:
-                    mylist.append(os.path.join(root, filename))
-                else:
-                    mylist.append(os.path.join(root[len(start):], filename))
+        if not check_ignore(root[len(start):].strip("\\"), ignoredirs):
+            for filename in files:
+                if filename.endswith(end):
+                    if abspath:
+                        mylist.append(os.path.join(root, filename))
+                    else:
+                        mylist.append(os.path.join(root[len(start):].strip("\\"), filename))
                     
     return mylist
+    
+def check_ignore(root, ignoredirs):
+    for dirname in ignoredirs:
+        if root.startswith(dirname):
+            return True
+    return False
 
 if sys.argv[1] == 'sdist':
     scripts = rec_search(".py")
@@ -138,8 +145,24 @@ elif sys.argv[1] == 'py2exe':
     #localegen()
     #localecompile()
     
+    skipdirs = ["build", "dist"]
+    
+    temp = rec_search(".ini", False, skipdirs)
+    temp.extend(rec_search(".txt", False, skipdirs))
+    temp.extend(rec_search(".mo", False, skipdirs))
+    temp.extend(rec_search(".qm", False, skipdirs))
+    temp.extend(rec_search(".png", False, skipdirs))
+    temp.extend(rec_search(".svg", False, skipdirs))
+    temp.extend(rec_search(".glade", False, skipdirs))
+    temp.extend(rec_search(".in", False, skipdirs))
+
+    data = []
+    for item in temp:
+        data.append((os.path.dirname(item), [item]))
+    
     setup(windows = ["gget.py"],
       #  zipfile = None,
+      data_files = data,
       options={"py2exe" : {"packages": 'encodings', "includes" : "cairo, pango, pangocairo, atk, gobject", "optimize": 2}},
       name = APP_NAME,
       version = VERSION,

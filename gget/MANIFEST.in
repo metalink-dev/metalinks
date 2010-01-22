@@ -1,0 +1,20 @@
+include *.txt
+include *.ini
+
+include *.bat
+include *.nsi
+include *.nsh
+include *.in
+include *.spec
+include *.pot
+include *.po
+include *.ts
+include *.png
+include *.glade
+include *.svg
+include *.py
+include .project
+include .pydevproject
+
+prune dist
+prune build
