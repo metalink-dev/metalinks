@@ -127,8 +127,8 @@
     &lt;size&gt;14471447&lt;/size&gt;
     &lt;url&gt;ftp://ftp.example.com/example.ext&lt;/url&gt;
     &lt;url&gt;http://example.com/example.ext&lt;/url&gt; 
-    &lt;metaurl 
-       type="torrent"&gt;http://example.com/example.ext.torrent&lt;/metaurl&gt;
+    &lt;metaurl mediatype="torrent"&gt;
+    http://example.com/example.ext.torrent&lt;/metaurl&gt;
   &lt;/file&gt;
 &lt;/metalink&gt;
 </artwork></figure></t>
@@ -154,7 +154,7 @@
          priority="1"&gt;ftp://ftp.example.com/example.ext&lt;/url&gt;
     &lt;url location="fr" 
          priority="1"&gt;http://example.com/example.ext&lt;/url&gt; 
-    &lt;metaurl type="torrent" 
+    &lt;metaurl mediatype="torrent" 
          priority="2"&gt;http://example.com/example.ext.torrent&lt;/metaurl&gt;
   &lt;/file&gt;
   &lt;file name="example2.ext"&gt;
@@ -172,7 +172,7 @@
          priority="1"&gt;ftp://ftp.example.com/example2.ext&lt;/url&gt;
     &lt;url location="fr" 
          priority="1"&gt;http://example.com/example2.ext&lt;/url&gt; 
-    &lt;metaurl type="torrent" 
+    &lt;metaurl mediatype="torrent" 
          priority="2"&gt;http://example.com/example2.ext.torrent&lt;/metaurl&gt;
   &lt;/file&gt;
 &lt;/metalink&gt;</artwork>
@@ -678,7 +678,11 @@ metalinkGenerator =
         <iref item="metalinkGenerator ABNF" primary="true"/>
         <iref item="ABNF" subitem="metalinkGenerator" primary="true"/>
 	      <artwork type="ABNF">
-token         = 1*&lt;any CHAR except CTLs or separators&gt;
+token          = 1*&lt;any CHAR except CTLs or separators&gt;
+separators     = "(" / ")" / "&lt;" / "&gt;" / "@"
+               / "," / ";" / ":" / "\" / &lt;"&gt;
+               / "/" / "[" / "]" / "?" / "="
+               / "{" / "}" / SP / HTAB
 agent         = token ["/" agent-version]
 agent-version = token
 </artwork></figure></t>
@@ -872,7 +876,16 @@ metalinkMetaURL =
 
 	    <t><xref target="element.metaurl" format="none">metalink:metaurl</xref> elements MUST have a "mediatype" attribute that indicates
 	    the MIME media type <xref target="RFC4288"/> of the metadata available at the IRI. In the case of BitTorrent as specified in <xref target="BITTORRENT"/>, the value "torrent" is REQUIRED. Types without "/" are reserved. Currently, "torrent" is the only reserved value.</t>
-
+        <t>Values for this attribute are defined below in ABNF notation <xref target="RFC5234"/>.
+<figure> 
+<iref item="mediatype ABNF" primary="true"/>
+<iref item="ABNF" subitem="mediatype" primary="true"/>
+<artwork type="ABNF">
+media-type = type-name "/" subtype-name
+type-name = &lt;Defined in section 4.2 of RFC 4288&gt;
+subtype-name = &lt;Defined in section 4.2 of RFC 4288&gt;
+</artwork></figure></t>
+		
 	  </section>
 	  <section title="The &#34;name&#34; Attribute"> 
 
@@ -883,7 +896,8 @@ metalinkMetaURL =
 		<figure>
 		<preamble>Directory information can also be contained in a "path/file" format only, as in:</preamble>
 	  <artwork type="example">
-&lt;metaurl type="torrent" name="debian-amd64/sarge/Contents-amd64.gz"&gt;
+&lt;metaurl
+     mediatype="torrent" name="debian-amd64/sarge/Contents-amd64.gz"&gt;
 </artwork></figure></t>
         <t>In this example, a file named "Contents-amd64.gz" is indicated, in a "debian-amd64/sarge/" subdirectory.
            The path MUST NOT contain any directory traversal directives or
@@ -1004,7 +1018,7 @@ metalinkPublisher =
 	  <t>The "<xref target="element.signature" format="none">metalink:signature</xref>" element is a Text construct that conveys a
 	  digital signature for a file described in a Metalink Document. Digital signatures verify that a file is from the entity that has signed it.</t>
 	  
-	  <t>Metalink Processors are NOT REQUIRED to support digital signatures included in this element.
+	  <t>Support for digital signatures included in this element is OPTIONAL.
 	  
 	    <figure>
         <iref item="metalinkSignature grammar production" primary="true"/>
@@ -1012,7 +1026,7 @@ metalinkPublisher =
 	      <artwork type="application/relax-ng-compact-syntax">
 metalinkSignature =
    element metalink:signature {
-     attribute type { text },
+     attribute mediatype { text },
      metalinkTextConstruct
    }</artwork></figure></t>
    
@@ -1020,7 +1034,7 @@ metalinkSignature =
 
 	 <figure>
 	  <artwork type="example">
-&lt;signature type="application/pgp-signature"&gt;
+&lt;signature mediatype="application/pgp-signature"&gt;
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v1.4.10 (GNU/Linux)
 
@@ -1033,11 +1047,20 @@ p3oAoO9lKHoOqOE0EMB3zmMcLoYUrNkg
 		   
 	</figure>
 	</t>
-	  <section title="The &#34;type&#34; Attribute"> 
+	  <section title="The &#34;mediatype&#34; Attribute"> 
 
-	    <t><xref target="element.signature" format="none">metalink:signature</xref> elements MUST have a "type" attribute that indicates
-	    the MIME media type <xref target="RFC4288"/> of the included digital signature.		
-		</t>
+	    <t><xref target="element.signature" format="none">metalink:signature</xref> elements MUST have a "mediatype" attribute that indicates
+	    the MIME media type <xref target="RFC4288"/> of the included digital signature.</t>
+		
+        <t>Values for this attribute are defined below in ABNF notation <xref target="RFC5234"/>.
+<figure> 
+<iref item="mediatype ABNF" primary="true"/>
+<iref item="ABNF" subitem="mediatype" primary="true"/>
+<artwork type="ABNF">
+media-type = type-name "/" subtype-name
+type-name = &lt;Defined in section 4.2 of RFC 4288&gt;
+subtype-name = &lt;Defined in section 4.2 of RFC 4288&gt;
+</artwork></figure></t>
 
 	  </section> 	  
 	  
@@ -1394,6 +1417,50 @@ structuredExtensionElement =
 		
 		<t>Publishers are also encouraged to include digital signatures of the files within the Metalink Documents, if they are available, as described in <xref target="element.signature"/>.</t>
 
+	    <section title="Digital Signatures">
+     
+	      <t>The root of a Metalink Document (i.e., <xref target="element.metalink" format="none">metalink:metalink</xref>) or any <xref target="element.file" format="none">metalink:file</xref> element MAY have an
+	      Enveloped Signature, as described by <xref target="REC-xmldsig-core">XML-Signature and
+	      Syntax Processing</xref>.</t>
+
+	      <t>Metalink Processors MUST NOT reject a Metalink Document
+	      containing such a signature because they are not capable
+	      of verifying it; they MUST continue processing and MAY
+	      inform the user of their failure to validate the
+	      signature.</t>
+
+	      <t>In other words, the presence of an element with the namespace
+	      URI "http://www.w3.org/2000/09/xmldsig#" and a local name of
+	      "Signature" as a child of the document element MUST NOT cause a
+	      Metalink Processor to fail merely because of its presence.</t>
+
+	      <t>Other elements in a Metalink Document MUST NOT be signed unless
+	      their definitions explicitly specify such a capability.</t>
+
+	      <t>Section 6.5.1 of <xref target="REC-xmldsig-core"/> requires
+	      support for Canonical XML <xref target="REC-xml-c14n"/>. However, many
+	      implementers do not use it because signed XML documents
+	      enclosed in other XML documents have their signatures
+	      broken. Thus, Metalink Processors that verify signed Metalink
+	      Documents MUST be able to canonicalize with the
+	      exclusive XML canonicalization method identified by the
+	      URI "http://www.w3.org/2001/10/xml-exc-c14n#", as
+	      specified in Exclusive XML Canonicalization <xref target="REC-xml-exc-c14n"/>.
+	      </t>
+
+	      <t>Section 4.4.2 of <xref target="REC-xmldsig-core"/> requires
+	      support for DSA signatures and recommends support for
+	      RSA signatures.  However, because of the much greater
+	      popularity in the market of RSA versus DSA, Metalink
+	      Processors that verify signed Metalink Documents MUST be
+	      able to verify RSA signatures, but do not need be able
+	      to verify DSA signatures. Due to security issues that
+	      can arise if the keying material for message
+	      authentication code (MAC) authentication is not handled
+	      properly, Metalink Documents SHOULD NOT use MACs for
+	      signatures.</t>
+	      
+	    </section> 
 
 	    <section title="URIs and IRIs">
 
@@ -1404,26 +1471,13 @@ structuredExtensionElement =
 
 	    <section title="Spoofing">
 
-	      <t>There is potential for spoofing attacks where the attacker publishes
+		  <t>There is potential for spoofing attacks where the attacker publishes
           Metalink Documents with false information. Malicious publishers might create Metalink Documents containing inaccurate information anywhere in the document.
           Unaware downloaders could be deceived into downloading a malicious or worthless file. Malicious publishers could attempt a distributed denial of service attack by inserting unrelated IRIs into Metalink Documents.</t>
-
+	      
+		  <t>Digital signatures address the issue of spoofing.</t>
 	    </section>	
 		
-	
-	    <section title="Signing">
-
-	      <t>Metalink Documents SHOULD be signed using <xref target="REC-xmldsig-core">XML-Signature and
-	      Syntax Processing</xref> and are
-	      subject to the security considerations implied by its
-	      use. This addresses the issue of spoofing.</t>
-
-	      <t>Digital signatures provide authentication, message
-	      integrity, and non-repudiation with proof of
-	      origin.</t>
-
-	    </section>
-
 	    <section title="Cryptographic Hashes" anchor="security.hash">
 
 	      <t>Currently, some of the hash types defined in the IANA registry named "Hash Function Textual Names" are considered insecure. These include the whole Message Digest family of algorithms which are not suitable for cryptographically strong verification. Malicious people could provide files that appear to be identical to another file because of a collision, i.e. the weak cryptographic hashes of the intended file and a substituted malicious file could match.</t>
@@ -1715,6 +1769,43 @@ structuredExtensionElement =
 </front>
 
 <seriesInfo name="W3C" value="REC-xml-20081126"></seriesInfo>
+</reference>
+
+<reference anchor="REC-xml-c14n" target="http://www.w3.org/TR/2001/REC-xml-c14n-20010315">
+<front>
+<title>Canonical XML Version 1.0</title>
+
+<author initials="J" surname="Boyer" fullname="John Boyer">
+    <organization/>
+</author>
+
+<date month="March" day="15" year="2001"/>
+</front>
+
+<seriesInfo name="W3C REC" value="REC-xml-c14n-20010315"/>
+</reference>
+ 
+
+<reference anchor="REC-xml-exc-c14n" target="http://www.w3.org/TR/2002/REC-xml-exc-c14n-20020718">
+<front>
+<title>Exclusive XML Canonicalization Version 1.0</title>
+
+<author initials="D" surname="Eastlake" fullname="Donald E. Eastlake 3rd">
+    <organization/>
+</author>
+
+<author initials="J" surname="Boyer" fullname="John Boyer">
+    <organization/>
+</author>
+
+<author initials="J" surname="Reagle" fullname="Joseph Reagle">
+    <organization/>
+</author>
+
+<date month="July" day="18" year="2002"/>
+</front>
+
+<seriesInfo name="W3C REC" value="REC-xml-exc-c14n-20020718"/>
 </reference>
 
  
@@ -2065,7 +2156,7 @@ metalinkPublisher =
 
 metalinkSignature =
    element metalink:signature {
-      attribute type { text },
+      attribute mediatype { text },
       metalinkTextConstruct
    }
 
