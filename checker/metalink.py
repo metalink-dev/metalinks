@@ -550,7 +550,7 @@ class MetalinkFile(MetalinkFileBase):
                 if key == 'pgp' and self.hashlist[key] != "":
                     text += '      <signature type="%s">' % key + self.hashlist[key] + '</signature>\n'
                 else:
-                    text += '      <hash type="%s">' % hashlookup(key) + self.hashlist[key].lower() + '</hash>\n'
+                    text += '      <hash type="%s">' % key + self.hashlist[key].lower() + '</hash>\n'
             if len(self.pieces) > 1:
                 text += '        <pieces type="'+self.piecetype+'" length="'+str(self.piecelength)+'">\n'
                 for id in range(len(self.pieces)):
@@ -801,7 +801,7 @@ class Metalink4(MetalinkBase):
             attr = 'dynamic="true"'
 
         if self.origin.strip() != "":
-            text += '<origin ' . attr . '>'+self.origin+'</origin>\n'
+            text += '<origin ' + attr + '>'+self.origin+'</origin>\n'
        
         for fileobj in self.files:
             text += fileobj.generate_file()
