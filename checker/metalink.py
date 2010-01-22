@@ -62,6 +62,8 @@ GENERATOR = "Metalink Checker Version 5.0"
 RFC3339 = "%Y-%m-%dT%H:%M:%SZ"
 RFC822 = "%a, %d %b %Y %H:%M:%S +0000"
 
+XMLSEP = "/"
+
 HASHMAP = { "sha256": "sha-256", 
             "sha1": "sha-1",
             "sha512": "sha-512",
@@ -588,7 +590,8 @@ class MetalinkBase:
         self.generator = GENERATOR
         self.origin = ""
 
-        self.p = xml.parsers.expat.ParserCreate()
+        self.p = xml.parsers.expat.ParserCreate(namespace_separator=XMLSEP)
+        self.p.buffer_text = True
         self.parent = []
 
         self.p.StartElementHandler = self.start_element
@@ -653,6 +656,7 @@ class Metalink(MetalinkBase):
         self.type = ""
         self.pubdate = ""
         self.refreshdate = ""
+        self.XMLNS = "http://www.metalinker.org/"
         MetalinkBase.__init__(self)
         
     def generate(self):
@@ -666,7 +670,7 @@ class Metalink(MetalinkBase):
         gentext = ""
         if self.generator.strip() != "":
             gentext = 'generator="'+self.generator+'" '
-        text += '<metalink version="3.0" '+origin + typetext + gentext + 'xmlns="http://www.metalinker.org/">\n'
+        text += '<metalink version="3.0" '+origin + typetext + gentext + 'xmlns="' + self.XMLNS + '">\n'
         text += self.generate_info()
         text += '  <files>\n'
         for fileobj in self.files:
@@ -712,6 +716,9 @@ class Metalink(MetalinkBase):
     # 3 handler functions
     def start_element(self, name, attrs):
         self.data = ""
+        xmlns, name = name.rsplit(XMLSEP, 1)
+        if xmlns != self.XMLNS and xmlns != "":
+            return
         self.parent.append(XMLTag(name, attrs))
         if name == "file":
             fileobj = MetalinkFile(attrs["name"], attrs)
@@ -724,6 +731,9 @@ class Metalink(MetalinkBase):
                 except KeyError: pass
             
     def end_element(self, name):
+        xmlns, name = name.rsplit(XMLSEP, 1)
+        if xmlns != self.XMLNS and xmlns != "":
+            return
         tag = self.parent.pop()
 
         try:
@@ -790,11 +800,12 @@ class Metalink4(MetalinkBase):
         self.dynamic=""
         self.published=""
         self.updated=""
+        self.XMLNS = "urn:ietf:params:xml:ns:metalink"
         MetalinkBase.__init__(self)
 
     def generate(self):
         text = '<?xml version="1.0" encoding="utf-8"?>\n'
-        text += '<metalink xmlns="urn:ietf:params:xml:ns:metalink">\n'
+        text += '<metalink xmlns="' + self.XMLNS + '">\n'
 
         attr = 'dynamic="false"'        
         if self.dynamic.lower() == "true":
@@ -813,21 +824,22 @@ class Metalink4(MetalinkBase):
         
     # handler functions
     def start_element(self, name, attrs):
-        xmlns = ""
+        if name.startswith("http://www.metalinker.org"):
+            raise AssertionError, "Not a valid Metalink 4 (RFC) file."
+            
         self.data = ""
+        xmlns, name = name.rsplit(XMLSEP, 1)
+        if xmlns != self.XMLNS:
+            return
         self.parent.append(XMLTag(name, attrs))
         if name == "file":
             fileobj = MetalinkFile4(attrs["name"], attrs)
             self.files.append(fileobj)
-            
-        if name == "metalink":
-            try:
-                xmlns = attrs["xmlns"]
-            except KeyError: pass
-            if xmlns != "urn:ietf:params:xml:ns:metalink":
-                raise AssertionError, "Not a valid Metalink 4 (RFC) file."
         
     def end_element(self, name):
+        xmlns, name = name.rsplit(XMLSEP, 1)
+        if xmlns != self.XMLNS:
+            return
         tag = self.parent.pop()
 
         try:
@@ -1148,8 +1160,9 @@ def convert_4to3(metalinkobj4):
     for fileobj4 in metalinkobj4.files:
         fileobj3 = MetalinkFile(fileobj4.filename)
         # copy common attributes
-        for attr in ('filename', 'pieces', 'piecelength', 'piecetype', 'language', 'os', 'size'):
+        for attr in ('filename', 'pieces', 'piecelength', 'language', 'os', 'size'):
             setattr(fileobj3, attr, getattr(fileobj4, attr))
+        setattr(fileobj3, "piecetype", getattr(fileobj4, "piecetype").replace("-", ""))
         for attr in ('description', 'version', 'identity', 'license_url', 'license_name', 'publisher_url', 'publisher_name'):
             setattr(metalinkobj3, attr, getattr(fileobj4, attr))
         # copy hashlist, change key names
