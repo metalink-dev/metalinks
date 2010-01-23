@@ -36,6 +36,16 @@ style="color: black; font-weight: bold" href="http://www.metalinker.org/samples.
 
         <h2><xsl:value-of select="metalink4:identity"/><xsl:text> </xsl:text><xsl:value-of select='metalink4:version'/></h2>
 
+<p>
+<xsl:if test="metalink4:origin/@dynamic">
+Dynamic: <xsl:value-of select="metalink4:origin/@dynamic"/><br />
+</xsl:if>
+<xsl:if test="metalink4:origin">
+Origin:
+<a><xsl:attribute name="href"><xsl:value-of select="metalink4:origin"/></xsl:attribute><xsl:value-of select="metalink4:origin"/></a><br />
+</xsl:if>
+</p>
+
 <!-- List file summary -->
 
 <h3>Table of Contents</h3>
@@ -253,6 +263,15 @@ License:
 </xsl:otherwise>
 </xsl:choose>
 <br />
+</xsl:if>
+
+<xsl:if test="@type">
+Type: <xsl:value-of select="@type"/><br />
+</xsl:if>
+<xsl:if test="@origin">
+Origin: 
+<a><xsl:attribute name="href"><xsl:value-of 
+select="@origin"/></xsl:attribute><xsl:value-of select="@origin"/></a><br />
 </xsl:if>
 
 <xsl:if test="metalink:tags">
