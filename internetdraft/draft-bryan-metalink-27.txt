@@ -11,7 +11,7 @@ Expires: July 27, 2010
 
 
                 The Metalink Download Description Format
-                        draft-bryan-metalink-26
+                        draft-bryan-metalink-27
 
 Abstract
 
@@ -1963,7 +1963,7 @@ Internet-Draft    Metalink Download Description Format      January 2010
 
    o  None.
 
-   -26 : January xx, 2010.
+   -26 : January 23, 2010.
    o  Address IESG Comments and Discuss: Alexey Melnikov.
 
    -25 : January 11, 2010.
