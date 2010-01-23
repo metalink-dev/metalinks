@@ -33,7 +33,6 @@
 ########################################################################
 
 import urllib
-import difflib
 import os
 import ConfigParser
 import optparse
@@ -41,12 +40,14 @@ import urlparse
 import hashlib
 import HTMLParser
 import time
+import threading
 
-CACHEDIR = "htmlcache"
-METADIR = "cache"
+#CACHEDIR = "htmlcache"
+METADIR = "/var/www/nabber/projects/metalink/crawler/index/"
 
 CACHETIME = 3600*24*7
 PAUSETIME = 1
+SKIPEXT = ["rpm", "jpg", "mpg", "iso", "gif", "png", "drpm"]
 
 def download_metalink(url):
     filename = os.path.join(METADIR, os.path.basename(url))
@@ -92,59 +93,69 @@ def parse_config(configfile="config.ini"):
             configdict[sect][options[0]] = options[1]
     return configdict                    
                     
-class App:
-    def __init__(self):
+class App(threading.Thread):
+    def __init__(self, url):
+        threading.Thread.__init__(self)
         self.queue = []
         self.indexed = []
+        self.url = url
+        self.add(url)
 
-    def process_html(self, filename, url=''):
-        handle = open(filename)
-        text = handle.read()
-        handle.close()
+    def process_html(self, text, url=''):
         parser = LinkParser(url)
         try:
             parser.feed(text)
-        except:
+        except HTMLParser.HTMLParseError:
             pass
         
         for link in parser.links:
             if link.endswith(".metalink") or link.endswith(".meta4"):
                 download_metalink(link)
-            elif (link.startswith(os.path.dirname(url))):
+            else:
                 self.add(link)
 
     def crawl(self, webpage):
         m = hashlib.md5()
         m.update(webpage)
 
-        filename = os.path.join(CACHEDIR, m.hexdigest() + ".html")
         try:
             handle = urllib.urlopen(webpage)
         except:
             print "Webpage Download Error:", webpage
             return
         text = handle.read()
+	self.indexed.append(handle.geturl())
         handle.close()
 
-        handle = open(filename, "w")
-        handle.write(text)
-        handle.close()
         time.sleep(PAUSETIME)
         
-        self.process_html(filename, webpage)
+        self.process_html(text, webpage)
         return
 
     def add(self, page):
-        if (page not in self.queue) and (page not in self.indexed):
-            self.queue.append(page)
+        if not page.startswith(os.path.dirname(self.url)):
+            return
+        if os.path.basename(page).startswith("?view="):
+            return
+        loc = page.rfind("#")
+        if loc != -1:
+            page = page[:page.rfind("#")]
+        ext = page[page.rfind(".")+1:].lower()
+        if ext in SKIPEXT:
+            return
+        if page in self.queue:
+            return
+        if page in self.indexed:
+            return
+        self.queue.append(page)
         
     def run(self):
         while len(self.queue) > 0:
             print "Queue len:", len(self.queue)
             page = self.queue.pop()
+            self.indexed.append(page)
             print "Crawling", page
             self.crawl(page)
-            self.indexed.append(page)
 
         
 def get_version():
@@ -153,6 +164,7 @@ def get_version():
 def run():
     parser = optparse.OptionParser(usage = "usage: %prog [options]")
     parser.add_option("--version", dest="printversion", action="store_true", help="Display the version information for this program")
+    parser.add_option("-t", dest="threaded", action="store_true", help="Run each website in its own thread")
  
     (options, args) = parser.parse_args()
 
@@ -160,19 +172,24 @@ def run():
         print get_version()
         return
         
-    if not os.path.exists(CACHEDIR):
-        os.makedirs(CACHEDIR)
+#    if not os.path.exists(CACHEDIR):
+#        os.makedirs(CACHEDIR)
         
-    app = App()
-
     config = parse_config()
 
-    items = config.keys()
-        
+    if options.threaded:
+        items = config.keys()        
+        for key in items:
+            app = App(key)
+            app.start()
+            #thread.start_new_thread(app.run, (),)
+            time.sleep(PAUSETIME)
+        return        
+
+    items = config.keys()        
     for key in items:
-        app.add(key)
-        
-    app.run()        
+        app = App(key)
+        app.run()        
 
 if __name__=="__main__":
     run()
