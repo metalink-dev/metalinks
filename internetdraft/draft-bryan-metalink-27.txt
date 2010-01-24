@@ -1247,8 +1247,8 @@ Internet-Draft    Metalink Download Description Format      January 2010
    result of the markup's presence.
 
    When unknown foreign markup is encountered in a Text Construct,
-   software SHOULD ignore the markup and process any text content of
-   foreign elements as though the surrounding markup were not present.
+   software SHOULD treat any text content of foreign elements as though
+   the surrounding foreign markup were not present.
 
 5.4.  Extension Elements
 
