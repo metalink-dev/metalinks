@@ -257,14 +257,6 @@ start = metalinkMetalink</artwork>
       consideration: when an IRI that is not also a URI is given for
       dereferencing, it MUST be mapped to a URI using the steps in
       Section 3.1 of <xref target="RFC3987"/>.</t>
-
-      <t>Any element defined by this specification MAY have an
-      xml:base attribute <xref target="REC-xmlbase"/>.
-      When xml:base is used in a Metalink Document, it serves the
-      function described in Section 5.1.1 of <xref target="RFC3986"/>,
-      establishing the base URI (or IRI) for resolving any relative
-      references found within the effective scope of the xml:base
-      attribute.</t>
       
       <t>Any element defined by this specification MAY have an
       xml:lang attribute, whose content indicates the natural language
@@ -280,7 +272,6 @@ start = metalinkMetalink</artwork>
       <iref item="Grammar" subitem="metalinkCommonAttributes" primary="true"/>
 	<artwork type="application/relax-ng-compact-syntax">
 metalinkCommonAttributes =
-   attribute xml:base { metalinkUri }?,
    attribute xml:lang { metalinkLanguageTag }?,
    undefinedAttribute*</artwork>  </figure></t>
       <t>All leading and trailing whitespace is part of the element content, and MUST NOT be ignored. Consequently, it is disallowed for elements where the defined type does not allow whitespace, such as dates, integers, or IRIs.
@@ -1689,27 +1680,6 @@ structuredExtensionElement =
 </reference>
 
  
-
-<reference anchor="REC-xmlbase" target="http://www.w3.org/TR/2009/REC-xmlbase-20090128/">
-<front>
-<title>XML Base (Second Edition)</title>
-
-<author fullname="J. Marsh" surname="Marsh" initials="J">
-
-    <organization></organization>
-</author>
-<author fullname="R. Tobin" surname="Tobin" initials="R">
-
-    <organization></organization>
-</author>
-
-<date year="2009" day="28" month="January"></date>
-</front>
-
-<seriesInfo name="W3C" value="REC-xmlbase-20090128"></seriesInfo>
-</reference>
-
- 
 <reference anchor="REC-xml-names" target="http://www.w3.org/TR/2009/REC-xml-names-20091208/">
 <front>
 <title>Namespaces in XML 1.0 (Third Edition)</title>
@@ -2025,7 +1995,6 @@ namespace xsd = "http://www.w3.org/2001/XMLSchema"
 # Common attributes
 
 metalinkCommonAttributes =
-   attribute xml:base { metalinkUri }?,
    attribute xml:lang { metalinkLanguageTag }?,
    undefinedAttribute*
 
@@ -2217,7 +2186,7 @@ extensionElement =
    simpleExtensionElement | structuredExtensionElement
 
 undefinedAttribute =
-  attribute * - (xml:base | xml:lang | local:*) { text }
+  attribute * - (xml:lang | local:*) { text }
 
 undefinedContent = (text|anyForeignElement)*
 
@@ -2246,15 +2215,23 @@ anyForeignElement =
 		<t>Known issues concerning this draft:
 	    <list style="symbols"> 
 	      
-	      <t>None.</t>
+	      <t>Digital signatures, metalink:signature element, metalink:os element / using IANA "Operating System Names" registry.</t>
+		  <t>Waiting on: MIME type review.</t>
 
 	    </list></t>
+
+<t>-27 : January xx, 2010.
+	    
+	    <list style="symbols">
+		
+		  <t>Address IESG Comments and Discuss.</t>
+	   </list></t>
 
 <t>-26 : January 23, 2010.
 	    
 	    <list style="symbols">
 		
-		  <t>Address IESG Comments and Discuss: Alexey Melnikov.</t>
+		  <t>Address IESG Comments and Discuss: Alexey Melnikov, Lars Eggert.</t>
 	   </list></t>
 
 <t>-25 : January 11, 2010.
