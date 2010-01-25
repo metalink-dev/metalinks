@@ -144,10 +144,10 @@
 <tr><td class="header">Network Working Group</td><td class="header">A. Bryan</td></tr>
 <tr><td class="header">Internet-Draft</td><td class="header">T. Tsujikawa</td></tr>
 <tr><td class="header">Intended status: Standards Track</td><td class="header">N. McNab</td></tr>
-<tr><td class="header">Expires: July 27, 2010</td><td class="header">&nbsp;</td></tr>
+<tr><td class="header">Expires: July 29, 2010</td><td class="header">&nbsp;</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">P. Poeml</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">Novell, Inc.</td></tr>
-<tr><td class="header">&nbsp;</td><td class="header">January 23, 2010</td></tr>
+<tr><td class="header">&nbsp;</td><td class="header">January 25, 2010</td></tr>
 </table></td></tr></table>
 <h1><br />The Metalink Download Description Format<br />draft-bryan-metalink-27</h1>
 
@@ -180,7 +180,7 @@ The list of current Internet-Drafts can be accessed at
 The list of Internet-Draft Shadow Directories can be accessed at
 <a href='http://www.ietf.org/shadow.html'>http://www.ietf.org/shadow.html</a>.</p>
 <p>
-This Internet-Draft will expire on July 27, 2010.</p>
+This Internet-Draft will expire on July 29, 2010.</p>
 
 <h3>Copyright Notice</h3>
 <p>
@@ -509,14 +509,6 @@ start = metalinkMetalink</pre></div>
       Section 3.1 of <a class='info' href='#RFC3987'>[RFC3987]<span> (</span><span class='info'>Duerst, M. and M. Suignard, &ldquo;Internationalized Resource Identifiers (IRIs),&rdquo; January&nbsp;2005.</span><span>)</span></a>.
 </p>
 <p>Any element defined by this specification MAY have an
-      xml:base attribute <a class='info' href='#REC-xmlbase'>[REC&#8209;xmlbase]<span> (</span><span class='info'>Marsh, J. and R. Tobin, &ldquo;XML Base (Second Edition),&rdquo; January&nbsp;2009.</span><span>)</span></a>.
-      When xml:base is used in a Metalink Document, it serves the
-      function described in Section 5.1.1 of <a class='info' href='#RFC3986'>[RFC3986]<span> (</span><span class='info'>Berners-Lee, T., Fielding, R., and L. Masinter, &ldquo;Uniform Resource Identifier (URI): Generic Syntax,&rdquo; January&nbsp;2005.</span><span>)</span></a>,
-      establishing the base URI (or IRI) for resolving any relative
-      references found within the effective scope of the xml:base
-      attribute.
-</p>
-<p>Any element defined by this specification MAY have an
       xml:lang attribute, whose content indicates the natural language
       for the element and its descendents.  The language context is only
       significant for elements and attributes declared to be
@@ -528,7 +520,6 @@ start = metalinkMetalink</pre></div>
       <a name='anchor30'></a><a name='anchor31'></a></p>
 <div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
 metalinkCommonAttributes =
-   attribute xml:base { metalinkUri }?,
    attribute xml:lang { metalinkLanguageTag }?,
    undefinedAttribute*</pre></div><p>
 
@@ -1712,8 +1703,6 @@ References</h3>
 <td class="author-text">Cowan, J. and R. Tobin, &ldquo;<a href="http://www.w3.org/TR/2004/REC-xml-infoset-20040204/">XML Information Set (Second Edition)</a>,&rdquo; W3C&nbsp;REC-xml-infoset-20040204, February&nbsp;2004.</td></tr>
 <tr><td class="author-text" valign="top"><a name="REC-xml-names">[REC-xml-names]</a></td>
 <td class="author-text">Hollander, D., Bray, T., Tobin, R., and A. Layman, &ldquo;<a href="http://www.w3.org/TR/2009/REC-xml-names-20091208/">Namespaces in XML 1.0 (Third Edition)</a>,&rdquo; W3C&nbsp;REC-xml-names-20091208, December&nbsp;2009.</td></tr>
-<tr><td class="author-text" valign="top"><a name="REC-xmlbase">[REC-xmlbase]</a></td>
-<td class="author-text">Marsh, J. and R. Tobin, &ldquo;<a href="http://www.w3.org/TR/2009/REC-xmlbase-20090128/">XML Base (Second Edition)</a>,&rdquo; W3C&nbsp;REC-xmlbase-20090128, January&nbsp;2009.</td></tr>
 <tr><td class="author-text" valign="top"><a name="REC-xmldsig-core">[REC-xmldsig-core]</a></td>
 <td class="author-text">Solo, D., Reagle, J., and D. Eastlake, &ldquo;<a href="http://www.w3.org/TR/2008/REC-xmldsig-core-20080610/">XML-Signature Syntax and Processing (Second Edition)</a>,&rdquo; W3C&nbsp;REC-xmldsig-core-20080610, June&nbsp;2008.</td></tr>
 <tr><td class="author-text" valign="top"><a name="RFC2119">[RFC2119]</a></td>
@@ -1809,7 +1798,6 @@ namespace xsd = "http://www.w3.org/2001/XMLSchema"
 # Common attributes
 
 metalinkCommonAttributes =
-   attribute xml:base { metalinkUri }?,
    attribute xml:lang { metalinkLanguageTag }?,
    undefinedAttribute*
 
@@ -2001,7 +1989,7 @@ extensionElement =
    simpleExtensionElement | structuredExtensionElement
 
 undefinedAttribute =
-  attribute * - (xml:base | xml:lang | local:*) { text }
+  attribute * - (xml:lang | local:*) { text }
 
 undefinedContent = (text|anyForeignElement)*
 
@@ -2032,7 +2020,17 @@ Document History (to be removed by RFC Editor before publication)</h3>
 <p>Known issues concerning this draft:
 	    </p>
 <ul class="text">
-<li>None.
+<li>Digital signatures, metalink:signature element, metalink:os element / using IANA "Operating System Names" registry.
+</li>
+<li>Waiting on: MIME type review.
+</li>
+</ul>
+
+<p>-27 : January xx, 2010.
+	    
+	    </p>
+<ul class="text">
+<li>Address IESG Comments and Discuss.
 </li>
 </ul>
 
@@ -2040,7 +2038,7 @@ Document History (to be removed by RFC Editor before publication)</h3>
 	    
 	    </p>
 <ul class="text">
-<li>Address IESG Comments and Discuss: Alexey Melnikov.
+<li>Address IESG Comments and Discuss: Alexey Melnikov, Lars Eggert.
 </li>
 </ul>
 
