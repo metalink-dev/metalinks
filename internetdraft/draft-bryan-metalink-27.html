@@ -322,8 +322,8 @@ Introduction</h3>
       available from.
 </p>
 <p>Often, identical copies of a file are accessible in multiple locations
-      on the Internet over a variety of protocols (FTP, HTTP, and
-      Peer-to-Peer).  In some cases, users are shown a list of these multiple
+      on the Internet over a variety of protocols, such as File Transfer Protocol (FTP), Hypertext Transfer Protocol (HTTP), and
+      Peer-to-Peer (P2P).  In some cases, users are shown a list of these multiple
       download locations (mirror servers) and must manually select one based on
       geographical location, priority, or bandwidth.  This is done to distribute
       the load across multiple servers, and to give human users the opportunity
@@ -703,7 +703,7 @@ The &#34;metalink:file&#34; Element</h3>
 </p>
 <p>All <a class='info' href='#element.url'>metalink:url<span> (</span><span class='info'>The &#34;metalink:url&#34; Element</span><span>)</span></a> elements contained in each <a class='info' href='#element.file'>metalink:file<span> (</span><span class='info'>The &#34;metalink:file&#34; Element</span><span>)</span></a> element SHOULD lead to identical files. That is,
 	  each <a class='info' href='#element.url'>metalink:url<span> (</span><span class='info'>The &#34;metalink:url&#34; Element</span><span>)</span></a> element should be an alternative location for the same file and each 
-	  <a class='info' href='#element.metaurl'>metalink:metaurl<span> (</span><span class='info'>The &#34;metalink:metaurl&#34; Element</span><span>)</span></a> element should provide metadata to retrieve the same file in another way, such as a peer to peer network.
+	  <a class='info' href='#element.metaurl'>metalink:metaurl<span> (</span><span class='info'>The &#34;metalink:metaurl&#34; Element</span><span>)</span></a> element should provide metadata to retrieve the same file in another way, such as a peer to peer network. Refer to <a class='info' href='#element.url'>Section&nbsp;4.2.16<span> (</span><span class='info'>The &#34;metalink:url&#34; Element</span><span>)</span></a> and <a class='info' href='#element.metaurl'>Section&nbsp;4.2.8<span> (</span><span class='info'>The &#34;metalink:metaurl&#34; Element</span><span>)</span></a> for more information.
 
 	    <a name='anchor42'></a><a name='anchor43'></a></p>
 <div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
@@ -823,7 +823,7 @@ The &#34;type&#34; Attribute</h3>
 <p><a class='info' href='#element.pieces'>metalink:pieces<span> (</span><span class='info'>The &#34;metalink:pieces&#34; Element</span><span>)</span></a> elements MUST have a "type" attribute.
 		
 </p>
-<p>The IANA registry named "Hash Function Textual Names" defines values for hash types. See <a class='info' href='#security.hash'>Section&nbsp;7.4<span> (</span><span class='info'>Cryptographic Hashes</span><span>)</span></a> for security implications.
+<p>The Internet Assigned Numbers Authority (IANA) registry named "Hash Function Textual Names" defines values for hash types. See <a class='info' href='#security.hash'>Section&nbsp;7.4<span> (</span><span class='info'>Cryptographic Hashes</span><span>)</span></a> for security implications.
 </p>
 <a name="piece.length"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
@@ -1073,7 +1073,7 @@ The &#34;priority&#34; Attribute</h3>
 The &#34;mediatype&#34; Attribute</h3>
 
 <p><a class='info' href='#element.metaurl'>metalink:metaurl<span> (</span><span class='info'>The &#34;metalink:metaurl&#34; Element</span><span>)</span></a> elements MUST have a "mediatype" attribute that indicates
-	    the MIME media type <a class='info' href='#RFC4288'>[RFC4288]<span> (</span><span class='info'>Freed, N. and J. Klensin, &ldquo;Media Type Specifications and Registration Procedures,&rdquo; December&nbsp;2005.</span><span>)</span></a> of the metadata available at the IRI. In the case of BitTorrent as specified in <a class='info' href='#BITTORRENT'>[BITTORRENT]<span> (</span><span class='info'>Cohen, B., &ldquo;The BitTorrent Protocol Specification,&rdquo; February&nbsp;2008.</span><span>)</span></a>, the value "torrent" is REQUIRED. Types without "/" are reserved. Currently, "torrent" is the only reserved value.
+	    the Multipurpose Internet Mail Extensions (MIME) media type <a class='info' href='#RFC4288'>[RFC4288]<span> (</span><span class='info'>Freed, N. and J. Klensin, &ldquo;Media Type Specifications and Registration Procedures,&rdquo; December&nbsp;2005.</span><span>)</span></a> of the metadata available at the IRI. In the case of BitTorrent as specified in <a class='info' href='#BITTORRENT'>[BITTORRENT]<span> (</span><span class='info'>Cohen, B., &ldquo;The BitTorrent Protocol Specification,&rdquo; February&nbsp;2008.</span><span>)</span></a>, the value "torrent" is REQUIRED. Types without "/" are reserved. Currently, "torrent" is the only reserved value.
 </p>
 <p>Values for this attribute are defined below in ABNF notation <a class='info' href='#RFC5234'>[RFC5234]<span> (</span><span class='info'>Crocker, D., Ed. and P. Overell, &ldquo;Augmented BNF for Syntax Specifications: ABNF,&rdquo; January&nbsp;2008.</span><span>)</span></a>.
 <a name='anchor82'></a><a name='anchor83'></a></p>
