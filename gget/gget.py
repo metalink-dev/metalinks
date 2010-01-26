@@ -20,20 +20,31 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
 
 import sys
-import os.path
+import os
+import imp
+
+os.environ['PATH'] += ";gtk/lib;gtk/bin"
+
+import gget.utils
+
+def runned_from_source():
+    return True
+
+def main_is_frozen():
+    return (hasattr(sys, "frozen") or # new py2exe
+            hasattr(sys, "importers") # old py2exe
+            or imp.is_frozen("__main__")) # tools/freeze
+
+def get_main_dir():
+    if main_is_frozen():
+        return os.path.dirname(sys.executable)
+    return os.path.dirname(sys.argv[0])
+    
+gget.utils.runned_from_source = runned_from_source
+gget.utils.__data_dir = os.path.join(get_main_dir(), "data")
+gget.utils.__images_dir = os.path.join(gget.utils.__data_dir, "images")
 
 PYTHON_DIR = "@PYTHONDIR@"
-
-# Try to determine if we run from source or install and fix path accordingly
-# def _check(path):
-    # return os.path.exists(path) and os.path.isdir(path) and \
-           # os.path.isfile(path + "/AUTHORS")
-
-# name = os.path.join(os.path.dirname(__file__), "..")
-# if _check(name):
-    # sys.path.insert(0, os.path.abspath(name))
-# elif PYTHON_DIR not in sys.path:
-    # sys.path.insert(0, os.path.abspath(PYTHON_DIR))
 
 from gget.application import Application
 

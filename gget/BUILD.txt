@@ -1,11 +1,9 @@
 Depends on:
 
-- GTK+ 2.16.6 All-in-one Bundle - http://www.gtk.org/download-windows.html#StableRelease
 - pygobject 1.4.12-2 - http://www.pygtk.org/downloads.html
 - pycairo 1.4.12-2 - http://www.pygtk.org/downloads.html
 - pygtk 2.12.1-3 - http://www.pygtk.org/downloads.html
 
 Included in source tree:
+- GTK+ 2.16.6 - http://gtk-win.sourceforge.net/home/index.php/en/Downloads
 - libglade 2.6.3 DLL - http://www.gtk-server.org/download.html
-
-Note: You need to add the GTK+ "bin" directory to your path statement.

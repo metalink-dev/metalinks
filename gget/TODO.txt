@@ -1,4 +1,3 @@
-- Write config to a file
 - Implement tray icon
 - Implement start at login option
 - Implement notifications on completed downloads option
