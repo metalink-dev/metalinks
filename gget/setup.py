@@ -147,7 +147,8 @@ elif sys.argv[1] == 'py2exe':
     
     skipdirs = ["build", "dist"]
     
-    temp = rec_search(".ini", False, skipdirs)
+    temp = ["AUTHORS"]
+    temp.extend(rec_search(".ini", False, skipdirs))
     temp.extend(rec_search(".txt", False, skipdirs))
     temp.extend(rec_search(".mo", False, skipdirs))
     temp.extend(rec_search(".qm", False, skipdirs))
