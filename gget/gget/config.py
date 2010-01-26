@@ -25,7 +25,8 @@ from gettext import gettext as _
 
 import gconf
 
-import dialogs
+#import dialogs
+import gtk
 import utils
 
 DIR_GGET       = "/apps/gget"
@@ -153,7 +154,10 @@ class Configuration(object):
                 os.system("gconftool-2 --install-schema-file %s" %
                         os.path.join(utils.get_data_dir(), "gget.schemas"))
             else:
-                ed = dialogs.ErrorDialog(_("Could not find configuration directory in GConf"), _("Please make sure that gget.schemas was correctly installed."))
+                ed = gtk.MessageDialog(type=gtk.MESSAGE_ERROR, buttons=gtk.BUTTONS_OK, message_format=_("Could not find configuration directory in GConf"))
+                ed.format_secondary_text(_("Please make sure that gget.schemas was correctly installed."))
+                ed.set_title(_("Error"))
+                #ed = dialogs.ErrorDialog(_("Could not find configuration directory in GConf"), _("Please make sure that gget.schemas was correctly installed."))
                 ed.run()
                 sys.exit(1)
 
