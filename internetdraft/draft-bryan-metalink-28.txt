@@ -11,7 +11,7 @@ Expires: August 1, 2010
 
 
                 The Metalink Download Description Format
-                        draft-bryan-metalink-27
+                        draft-bryan-metalink-28
 
 Abstract
 
