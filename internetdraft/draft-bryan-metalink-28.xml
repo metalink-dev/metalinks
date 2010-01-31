@@ -1212,9 +1212,9 @@ metalinkVersion =
 	    
 	    <section title="Processing Foreign Markup" anchor="processing.foreign.markup">
 	      
-	      <t>Metalink Processors that encounter foreign markup in a
-	      location that is legal according to this specification
-	      MUST NOT stop processing or signal an error. It might be
+	      <t>Metalink Processors that encounter foreign markup in a location that
+          is legal according to this specification MUST ignore such foreign markup,
+          in particular they MUST NOT stop processing or signal an error. It might be
 	      the case that the Metalink Processor is able to process the
 	      foreign markup correctly and does so. Otherwise, such
 	      markup is termed "unknown foreign markup".</t>
