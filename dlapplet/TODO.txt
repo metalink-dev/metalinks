@@ -1,0 +1,6 @@
+segmented downloads and checksum checking, possible libraries:
+
+- phex
+- jdownloader - too integrated with too many other libraries
+- http://code.google.com/p/metalink/source/browse/#svn/trunk/src/org/heresylabs/metalink
+- org.apache.commons.httpclient
