@@ -1223,10 +1223,6 @@ metalinkVersion =
 	      <xref target="element.file" format="none">metalink:file</xref>, <xref target="element.metalink" format="none">metalink:metalink</xref>, Metalink Processors MAY
 	      bypass the markup and any textual content and MUST NOT change
 	      their behavior as a result of the markup's presence.</t>
-        
-	      <t>When unknown foreign markup is encountered in a Text Construct,
-          software SHOULD treat any text content of foreign elements as
-          though the surrounding foreign markup were not present.</t>
 
 	    </section>
 
