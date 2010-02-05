@@ -1010,7 +1010,7 @@ metalinkPublisher =
 	  <t>The "<xref target="element.signature" format="none">metalink:signature</xref>" element is a Text construct that conveys a
 	  digital signature for a file described in a Metalink Document. Digital signatures verify that a file is from the entity that has signed it.</t>
 	  
-	  <t>Support for digital signatures included in this element is OPTIONAL.
+	  <t>Support for digital signatures included in this element is OPTIONAL. Note that the signing of Metalink Documents is covered in <xref target="security.signatures"/>.
 	  
 	    <figure>
         <iref item="metalinkSignature grammar production" primary="true"/>
@@ -1402,13 +1402,19 @@ structuredExtensionElement =
 	    <t>Publishers are encouraged to offer Metalink documents via authenticated HTTP under TLS (Transport Layer Security) as specified in <xref target="RFC2818"/>. The choice of a secure content layer is entirely possible for content providers.</t>
 		
 		<t>Publishers are also encouraged to include digital signatures of the files within the Metalink Documents, if they are available, as described in <xref target="element.signature"/>.</t>
+		
+		<t>If weak cryptography is used in a Metalink Document, such as legacy or marginal algorithms or key sizes (i.e., MD5 or 512 bit RSA)...</t>
 
-	    <section title="Digital Signatures">
+	    <section title="Digital Signatures" anchor="security.signatures">
      
 	      <t>The root of a Metalink Document (i.e., <xref target="element.metalink" format="none">metalink:metalink</xref>) or any <xref target="element.file" format="none">metalink:file</xref> element MAY have an
 	      Enveloped Signature, as described by <xref target="REC-xmldsig-core">XML-Signature and
 	      Syntax Processing</xref>.</t>
 
+		  <t>Although signing and verifying signatures are both OPTIONAL, an implementation that supports either feature SHOULD implement RSA with a minimum key size of 2048 with SHA-256.</t>
+		  
+		  <t>Metalink Processors that support verifying signatures MUST reject Metalink Documents with invalid signatures.</t>
+	      
 	      <t>Metalink Processors MUST NOT reject a Metalink Document
 	      containing such a signature because they are not capable
 	      of verifying it; they MUST continue processing and MAY
@@ -1445,7 +1451,8 @@ structuredExtensionElement =
 	      authentication code (MAC) authentication is not handled
 	      properly, Metalink Documents SHOULD NOT use MACs for
 	      signatures.</t>
-	      
+	  
+
 	    </section> 
 
 	    <section title="URIs and IRIs">
@@ -2216,6 +2223,13 @@ anyForeignElement =
 
 	    </list></t>
 
+<t>-28 : February xx, 2010.
+	    
+	    <list style="symbols">
+		
+		  <t>Address IESG Comments and Discuss: Tim Polk.</t>
+	   </list></t>
+	   
 <t>-27 : January 28, 2010.
 	    
 	    <list style="symbols">

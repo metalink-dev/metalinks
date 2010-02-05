@@ -123,14 +123,14 @@ Internet-Draft    Metalink Download Description Format      January 2010
      7.2.  URIs and IRIs  . . . . . . . . . . . . . . . . . . . . . . 27
      7.3.  Spoofing . . . . . . . . . . . . . . . . . . . . . . . . . 27
      7.4.  Cryptographic Hashes . . . . . . . . . . . . . . . . . . . 27
-   8.  References . . . . . . . . . . . . . . . . . . . . . . . . . . 27
-     8.1.  Normative References . . . . . . . . . . . . . . . . . . . 27
+   8.  References . . . . . . . . . . . . . . . . . . . . . . . . . . 28
+     8.1.  Normative References . . . . . . . . . . . . . . . . . . . 28
      8.2.  Informative References . . . . . . . . . . . . . . . . . . 29
    Appendix A.  Acknowledgements and Contributors . . . . . . . . . . 30
    Appendix B.  RELAX NG Compact Schema . . . . . . . . . . . . . . . 31
    Appendix C.  Document History (to be removed by RFC Editor
-                before publication) . . . . . . . . . . . . . . . . . 35
-   Index  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 38
+                before publication) . . . . . . . . . . . . . . . . . 36
+   Index  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 39
    Authors' Addresses . . . . . . . . . . . . . . . . . . . . . . . . 41
 
 
@@ -1086,6 +1086,8 @@ Internet-Draft    Metalink Download Description Format      January 2010
    signed it.
 
    Support for digital signatures included in this element is OPTIONAL.
+   Note that the signing of Metalink Documents is covered in
+   Section 7.1.
 
    metalinkSignature =
       element metalink:signature {
@@ -1111,8 +1113,6 @@ Internet-Draft    Metalink Download Description Format      January 2010
    indicates the MIME media type [RFC4288] of the included digital
    signature.
 
-   Values for this attribute are defined below in ABNF notation
-   [RFC5234].
 
 
 
@@ -1120,6 +1120,9 @@ Bryan, et al.             Expires July 5, 2010                 [Page 20]
 
 Internet-Draft    Metalink Download Description Format      January 2010
 
+
+   Values for this attribute are defined below in ABNF notation
+   [RFC5234].
 
    media-type = type-name "/" subtype-name
    type-name = <Defined in section 4.2 of RFC 4288>
@@ -1166,9 +1169,6 @@ Internet-Draft    Metalink Download Description Format      January 2010
    Metalink Processors MUST filter out invalid files obtained from
    "metalink:url" elements by using information in the metalink:size
    element and metalink:hash elements.
-
-
-
 
 
 
@@ -1408,11 +1408,21 @@ Internet-Draft    Metalink Download Description Format      January 2010
    files within the Metalink Documents, if they are available, as
    described in Section 4.2.13.
 
+   If weak cryptography is used in a Metalink Document, such as legacy
+   or marginal algorithms or key sizes (i.e., MD5 or 512 bit RSA)...
+
 7.1.  Digital Signatures
 
    The root of a Metalink Document (i.e., metalink:metalink) or any
    metalink:file element MAY have an Enveloped Signature, as described
    by XML-Signature and Syntax Processing [REC-xmldsig-core].
+
+   Although signing and verifying signatures are both OPTIONAL, an
+   implementation that supports either feature SHOULD implement RSA with
+   a minimum key size of 2048 with SHA-256.
+
+   Metalink Processors that support verifying signatures MUST reject
+   Metalink Documents with invalid signatures.
 
    Metalink Processors MUST NOT reject a Metalink Document containing
    such a signature because they are not capable of verifying it; they
@@ -1439,16 +1449,6 @@ Internet-Draft    Metalink Download Description Format      January 2010
    Section 4.4.2 of [REC-xmldsig-core] requires support for DSA
    signatures and recommends support for RSA signatures.  However,
    because of the much greater popularity in the market of RSA versus
-   DSA, Metalink Processors that verify signed Metalink Documents MUST
-   be able to verify RSA signatures, but do not need be able to verify
-   DSA signatures.  Due to security issues that can arise if the keying
-   material for message authentication code (MAC) authentication is not
-   handled properly, Metalink Documents SHOULD NOT use MACs for
-   signatures.
-
-
-
-
 
 
 
@@ -1456,6 +1456,13 @@ Bryan, et al.             Expires July 5, 2010                 [Page 26]
 
 Internet-Draft    Metalink Download Description Format      January 2010
 
+
+   DSA, Metalink Processors that verify signed Metalink Documents MUST
+   be able to verify RSA signatures, but do not need be able to verify
+   DSA signatures.  Due to security issues that can arise if the keying
+   material for message authentication code (MAC) authentication is not
+   handled properly, Metalink Documents SHOULD NOT use MACs for
+   signatures.
 
 7.2.  URIs and IRIs
 
@@ -1496,6 +1503,16 @@ Internet-Draft    Metalink Download Description Format      January 2010
 
 8.  References
 
+
+
+
+
+
+Bryan, et al.             Expires July 5, 2010                 [Page 27]
+
+Internet-Draft    Metalink Download Description Format      January 2010
+
+
 8.1.  Normative References
 
    [BITTORRENT]
@@ -1505,14 +1522,6 @@ Internet-Draft    Metalink Download Description Format      January 2010
 
    [FIPS-180-3]
               National Institute of Standards and Technology (NIST),
-
-
-
-Bryan, et al.             Expires July 5, 2010                 [Page 27]
-
-Internet-Draft    Metalink Download Description Format      January 2010
-
-
               "Secure Hash Standard (SHS)", FIPS PUB 180-3,
               October 2008.
 
@@ -1552,6 +1561,14 @@ Internet-Draft    Metalink Download Description Format      January 2010
    [REC-xmldsig-core]
               Solo, D., Reagle, J., and D. Eastlake, "XML-Signature
               Syntax and Processing (Second Edition)", W3C REC-xmldsig-
+
+
+
+Bryan, et al.             Expires July 5, 2010                 [Page 28]
+
+Internet-Draft    Metalink Download Description Format      January 2010
+
+
               core-20080610, June 2008,
               <http://www.w3.org/TR/2008/REC-xmldsig-core-20080610/>.
 
@@ -1561,14 +1578,6 @@ Internet-Draft    Metalink Download Description Format      January 2010
    [RFC2818]  Rescorla, E., "HTTP Over TLS", RFC 2818, May 2000.
 
    [RFC3023]  Murata, M., St. Laurent, S., and D. Kohn, "XML Media
-
-
-
-Bryan, et al.             Expires July 5, 2010                 [Page 28]
-
-Internet-Draft    Metalink Download Description Format      January 2010
-
-
               Types", RFC 3023, January 2001.
 
    [RFC3339]  Klyne, G. and C. Newman, "Date and Time on the Internet:
@@ -1609,6 +1618,13 @@ Internet-Draft    Metalink Download Description Format      January 2010
               October 2004,
               <http://www.w3.org/TR/2004/REC-xmlschema-2-20041028/>.
 
+
+
+Bryan, et al.             Expires July 5, 2010                 [Page 29]
+
+Internet-Draft    Metalink Download Description Format      January 2010
+
+
    [RELAX-NG]
               Clark, J., "RELAX NG Compact Syntax", December 2001, <http
               ://www.oasis-open.org/committees/relax-ng/
@@ -1616,14 +1632,6 @@ Internet-Draft    Metalink Download Description Format      January 2010
 
    [RFC3688]  Mealling, M., "The IETF XML Registry", BCP 81, RFC 3688,
               January 2004.
-
-
-
-
-Bryan, et al.             Expires July 5, 2010                 [Page 29]
-
-Internet-Draft    Metalink Download Description Format      January 2010
-
 
    [RFC4287]  Nottingham, M. and R. Sayre, "The Atom Syndication
               Format", RFC 4287, December 2005.
@@ -1665,20 +1673,20 @@ Appendix A.  Acknowledgements and Contributors
    Goulding.  We also thank the Anthony Family, the Bryan Family,
    Juanita Anthony and Zimmy Bryan.
 
-   We also thank the following contributors for assistance and review:
-   Eran Hammer-Lahav, Lisa Dusseault, Mark Nottingham, Peter Saint-
-   Andre, Julian Reschke, Chris Newman, Ian Macfarlane, Dave Cridland,
-   Barry Leiba, Uri Blumenthal, Paul Hoffman, Felix Sasaki, Matthias
-   Fuchs, Mark Baker, Scott Cantor, Brian Carpenter, Alexey Melnikov,
-   Lars Eggert, Pasi Eronen, Tim Polk, and Dan Romascanu.
-
-
 
 
 
 Bryan, et al.             Expires July 5, 2010                 [Page 30]
 
 Internet-Draft    Metalink Download Description Format      January 2010
+
+
+   We also thank the following contributors for assistance and review:
+   Eran Hammer-Lahav, Lisa Dusseault, Mark Nottingham, Peter Saint-
+   Andre, Julian Reschke, Chris Newman, Ian Macfarlane, Dave Cridland,
+   Barry Leiba, Uri Blumenthal, Paul Hoffman, Felix Sasaki, Matthias
+   Fuchs, Mark Baker, Scott Cantor, Brian Carpenter, Alexey Melnikov,
+   Lars Eggert, Pasi Eronen, Tim Polk, and Dan Romascanu.
 
 
 Appendix B.  RELAX NG Compact Schema
@@ -1721,6 +1729,14 @@ Appendix B.  RELAX NG Compact Schema
 
    metalinkMetalink =
       element metalink:metalink {
+
+
+
+Bryan, et al.             Expires July 5, 2010                 [Page 31]
+
+Internet-Draft    Metalink Download Description Format      January 2010
+
+
          metalinkCommonAttributes,
          (metalinkFile+
           & metalinkGenerator?
@@ -1729,13 +1745,6 @@ Appendix B.  RELAX NG Compact Schema
           & metalinkUpdated?
           & extensionElement*)
       }
-
-
-
-Bryan, et al.             Expires July 5, 2010                 [Page 31]
-
-Internet-Draft    Metalink Download Description Format      January 2010
-
 
    metalinkFile =
       element metalink:file {
@@ -1776,6 +1785,14 @@ Internet-Draft    Metalink Download Description Format      January 2010
       }
 
    metalinkGenerator =
+
+
+
+Bryan, et al.             Expires July 5, 2010                 [Page 32]
+
+Internet-Draft    Metalink Download Description Format      January 2010
+
+
       element metalink:generator {
          metalinkTextConstruct
       }
@@ -1785,13 +1802,6 @@ Internet-Draft    Metalink Download Description Format      January 2010
           attribute type { text }?,
           text
         }
-
-
-
-Bryan, et al.             Expires July 5, 2010                 [Page 32]
-
-Internet-Draft    Metalink Download Description Format      January 2010
-
 
    metalinkIdentity =
       element metalink:identity {
@@ -1831,6 +1841,14 @@ Internet-Draft    Metalink Download Description Format      January 2010
          metalinkTextConstruct
       }
 
+
+
+
+Bryan, et al.             Expires July 5, 2010                 [Page 33]
+
+Internet-Draft    Metalink Download Description Format      January 2010
+
+
    metalinkPublished =
       element metalink:published {
          metalinkDateConstruct
@@ -1841,14 +1859,6 @@ Internet-Draft    Metalink Download Description Format      January 2010
          metalinkCommonAttributes,
          attribute name { text },
          attribute url { metalinkUri }?
-
-
-
-Bryan, et al.             Expires July 5, 2010                 [Page 33]
-
-Internet-Draft    Metalink Download Description Format      January 2010
-
-
       }
 
    metalinkSignature =
@@ -1888,6 +1898,13 @@ Internet-Draft    Metalink Download Description Format      January 2010
       pattern = "[A-Za-z]{1,8}(-[A-Za-z0-9]{1,8})*"
    }
 
+
+
+Bryan, et al.             Expires July 5, 2010                 [Page 34]
+
+Internet-Draft    Metalink Download Description Format      January 2010
+
+
    # Unconstrained; it's not entirely clear how IRI fit into
    # xsd:anyURI so let's not try to constrain it here
    metalinkUri = text
@@ -1897,14 +1914,6 @@ Internet-Draft    Metalink Download Description Format      January 2010
    simpleExtensionElement =
       element * - metalink:* {
          text
-
-
-
-Bryan, et al.             Expires July 5, 2010                 [Page 34]
-
-Internet-Draft    Metalink Download Description Format      January 2010
-
-
       }
 
    # Structured Extension
@@ -1944,6 +1953,14 @@ Internet-Draft    Metalink Download Description Format      January 2010
    # EOF
 
 
+
+
+
+Bryan, et al.             Expires July 5, 2010                 [Page 35]
+
+Internet-Draft    Metalink Download Description Format      January 2010
+
+
 Appendix C.  Document History (to be removed by RFC Editor before
              publication)
 
@@ -1954,17 +1971,13 @@ Appendix C.  Document History (to be removed by RFC Editor before
    in Subversion at
    http://metalinks.svn.sourceforge.net/viewvc/metalinks/internetdraft/
 
-
-
-Bryan, et al.             Expires July 5, 2010                 [Page 35]
-
-Internet-Draft    Metalink Download Description Format      January 2010
-
-
    Known issues concerning this draft:
    o  Digital signatures, metalink:signature element, metalink:os
       element / using IANA "Operating System Names" registry.
    o  Waiting on: MIME type review.
+
+   -28 : February xx, 2010.
+   o  Address IESG Comments and Discuss: Tim Polk.
 
    -27 : January 28, 2010.
    o  Address IESG Comments and Discuss: Pasi Eronen and Dan Romascanu.
@@ -1994,6 +2007,16 @@ Internet-Draft    Metalink Download Description Format      January 2010
    o  Clarifications.
 
    -21 : October 13, 2009.
+
+
+
+
+
+Bryan, et al.             Expires July 5, 2010                 [Page 36]
+
+Internet-Draft    Metalink Download Description Format      January 2010
+
+
    o  Update author details.
 
    -20 : October 12, 2009.
@@ -2008,15 +2031,6 @@ Internet-Draft    Metalink Download Description Format      January 2010
       elements, add size element to example.
 
    -17 : September 28, 2009.
-
-
-
-
-Bryan, et al.             Expires July 5, 2010                 [Page 36]
-
-Internet-Draft    Metalink Download Description Format      January 2010
-
-
    o  Typo correction.
 
    -16 : August 31, 2009.
@@ -2051,6 +2065,14 @@ Internet-Draft    Metalink Download Description Format      January 2010
    o  Update REC-xmldsig-core reference to second edition.
 
    -09 : July 11, 2009.
+
+
+
+Bryan, et al.             Expires July 5, 2010                 [Page 37]
+
+Internet-Draft    Metalink Download Description Format      January 2010
+
+
    o  Replace ISO639-2 references with RFC 4646.
    o  Add ISO3166-1.
 
@@ -2064,15 +2086,6 @@ Internet-Draft    Metalink Download Description Format      January 2010
    o  Expand "Known issues" section of Document History.
 
    -06 : March 3, 2009.
-
-
-
-
-Bryan, et al.             Expires July 5, 2010                 [Page 37]
-
-Internet-Draft    Metalink Download Description Format      January 2010
-
-
    o  Add authors and this Document History section.
 
    -05 : January 13, 2009.
@@ -2107,6 +2120,15 @@ Internet-Draft    Metalink Download Description Format      January 2010
       3.0 specification.
 
 
+
+
+
+
+Bryan, et al.             Expires July 5, 2010                 [Page 38]
+
+Internet-Draft    Metalink Download Description Format      January 2010
+
+
 Index
 
    A
@@ -2120,14 +2142,6 @@ Index
 
    D
       description XML element  14
-
-
-
-
-Bryan, et al.             Expires July 5, 2010                 [Page 38]
-
-Internet-Draft    Metalink Download Description Format      January 2010
-
 
    F
       file XML element  11
@@ -2163,6 +2177,14 @@ Internet-Draft    Metalink Download Description Format      January 2010
    H
       hash XML element  15
 
+
+
+
+Bryan, et al.             Expires July 5, 2010                 [Page 39]
+
+Internet-Draft    Metalink Download Description Format      January 2010
+
+
    I
       identity XML element  16
 
@@ -2177,14 +2199,6 @@ Internet-Draft    Metalink Download Description Format      January 2010
       metadata XML element  17
       metalink XML element  10
       metalinkCommonAttributes grammar production  8
-
-
-
-Bryan, et al.             Expires July 5, 2010                 [Page 39]
-
-Internet-Draft    Metalink Download Description Format      January 2010
-
-
       metalinkCopyright grammar production  14
       metalinkDateConstruct grammar production  9
       metalinkDescription grammar production  14
@@ -2219,6 +2233,14 @@ Internet-Draft    Metalink Download Description Format      January 2010
 
    S
       signature XML element  20
+
+
+
+Bryan, et al.             Expires July 5, 2010                 [Page 40]
+
+Internet-Draft    Metalink Download Description Format      January 2010
+
+
       simpleExtensionElement grammar production  23
       size XML element  21
       structuredExtensionElement grammar production  24
@@ -2233,14 +2255,6 @@ Internet-Draft    Metalink Download Description Format      January 2010
    X
       XML Elements
          copyright  14
-
-
-
-Bryan, et al.             Expires July 5, 2010                 [Page 40]
-
-Internet-Draft    Metalink Download Description Format      January 2010
-
-
          description  14
          entry  11
          generator  14
@@ -2272,6 +2286,17 @@ Authors' Addresses
    URI:   http://www.metalinker.org
 
 
+
+
+
+
+
+
+Bryan, et al.             Expires July 5, 2010                 [Page 41]
+
+Internet-Draft    Metalink Download Description Format      January 2010
+
+
    Tatsuhiro Tsujikawa
 
    Email: tatsuhiro.t@gmail.com
@@ -2284,36 +2309,11 @@ Authors' Addresses
    URI:   http://www.nabber.org
 
 
-
-
-
-
-
-
-
-
-Bryan, et al.             Expires July 5, 2010                 [Page 41]
-
-Internet-Draft    Metalink Download Description Format      January 2010
-
-
    Peter Poeml
    Novell, Inc.
 
    Email: poeml@mirrorbrain.org
    URI:   http://www.mirrorbrain.org/
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
