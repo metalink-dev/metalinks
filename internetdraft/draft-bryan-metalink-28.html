@@ -144,10 +144,10 @@
 <tr><td class="header">Network Working Group</td><td class="header">A. Bryan</td></tr>
 <tr><td class="header">Internet-Draft</td><td class="header">T. Tsujikawa</td></tr>
 <tr><td class="header">Intended status: Standards Track</td><td class="header">N. McNab</td></tr>
-<tr><td class="header">Expires: July 5, 2010</td><td class="header">&nbsp;</td></tr>
+<tr><td class="header">Expires: August 9, 2010</td><td class="header">&nbsp;</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">P. Poeml</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">Novell, Inc.</td></tr>
-<tr><td class="header">&nbsp;</td><td class="header">January 2010</td></tr>
+<tr><td class="header">&nbsp;</td><td class="header">February 5, 2010</td></tr>
 </table></td></tr></table>
 <h1><br />The Metalink Download Description Format<br />draft-bryan-metalink-28</h1>
 
@@ -180,7 +180,7 @@ The list of current Internet-Drafts can be accessed at
 The list of Internet-Draft Shadow Directories can be accessed at
 <a href='http://www.ietf.org/shadow.html'>http://www.ietf.org/shadow.html</a>.</p>
 <p>
-This Internet-Draft will expire on July 5, 2010.</p>
+This Internet-Draft will expire on August 9, 2010.</p>
 
 <h3>Copyright Notice</h3>
 <p>
@@ -2022,8 +2022,6 @@ Document History (to be removed by RFC Editor before publication)</h3>
 <p>Known issues concerning this draft:
 	    </p>
 <ul class="text">
-<li>Digital signatures, metalink:signature element, metalink:os element / using IANA "Operating System Names" registry.
-</li>
 <li>Waiting on: MIME type review.
 </li>
 </ul>
@@ -2072,7 +2070,7 @@ Document History (to be removed by RFC Editor before publication)</h3>
 	    
 	    </p>
 <ul class="text">
-<li>Document Shepherd review changes.
+<li>Eran Hammer-Lahav, Document Shepherd review changes.
 </li>
 <li>Example XML indentation.
 </li>
@@ -2084,7 +2082,7 @@ Document History (to be removed by RFC Editor before publication)</h3>
 	    
 	    </p>
 <ul class="text">
-<li>Apps Area AD review changes, Change RFC3688 from Normative to Informative Reference.
+<li>Lisa Dusseault, Apps Area AD review changes, Change RFC3688 from Normative to Informative Reference.
 </li>
 <li>Schema: integer changed to positiveInteger or nonNegativeInteger where fitting.
 </li>
@@ -2315,8 +2313,9 @@ Document History (to be removed by RFC Editor before publication)</h3>
 <table>
 <tr><td><strong>A</strong></td><td>&nbsp;</td></tr>
 <tr><td>&nbsp;</td><td>ABNF</td></tr>
-<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<b>mediatype</b>  <a href="#anchor82">1</a>, <a href="#anchor104">2</a></td></tr>
 <tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor60"><b>metalinkGenerator</b></a></td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor82"><b>metaurl mediatype</b></a></td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor104"><b>signature mediatype</b></a></td></tr>
 <tr><td>&nbsp;</td><td><a href="#anchor126"><b>application/metalink4+xml Media Type</b></a></td></tr>
 <tr><td><strong>C</strong></td><td>&nbsp;</td></tr>
 <tr><td>&nbsp;</td><td><a href="#anchor48"><b>copyright XML element</b></a></td></tr>
@@ -2338,6 +2337,7 @@ Document History (to be removed by RFC Editor before publication)</h3>
 <tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor72"><b>metalinkLanguage</b></a></td></tr>
 <tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor76"><b>metalinkLogo</b></a></td></tr>
 <tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor38"><b>metalinkMetalink</b></a></td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor80"><b>metalinkMetaURL</b></a></td></tr>
 <tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor86"><b>metalinkOrigin</b></a></td></tr>
 <tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor90"><b>metalinkOS</b></a></td></tr>
 <tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor46"><b>metalinkPieces</b></a></td></tr>
@@ -2347,7 +2347,7 @@ Document History (to be removed by RFC Editor before publication)</h3>
 <tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor108"><b>metalinkSize</b></a></td></tr>
 <tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor32"><b>metalinkTextConstruct</b></a></td></tr>
 <tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor112"><b>metalinkUpdated</b></a></td></tr>
-<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<b>metalinkURL</b>  <a href="#anchor80">1</a>, <a href="#anchor116">2</a></td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor116"><b>metalinkURL</b></a></td></tr>
 <tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor120"><b>metalinkVersion</b></a></td></tr>
 <tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor122"><b>simpleExtensionElement</b></a></td></tr>
 <tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor124"><b>structuredExtensionElement</b></a></td></tr>
@@ -2361,8 +2361,6 @@ Document History (to be removed by RFC Editor before publication)</h3>
 <tr><td><strong>M</strong></td><td>&nbsp;</td></tr>
 <tr><td>&nbsp;</td><td>Media Type</td></tr>
 <tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor125"><b>application/metalink4+xml</b></a></td></tr>
-<tr><td>&nbsp;</td><td><b>mediatype ABNF</b>  <a href="#anchor81">1</a>, <a href="#anchor103">2</a></td></tr>
-<tr><td>&nbsp;</td><td><a href="#anchor78"><b>metadata XML element</b></a></td></tr>
 <tr><td>&nbsp;</td><td><a href="#anchor36"><b>metalink XML element</b></a></td></tr>
 <tr><td>&nbsp;</td><td><a href="#anchor29"><b>metalinkCommonAttributes grammar production</b></a></td></tr>
 <tr><td>&nbsp;</td><td><a href="#anchor49"><b>metalinkCopyright grammar production</b></a></td></tr>
@@ -2376,6 +2374,7 @@ Document History (to be removed by RFC Editor before publication)</h3>
 <tr><td>&nbsp;</td><td><a href="#anchor71"><b>metalinkLanguage grammar production</b></a></td></tr>
 <tr><td>&nbsp;</td><td><a href="#anchor75"><b>metalinkLogo grammar production</b></a></td></tr>
 <tr><td>&nbsp;</td><td><a href="#anchor37"><b>metalinkMetalink grammar production</b></a></td></tr>
+<tr><td>&nbsp;</td><td><a href="#anchor79"><b>metalinkMetaURL grammar production</b></a></td></tr>
 <tr><td>&nbsp;</td><td><a href="#anchor85"><b>metalinkOrigin grammar production</b></a></td></tr>
 <tr><td>&nbsp;</td><td><a href="#anchor89"><b>metalinkOS grammar production</b></a></td></tr>
 <tr><td>&nbsp;</td><td><a href="#anchor45"><b>metalinkPieces grammar production</b></a></td></tr>
@@ -2385,8 +2384,10 @@ Document History (to be removed by RFC Editor before publication)</h3>
 <tr><td>&nbsp;</td><td><a href="#anchor107"><b>metalinkSize grammar production</b></a></td></tr>
 <tr><td>&nbsp;</td><td><a href="#anchor31"><b>metalinkTextConstruct grammar production</b></a></td></tr>
 <tr><td>&nbsp;</td><td><a href="#anchor111"><b>metalinkUpdated grammar production</b></a></td></tr>
-<tr><td>&nbsp;</td><td><b>metalinkURL grammar production</b>  <a href="#anchor79">1</a>, <a href="#anchor115">2</a></td></tr>
+<tr><td>&nbsp;</td><td><a href="#anchor115"><b>metalinkURL grammar production</b></a></td></tr>
 <tr><td>&nbsp;</td><td><a href="#anchor119"><b>metalinkVersion grammar production</b></a></td></tr>
+<tr><td>&nbsp;</td><td><a href="#anchor81"><b>metaurl mediatype ABNF</b></a></td></tr>
+<tr><td>&nbsp;</td><td><a href="#anchor78"><b>metaurl XML element</b></a></td></tr>
 <tr><td><strong>O</strong></td><td>&nbsp;</td></tr>
 <tr><td>&nbsp;</td><td><a href="#anchor84"><b>origin XML element</b></a></td></tr>
 <tr><td>&nbsp;</td><td><a href="#anchor88"><b>os XML element</b></a></td></tr>
@@ -2395,6 +2396,7 @@ Document History (to be removed by RFC Editor before publication)</h3>
 <tr><td>&nbsp;</td><td><a href="#anchor92"><b>published XML element</b></a></td></tr>
 <tr><td>&nbsp;</td><td><a href="#anchor96"><b>publisher XML element</b></a></td></tr>
 <tr><td><strong>S</strong></td><td>&nbsp;</td></tr>
+<tr><td>&nbsp;</td><td><a href="#anchor103"><b>signature mediatype ABNF</b></a></td></tr>
 <tr><td>&nbsp;</td><td><a href="#anchor100"><b>signature XML element</b></a></td></tr>
 <tr><td>&nbsp;</td><td><a href="#anchor121"><b>simpleExtensionElement grammar production</b></a></td></tr>
 <tr><td>&nbsp;</td><td><a href="#anchor106"><b>size XML element</b></a></td></tr>
@@ -2408,14 +2410,14 @@ Document History (to be removed by RFC Editor before publication)</h3>
 <tr><td>&nbsp;</td><td>XML Elements</td></tr>
 <tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor47"><b>copyright</b></a></td></tr>
 <tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor51"><b>description</b></a></td></tr>
-<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor39"><b>entry</b></a></td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor39"><b>file</b></a></td></tr>
 <tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor55"><b>generator</b></a></td></tr>
 <tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor61"><b>hash</b></a></td></tr>
 <tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor65"><b>identity</b></a></td></tr>
 <tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor69"><b>language</b></a></td></tr>
 <tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor73"><b>logo</b></a></td></tr>
-<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor77"><b>metadata</b></a></td></tr>
 <tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor35"><b>metalink</b></a></td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor77"><b>metaurl</b></a></td></tr>
 <tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor83"><b>origin</b></a></td></tr>
 <tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor87"><b>os</b></a></td></tr>
 <tr><td>&nbsp;</td><td>&nbsp;&nbsp;<a href="#anchor43"><b>pieces</b></a></td></tr>
