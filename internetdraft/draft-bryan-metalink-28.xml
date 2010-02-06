@@ -63,7 +63,7 @@
   <middle>
     <section title="Introduction">
 
-      <t>Metalink is an XML-based document format that describes a file or list
+      <t>Metalink is a document format based on Extensible Markup Language (XML) that describes a file or list
       of files to be downloaded from a server. Metalinks can list a number of
       files, each with an extensible set of attached metadata. 
       Each listed file can have a description, checksum, and a list of URIs (Uniform Resource Identifiers) that it is 
