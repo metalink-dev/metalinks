@@ -1384,7 +1384,7 @@ Internet-Draft    Metalink Download Description Format      January 2010
    Because Metalink is an XML-based format, existing XML security
    mechanisms can be used to secure its content.
 
-   Producers of Metalink Documents may have sound reasons for signing
+   Publishers of Metalink Documents may have sound reasons for signing
    otherwise-unprotected content.  For example, a merchant might
    digitally sign a Metalink that lists a file download to verify its
    origin.  Other merchants may wish to sign and encrypt Metalink
@@ -1408,11 +1408,11 @@ Internet-Draft    Metalink Download Description Format      January 2010
    files within the Metalink Documents, if they are available, as
    described in Section 4.2.13.
 
-   Normally, a content creator is in the best position to know how
-   strong the protective signing ought to be on their content.  Thus, a
-   content creator can choose weak or strong cryptography, and a content
-   consumer would normally accept that.  There MAY be applications where
-   the content consumer chooses to reject weak cryptography, but that is
+   Normally, a publisher is in the best position to know how strong the
+   protective signing ought to be on their content.  Thus, a publisher
+   can choose weak or strong cryptography, and a Metalink Processor
+   would normally accept that.  There MAY be applications where the
+   Metalink Processor chooses to reject weak cryptography, but that is
    not envisioned as the common use case.
 
 7.1.  Digital Signatures

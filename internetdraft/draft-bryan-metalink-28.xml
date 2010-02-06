@@ -1395,7 +1395,7 @@ structuredExtensionElement =
 	    mechanisms can be used to secure its content.</t>
 
 	    
-	    <t>Producers of Metalink Documents may have sound reasons for signing
+	    <t>Publishers of Metalink Documents may have sound reasons for signing
 	    otherwise-unprotected content. For example, a merchant
 	    might digitally sign a Metalink that lists a file download to verify its origin. Other merchants may wish to sign and encrypt Metalink Documents that list digital songs that have been purchased. Of course,
 	    many other examples are conceivable as well.</t>
@@ -1403,7 +1403,7 @@ structuredExtensionElement =
 		
 		<t>Publishers are also encouraged to include digital signatures of the files within the Metalink Documents, if they are available, as described in <xref target="element.signature"/>.</t>
 		
-		<t>Normally, a content creator is in the best position to know how strong the protective signing ought to be on their content. Thus, a content creator can choose weak or strong cryptography, and a content consumer would normally accept that.  There MAY be applications where the content consumer chooses to reject weak cryptography, but that is not envisioned as the common use case.</t>
+		<t>Normally, a publisher is in the best position to know how strong the protective signing ought to be on their content. Thus, a publisher can choose weak or strong cryptography, and a Metalink Processor would normally accept that.  There MAY be applications where the Metalink Processor chooses to reject weak cryptography, but that is not envisioned as the common use case.</t>
 
 	    <section title="Digital Signatures" anchor="security.signatures">
      
