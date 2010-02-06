@@ -66,7 +66,7 @@
       <t>Metalink is a document format based on Extensible Markup Language (XML) that describes a file or list
       of files to be downloaded from a server. Metalinks can list a number of
       files, each with an extensible set of attached metadata. 
-      Each listed file can have a description, multiple different cryptographic hashes, and a list of URIs (Uniform Resource Identifiers) that it is 
+      Each listed file can have a description, multiple cryptographic hashes, and a list of URIs (Uniform Resource Identifiers) that it is 
       available from.</t>
 
       <t>Often, identical copies of a file are accessible in multiple locations
@@ -89,7 +89,7 @@
       <t>Knowledge about availability of a download on mirror servers can be
       acquired and maintained by the operators of the origin server, or by a third
       party.  This knowledge, together with cryptographic hashes,
-      digital signatures, and more can be stored in a machine-readable Metalink
+      digital signatures, and more, can be stored in a machine-readable Metalink
       file.  The Metalink file can transfer this knowledge to the user agent,
       which can peruse it in automatic ways or present the information to a human user. 
       User agents can fall back to alternate
