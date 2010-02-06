@@ -171,11 +171,12 @@ Internet-Draft    Metalink Download Description Format      January 2010
 
 1.  Introduction
 
-   Metalink is an XML-based document format that describes a file or
-   list of files to be downloaded from a server.  Metalinks can list a
-   number of files, each with an extensible set of attached metadata.
-   Each listed file can have a description, checksum, and a list of URIs
-   (Uniform Resource Identifiers) that it is available from.
+   Metalink is a document format based on Extensible Markup Language
+   (XML) that describes a file or list of files to be downloaded from a
+   server.  Metalinks can list a number of files, each with an
+   extensible set of attached metadata.  Each listed file can have a
+   description, checksum, and a list of URIs (Uniform Resource
+   Identifiers) that it is available from.
 
    Often, identical copies of a file are accessible in multiple
    locations on the Internet over a variety of protocols, such as File
@@ -216,7 +217,6 @@ Internet-Draft    Metalink Download Description Format      January 2010
    mirrors (and optionally, Peer-to-Peer) simultaneously, which
    frequently results in a faster download.  Metalinks can leverage
    HTTP, FTP and Peer-to-Peer protocols together, because regardless
-   over which protocol the Metalink was obtained, it can make a resource
 
 
 
@@ -225,6 +225,7 @@ Bryan, et al.             Expires July 5, 2010                  [Page 4]
 Internet-Draft    Metalink Download Description Format      January 2010
 
 
+   over which protocol the Metalink was obtained, it can make a resource
    accessible through other protocols.  If the Metalink was obtained
    from a trusted source, included verification metadata can solve trust
    issues when downloading files from replica servers operated by third
@@ -251,7 +252,6 @@ Internet-Draft    Metalink Download Description Format      January 2010
        http://example.com/example.ext.torrent</metaurl>
      </file>
    </metalink>
-
 
 
 
