@@ -155,7 +155,7 @@
 
 <p>This document specifies Metalink, an XML-based download description
 		format. Metalink describes download locations
-		(mirrors), checksums, and other information. Clients can
+		(mirrors), cryptographic hashes, and other information. Clients can
 		transparently use this information to reliably transfer
 		files.
 </p>
@@ -318,7 +318,7 @@ Introduction</h3>
 <p>Metalink is a document format based on Extensible Markup Language (XML) that describes a file or list
       of files to be downloaded from a server. Metalinks can list a number of
       files, each with an extensible set of attached metadata. 
-      Each listed file can have a description, checksum, and a list of URIs (Uniform Resource Identifiers) that it is 
+      Each listed file can have a description, multiple different cryptographic hashes, and a list of URIs (Uniform Resource Identifiers) that it is 
       available from.
 </p>
 <p>Often, identical copies of a file are accessible in multiple locations
@@ -340,7 +340,7 @@ Introduction</h3>
 </p>
 <p>Knowledge about availability of a download on mirror servers can be
       acquired and maintained by the operators of the origin server, or by a third
-      party.  This knowledge, together with checksums,
+      party.  This knowledge, together with cryptographic hashes,
       digital signatures, and more can be stored in a machine-readable Metalink
       file.  The Metalink file can transfer this knowledge to the user agent,
       which can peruse it in automatic ways or present the information to a human user. 
@@ -801,8 +801,8 @@ The &#34;name&#34; Attribute</h3>
 <a name="rfc.section.4.1.3"></a><h3>4.1.3.&nbsp;
 The &#34;metalink:pieces&#34; Element</h3>
 <a name='anchor43'></a><a name='anchor44'></a>
-<p>The "<a class='info' href='#element.pieces'>metalink:pieces<span> (</span><span class='info'>The &#34;metalink:pieces&#34; Element</span><span>)</span></a>" element acts as a container for a list of checksums of
-non-overlapping pieces of the file. The checksums MUST be listed in the same order as the corresponding pieces appear in the file, starting at
+<p>The "<a class='info' href='#element.pieces'>metalink:pieces<span> (</span><span class='info'>The &#34;metalink:pieces&#34; Element</span><span>)</span></a>" element acts as a container for a list of cryptographic hashes of
+non-overlapping pieces of the file. The cryptographic hashes MUST be listed in the same order as the corresponding pieces appear in the file, starting at
       the beginning of the file. 
 	  
 	    <a name='anchor45'></a><a name='anchor46'></a></p>

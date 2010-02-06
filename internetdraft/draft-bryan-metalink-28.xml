@@ -53,7 +53,7 @@
       <abstract>
 	<t>This document specifies Metalink, an XML-based download description
 		format. Metalink describes download locations
-		(mirrors), checksums, and other information. Clients can
+		(mirrors), cryptographic hashes, and other information. Clients can
 		transparently use this information to reliably transfer
 		files.</t>
       </abstract>    
@@ -66,7 +66,7 @@
       <t>Metalink is a document format based on Extensible Markup Language (XML) that describes a file or list
       of files to be downloaded from a server. Metalinks can list a number of
       files, each with an extensible set of attached metadata. 
-      Each listed file can have a description, checksum, and a list of URIs (Uniform Resource Identifiers) that it is 
+      Each listed file can have a description, multiple different cryptographic hashes, and a list of URIs (Uniform Resource Identifiers) that it is 
       available from.</t>
 
       <t>Often, identical copies of a file are accessible in multiple locations
@@ -88,7 +88,7 @@
 
       <t>Knowledge about availability of a download on mirror servers can be
       acquired and maintained by the operators of the origin server, or by a third
-      party.  This knowledge, together with checksums,
+      party.  This knowledge, together with cryptographic hashes,
       digital signatures, and more can be stored in a machine-readable Metalink
       file.  The Metalink file can transfer this knowledge to the user agent,
       which can peruse it in automatic ways or present the information to a human user. 
@@ -562,8 +562,8 @@ metalinkFile =
     <iref item="XML Elements" subitem="pieces" primary="true"/>
     <iref item="pieces XML element" primary="true"/> 
 	      
-	  <t>The "<xref target="element.pieces" format="none">metalink:pieces</xref>" element acts as a container for a list of checksums of
-non-overlapping pieces of the file. The checksums MUST be listed in the same order as the corresponding pieces appear in the file, starting at
+	  <t>The "<xref target="element.pieces" format="none">metalink:pieces</xref>" element acts as a container for a list of cryptographic hashes of
+non-overlapping pieces of the file. The cryptographic hashes MUST be listed in the same order as the corresponding pieces appear in the file, starting at
       the beginning of the file. 
 	  
 	    <figure>

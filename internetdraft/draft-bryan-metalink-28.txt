@@ -16,9 +16,9 @@ Expires: July 5, 2010
 Abstract
 
    This document specifies Metalink, an XML-based download description
-   format.  Metalink describes download locations (mirrors), checksums,
-   and other information.  Clients can transparently use this
-   information to reliably transfer files.
+   format.  Metalink describes download locations (mirrors),
+   cryptographic hashes, and other information.  Clients can
+   transparently use this information to reliably transfer files.
 
 Status of this Memo
 
@@ -175,8 +175,8 @@ Internet-Draft    Metalink Download Description Format      January 2010
    (XML) that describes a file or list of files to be downloaded from a
    server.  Metalinks can list a number of files, each with an
    extensible set of attached metadata.  Each listed file can have a
-   description, checksum, and a list of URIs (Uniform Resource
-   Identifiers) that it is available from.
+   description, multiple different cryptographic hashes, and a list of
+   URIs (Uniform Resource Identifiers) that it is available from.
 
    Often, identical copies of a file are accessible in multiple
    locations on the Internet over a variety of protocols, such as File
@@ -199,10 +199,10 @@ Internet-Draft    Metalink Download Description Format      January 2010
 
    Knowledge about availability of a download on mirror servers can be
    acquired and maintained by the operators of the origin server, or by
-   a third party.  This knowledge, together with checksums, digital
-   signatures, and more can be stored in a machine-readable Metalink
-   file.  The Metalink file can transfer this knowledge to the user
-   agent, which can peruse it in automatic ways or present the
+   a third party.  This knowledge, together with cryptographic hashes,
+   digital signatures, and more can be stored in a machine-readable
+   Metalink file.  The Metalink file can transfer this knowledge to the
+   user agent, which can peruse it in automatic ways or present the
    information to a human user.  User agents can fall back to alternate
    mirrors if the current one has an issue.  Thereby, clients are
    enabled to work their way to a successful download even under adverse
@@ -687,9 +687,10 @@ Internet-Draft    Metalink Download Description Format      January 2010
 4.1.3.  The "metalink:pieces" Element
 
    The "metalink:pieces" element acts as a container for a list of
-   checksums of non-overlapping pieces of the file.  The checksums MUST
-   be listed in the same order as the corresponding pieces appear in the
-   file, starting at the beginning of the file.
+   cryptographic hashes of non-overlapping pieces of the file.  The
+   cryptographic hashes MUST be listed in the same order as the
+   corresponding pieces appear in the file, starting at the beginning of
+   the file.
 
    metalinkPieces =
       element metalink:pieces {
@@ -717,7 +718,6 @@ Internet-Draft    Metalink Download Description Format      January 2010
    therefore be shorter than the other pieces.
 
 4.2.  Metadata Elements
-
 
 
 
