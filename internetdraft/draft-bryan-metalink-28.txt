@@ -4,10 +4,10 @@
 Network Working Group                                           A. Bryan
 Internet-Draft                                              T. Tsujikawa
 Intended status: Standards Track                                N. McNab
-Expires: July 5, 2010
+Expires: August 9, 2010
                                                                 P. Poeml
                                                             Novell, Inc.
-                                                            January 2010
+                                                        February 5, 2010
 
 
                 The Metalink Download Description Format
@@ -41,7 +41,7 @@ Status of this Memo
    The list of Internet-Draft Shadow Directories can be accessed at
    http://www.ietf.org/shadow.html.
 
-   This Internet-Draft will expire on July 5, 2010.
+   This Internet-Draft will expire on August 9, 2010.
 
 Copyright Notice
 
@@ -52,9 +52,9 @@ Copyright Notice
 
 
 
-Bryan, et al.             Expires July 5, 2010                  [Page 1]
+Bryan, et al.            Expires August 9, 2010                 [Page 1]
 
-Internet-Draft    Metalink Download Description Format      January 2010
+Internet-Draft    Metalink Download Description Format     February 2010
 
 
    Provisions Relating to IETF Documents
@@ -108,9 +108,9 @@ Table of Contents
 
 
 
-Bryan, et al.             Expires July 5, 2010                  [Page 2]
+Bryan, et al.            Expires August 9, 2010                 [Page 2]
 
-Internet-Draft    Metalink Download Description Format      January 2010
+Internet-Draft    Metalink Download Description Format     February 2010
 
 
        5.4.1.  Simple Extension Elements  . . . . . . . . . . . . . . 23
@@ -130,7 +130,7 @@ Internet-Draft    Metalink Download Description Format      January 2010
    Appendix B.  RELAX NG Compact Schema . . . . . . . . . . . . . . . 31
    Appendix C.  Document History (to be removed by RFC Editor
                 before publication) . . . . . . . . . . . . . . . . . 36
-   Index  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 39
+   Index  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 38
    Authors' Addresses . . . . . . . . . . . . . . . . . . . . . . . . 41
 
 
@@ -164,9 +164,9 @@ Internet-Draft    Metalink Download Description Format      January 2010
 
 
 
-Bryan, et al.             Expires July 5, 2010                  [Page 3]
+Bryan, et al.            Expires August 9, 2010                 [Page 3]
 
-Internet-Draft    Metalink Download Description Format      January 2010
+Internet-Draft    Metalink Download Description Format     February 2010
 
 
 1.  Introduction
@@ -220,9 +220,9 @@ Internet-Draft    Metalink Download Description Format      January 2010
 
 
 
-Bryan, et al.             Expires July 5, 2010                  [Page 4]
+Bryan, et al.            Expires August 9, 2010                 [Page 4]
 
-Internet-Draft    Metalink Download Description Format      January 2010
+Internet-Draft    Metalink Download Description Format     February 2010
 
 
    over which protocol the Metalink was obtained, it can make a resource
@@ -276,9 +276,9 @@ Internet-Draft    Metalink Download Description Format      January 2010
 
 
 
-Bryan, et al.             Expires July 5, 2010                  [Page 5]
+Bryan, et al.            Expires August 9, 2010                 [Page 5]
 
-Internet-Draft    Metalink Download Description Format      January 2010
+Internet-Draft    Metalink Download Description Format     February 2010
 
 
    A more extensive, Metalink Document that describes two files:
@@ -332,9 +332,9 @@ Internet-Draft    Metalink Download Description Format      January 2010
 
 
 
-Bryan, et al.             Expires July 5, 2010                  [Page 6]
+Bryan, et al.            Expires August 9, 2010                 [Page 6]
 
-Internet-Draft    Metalink Download Description Format      January 2010
+Internet-Draft    Metalink Download Description Format     February 2010
 
 
    urn:ietf:params:xml:ns:metalink
@@ -388,9 +388,9 @@ Internet-Draft    Metalink Download Description Format      January 2010
 
 
 
-Bryan, et al.             Expires July 5, 2010                  [Page 7]
+Bryan, et al.            Expires August 9, 2010                 [Page 7]
 
-Internet-Draft    Metalink Download Description Format      January 2010
+Internet-Draft    Metalink Download Description Format     February 2010
 
 
    Metalink Documents MUST be well-formed XML.  This specification does
@@ -444,9 +444,9 @@ Internet-Draft    Metalink Download Description Format      January 2010
 
 
 
-Bryan, et al.             Expires July 5, 2010                  [Page 8]
+Bryan, et al.            Expires August 9, 2010                 [Page 8]
 
-Internet-Draft    Metalink Download Description Format      January 2010
+Internet-Draft    Metalink Download Description Format     February 2010
 
 
 3.1.  Text Constructs
@@ -500,9 +500,9 @@ Internet-Draft    Metalink Download Description Format      January 2010
 
 
 
-Bryan, et al.             Expires July 5, 2010                  [Page 9]
+Bryan, et al.            Expires August 9, 2010                 [Page 9]
 
-Internet-Draft    Metalink Download Description Format      January 2010
+Internet-Draft    Metalink Download Description Format     February 2010
 
 
    ...
@@ -556,9 +556,9 @@ Internet-Draft    Metalink Download Description Format      January 2010
 
 
 
-Bryan, et al.             Expires July 5, 2010                 [Page 10]
+Bryan, et al.            Expires August 9, 2010                [Page 10]
 
-Internet-Draft    Metalink Download Description Format      January 2010
+Internet-Draft    Metalink Download Description Format     February 2010
 
 
 4.1.1.1.  Providing Textual Content
@@ -612,9 +612,9 @@ Internet-Draft    Metalink Download Description Format      January 2010
 
 
 
-Bryan, et al.             Expires July 5, 2010                 [Page 11]
+Bryan, et al.            Expires August 9, 2010                [Page 11]
 
-Internet-Draft    Metalink Download Description Format      January 2010
+Internet-Draft    Metalink Download Description Format     February 2010
 
 
       }
@@ -668,9 +668,9 @@ Internet-Draft    Metalink Download Description Format      January 2010
 
 
 
-Bryan, et al.             Expires July 5, 2010                 [Page 12]
+Bryan, et al.            Expires August 9, 2010                [Page 12]
 
-Internet-Draft    Metalink Download Description Format      January 2010
+Internet-Draft    Metalink Download Description Format     February 2010
 
 
    Directory information can also be contained in a "path/file" format
@@ -724,9 +724,9 @@ Internet-Draft    Metalink Download Description Format      January 2010
 
 
 
-Bryan, et al.             Expires July 5, 2010                 [Page 13]
+Bryan, et al.            Expires August 9, 2010                [Page 13]
 
-Internet-Draft    Metalink Download Description Format      January 2010
+Internet-Draft    Metalink Download Description Format     February 2010
 
 
 4.2.1.  The "metalink:copyright" Element
@@ -780,9 +780,9 @@ Internet-Draft    Metalink Download Description Format      January 2010
 
 
 
-Bryan, et al.             Expires July 5, 2010                 [Page 14]
+Bryan, et al.            Expires August 9, 2010                [Page 14]
 
-Internet-Draft    Metalink Download Description Format      January 2010
+Internet-Draft    Metalink Download Description Format     February 2010
 
 
    ...
@@ -836,9 +836,9 @@ Internet-Draft    Metalink Download Description Format      January 2010
 
 
 
-Bryan, et al.             Expires July 5, 2010                 [Page 15]
+Bryan, et al.            Expires August 9, 2010                [Page 15]
 
-Internet-Draft    Metalink Download Description Format      January 2010
+Internet-Draft    Metalink Download Description Format     February 2010
 
 
    starting at the beginning of the file.  The size of the piece is
@@ -892,9 +892,9 @@ Internet-Draft    Metalink Download Description Format      January 2010
 
 
 
-Bryan, et al.             Expires July 5, 2010                 [Page 16]
+Bryan, et al.            Expires August 9, 2010                [Page 16]
 
-Internet-Draft    Metalink Download Description Format      January 2010
+Internet-Draft    Metalink Download Description Format     February 2010
 
 
    metalinkLanguage =
@@ -948,9 +948,9 @@ Internet-Draft    Metalink Download Description Format      January 2010
 
 
 
-Bryan, et al.             Expires July 5, 2010                 [Page 17]
+Bryan, et al.            Expires August 9, 2010                [Page 17]
 
-Internet-Draft    Metalink Download Description Format      January 2010
+Internet-Draft    Metalink Download Description Format     February 2010
 
 
    the same priority, i.e. one BitTorrent .torrent file and three FTP
@@ -1004,9 +1004,9 @@ Internet-Draft    Metalink Download Description Format      January 2010
 
 
 
-Bryan, et al.             Expires July 5, 2010                 [Page 18]
+Bryan, et al.            Expires August 9, 2010                [Page 18]
 
-Internet-Draft    Metalink Download Description Format      January 2010
+Internet-Draft    Metalink Download Description Format     February 2010
 
 
    metalinkOrigin =
@@ -1060,9 +1060,9 @@ Internet-Draft    Metalink Download Description Format      January 2010
 
 
 
-Bryan, et al.             Expires July 5, 2010                 [Page 19]
+Bryan, et al.            Expires August 9, 2010                [Page 19]
 
-Internet-Draft    Metalink Download Description Format      January 2010
+Internet-Draft    Metalink Download Description Format     February 2010
 
 
    metalinkPublisher =
@@ -1116,9 +1116,9 @@ Internet-Draft    Metalink Download Description Format      January 2010
 
 
 
-Bryan, et al.             Expires July 5, 2010                 [Page 20]
+Bryan, et al.            Expires August 9, 2010                [Page 20]
 
-Internet-Draft    Metalink Download Description Format      January 2010
+Internet-Draft    Metalink Download Description Format     February 2010
 
 
    Values for this attribute are defined below in ABNF notation
@@ -1172,9 +1172,9 @@ Internet-Draft    Metalink Download Description Format      January 2010
 
 
 
-Bryan, et al.             Expires July 5, 2010                 [Page 21]
+Bryan, et al.            Expires August 9, 2010                [Page 21]
 
-Internet-Draft    Metalink Download Description Format      January 2010
+Internet-Draft    Metalink Download Description Format     February 2010
 
 
    metalinkURL =
@@ -1228,9 +1228,9 @@ Internet-Draft    Metalink Download Description Format      January 2010
 
 
 
-Bryan, et al.             Expires July 5, 2010                 [Page 22]
+Bryan, et al.            Expires August 9, 2010                [Page 22]
 
-Internet-Draft    Metalink Download Description Format      January 2010
+Internet-Draft    Metalink Download Description Format     February 2010
 
 
 5.2.  Extensions to the Metalink Vocabulary
@@ -1284,9 +1284,9 @@ Internet-Draft    Metalink Download Description Format      January 2010
 
 
 
-Bryan, et al.             Expires July 5, 2010                 [Page 23]
+Bryan, et al.            Expires August 9, 2010                [Page 23]
 
-Internet-Draft    Metalink Download Description Format      January 2010
+Internet-Draft    Metalink Download Description Format     February 2010
 
 
    content of the element can be interpreted as the value of the
@@ -1340,9 +1340,9 @@ Internet-Draft    Metalink Download Description Format      January 2010
 
 
 
-Bryan, et al.             Expires July 5, 2010                 [Page 24]
+Bryan, et al.            Expires August 9, 2010                [Page 24]
 
-Internet-Draft    Metalink Download Description Format      January 2010
+Internet-Draft    Metalink Download Description Format     February 2010
 
 
    MIME media type name:  application
@@ -1396,9 +1396,9 @@ Internet-Draft    Metalink Download Description Format      January 2010
 
 
 
-Bryan, et al.             Expires July 5, 2010                 [Page 25]
+Bryan, et al.            Expires August 9, 2010                [Page 25]
 
-Internet-Draft    Metalink Download Description Format      January 2010
+Internet-Draft    Metalink Download Description Format     February 2010
 
 
    in [RFC2818].  The choice of a secure content layer is entirely
@@ -1452,9 +1452,9 @@ Internet-Draft    Metalink Download Description Format      January 2010
 
 
 
-Bryan, et al.             Expires July 5, 2010                 [Page 26]
+Bryan, et al.            Expires August 9, 2010                [Page 26]
 
-Internet-Draft    Metalink Download Description Format      January 2010
+Internet-Draft    Metalink Download Description Format     February 2010
 
 
    Section 4.4.2 of [REC-xmldsig-core] requires support for DSA
@@ -1508,9 +1508,9 @@ Internet-Draft    Metalink Download Description Format      January 2010
 
 
 
-Bryan, et al.             Expires July 5, 2010                 [Page 27]
+Bryan, et al.            Expires August 9, 2010                [Page 27]
 
-Internet-Draft    Metalink Download Description Format      January 2010
+Internet-Draft    Metalink Download Description Format     February 2010
 
 
 8.1.  Normative References
@@ -1564,9 +1564,9 @@ Internet-Draft    Metalink Download Description Format      January 2010
 
 
 
-Bryan, et al.             Expires July 5, 2010                 [Page 28]
+Bryan, et al.            Expires August 9, 2010                [Page 28]
 
-Internet-Draft    Metalink Download Description Format      January 2010
+Internet-Draft    Metalink Download Description Format     February 2010
 
 
               core-20080610, June 2008,
@@ -1620,9 +1620,9 @@ Internet-Draft    Metalink Download Description Format      January 2010
 
 
 
-Bryan, et al.             Expires July 5, 2010                 [Page 29]
+Bryan, et al.            Expires August 9, 2010                [Page 29]
 
-Internet-Draft    Metalink Download Description Format      January 2010
+Internet-Draft    Metalink Download Description Format     February 2010
 
 
    [RELAX-NG]
@@ -1676,9 +1676,9 @@ Appendix A.  Acknowledgements and Contributors
 
 
 
-Bryan, et al.             Expires July 5, 2010                 [Page 30]
+Bryan, et al.            Expires August 9, 2010                [Page 30]
 
-Internet-Draft    Metalink Download Description Format      January 2010
+Internet-Draft    Metalink Download Description Format     February 2010
 
 
    We also thank the following contributors for assistance and review:
@@ -1732,9 +1732,9 @@ Appendix B.  RELAX NG Compact Schema
 
 
 
-Bryan, et al.             Expires July 5, 2010                 [Page 31]
+Bryan, et al.            Expires August 9, 2010                [Page 31]
 
-Internet-Draft    Metalink Download Description Format      January 2010
+Internet-Draft    Metalink Download Description Format     February 2010
 
 
          metalinkCommonAttributes,
@@ -1788,9 +1788,9 @@ Internet-Draft    Metalink Download Description Format      January 2010
 
 
 
-Bryan, et al.             Expires July 5, 2010                 [Page 32]
+Bryan, et al.            Expires August 9, 2010                [Page 32]
 
-Internet-Draft    Metalink Download Description Format      January 2010
+Internet-Draft    Metalink Download Description Format     February 2010
 
 
       element metalink:generator {
@@ -1844,9 +1844,9 @@ Internet-Draft    Metalink Download Description Format      January 2010
 
 
 
-Bryan, et al.             Expires July 5, 2010                 [Page 33]
+Bryan, et al.            Expires August 9, 2010                [Page 33]
 
-Internet-Draft    Metalink Download Description Format      January 2010
+Internet-Draft    Metalink Download Description Format     February 2010
 
 
    metalinkPublished =
@@ -1900,9 +1900,9 @@ Internet-Draft    Metalink Download Description Format      January 2010
 
 
 
-Bryan, et al.             Expires July 5, 2010                 [Page 34]
+Bryan, et al.            Expires August 9, 2010                [Page 34]
 
-Internet-Draft    Metalink Download Description Format      January 2010
+Internet-Draft    Metalink Download Description Format     February 2010
 
 
    # Unconstrained; it's not entirely clear how IRI fit into
@@ -1956,9 +1956,9 @@ Internet-Draft    Metalink Download Description Format      January 2010
 
 
 
-Bryan, et al.             Expires July 5, 2010                 [Page 35]
+Bryan, et al.            Expires August 9, 2010                [Page 35]
 
-Internet-Draft    Metalink Download Description Format      January 2010
+Internet-Draft    Metalink Download Description Format     February 2010
 
 
 Appendix C.  Document History (to be removed by RFC Editor before
@@ -1972,8 +1972,6 @@ Appendix C.  Document History (to be removed by RFC Editor before
    http://metalinks.svn.sourceforge.net/viewvc/metalinks/internetdraft/
 
    Known issues concerning this draft:
-   o  Digital signatures, metalink:signature element, metalink:os
-      element / using IANA "Operating System Names" registry.
    o  Waiting on: MIME type review.
 
    -28 : February xx, 2010.
@@ -1993,13 +1991,13 @@ Appendix C.  Document History (to be removed by RFC Editor before
    o  dynamic element changed to dynamic attribute of origin element.
 
    -24 : December 08, 2009.
-   o  Document Shepherd review changes.
+   o  Eran Hammer-Lahav, Document Shepherd review changes.
    o  Example XML indentation.
    o  Baseline file hash: SHA-256.
 
    -23 : November 26, 2009.
-   o  Apps Area AD review changes, Change RFC3688 from Normative to
-      Informative Reference.
+   o  Lisa Dusseault, Apps Area AD review changes, Change RFC3688 from
+      Normative to Informative Reference.
    o  Schema: integer changed to positiveInteger or nonNegativeInteger
       where fitting.
 
@@ -2007,19 +2005,18 @@ Appendix C.  Document History (to be removed by RFC Editor before
    o  Clarifications.
 
    -21 : October 13, 2009.
-
-
-
-
-
-Bryan, et al.             Expires July 5, 2010                 [Page 36]
-
-Internet-Draft    Metalink Download Description Format      January 2010
-
-
    o  Update author details.
 
    -20 : October 12, 2009.
+
+
+
+
+Bryan, et al.            Expires August 9, 2010                [Page 36]
+
+Internet-Draft    Metalink Download Description Format     February 2010
+
+
    o  RFC 5646 updates RFC 4646.
 
    -19 : October 5, 2009.
@@ -2065,15 +2062,17 @@ Internet-Draft    Metalink Download Description Format      January 2010
    o  Update REC-xmldsig-core reference to second edition.
 
    -09 : July 11, 2009.
-
-
-
-Bryan, et al.             Expires July 5, 2010                 [Page 37]
-
-Internet-Draft    Metalink Download Description Format      January 2010
-
-
    o  Replace ISO639-2 references with RFC 4646.
+
+
+
+
+
+Bryan, et al.            Expires August 9, 2010                [Page 37]
+
+Internet-Draft    Metalink Download Description Format     February 2010
+
+
    o  Add ISO3166-1.
 
    -08 : July 04, 2009.
@@ -2120,21 +2119,21 @@ Internet-Draft    Metalink Download Description Format      January 2010
       3.0 specification.
 
 
-
-
-
-
-Bryan, et al.             Expires July 5, 2010                 [Page 38]
-
-Internet-Draft    Metalink Download Description Format      January 2010
-
-
 Index
+
+
+
+
+Bryan, et al.            Expires August 9, 2010                [Page 38]
+
+Internet-Draft    Metalink Download Description Format     February 2010
+
 
    A
       ABNF
-         mediatype  18, 21
          metalinkGenerator  14
+         metaurl mediatype  18
+         signature mediatype  21
       application/metalink4+xml Media Type  24
 
    C
@@ -2160,6 +2159,7 @@ Index
          metalinkLanguage  17
          metalinkLogo  17
          metalinkMetalink  10
+         metalinkMetaURL  17
          metalinkOrigin  19
          metalinkOS  19
          metalinkPieces  13
@@ -2169,7 +2169,7 @@ Index
          metalinkSize  21
          metalinkTextConstruct  9
          metalinkUpdated  21
-         metalinkURL  17, 22
+         metalinkURL  22
          metalinkVersion  22
          simpleExtensionElement  23
          structuredExtensionElement  24
@@ -2180,9 +2180,9 @@ Index
 
 
 
-Bryan, et al.             Expires July 5, 2010                 [Page 39]
+Bryan, et al.            Expires August 9, 2010                [Page 39]
 
-Internet-Draft    Metalink Download Description Format      January 2010
+Internet-Draft    Metalink Download Description Format     February 2010
 
 
    I
@@ -2195,8 +2195,6 @@ Internet-Draft    Metalink Download Description Format      January 2010
    M
       Media Type
          application/metalink4+xml  24
-      mediatype ABNF  18, 21
-      metadata XML element  17
       metalink XML element  10
       metalinkCommonAttributes grammar production  8
       metalinkCopyright grammar production  14
@@ -2210,6 +2208,7 @@ Internet-Draft    Metalink Download Description Format      January 2010
       metalinkLanguage grammar production  17
       metalinkLogo grammar production  17
       metalinkMetalink grammar production  10
+      metalinkMetaURL grammar production  17
       metalinkOrigin grammar production  19
       metalinkOS grammar production  19
       metalinkPieces grammar production  13
@@ -2219,8 +2218,10 @@ Internet-Draft    Metalink Download Description Format      January 2010
       metalinkSize grammar production  21
       metalinkTextConstruct grammar production  9
       metalinkUpdated grammar production  21
-      metalinkURL grammar production  17, 22
+      metalinkURL grammar production  22
       metalinkVersion grammar production  22
+      metaurl mediatype ABNF  18
+      metaurl XML element  17
 
    O
       origin XML element  18
@@ -2232,15 +2233,16 @@ Internet-Draft    Metalink Download Description Format      January 2010
       publisher XML element  19
 
    S
-      signature XML element  20
 
 
 
-Bryan, et al.             Expires July 5, 2010                 [Page 40]
+Bryan, et al.            Expires August 9, 2010                [Page 40]
 
-Internet-Draft    Metalink Download Description Format      January 2010
+Internet-Draft    Metalink Download Description Format     February 2010
 
 
+      signature mediatype ABNF  21
+      signature XML element  20
       simpleExtensionElement grammar production  23
       size XML element  21
       structuredExtensionElement grammar production  24
@@ -2256,14 +2258,14 @@ Internet-Draft    Metalink Download Description Format      January 2010
       XML Elements
          copyright  14
          description  14
-         entry  11
+         file  11
          generator  14
          hash  15
          identity  16
          language  16
          logo  17
-         metadata  17
          metalink  10
+         metaurl  17
          origin  18
          os  19
          pieces  13
@@ -2290,11 +2292,9 @@ Authors' Addresses
 
 
 
-
-
-Bryan, et al.             Expires July 5, 2010                 [Page 41]
+Bryan, et al.            Expires August 9, 2010                [Page 41]
 
-Internet-Draft    Metalink Download Description Format      January 2010
+Internet-Draft    Metalink Download Description Format     February 2010
 
 
    Tatsuhiro Tsujikawa
@@ -2348,5 +2348,5 @@ Internet-Draft    Metalink Download Description Format      January 2010
 
 
 
-Bryan, et al.             Expires July 5, 2010                 [Page 42]
+Bryan, et al.            Expires August 9, 2010                [Page 42]
 

@@ -48,7 +48,7 @@
           <uri>http://www.mirrorbrain.org/</uri>
         </address>
       </author>
-	<date month="January" year="2010"/>        
+	<date month="February" year="2010"/>        
 
       <abstract>
 	<t>This document specifies Metalink, an XML-based download description
@@ -453,7 +453,7 @@ metalinkMetalink =
 	<section anchor="element.file" title="The &#34;metalink:file&#34; Element">
     
     
-    <iref item="XML Elements" subitem="entry" primary="true"/>
+    <iref item="XML Elements" subitem="file" primary="true"/>
     <iref item="file XML element" primary="true"/> 
 
 	  <t>The "<xref target="element.file" format="none">metalink:file</xref>" element represents an individual file,
@@ -834,15 +834,15 @@ metalinkLogo =
 	<section anchor="element.metaurl" title="The &#34;metalink:metaurl&#34; Element">
     
     
-    <iref item="XML Elements" subitem="metadata" primary="true"/>
-    <iref item="metadata XML element" primary="true"/> 
+    <iref item="XML Elements" subitem="metaurl" primary="true"/>
+    <iref item="metaurl XML element" primary="true"/> 
 	  
 	  <t>The "<xref target="element.metaurl" format="none">metalink:metaurl</xref>" element contains the IRI of a metadata file, also known as a metainfo file, about a resource to download. For example, this could be the IRI of a BitTorrent .torrent file, a Metalink Document, or other type of metadata file. Note that
 	  the information in the <xref target="element.hash" format="none">metalink:hash</xref> element does not apply to these metadata files, but to the files that are described by them.
 
 	    <figure>
-        <iref item="metalinkURL grammar production" primary="true"/>
-        <iref item="Grammar" subitem="metalinkURL" primary="true"/>
+        <iref item="metalinkMetaURL grammar production" primary="true"/>
+        <iref item="Grammar" subitem="metalinkMetaURL" primary="true"/>
 	      <artwork type="application/relax-ng-compact-syntax">
 metalinkMetaURL =
    element metalink:metaurl {
@@ -869,8 +869,8 @@ metalinkMetaURL =
 	    the Multipurpose Internet Mail Extensions (MIME) media type <xref target="RFC4288"/> of the metadata available at the IRI. In the case of BitTorrent as specified in <xref target="BITTORRENT"/>, the value "torrent" is REQUIRED. Types without "/" are reserved. Currently, "torrent" is the only reserved value.</t>
         <t>Values for this attribute are defined below in ABNF notation <xref target="RFC5234"/>.
 <figure> 
-<iref item="mediatype ABNF" primary="true"/>
-<iref item="ABNF" subitem="mediatype" primary="true"/>
+<iref item="metaurl mediatype ABNF" primary="true"/>
+<iref item="ABNF" subitem="metaurl mediatype" primary="true"/>
 <artwork type="ABNF">
 media-type = (type-name "/" subtype-name) / media-reserved
 media-reserved = "torrent"
@@ -1046,8 +1046,8 @@ p3oAoO9lKHoOqOE0EMB3zmMcLoYUrNkg
 		
         <t>Values for this attribute are defined below in ABNF notation <xref target="RFC5234"/>.
 <figure> 
-<iref item="mediatype ABNF" primary="true"/>
-<iref item="ABNF" subitem="mediatype" primary="true"/>
+<iref item="signature mediatype ABNF" primary="true"/>
+<iref item="ABNF" subitem="signature mediatype" primary="true"/>
 <artwork type="ABNF">
 media-type = type-name "/" subtype-name
 type-name = &lt;Defined in section 4.2 of RFC 4288&gt;
@@ -2217,7 +2217,6 @@ anyForeignElement =
 		<t>Known issues concerning this draft:
 	    <list style="symbols"> 
 	      
-	      <t>Digital signatures, metalink:signature element, metalink:os element / using IANA "Operating System Names" registry.</t>
 		  <t>Waiting on: MIME type review.</t>
 
 	    </list></t>
@@ -2258,7 +2257,7 @@ anyForeignElement =
 	    
 	    <list style="symbols">
 		
-		  <t>Document Shepherd review changes.</t>
+		  <t>Eran Hammer-Lahav, Document Shepherd review changes.</t>
 		  <t>Example XML indentation.</t>
 		  <t>Baseline file hash: SHA-256.</t>
 	   </list></t>
@@ -2267,7 +2266,7 @@ anyForeignElement =
 	    
 	    <list style="symbols">
 		
-		  <t>Apps Area AD review changes, Change RFC3688 from Normative to Informative Reference.</t>
+		  <t>Lisa Dusseault, Apps Area AD review changes, Change RFC3688 from Normative to Informative Reference.</t>
 		  <t>Schema: integer changed to positiveInteger or nonNegativeInteger where fitting.</t>
 	   </list></t>
 	   
