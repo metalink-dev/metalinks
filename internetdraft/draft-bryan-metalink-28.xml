@@ -1403,7 +1403,7 @@ structuredExtensionElement =
 		
 		<t>Publishers are also encouraged to include digital signatures of the files within the Metalink Documents, if they are available, as described in <xref target="element.signature"/>.</t>
 		
-		<t>If weak cryptography is used in a Metalink Document, such as legacy or marginal algorithms or key sizes (i.e., MD5 or 512 bit RSA)...</t>
+		<t>Normally, a content creator is in the best position to know how strong the protective signing ought to be on their content. Thus, a content creator can choose weak or strong cryptography, and a content consumer would normally accept that.  There MAY be applications where the content consumer chooses to reject weak cryptography, but that is not envisioned as the common use case.</t>
 
 	    <section title="Digital Signatures" anchor="security.signatures">
      
@@ -1450,8 +1450,7 @@ structuredExtensionElement =
 	      can arise if the keying material for message
 	      authentication code (MAC) authentication is not handled
 	      properly, Metalink Documents SHOULD NOT use MACs for
-	      signatures.</t>
-	  
+	      signatures.</t> 
 
 	    </section> 
 

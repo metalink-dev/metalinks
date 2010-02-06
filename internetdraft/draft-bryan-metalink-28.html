@@ -1598,7 +1598,7 @@ Security Considerations</h3>
 </p>
 <p>Publishers are also encouraged to include digital signatures of the files within the Metalink Documents, if they are available, as described in <a class='info' href='#element.signature'>Section&nbsp;4.2.13<span> (</span><span class='info'>The &#34;metalink:signature&#34; Element</span><span>)</span></a>.
 </p>
-<p>If weak cryptography is used in a Metalink Document, such as legacy or marginal algorithms or key sizes (i.e., MD5 or 512 bit RSA)...
+<p>Normally, a content creator is in the best position to know how strong the protective signing ought to be on their content. Thus, a content creator can choose weak or strong cryptography, and a content consumer would normally accept that.  There MAY be applications where the content consumer chooses to reject weak cryptography, but that is not envisioned as the common use case.
 </p>
 <a name="security.signatures"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>

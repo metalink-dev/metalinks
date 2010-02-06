@@ -1408,8 +1408,12 @@ Internet-Draft    Metalink Download Description Format      January 2010
    files within the Metalink Documents, if they are available, as
    described in Section 4.2.13.
 
-   If weak cryptography is used in a Metalink Document, such as legacy
-   or marginal algorithms or key sizes (i.e., MD5 or 512 bit RSA)...
+   Normally, a content creator is in the best position to know how
+   strong the protective signing ought to be on their content.  Thus, a
+   content creator can choose weak or strong cryptography, and a content
+   consumer would normally accept that.  There MAY be applications where
+   the content consumer chooses to reject weak cryptography, but that is
+   not envisioned as the common use case.
 
 7.1.  Digital Signatures
 
@@ -1446,10 +1450,6 @@ Internet-Draft    Metalink Download Description Format      January 2010
    "http://www.w3.org/2001/10/xml-exc-c14n#", as specified in Exclusive
    XML Canonicalization [REC-xml-exc-c14n].
 
-   Section 4.4.2 of [REC-xmldsig-core] requires support for DSA
-   signatures and recommends support for RSA signatures.  However,
-   because of the much greater popularity in the market of RSA versus
-
 
 
 Bryan, et al.             Expires July 5, 2010                 [Page 26]
@@ -1457,6 +1457,9 @@ Bryan, et al.             Expires July 5, 2010                 [Page 26]
 Internet-Draft    Metalink Download Description Format      January 2010
 
 
+   Section 4.4.2 of [REC-xmldsig-core] requires support for DSA
+   signatures and recommends support for RSA signatures.  However,
+   because of the much greater popularity in the market of RSA versus
    DSA, Metalink Processors that verify signed Metalink Documents MUST
    be able to verify RSA signatures, but do not need be able to verify
    DSA signatures.  Due to security issues that can arise if the keying
@@ -1502,9 +1505,6 @@ Internet-Draft    Metalink Download Description Format      January 2010
 
 
 8.  References
-
-
-
 
 
 
