@@ -696,7 +696,7 @@ agent-version = token
 	</t>
 
 
-       <t>token is of type text. Although any character allowed in text MAY appear in an agent-version, this token SHOULD only be used for a version identifier (i.e., successive versions of the same agent
+       <t>Although any token character MAY appear in an agent-version, this token SHOULD only be used for a version identifier (i.e., successive versions of the same agent
        SHOULD only differ in the agent-version portion of the agent value).</t>
 
 
