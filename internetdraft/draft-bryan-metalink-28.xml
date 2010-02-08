@@ -652,7 +652,7 @@ metalinkDescription =
     <iref item="XML Elements" subitem="generator" primary="true"/>
     <iref item="generator XML element" primary="true"/>
 	      
-	  <t>The "<xref target="element.generator" format="none">metalink:generator</xref>" element's content identifies the generating agent name and versionused to generate a Metalink Document, for debugging and other purposes.
+	  <t>The "<xref target="element.generator" format="none">metalink:generator</xref>" element's content identifies the generating agent name and version used to generate a Metalink Document, for debugging and other purposes.
       
 	    <figure> 
         <iref item="metalinkGenerator grammar production" primary="true"/>
