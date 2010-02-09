@@ -23,10 +23,6 @@ import sys
 import os
 import imp
 
-os.environ['PATH'] += ";gtk/lib;gtk/bin"
-
-import gget.utils
-
 def runned_from_source():
     return True
 
@@ -39,6 +35,13 @@ def get_main_dir():
     if main_is_frozen():
         return os.path.dirname(sys.executable)
     return os.path.dirname(sys.argv[0])
+
+if main_is_frozen():
+    code = os.system("bin\\gdk-pixbuf-query-loaders.exe > etc\\gtk-2.0\\gdk-pixbuf.loaders")
+else:
+    code = os.system("gtk\\bin\\gdk-pixbuf-query-loaders.exe > gtk\\etc\\gtk-2.0\\gdk-pixbuf.loaders")
+
+import gget.utils
     
 gget.utils.runned_from_source = runned_from_source
 gget.utils.__data_dir = os.path.join(get_main_dir(), "data")
