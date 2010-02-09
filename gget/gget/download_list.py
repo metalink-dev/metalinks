@@ -20,7 +20,8 @@
 
 import os.path
 import sys
-from xml.etree import cElementTree as ET
+# tweaked from upstream because we don't have cElementTree
+from xml.etree import ElementTree as ET
 
 import gobject
 
