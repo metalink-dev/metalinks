@@ -144,10 +144,10 @@
 <tr><td class="header">Network Working Group</td><td class="header">A. Bryan</td></tr>
 <tr><td class="header">Internet-Draft</td><td class="header">T. Tsujikawa</td></tr>
 <tr><td class="header">Intended status: Standards Track</td><td class="header">N. McNab</td></tr>
-<tr><td class="header">Expires: August 12, 2010</td><td class="header">&nbsp;</td></tr>
+<tr><td class="header">Expires: August 13, 2010</td><td class="header">&nbsp;</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">P. Poeml</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">Novell, Inc.</td></tr>
-<tr><td class="header">&nbsp;</td><td class="header">February 8, 2010</td></tr>
+<tr><td class="header">&nbsp;</td><td class="header">February 9, 2010</td></tr>
 </table></td></tr></table>
 <h1><br />The Metalink Download Description Format<br />draft-bryan-metalink-28</h1>
 
@@ -180,7 +180,7 @@ The list of current Internet-Drafts can be accessed at
 The list of Internet-Draft Shadow Directories can be accessed at
 <a href='http://www.ietf.org/shadow.html'>http://www.ietf.org/shadow.html</a>.</p>
 <p>
-This Internet-Draft will expire on August 12, 2010.</p>
+This Internet-Draft will expire on August 13, 2010.</p>
 
 <h3>Copyright Notice</h3>
 <p>
@@ -318,7 +318,7 @@ Introduction</h3>
 <p>Metalink is a document format based on Extensible Markup Language (XML) that describes a file or list
       of files to be downloaded from a server. Metalinks can list a number of
       files, each with an extensible set of attached metadata. 
-      Each listed file can have a description, multiple cryptographic hashes, and a list of URIs (Uniform Resource Identifiers) that it is 
+      Each listed file can have a description, multiple cryptographic hashes, and a list of Uniform Resource Identifiers (URIs) that it is 
       available from.
 </p>
 <p>Often, identical copies of a file are accessible in multiple locations
@@ -497,11 +497,11 @@ start = metalinkMetalink</pre></div>
       "application/metalink4+xml" media type.
 </p>
 <p>Metalink Documents MUST be
-      well-formed XML. This specification does not define a DTD (Document Type Definition) for
+      well-formed XML. This specification does not define a Document Type Definition (DTD) for
       Metalink Documents, and hence does not require them to be valid (in
       the sense used by XML).
 </p>
-<p>Metalink allows the use of IRIs (Internationalized Resource Identifiers), encoded according to <a class='info' href='#RFC3987'>[RFC3987]<span> (</span><span class='info'>Duerst, M. and M. Suignard, &ldquo;Internationalized Resource Identifiers (IRIs),&rdquo; January&nbsp;2005.</span><span>)</span></a>. Every
+<p>Metalink allows the use of Internationalized Resource Identifiers (IRIs), encoded according to <a class='info' href='#RFC3987'>[RFC3987]<span> (</span><span class='info'>Duerst, M. and M. Suignard, &ldquo;Internationalized Resource Identifiers (IRIs),&rdquo; January&nbsp;2005.</span><span>)</span></a>. Every
       URI <a class='info' href='#RFC3986'>[RFC3986]<span> (</span><span class='info'>Berners-Lee, T., Fielding, R., and L. Masinter, &ldquo;Uniform Resource Identifier (URI): Generic Syntax,&rdquo; January&nbsp;2005.</span><span>)</span></a> is also an IRI, so a URI may be
       used wherever below an IRI is named. There is one special
       consideration: when an IRI that is not also a URI is given for

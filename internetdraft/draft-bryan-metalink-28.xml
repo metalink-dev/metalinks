@@ -66,7 +66,7 @@
       <t>Metalink is a document format based on Extensible Markup Language (XML) that describes a file or list
       of files to be downloaded from a server. Metalinks can list a number of
       files, each with an extensible set of attached metadata. 
-      Each listed file can have a description, multiple cryptographic hashes, and a list of URIs (Uniform Resource Identifiers) that it is 
+      Each listed file can have a description, multiple cryptographic hashes, and a list of Uniform Resource Identifiers (URIs) that it is 
       available from.</t>
 
       <t>Often, identical copies of a file are accessible in multiple locations
@@ -247,11 +247,11 @@ start = metalinkMetalink</artwork>
       "application/metalink4+xml" media type.</t>
 	  
       <t>Metalink Documents MUST be
-      well-formed XML. This specification does not define a DTD (Document Type Definition) for
+      well-formed XML. This specification does not define a Document Type Definition (DTD) for
       Metalink Documents, and hence does not require them to be valid (in
       the sense used by XML).</t>
 	  
-      <t>Metalink allows the use of IRIs (Internationalized Resource Identifiers), encoded according to <xref target="RFC3987"/>. Every
+      <t>Metalink allows the use of Internationalized Resource Identifiers (IRIs), encoded according to <xref target="RFC3987"/>. Every
       URI <xref target="RFC3986"/> is also an IRI, so a URI may be
       used wherever below an IRI is named. There is one special
       consideration: when an IRI that is not also a URI is given for
