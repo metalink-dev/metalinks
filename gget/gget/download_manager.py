@@ -135,7 +135,6 @@ class DownloadManager(gobject.GObject):
                               "cancel": download.is_canceled,
                               "pause": download.is_paused},
                     headers=download.headers)
-                    )
 
             if not result:
                 download.set_status(ERROR)
