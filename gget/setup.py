@@ -8,7 +8,7 @@ import glob
 import zipfile
 
 APP_NAME = 'GGet'
-VERSION = '0.0.4'
+VERSION = '0.0.4.0'
 LICENSE = 'GPL'
 DESC = ''
 AUTHOR_NAME = 'Neil McNab'
@@ -114,6 +114,20 @@ def check_ignore(root, ignoredirs):
         if root.startswith(dirname):
             return True
     return False
+    
+def copy_directory(source, target):
+    if not os.path.exists(target):
+        os.mkdir(target)
+    for root, dirs, files in os.walk(source):
+        if '.svn' in dirs:
+            dirs.remove('.svn')  # don't visit .svn directories           
+        for file in files:
+            from_ = os.path.join(root, file)           
+            to_ = from_.replace(source, target, 1)
+            to_directory = os.path.split(to_)[0]
+            if not os.path.exists(to_directory):
+                os.makedirs(to_directory)
+            shutil.copyfile(from_, to_)
 
 if sys.argv[1] == 'sdist':
     scripts = rec_search(".py")
@@ -145,7 +159,7 @@ elif sys.argv[1] == 'py2exe':
     #localegen()
     #localecompile()
     
-    skipdirs = ["build", "dist"]
+    skipdirs = ["build", "dist", "gtk"]
     
     temp = ["AUTHORS"]
     temp.extend(rec_search(".ini", False, skipdirs))
@@ -162,7 +176,7 @@ elif sys.argv[1] == 'py2exe':
         data.append((os.path.dirname(item), [item]))
     
     setup(windows = ["gget.py"],
-      #  zipfile = None,
+      zipfile = None,
       data_files = data,
       options={"py2exe" : {"packages": 'encodings', "includes" : "cairo, pango, pangocairo, atk, gobject", "optimize": 2}},
       name = APP_NAME,
@@ -173,7 +187,12 @@ elif sys.argv[1] == 'py2exe':
       author_email = EMAIL,
       url = URL
       )
-
+      
+    # TODO we can probably eliminate some files from here
+    for dir in ('lib', 'share', 'etc'):
+        copy_directory(os.path.join("gtk", dir), os.path.join("dist", dir))
+        
 elif sys.argv[1] == 'zip':
     #print "Zipping up..."
     create_zip("dist/", APP_NAME + "-" + VERSION + "-win32.zip")
+
