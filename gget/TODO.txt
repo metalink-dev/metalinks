@@ -1,3 +1,4 @@
+- "Cancel" then "Resume" fails
 - Implement tray icon
 - Implement start at login option
 - Implement notifications on completed downloads option
