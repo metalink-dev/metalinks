@@ -894,6 +894,65 @@ class Metalink4(MetalinkBase):
             self.errors.extend(fileobj.errors)
         return valid
 
+############### RSS/Atom ###################
+
+class RSSAtomItem:
+    def __init__(self):
+        self.url = None
+        self.title = None
+        self.size = 0
+
+class RSSAtom():
+    def __init__(self):
+        self.files = []
+        self.title = ""
+        
+        self.p = xml.parsers.expat.ParserCreate()
+        self.p.buffer_text = True
+        self.parent = []
+
+        self.p.StartElementHandler = self.start_element
+        self.p.EndElementHandler = self.end_element
+        self.p.CharacterDataHandler = self.char_data
+            
+    def char_data(self, data):
+        self.data += data #.strip()
+
+    def parsehandle(self, handle):
+        return self.p.ParseFile(handle)
+        
+    # handler functions
+    def start_element(self, name, attrs):
+        self.data = ""
+        self.parent.append(XMLTag(name, attrs))
+        if name in ('item', 'entry'):
+            self.files.append(RSSAtomItem())
+        
+    def end_element(self, name):
+        tag = self.parent.pop()
+
+        if name == "link":
+            if tag.attrs.has_key("rel") and tag.attrs["rel"] == 'enclosure':
+                fileobj = self.files[-1]
+                if tag.attrs.has_key("href"):
+                    fileobj.url = tag.attrs["href"]
+                if tag.attrs.has_key("length"):
+                    fileobj.size = int(tag.attrs["length"])
+                    
+        if name == "enclosure":
+            fileobj = self.files[-1]
+            if tag.attrs.has_key("url"):
+                fileobj.url = tag.attrs["url"]
+            if tag.attrs.has_key("length"):
+                fileobj.size = int(tag.attrs["length"])
+                
+        if name == "title" and self.parent[-1].name in ("entry","item"):
+            fileobj = self.files[-1]
+            fileobj.title = self.data
+        elif name == "title":
+            self.title = self.data    
+        
+        
 ############### Jigdo ######################
 
 class DecompressFile(gzip.GzipFile):
