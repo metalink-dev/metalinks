@@ -100,6 +100,8 @@ def run():
     parser.add_option("--convert", dest="convert", action="store_true", help="Conversion from 3 to 4 (IETF RFC)")
     parser.add_option("--rconvert", dest="rev", action="store_true", help="Reverses conversion from 4 (IETF RFC) to 3")
     parser.add_option("--output", dest="output", metavar="OUTFILE", help=_("Output conversion result to this file instead of screen"))
+    parser.add_option("--rss", "-r", action="store_true", dest="rss", help=_("RSS/Atom Feed Mode, implies -d"))
+    parser.add_option("-w", dest="writedir", default=os.getcwd(), help=_("Directory to write output files to (default: current directory)"))
     (options, args) = parser.parse_args()
     
     #if options.filevar != None:
@@ -202,7 +204,15 @@ def run():
 
         for item in args:
             progress = ProgressBar()
-            result = download.get(item, os.getcwd(), handlers={"status": progress.download_update, "bitrate": progress.set_bitrate}, segmented = not options.nosegmented)
+            result = download.get(item, options.writedir, handlers={"status": progress.download_update, "bitrate": progress.set_bitrate}, segmented = not options.nosegmented)
+            progress.download_end()
+            if not result:
+                sys.exit(-1)
+                
+    if options.rss:
+        for feed in args:
+            progress = ProgressBar()
+            result = download.download_rss(feed, options.writedir, handlers={"status": progress.download_update, "bitrate": progress.set_bitrate}, segmented = not options.nosegmented)
             progress.download_end()
             if not result:
                 sys.exit(-1)

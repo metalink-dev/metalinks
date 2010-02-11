@@ -386,21 +386,29 @@ def download_file_urls(metalinkfile, force = False, handlers = {}, segmented = S
     Returns False otherwise (checksum fails)    
     '''
     
-    print ""
-    print _("Downloading to %s.") % metalinkfile.filename
-        
-    if os.path.exists(metalinkfile.filename) and (not force) and len(metalinkfile.hashlist) > 0:
-        checksum = verify_checksum(metalinkfile.filename, metalinkfile.hashlist)
-        if checksum:
-            actsize = metalinkfile.size
-            if actsize == 0:
-                actsize = os.stat(metalinkfile.filename).st_size
-            if actsize != 0:
-                #if handler != None:
+    if os.path.exists(metalinkfile.filename) and (not force):
+        actsize = os.stat(metalinkfile.filename).st_size
+        if len(metalinkfile.hashlist) > 0:
+            checksum = verify_checksum(metalinkfile.filename, metalinkfile.hashlist)
+            if checksum:
                 handlers["status"](1, actsize, actsize)
+                print ""
+                print _("Already downloaded %s.") % os.path.basename(metalinkfile.filename)
                 return metalinkfile.filename
-        else:
-            print _("Checksum failed, retrying download of %s.") % os.path.basename(metalinkfile.filename)
+            else:
+                print _("Checksum failed, retrying download of %s.") % os.path.basename(metalinkfile.filename)
+                
+        if metalinkfile.size == actsize:
+            handlers["status"](1, actsize, actsize)
+            print ""
+            print _("Already downloaded %s.") % os.path.basename(metalinkfile.filename)
+            return metalinkfile.filename
+
+        if metalinkfile.size == 0 and not os.path.exists(metalinkfile.filename + ".temp"):
+            handlers["status"](1, actsize, actsize)
+            print ""
+            print _("Already downloaded %s.") % os.path.basename(metalinkfile.filename)
+            return metalinkfile.filename
 
     directory = os.path.dirname(metalinkfile.filename)
     if not os.path.isdir(directory):
@@ -409,6 +417,8 @@ def download_file_urls(metalinkfile, force = False, handlers = {}, segmented = S
     if metalinkfile.piecelength == 0:
         metalinkfile.piecelength = DEFAULT_CHUNK_SIZE
 
+    print _("Downloading to %s.") % metalinkfile.filename
+        
     seg_result = False
     if segmented:
         manager = Segment_Manager(metalinkfile, headers)
@@ -638,7 +648,7 @@ def filecheck(local_file, checksums, size, handler = None):
     
     print "\n" + _("Checksum failed for %s.") % os.path.basename(local_file)
     return False
-
+    
 def parse_metalink(src, headers = {}, nocheck = False, ver=3):
     src = complete_url(src)
     is_metalink = nocheck
@@ -715,6 +725,40 @@ def parse_metalink(src, headers = {}, nocheck = False, ver=3):
     metalinkobj = metalink.parsehandle(datasource, ver)
     datasource.close()
     return metalinkobj
+
+def parse_rss(src, headers = {}):
+    src = complete_url(src)
+
+    try:
+        datasource = urlopen(src, headers = headers)
+    except:
+        return False
+
+    rssobj = metalink.RSSAtom()
+    rssobj.parsehandle(datasource)
+    datasource.close()
+    return rssobj    
+    
+def download_rss(src, path, force = False, handlers = {}, segmented = SEGMENTED, headers = {}, nocheck = False):
+    rssobj = parse_rss(src, headers)
+    if rssobj == False:
+        return False
+        
+    urllist = rssobj.files
+    if len(urllist) == 0:
+        print _("No enclosures to download files from.")
+        return False
+
+    results = []
+    for rssitem in urllist:
+        result = download_file(rssitem.url, os.path.join(path, os.path.basename(rssitem.url)), rssitem.size, force=force, handlers=handlers, segmented=segmented)
+        if result:
+            results.append(result)
+            
+    if len(results) == 0:
+        return False
+    
+    return results
     
 def download_metalink(src, path, force = False, handlers = {}, segmented = SEGMENTED, headers = {}, nocheck = False):
     '''
