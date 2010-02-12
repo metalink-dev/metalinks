@@ -141,9 +141,7 @@
   &lt;published&gt;2009-05-15T12:23:23Z&lt;/published&gt;
   &lt;file name="example.ext"&gt;
     &lt;size&gt;14471447&lt;/size&gt;
-    &lt;identity&gt;
-    Example
-    &lt;/identity&gt;
+    &lt;identity&gt;Example&lt;/identity&gt;
     &lt;version&gt;1.0&lt;/version&gt;
     &lt;language&gt;en&lt;/language&gt;	  
     &lt;description&gt;
@@ -159,9 +157,7 @@
   &lt;/file&gt;
   &lt;file name="example2.ext"&gt;
     &lt;size&gt;14471447&lt;/size&gt;
-    &lt;identity&gt;
-    Example2
-    &lt;/identity&gt;
+    &lt;identity&gt;Example2&lt;/identity&gt;
     &lt;version&gt;1.0&lt;/version&gt;
     &lt;language&gt;en&lt;/language&gt;	  
     &lt;description&gt;
@@ -429,7 +425,8 @@ metalinkMetalink =
 	      <t><xref target="element.metalink" format="none">metalink:metalink</xref> elements SHOULD contain exactly one <xref target="element.origin" format="none">metalink:origin</xref> element and MUST NOT contain more than one such element.</t>
 
 	      <t><xref target="element.metalink" format="none">metalink:metalink</xref> elements MAY contain exactly one <xref target="element.published" format="none">metalink:published</xref> element and MUST NOT contain more than one such element.</t>
-	  
+		  
+	      <t><xref target="element.metalink" format="none">metalink:metalink</xref> elements MAY contain exactly one <xref target="element.updated" format="none">metalink:updated</xref> element and MUST NOT contain more than one such element.</t>	  
 	    </list></t> 
 
 
@@ -512,7 +509,7 @@ metalinkFile =
 	      <t><xref target="element.file" format="none">metalink:file</xref> elements MAY contain one or more <xref target="element.hash" format="none">metalink:hash</xref> elements.</t>
 
 	      <t><xref target="element.file" format="none">metalink:file</xref> elements MAY contain one or more <xref target="element.language" format="none">metalink:language</xref>
-	      element.</t>	
+	      elements.</t>	
 
 	      <t><xref target="element.file" format="none">metalink:file</xref> elements MAY contain exactly one <xref target="element.logo" format="none">metalink:logo</xref>
 	      element and MUST NOT contain more than one such element.</t>	
@@ -590,8 +587,8 @@ metalinkPieces =
 
 	    <t><xref target="element.pieces" format="none">metalink:pieces</xref> elements MUST have a "length" attribute, which is a positive integer
         that describes the length of the pieces of the file in octets. The whole file is divided into non-overlapping pieces of this length,
-        starting from the beginning of the file. That is, every piece should be the same size, apart from
-        the last piece which is the remainder. The last piece extends to the end of the file, and can therefore be shorter than the other pieces.
+        starting from the beginning of the file. That is, every piece MUST be the same size, apart from
+        the last piece which is the remainder. The last piece extends to the end of the file, and therefore MAY be shorter than the other pieces.
 		</t>
 		
 	  </section> 
@@ -663,7 +660,7 @@ metalinkGenerator =
      metalinkTextConstruct
    }</artwork></figure></t> 
 
-      <t>metalink:generator element's content is defined below in ABNF notation <xref target="RFC5234"/>.
+      <t>The <xref target="element.generator" format="none">metalink:generator</xref> element's content is defined below in ABNF notation <xref target="RFC5234"/>.
 
 	    <figure> 
         <iref item="metalinkGenerator ABNF" primary="true"/>
@@ -733,7 +730,7 @@ metalinkHash =
       </t>
       <t>Metalink Documents MAY also contain hashes for individual pieces of a file.  <xref target="element.hash" format="none">metalink:hash</xref> elements that are inside a <xref target="element.pieces" format="none">metalink:pieces</xref> container element have a hash for that specific piece or chunk of the file, and are of the same hash type as the <xref target="element.pieces" format="none">metalink:pieces</xref> element they are contained in.</t>
       <t><xref target="element.hash" format="none">metalink:hash</xref> elements without a "type" attribute MUST contain a hash for that specific piece or chunk of the file and MUST be listed in the
-      same order as the corresponding pieces appear in the file, starting at the beginning of the file. The size of the piece is equal to the value of the "length" attribute of the <xref target="element.pieces" format="none">metalink:pieces</xref> element. See <xref target="piece.length"/> for more information on the size of pieces.</t>
+      same order as the corresponding pieces appear in the file, starting at the beginning of the file. The size of the piece is equal to the value of the "length" attribute of the <xref target="element.pieces" format="none">metalink:pieces</xref> element, apart from the last piece which is the remainder. See <xref target="piece.length"/> for more information on the size of pieces.</t>
 
       <t>In this example, SHA-1 and SHA-256 hashes of the complete file are included, along with four SHA-1 piece hashes.
 	      <figure>
@@ -979,7 +976,7 @@ metalinkPublished =
     <iref item="XML Elements" subitem="publisher" primary="true"/>
     <iref item="publisher XML element" primary="true"/>
  
-	  <t>The "<xref target="element.publisher" format="none">metalink:publisher</xref>" element contains a human-readable group or other entity which has published the file described in the Metalink Document and a URI for more information.
+	  <t>The "<xref target="element.publisher" format="none">metalink:publisher</xref>" element contains a human-readable group or other entity which has published the file described in the Metalink Document and an IRI for more information.
 	  
 	    <figure>
         <iref item="metalinkPublisher grammar production" primary="true"/>
@@ -1010,7 +1007,7 @@ metalinkPublisher =
 	  <t>The "<xref target="element.signature" format="none">metalink:signature</xref>" element is a Text construct that conveys a
 	  digital signature for a file described in a Metalink Document. Digital signatures verify that a file is from the entity that has signed it.</t>
 	  
-	  <t>Support for digital signatures included in this element is OPTIONAL. Note that the signing of Metalink Documents is covered in <xref target="security.signatures"/>.
+	  <t>Support in Metalink Processors for digital signatures included in this element is OPTIONAL. Note that the signing of Metalink Documents, as opposed to a digital signature of a file described in a Metalink Document, is covered in <xref target="security.signatures"/>.
 	  
 	    <figure>
         <iref item="metalinkSignature grammar production" primary="true"/>
@@ -1141,7 +1138,7 @@ metalinkURL =
 	    <t><xref target="element.url" format="none">metalink:url</xref>
 	    elements MAY have a priority attribute. Values MUST be positive integers between 1 and 999999. Lower values indicate a higher priority. <xref target="element.url" format="none">metalink:url</xref>
 	    elements without a priority attribute are considered to have the lowest priority, i.e. 999999. Multiple <xref target="element.url" format="none">metalink:url</xref> elements can have the same
-		priority, i.e. ten mirrors could have priority="1".</t>
+		priority, i.e. ten different mirrors could have priority="1".</t>
 
 	  </section> 
 
@@ -1954,8 +1951,8 @@ structuredExtensionElement =
           Giorgio Maone, Nils Maier, Max Velasques, Manolo Valdes, Hayden Legendre, Frederick Cheung, Rene Leonhardt, Per Oyvind Karlsen, Matt Domsch, Yazsoft, 
 		  KGet developers, Free Download Manager developers, Orbit developers, Arne Babenhauserheide, Mathias Berchtold, Xienzhenyu and TheWorld Browser developers, Xi Software, Agostino Russo, and James Antill.</t>
 
-	      <t>The Metalink community has dozens of contributors who proposed ideas and wording for this
-	      document, or contributed to the evolution of Metalink, including:</t>
+	      <t>The Metalink community has dozens of contributors who contributed to the evolution of Metalink or proposed ideas and wording for this
+	      document, including:</t>
 
           <t>Paul Burkhead, Kristian Weston, Nicolas Alvarez, Urs Wolfer, Bridget and Ethan Fletcher, Patrick Ruckstuhl, Sebastien Willemijns, Micah Cowan, Ruben Kerkhof,  
           Danny Ayers, Nick Dominguez, Gary Zellerbach, James Clark, Daniel Stenberg, John and Sandra Sowder, Salvatore Musumeci, Steve Eshelman, 
