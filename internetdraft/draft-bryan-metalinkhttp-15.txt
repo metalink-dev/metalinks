@@ -4,10 +4,10 @@
 Network Working Group                                           A. Bryan
 Internet-Draft                                                  N. McNab
 Intended status: Standards Track                            H. Nordstrom
-Expires: June 4, 2010
+Expires: August 24, 2010
                                                                  A. Ford
                                                      Roke Manor Research
-                                                           December 2009
+                                                       February 20, 2010
 
 
     Metalink/HTTP: Mirrors and Cryptographic Hashes in HTTP Headers
@@ -45,19 +45,19 @@ Status of this Memo
    The list of Internet-Draft Shadow Directories can be accessed at
    http://www.ietf.org/shadow.html.
 
-   This Internet-Draft will expire on June 4, 2010.
+   This Internet-Draft will expire on August 24, 2010.
 
 Copyright Notice
 
 
 
 
-Bryan, et al.             Expires June 4, 2010                  [Page 1]
+Bryan, et al.            Expires August 24, 2010                [Page 1]
 
-Internet-Draft    Metalink/HTTP: Mirrors and Checksums     December 2009
+Internet-Draft      Metalink/HTTP: Mirrors and Hashes      February 2010
 
 
-   Copyright (c) 2009 IETF Trust and the persons identified as the
+   Copyright (c) 2010 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -108,9 +108,9 @@ Table of Contents
 
 
 
-Bryan, et al.             Expires June 4, 2010                  [Page 2]
+Bryan, et al.            Expires August 24, 2010                [Page 2]
 
-Internet-Draft    Metalink/HTTP: Mirrors and Checksums     December 2009
+Internet-Draft      Metalink/HTTP: Mirrors and Hashes      February 2010
 
 
 1.  Introduction
@@ -164,9 +164,9 @@ Internet-Draft    Metalink/HTTP: Mirrors and Checksums     December 2009
 
 
 
-Bryan, et al.             Expires June 4, 2010                  [Page 3]
+Bryan, et al.            Expires August 24, 2010                [Page 3]
 
-Internet-Draft    Metalink/HTTP: Mirrors and Checksums     December 2009
+Internet-Draft      Metalink/HTTP: Mirrors and Hashes      February 2010
 
 
    download even under adverse circumstances.  All this is done
@@ -220,9 +220,9 @@ Internet-Draft    Metalink/HTTP: Mirrors and Checksums     December 2009
 
 
 
-Bryan, et al.             Expires June 4, 2010                  [Page 4]
+Bryan, et al.            Expires August 24, 2010                [Page 4]
 
-Internet-Draft    Metalink/HTTP: Mirrors and Checksums     December 2009
+Internet-Draft      Metalink/HTTP: Mirrors and Hashes      February 2010
 
 
 1.3.  Notational Conventions
@@ -276,9 +276,9 @@ Internet-Draft    Metalink/HTTP: Mirrors and Checksums     December 2009
 
 
 
-Bryan, et al.             Expires June 4, 2010                  [Page 5]
+Bryan, et al.            Expires August 24, 2010                [Page 5]
 
-Internet-Draft    Metalink/HTTP: Mirrors and Checksums     December 2009
+Internet-Draft      Metalink/HTTP: Mirrors and Hashes      February 2010
 
 
    file are downloaded from multiple mirrors simultaneously (and
@@ -332,9 +332,9 @@ Internet-Draft    Metalink/HTTP: Mirrors and Checksums     December 2009
 
 
 
-Bryan, et al.             Expires June 4, 2010                  [Page 6]
+Bryan, et al.            Expires August 24, 2010                [Page 6]
 
-Internet-Draft    Metalink/HTTP: Mirrors and Checksums     December 2009
+Internet-Draft      Metalink/HTTP: Mirrors and Hashes      February 2010
 
 
    reducing network load at inter-country bottlenecks.
@@ -388,9 +388,9 @@ Internet-Draft    Metalink/HTTP: Mirrors and Checksums     December 2009
 
 
 
-Bryan, et al.             Expires June 4, 2010                  [Page 7]
+Bryan, et al.            Expires August 24, 2010                [Page 7]
 
-Internet-Draft    Metalink/HTTP: Mirrors and Checksums     December 2009
+Internet-Draft      Metalink/HTTP: Mirrors and Hashes      February 2010
 
 
    [draft-nottingham-http-link-header] and a relation type of
@@ -444,9 +444,9 @@ Internet-Draft    Metalink/HTTP: Mirrors and Checksums     December 2009
 
 
 
-Bryan, et al.             Expires June 4, 2010                  [Page 8]
+Bryan, et al.            Expires August 24, 2010                [Page 8]
 
-Internet-Draft    Metalink/HTTP: Mirrors and Checksums     December 2009
+Internet-Draft      Metalink/HTTP: Mirrors and Hashes      February 2010
 
 
 7.  Client / Server Multi-source Download Interaction
@@ -500,9 +500,9 @@ Internet-Draft    Metalink/HTTP: Mirrors and Checksums     December 2009
 
 
 
-Bryan, et al.             Expires June 4, 2010                  [Page 9]
+Bryan, et al.            Expires August 24, 2010                [Page 9]
 
-Internet-Draft    Metalink/HTTP: Mirrors and Checksums     December 2009
+Internet-Draft      Metalink/HTTP: Mirrors and Hashes      February 2010
 
 
    server found via the Link headers)
@@ -556,9 +556,9 @@ Internet-Draft    Metalink/HTTP: Mirrors and Checksums     December 2009
 
 
 
-Bryan, et al.             Expires June 4, 2010                 [Page 10]
+Bryan, et al.            Expires August 24, 2010               [Page 10]
 
-Internet-Draft    Metalink/HTTP: Mirrors and Checksums     December 2009
+Internet-Draft      Metalink/HTTP: Mirrors and Hashes      February 2010
 
 
    HTTP/1.1 206 Partial Content
@@ -612,9 +612,9 @@ Internet-Draft    Metalink/HTTP: Mirrors and Checksums     December 2009
 
 
 
-Bryan, et al.             Expires June 4, 2010                 [Page 11]
+Bryan, et al.            Expires August 24, 2010               [Page 11]
 
-Internet-Draft    Metalink/HTTP: Mirrors and Checksums     December 2009
+Internet-Draft      Metalink/HTTP: Mirrors and Hashes      February 2010
 
 
    have a chain of trust where the master server authorizes these
@@ -668,9 +668,9 @@ Internet-Draft    Metalink/HTTP: Mirrors and Checksums     December 2009
 
 
 
-Bryan, et al.             Expires June 4, 2010                 [Page 12]
+Bryan, et al.            Expires August 24, 2010               [Page 12]
 
-Internet-Draft    Metalink/HTTP: Mirrors and Checksums     December 2009
+Internet-Draft      Metalink/HTTP: Mirrors and Hashes      February 2010
 
 
    fetched again.  If no partial cryptographic hashes are available,
@@ -724,9 +724,9 @@ Internet-Draft    Metalink/HTTP: Mirrors and Checksums     December 2009
 
 
 
-Bryan, et al.             Expires June 4, 2010                 [Page 13]
+Bryan, et al.            Expires August 24, 2010               [Page 13]
 
-Internet-Draft    Metalink/HTTP: Mirrors and Checksums     December 2009
+Internet-Draft      Metalink/HTTP: Mirrors and Hashes      February 2010
 
 
    o Relation Name: duplicate
@@ -780,9 +780,9 @@ Internet-Draft    Metalink/HTTP: Mirrors and Checksums     December 2009
 
 
 
-Bryan, et al.             Expires June 4, 2010                 [Page 14]
+Bryan, et al.            Expires August 24, 2010               [Page 14]
 
-Internet-Draft    Metalink/HTTP: Mirrors and Checksums     December 2009
+Internet-Draft      Metalink/HTTP: Mirrors and Hashes      February 2010
 
 
 10.4.  Signing
@@ -827,18 +827,18 @@ Internet-Draft    Metalink/HTTP: Mirrors and Checksums     December 2009
    [draft-bryan-metalink]
               Bryan, A., Ed., Tsujikawa, T., McNab, N., and P. Poeml,
               "The Metalink Download Description Format",
-              draft-bryan-metalink-16 (work in progress), August 2009.
+              draft-bryan-metalink-28 (work in progress), February 2010.
 
    [draft-nottingham-http-link-header]
               Nottingham, M., "Web Linking",
-              draft-nottingham-http-link-header-06 (work in progress),
-              July 2009.
+              draft-nottingham-http-link-header-07 (work in progress),
+              January 2010.
 
 
 
-Bryan, et al.             Expires June 4, 2010                 [Page 15]
+Bryan, et al.            Expires August 24, 2010               [Page 15]
 
-Internet-Draft    Metalink/HTTP: Mirrors and Checksums     December 2009
+Internet-Draft      Metalink/HTTP: Mirrors and Hashes      February 2010
 
 
 Appendix A.  Acknowledgements and Contributors
@@ -892,9 +892,9 @@ Appendix B.  Comparisons to Similar Options
 
 
 
-Bryan, et al.             Expires June 4, 2010                 [Page 16]
+Bryan, et al.            Expires August 24, 2010               [Page 16]
 
-Internet-Draft    Metalink/HTTP: Mirrors and Checksums     December 2009
+Internet-Draft      Metalink/HTTP: Mirrors and Hashes      February 2010
 
 
 Appendix C.  Document History
@@ -902,9 +902,9 @@ Appendix C.  Document History
    [[ to be removed by the RFC editor before publication as an RFC. ]]
 
    Known issues concerning this draft:
-   o  Use of Link header to describe Mirrors.  Only send a few mirrors
-      with Link header, or only send them if Want-Digest is used?  Some
-      organizations have many mirrors.
+   o  Some organizations have many mirrors.  Should all be sent, or only
+      a certain number?  All should be included in the Metalink/XML, if
+      used.
    o  Would it make more sense to use qvalue-style policies to describe
       mirror priority, i.e. q=1.0 through q=0.0 ?
    o  Using Metalink/XML for partial file cryptographic hashes.  That
@@ -912,6 +912,9 @@ Appendix C.  Document History
       better method?
    o  Do we need an "official" MIME type for .torrent files or allow
       "application/x-bittorrent"?
+
+   -15 : December 31, 2009.
+   o  Update references and terminology.
 
    -14 : December 31, 2009.
    o  Baseline file hash: SHA-256.
@@ -940,19 +943,21 @@ Appendix C.  Document History
    o  Preferred mirror servers.
 
    -06 : September 24, 2009.
+
+
+
+
+
+Bryan, et al.            Expires August 24, 2010               [Page 17]
+
+Internet-Draft      Metalink/HTTP: Mirrors and Hashes      February 2010
+
+
    o  Add Mismatch Detection, Error Recovery, and Digest Algorithm
       values.
    o  Remove Content-MD5 and Want-Digest.
 
    -05 : September 19, 2009.
-
-
-
-Bryan, et al.             Expires June 4, 2010                 [Page 17]
-
-Internet-Draft    Metalink/HTTP: Mirrors and Checksums     December 2009
-
-
    o  ETags, preferably matching the Instance Digests.
 
    -04 : September 17, 2009.
@@ -999,14 +1004,9 @@ Authors' Addresses
 
 
 
-
-
-
-
-
-Bryan, et al.             Expires June 4, 2010                 [Page 18]
+Bryan, et al.            Expires August 24, 2010               [Page 18]
 
-Internet-Draft    Metalink/HTTP: Mirrors and Checksums     December 2009
+Internet-Draft      Metalink/HTTP: Mirrors and Hashes      February 2010
 
 
    Alan Ford
@@ -1060,5 +1060,5 @@ Internet-Draft    Metalink/HTTP: Mirrors and Checksums     December 2009
 
 
 
-Bryan, et al.             Expires June 4, 2010                 [Page 19]
+Bryan, et al.            Expires August 24, 2010               [Page 19]
 

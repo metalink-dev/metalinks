@@ -144,10 +144,10 @@
 <tr><td class="header">Network Working Group</td><td class="header">A. Bryan</td></tr>
 <tr><td class="header">Internet-Draft</td><td class="header">N. McNab</td></tr>
 <tr><td class="header">Intended status: Standards Track</td><td class="header">H. Nordstrom</td></tr>
-<tr><td class="header">Expires: June 4, 2010</td><td class="header">&nbsp;</td></tr>
+<tr><td class="header">Expires: August 24, 2010</td><td class="header">&nbsp;</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">A. Ford</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">Roke Manor Research</td></tr>
-<tr><td class="header">&nbsp;</td><td class="header">December 2009</td></tr>
+<tr><td class="header">&nbsp;</td><td class="header">February 20, 2010</td></tr>
 </table></td></tr></table>
 <h1><br />Metalink/HTTP: Mirrors and Cryptographic Hashes in HTTP Headers<br />draft-bryan-metalinkhttp-15</h1>
 
@@ -178,11 +178,11 @@ The list of current Internet-Drafts can be accessed at
 The list of Internet-Draft Shadow Directories can be accessed at
 <a href='http://www.ietf.org/shadow.html'>http://www.ietf.org/shadow.html</a>.</p>
 <p>
-This Internet-Draft will expire on June 4, 2010.</p>
+This Internet-Draft will expire on August 24, 2010.</p>
 
 <h3>Copyright Notice</h3>
 <p>
-Copyright (c) 2009 IETF Trust and the persons identified as the
+Copyright (c) 2010 IETF Trust and the persons identified as the
 document authors.  All rights reserved.</p>
 <p>
 This document is subject to BCP 78 and the IETF Trust's Legal
@@ -265,8 +265,8 @@ Authors' Addresses<br />
 <a name="rfc.section.1"></a><h3>1.&nbsp;
 Introduction</h3>
 
-<p>Metalink/HTTP is an alternative representation of Metalink information, which is usually presented as an XML-based document format <a class='info' href='#draft-bryan-metalink'>[draft&#8209;bryan&#8209;metalink]<span> (</span><span class='info'>Bryan, A., Ed., Tsujikawa, T., McNab, N., and P. Poeml, &ldquo;The Metalink Download Description Format,&rdquo; August&nbsp;2009.</span><span>)</span></a>. 
-      Metalink/HTTP attempts to provide as much functionality as the Metalink/XML format by using existing standards such as Web Linking <a class='info' href='#draft-nottingham-http-link-header'>[draft&#8209;nottingham&#8209;http&#8209;link&#8209;header]<span> (</span><span class='info'>Nottingham, M., &ldquo;Web Linking,&rdquo; July&nbsp;2009.</span><span>)</span></a>, 
+<p>Metalink/HTTP is an alternative representation of Metalink information, which is usually presented as an XML-based document format <a class='info' href='#draft-bryan-metalink'>[draft&#8209;bryan&#8209;metalink]<span> (</span><span class='info'>Bryan, A., Ed., Tsujikawa, T., McNab, N., and P. Poeml, &ldquo;The Metalink Download Description Format,&rdquo; February&nbsp;2010.</span><span>)</span></a>. 
+      Metalink/HTTP attempts to provide as much functionality as the Metalink/XML format by using existing standards such as Web Linking <a class='info' href='#draft-nottingham-http-link-header'>[draft&#8209;nottingham&#8209;http&#8209;link&#8209;header]<span> (</span><span class='info'>Nottingham, M., &ldquo;Web Linking,&rdquo; January&nbsp;2010.</span><span>)</span></a>, 
       Instance Digests in HTTP <a class='info' href='#RFC3230'>[RFC3230]<span> (</span><span class='info'>Mogul, J. and A. Van Hoff, &ldquo;Instance Digests in HTTP,&rdquo; January&nbsp;2002.</span><span>)</span></a>, and ETags. Metalink/HTTP is used to list
       information about a file to be downloaded. This can include lists of multiple URIs (mirrors), Peer-to-Peer information, cryptographic hashes, and digital signatures.
 </p>
@@ -336,9 +336,9 @@ Notational Conventions</h3>
 <a name="rfc.section.2"></a><h3>2.&nbsp;
 Requirements</h3>
 
-<p>In this context, "Metalink" refers to Metalink/HTTP which consists of mirrors and cryptographic hashes in HTTP Headers as described in this document. "Metalink/XML" refers to the XML format described in <a class='info' href='#draft-bryan-metalink'>[draft&#8209;bryan&#8209;metalink]<span> (</span><span class='info'>Bryan, A., Ed., Tsujikawa, T., McNab, N., and P. Poeml, &ldquo;The Metalink Download Description Format,&rdquo; August&nbsp;2009.</span><span>)</span></a>.
+<p>In this context, "Metalink" refers to Metalink/HTTP which consists of mirrors and cryptographic hashes in HTTP Headers as described in this document. "Metalink/XML" refers to the XML format described in <a class='info' href='#draft-bryan-metalink'>[draft&#8209;bryan&#8209;metalink]<span> (</span><span class='info'>Bryan, A., Ed., Tsujikawa, T., McNab, N., and P. Poeml, &ldquo;The Metalink Download Description Format,&rdquo; February&nbsp;2010.</span><span>)</span></a>.
 </p>
-<p>Metalink resources include a Link header <a class='info' href='#draft-nottingham-http-link-header'>[draft&#8209;nottingham&#8209;http&#8209;link&#8209;header]<span> (</span><span class='info'>Nottingham, M., &ldquo;Web Linking,&rdquo; July&nbsp;2009.</span><span>)</span></a> to present a list of mirrors in the response to a client request for the resource. The cryptographic hash of a resource must be included via Instance Digests in HTTP <a class='info' href='#RFC3230'>[RFC3230]<span> (</span><span class='info'>Mogul, J. and A. Van Hoff, &ldquo;Instance Digests in HTTP,&rdquo; January&nbsp;2002.</span><span>)</span></a>.
+<p>Metalink resources include a Link header <a class='info' href='#draft-nottingham-http-link-header'>[draft&#8209;nottingham&#8209;http&#8209;link&#8209;header]<span> (</span><span class='info'>Nottingham, M., &ldquo;Web Linking,&rdquo; January&nbsp;2010.</span><span>)</span></a> to present a list of mirrors in the response to a client request for the resource. The cryptographic hash of a resource must be included via Instance Digests in HTTP <a class='info' href='#RFC3230'>[RFC3230]<span> (</span><span class='info'>Mogul, J. and A. Van Hoff, &ldquo;Instance Digests in HTTP,&rdquo; January&nbsp;2002.</span><span>)</span></a>.
 </p>
 <p>Metalink servers are HTTP servers with one or more Metalink
  resources. Mirror and cryptographic hash information provided by the originating Metalink server MUST be considered authoritative. Metalink servers and their associated mirror servers
@@ -347,7 +347,7 @@ Requirements</h3>
 <p>Mirror servers are typically FTP or HTTP servers that "mirror" another server. That is, they provide identical copies of (at least some) files that are also on the mirrored server. 
       Mirror servers MAY be Metalink servers. Mirror servers MUST support serving partial content. HTTP mirror servers SHOULD share the same ETag policy as the originating Metalink server. HTTP Mirror servers SHOULD support Instance Digests in HTTP <a class='info' href='#RFC3230'>[RFC3230]<span> (</span><span class='info'>Mogul, J. and A. Van Hoff, &ldquo;Instance Digests in HTTP,&rdquo; January&nbsp;2002.</span><span>)</span></a>.
 </p>
-<p>Metalink clients use the mirrors provided by a Metalink server with Link header <a class='info' href='#draft-nottingham-http-link-header'>[draft&#8209;nottingham&#8209;http&#8209;link&#8209;header]<span> (</span><span class='info'>Nottingham, M., &ldquo;Web Linking,&rdquo; July&nbsp;2009.</span><span>)</span></a>. Metalink clients MUST support HTTP and MAY support FTP, BitTorrent, 
+<p>Metalink clients use the mirrors provided by a Metalink server with Link header <a class='info' href='#draft-nottingham-http-link-header'>[draft&#8209;nottingham&#8209;http&#8209;link&#8209;header]<span> (</span><span class='info'>Nottingham, M., &ldquo;Web Linking,&rdquo; January&nbsp;2010.</span><span>)</span></a>. Metalink clients MUST support HTTP and MAY support FTP, BitTorrent, 
       or other download methods. Metalink clients MUST switch downloads from one mirror to another if the mirror becomes unreachable. Metalink clients SHOULD support multi-source, or parallel, 
       downloads, where portions of a file are downloaded from multiple mirrors simultaneously (and optionally, from Peer-to-Peer sources). Metalink clients MUST support Instance Digests in HTTP <a class='info' href='#RFC3230'>[RFC3230]<span> (</span><span class='info'>Mogul, J. and A. Van Hoff, &ldquo;Instance Digests in HTTP,&rdquo; January&nbsp;2002.</span><span>)</span></a> by 
       requesting and verifying cryptographic hashes. Metalink clients MAY make use of digital signatures if they are offered.
@@ -357,7 +357,7 @@ Requirements</h3>
 <a name="rfc.section.3"></a><h3>3.&nbsp;
 Mirrors / Multiple Download Locations</h3>
 
-<p>Mirrors are specified with the Link header <a class='info' href='#draft-nottingham-http-link-header'>[draft&#8209;nottingham&#8209;http&#8209;link&#8209;header]<span> (</span><span class='info'>Nottingham, M., &ldquo;Web Linking,&rdquo; July&nbsp;2009.</span><span>)</span></a> and a relation type of "duplicate" as defined in <a class='info' href='#IANA'>Section&nbsp;9<span> (</span><span class='info'>IANA Considerations</span><span>)</span></a>.
+<p>Mirrors are specified with the Link header <a class='info' href='#draft-nottingham-http-link-header'>[draft&#8209;nottingham&#8209;http&#8209;link&#8209;header]<span> (</span><span class='info'>Nottingham, M., &ldquo;Web Linking,&rdquo; January&nbsp;2010.</span><span>)</span></a> and a relation type of "duplicate" as defined in <a class='info' href='#IANA'>Section&nbsp;9<span> (</span><span class='info'>IANA Considerations</span><span>)</span></a>.
 </p>
 <p>
 <p>A brief Metalink server response with two mirrors only:
@@ -435,7 +435,7 @@ rel="duplicate"; pri=1; pref=1; depth=4
 <a name="rfc.section.4"></a><h3>4.&nbsp;
 Peer-to-Peer / Metainfo</h3>
 
-<p>Metainfo files, which describe ways to download a file over Peer-to-Peer networks or otherwise, are specified with the Link header <a class='info' href='#draft-nottingham-http-link-header'>[draft&#8209;nottingham&#8209;http&#8209;link&#8209;header]<span> (</span><span class='info'>Nottingham, M., &ldquo;Web Linking,&rdquo; July&nbsp;2009.</span><span>)</span></a> and a relation type of "describedby" and a type parameter that indicates
+<p>Metainfo files, which describe ways to download a file over Peer-to-Peer networks or otherwise, are specified with the Link header <a class='info' href='#draft-nottingham-http-link-header'>[draft&#8209;nottingham&#8209;http&#8209;link&#8209;header]<span> (</span><span class='info'>Nottingham, M., &ldquo;Web Linking,&rdquo; January&nbsp;2010.</span><span>)</span></a> and a relation type of "describedby" and a type parameter that indicates
    the MIME type of the metadata available at the URI.
 </p>
 <p>
@@ -463,7 +463,7 @@ Metalink/XML Files</h3>
 <a name="rfc.section.5"></a><h3>5.&nbsp;
 OpenPGP Signatures</h3>
 
-<p>OpenPGP signatures are specified with the Link header <a class='info' href='#draft-nottingham-http-link-header'>[draft&#8209;nottingham&#8209;http&#8209;link&#8209;header]<span> (</span><span class='info'>Nottingham, M., &ldquo;Web Linking,&rdquo; July&nbsp;2009.</span><span>)</span></a> and a relation type of "describedby" and a type parameter of "application/pgp-signature".
+<p>OpenPGP signatures are specified with the Link header <a class='info' href='#draft-nottingham-http-link-header'>[draft&#8209;nottingham&#8209;http&#8209;link&#8209;header]<span> (</span><span class='info'>Nottingham, M., &ldquo;Web Linking,&rdquo; January&nbsp;2010.</span><span>)</span></a> and a relation type of "describedby" and a type parameter of "application/pgp-signature".
 </p>
 <p>
 <p>A brief Metalink server response with OpenPGP signature only:
@@ -787,9 +787,9 @@ Signing</h3>
 <tr><td class="author-text" valign="top"><a name="RFC3987">[RFC3987]</a></td>
 <td class="author-text">Duerst, M. and M. Suignard, &ldquo;<a href="http://tools.ietf.org/html/rfc3987">Internationalized Resource Identifiers (IRIs)</a>,&rdquo; RFC&nbsp;3987, January&nbsp;2005.</td></tr>
 <tr><td class="author-text" valign="top"><a name="draft-bryan-metalink">[draft-bryan-metalink]</a></td>
-<td class="author-text"><a href="mailto:anthonybryan@gmail.com">Bryan, A., Ed.</a>, <a href="mailto:tatsuhiro.t@gmail.com">Tsujikawa, T.</a>, <a href="mailto:neil@nabber.org">McNab, N.</a>, and <a href="mailto:poeml@mirrorbrain.org">P. Poeml</a>, &ldquo;<a href="http://www.ietf.org/internet-drafts/draft-bryan-metalink-16.txt">The Metalink Download Description Format</a>,&rdquo; draft-bryan-metalink-16 (work in progress), August&nbsp;2009.</td></tr>
+<td class="author-text"><a href="mailto:anthonybryan@gmail.com">Bryan, A., Ed.</a>, <a href="mailto:tatsuhiro.t@gmail.com">Tsujikawa, T.</a>, <a href="mailto:neil@nabber.org">McNab, N.</a>, and <a href="mailto:poeml@mirrorbrain.org">P. Poeml</a>, &ldquo;<a href="http://www.ietf.org/internet-drafts/draft-bryan-metalink-28.txt">The Metalink Download Description Format</a>,&rdquo; draft-bryan-metalink-28 (work in progress), February&nbsp;2010.</td></tr>
 <tr><td class="author-text" valign="top"><a name="draft-nottingham-http-link-header">[draft-nottingham-http-link-header]</a></td>
-<td class="author-text"><a href="mailto:mnot@mnot.net">Nottingham, M.</a>, &ldquo;<a href="http://www.ietf.org/internet-drafts/draft-nottingham-http-link-header-06.txt">Web Linking</a>,&rdquo; draft-nottingham-http-link-header-06 (work in progress), July&nbsp;2009.</td></tr>
+<td class="author-text"><a href="mailto:mnot@mnot.net">Nottingham, M.</a>, &ldquo;<a href="http://www.ietf.org/internet-drafts/draft-nottingham-http-link-header-07.txt">Web Linking</a>,&rdquo; draft-nottingham-http-link-header-07 (work in progress), January&nbsp;2010.</td></tr>
 </table>
 
 <a name="anchor15"></a><br /><hr />
@@ -808,7 +808,7 @@ Comparisons to Similar Options</h3>
 
 <p>[[ to be removed by the RFC editor before publication as an RFC. ]]
 </p>
-<p>This draft, compared to the Metalink/XML format <a class='info' href='#draft-bryan-metalink'>[draft&#8209;bryan&#8209;metalink]<span> (</span><span class='info'>Bryan, A., Ed., Tsujikawa, T., McNab, N., and P. Poeml, &ldquo;The Metalink Download Description Format,&rdquo; August&nbsp;2009.</span><span>)</span></a> :
+<p>This draft, compared to the Metalink/XML format <a class='info' href='#draft-bryan-metalink'>[draft&#8209;bryan&#8209;metalink]<span> (</span><span class='info'>Bryan, A., Ed., Tsujikawa, T., McNab, N., and P. Poeml, &ldquo;The Metalink Download Description Format,&rdquo; February&nbsp;2010.</span><span>)</span></a> :
 </p>
 <p>
 	    </p>
@@ -849,13 +849,21 @@ Document History</h3>
 <p>Known issues concerning this draft:
 	    </p>
 <ul class="text">
-<li>Use of Link header to describe Mirrors. Only send a few mirrors with Link header, or only send them if Want-Digest is used? Some organizations have many mirrors.
+<li>Some organizations have many mirrors. Should all be sent, or only a certain number? All should be included in the Metalink/XML, if used.
 </li>
 <li>Would it make more sense to use qvalue-style policies to describe mirror priority, i.e. q=1.0 through q=0.0 ?
 </li>
 <li>Using Metalink/XML for partial file cryptographic hashes. That adds XML dependency to apps for an important feature. Is there a better method?
 </li>
 <li>Do we need an "official" MIME type for .torrent files or allow "application/x-bittorrent"?
+</li>
+</ul>
+
+<p>-15 : December 31, 2009.
+	    
+	    </p>
+<ul class="text">
+<li>Update references and terminology.
 </li>
 </ul>
 
