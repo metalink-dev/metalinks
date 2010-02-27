@@ -6,7 +6,7 @@
 # URL: http://www.nabber.org/projects/
 # E-mail: webmaster@nabber.org
 #
-# Copyright: (C) 2007-2009, Hampus Wessman, Neil McNab
+# Copyright: (C) 2007-2010, Hampus Wessman, Neil McNab
 # License: GNU General Public License Version 2
 #   (http://www.gnu.org/copyleft/gpl.html)
 #
@@ -30,7 +30,7 @@
 #
 # Description:
 #   Functions for accessing XML formatted data.
-#   Last updated for RFC draft 26
+#   Last updated for RFC final draft 28
 #
 ########################################################################
 
