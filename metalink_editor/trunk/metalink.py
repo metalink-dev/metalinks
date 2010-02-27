@@ -6,7 +6,7 @@
 # URL: http://www.nabber.org/projects/
 # E-mail: webmaster@nabber.org
 #
-# Copyright: (C) 2007-2009, Hampus Wessman, Neil McNab
+# Copyright: (C) 2007-2010, Hampus Wessman, Neil McNab
 # License: GNU General Public License Version 2
 #   (http://www.gnu.org/copyleft/gpl.html)
 #
@@ -25,11 +25,12 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
 # Filename: $URL: https://metalinks.svn.sourceforge.net/svnroot/metalinks/checker/metalink.py $
-# Last Updated: $Date: 2009-10-05 00:16:28 -0700 (Mon, 05 Oct 2009) $
+# Last Updated: $Date: 2010-02-27 13:31:13 -0800 (Sat, 27 Feb 2010) $
 # Author(s): Hampus Wessman, Neil McNab
 #
 # Description:
 #   Functions for accessing XML formatted data.
+#   Last updated for RFC final draft 28
 #
 ########################################################################
 
@@ -60,6 +61,8 @@ GENERATOR = "Metalink Checker Version 5.0"
 
 RFC3339 = "%Y-%m-%dT%H:%M:%SZ"
 RFC822 = "%a, %d %b %Y %H:%M:%S +0000"
+
+XMLSEP = "/"
 
 HASHMAP = { "sha256": "sha-256", 
             "sha1": "sha-1",
@@ -549,7 +552,7 @@ class MetalinkFile(MetalinkFileBase):
                 if key == 'pgp' and self.hashlist[key] != "":
                     text += '      <signature type="%s">' % key + self.hashlist[key] + '</signature>\n'
                 else:
-                    text += '      <hash type="%s">' % hashlookup(key) + self.hashlist[key].lower() + '</hash>\n'
+                    text += '      <hash type="%s">' % key + self.hashlist[key].lower() + '</hash>\n'
             if len(self.pieces) > 1:
                 text += '        <pieces type="'+self.piecetype+'" length="'+str(self.piecelength)+'">\n'
                 for id in range(len(self.pieces)):
@@ -587,7 +590,8 @@ class MetalinkBase:
         self.generator = GENERATOR
         self.origin = ""
 
-        self.p = xml.parsers.expat.ParserCreate()
+        self.p = xml.parsers.expat.ParserCreate(namespace_separator=XMLSEP)
+        self.p.buffer_text = True
         self.parent = []
 
         self.p.StartElementHandler = self.start_element
@@ -652,6 +656,7 @@ class Metalink(MetalinkBase):
         self.type = ""
         self.pubdate = ""
         self.refreshdate = ""
+        self.XMLNS = "http://www.metalinker.org/"
         MetalinkBase.__init__(self)
         
     def generate(self):
@@ -665,7 +670,7 @@ class Metalink(MetalinkBase):
         gentext = ""
         if self.generator.strip() != "":
             gentext = 'generator="'+self.generator+'" '
-        text += '<metalink version="3.0" '+origin + typetext + gentext + 'xmlns="http://www.metalinker.org/">\n'
+        text += '<metalink version="3.0" '+origin + typetext + gentext + 'xmlns="' + self.XMLNS + '">\n'
         text += self.generate_info()
         text += '  <files>\n'
         for fileobj in self.files:
@@ -711,6 +716,9 @@ class Metalink(MetalinkBase):
     # 3 handler functions
     def start_element(self, name, attrs):
         self.data = ""
+        xmlns, name = name.rsplit(XMLSEP, 1)
+        if xmlns != self.XMLNS and xmlns != "":
+            return
         self.parent.append(XMLTag(name, attrs))
         if name == "file":
             fileobj = MetalinkFile(attrs["name"], attrs)
@@ -723,6 +731,9 @@ class Metalink(MetalinkBase):
                 except KeyError: pass
             
     def end_element(self, name):
+        xmlns, name = name.rsplit(XMLSEP, 1)
+        if xmlns != self.XMLNS and xmlns != "":
+            return
         tag = self.parent.pop()
 
         try:
@@ -789,15 +800,19 @@ class Metalink4(MetalinkBase):
         self.dynamic=""
         self.published=""
         self.updated=""
+        self.XMLNS = "urn:ietf:params:xml:ns:metalink"
         MetalinkBase.__init__(self)
 
     def generate(self):
         text = '<?xml version="1.0" encoding="utf-8"?>\n'
-        text += '<metalink xmlns="urn:ietf:params:xml:ns:metalink">\n'
-        if self.origin.strip() != "":
-            text += '<origin>'+self.origin+'</origin>\n'
+        text += '<metalink xmlns="' + self.XMLNS + '">\n'
+
+        attr = 'dynamic="false"'        
         if self.dynamic.lower() == "true":
-            text += '<dynamic>true</dynamic>\n'
+            attr = 'dynamic="true"'
+
+        if self.origin.strip() != "":
+            text += '<origin ' + attr + '>'+self.origin+'</origin>\n'
        
         for fileobj in self.files:
             text += fileobj.generate_file()
@@ -809,26 +824,29 @@ class Metalink4(MetalinkBase):
         
     # handler functions
     def start_element(self, name, attrs):
-        xmlns = ""
+        if name.startswith("http://www.metalinker.org"):
+            raise AssertionError, "Not a valid Metalink 4 (RFC) file."
+            
         self.data = ""
+        xmlns, name = name.rsplit(XMLSEP, 1)
+        if xmlns != self.XMLNS:
+            return
         self.parent.append(XMLTag(name, attrs))
         if name == "file":
             fileobj = MetalinkFile4(attrs["name"], attrs)
             self.files.append(fileobj)
-            
-        if name == "metalink":
-            try:
-                xmlns = attrs["xmlns"]
-            except KeyError: pass
-            if xmlns != "urn:ietf:params:xml:ns:metalink":
-                raise AssertionError, "Not a valid Metalink 4 (RFC) file."
         
     def end_element(self, name):
+        xmlns, name = name.rsplit(XMLSEP, 1)
+        if xmlns != self.XMLNS:
+            return
         tag = self.parent.pop()
 
         try:
-            if name in ("dynamic", "generator", "origin", "published", "updated"):
+            if name in ("generator", "origin", "published", "updated"):
                 setattr(self, name, self.data.strip())
+                if name == "origin" and tag.attrs.has_key("dynamic"):
+                    setattr(self, "dynamic", tag.attrs["dynamic"])
             elif name in ("url", "metaurl"):
                 fileobj = self.files[-1]
                 fileobj.add_url(self.data.strip(), attrs=tag.attrs)
@@ -876,6 +894,65 @@ class Metalink4(MetalinkBase):
             self.errors.extend(fileobj.errors)
         return valid
 
+############### RSS/Atom ###################
+
+class RSSAtomItem:
+    def __init__(self):
+        self.url = None
+        self.title = None
+        self.size = 0
+
+class RSSAtom():
+    def __init__(self):
+        self.files = []
+        self.title = ""
+        
+        self.p = xml.parsers.expat.ParserCreate()
+        self.p.buffer_text = True
+        self.parent = []
+
+        self.p.StartElementHandler = self.start_element
+        self.p.EndElementHandler = self.end_element
+        self.p.CharacterDataHandler = self.char_data
+            
+    def char_data(self, data):
+        self.data += data #.strip()
+
+    def parsehandle(self, handle):
+        return self.p.ParseFile(handle)
+        
+    # handler functions
+    def start_element(self, name, attrs):
+        self.data = ""
+        self.parent.append(XMLTag(name, attrs))
+        if name in ('item', 'entry'):
+            self.files.append(RSSAtomItem())
+        
+    def end_element(self, name):
+        tag = self.parent.pop()
+
+        if name == "link":
+            if tag.attrs.has_key("rel") and tag.attrs["rel"] == 'enclosure':
+                fileobj = self.files[-1]
+                if tag.attrs.has_key("href"):
+                    fileobj.url = tag.attrs["href"]
+                if tag.attrs.has_key("length"):
+                    fileobj.size = int(tag.attrs["length"])
+                    
+        if name == "enclosure":
+            fileobj = self.files[-1]
+            if tag.attrs.has_key("url"):
+                fileobj.url = tag.attrs["url"]
+            if tag.attrs.has_key("length"):
+                fileobj.size = int(tag.attrs["length"])
+                
+        if name == "title" and self.parent[-1].name in ("entry","item"):
+            fileobj = self.files[-1]
+            fileobj.title = self.data
+        elif name == "title":
+            self.title = self.data    
+        
+        
 ############### Jigdo ######################
 
 class DecompressFile(gzip.GzipFile):
@@ -1142,8 +1219,9 @@ def convert_4to3(metalinkobj4):
     for fileobj4 in metalinkobj4.files:
         fileobj3 = MetalinkFile(fileobj4.filename)
         # copy common attributes
-        for attr in ('filename', 'pieces', 'piecelength', 'piecetype', 'language', 'os', 'size'):
+        for attr in ('filename', 'pieces', 'piecelength', 'language', 'os', 'size'):
             setattr(fileobj3, attr, getattr(fileobj4, attr))
+        setattr(fileobj3, "piecetype", getattr(fileobj4, "piecetype").replace("-", ""))
         for attr in ('description', 'version', 'identity', 'license_url', 'license_name', 'publisher_url', 'publisher_name'):
             setattr(metalinkobj3, attr, getattr(fileobj4, attr))
         # copy hashlist, change key names
@@ -1303,9 +1381,10 @@ def compute_ed2k(filename, size=None, ed2khash=None):
     return "ed2k://|file|%s|%s|%s|/" % (os.path.basename(filename), size, ed2khash)
 
 def ed2k_hash(filename):
-    try:
-        import hashlib
-    except ImportError:
+    try: import hashlib
+    except ImportError: pass
+    
+    if hashlib == None:
         return ""
     
     blocksize = 9728000
