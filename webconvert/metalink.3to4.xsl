@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Author: neil@nabber.org 
-Updated to match draft 26
+Updated to final RFC draft 28
 -->
 
 <xsl:stylesheet xmlns="urn:ietf:params:xml:ns:metalink"
