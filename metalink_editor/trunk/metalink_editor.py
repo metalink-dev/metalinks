@@ -16,9 +16,13 @@
 #    along with this program; if not, write to the Free Software
 #    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 
-import wxversion
-wxversion.ensureMinimal("2.6")
-import wx, metalink, sys, os.path
+import sys
+
+if not hasattr(sys, 'frozen'):
+    import wxversion
+    wxversion.ensureMinimal("2.6")
+
+import wx, metalink, os.path
 
 current_version = "1.3.0"
 
