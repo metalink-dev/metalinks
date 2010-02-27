@@ -19,7 +19,7 @@ URL = 'http://www.nabber.org/projects/'
 modules = ['console', 'metalink', 'GPG', 'download', 'checker']
 outputfile = "metalinkc.py"
 
-readhandle = open("header.txt")
+readhandle = open("README.txt")
 header = readhandle.read()
 readhandle.close()
 
