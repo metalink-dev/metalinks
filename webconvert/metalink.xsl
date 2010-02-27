@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Author: webmaster@nabber.org -->
+<!-- Author: neil@nabber.org 
+Updated to final RFC draft 28
+-->
 
 <xsl:stylesheet xmlns="http://www.w3.org/1999/xhtml"
 		xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
