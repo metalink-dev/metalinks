@@ -621,7 +621,7 @@ class MainFrame(wx.Frame):
         if self.filename.endswith("meta4"):
             ml = metalink.convert(self.ml, 4)
         if not ml.validate():
-            for e in sml.errors:
+            for e in ml.errors:
                 answer = wx.MessageBox(e + " Continue anyway?", "Confirm", wx.ICON_ERROR | wx.OK | wx.CANCEL, self)
                 if answer != wx.OK: return
             ml.errors = []
