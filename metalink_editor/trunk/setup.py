@@ -6,12 +6,12 @@ import os
 import shutil
 
 APP_NAME = 'Metalink Editor'
-VERSION = '1.3'
+VERSION = '1.3.1'
 LICENSE = 'GPL'
 DESC = ''
-AUTHOR_NAME = 'Hampus Wessman'
+AUTHOR_NAME = 'Neil McNab'
 EMAIL = ''
-URL = 'http://hampus.vox.nu/metalink/'
+URL = 'https://sourceforge.net/projects/metalinks/'
 
 scripts = ["meditor.py"]
 data = ["metalink_small.png", "metalink_small.ico", "metalink.png", "license.txt", "changelog.txt", "readme.txt"]

@@ -38,7 +38,7 @@ import optparse
 import os.path
 import sys
 
-metalink.GENERATOR = "Metalink Editor version 1.3"
+metalink.GENERATOR = "Metalink Editor version 1.3.1"
 
 # This value is used by the ProgressBar class. Set it to False if the
 # current console doesn't support \b
