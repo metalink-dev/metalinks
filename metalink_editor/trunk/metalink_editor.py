@@ -407,7 +407,7 @@ class MainFrame(wx.Frame):
 
     
     def onMenuAbout(self, evt):
-        wx.MessageBox("Metalink Editor is an editor for metalink files (www.metalinker.org).\n\nThe application was programmed by Hampus Wessman.\nWeb site: http://hampus.vox.nu/metalink/\n\nAnthony Bryan has helped alot with ideas and comments. Thanks!", "About Metalink Editor", wx.ICON_INFORMATION)
+        wx.MessageBox("Metalink Editor is an editor for metalink files (www.metalinker.org).\n\nThe application is maintained by Neil McNab.\nWeb site: https://sourceforge.net/projects/metalinks/\n\nThe application was created by Hampus Wessman.\nAnthony Bryan has helped alot with ideas and comments. Thanks!", "About Metalink Editor", wx.ICON_INFORMATION)
 
     def onMenuSettings(self, evt):
         dlg = SettingsDialog(self, -1, "Change Settings")
