@@ -24,7 +24,7 @@ if not hasattr(sys, 'frozen'):
 
 import wx, metalink, os.path
 
-current_version = "1.3.0"
+current_version = "1.3.1"
 
 use_chunks_default = True
 max_chunks_default = 100

@@ -2,9 +2,9 @@
 
 ; HM NIS Edit Wizard helper defines
 !define PRODUCT_NAME "Metalink Editor"
-!define PRODUCT_VERSION "1.3.0"
-!define PRODUCT_PUBLISHER "Hampus Wessman"
-!define PRODUCT_WEB_SITE "http://hampus.vox.nu/metalink/"
+!define PRODUCT_VERSION "1.3.1"
+!define PRODUCT_PUBLISHER "Neil McNab"
+!define PRODUCT_WEB_SITE "https://sourceforge.net/projects/metalinks/"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\metalink_editor.exe"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
 !define PRODUCT_UNINST_ROOT_KEY "HKLM"
