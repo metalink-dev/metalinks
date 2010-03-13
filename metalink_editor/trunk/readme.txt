@@ -1,5 +1,5 @@
 Metalink Editor's Readme
-Hampus Wessman (hw@vox.nu)
+https://sourceforge.net/projects/metalinks/
 
 ABOUT
 -----
@@ -72,5 +72,3 @@ website).  For BSD,  MIT and  similar it  is recommended  to enter
 an URL  pointing to a license  for this specific file.  CC and GNU
 licenses don't need any special  treatment, but the URLs might not
 point to the latest version...
-
-Please send me an email if you have any questions!
