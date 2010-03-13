@@ -1,27 +1,14 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head>
-  <meta content="text/html; charset=UTF-8" http-equiv="content-type">
-
-	<meta name="language" content="en" >
-	<meta name="lang" content="en" >
-	<link rel="icon" type="image/png" href="/var/img/metalink_16x16.png" >
-
-  <title>Metalink validator</title>
-  <link href="/var/base.css" rel="stylesheet" type="text/css" media="screen">
-</head>
-<body>
+{% extends "base.html" %}
+{% block title %}Metalink validation results for {{ url|escape }} {% endblock%}
+{% block body %}
 <div class="page">
-
-  <div class="warning padded center">
-  This page is currently under construction by the <a href="http://sourceforge.net/apps/trac/metalinks/">Metalinks project</a>.
-  </div>
+{% include "validation_form.html" %}
 
 <div class="center">
 {% if validator.passed %}
-<h1>Passed!</h1>
+<h1 class="gree">Valid</h1>
 {% else %}
-<h1>Failed :(</h1>
+<h1 class="red">Invalid</h1>
 {% endif %}
 {% for msg in validator.messages %}
   <div class="message"><em>{{ msg.catagoryName }}</em><br>{{ msg|escape }}</div>
@@ -29,5 +16,4 @@
 </div>
 
 </div>
-</body>
-</html>
+{% endblock %}

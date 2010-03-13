@@ -1,7 +1,6 @@
 Currently the following is going to (will have to) happen:
 
-[Bram] Extend templates on a common base using extend
-[Bram] Change CSS to something more beautifull
+  Change CSS to something more beautifull
   Create an url parsing and validating service.. for there on it should be hacking the validation function.
    - Load XML and parse it using XML
    - Detect version of the metalink?
