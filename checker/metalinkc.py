@@ -244,11 +244,19 @@ try: import win32process
 except ImportError: pass
 try: import bz2
 except ImportError: pass
-try: import hashlib
-except ImportError: pass
+try:
+    import hashlib
+    md5 = hashlib
+    sha1 = hashlib
+    sha256 = hashlib
+except ImportError:
+    import md5
+    md5 = md5
+    import sha
+    sha1 = sha
+    sha1.sha1 = sha1.sha
+    sha256 = None
 import copy
-import md5
-import sha
 import gzip
 import httplib
 import binascii
@@ -1885,6 +1893,9 @@ def verify_chunk_checksum(chunkstring, checksums={}):
     Returns True if first checksum provided is valid
     Returns True if no checksums are provided
     Returns False otherwise
+
+    Verification of hash types other than {md5,sha1} requires the hashlib
+    module to be present (Python 2.5 or newer).
     '''
 
     try:
@@ -1910,14 +1921,14 @@ def verify_chunk_checksum(chunkstring, checksums={}):
     except (KeyError, AttributeError): pass
     try:
         checksums["sha1"]
-        if hashlib.sha1(chunkstring).hexdigest() == checksums["sha1"].lower():
+        if sha1.sha1(chunkstring).hexdigest() == checksums["sha1"].lower():
             return True
         else:
             return False
     except KeyError: pass
     try:
         checksums["md5"]
-        if hashlib.md5(chunkstring).hexdigest() == checksums["md5"].lower():
+        if md5.md5(chunkstring).hexdigest() == checksums["md5"].lower():
             return True
         else:
             return False
@@ -1934,6 +1945,9 @@ def verify_checksum(local_file, checksums={}):
     Returns True if first checksum provided is valid
     Returns True if no checksums are provided
     Returns False otherwise
+
+    Verification of hash types other than {md5,sha1} requires the hashlib
+    module to be present (Python 2.5 or newer).
     '''
     
     try:
@@ -1965,7 +1979,7 @@ def verify_checksum(local_file, checksums={}):
     except (KeyError, AttributeError): pass
     try:
         checksums["sha1"]
-        if filehash(local_file, hashlib.sha1()) == checksums["sha1"].lower():
+        if filehash(local_file, sha1.sha1()) == checksums["sha1"].lower():
             return True
         else:
             #print "\nERROR: sha1 checksum failed for %s." % os.path.basename(local_file)
@@ -1973,7 +1987,7 @@ def verify_checksum(local_file, checksums={}):
     except KeyError: pass
     try:
         checksums["md5"]
-        if filehash(local_file, hashlib.md5()) == checksums["md5"].lower():
+        if filehash(local_file, md5.md5()) == checksums["md5"].lower():
             return True
         else:
             #print "\nERROR: md5 checksum failed for %s." % os.path.basename(local_file)
@@ -4227,17 +4241,14 @@ class MetalinkFileBase:
             if numpieces < 2: use_chunks = False
         # Hashes
         fp = open(filename, "rb")
-        md5hash = md5.new()
-        sha1hash = sha.new()
-        sha256hash = None
-        # Try to use hashlib
-        try:
-            md5hash = hashlib.md5()
-            sha1hash = hashlib.sha1()
-            sha256hash = hashlib.sha256()
-        except:
+        md5hash = md5.md5()
+        sha1hash = sha1.sha1()
+        if sha256:
+            sha256hash = sha256.sha256()
+        else:
+            sha256hash = None
             print "Hashlib not available. No support for SHA-256."
-        piecehash = sha.new()
+        piecehash = sha1.sha1()
         piecenum = 0
         length = 0
         self.pieces = []
@@ -4279,13 +4290,13 @@ class MetalinkFileBase:
                     if length == self.piecelength:
                         print "Done with piece hash", len(self.pieces)
                         self.pieces.append(piecehash.hexdigest())
-                        piecehash = sha.new()
+                        piecehash = sha1.sha1()
                         length = 0
         if use_chunks:
             if length > 0:
                 print "Done with piece hash", len(self.pieces)
                 self.pieces.append(piecehash.hexdigest())
-                piecehash = sha.new()
+                piecehash = sha1.sha1()
             print "Total number of pieces:", len(self.pieces)
         fp.close()
         self.hashlist["md5"] = md5hash.hexdigest()
