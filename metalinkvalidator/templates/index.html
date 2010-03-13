@@ -1,32 +1,6 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-<head>
-  <meta content="text/html; charset=UTF-8" http-equiv="content-type">
-
-	<meta name="language" content="en" >
-	<meta name="lang" content="en" >
-	<link rel="icon" type="image/png" href="/var/img/metalink_16x16.png" >
-
-  <title>Metalink validator</title>
-  <link href="/var/base.css" rel="stylesheet" type="text/css" media="screen">
-</head>
-<body>
+{% extends "base.html" %}
+{% block body %}
 <div class="page">
-
-  <div class="warning padded center">
-  This page is currently under construction by the <a href="http://sourceforge.net/apps/trac/metalinks/">Metalinks project</a>.
-  </div>
-
-<div class="center">
-  <form action="/validate" method="get">
-    <fieldset>
-      <legend>Metalink validator:</legend>
-      URL: <input type="text" name="url" size="80">
-      <input type="submit">
-    </fieldset>
-  </form>
+{% include "validation_form.html" %}
 </div>
-
-</div>
-</body>
-</html>
+{% endblock %}

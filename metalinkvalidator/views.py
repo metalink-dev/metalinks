@@ -52,7 +52,7 @@ class Validator(webapp.RequestHandler, TemplateRenderer):
       v.run()
     except google.appengine.api.urlfetch.InvalidURLError, e:
       v.addError('Invalid url, "%s" is not considered valid.' % url, fatal = True)
-    self.write_template('validation_result.html', {'validator': v})
+    self.write_template('validation_result.html', {'validator': v, 'url': url})
 
 
 

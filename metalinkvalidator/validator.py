@@ -63,8 +63,14 @@ class Validator:
     return stats
   
   def run(self):
+    self.passed = False
+    if not len(self.content):
+      self.addError('No content found')
+      return
+    
     self.messages.append(Message('info', 'Content length: %i' % len(self.content)))
     #Start with normal XML validation
+    
     #Insert more checks here
     #Set self.passed if this validation ran successfully
     pass
