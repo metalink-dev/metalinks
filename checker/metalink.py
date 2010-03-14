@@ -36,8 +36,7 @@
 
 import os
 import os.path
-import md5
-import sha
+import hashlib
 import re
 import math
 import time
@@ -286,18 +285,12 @@ class MetalinkFileBase:
             if numpieces < 2: use_chunks = False
         # Hashes
         fp = open(filename, "rb")
-        md5hash = md5.new()
-        sha1hash = sha.new()
-        sha256hash = None
-        # Try to use hashlib
-        try:
-            import hashlib
-            md5hash = hashlib.md5()
-            sha1hash = hashlib.sha1()
-            sha256hash = hashlib.sha256()
-        except:
-            print "Hashlib not available. No support for SHA-256."
-        piecehash = sha.new()
+
+        md5hash = hashlib.md5()
+        sha1hash = hashlib.sha1()
+        sha256hash = hashlib.sha256()
+        piecehash = hashlib.sha1()
+        
         piecenum = 0
         length = 0
         self.pieces = []
@@ -1380,13 +1373,7 @@ def compute_ed2k(filename, size=None, ed2khash=None):
 
     return "ed2k://|file|%s|%s|%s|/" % (os.path.basename(filename), size, ed2khash)
 
-def ed2k_hash(filename):
-    try: import hashlib
-    except ImportError: pass
-    
-    if hashlib == None:
-        return ""
-    
+def ed2k_hash(filename):    
     blocksize = 9728000
     size = os.path.getsize(filename)
 
@@ -1422,12 +1409,7 @@ def file_hash(filename, hashtype):
     '''
     returns checksum as a hex string
     '''
-    try:
-        import hashlib
-        hashfunc = getattr(hashlib, hashtype)
-    except ImportError:
-        hashfunc = getattr(hashtype, new)
-
+    hashfunc = getattr(hashlib, hashtype)
     hashobj = hashfunc()
     return filehash(filename, hashobj)
 
