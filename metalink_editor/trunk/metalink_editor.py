@@ -26,6 +26,10 @@ import wx, metalink, os.path
 
 current_version = "1.3.1"
 
+use_meta4_default = True
+use_md5_default = True
+use_sha1_default = True
+use_sha256_default = True
 use_chunks_default = True
 max_chunks_default = 100
 chunk_size_default = 256
@@ -46,11 +50,27 @@ class SettingsDialog(wx.Dialog):
         # Init some values
         config = wx.ConfigBase.Get()
         config.SetPath("/Scanning")
+        use_meta4 = config.ReadBool("use_meta4_default", use_meta4_default)
+        use_md5 = config.ReadBool("use_md5_checksums", use_md5_default)
+        use_sha1 = config.ReadBool("use_sha1_checksums", use_sha1_default)
+        use_sha256 = config.ReadBool("use_sha256_checksums", use_sha256_default)
         use_chunks = config.ReadBool("use_chunk_checksums", use_chunks_default)
         max_chunks = config.ReadInt("max_chunk_checksums", max_chunks_default)
         size_chunks = config.ReadInt("min_chunk_size", chunk_size_default)
         
         # Create controls
+        txt_meta4 = wx.StaticText(self, -1, "Use Metalink 4 format by default?")
+        self.checkbox_meta4 = wx.CheckBox(self, -1, "Enable")
+        self.checkbox_meta4.SetValue(use_meta4)
+        txt_md5 = wx.StaticText(self, -1, "Use MD5 checksums?")
+        self.checkbox_md5 = wx.CheckBox(self, -1, "Enable")
+        self.checkbox_md5.SetValue(use_md5)
+        txt_sha1 = wx.StaticText(self, -1, "Use SHA1 checksums?")
+        self.checkbox_sha1 = wx.CheckBox(self, -1, "Enable")
+        self.checkbox_sha1.SetValue(use_sha1)
+        txt_sha256 = wx.StaticText(self, -1, "Use SHA256 checksums?")
+        self.checkbox_sha256 = wx.CheckBox(self, -1, "Enable")
+        self.checkbox_sha256.SetValue(use_sha256)
         txt_chunks = wx.StaticText(self, -1, "Use chunk checksums?")
         self.checkbox_chunks = wx.CheckBox(self, -1, "Enable")
         self.checkbox_chunks.SetValue(use_chunks)
@@ -62,9 +82,20 @@ class SettingsDialog(wx.Dialog):
         self.txtctrl_chunksize.SetValue(size_chunks)
         # Sizers
         vbox =  wx.BoxSizer(wx.VERTICAL)
+
+        saveflex_sizer = wx.FlexGridSizer(0, 2)
+        saveflex_sizer.AddGrowableCol(1)
+        saveflex_sizer.Add(txt_meta4, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL, 2)
+        saveflex_sizer.Add(self.checkbox_meta4, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL, 2)
         
         flex_sizer = wx.FlexGridSizer(0, 2)
         flex_sizer.AddGrowableCol(1)
+        flex_sizer.Add(txt_md5, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL, 2)
+        flex_sizer.Add(self.checkbox_md5, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL, 2)
+        flex_sizer.Add(txt_sha1, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL, 2)
+        flex_sizer.Add(self.checkbox_sha1, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL, 2)
+        flex_sizer.Add(txt_sha256, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL, 2)
+        flex_sizer.Add(self.checkbox_sha256, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL, 2)
         flex_sizer.Add(txt_chunks, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL, 2)
         flex_sizer.Add(self.checkbox_chunks, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL, 2)
         flex_sizer.Add(txt_maxchunks, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL, 2)
@@ -73,9 +104,12 @@ class SettingsDialog(wx.Dialog):
         flex_sizer.Add(self.txtctrl_chunksize, 0, wx.ALL | wx.ALIGN_CENTER_VERTICAL, 2)
         
         sizer =  self.CreateButtonSizer(wx.OK|wx.CANCEL)
+        save_staticbox = wx.StaticBoxSizer(wx.StaticBox(self, -1, "Save settings"), wx.VERTICAL)
+        save_staticbox.Add(saveflex_sizer, 1, wx.ALL | wx.EXPAND, 2)
         chunk_staticbox = wx.StaticBoxSizer(wx.StaticBox(self, -1, "Scan settings"), wx.VERTICAL)
         chunk_staticbox.Add(flex_sizer, 1, wx.ALL | wx.EXPAND, 2)
-        
+
+        vbox.Add(save_staticbox, 0, wx.ALL | wx.EXPAND, 5)
         vbox.Add(chunk_staticbox, 0, wx.ALL | wx.EXPAND, 5)
         vbox.Add(sizer, 0, wx.ALL | wx.EXPAND, 5)
         
@@ -90,9 +124,17 @@ class SettingsDialog(wx.Dialog):
         # Save data
         config = wx.ConfigBase.Get()
         config.SetPath("/Scanning")
+        use_meta4 = self.checkbox_meta4.GetValue()
+        use_md5 = self.checkbox_md5.GetValue()
+        use_sha1 = self.checkbox_sha1.GetValue()
+        use_sha256 = self.checkbox_sha256.GetValue()                
         use_chunks = self.checkbox_chunks.GetValue()
         max_chunks = self.txtctrl_maxchunks.GetValue()
         size_chunks = self.txtctrl_chunksize.GetValue()
+        config.WriteBool("use_meta4_default", use_meta4)
+        config.WriteBool("use_md5_checksums", use_md5)
+        config.WriteBool("use_sha1_checksums", use_sha1)
+        config.WriteBool("use_sha256_checksums", use_sha256)
         config.WriteBool("use_chunk_checksums", use_chunks)
         config.WriteInt("max_chunk_checksums", max_chunks)
         config.WriteInt("min_chunk_size", size_chunks)
@@ -430,6 +472,9 @@ class MainFrame(wx.Frame):
         if filename != "":
             config = wx.ConfigBase.Get()
             config.SetPath("/Scanning")
+            use_md5 = config.ReadBool("use_md5_checksums", use_md5_default)
+            use_sha1 = config.ReadBool("use_sha1_checksums", use_sha1_default)
+            use_sha256 = config.ReadBool("use_sha256_checksums", use_sha256_default)
             use_chunks = config.ReadBool("use_chunk_checksums", use_chunks_default)
             max_chunks = config.ReadInt("max_chunk_checksums", max_chunks_default)
             size_chunks = config.ReadInt("min_chunk_size", chunk_size_default)
@@ -441,9 +486,20 @@ class MainFrame(wx.Frame):
             if not success: return
             self.txtctrl_size.SetValue(str(self.mlfile.size))
             self.txtctrl_filename.SetValue(self.mlfile.filename)
-            self.txtctrl_md5.SetValue(self.mlfile.hashlist['md5'])
-            self.txtctrl_sha1.SetValue(self.mlfile.hashlist['sha1'])
-            self.txtctrl_sha256.SetValue(self.mlfile.hashlist['sha256'])
+            
+            md5val = ""
+            if use_md5:
+                md5val = self.mlfile.hashlist['md5']
+            self.txtctrl_md5.SetValue(md5val)
+            sha1val = ""
+            if use_sha1:
+                sha1val = self.mlfile.hashlist['sha1']
+            self.txtctrl_sha1.SetValue(sha1val)
+            sha256val = ""
+            if use_sha256:
+                sha256val = self.mlfile.hashlist['sha256']
+            self.txtctrl_sha256.SetValue(sha256val)
+            
             if self.mlfile.hashlist['sha256'] == "":
                 self.txtctrl_sha256.Enable(False) # No support for SHA-256
             # Update URLs
@@ -565,11 +621,22 @@ class MainFrame(wx.Frame):
             self.save()
     
     def save_browse(self):
+        config = wx.ConfigBase.Get()
+        config.SetPath("/Scanning")
+        use_meta4 = config.ReadBool("use_meta4_default", use_meta4_default)
+
+        default_type = ".metalink"
+        if use_meta4:
+            default_type = ".meta4"
+        
         if self.filename != "":
             default_path, default_name = os.path.split(self.filename)
+            default_name = default_name.rsplit('.', 1)[0]
+            default_name += default_type
         else:
             default_path, default_name = "", ""
-        filename = wx.FileSelector("Save as...", default_path, default_name, ".metalink", "All files (*.*)|*.*|Metalink files (*.metalink)|*.metalink|Metalink4 files (*.meta4)|*.meta4", wx.SAVE)
+
+        filename = wx.FileSelector("Save as...", default_path, default_name, default_type, "All files (*.*)|*.*|Metalink4 files (*.meta4)|*.meta4|Metalink files (*.metalink)|*.metalink", wx.SAVE)
         if filename == "":
             return False
         else:
@@ -625,11 +692,11 @@ class MainFrame(wx.Frame):
                 answer = wx.MessageBox(e + " Continue anyway?", "Confirm", wx.ICON_ERROR | wx.OK | wx.CANCEL, self)
                 if answer != wx.OK: return
             ml.errors = []
-        try:
-            text = ml.generate()
-        except Exception, e:
-            wx.MessageBox(str(e), "Error!", wx.ICON_ERROR)
-            return
+        #try:
+        text = ml.generate()
+        #except Exception, e:
+        #    wx.MessageBox(str(e), "Error!", wx.ICON_ERROR)
+        #    return
         outfilename = self.filename
         # Warn about overwrites
         if os.path.isfile(self.filename) and self.new_file:
@@ -641,6 +708,7 @@ class MainFrame(wx.Frame):
         except IOError:
             wx.MessageBox("Could not open output file!", "Error!", wx.ICON_ERROR)
             return
+            
         try:
             fp.write(text)
             fp.close()
