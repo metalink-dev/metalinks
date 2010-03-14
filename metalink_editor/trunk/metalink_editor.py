@@ -692,11 +692,11 @@ class MainFrame(wx.Frame):
                 answer = wx.MessageBox(e + " Continue anyway?", "Confirm", wx.ICON_ERROR | wx.OK | wx.CANCEL, self)
                 if answer != wx.OK: return
             ml.errors = []
-        #try:
-        text = ml.generate()
-        #except Exception, e:
-        #    wx.MessageBox(str(e), "Error!", wx.ICON_ERROR)
-        #    return
+        try:
+            text = ml.generate()
+        except Exception, e:
+            wx.MessageBox(str(e), "Error!", wx.ICON_ERROR)
+            return
         outfilename = self.filename
         # Warn about overwrites
         if os.path.isfile(self.filename) and self.new_file:
