@@ -465,10 +465,10 @@ class MetalinkFile4(MetalinkFileBase):
         for key in self.hashlist.keys():
             if key == 'pgp' and self.hashlist[key] != "":
                 text += '      <signature type="%s">' % key + self.hashlist[key] + '</signature>\n'
-            else:
+            elif self.hashlist[key] != "":
                 text += '      <hash type="%s">' % hashlookup(key) + self.hashlist[key].lower() + '</hash>\n'
         if len(self.pieces) > 1:
-            text += '      <pieces type="'+hashlookup(self.piecetype)+'" length="'+self.piecelength+'">\n'
+            text += '      <pieces type="'+hashlookup(self.piecetype)+'" length="'+str(self.piecelength)+'">\n'
             for id in range(len(self.pieces)):
                 text += '        <hash>'+self.pieces[id]+'</hash>\n'
             text += '      </pieces>\n'
@@ -551,7 +551,7 @@ class MetalinkFile(MetalinkFileBase):
             for key in self.hashlist.keys():
                 if key == 'pgp' and self.hashlist[key] != "":
                     text += '      <signature type="%s">' % key + self.hashlist[key] + '</signature>\n'
-                else:
+                elif self.hashlist[key] != "":
                     text += '      <hash type="%s">' % key + self.hashlist[key].lower() + '</hash>\n'
             if len(self.pieces) > 1:
                 text += '        <pieces type="'+self.piecetype+'" length="'+str(self.piecelength)+'">\n'
