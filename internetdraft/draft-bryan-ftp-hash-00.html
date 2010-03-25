@@ -1,0 +1,499 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en"><head><title>FTP Extensions for Cryptographic Hashes</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="description" content="FTP Extensions for Cryptographic Hashes">
+<meta name="generator" content="xml2rfc v1.35pre1 (http://xml.resource.org/)">
+<style type='text/css'><!--
+        body {
+                font-family: verdana, charcoal, helvetica, arial, sans-serif;
+                font-size: small; color: #000; background-color: #FFF;
+                margin: 2em;
+        }
+        h1, h2, h3, h4, h5, h6 {
+                font-family: helvetica, monaco, "MS Sans Serif", arial, sans-serif;
+                font-weight: bold; font-style: normal;
+        }
+        h1 { color: #900; background-color: transparent; text-align: right; }
+        h3 { color: #333; background-color: transparent; }
+
+        td.RFCbug {
+                font-size: x-small; text-decoration: none;
+                width: 30px; height: 30px; padding-top: 2px;
+                text-align: justify; vertical-align: middle;
+                background-color: #000;
+        }
+        td.RFCbug span.RFC {
+                font-family: monaco, charcoal, geneva, "MS Sans Serif", helvetica, verdana, sans-serif;
+                font-weight: bold; color: #666;
+        }
+        td.RFCbug span.hotText {
+                font-family: charcoal, monaco, geneva, "MS Sans Serif", helvetica, verdana, sans-serif;
+                font-weight: normal; text-align: center; color: #FFF;
+        }
+
+        table.TOCbug { width: 30px; height: 15px; }
+        td.TOCbug {
+                text-align: center; width: 30px; height: 15px;
+                color: #FFF; background-color: #900;
+        }
+        td.TOCbug a {
+                font-family: monaco, charcoal, geneva, "MS Sans Serif", helvetica, sans-serif;
+                font-weight: bold; font-size: x-small; text-decoration: none;
+                color: #FFF; background-color: transparent;
+        }
+
+        td.header {
+                font-family: arial, helvetica, sans-serif; font-size: x-small;
+                vertical-align: top; width: 33%;
+                color: #FFF; background-color: #666;
+        }
+        td.author { font-weight: bold; font-size: x-small; margin-left: 4em; }
+        td.author-text { font-size: x-small; }
+
+        /* info code from SantaKlauss at http://www.madaboutstyle.com/tooltip2.html */
+        a.info {
+                /* This is the key. */
+                position: relative;
+                z-index: 24;
+                text-decoration: none;
+        }
+        a.info:hover {
+                z-index: 25;
+                color: #FFF; background-color: #900;
+        }
+        a.info span { display: none; }
+        a.info:hover span.info {
+                /* The span will display just on :hover state. */
+                display: block;
+                position: absolute;
+                font-size: smaller;
+                top: 2em; left: -5em; width: 15em;
+                padding: 2px; border: 1px solid #333;
+                color: #900; background-color: #EEE;
+                text-align: left;
+        }
+
+        a { font-weight: bold; }
+        a:link    { color: #900; background-color: transparent; }
+        a:visited { color: #633; background-color: transparent; }
+        a:active  { color: #633; background-color: transparent; }
+
+        p { margin-left: 2em; margin-right: 2em; }
+        p.copyright { font-size: x-small; }
+        p.toc { font-size: small; font-weight: bold; margin-left: 3em; }
+        table.toc { margin: 0 0 0 3em; padding: 0; border: 0; vertical-align: text-top; }
+        td.toc { font-size: small; font-weight: bold; vertical-align: text-top; }
+
+        ol.text { margin-left: 2em; margin-right: 2em; }
+        ul.text { margin-left: 2em; margin-right: 2em; }
+        li      { margin-left: 3em; }
+
+        /* RFC-2629 <spanx>s and <artwork>s. */
+        em     { font-style: italic; }
+        strong { font-weight: bold; }
+        dfn    { font-weight: bold; font-style: normal; }
+        cite   { font-weight: normal; font-style: normal; }
+        tt     { color: #036; }
+        tt, pre, pre dfn, pre em, pre cite, pre span {
+                font-family: "Courier New", Courier, monospace; font-size: small;
+        }
+        pre {
+                text-align: left; padding: 4px;
+                color: #000; background-color: #CCC;
+        }
+        pre dfn  { color: #900; }
+        pre em   { color: #66F; background-color: #FFC; font-weight: normal; }
+        pre .key { color: #33C; font-weight: bold; }
+        pre .id  { color: #900; }
+        pre .str { color: #000; background-color: #CFF; }
+        pre .val { color: #066; }
+        pre .rep { color: #909; }
+        pre .oth { color: #000; background-color: #FCF; }
+        pre .err { background-color: #FCC; }
+
+        /* RFC-2629 <texttable>s. */
+        table.all, table.full, table.headers, table.none {
+                font-size: small; text-align: center; border-width: 2px;
+                vertical-align: top; border-collapse: collapse;
+        }
+        table.all, table.full { border-style: solid; border-color: black; }
+        table.headers, table.none { border-style: none; }
+        th {
+                font-weight: bold; border-color: black;
+                border-width: 2px 2px 3px 2px;
+        }
+        table.all th, table.full th { border-style: solid; }
+        table.headers th { border-style: none none solid none; }
+        table.none th { border-style: none; }
+        table.all td {
+                border-style: solid; border-color: #333;
+                border-width: 1px 2px;
+        }
+        table.full td, table.headers td, table.none td { border-style: none; }
+
+        hr { height: 1px; }
+        hr.insert {
+                width: 80%; border-style: none; border-width: 0;
+                color: #CCC; background-color: #CCC;
+        }
+--></style>
+</head>
+<body>
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<table summary="layout" width="66%" border="0" cellpadding="0" cellspacing="0"><tr><td><table summary="layout" width="100%" border="0" cellpadding="2" cellspacing="1">
+<tr><td class="header">Network Working Group</td><td class="header">A. Bryan</td></tr>
+<tr><td class="header">Internet-Draft</td><td class="header">T. Kosse</td></tr>
+<tr><td class="header">Intended status: Experimental</td><td class="header">March 23, 2010</td></tr>
+<tr><td class="header">Expires: September 24, 2010</td><td class="header">&nbsp;</td></tr>
+</table></td></tr></table>
+<h1><br />FTP Extensions for Cryptographic Hashes<br />draft-bryan-ftp-hash-00</h1>
+
+<h3>Abstract</h3>
+
+<p>The specification for the File Transfer Protocol does not include methods to obtain cryptographic hashes of files. Cryptographic hashes can be used to identify files and verify intregrity. Unfortunately, because of the desire for this feature, multiple commands that are not formally specified have been implemented in FTP applications leading to non-interoperability and confusion. This specification documents an optional command where FTP clients can request the cryptographic hash of a file from a FTP server.
+
+</p>
+<h3>Status of this Memo</h3>
+<p>
+This Internet-Draft is submitted to IETF in full
+conformance with the provisions of BCP&nbsp;78 and BCP&nbsp;79.</p>
+<p>
+Internet-Drafts are working documents of the Internet Engineering
+Task Force (IETF), its areas, and its working groups.
+Note that other groups may also distribute working documents as
+Internet-Drafts.</p>
+<p>
+Internet-Drafts are draft documents valid for a maximum of six months
+and may be updated, replaced, or obsoleted by other documents at any time.
+It is inappropriate to use Internet-Drafts as reference material or to cite
+them other than as &ldquo;work in progress.&rdquo;</p>
+<p>
+The list of current Internet-Drafts can be accessed at
+<a href='http://www.ietf.org/ietf/1id-abstracts.txt'>http://www.ietf.org/ietf/1id-abstracts.txt</a>.</p>
+<p>
+The list of Internet-Draft Shadow Directories can be accessed at
+<a href='http://www.ietf.org/shadow.html'>http://www.ietf.org/shadow.html</a>.</p>
+<p>
+This Internet-Draft will expire on September 24, 2010.</p>
+
+<h3>Copyright Notice</h3>
+<p>
+Copyright (c) 2010 IETF Trust and the persons identified as the
+document authors.  All rights reserved.</p>
+<p>
+This document is subject to BCP 78 and the IETF Trust's Legal
+Provisions Relating to IETF Documents
+(http://trustee.ietf.org/license-info) in effect on the date of
+publication of this document.  Please review these documents
+carefully, as they describe your rights and restrictions with respect
+to this document. Code Components extracted from this document must
+include Simplified BSD License text as described in Section 4.e of
+the Trust Legal Provisions and are provided without warranty as
+described in the BSD License.</p>
+<a name="toc"></a><br /><hr />
+<h3>Table of Contents</h3>
+<p class="toc">
+<a href="#anchor1">1.</a>&nbsp;
+Introduction<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor2">1.1.</a>&nbsp;
+Examples<br />
+<a href="#anchor3">2.</a>&nbsp;
+Notational Conventions<br />
+<a href="#HASH">3.</a>&nbsp;
+The HASH Command (HASH)<br />
+<a href="#anchor4">4.</a>&nbsp;
+Command Usage<br />
+<a href="#IANA">5.</a>&nbsp;
+IANA Considerations<br />
+<a href="#anchor5">6.</a>&nbsp;
+Security Considerations<br />
+<a href="#rfc.references1">7.</a>&nbsp;
+References<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#rfc.references1">7.1.</a>&nbsp;
+Normative References<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#rfc.references2">7.2.</a>&nbsp;
+Informative References<br />
+<a href="#anchor8">Appendix&nbsp;A.</a>&nbsp;
+List of Implementations with Non-standard Cryptographic Hash Command<br />
+<a href="#anchor9">Appendix&nbsp;B.</a>&nbsp;
+Acknowledgements and Contributors<br />
+<a href="#anchor10">Appendix&nbsp;C.</a>&nbsp;
+Document History<br />
+<a href="#rfc.authors">&#167;</a>&nbsp;
+Authors' Addresses<br />
+</p>
+<br clear="all" />
+
+<a name="anchor1"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.1"></a><h3>1.&nbsp;
+Introduction</h3>
+
+<p>The specification for the File Transfer Protocol <a class='info' href='#RFC0959'>[RFC0959]<span> (</span><span class='info'>Postel, J. and J. Reynolds, &ldquo;File Transfer Protocol,&rdquo; October&nbsp;1985.</span><span>)</span></a> does not include methods to obtain cryptographic hashes of files. Cryptographic hashes can be used to identify files and verify integrity. Unfortunately, because of the desire for this feature, multiple commands that are not formally specified have been implemented in FTP applications leading to non-interoperability and confusion. This specification documents an optional command where FTP clients can request the cryptographic hash of a file from a FTP server.
+HTTP has a similar feature named Instance Digests <a class='info' href='#RFC3230'>[RFC3230]<span> (</span><span class='info'>Mogul, J. and A. Van Hoff, &ldquo;Instance Digests in HTTP,&rdquo; January&nbsp;2002.</span><span>)</span></a> which allows a client to request the cryptographic hash of a file.
+</p>
+<a name="anchor2"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.1.1"></a><h3>1.1.&nbsp;
+Examples</h3>
+
+<p>
+<p>Example of HASH client request:
+</p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
+        HASH SHA-1 filename.ext
+</pre></div>
+
+<p>
+<p>HASH server response with Positive Completion code and the requested hash:
+</p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
+        213 80bc95fd391772fa61c91ed68567f0980bb45fd9
+</pre></div>
+
+<a name="anchor3"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.2"></a><h3>2.&nbsp;
+Notational Conventions</h3>
+
+<p>This specification describes conformance of FTP Extensions for cryptographic hashes.
+</p>
+<p>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+	"SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+	document are to be interpreted as described in BCP 14, <a class='info' href='#RFC2119'>[RFC2119]<span> (</span><span class='info'>Bradner, S., &ldquo;Key words for use in RFCs to Indicate Requirement Levels,&rdquo; March&nbsp;1997.</span><span>)</span></a>, as scoped to those conformance targets.
+</p>
+<p>This document also uses notation defined in STD 9, <a class='info' href='#RFC0959'>[RFC0959]<span> (</span><span class='info'>Postel, J. and J. Reynolds, &ldquo;File Transfer Protocol,&rdquo; October&nbsp;1985.</span><span>)</span></a>.
+</p>
+<p>Syntax required is defined using the Augmented BNF defined in <a class='info' href='#RFC5234'>[RFC5234]<span> (</span><span class='info'>Crocker, D. and P. Overell, &ldquo;Augmented BNF for Syntax Specifications: ABNF,&rdquo; January&nbsp;2008.</span><span>)</span></a>.
+</p>
+<a name="HASH"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.3"></a><h3>3.&nbsp;
+The HASH Command (HASH)</h3>
+
+<p>The HASH command allows for requesting the cryptographic hash of a file.
+</p>
+<p>The syntax for the HASH command is:
+
+
+<p>
+</p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
+        hash = "HASH" SP &lt;hash type&gt; SP &lt;filename&gt;
+</pre></div>
+
+<p>As with all FTP commands, the "HASH" command label is interpreted in a case-insensitive manner.
+</p>
+<p>The HASH command keyword MUST be followed by a single space (ASCII 32). Following the space, a hash type MUST be present. Another single space (ASCII 32), MUST be followed by the filename.
+</p>
+<p>The IANA registry named "Hash Function Textual Names" defines values for hash types. Hash names should be presented in uppercase, but comparisons should be case-insensitive, e.g. MD5, md5, Md5 are all the same.
+</p>
+<p>The filename argument should reference the same file as other file based commands such as STOR or RETR which the same argument would reference.
+</p>
+<p>The text returned in response to the HASH command MUST be:
+</p>
+<p>
+<p>
+</p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
+        hash-response = "213" SP 1*HEXDIGIT CRLF
+</pre></div>
+
+<p>All hash values MUST be encoded in lowercase hexadecimal format.
+</p>
+<p>The standard negative error codes 500 and 501 are sufficient to handle all errors involving the HASH command (e.g., syntax errors). Response code 550 is used if the user isn't allowed to use the HASH command.
+Response code 450 is used to indicate the server is busy, e.g. already hashing other files yet inviting the client to retry in future.
+</p>
+<p>A server that supports HASH should advertise it in FEAT response <a class='info' href='#RFC2389'>[RFC2389]<span> (</span><span class='info'>Hethmon, P. and R. Elz, &ldquo;Feature negotiation mechanism for the File Transfer Protocol,&rdquo; August&nbsp;1998.</span><span>)</span></a> with a list of all supported hash algorithms in a comma separated list. The "C>" lines are commands from user-PI to server-PI, the "S>" lines are server-PI replies.
+</p>
+<p>
+<p>
+</p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
+        C&gt; feat
+        S&gt; 211-Extensions supported:
+        S&gt;  SIZE
+        S&gt;  COMPRESSION
+        S&gt;  HASH SHA-1,MD5
+        S&gt;  MDTM
+        S&gt; 211 END
+</pre></div>
+
+<a name="anchor4"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.4"></a><h3>4.&nbsp;
+Command Usage</h3>
+
+<p>Client requests the cryptographic hash of a file with HASH command. Server replies with cryptographic hash of file. Client downloads file. Client hashes the downloaded file and compares its hash to the hash obtained from the server. This command could also be used to verify that an uploaded file is an exact copy.
+</p>
+<a name="IANA"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.5"></a><h3>5.&nbsp;
+IANA Considerations</h3>
+
+<p>None.
+</p>
+<a name="anchor5"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.6"></a><h3>6.&nbsp;
+Security Considerations</h3>
+
+<p>Calculating a file's hash is a CPU intensive operation and can easily
+consume the available disk I/O resources. If the HASH command isn't
+implemented carefully, a server could be vulnerable to a denial of
+service attack. On an affected server a malicious user could for example
+continuously send HASH commands over multiple connections and thus
+consume most CPU and disk I/O resources, leaving little room for other
+operations.
+To mitigate this risk, a server should cache the calculated hashes so
+that the hash of a file is only calculated once even if multiple hash
+requests are sent for that file.
+</p>
+<p>The performance of commonly used hard disk drives is adversely affected
+by the amount of time the device needs to reposition its read-and-write
+heads. A server should therefore avoid hashing multiple files at the
+same time which are located on the same physical media and should
+instead hash them sequentially. A possible solution is to use the 450
+reply code of HASH to indicate that the server is already busy with
+another HASH operation.
+</p>
+<p>In addition, the HASH command can be used to draw conclusions about the
+contents of a file. If the hash of a file on some server matches the
+hash of some known, local file, both files are likely identical. To
+prevent this scenario it suffices to limit use of the HASH command to
+users who would already be able to download the file.
+</p>
+<a name="rfc.references"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.7"></a><h3>7.&nbsp;
+References</h3>
+
+<a name="rfc.references1"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<h3>7.1.&nbsp;Normative References</h3>
+<table width="99%" border="0">
+<tr><td class="author-text" valign="top"><a name="RFC0959">[RFC0959]</a></td>
+<td class="author-text">Postel, J. and J. Reynolds, &ldquo;<a href="http://tools.ietf.org/html/rfc0959">File Transfer Protocol</a>,&rdquo; STD&nbsp;9, RFC&nbsp;0959, October&nbsp;1985.</td></tr>
+<tr><td class="author-text" valign="top"><a name="RFC2119">[RFC2119]</a></td>
+<td class="author-text"><a href="mailto:sob@harvard.edu">Bradner, S.</a>, &ldquo;<a href="http://tools.ietf.org/html/rfc2119">Key words for use in RFCs to Indicate Requirement Levels</a>,&rdquo; BCP&nbsp;14, RFC&nbsp;2119, March&nbsp;1997.</td></tr>
+<tr><td class="author-text" valign="top"><a name="RFC2389">[RFC2389]</a></td>
+<td class="author-text">Hethmon, P. and R. Elz, &ldquo;<a href="http://tools.ietf.org/html/rfc2389">Feature negotiation mechanism for the File Transfer Protocol</a>,&rdquo; RFC&nbsp;2389, August&nbsp;1998.</td></tr>
+<tr><td class="author-text" valign="top"><a name="RFC5234">[RFC5234]</a></td>
+<td class="author-text">Crocker, D. and P. Overell, &ldquo;<a href="http://tools.ietf.org/html/rfc5234">Augmented BNF for Syntax Specifications: ABNF</a>,&rdquo; STD&nbsp;68, RFC&nbsp;5234, January&nbsp;2008.</td></tr>
+</table>
+
+<a name="rfc.references2"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<h3>7.2.&nbsp;Informative References</h3>
+<table width="99%" border="0">
+<tr><td class="author-text" valign="top"><a name="RFC3230">[RFC3230]</a></td>
+<td class="author-text">Mogul, J. and A. Van Hoff, &ldquo;<a href="http://tools.ietf.org/html/rfc3230">Instance Digests in HTTP</a>,&rdquo; RFC&nbsp;3230, January&nbsp;2002.</td></tr>
+</table>
+
+<a name="anchor8"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.A"></a><h3>Appendix A.&nbsp;
+List of Implementations with Non-standard Cryptographic Hash Command</h3>
+
+<p>[[ to be removed by the RFC editor before publication as an RFC. ]]
+</p>
+<p>An incomplete list of FTP clients and servers that have implemented multiple commands (XMD5, XSHA1, SITE SHOHASH, etc) that are not formally specified, leading to non-interoperability and confusion.
+</p>
+<p>
+	    </p>
+<ul class="text">
+<li>Akamai NetStorage p17-18
+http://pigdogslow.dyndns.org/NetStorage_UserGuide.pdf
+</li>
+<li>Cerberus FTP server
+http://www.softpedia.com/progChangelog/Cerberus-FTP-Server-Changelog-1904.html
+</li>
+<li>FileCOPA FTP Server
+http://www.filecopa-ftpserver.com/features.html
+</li>
+<li>FireFTP
+http://fireftp.mozdev.org/features.html
+</li>
+<li>Gene6 FTP Server
+http://www.g6ftpserver.com/en/information#features
+</li>
+<li>GoldenGate FTP (Ftp Full Java Server)
+</li>
+<li>IceWarp FTP Server
+http://www.icewarp.com/products/ftp_server/
+</li>
+<li>JAFS
+http://www.sbbi.net/site/jafs/features.html
+</li>
+<li>MOVEit DMZ
+</li>
+<li>Nofeel FTP server
+http://www.nftpserver.com/history.php
+</li>
+<li>Null FTP
+http://www.sharewareconnection.com/null-ftp-client-pro.htm
+</li>
+<li>ProFTPD module mod_digest
+http://www.smartftp.com/oss/proftpd/mod_digest.html
+</li>
+<li>SmartFTP client http://www.smartftp.com/features/
+</li>
+<li>Starksoft Ftp Component for .NET / Mono
+http://www.starksoft.com/prod_ftp.html
+</li>
+<li>RaidenFTPD32 FTP server
+</li>
+<li>WS_FTP client / server
+http://ipswitchft.custhelp.com/app/answers/detail/a_id/671/kw/xmd5/r_id/166/sno/1
+</li>
+<li>zFTPServer
+</li>
+</ul>
+
+<a name="anchor9"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.B"></a><h3>Appendix B.&nbsp;
+Acknowledgements and Contributors</h3>
+
+<p>Thanks to John C. Klensin and Alfred Hoenes.
+</p>
+<a name="anchor10"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.C"></a><h3>Appendix C.&nbsp;
+Document History</h3>
+
+<p>[[ to be removed by the RFC editor before publication as an RFC. ]]
+</p>
+<p>Known issues concerning this draft:
+	    </p>
+<ul class="text">
+<li>None known.
+</li>
+</ul>
+
+<p>-00 : October 19, 2009.
+	    
+	    </p>
+<ul class="text">
+<li>Initial draft.
+</li>
+</ul>
+
+<a name="rfc.authors"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<h3>Authors' Addresses</h3>
+<table width="99%" border="0" cellpadding="0" cellspacing="0">
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text">Anthony Bryan</td></tr>
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text">Pompano Beach, FL</td></tr>
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text">USA</td></tr>
+<tr><td class="author" align="right">Email:&nbsp;</td>
+<td class="author-text"><a href="mailto:anthonybryan@gmail.com">anthonybryan@gmail.com</a></td></tr>
+<tr><td class="author" align="right">URI:&nbsp;</td>
+<td class="author-text"><a href="http://www.metalinker.org">http://www.metalinker.org</a></td></tr>
+<tr cellpadding="3"><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text">Tim Kosse</td></tr>
+<tr><td class="author" align="right">Email:&nbsp;</td>
+<td class="author-text"><a href="mailto:tim.kosse@filezilla-project.org">tim.kosse@filezilla-project.org</a></td></tr>
+<tr><td class="author" align="right">URI:&nbsp;</td>
+<td class="author-text"><a href="http://filezilla-project.org/">http://filezilla-project.org/</a></td></tr>
+</table>
+</body></html>

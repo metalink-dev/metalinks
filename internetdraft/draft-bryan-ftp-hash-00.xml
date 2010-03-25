@@ -1,0 +1,350 @@
+<?xml version="1.0" encoding="UTF-8"?><?rfc linefile="1:draft-bryan-ftp-hash-00.xml"?>
+<?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
+<?rfc toc="yes" ?>
+<?rfc tocdepth="3" ?>
+<?rfc tocindent="yes" ?>
+<?rfc symrefs="yes" ?>
+<?rfc sortrefs="yes"?>
+<?rfc iprnotified="no" ?>
+<?rfc compact="yes" ?>
+<?rfc comments="yes" ?>
+<?rfc inline="yes" ?>
+<!DOCTYPE rfc
+  PUBLIC "" "rfc2629.dtd">
+<rfc category="exp" docName="draft-bryan-ftp-hash-00" ipr="trust200902">
+    <front>        
+      <title abbrev="FTP Extensions for Cryptographic Hashes">FTP Extensions for Cryptographic Hashes</title>
+      <author initials="A." surname="Bryan" fullname="Anthony Bryan">
+	    <organization></organization>
+	    <address>
+		  <postal>
+			<street></street>
+		    <city>Pompano Beach</city>
+			<region>FL</region>
+			<country>USA</country>
+		  </postal>
+	      <email>anthonybryan@gmail.com</email>	
+	      <uri>http://www.metalinker.org</uri>		
+	    </address>
+      </author>
+      <author initials="T." surname="Kosse" fullname="Tim Kosse">
+	    <organization></organization>
+	    <address>
+	      <email>tim.kosse@filezilla-project.org</email>	
+	      <uri>http://filezilla-project.org/</uri>		
+	    </address>
+      </author>
+	<date month="March" year="2010"/>        
+
+      <abstract>
+	<t>The specification for the File Transfer Protocol does not include methods to obtain cryptographic hashes of files. Cryptographic hashes can be used to identify files and verify intregrity. Unfortunately, because of the desire for this feature, multiple commands that are not formally specified have been implemented in FTP applications leading to non-interoperability and confusion. This specification documents an optional command where FTP clients can request the cryptographic hash of a file from a FTP server.
+</t>
+      </abstract>    
+	  
+  </front>    
+
+  <middle>
+    <section title="Introduction">
+	<t>The specification for the File Transfer Protocol <xref target="RFC0959"/> does not include methods to obtain cryptographic hashes of files. Cryptographic hashes can be used to identify files and verify integrity. Unfortunately, because of the desire for this feature, multiple commands that are not formally specified have been implemented in FTP applications leading to non-interoperability and confusion. This specification documents an optional command where FTP clients can request the cryptographic hash of a file from a FTP server.
+HTTP has a similar feature named Instance Digests <xref target="RFC3230"/> which allows a client to request the cryptographic hash of a file.</t>
+      <section title="Examples"><t><figure> 
+	  <preamble>Example of HASH client request:</preamble>
+	  
+	  <artwork type="example">
+        HASH SHA-1 filename.ext
+</artwork></figure></t>
+
+<t><figure> 
+	  <preamble>HASH server response with Positive Completion code and the requested hash:</preamble>
+	  <artwork type="example">
+        213 80bc95fd391772fa61c91ed68567f0980bb45fd9
+</artwork></figure></t>
+	  
+    </section>
+	</section>
+
+      <section title="Notational Conventions"> 
+
+	<t>This specification describes conformance of FTP Extensions for cryptographic hashes.</t>
+     
+
+	<t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+	"SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+	document are to be interpreted as described in BCP 14, <xref target="RFC2119"/>, as scoped to those conformance targets.</t>
+	
+	<t>This document also uses notation defined in STD 9, <xref target="RFC0959"/>.</t>
+	
+	<t>Syntax required is defined using the Augmented BNF defined in <xref target="RFC5234"/>.</t>
+
+      </section>
+
+	  
+<section title="The HASH Command (HASH)" anchor="HASH">
+<t>The HASH command allows for requesting the cryptographic hash of a file.</t>
+<t>The syntax for the HASH command is:
+
+<figure> 
+	  <preamble></preamble>
+	  <artwork type="example">
+        hash = "HASH" SP &lt;hash type&gt; SP &lt;filename&gt;
+</artwork></figure></t>
+   
+<t>As with all FTP commands, the "HASH" command label is interpreted in a case-insensitive manner.</t>
+   
+<t>The HASH command keyword MUST be followed by a single space (ASCII 32). Following the space, a hash type MUST be present. Another single space (ASCII 32), MUST be followed by the filename.</t>
+<t>The IANA registry named "Hash Function Textual Names" defines values for hash types. Hash names should be presented in uppercase, but comparisons should be case-insensitive, e.g. MD5, md5, Md5 are all the same.</t>
+
+<t>The filename argument should reference the same file as other file based commands such as STOR or RETR which the same argument would reference.</t>
+
+<t>The text returned in response to the HASH command MUST be:</t>
+
+<t><figure> 
+	  <preamble></preamble>
+	  <artwork type="example">
+        hash-response = "213" SP 1*HEXDIGIT CRLF
+</artwork></figure></t>
+
+<t>All hash values MUST be encoded in lowercase hexadecimal format.</t>
+
+<t>The standard negative error codes 500 and 501 are sufficient to handle all errors involving the HASH command (e.g., syntax errors). Response code 550 is used if the user isn't allowed to use the HASH command.
+Response code 450 is used to indicate the server is busy, e.g. already hashing other files yet inviting the client to retry in future.</t>
+
+<t>A server that supports HASH should advertise it in FEAT response <xref target="RFC2389"/> with a list of all supported hash algorithms in a comma separated list. The "C>" lines are commands from user-PI to server-PI, the "S>" lines are server-PI replies.</t>
+
+<t><figure> 
+	  <preamble></preamble>
+	  <artwork type="example">
+        C&gt; feat
+        S&gt; 211-Extensions supported:
+        S&gt;  SIZE
+        S&gt;  COMPRESSION
+        S&gt;  HASH SHA-1,MD5
+        S&gt;  MDTM
+        S&gt; 211 END
+</artwork></figure></t>
+
+</section>
+
+
+<section title="Command Usage">
+<t>Client requests the cryptographic hash of a file with HASH command. Server replies with cryptographic hash of file. Client downloads file. Client hashes the downloaded file and compares its hash to the hash obtained from the server. This command could also be used to verify that an uploaded file is an exact copy.</t>
+
+</section>
+
+	<section title="IANA Considerations" anchor="IANA">
+	<t>None.</t>
+
+
+   
+	</section>
+
+
+	
+	  <section title="Security Considerations">
+
+<t>Calculating a file's hash is a CPU intensive operation and can easily
+consume the available disk I/O resources. If the HASH command isn't
+implemented carefully, a server could be vulnerable to a denial of
+service attack. On an affected server a malicious user could for example
+continuously send HASH commands over multiple connections and thus
+consume most CPU and disk I/O resources, leaving little room for other
+operations.
+To mitigate this risk, a server should cache the calculated hashes so
+that the hash of a file is only calculated once even if multiple hash
+requests are sent for that file.</t>
+
+<t>The performance of commonly used hard disk drives is adversely affected
+by the amount of time the device needs to reposition its read-and-write
+heads. A server should therefore avoid hashing multiple files at the
+same time which are located on the same physical media and should
+instead hash them sequentially. A possible solution is to use the 450
+reply code of HASH to indicate that the server is already busy with
+another HASH operation.</t>
+
+<t>In addition, the HASH command can be used to draw conclusions about the
+contents of a file. If the hash of a file on some server matches the
+hash of some known, local file, both files are likely identical. To
+prevent this scenario it suffices to limit use of the HASH command to
+users who would already be able to download the file.</t>
+		
+	  </section>
+	  
+
+
+	</middle> 
+
+	<back> 
+	  
+	  <references title="Normative References">
+
+<reference anchor="RFC0959">
+
+<front>
+<title>File Transfer Protocol</title>
+<author initials="J." surname="Postel" fullname="J. Postel">
+<organization/></author>
+<author initials="J." surname="Reynolds" fullname="J. Reynolds">
+<organization/></author>
+<date year="1985" month="October"/></front>
+
+<seriesInfo name="STD" value="9"/>
+<seriesInfo name="RFC" value="0959"/>
+</reference>
+
+<reference anchor="RFC2119">
+
+<front>
+<title abbrev="RFC Key Words">Key words for use in RFCs to Indicate Requirement Levels</title>
+<author initials="S." surname="Bradner" fullname="Scott Bradner">
+<organization>Harvard University</organization>
+<address>
+<postal>
+<street>1350 Mass. Ave.</street>
+<street>Cambridge</street>
+<street>MA 02138</street></postal>
+<phone>- +1 617 495 3864</phone>
+<email>sob@harvard.edu</email></address></author>
+<date year="1997" month="March"/>
+<area>General</area>
+<keyword>keyword</keyword>
+<abstract>
+<t>
+   In many standards track documents several words are used to signify
+   the requirements in the specification.  These words are often
+   capitalized.  This document defines these words as they should be
+   interpreted in IETF documents.  Authors who follow these guidelines
+   should incorporate this phrase near the beginning of their document:
+
+<list>
+<t>
+      The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL
+      NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED",  "MAY", and
+      "OPTIONAL" in this document are to be interpreted as described in
+      RFC 2119.
+</t></list></t>
+<t>
+   Note that the force of these words is modified by the requirement
+   level of the document in which they are used.
+</t></abstract></front>
+
+<seriesInfo name="BCP" value="14"/>
+<seriesInfo name="RFC" value="2119"/>
+</reference>
+
+<reference anchor="RFC2389">
+
+<front>
+<title>Feature negotiation mechanism for the File Transfer Protocol</title>
+<author initials="P." surname="Hethmon" fullname="P. Hethmon">
+<organization/></author>
+<author initials="R." surname="Elz" fullname="R. Elz">
+<organization/></author>
+<date year="1998" month="August"/></front>
+
+<seriesInfo name="RFC" value="2389"/>
+</reference>
+
+<reference anchor="RFC5234">
+
+<front>
+<title>Augmented BNF for Syntax Specifications: ABNF</title>
+<author initials="D." surname="Crocker" fullname="D. Crocker">
+<organization/></author>
+<author initials="P." surname="Overell" fullname="P. Overell">
+<organization/></author>
+<date year="2008" month="January"/></front>
+
+<seriesInfo name="STD" value="68"/>
+<seriesInfo name="RFC" value="5234"/>
+</reference>
+
+
+	  </references>
+
+
+	  <references title="Informative References">
+
+<reference anchor="RFC3230">
+
+<front>
+<title>Instance Digests in HTTP</title>
+<author initials="J." surname="Mogul" fullname="J. Mogul">
+<organization/></author>
+<author initials="A." surname="Van Hoff" fullname="A. Van Hoff">
+<organization/></author>
+<date year="2002" month="January"/></front>
+
+<seriesInfo name="RFC" value="3230"/>
+</reference>
+
+
+	    </references> 
+
+
+	    <section title="List of Implementations with Non-standard Cryptographic Hash Command">
+		<t>[[ to be removed by the RFC editor before publication as an RFC. ]]</t>
+		
+<t>An incomplete list of FTP clients and servers that have implemented multiple commands (XMD5, XSHA1, SITE SHOHASH, etc) that are not formally specified, leading to non-interoperability and confusion.</t>
+	    <t>
+	    <list style="symbols">
+
+<t>Akamai NetStorage p17-18
+http://pigdogslow.dyndns.org/NetStorage_UserGuide.pdf</t>
+<t>Cerberus FTP server
+http://www.softpedia.com/progChangelog/Cerberus-FTP-Server-Changelog-1904.html</t>
+<t>FileCOPA FTP Server
+http://www.filecopa-ftpserver.com/features.html</t>
+<t>FireFTP
+http://fireftp.mozdev.org/features.html</t>
+<t>Gene6 FTP Server
+http://www.g6ftpserver.com/en/information#features</t>
+<t>GoldenGate FTP (Ftp Full Java Server)</t>
+<t>IceWarp FTP Server
+http://www.icewarp.com/products/ftp_server/</t>
+<t>JAFS
+http://www.sbbi.net/site/jafs/features.html</t>
+<t>MOVEit DMZ</t>
+<t>Nofeel FTP server
+http://www.nftpserver.com/history.php</t>
+<t>Null FTP
+http://www.sharewareconnection.com/null-ftp-client-pro.htm</t>
+<t>ProFTPD module mod_digest
+http://www.smartftp.com/oss/proftpd/mod_digest.html</t>
+<t>SmartFTP client http://www.smartftp.com/features/</t>
+<t>Starksoft Ftp Component for .NET / Mono
+http://www.starksoft.com/prod_ftp.html</t>
+<t>RaidenFTPD32 FTP server</t>
+<t>WS_FTP client / server
+http://ipswitchft.custhelp.com/app/answers/detail/a_id/671/kw/xmd5/r_id/166/sno/1</t>
+<t>zFTPServer</t>
+	    </list></t>
+
+	    </section>
+	  
+
+		
+	    <section title="Acknowledgements and Contributors">
+		  <t>Thanks to John C. Klensin and Alfred Hoenes.</t>
+    </section>
+
+	    <section title="Document History">
+		<t>[[ to be removed by the RFC editor before publication as an RFC. ]]</t>
+		<t>Known issues concerning this draft:
+	    <list style="symbols"> 
+	      
+		  <t>None known.</t>
+
+	    </list></t>
+
+
+		
+<t>-00 : October 19, 2009.
+	    
+	    <list style="symbols">
+
+	      <t>Initial draft.</t>
+	    </list></t>
+		
+	    </section>
+	  </back> 
+	</rfc>
