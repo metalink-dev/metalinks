@@ -150,7 +150,7 @@
 
 <h3>Abstract</h3>
 
-<p>The specification for the File Transfer Protocol does not include methods to obtain cryptographic hashes of files. Cryptographic hashes can be used to identify files and verify integrity. Unfortunately, because of the desire for this feature, multiple commands that are not formally specified have been implemented in FTP applications leading to non-interoperability and confusion. This specification documents an optional command where FTP clients can request the cryptographic hash of a file from an FTP server.
+<p>The File Transfer Protocol does not include methods to obtain cryptographic hashes of files. Cryptographic hashes can be used to identify files and verify integrity. Unfortunately, because of the desire for this feature, multiple FTP commands that are not formally specified have been implemented in FTP applications, leading to non-interoperability and confusion. This specification documents an optional command where FTP clients can request the cryptographic hash of a file from an FTP server.
 
 </p>
 <h3>Status of this Memo</h3>
@@ -229,7 +229,7 @@ Authors' Addresses<br />
 <a name="rfc.section.1"></a><h3>1.&nbsp;
 Introduction</h3>
 
-<p>The specification for the File Transfer Protocol <a class='info' href='#RFC0959'>[RFC0959]<span> (</span><span class='info'>Postel, J. and J. Reynolds, &ldquo;File Transfer Protocol,&rdquo; October&nbsp;1985.</span><span>)</span></a> does not include methods to obtain cryptographic hashes of files. Cryptographic hashes can be used to identify files and verify integrity. Unfortunately, because of the desire for this feature, multiple commands that are not formally specified have been implemented in FTP applications leading to non-interoperability and confusion. This specification documents an optional command where FTP clients can request the cryptographic hash of a file from an FTP server.
+<p>The specification for the File Transfer Protocol <a class='info' href='#RFC0959'>[RFC0959]<span> (</span><span class='info'>Postel, J. and J. Reynolds, &ldquo;File Transfer Protocol,&rdquo; October&nbsp;1985.</span><span>)</span></a> does not include methods to obtain cryptographic hashes of files. Cryptographic hashes can be used to identify files and verify integrity. Unfortunately, because of the desire for this feature, multiple FTP commands that are not formally specified have been implemented in FTP applications, leading to non-interoperability and confusion. This specification documents an optional command where FTP clients can request the cryptographic hash of a file from an FTP server.
 HTTP has a similar feature named Instance Digests <a class='info' href='#RFC3230'>[RFC3230]<span> (</span><span class='info'>Mogul, J. and A. Van Hoff, &ldquo;Instance Digests in HTTP,&rdquo; January&nbsp;2002.</span><span>)</span></a> which allows a client to request the cryptographic hash of a file.
 </p>
 <a name="anchor2"></a><br /><hr />
@@ -276,16 +276,16 @@ The HASH Command (HASH)</h3>
 
 <p>
 </p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
-        hash = "HASH" SP &lt;hash type&gt; SP &lt;filename&gt;
+        hash = "HASH" SP &lt;hash type&gt; SP &lt;pathname&gt;
 </pre></div>
 
 <p>As with all FTP commands, the "HASH" command label is interpreted in a case-insensitive manner.
 </p>
-<p>The HASH command keyword MUST be followed by a single space (ASCII 32). Following the space, a hash type MUST be present. Another single space (ASCII 32), MUST be followed by the filename.
+<p>The HASH command keyword MUST be followed by a single space (ASCII 32). Following the space, a hash type MUST be present. Another single space (ASCII 32), MUST be followed by the pathname.
 </p>
 <p>The IANA registry named "Hash Function Textual Names" defines values for hash types. Hash names should be presented in uppercase, but comparisons should be case-insensitive, e.g. MD5, md5, Md5 are all the same.
 </p>
-<p>The filename argument should reference the same file as other file based commands such as STOR or RETR which the same argument would reference.
+<p>The pathname argument should reference the same file as other file based commands such as STOR or RETR which the same argument would reference.
 </p>
 <p>The text returned in response to the HASH command MUST be:
 </p>
@@ -326,7 +326,19 @@ Command Usage</h3>
 <a name="rfc.section.5"></a><h3>5.&nbsp;
 IANA Considerations</h3>
 
-<p>None.
+<p>This new command is added to the "FTP Commands and Extensions" registry created by <a class='info' href='#RFC5797'>[RFC5797]<span> (</span><span class='info'>Klensin, J. and A. Hoenes, &ldquo;FTP Command and Extension Registry,&rdquo; March&nbsp;2010.</span><span>)</span></a>.
+</p>
+<p>Command Name: HASH
+</p>
+<p>Description: Cryptographic Hash of a file
+</p>
+<p>FEAT String: HASH
+</p>
+<p>Command Type: Service execution
+</p>
+<p>Conformance Requirements: Optional
+</p>
+<p>Reference: This specification
 </p>
 <a name="anchor5"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
@@ -336,18 +348,18 @@ Security Considerations</h3>
 <p>Calculating a file's hash is a CPU intensive operation and can easily
 consume the available disk I/O resources. If the HASH command isn't
 implemented carefully, a server could be vulnerable to a denial of
-service attack. On an affected server a malicious user could for example
+service attack. On an affected server a malicious user could, for example,
 continuously send HASH commands over multiple connections and thus
-consume most CPU and disk I/O resources, leaving little room for other
+consume most of the FTP server's CPU and disk I/O resources, leaving little room for other
 operations.
-To mitigate this risk, a server should cache the calculated hashes so
+To mitigate this risk, a server SHOULD cache the calculated hashes so
 that the hash of a file is only calculated once even if multiple hash
 requests are sent for that file.
 </p>
 <p>The performance of commonly used hard disk drives is adversely affected
 by the amount of time the device needs to reposition its read-and-write
-heads. A server should therefore avoid hashing multiple files at the
-same time which are located on the same physical media and should
+heads. A server SHOULD therefore avoid hashing multiple files at the
+same time which are located on the same physical media and SHOULD
 instead hash them sequentially. A possible solution is to use the 450
 reply code of HASH to indicate that the server is already busy with
 another HASH operation.
@@ -383,6 +395,10 @@ References</h3>
 <table width="99%" border="0">
 <tr><td class="author-text" valign="top"><a name="RFC3230">[RFC3230]</a></td>
 <td class="author-text">Mogul, J. and A. Van Hoff, &ldquo;<a href="http://tools.ietf.org/html/rfc3230">Instance Digests in HTTP</a>,&rdquo; RFC&nbsp;3230, January&nbsp;2002.</td></tr>
+<tr><td class="author-text" valign="top"><a name="RFC5797">[RFC5797]</a></td>
+<td class="author-text">Klensin, J. and A. Hoenes, &ldquo;<a href="http://tools.ietf.org/html/rfc5797">FTP Command and Extension Registry</a>,&rdquo; RFC&nbsp;5797, March&nbsp;2010.</td></tr>
+<tr><td class="author-text" valign="top"><a name="draft-twine-ftpmd5">[draft-twine-ftpmd5]</a></td>
+<td class="author-text"><a href="mailto:jtwine@jrtwine.com">Twine, J.</a>, &ldquo;<a href="http://www.ietf.org/internet-drafts/draft-twine-ftpmd5-00.txt">The MD5 and MMD5 FTP Command Extensions</a>,&rdquo; draft-twine-ftpmd5-00 (work in progress), May&nbsp;2002.</td></tr>
 </table>
 
 <a name="anchor8"></a><br /><hr />
@@ -392,6 +408,8 @@ List of Implementations with Non-standard Cryptographic Hash Command</h3>
 
 <p>[[ to be removed by the RFC editor before publication as an RFC. ]]
 </p>
+<p>At least one previous Internet Draft <a class='info' href='#draft-twine-ftpmd5'>[draft&#8209;twine&#8209;ftpmd5]<span> (</span><span class='info'>Twine, J., &ldquo;The MD5 and MMD5 FTP Command Extensions,&rdquo; May&nbsp;2002.</span><span>)</span></a>	 attempted to address this issue but it only supports one hash (MD5).
+</p>
 <p>An incomplete list of FTP clients and servers that have implemented multiple commands (XMD5, XSHA1, SITE SHOHASH, etc) that are not formally specified, leading to non-interoperability and confusion.
 </p>
 <p>
@@ -399,6 +417,8 @@ List of Implementations with Non-standard Cryptographic Hash Command</h3>
 <ul class="text">
 <li>Akamai NetStorage p17-18
 http://pigdogslow.dyndns.org/NetStorage_UserGuide.pdf
+</li>
+<li>Apache Ftp Server (supports draft-twine-ftpmd5) http://cwiki.apache.org/FTPSERVER/documentation.html
 </li>
 <li>Cerberus FTP server
 http://www.softpedia.com/progChangelog/Cerberus-FTP-Server-Changelog-1904.html
@@ -450,7 +470,7 @@ http://ipswitchft.custhelp.com/app/answers/detail/a_id/671/kw/xmd5/r_id/166/sno/
 <a name="rfc.section.B"></a><h3>Appendix B.&nbsp;
 Acknowledgements and Contributors</h3>
 
-<p>Thanks to John C. Klensin and Alfred Hoenes.
+<p>Thanks to John C. Klensin, Alfred Hoenes, and Daniel Stenberg.
 </p>
 <a name="anchor10"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
@@ -462,7 +482,27 @@ Document History</h3>
 <p>Known issues concerning this draft:
 	    </p>
 <ul class="text">
-<li>None known.
+<li>Atypical use of a command with a file path argument and another argument. Alfred Hoenes suggests:
+
+<p>
+</p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
+OPTS HASH &lt;hash&gt;
+HASH &lt;pathname&gt;
+</pre></div>
+</li>
+<li>Underspecification of the representation of the file that shall undergo the hash calculation.
+</li>
+<li>Correct response code to use for completion and errors.
+</li>
+</ul>
+
+<p>-01 : March 24, 2010.
+	    
+	    </p>
+<ul class="text">
+<li>Reference RFC 5797 and add IANA Considerations section.
+</li>
+<li>Informative Reference to expired Internet Draft (draft-twine-ftpmd5) which attempted to address this issue but it only supports one hash (MD5).
 </li>
 </ul>
 

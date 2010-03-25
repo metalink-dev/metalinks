@@ -12,14 +12,14 @@ Expires: September 26, 2010
 
 Abstract
 
-   The specification for the File Transfer Protocol does not include
-   methods to obtain cryptographic hashes of files.  Cryptographic
-   hashes can be used to identify files and verify integrity.
-   Unfortunately, because of the desire for this feature, multiple
-   commands that are not formally specified have been implemented in FTP
-   applications leading to non-interoperability and confusion.  This
-   specification documents an optional command where FTP clients can
-   request the cryptographic hash of a file from an FTP server.
+   The File Transfer Protocol does not include methods to obtain
+   cryptographic hashes of files.  Cryptographic hashes can be used to
+   identify files and verify integrity.  Unfortunately, because of the
+   desire for this feature, multiple FTP commands that are not formally
+   specified have been implemented in FTP applications, leading to non-
+   interoperability and confusion.  This specification documents an
+   optional command where FTP clients can request the cryptographic hash
+   of a file from an FTP server.
 
 Status of this Memo
 
@@ -77,14 +77,14 @@ Table of Contents
    4.  Command Usage . . . . . . . . . . . . . . . . . . . . . . . . . 5
    5.  IANA Considerations . . . . . . . . . . . . . . . . . . . . . . 5
    6.  Security Considerations . . . . . . . . . . . . . . . . . . . . 5
-   7.  References  . . . . . . . . . . . . . . . . . . . . . . . . . . 5
-     7.1.  Normative References  . . . . . . . . . . . . . . . . . . . 5
+   7.  References  . . . . . . . . . . . . . . . . . . . . . . . . . . 6
+     7.1.  Normative References  . . . . . . . . . . . . . . . . . . . 6
      7.2.  Informative References  . . . . . . . . . . . . . . . . . . 6
    Appendix A.  List of Implementations with Non-standard
                 Cryptographic Hash Command . . . . . . . . . . . . . . 6
    Appendix B.  Acknowledgements and Contributors  . . . . . . . . . . 7
    Appendix C.  Document History . . . . . . . . . . . . . . . . . . . 7
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . . . 7
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . . . 8
 
 
 
@@ -119,8 +119,8 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes      March 2010
    include methods to obtain cryptographic hashes of files.
    Cryptographic hashes can be used to identify files and verify
    integrity.  Unfortunately, because of the desire for this feature,
-   multiple commands that are not formally specified have been
-   implemented in FTP applications leading to non-interoperability and
+   multiple FTP commands that are not formally specified have been
+   implemented in FTP applications, leading to non-interoperability and
    confusion.  This specification documents an optional command where
    FTP clients can request the cryptographic hash of a file from an FTP
    server.  HTTP has a similar feature named Instance Digests [RFC3230]
@@ -169,21 +169,21 @@ Bryan & Kosse          Expires September 26, 2010               [Page 3]
 Internet-Draft   FTP Extensions for Cryptographic Hashes      March 2010
 
 
-           hash = "HASH" SP <hash type> SP <filename>
+           hash = "HASH" SP <hash type> SP <pathname>
 
    As with all FTP commands, the "HASH" command label is interpreted in
    a case-insensitive manner.
 
    The HASH command keyword MUST be followed by a single space (ASCII
    32).  Following the space, a hash type MUST be present.  Another
-   single space (ASCII 32), MUST be followed by the filename.
+   single space (ASCII 32), MUST be followed by the pathname.
 
    The IANA registry named "Hash Function Textual Names" defines values
    for hash types.  Hash names should be presented in uppercase, but
    comparisons should be case-insensitive, e.g.  MD5, md5, Md5 are all
    the same.
 
-   The filename argument should reference the same file as other file
+   The pathname argument should reference the same file as other file
    based commands such as STOR or RETR which the same argument would
    reference.
 
@@ -236,7 +236,20 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes      March 2010
 
 5.  IANA Considerations
 
-   None.
+   This new command is added to the "FTP Commands and Extensions"
+   registry created by [RFC5797].
+
+   Command Name: HASH
+
+   Description: Cryptographic Hash of a file
+
+   FEAT String: HASH
+
+   Command Type: Service execution
+
+   Conformance Requirements: Optional
+
+   Reference: This specification
 
 
 6.  Security Considerations
@@ -244,20 +257,29 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes      March 2010
    Calculating a file's hash is a CPU intensive operation and can easily
    consume the available disk I/O resources.  If the HASH command isn't
    implemented carefully, a server could be vulnerable to a denial of
-   service attack.  On an affected server a malicious user could for
-   example continuously send HASH commands over multiple connections and
-   thus consume most CPU and disk I/O resources, leaving little room for
-   other operations.  To mitigate this risk, a server should cache the
-   calculated hashes so that the hash of a file is only calculated once
-   even if multiple hash requests are sent for that file.
+   service attack.  On an affected server a malicious user could, for
+   example, continuously send HASH commands over multiple connections
+   and thus consume most of the FTP server's CPU and disk I/O resources,
+   leaving little room for other operations.  To mitigate this risk, a
+   server SHOULD cache the calculated hashes so that the hash of a file
+   is only calculated once even if multiple hash requests are sent for
+   that file.
 
    The performance of commonly used hard disk drives is adversely
    affected by the amount of time the device needs to reposition its
-   read-and-write heads.  A server should therefore avoid hashing
+   read-and-write heads.  A server SHOULD therefore avoid hashing
    multiple files at the same time which are located on the same
-   physical media and should instead hash them sequentially.  A possible
+   physical media and SHOULD instead hash them sequentially.  A possible
    solution is to use the 450 reply code of HASH to indicate that the
    server is already busy with another HASH operation.
+
+
+
+
+Bryan & Kosse          Expires September 26, 2010               [Page 5]
+
+Internet-Draft   FTP Extensions for Cryptographic Hashes      March 2010
+
 
    In addition, the HASH command can be used to draw conclusions about
    the contents of a file.  If the hash of a file on some server matches
@@ -273,14 +295,6 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes      March 2010
    [RFC0959]  Postel, J. and J. Reynolds, "File Transfer Protocol",
               STD 9, RFC 0959, October 1985.
 
-
-
-
-Bryan & Kosse          Expires September 26, 2010               [Page 5]
-
-Internet-Draft   FTP Extensions for Cryptographic Hashes      March 2010
-
-
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119, March 1997.
 
@@ -295,18 +309,38 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes      March 2010
    [RFC3230]  Mogul, J. and A. Van Hoff, "Instance Digests in HTTP",
               RFC 3230, January 2002.
 
+   [RFC5797]  Klensin, J. and A. Hoenes, "FTP Command and Extension
+              Registry", RFC 5797, March 2010.
+
+   [draft-twine-ftpmd5]
+              Twine, J., "The MD5 and MMD5 FTP Command Extensions",
+              draft-twine-ftpmd5-00 (work in progress), May 2002.
+
 
 Appendix A.  List of Implementations with Non-standard Cryptographic
              Hash Command
 
    [[ to be removed by the RFC editor before publication as an RFC. ]]
 
+   At least one previous Internet Draft [draft-twine-ftpmd5] attempted
+   to address this issue but it only supports one hash (MD5).
+
    An incomplete list of FTP clients and servers that have implemented
    multiple commands (XMD5, XSHA1, SITE SHOHASH, etc) that are not
    formally specified, leading to non-interoperability and confusion.
 
+
+
+
+Bryan & Kosse          Expires September 26, 2010               [Page 6]
+
+Internet-Draft   FTP Extensions for Cryptographic Hashes      March 2010
+
+
    o  Akamai NetStorage p17-18
       http://pigdogslow.dyndns.org/NetStorage_UserGuide.pdf
+   o  Apache Ftp Server (supports draft-twine-ftpmd5)
+      http://cwiki.apache.org/FTPSERVER/documentation.html
    o  Cerberus FTP server http://www.softpedia.com/progChangelog/
       Cerberus-FTP-Server-Changelog-1904.html
    o  FileCOPA FTP Server
@@ -327,16 +361,6 @@ Appendix A.  List of Implementations with Non-standard Cryptographic
    o  Starksoft Ftp Component for .NET / Mono
       http://www.starksoft.com/prod_ftp.html
    o  RaidenFTPD32 FTP server
-
-
-
-
-
-Bryan & Kosse          Expires September 26, 2010               [Page 6]
-
-Internet-Draft   FTP Extensions for Cryptographic Hashes      March 2010
-
-
    o  WS_FTP client / server http://ipswitchft.custhelp.com/app/answers/
       detail/a_id/671/kw/xmd5/r_id/166/sno/1
    o  zFTPServer
@@ -344,7 +368,7 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes      March 2010
 
 Appendix B.  Acknowledgements and Contributors
 
-   Thanks to John C. Klensin and Alfred Hoenes.
+   Thanks to John C. Klensin, Alfred Hoenes, and Daniel Stenberg.
 
 
 Appendix C.  Document History
@@ -352,7 +376,32 @@ Appendix C.  Document History
    [[ to be removed by the RFC editor before publication as an RFC. ]]
 
    Known issues concerning this draft:
-   o  None known.
+   o  Atypical use of a command with a file path argument and another
+      argument.  Alfred Hoenes suggests:
+
+
+   OPTS HASH <hash>
+   HASH <pathname>
+
+
+
+
+
+
+Bryan & Kosse          Expires September 26, 2010               [Page 7]
+
+Internet-Draft   FTP Extensions for Cryptographic Hashes      March 2010
+
+
+   o  Underspecification of the representation of the file that shall
+      undergo the hash calculation.
+   o  Correct response code to use for completion and errors.
+
+   -01 : March 24, 2010.
+   o  Reference RFC 5797 and add IANA Considerations section.
+   o  Informative Reference to expired Internet Draft
+      (draft-twine-ftpmd5) which attempted to address this issue but it
+      only supports one hash (MD5).
 
    -00 : October 19, 2009.
    o  Initial draft.
@@ -388,5 +437,12 @@ Authors' Addresses
 
 
 
-Bryan & Kosse          Expires September 26, 2010               [Page 7]
+
+
+
+
+
+
+
+Bryan & Kosse          Expires September 26, 2010               [Page 8]
 
