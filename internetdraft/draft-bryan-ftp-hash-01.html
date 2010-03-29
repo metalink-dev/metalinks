@@ -143,8 +143,8 @@
 <table summary="layout" width="66%" border="0" cellpadding="0" cellspacing="0"><tr><td><table summary="layout" width="100%" border="0" cellpadding="2" cellspacing="1">
 <tr><td class="header">Network Working Group</td><td class="header">A. Bryan</td></tr>
 <tr><td class="header">Internet-Draft</td><td class="header">T. Kosse</td></tr>
-<tr><td class="header">Intended status: Experimental</td><td class="header">March 25, 2010</td></tr>
-<tr><td class="header">Expires: September 26, 2010</td><td class="header">&nbsp;</td></tr>
+<tr><td class="header">Intended status: Experimental</td><td class="header">March 29, 2010</td></tr>
+<tr><td class="header">Expires: September 30, 2010</td><td class="header">&nbsp;</td></tr>
 </table></td></tr></table>
 <h1><br />FTP Extensions for Cryptographic Hashes<br />draft-bryan-ftp-hash-01</h1>
 
@@ -174,7 +174,7 @@ The list of current Internet-Drafts can be accessed at
 The list of Internet-Draft Shadow Directories can be accessed at
 <a href='http://www.ietf.org/shadow.html'>http://www.ietf.org/shadow.html</a>.</p>
 <p>
-This Internet-Draft will expire on September 26, 2010.</p>
+This Internet-Draft will expire on September 30, 2010.</p>
 
 <h3>Copyright Notice</h3>
 <p>
@@ -231,6 +231,9 @@ Introduction</h3>
 
 <p>The specification for the File Transfer Protocol <a class='info' href='#RFC0959'>[RFC0959]<span> (</span><span class='info'>Postel, J. and J. Reynolds, &ldquo;File Transfer Protocol,&rdquo; October&nbsp;1985.</span><span>)</span></a> does not include methods to obtain cryptographic hashes of files. Cryptographic hashes can be used to identify files and verify integrity. Unfortunately, because of the desire for this feature, multiple FTP commands that are not formally specified have been implemented in FTP applications, leading to non-interoperability and confusion. This specification documents an optional command where FTP clients can request the cryptographic hash of a file from an FTP server.
 HTTP has a similar feature named Instance Digests <a class='info' href='#RFC3230'>[RFC3230]<span> (</span><span class='info'>Mogul, J. and A. Van Hoff, &ldquo;Instance Digests in HTTP,&rdquo; January&nbsp;2002.</span><span>)</span></a> which allows a client to request the cryptographic hash of a file.
+</p>
+<p>[[ Discussion of this draft should take place on
+      apps-discuss@ietf.org. ]]
 </p>
 <a name="anchor2"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
@@ -408,7 +411,7 @@ List of Implementations with Non-standard Cryptographic Hash Command</h3>
 
 <p>[[ to be removed by the RFC editor before publication as an RFC. ]]
 </p>
-<p>At least one previous Internet Draft <a class='info' href='#draft-twine-ftpmd5'>[draft&#8209;twine&#8209;ftpmd5]<span> (</span><span class='info'>Twine, J., &ldquo;The MD5 and MMD5 FTP Command Extensions,&rdquo; May&nbsp;2002.</span><span>)</span></a>	 attempted to address this issue but it only supports one hash (MD5).
+<p>At least one previous Internet Draft <a class='info' href='#draft-twine-ftpmd5'>[draft&#8209;twine&#8209;ftpmd5]<span> (</span><span class='info'>Twine, J., &ldquo;The MD5 and MMD5 FTP Command Extensions,&rdquo; May&nbsp;2002.</span><span>)</span></a>	 attempted to address this issue but it only supported one hash (MD5).
 </p>
 <p>An incomplete list of FTP clients and servers that have implemented multiple commands (XMD5, XSHA1, SITE SHOHASH, etc) that are not formally specified, leading to non-interoperability and confusion.
 </p>
@@ -461,6 +464,8 @@ http://www.starksoft.com/prod_ftp.html
 <li>WS_FTP client / server
 http://ipswitchft.custhelp.com/app/answers/detail/a_id/671/kw/xmd5/r_id/166/sno/1
 </li>
+<li>wuftpd ('SITE CHECKMETHOD' and 'SITE CHECKSUM')
+</li>
 <li>zFTPServer
 </li>
 </ul>
@@ -470,7 +475,7 @@ http://ipswitchft.custhelp.com/app/answers/detail/a_id/671/kw/xmd5/r_id/166/sno/
 <a name="rfc.section.B"></a><h3>Appendix B.&nbsp;
 Acknowledgements and Contributors</h3>
 
-<p>Thanks to John C. Klensin, Alfred Hoenes, and Daniel Stenberg.
+<p>Thanks to John C. Klensin, Alfred Hoenes, Daniel Stenberg, and James Twine.
 </p>
 <a name="anchor10"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
@@ -502,7 +507,7 @@ HASH &lt;pathname&gt;
 <ul class="text">
 <li>Reference RFC 5797 and add IANA Considerations section.
 </li>
-<li>Informative Reference to expired Internet Draft (draft-twine-ftpmd5) which attempted to address this issue but it only supports one hash (MD5).
+<li>Informative Reference to expired Internet Draft (draft-twine-ftpmd5) which attempted to address this issue but it only supported one hash (MD5).
 </li>
 </ul>
 

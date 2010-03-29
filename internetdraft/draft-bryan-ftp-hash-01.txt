@@ -3,8 +3,8 @@
 
 Network Working Group                                           A. Bryan
 Internet-Draft                                                  T. Kosse
-Intended status: Experimental                             March 25, 2010
-Expires: September 26, 2010
+Intended status: Experimental                             March 29, 2010
+Expires: September 30, 2010
 
 
                 FTP Extensions for Cryptographic Hashes
@@ -42,7 +42,7 @@ Status of this Memo
    The list of Internet-Draft Shadow Directories can be accessed at
    http://www.ietf.org/shadow.html.
 
-   This Internet-Draft will expire on September 26, 2010.
+   This Internet-Draft will expire on September 30, 2010.
 
 Copyright Notice
 
@@ -52,7 +52,7 @@ Copyright Notice
 
 
 
-Bryan & Kosse          Expires September 26, 2010               [Page 1]
+Bryan & Kosse          Expires September 30, 2010               [Page 1]
 
 Internet-Draft   FTP Extensions for Cryptographic Hashes      March 2010
 
@@ -108,7 +108,7 @@ Table of Contents
 
 
 
-Bryan & Kosse          Expires September 26, 2010               [Page 2]
+Bryan & Kosse          Expires September 30, 2010               [Page 2]
 
 Internet-Draft   FTP Extensions for Cryptographic Hashes      March 2010
 
@@ -125,6 +125,9 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes      March 2010
    FTP clients can request the cryptographic hash of a file from an FTP
    server.  HTTP has a similar feature named Instance Digests [RFC3230]
    which allows a client to request the cryptographic hash of a file.
+
+   [[ Discussion of this draft should take place on
+   apps-discuss@ietf.org. ]]
 
 1.1.  Examples
 
@@ -159,14 +162,14 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes      March 2010
    The HASH command allows for requesting the cryptographic hash of a
    file.
 
-   The syntax for the HASH command is:
 
 
-
-
-Bryan & Kosse          Expires September 26, 2010               [Page 3]
+Bryan & Kosse          Expires September 30, 2010               [Page 3]
 
 Internet-Draft   FTP Extensions for Cryptographic Hashes      March 2010
+
+
+   The syntax for the HASH command is:
 
 
            hash = "HASH" SP <hash type> SP <pathname>
@@ -207,6 +210,21 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes      March 2010
    server-PI, the "S>" lines are server-PI replies.
 
 
+
+
+
+
+
+
+
+
+
+
+Bryan & Kosse          Expires September 30, 2010               [Page 4]
+
+Internet-Draft   FTP Extensions for Cryptographic Hashes      March 2010
+
+
            C> feat
            S> 211-Extensions supported:
            S>  SIZE
@@ -214,15 +232,6 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes      March 2010
            S>  HASH SHA-1,MD5
            S>  MDTM
            S> 211 END
-
-
-
-
-
-
-Bryan & Kosse          Expires September 26, 2010               [Page 4]
-
-Internet-Draft   FTP Extensions for Cryptographic Hashes      March 2010
 
 
 4.  Command Usage
@@ -265,6 +274,13 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes      March 2010
    is only calculated once even if multiple hash requests are sent for
    that file.
 
+
+
+Bryan & Kosse          Expires September 30, 2010               [Page 5]
+
+Internet-Draft   FTP Extensions for Cryptographic Hashes      March 2010
+
+
    The performance of commonly used hard disk drives is adversely
    affected by the amount of time the device needs to reposition its
    read-and-write heads.  A server SHOULD therefore avoid hashing
@@ -272,14 +288,6 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes      March 2010
    physical media and SHOULD instead hash them sequentially.  A possible
    solution is to use the 450 reply code of HASH to indicate that the
    server is already busy with another HASH operation.
-
-
-
-
-Bryan & Kosse          Expires September 26, 2010               [Page 5]
-
-Internet-Draft   FTP Extensions for Cryptographic Hashes      March 2010
-
 
    In addition, the HASH command can be used to draw conclusions about
    the contents of a file.  If the hash of a file on some server matches
@@ -322,20 +330,19 @@ Appendix A.  List of Implementations with Non-standard Cryptographic
 
    [[ to be removed by the RFC editor before publication as an RFC. ]]
 
+
+
+Bryan & Kosse          Expires September 30, 2010               [Page 6]
+
+Internet-Draft   FTP Extensions for Cryptographic Hashes      March 2010
+
+
    At least one previous Internet Draft [draft-twine-ftpmd5] attempted
-   to address this issue but it only supports one hash (MD5).
+   to address this issue but it only supported one hash (MD5).
 
    An incomplete list of FTP clients and servers that have implemented
    multiple commands (XMD5, XSHA1, SITE SHOHASH, etc) that are not
    formally specified, leading to non-interoperability and confusion.
-
-
-
-
-Bryan & Kosse          Expires September 26, 2010               [Page 6]
-
-Internet-Draft   FTP Extensions for Cryptographic Hashes      March 2010
-
 
    o  Akamai NetStorage p17-18
       http://pigdogslow.dyndns.org/NetStorage_UserGuide.pdf
@@ -363,12 +370,14 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes      March 2010
    o  RaidenFTPD32 FTP server
    o  WS_FTP client / server http://ipswitchft.custhelp.com/app/answers/
       detail/a_id/671/kw/xmd5/r_id/166/sno/1
+   o  wuftpd ('SITE CHECKMETHOD' and 'SITE CHECKSUM')
    o  zFTPServer
 
 
 Appendix B.  Acknowledgements and Contributors
 
-   Thanks to John C. Klensin, Alfred Hoenes, and Daniel Stenberg.
+   Thanks to John C. Klensin, Alfred Hoenes, Daniel Stenberg, and James
+   Twine.
 
 
 Appendix C.  Document History
@@ -376,22 +385,20 @@ Appendix C.  Document History
    [[ to be removed by the RFC editor before publication as an RFC. ]]
 
    Known issues concerning this draft:
+
+
+
+Bryan & Kosse          Expires September 30, 2010               [Page 7]
+
+Internet-Draft   FTP Extensions for Cryptographic Hashes      March 2010
+
+
    o  Atypical use of a command with a file path argument and another
       argument.  Alfred Hoenes suggests:
 
 
    OPTS HASH <hash>
    HASH <pathname>
-
-
-
-
-
-
-Bryan & Kosse          Expires September 26, 2010               [Page 7]
-
-Internet-Draft   FTP Extensions for Cryptographic Hashes      March 2010
-
 
    o  Underspecification of the representation of the file that shall
       undergo the hash calculation.
@@ -401,7 +408,7 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes      March 2010
    o  Reference RFC 5797 and add IANA Considerations section.
    o  Informative Reference to expired Internet Draft
       (draft-twine-ftpmd5) which attempted to address this issue but it
-      only supports one hash (MD5).
+      only supported one hash (MD5).
 
    -00 : October 19, 2009.
    o  Initial draft.
@@ -437,12 +444,5 @@ Authors' Addresses
 
 
 
-
-
-
-
-
-
-
-Bryan & Kosse          Expires September 26, 2010               [Page 8]
+Bryan & Kosse          Expires September 30, 2010               [Page 8]
 
