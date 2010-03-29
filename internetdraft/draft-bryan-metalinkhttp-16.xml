@@ -180,9 +180,9 @@ pri=2; geo="gb"; depth=1
 </section>
 
 <section title="Coordinated Mirror Policies" anchor="coordinatedpolicies">
-      <t>There are two types of mirror servers: preferred and normal. Preferred mirror servers are HTTP mirror servers that MUST share the same ETag policy as the originating Metalink server. Optimally, they will do both. Preferred mirrors make it possible to detect early on, before data is transferred, if the file requested matches the desired file.
-      Preferred HTTP mirror servers have a "pref" value of 1. By default, if unspecified then mirrors are considered "normal" and do not share the same ETag policy. FTP mirrors, as they do not emit ETags, MUST always be considered "normal".</t>
-	  <t>HTTP Mirror servers SHOULD support Instance Digests in HTTP <xref target="RFC3230"/>.</t>
+      <t>There are two types of mirror servers: preferred and normal. Preferred mirror servers are HTTP mirror servers that MUST share the same ETag policy as the originating Metalink server. Preferred mirrors make it possible to detect early on, before data is transferred, if the file requested matches the desired file.
+      Preferred HTTP mirror servers have a "pref" value of 1. By default, if unspecified then mirrors are considered "normal" and do not share the same ETag policy. FTP mirrors, as they do not emit ETags, MUST always be considered "normal". (<xref target="draft-bryan-ftp-hash"/> allows for FTP mirrors to be coordinated and provide file hashes).</t>
+	  <t>HTTP Mirror servers SHOULD support Instance Digests in HTTP <xref target="RFC3230"/>. Optimally, mirror servers will share the same ETag policy and support Instance Digests in HTTP.</t>
 	  
       <t>[[Suggestion: In order for clients to identify servers that have coordinated ETag policies, the ETag MUST begin with "Metalink:", e.g.
         <figure><artwork type="example">
@@ -345,7 +345,7 @@ DYzYjRjYzFhOTlmNTQwYzI2M2QwM2U2MQ==
 
 <section title="Error Prevention, Detection, and Correction">
 
-<t>Error prevention, or early file mismatch detection, is possible before file transfers with the use of file sizes, ETags, and Instance Digests. Error dectection requires Instance Digests, or cryptographic hashes, to
+<t>Error prevention, or early file mismatch detection, is possible before file transfers with the use of file sizes, ETags, and cryptographic hashes. Error detection requires Instance Digests, or cryptographic hashes, to
 determine after transfers if there has been an error. Error correction, or download repair, is possible with partial file cryptographic hashes.</t>
 
 <section title="Error Prevention (Early File Mismatch Detection)" anchor="earlyfilemismatchdetection">
@@ -363,7 +363,7 @@ to be shared among the mirror servers.
 If the mirror server provides neither synchronized ETag or Instance Digest, then early detection of
 mismatches is not possible unless file length also differs. Finally, the error is still detectable, after the download has completed, when the merged response is verified.</t>
 
-<t>ETag can not be used for verifying the integrity of the received
+<t>ETags can not be used for verifying the integrity of the received
 content. But it is a guarantee issued by the Metalink server that the content is
 correct for that ETag. And if the ETag given by the mirror server matches
 the ETag given by the master server, then we have a chain of trust where the master server
@@ -655,7 +655,7 @@ other mirrors.</t>
 <reference anchor="draft-bryan-metalink">
   <front>
       <title abbrev="Metalink Download Description Format">The Metalink Download Description Format</title>		
-      <author initials="A." surname="Bryan" fullname="Anthony Bryan" role="editor">
+      <author initials="A." surname="Bryan" fullname="Anthony Bryan">
 	    <organization>Metalinker Project</organization>
 	    <address>		
 	      <email>anthonybryan@gmail.com</email>	
@@ -686,6 +686,34 @@ other mirrors.</t>
     <date month="February" year="2010"/>
   </front>
   <seriesInfo name="Internet-Draft" value="draft-bryan-metalink-28"/>
+</reference>
+
+<reference anchor="draft-bryan-ftp-hash">
+  <front>
+      <title abbrev="FTP Extensions for Cryptographic Hashes">FTP Extensions for Cryptographic Hashes</title>
+      <author initials="A." surname="Bryan" fullname="Anthony Bryan">
+	    <organization></organization>
+	    <address>
+		  <postal>
+			<street></street>
+		    <city>Pompano Beach</city>
+			<region>FL</region>
+			<country>USA</country>
+		  </postal>
+	      <email>anthonybryan@gmail.com</email>	
+	      <uri>http://www.metalinker.org</uri>		
+	    </address>
+      </author>
+      <author initials="T." surname="Kosse" fullname="Tim Kosse">
+	    <organization></organization>
+	    <address>
+	      <email>tim.kosse@filezilla-project.org</email>	
+	      <uri>http://filezilla-project.org/</uri>		
+	    </address>
+      </author>
+	<date month="March" year="2010"/>   
+  </front>
+  <seriesInfo name="Internet-Draft" value="draft-bryan-ftp-hash-00"/>
 </reference>
 
 	  </references>
@@ -733,6 +761,13 @@ other mirrors.</t>
 		  <t>Do we need an "official" MIME type for .torrent files or allow "application/x-bittorrent"?</t>
 	    </list></t>
 
+<t>-16 : March , 2010.
+	    
+	    <list style="symbols">
+
+	      <t>Add draft-bryan-ftp-hash reference and FTP mirror coordination.</t>
+	    </list></t>
+		
 <t>-15 : December 31, 2009.
 	    
 	    <list style="symbols">
