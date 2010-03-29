@@ -34,7 +34,7 @@
 	      <uri>http://filezilla-project.org/</uri>		
 	    </address>
       </author>
-	<date month="March" year="2010"/>        
+	<date year="2010"/>        
 
       <abstract>
 	<t>The File Transfer Protocol does not include methods to obtain cryptographic hashes of files. Cryptographic hashes can be used to identify files and verify integrity. Unfortunately, because of the desire for this feature, multiple FTP commands that are not formally specified have been implemented in FTP applications, leading to non-interoperability and confusion. This specification documents an optional command where FTP clients can request the cryptographic hash of a file from an FTP server.
@@ -378,6 +378,9 @@ HASH &lt;pathname&gt;
 
 		  <t>Underspecification of the representation of the file that shall undergo the hash calculation.</t>
 		  <t>Correct response code to use for completion and errors.</t>
+		  <t>Need to include some more general advice on algorithms just in case algorithm X is found to be broken the day after this draft is released.</t>
+		  <t>Possibly we should suggest that servers calculate the hash numbers in advance, like when the file gets uploaded to avoid the risk of this becoming a DOS-vector.</t>
+		  <t>The FTP server's right to refuse to calculate the hash is of course important to help against DOS risks.</t>
 
 	    </list></t>
 

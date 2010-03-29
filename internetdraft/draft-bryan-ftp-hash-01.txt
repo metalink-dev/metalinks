@@ -403,6 +403,14 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes      March 2010
    o  Underspecification of the representation of the file that shall
       undergo the hash calculation.
    o  Correct response code to use for completion and errors.
+   o  Need to include some more general advice on algorithms just in
+      case algorithm X is found to be broken the day after this draft is
+      released.
+   o  Possibly we should suggest that servers calculate the hash numbers
+      in advance, like when the file gets uploaded to avoid the risk of
+      this becoming a DOS-vector.
+   o  The FTP server's right to refuse to calculate the hash is of
+      course important to help against DOS risks.
 
    -01 : March 24, 2010.
    o  Reference RFC 5797 and add IANA Considerations section.
@@ -428,14 +436,6 @@ Authors' Addresses
 
    Email: tim.kosse@filezilla-project.org
    URI:   http://filezilla-project.org/
-
-
-
-
-
-
-
-
 
 
 
