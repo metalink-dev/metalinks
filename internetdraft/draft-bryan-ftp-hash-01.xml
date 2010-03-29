@@ -47,6 +47,10 @@
     <section title="Introduction">
 	<t>The specification for the File Transfer Protocol <xref target="RFC0959"/> does not include methods to obtain cryptographic hashes of files. Cryptographic hashes can be used to identify files and verify integrity. Unfortunately, because of the desire for this feature, multiple FTP commands that are not formally specified have been implemented in FTP applications, leading to non-interoperability and confusion. This specification documents an optional command where FTP clients can request the cryptographic hash of a file from an FTP server.
 HTTP has a similar feature named Instance Digests <xref target="RFC3230"/> which allows a client to request the cryptographic hash of a file.</t>
+
+      <t>[[ Discussion of this draft should take place on
+      apps-discuss@ietf.org. ]]</t>
+	  
       <section title="Examples"><t><figure> 
 	  <preamble>Example of HASH client request:</preamble>
 	  
@@ -313,7 +317,7 @@ users who would already be able to download the file.</t>
 
 	    <section title="List of Implementations with Non-standard Cryptographic Hash Command">
 		<t>[[ to be removed by the RFC editor before publication as an RFC. ]]</t>
-<t>At least one previous Internet Draft <xref target="draft-twine-ftpmd5"/>	 attempted to address this issue but it only supports one hash (MD5).</t>
+<t>At least one previous Internet Draft <xref target="draft-twine-ftpmd5"/>	 attempted to address this issue but it only supported one hash (MD5).</t>
 <t>An incomplete list of FTP clients and servers that have implemented multiple commands (XMD5, XSHA1, SITE SHOHASH, etc) that are not formally specified, leading to non-interoperability and confusion.</t>
 	    <t>
 	    <list style="symbols">
@@ -347,6 +351,7 @@ http://www.starksoft.com/prod_ftp.html</t>
 <t>RaidenFTPD32 FTP server</t>
 <t>WS_FTP client / server
 http://ipswitchft.custhelp.com/app/answers/detail/a_id/671/kw/xmd5/r_id/166/sno/1</t>
+<t>wuftpd ('SITE CHECKMETHOD' and 'SITE CHECKSUM')</t>
 <t>zFTPServer</t>
 	    </list></t>
 
@@ -355,7 +360,7 @@ http://ipswitchft.custhelp.com/app/answers/detail/a_id/671/kw/xmd5/r_id/166/sno/
 
 		
 	    <section title="Acknowledgements and Contributors">
-		  <t>Thanks to John C. Klensin, Alfred Hoenes, and Daniel Stenberg.</t>
+		  <t>Thanks to John C. Klensin, Alfred Hoenes, Daniel Stenberg, and James Twine.</t>
     </section>
 
 	    <section title="Document History">
@@ -381,7 +386,7 @@ HASH &lt;pathname&gt;
 	    <list style="symbols">
 
 	      <t>Reference RFC 5797 and add IANA Considerations section.</t>	
-	      <t>Informative Reference to expired Internet Draft (draft-twine-ftpmd5) which attempted to address this issue but it only supports one hash (MD5).</t>
+	      <t>Informative Reference to expired Internet Draft (draft-twine-ftpmd5) which attempted to address this issue but it only supported one hash (MD5).</t>
 	    </list></t>
 		
 <t>-00 : October 19, 2009.
