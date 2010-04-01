@@ -3,8 +3,8 @@
 
 Network Working Group                                           A. Bryan
 Internet-Draft                                                  T. Kosse
-Intended status: Experimental                             March 29, 2010
-Expires: September 30, 2010
+Intended status: Experimental                              April 1, 2010
+Expires: October 3, 2010
 
 
                 FTP Extensions for Cryptographic Hashes
@@ -42,7 +42,7 @@ Status of this Memo
    The list of Internet-Draft Shadow Directories can be accessed at
    http://www.ietf.org/shadow.html.
 
-   This Internet-Draft will expire on September 30, 2010.
+   This Internet-Draft will expire on October 3, 2010.
 
 Copyright Notice
 
@@ -52,9 +52,9 @@ Copyright Notice
 
 
 
-Bryan & Kosse          Expires September 30, 2010               [Page 1]
+Bryan & Kosse            Expires October 3, 2010                [Page 1]
 
-Internet-Draft   FTP Extensions for Cryptographic Hashes      March 2010
+Internet-Draft   FTP Extensions for Cryptographic Hashes      April 2010
 
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -80,9 +80,9 @@ Table of Contents
    7.  References  . . . . . . . . . . . . . . . . . . . . . . . . . . 6
      7.1.  Normative References  . . . . . . . . . . . . . . . . . . . 6
      7.2.  Informative References  . . . . . . . . . . . . . . . . . . 6
-   Appendix A.  List of Implementations with Non-standard
-                Cryptographic Hash Command . . . . . . . . . . . . . . 6
-   Appendix B.  Acknowledgements and Contributors  . . . . . . . . . . 7
+   Appendix A.  Acknowledgements and Contributors  . . . . . . . . . . 6
+   Appendix B.  List of Implementations with Non-standard
+                Cryptographic Hash Command . . . . . . . . . . . . . . 7
    Appendix C.  Document History . . . . . . . . . . . . . . . . . . . 7
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . . . 8
 
@@ -108,9 +108,9 @@ Table of Contents
 
 
 
-Bryan & Kosse          Expires September 30, 2010               [Page 2]
+Bryan & Kosse            Expires October 3, 2010                [Page 2]
 
-Internet-Draft   FTP Extensions for Cryptographic Hashes      March 2010
+Internet-Draft   FTP Extensions for Cryptographic Hashes      April 2010
 
 
 1.  Introduction
@@ -164,9 +164,9 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes      March 2010
 
 
 
-Bryan & Kosse          Expires September 30, 2010               [Page 3]
+Bryan & Kosse            Expires October 3, 2010                [Page 3]
 
-Internet-Draft   FTP Extensions for Cryptographic Hashes      March 2010
+Internet-Draft   FTP Extensions for Cryptographic Hashes      April 2010
 
 
    The syntax for the HASH command is:
@@ -199,9 +199,10 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes      March 2010
 
    The standard negative error codes 500 and 501 are sufficient to
    handle all errors involving the HASH command (e.g., syntax errors).
-   Response code 550 is used if the user isn't allowed to use the HASH
-   command.  Response code 450 is used to indicate the server is busy,
-   e.g. already hashing other files yet inviting the client to retry in
+   Responce code 550 is used if the file can not be found.  Response
+   code 552 is used if the user isn't allowed to use the HASH command.
+   Response code 450 is used to indicate the server is busy, e.g.
+   already hashing other files yet inviting the client to retry in
    future.
 
    A server that supports HASH should advertise it in FEAT response
@@ -219,10 +220,9 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes      March 2010
 
 
 
-
-Bryan & Kosse          Expires September 30, 2010               [Page 4]
+Bryan & Kosse            Expires October 3, 2010                [Page 4]
 
-Internet-Draft   FTP Extensions for Cryptographic Hashes      March 2010
+Internet-Draft   FTP Extensions for Cryptographic Hashes      April 2010
 
 
            C> feat
@@ -276,9 +276,9 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes      March 2010
 
 
 
-Bryan & Kosse          Expires September 30, 2010               [Page 5]
+Bryan & Kosse            Expires October 3, 2010                [Page 5]
 
-Internet-Draft   FTP Extensions for Cryptographic Hashes      March 2010
+Internet-Draft   FTP Extensions for Cryptographic Hashes      April 2010
 
 
    The performance of commonly used hard disk drives is adversely
@@ -325,20 +325,25 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes      March 2010
               draft-twine-ftpmd5-00 (work in progress), May 2002.
 
 
-Appendix A.  List of Implementations with Non-standard Cryptographic
+Appendix A.  Acknowledgements and Contributors
+
+   Thanks to John C. Klensin, Alfred Hoenes, Daniel Stenberg, and James
+   Twine.
+
+
+
+Bryan & Kosse            Expires October 3, 2010                [Page 6]
+
+Internet-Draft   FTP Extensions for Cryptographic Hashes      April 2010
+
+
+Appendix B.  List of Implementations with Non-standard Cryptographic
              Hash Command
 
    [[ to be removed by the RFC editor before publication as an RFC. ]]
 
-
-
-Bryan & Kosse          Expires September 30, 2010               [Page 6]
-
-Internet-Draft   FTP Extensions for Cryptographic Hashes      March 2010
-
-
    At least one previous Internet Draft [draft-twine-ftpmd5] attempted
-   to address this issue but it only supported one hash (MD5).
+   to address this issue (it only supported one hash, MD5).
 
    An incomplete list of FTP clients and servers that have implemented
    multiple commands (XMD5, XSHA1, SITE SHOHASH, etc) that are not
@@ -374,12 +379,6 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes      March 2010
    o  zFTPServer
 
 
-Appendix B.  Acknowledgements and Contributors
-
-   Thanks to John C. Klensin, Alfred Hoenes, Daniel Stenberg, and James
-   Twine.
-
-
 Appendix C.  Document History
 
    [[ to be removed by the RFC editor before publication as an RFC. ]]
@@ -388,9 +387,10 @@ Appendix C.  Document History
 
 
 
-Bryan & Kosse          Expires September 30, 2010               [Page 7]
+
+Bryan & Kosse            Expires October 3, 2010                [Page 7]
 
-Internet-Draft   FTP Extensions for Cryptographic Hashes      March 2010
+Internet-Draft   FTP Extensions for Cryptographic Hashes      April 2010
 
 
    o  Atypical use of a command with a file path argument and another
@@ -411,12 +411,13 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes      March 2010
       this becoming a DOS-vector.
    o  The FTP server's right to refuse to calculate the hash is of
       course important to help against DOS risks.
+   o  Partial file hashes.
 
    -01 : March 24, 2010.
    o  Reference RFC 5797 and add IANA Considerations section.
    o  Informative Reference to expired Internet Draft
-      (draft-twine-ftpmd5) which attempted to address this issue but it
-      only supported one hash (MD5).
+      (draft-twine-ftpmd5) which attempted to address this issue (it
+      only supported one hash, MD5).
 
    -00 : October 19, 2009.
    o  Initial draft.
@@ -443,6 +444,5 @@ Authors' Addresses
 
 
 
-
-Bryan & Kosse          Expires September 30, 2010               [Page 8]
+Bryan & Kosse            Expires October 3, 2010                [Page 8]
 

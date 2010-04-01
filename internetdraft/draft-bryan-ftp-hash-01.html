@@ -143,8 +143,8 @@
 <table summary="layout" width="66%" border="0" cellpadding="0" cellspacing="0"><tr><td><table summary="layout" width="100%" border="0" cellpadding="2" cellspacing="1">
 <tr><td class="header">Network Working Group</td><td class="header">A. Bryan</td></tr>
 <tr><td class="header">Internet-Draft</td><td class="header">T. Kosse</td></tr>
-<tr><td class="header">Intended status: Experimental</td><td class="header">March 29, 2010</td></tr>
-<tr><td class="header">Expires: September 30, 2010</td><td class="header">&nbsp;</td></tr>
+<tr><td class="header">Intended status: Experimental</td><td class="header">April 1, 2010</td></tr>
+<tr><td class="header">Expires: October 3, 2010</td><td class="header">&nbsp;</td></tr>
 </table></td></tr></table>
 <h1><br />FTP Extensions for Cryptographic Hashes<br />draft-bryan-ftp-hash-01</h1>
 
@@ -174,7 +174,7 @@ The list of current Internet-Drafts can be accessed at
 The list of Internet-Draft Shadow Directories can be accessed at
 <a href='http://www.ietf.org/shadow.html'>http://www.ietf.org/shadow.html</a>.</p>
 <p>
-This Internet-Draft will expire on September 30, 2010.</p>
+This Internet-Draft will expire on October 3, 2010.</p>
 
 <h3>Copyright Notice</h3>
 <p>
@@ -214,9 +214,9 @@ Normative References<br />
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="#rfc.references2">7.2.</a>&nbsp;
 Informative References<br />
 <a href="#anchor8">Appendix&nbsp;A.</a>&nbsp;
-List of Implementations with Non-standard Cryptographic Hash Command<br />
-<a href="#anchor9">Appendix&nbsp;B.</a>&nbsp;
 Acknowledgements and Contributors<br />
+<a href="#anchor9">Appendix&nbsp;B.</a>&nbsp;
+List of Implementations with Non-standard Cryptographic Hash Command<br />
 <a href="#anchor10">Appendix&nbsp;C.</a>&nbsp;
 Document History<br />
 <a href="#rfc.authors">&#167;</a>&nbsp;
@@ -300,7 +300,7 @@ The HASH Command (HASH)</h3>
 
 <p>All hash values MUST be encoded in lowercase hexadecimal format.
 </p>
-<p>The standard negative error codes 500 and 501 are sufficient to handle all errors involving the HASH command (e.g., syntax errors). Response code 550 is used if the user isn't allowed to use the HASH command.
+<p>The standard negative error codes 500 and 501 are sufficient to handle all errors involving the HASH command (e.g., syntax errors). Responce code 550 is used if the file can not be found. Response code 552 is used if the user isn't allowed to use the HASH command.
 Response code 450 is used to indicate the server is busy, e.g. already hashing other files yet inviting the client to retry in future.
 </p>
 <p>A server that supports HASH should advertise it in FEAT response <a class='info' href='#RFC2389'>[RFC2389]<span> (</span><span class='info'>Hethmon, P. and R. Elz, &ldquo;Feature negotiation mechanism for the File Transfer Protocol,&rdquo; August&nbsp;1998.</span><span>)</span></a> with a list of all supported hash algorithms in a comma separated list. The "C>" lines are commands from user-PI to server-PI, the "S>" lines are server-PI replies.
@@ -407,11 +407,18 @@ References</h3>
 <a name="anchor8"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.A"></a><h3>Appendix A.&nbsp;
+Acknowledgements and Contributors</h3>
+
+<p>Thanks to John C. Klensin, Alfred Hoenes, Daniel Stenberg, and James Twine.
+</p>
+<a name="anchor9"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.B"></a><h3>Appendix B.&nbsp;
 List of Implementations with Non-standard Cryptographic Hash Command</h3>
 
 <p>[[ to be removed by the RFC editor before publication as an RFC. ]]
 </p>
-<p>At least one previous Internet Draft <a class='info' href='#draft-twine-ftpmd5'>[draft&#8209;twine&#8209;ftpmd5]<span> (</span><span class='info'>Twine, J., &ldquo;The MD5 and MMD5 FTP Command Extensions,&rdquo; May&nbsp;2002.</span><span>)</span></a>	 attempted to address this issue but it only supported one hash (MD5).
+<p>At least one previous Internet Draft <a class='info' href='#draft-twine-ftpmd5'>[draft&#8209;twine&#8209;ftpmd5]<span> (</span><span class='info'>Twine, J., &ldquo;The MD5 and MMD5 FTP Command Extensions,&rdquo; May&nbsp;2002.</span><span>)</span></a>	 attempted to address this issue (it only supported one hash, MD5).
 </p>
 <p>An incomplete list of FTP clients and servers that have implemented multiple commands (XMD5, XSHA1, SITE SHOHASH, etc) that are not formally specified, leading to non-interoperability and confusion.
 </p>
@@ -470,13 +477,6 @@ http://ipswitchft.custhelp.com/app/answers/detail/a_id/671/kw/xmd5/r_id/166/sno/
 </li>
 </ul>
 
-<a name="anchor9"></a><br /><hr />
-<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.B"></a><h3>Appendix B.&nbsp;
-Acknowledgements and Contributors</h3>
-
-<p>Thanks to John C. Klensin, Alfred Hoenes, Daniel Stenberg, and James Twine.
-</p>
 <a name="anchor10"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.C"></a><h3>Appendix C.&nbsp;
@@ -505,6 +505,8 @@ HASH &lt;pathname&gt;
 </li>
 <li>The FTP server's right to refuse to calculate the hash is of course important to help against DOS risks.
 </li>
+<li>Partial file hashes.
+</li>
 </ul>
 
 <p>-01 : March 24, 2010.
@@ -513,7 +515,7 @@ HASH &lt;pathname&gt;
 <ul class="text">
 <li>Reference RFC 5797 and add IANA Considerations section.
 </li>
-<li>Informative Reference to expired Internet Draft (draft-twine-ftpmd5) which attempted to address this issue but it only supported one hash (MD5).
+<li>Informative Reference to expired Internet Draft (draft-twine-ftpmd5) which attempted to address this issue (it only supported one hash, MD5).
 </li>
 </ul>
 
