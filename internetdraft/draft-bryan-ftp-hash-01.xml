@@ -55,11 +55,11 @@ HTTP has a similar feature named Instance Digests <xref target="RFC3230"/> which
 	  <preamble>Example of HASH client request:</preamble>
 	  
 	  <artwork type="example">
-        HASH SHA-1 filename.ext
+        HASH filename.ext
 </artwork></figure></t>
 
 <t><figure> 
-	  <preamble>HASH server response with Positive Completion code and the requested hash:</preamble>
+	  <preamble>HASH server response with Positive Completion code and the requested hash using the currently selected algorithm:</preamble>
 	  <artwork type="example">
         213 80bc95fd391772fa61c91ed68567f0980bb45fd9
 </artwork></figure></t>
@@ -90,13 +90,12 @@ HTTP has a similar feature named Instance Digests <xref target="RFC3230"/> which
 <figure> 
 	  <preamble></preamble>
 	  <artwork type="example">
-        hash = "HASH" SP &lt;hash type&gt; SP &lt;pathname&gt;
+        hash = "HASH" SP &lt;pathname&gt;
 </artwork></figure></t>
    
 <t>As with all FTP commands, the "HASH" command label is interpreted in a case-insensitive manner.</t>
    
-<t>The HASH command keyword MUST be followed by a single space (ASCII 32). Following the space, a hash type MUST be present. Another single space (ASCII 32), MUST be followed by the pathname.</t>
-<t>The IANA registry named "Hash Function Textual Names" defines values for hash types. Hash names should be presented in uppercase, but comparisons should be case-insensitive, e.g. MD5, md5, Md5 are all the same.</t>
+<t>The HASH command keyword MUST be followed by a single space (ASCII 32) followed by the pathname.</t>
 
 <t>The pathname argument should reference the same file as other file based commands such as STOR or RETR which the same argument would reference.</t>
 
@@ -110,10 +109,12 @@ HTTP has a similar feature named Instance Digests <xref target="RFC3230"/> which
 
 <t>All hash values MUST be encoded in lowercase hexadecimal format.</t>
 
-<t>The standard negative error codes 500 and 501 are sufficient to handle all errors involving the HASH command (e.g., syntax errors). Responce code 550 is used if the file can not be found. Response code 552 is used if the user isn't allowed to use the HASH command.
+<t>The standard negative error codes 500 and 501 are sufficient to handle all errors involving the HASH command (e.g., syntax errors). Response code 550 is used if the file can not be found. Response code 552 is used if the user isn't allowed to use the HASH command.
 Response code 450 is used to indicate the server is busy, e.g. already hashing other files yet inviting the client to retry in future.</t>
 
-<t>A server that supports HASH should advertise it in FEAT response <xref target="RFC2389"/> with a list of all supported hash algorithms in a comma separated list. The "C>" lines are commands from user-PI to server-PI, the "S>" lines are server-PI replies.</t>
+<section title="FEAT response for HASH">
+
+<t>A server that supports HASH should advertise it in FEAT response <xref target="RFC2389"/> with a list of all supported hash algorithms in a semicolon separated list. The hash algorithm that is selected by default is marked with an asterisk. In the example below, the "C>" lines are commands from user-PI to server-PI, the "S>" lines are server-PI replies. </t>
 
 <t><figure> 
 	  <preamble></preamble>
@@ -122,14 +123,50 @@ Response code 450 is used to indicate the server is busy, e.g. already hashing o
         S&gt; 211-Extensions supported:
         S&gt;  SIZE
         S&gt;  COMPRESSION
-        S&gt;  HASH SHA-1,MD5
+        S&gt;  HASH SHA-1*;MD5
         S&gt;  MDTM
         S&gt; 211 END
 </artwork></figure></t>
 
+<t>The IANA registry named "Hash Function Textual Names" defines values for hash types. Hash names should be presented in uppercase, but comparisons should be case-insensitive, e.g. MD5, md5, Md5 are all the same.</t>
+
+<t><figure> 
+	  <preamble></preamble>
+	  <artwork type="example">	
+        hash-feat = SP "HASH" SP hashlist CRLF
+        hashlist = 1*( hashname ["*"] ";" )
+        hashtype = 1*( hchar )
+        hchar = ALPHA / DIGIT / "-" / "_" / "/" / "." / ","
+
+</artwork></figure></t>
+
 </section>
 
+<section title="Changing the HASH algorithm">
 
+	<t>To query the current hash algorithm and to change it, the OPTS command as defined in <xref target="RFC2389"/> is used with HASH as the first argument. If no second argument is passed, OPTS HASH simply returns the currently selected hash algorithm. To change the algorithm, a valid hashtype has to be given as second argument. If the command is successful, all future calls to HASH until the next successful OPTS HASH command or until the session is reinitialized (REIN) will use the selected hash algorithm.</t>
+	
+<t><figure>
+	  <preamble></preamble>
+	  <artwork type="example">
+        C&gt; OPTS HASH
+        S&gt; 200 SHA-1
+        C&gt; OPTS HASH SHA-512
+        S&gt; 200 SHA-512
+        C&gt; OPTS HASH CRC-37
+        S&gt; 501 Unknown algorithm, current selection not changed
+</artwork></figure></t>
+
+<t><figure> 
+	  <preamble></preamble>
+	  <artwork type="example">	
+        hashopts-cmd = "OPTS HASH" [ SP hashtype ] CRLF
+        hashopts-response = "200" SP hashtype CRLF
+</artwork></figure></t>
+
+</section>
+
+</section>
 <section title="Command Usage">
 <t>Client requests the cryptographic hash of a file with HASH command. Server replies with cryptographic hash of file. Client downloads file. Client hashes the downloaded file and compares its hash to the hash obtained from the server. This command could also be used to verify that an uploaded file is an exact copy.</t>
 
@@ -148,7 +185,12 @@ Response code 450 is used to indicate the server is busy, e.g. already hashing o
    
 	</section>
 
+<section title="Implementation Requirements">
 
+	<t>All conforming implementations MUST at least support the SHA-1 algorithm. Implementations SHOULD NOT make any algorithm the default that is known to be weaker than SHA-1. Support for any additional algorithms is optional.</t>
+
+
+	</section>
 	
 	  <section title="Security Considerations">
 
@@ -369,13 +411,6 @@ http://ipswitchft.custhelp.com/app/answers/detail/a_id/671/kw/xmd5/r_id/166/sno/
 		<t>Known issues concerning this draft:
 	    <list style="symbols"> 
 	      
-		  <t>Atypical use of a command with a file path argument and another argument. Alfred Hoenes suggests:
-<figure> 
-	  <preamble></preamble>
-	  <artwork type="example">
-OPTS HASH &lt;hash&gt;
-HASH &lt;pathname&gt;
-</artwork></figure></t>
 
 		  <t>Underspecification of the representation of the file that shall undergo the hash calculation.</t>
 		  <t>Correct response code to use for completion and errors.</t>
@@ -390,6 +425,7 @@ HASH &lt;pathname&gt;
 	    
 	    <list style="symbols">
 
+          <t>Changing HASH algorithm with OPTS.</t>
 	      <t>Reference RFC 5797 and add IANA Considerations section.</t>	
 	      <t>Informative Reference to expired Internet Draft (draft-twine-ftpmd5) which attempted to address this issue (it only supported one hash, MD5).</t>
 	    </list></t>
