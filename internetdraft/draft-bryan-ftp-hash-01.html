@@ -2,7 +2,7 @@
 <html lang="en"><head><title>FTP Extensions for Cryptographic Hashes</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="FTP Extensions for Cryptographic Hashes">
-<meta name="generator" content="xml2rfc v1.35pre1 (http://xml.resource.org/)">
+<meta name="generator" content="xml2rfc v1.35 (http://xml.resource.org/)">
 <style type='text/css'><!--
         body {
                 font-family: verdana, charcoal, helvetica, arial, sans-serif;
@@ -143,8 +143,8 @@
 <table summary="layout" width="66%" border="0" cellpadding="0" cellspacing="0"><tr><td><table summary="layout" width="100%" border="0" cellpadding="2" cellspacing="1">
 <tr><td class="header">Network Working Group</td><td class="header">A. Bryan</td></tr>
 <tr><td class="header">Internet-Draft</td><td class="header">T. Kosse</td></tr>
-<tr><td class="header">Intended status: Experimental</td><td class="header">April 1, 2010</td></tr>
-<tr><td class="header">Expires: October 3, 2010</td><td class="header">&nbsp;</td></tr>
+<tr><td class="header">Intended status: Experimental</td><td class="header">April 4, 2010</td></tr>
+<tr><td class="header">Expires: October 6, 2010</td><td class="header">&nbsp;</td></tr>
 </table></td></tr></table>
 <h1><br />FTP Extensions for Cryptographic Hashes<br />draft-bryan-ftp-hash-01</h1>
 
@@ -155,26 +155,20 @@
 </p>
 <h3>Status of this Memo</h3>
 <p>
-This Internet-Draft is submitted to IETF in full
+This Internet-Draft is submitted  in full
 conformance with the provisions of BCP&nbsp;78 and BCP&nbsp;79.</p>
 <p>
 Internet-Drafts are working documents of the Internet Engineering
-Task Force (IETF), its areas, and its working groups.
-Note that other groups may also distribute working documents as
-Internet-Drafts.</p>
+Task Force (IETF).  Note that other groups may also distribute
+working documents as Internet-Drafts.  The list of current
+Internet-Drafts is at http://datatracker.ietf.org/drafts/current/.</p>
 <p>
 Internet-Drafts are draft documents valid for a maximum of six months
 and may be updated, replaced, or obsoleted by other documents at any time.
 It is inappropriate to use Internet-Drafts as reference material or to cite
 them other than as &ldquo;work in progress.&rdquo;</p>
 <p>
-The list of current Internet-Drafts can be accessed at
-<a href='http://www.ietf.org/ietf/1id-abstracts.txt'>http://www.ietf.org/ietf/1id-abstracts.txt</a>.</p>
-<p>
-The list of Internet-Draft Shadow Directories can be accessed at
-<a href='http://www.ietf.org/shadow.html'>http://www.ietf.org/shadow.html</a>.</p>
-<p>
-This Internet-Draft will expire on October 3, 2010.</p>
+This Internet-Draft will expire on October 6, 2010.</p>
 
 <h3>Copyright Notice</h3>
 <p>
@@ -189,7 +183,7 @@ carefully, as they describe your rights and restrictions with respect
 to this document. Code Components extracted from this document must
 include Simplified BSD License text as described in Section 4.e of
 the Trust Legal Provisions and are provided without warranty as
-described in the BSD License.</p>
+described in the Simplified BSD License.</p>
 <a name="toc"></a><br /><hr />
 <h3>Table of Contents</h3>
 <p class="toc">
@@ -201,23 +195,29 @@ Examples<br />
 Notational Conventions<br />
 <a href="#HASH">3.</a>&nbsp;
 The HASH Command (HASH)<br />
-<a href="#anchor4">4.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor4">3.1.</a>&nbsp;
+FEAT response for HASH<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor5">3.2.</a>&nbsp;
+Changing the HASH algorithm<br />
+<a href="#anchor6">4.</a>&nbsp;
 Command Usage<br />
 <a href="#IANA">5.</a>&nbsp;
 IANA Considerations<br />
-<a href="#anchor5">6.</a>&nbsp;
+<a href="#anchor7">6.</a>&nbsp;
+Implementation Requirements<br />
+<a href="#anchor8">7.</a>&nbsp;
 Security Considerations<br />
-<a href="#rfc.references1">7.</a>&nbsp;
+<a href="#rfc.references1">8.</a>&nbsp;
 References<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#rfc.references1">7.1.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#rfc.references1">8.1.</a>&nbsp;
 Normative References<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#rfc.references2">7.2.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#rfc.references2">8.2.</a>&nbsp;
 Informative References<br />
-<a href="#anchor8">Appendix&nbsp;A.</a>&nbsp;
+<a href="#anchor11">Appendix&nbsp;A.</a>&nbsp;
 Acknowledgements and Contributors<br />
-<a href="#anchor9">Appendix&nbsp;B.</a>&nbsp;
+<a href="#anchor12">Appendix&nbsp;B.</a>&nbsp;
 List of Implementations with Non-standard Cryptographic Hash Command<br />
-<a href="#anchor10">Appendix&nbsp;C.</a>&nbsp;
+<a href="#anchor13">Appendix&nbsp;C.</a>&nbsp;
 Document History<br />
 <a href="#rfc.authors">&#167;</a>&nbsp;
 Authors' Addresses<br />
@@ -243,11 +243,11 @@ Examples</h3>
 <p>
 <p>Example of HASH client request:
 </p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
-        HASH SHA-1 filename.ext
+        HASH filename.ext
 </pre></div>
 
 <p>
-<p>HASH server response with Positive Completion code and the requested hash:
+<p>HASH server response with Positive Completion code and the requested hash using the currently selected algorithm:
 </p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
         213 80bc95fd391772fa61c91ed68567f0980bb45fd9
 </pre></div>
@@ -279,14 +279,12 @@ The HASH Command (HASH)</h3>
 
 <p>
 </p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
-        hash = "HASH" SP &lt;hash type&gt; SP &lt;pathname&gt;
+        hash = "HASH" SP &lt;pathname&gt;
 </pre></div>
 
 <p>As with all FTP commands, the "HASH" command label is interpreted in a case-insensitive manner.
 </p>
-<p>The HASH command keyword MUST be followed by a single space (ASCII 32). Following the space, a hash type MUST be present. Another single space (ASCII 32), MUST be followed by the pathname.
-</p>
-<p>The IANA registry named "Hash Function Textual Names" defines values for hash types. Hash names should be presented in uppercase, but comparisons should be case-insensitive, e.g. MD5, md5, Md5 are all the same.
+<p>The HASH command keyword MUST be followed by a single space (ASCII 32) followed by the pathname.
 </p>
 <p>The pathname argument should reference the same file as other file based commands such as STOR or RETR which the same argument would reference.
 </p>
@@ -303,7 +301,12 @@ The HASH Command (HASH)</h3>
 <p>The standard negative error codes 500 and 501 are sufficient to handle all errors involving the HASH command (e.g., syntax errors). Responce code 550 is used if the file can not be found. Response code 552 is used if the user isn't allowed to use the HASH command.
 Response code 450 is used to indicate the server is busy, e.g. already hashing other files yet inviting the client to retry in future.
 </p>
-<p>A server that supports HASH should advertise it in FEAT response <a class='info' href='#RFC2389'>[RFC2389]<span> (</span><span class='info'>Hethmon, P. and R. Elz, &ldquo;Feature negotiation mechanism for the File Transfer Protocol,&rdquo; August&nbsp;1998.</span><span>)</span></a> with a list of all supported hash algorithms in a comma separated list. The "C>" lines are commands from user-PI to server-PI, the "S>" lines are server-PI replies.
+<a name="anchor4"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.3.1"></a><h3>3.1.&nbsp;
+FEAT response for HASH</h3>
+
+<p>A server that supports HASH should advertise it in FEAT response <a class='info' href='#RFC2389'>[RFC2389]<span> (</span><span class='info'>Hethmon, P. and R. Elz, &ldquo;Feature negotiation mechanism for the File Transfer Protocol,&rdquo; August&nbsp;1998.</span><span>)</span></a> with a list of all supported hash algorithms in a semicolon separated list. The hash algorithm that is selected by default is marked with an asterisk. In the example below, the "C>" lines are commands from user-PI to server-PI, the "S>" lines are server-PI replies. 
 </p>
 <p>
 <p>
@@ -312,12 +315,49 @@ Response code 450 is used to indicate the server is busy, e.g. already hashing o
         S&gt; 211-Extensions supported:
         S&gt;  SIZE
         S&gt;  COMPRESSION
-        S&gt;  HASH SHA-1,MD5
+        S&gt;  HASH SHA-1*;MD5
         S&gt;  MDTM
         S&gt; 211 END
 </pre></div>
 
-<a name="anchor4"></a><br /><hr />
+<p>The IANA registry named "Hash Function Textual Names" defines values for hash types. Hash names should be presented in uppercase, but comparisons should be case-insensitive, e.g. MD5, md5, Md5 are all the same.
+</p>
+<p>
+<p>
+</p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
+        hash-feat = SP "HASH" SP hashlist CRLF
+        hashlist = 1*( hashname ["*"] ";" )
+        hashtype = 1*( hchar )
+        hchar = ALPHA / DIGIT / "-" / "_" / "/" / "." / ","
+
+</pre></div>
+
+<a name="anchor5"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.3.2"></a><h3>3.2.&nbsp;
+Changing the HASH algorithm</h3>
+
+<p>To query the current hash algorithm and to change it, the OPTS command as defined in <a class='info' href='#RFC2389'>[RFC2389]<span> (</span><span class='info'>Hethmon, P. and R. Elz, &ldquo;Feature negotiation mechanism for the File Transfer Protocol,&rdquo; August&nbsp;1998.</span><span>)</span></a> is used with HASH as the first argument. If no second argument is passed, OPTS HASH simply returns the currently selected hash algorithm. To change the algorithm, a valid hashtype has to be given as second argument. If the command is successful, all future calls to HASH until the next successful OPTS HASH command or until the session is reinitialized (REIN) will use the selected hash algorithm.
+</p>
+<p>
+<p>
+</p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
+        C&gt; OPTS HASH
+        S&gt; 200 SHA-1
+        C&gt; OPTS HASH SHA-512
+        S&gt; 200 SHA-512
+        C&gt; OPTS HASH CRC-37
+        S&gt; 501 Unknown algorithm, current selection not changed
+</pre></div>
+
+<p>
+<p>
+</p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
+        hashopts-cmd = "OPTS HASH" [ SP hashtype ] CRLF
+        hashopts-response = "200" SP hashtype CRLF
+</pre></div>
+
+<a name="anchor6"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4"></a><h3>4.&nbsp;
 Command Usage</h3>
@@ -343,9 +383,16 @@ IANA Considerations</h3>
 </p>
 <p>Reference: This specification
 </p>
-<a name="anchor5"></a><br /><hr />
+<a name="anchor7"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.6"></a><h3>6.&nbsp;
+Implementation Requirements</h3>
+
+<p>All conforming implementations MUST at least support the SHA-1 algorithm. Implementations SHOULD NOT make any algorithm the default that is known to be weaker than SHA-1. Support for any additional algorithms is optional.
+</p>
+<a name="anchor8"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.7"></a><h3>7.&nbsp;
 Security Considerations</h3>
 
 <p>Calculating a file's hash is a CPU intensive operation and can easily
@@ -375,12 +422,12 @@ users who would already be able to download the file.
 </p>
 <a name="rfc.references"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.7"></a><h3>7.&nbsp;
+<a name="rfc.section.8"></a><h3>8.&nbsp;
 References</h3>
 
 <a name="rfc.references1"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<h3>7.1.&nbsp;Normative References</h3>
+<h3>8.1.&nbsp;Normative References</h3>
 <table width="99%" border="0">
 <tr><td class="author-text" valign="top"><a name="RFC0959">[RFC0959]</a></td>
 <td class="author-text">Postel, J. and J. Reynolds, &ldquo;<a href="http://tools.ietf.org/html/rfc0959">File Transfer Protocol</a>,&rdquo; STD&nbsp;9, RFC&nbsp;0959, October&nbsp;1985.</td></tr>
@@ -394,7 +441,7 @@ References</h3>
 
 <a name="rfc.references2"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<h3>7.2.&nbsp;Informative References</h3>
+<h3>8.2.&nbsp;Informative References</h3>
 <table width="99%" border="0">
 <tr><td class="author-text" valign="top"><a name="RFC3230">[RFC3230]</a></td>
 <td class="author-text">Mogul, J. and A. Van Hoff, &ldquo;<a href="http://tools.ietf.org/html/rfc3230">Instance Digests in HTTP</a>,&rdquo; RFC&nbsp;3230, January&nbsp;2002.</td></tr>
@@ -404,14 +451,14 @@ References</h3>
 <td class="author-text"><a href="mailto:jtwine@jrtwine.com">Twine, J.</a>, &ldquo;<a href="http://www.ietf.org/internet-drafts/draft-twine-ftpmd5-00.txt">The MD5 and MMD5 FTP Command Extensions</a>,&rdquo; draft-twine-ftpmd5-00 (work in progress), May&nbsp;2002.</td></tr>
 </table>
 
-<a name="anchor8"></a><br /><hr />
+<a name="anchor11"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.A"></a><h3>Appendix A.&nbsp;
 Acknowledgements and Contributors</h3>
 
 <p>Thanks to John C. Klensin, Alfred Hoenes, Daniel Stenberg, and James Twine.
 </p>
-<a name="anchor9"></a><br /><hr />
+<a name="anchor12"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.B"></a><h3>Appendix B.&nbsp;
 List of Implementations with Non-standard Cryptographic Hash Command</h3>
@@ -477,7 +524,7 @@ http://ipswitchft.custhelp.com/app/answers/detail/a_id/671/kw/xmd5/r_id/166/sno/
 </li>
 </ul>
 
-<a name="anchor10"></a><br /><hr />
+<a name="anchor13"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.C"></a><h3>Appendix C.&nbsp;
 Document History</h3>
@@ -487,14 +534,6 @@ Document History</h3>
 <p>Known issues concerning this draft:
 	    </p>
 <ul class="text">
-<li>Atypical use of a command with a file path argument and another argument. Alfred Hoenes suggests:
-
-<p>
-</p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
-OPTS HASH &lt;hash&gt;
-HASH &lt;pathname&gt;
-</pre></div>
-</li>
 <li>Underspecification of the representation of the file that shall undergo the hash calculation.
 </li>
 <li>Correct response code to use for completion and errors.
@@ -513,6 +552,8 @@ HASH &lt;pathname&gt;
 	    
 	    </p>
 <ul class="text">
+<li>Changing HASH algorithm with OPTS.
+</li>
 <li>Reference RFC 5797 and add IANA Considerations section.
 </li>
 <li>Informative Reference to expired Internet Draft (draft-twine-ftpmd5) which attempted to address this issue (it only supported one hash, MD5).
