@@ -23,15 +23,22 @@
 			<region>FL</region>
 			<country>USA</country>
 		  </postal>
-	      <email>anthonybryan@gmail.com</email>	
-	      <uri>http://www.metalinker.org</uri>		
+	      <email>anthonybryan@gmail.com</email>
+	      <uri>http://www.metalinker.org</uri>
 	    </address>
       </author>
       <author initials="T." surname="Kosse" fullname="Tim Kosse">
 	    <organization></organization>
 	    <address>
-	      <email>tim.kosse@filezilla-project.org</email>	
-	      <uri>http://filezilla-project.org/</uri>		
+	      <email>tim.kosse@filezilla-project.org</email>
+	      <uri>http://filezilla-project.org/</uri>
+	    </address>
+      </author>
+      <author initials="D." surname="Stenberg" fullname="Daniel Stenberg">
+	    <organization></organization>
+	    <address>
+	      <email>daniel@haxx.se</email>
+	      <uri>http://www.haxx.se/</uri>
 	    </address>
       </author>
 	<date year="2010"/>        
@@ -114,7 +121,7 @@ Response code 450 is used to indicate the server is busy, e.g. already hashing o
 
 <section title="FEAT response for HASH">
 
-<t>A server that supports HASH should advertise it in FEAT response <xref target="RFC2389"/> with a list of all supported hash algorithms in a semicolon separated list. The hash algorithm that is selected by default is marked with an asterisk. In the example below, the "C>" lines are commands from user-PI to server-PI, the "S>" lines are server-PI replies. </t>
+<t>A server that supports HASH should advertise it in FEAT response <xref target="RFC2389"/> with a list of all supported hash algorithms in a semicolon separated list. The hash algorithm that is currently selected is marked with an asterisk. In the example below, the "C>" lines are commands from user-PI to server-PI, the "S>" lines are server-PI replies. </t>
 
 <t><figure> 
 	  <preamble></preamble>
