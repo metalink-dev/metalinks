@@ -143,8 +143,8 @@
 <table summary="layout" width="66%" border="0" cellpadding="0" cellspacing="0"><tr><td><table summary="layout" width="100%" border="0" cellpadding="2" cellspacing="1">
 <tr><td class="header">Network Working Group</td><td class="header">A. Bryan</td></tr>
 <tr><td class="header">Internet-Draft</td><td class="header">T. Kosse</td></tr>
-<tr><td class="header">Intended status: Experimental</td><td class="header">April 4, 2010</td></tr>
-<tr><td class="header">Expires: October 6, 2010</td><td class="header">&nbsp;</td></tr>
+<tr><td class="header">Intended status: Experimental</td><td class="header">D. Stenberg</td></tr>
+<tr><td class="header">Expires: October 7, 2010</td><td class="header">April 5, 2010</td></tr>
 </table></td></tr></table>
 <h1><br />FTP Extensions for Cryptographic Hashes<br />draft-bryan-ftp-hash-01</h1>
 
@@ -168,7 +168,7 @@ and may be updated, replaced, or obsoleted by other documents at any time.
 It is inappropriate to use Internet-Drafts as reference material or to cite
 them other than as &ldquo;work in progress.&rdquo;</p>
 <p>
-This Internet-Draft will expire on October 6, 2010.</p>
+This Internet-Draft will expire on October 7, 2010.</p>
 
 <h3>Copyright Notice</h3>
 <p>
@@ -298,7 +298,7 @@ The HASH Command (HASH)</h3>
 
 <p>All hash values MUST be encoded in lowercase hexadecimal format.
 </p>
-<p>The standard negative error codes 500 and 501 are sufficient to handle all errors involving the HASH command (e.g., syntax errors). Responce code 550 is used if the file can not be found. Response code 552 is used if the user isn't allowed to use the HASH command.
+<p>The standard negative error codes 500 and 501 are sufficient to handle all errors involving the HASH command (e.g., syntax errors). Response code 550 is used if the file can not be found. Response code 552 is used if the user isn't allowed to use the HASH command.
 Response code 450 is used to indicate the server is busy, e.g. already hashing other files yet inviting the client to retry in future.
 </p>
 <a name="anchor4"></a><br /><hr />
@@ -306,7 +306,7 @@ Response code 450 is used to indicate the server is busy, e.g. already hashing o
 <a name="rfc.section.3.1"></a><h3>3.1.&nbsp;
 FEAT response for HASH</h3>
 
-<p>A server that supports HASH should advertise it in FEAT response <a class='info' href='#RFC2389'>[RFC2389]<span> (</span><span class='info'>Hethmon, P. and R. Elz, &ldquo;Feature negotiation mechanism for the File Transfer Protocol,&rdquo; August&nbsp;1998.</span><span>)</span></a> with a list of all supported hash algorithms in a semicolon separated list. The hash algorithm that is selected by default is marked with an asterisk. In the example below, the "C>" lines are commands from user-PI to server-PI, the "S>" lines are server-PI replies. 
+<p>A server that supports HASH should advertise it in FEAT response <a class='info' href='#RFC2389'>[RFC2389]<span> (</span><span class='info'>Hethmon, P. and R. Elz, &ldquo;Feature negotiation mechanism for the File Transfer Protocol,&rdquo; August&nbsp;1998.</span><span>)</span></a> with a list of all supported hash algorithms in a semicolon separated list. The hash algorithm that is currently selected is marked with an asterisk. In the example below, the "C>" lines are commands from user-PI to server-PI, the "S>" lines are server-PI replies. 
 </p>
 <p>
 <p>
@@ -589,5 +589,12 @@ Document History</h3>
 <td class="author-text"><a href="mailto:tim.kosse@filezilla-project.org">tim.kosse@filezilla-project.org</a></td></tr>
 <tr><td class="author" align="right">URI:&nbsp;</td>
 <td class="author-text"><a href="http://filezilla-project.org/">http://filezilla-project.org/</a></td></tr>
+<tr cellpadding="3"><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text">Daniel Stenberg</td></tr>
+<tr><td class="author" align="right">Email:&nbsp;</td>
+<td class="author-text"><a href="mailto:daniel@haxx.se">daniel@haxx.se</a></td></tr>
+<tr><td class="author" align="right">URI:&nbsp;</td>
+<td class="author-text"><a href="http://www.haxx.se/">http://www.haxx.se/</a></td></tr>
 </table>
 </body></html>
