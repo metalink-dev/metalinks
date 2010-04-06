@@ -44,7 +44,8 @@
 	<date year="2010"/>        
 
       <abstract>
-	<t>The File Transfer Protocol does not include methods to obtain cryptographic hashes of files. Cryptographic hashes can be used to identify files and verify integrity. Unfortunately, because of the desire for this feature, multiple FTP commands that are not formally specified have been implemented in FTP applications, leading to non-interoperability and confusion. This specification documents an optional command where FTP clients can request the cryptographic hash of a file from an FTP server.
+	<t>The File Transfer Protocol does not offer any method to verify the integrity of a transferred file, nor can two files be compared against each other without actually transferring them first. Cryptographic hashes are a possible solution to this problem. In the past, several attempts have been made to add commands to obtain checksums and hashes,
+       however none have been formally specified, leading to non-interoperability and confusion. To solve these issues, this document specifies a new FTP command to be used by clients to request cryptographic hashes of files.
 </t>
       </abstract>    
 	  
@@ -52,7 +53,8 @@
 
   <middle>
     <section title="Introduction">
-	<t>The specification for the File Transfer Protocol <xref target="RFC0959"/> does not include methods to obtain cryptographic hashes of files. Cryptographic hashes can be used to identify files and verify integrity. Unfortunately, because of the desire for this feature, multiple FTP commands that are not formally specified have been implemented in FTP applications, leading to non-interoperability and confusion. This specification documents an optional command where FTP clients can request the cryptographic hash of a file from an FTP server.
+	<t>The File Transfer Protocol <xref target="RFC0959"/> does not offer any method to verify the integrity of a transferred file, nor can two files be compared against each other without actually transferring them first. Cryptographic hashes are a possible solution to this problem. In the past, several attempts have been made to add commands to obtain checksums and hashes,
+       however none have been formally specified, leading to non-interoperability and confusion. To solve these issues, this document specifies a new FTP command to be used by clients to request cryptographic hashes of files.
 HTTP has a similar feature named Instance Digests <xref target="RFC3230"/> which allows a client to request the cryptographic hash of a file.</t>
 
       <t>[[ Discussion of this draft should take place on
@@ -118,6 +120,8 @@ HTTP has a similar feature named Instance Digests <xref target="RFC3230"/> which
 
 <t>The standard negative error codes 500 and 501 are sufficient to handle all errors involving the HASH command (e.g., syntax errors). Response code 550 is used if the file can not be found. Response code 552 is used if the user isn't allowed to use the HASH command.
 Response code 450 is used to indicate the server is busy, e.g. already hashing other files yet inviting the client to retry in future.</t>
+
+<t>The HASH command is useful for files transmitted in Image type mode (TYPE I) and Stream transfer mode (MODE S).</t>
 
 <section title="FEAT response for HASH">
 
@@ -419,6 +423,7 @@ http://ipswitchft.custhelp.com/app/answers/detail/a_id/671/kw/xmd5/r_id/166/sno/
 	    <list style="symbols"> 
 	      
 
+		  <t>Current but non-standard FTP HASH command: "Toggles number sign (#) printing for each data block that is transferred."</t>
 		  <t>Underspecification of the representation of the file that shall undergo the hash calculation.</t>
 		  <t>Correct response code to use for completion and errors.</t>
 		  <t>Need to include some more general advice on algorithms just in case algorithm X is found to be broken the day after this draft is released.</t>

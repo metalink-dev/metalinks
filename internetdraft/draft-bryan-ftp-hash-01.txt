@@ -12,14 +12,15 @@ Expires: October 7, 2010                                   April 5, 2010
 
 Abstract
 
-   The File Transfer Protocol does not include methods to obtain
-   cryptographic hashes of files.  Cryptographic hashes can be used to
-   identify files and verify integrity.  Unfortunately, because of the
-   desire for this feature, multiple FTP commands that are not formally
-   specified have been implemented in FTP applications, leading to non-
-   interoperability and confusion.  This specification documents an
-   optional command where FTP clients can request the cryptographic hash
-   of a file from an FTP server.
+   The File Transfer Protocol does not offer any method to verify the
+   integrity of a transferred file, nor can two files be compared
+   against each other without actually transferring them first.
+   Cryptographic hashes are a possible solution to this problem.  In the
+   past, several attempts have been made to add commands to obtain
+   checksums and hashes, however none have been formally specified,
+   leading to non-interoperability and confusion.  To solve these
+   issues, this document specifies a new FTP command to be used by
+   clients to request cryptographic hashes of files.
 
 Status of this Memo
 
@@ -48,7 +49,6 @@ Copyright Notice
    (http://trustee.ietf.org/license-info) in effect on the date of
    publication of this document.  Please review these documents
    carefully, as they describe your rights and restrictions with respect
-   to this document.  Code Components extracted from this document must
 
 
 
@@ -57,6 +57,7 @@ Bryan, et al.            Expires October 7, 2010                [Page 1]
 Internet-Draft   FTP Extensions for Cryptographic Hashes      April 2010
 
 
+   to this document.  Code Components extracted from this document must
    include Simplified BSD License text as described in Section 4.e of
    the Trust Legal Provisions and are provided without warranty as
    described in the Simplified BSD License.
@@ -107,7 +108,6 @@ Table of Contents
 
 
 
-
 Bryan, et al.            Expires October 7, 2010                [Page 2]
 
 Internet-Draft   FTP Extensions for Cryptographic Hashes      April 2010
@@ -115,16 +115,17 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes      April 2010
 
 1.  Introduction
 
-   The specification for the File Transfer Protocol [RFC0959] does not
-   include methods to obtain cryptographic hashes of files.
-   Cryptographic hashes can be used to identify files and verify
-   integrity.  Unfortunately, because of the desire for this feature,
-   multiple FTP commands that are not formally specified have been
-   implemented in FTP applications, leading to non-interoperability and
-   confusion.  This specification documents an optional command where
-   FTP clients can request the cryptographic hash of a file from an FTP
-   server.  HTTP has a similar feature named Instance Digests [RFC3230]
-   which allows a client to request the cryptographic hash of a file.
+   The File Transfer Protocol [RFC0959] does not offer any method to
+   verify the integrity of a transferred file, nor can two files be
+   compared against each other without actually transferring them first.
+   Cryptographic hashes are a possible solution to this problem.  In the
+   past, several attempts have been made to add commands to obtain
+   checksums and hashes, however none have been formally specified,
+   leading to non-interoperability and confusion.  To solve these
+   issues, this document specifies a new FTP command to be used by
+   clients to request cryptographic hashes of files.  HTTP has a similar
+   feature named Instance Digests [RFC3230] which allows a client to
+   request the cryptographic hash of a file.
 
    [[ Discussion of this draft should take place on
    apps-discuss@ietf.org. ]]
@@ -160,7 +161,6 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes      April 2010
 3.  The HASH Command (HASH)
 
    The HASH command allows for requesting the cryptographic hash of a
-   file.
 
 
 
@@ -168,6 +168,8 @@ Bryan, et al.            Expires October 7, 2010                [Page 3]
 
 Internet-Draft   FTP Extensions for Cryptographic Hashes      April 2010
 
+
+   file.
 
    The syntax for the HASH command is:
 
@@ -199,6 +201,9 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes      April 2010
    already hashing other files yet inviting the client to retry in
    future.
 
+   The HASH command is useful for files transmitted in Image type mode
+   (TYPE I) and Stream transfer mode (MODE S).
+
 3.1.  FEAT response for HASH
 
    A server that supports HASH should advertise it in FEAT response
@@ -207,11 +212,6 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes      April 2010
    marked with an asterisk.  In the example below, the "C>" lines are
    commands from user-PI to server-PI, the "S>" lines are server-PI
    replies.
-
-
-
-
-
 
 
 
@@ -449,6 +449,8 @@ Bryan, et al.            Expires October 7, 2010                [Page 8]
 Internet-Draft   FTP Extensions for Cryptographic Hashes      April 2010
 
 
+   o  Current but non-standard FTP HASH command: "Toggles number sign
+      (#) printing for each data block that is transferred."
    o  Underspecification of the representation of the file that shall
       undergo the hash calculation.
    o  Correct response code to use for completion and errors.
@@ -493,8 +495,6 @@ Authors' Addresses
 
    Email: daniel@haxx.se
    URI:   http://www.haxx.se/
-
-
 
 
 
