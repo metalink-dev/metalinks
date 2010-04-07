@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><?rfc linefile="1:draft-bryan-ftp-hash-01.xml"?>
+<?xml version="1.0" encoding="UTF-8"?><?rfc linefile="1:draft-bryan-ftp-hash-02.xml"?>
 <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
 <?rfc toc="yes" ?>
 <?rfc tocdepth="3" ?>
@@ -11,7 +11,7 @@
 <?rfc inline="yes" ?>
 <!DOCTYPE rfc
   PUBLIC "" "rfc2629.dtd">
-<rfc category="exp" docName="draft-bryan-ftp-hash-01" ipr="trust200902">
+<rfc category="exp" docName="draft-bryan-ftp-hash-02" ipr="trust200902">
     <front>        
       <title abbrev="FTP Extensions for Cryptographic Hashes">FTP Extensions for Cryptographic Hashes</title>
       <author initials="A." surname="Bryan" fullname="Anthony Bryan">
