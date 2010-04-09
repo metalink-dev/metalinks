@@ -144,7 +144,7 @@
 <tr><td class="header">Network Working Group</td><td class="header">A. Bryan</td></tr>
 <tr><td class="header">Internet-Draft</td><td class="header">T. Kosse</td></tr>
 <tr><td class="header">Intended status: Experimental</td><td class="header">D. Stenberg</td></tr>
-<tr><td class="header">Expires: October 9, 2010</td><td class="header">April 7, 2010</td></tr>
+<tr><td class="header">Expires: October 10, 2010</td><td class="header">April 8, 2010</td></tr>
 </table></td></tr></table>
 <h1><br />FTP Extensions for Cryptographic Hashes<br />draft-bryan-ftp-hash-02</h1>
 
@@ -169,7 +169,7 @@ and may be updated, replaced, or obsoleted by other documents at any time.
 It is inappropriate to use Internet-Drafts as reference material or to cite
 them other than as &ldquo;work in progress.&rdquo;</p>
 <p>
-This Internet-Draft will expire on October 9, 2010.</p>
+This Internet-Draft will expire on October 10, 2010.</p>
 
 <h3>Copyright Notice</h3>
 <p>
@@ -266,6 +266,10 @@ Notational Conventions</h3>
 	document are to be interpreted as described in BCP 14, <a class='info' href='#RFC2119'>[RFC2119]<span> (</span><span class='info'>Bradner, S., &ldquo;Key words for use in RFCs to Indicate Requirement Levels,&rdquo; March&nbsp;1997.</span><span>)</span></a>, as scoped to those conformance targets.
 </p>
 <p>This document also uses notation defined in STD 9, <a class='info' href='#RFC0959'>[RFC0959]<span> (</span><span class='info'>Postel, J. and J. Reynolds, &ldquo;File Transfer Protocol,&rdquo; October&nbsp;1985.</span><span>)</span></a>.
+	In particular, the terms "reply", "user", "file", "pathname", "FTP commands", "user-PI",
+    "server-PI", "mode", "type", and "ASCII", are all used here as defined there.
+</p>
+<p>In examples, the "C&gt;" lines are commands from user-PI to server-PI, and the "S&gt;" lines are server-PI replies.
 </p>
 <p>Syntax required is defined using the Augmented BNF defined in <a class='info' href='#RFC5234'>[RFC5234]<span> (</span><span class='info'>Crocker, D. and P. Overell, &ldquo;Augmented BNF for Syntax Specifications: ABNF,&rdquo; January&nbsp;2008.</span><span>)</span></a>.
 </p>
@@ -310,7 +314,8 @@ Response code 450 is used to indicate the server is busy, e.g. already hashing o
 <a name="rfc.section.3.1"></a><h3>3.1.&nbsp;
 FEAT response for HASH</h3>
 
-<p>A server that supports HASH should advertise it in FEAT response <a class='info' href='#RFC2389'>[RFC2389]<span> (</span><span class='info'>Hethmon, P. and R. Elz, &ldquo;Feature negotiation mechanism for the File Transfer Protocol,&rdquo; August&nbsp;1998.</span><span>)</span></a> with a list of all supported hash algorithms in a semicolon separated list. The hash algorithm that is currently selected is marked with an asterisk. In the example below, the "C>" lines are commands from user-PI to server-PI, the "S>" lines are server-PI replies. 
+<p>A server that supports the HASH command MUST advertise it in FEAT response <a class='info' href='#RFC2389'>[RFC2389]<span> (</span><span class='info'>Hethmon, P. and R. Elz, &ldquo;Feature negotiation mechanism for the File Transfer Protocol,&rdquo; August&nbsp;1998.</span><span>)</span></a> with a list of all supported hash algorithms in a semicolon separated list. The hash algorithm that is currently selected MUST be marked with an asterisk. This command word is
+   case insensitive, but it SHOULD be transmitted in upper case only. That is, the response SHOULD be:
 </p>
 <p>
 <p>
@@ -324,6 +329,8 @@ FEAT response for HASH</h3>
         S&gt; 211 END
 </pre></div>
 
+<p>The single space indentation of each feature line is mandatory <a class='info' href='#RFC2389'>[RFC2389]<span> (</span><span class='info'>Hethmon, P. and R. Elz, &ldquo;Feature negotiation mechanism for the File Transfer Protocol,&rdquo; August&nbsp;1998.</span><span>)</span></a>.
+</p>
 <p>The IANA registry named "Hash Function Textual Names" defines values for hash types. Hash names should be presented in uppercase, but comparisons should be case-insensitive, e.g. MD5, md5, Md5 are all the same.
 </p>
 <p>
@@ -341,7 +348,7 @@ FEAT response for HASH</h3>
 <a name="rfc.section.3.2"></a><h3>3.2.&nbsp;
 Changing the HASH algorithm</h3>
 
-<p>To query the current hash algorithm and to change it, the OPTS command as defined in <a class='info' href='#RFC2389'>[RFC2389]<span> (</span><span class='info'>Hethmon, P. and R. Elz, &ldquo;Feature negotiation mechanism for the File Transfer Protocol,&rdquo; August&nbsp;1998.</span><span>)</span></a> is used with HASH as the first argument. If no second argument is passed, OPTS HASH simply returns the currently selected hash algorithm. To change the algorithm, a valid hashtype has to be given as second argument. If the command is successful, all future calls to HASH until the next successful OPTS HASH command or until the session is reinitialized (REIN) will use the selected hash algorithm.
+<p>To query the current hash algorithm and to change it, the OPTS command as defined in <a class='info' href='#RFC2389'>[RFC2389]<span> (</span><span class='info'>Hethmon, P. and R. Elz, &ldquo;Feature negotiation mechanism for the File Transfer Protocol,&rdquo; August&nbsp;1998.</span><span>)</span></a> is used with HASH as the first argument. If no second argument is passed, OPTS HASH simply returns the currently selected hash algorithm. To change the algorithm, a valid hashtype MUST be given as second argument. If the command is successful, all future calls to HASH until the next successful OPTS HASH command or until the session is reinitialized (REIN) will use the selected hash algorithm.
 </p>
 <p>
 <p>
@@ -460,7 +467,7 @@ References</h3>
 <a name="rfc.section.A"></a><h3>Appendix A.&nbsp;
 Acknowledgements and Contributors</h3>
 
-<p>Thanks to John C. Klensin, Alfred Hoenes, Daniel Stenberg, and James Twine.
+<p>Thanks to John C. Klensin, Alfred Hoenes, James Twine, and Robert McMurray.
 </p>
 <a name="anchor12"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
@@ -538,8 +545,6 @@ Document History</h3>
 <p>Known issues concerning this draft:
 	    </p>
 <ul class="text">
-<li>Local HASH command: "Toggles number sign (#) printing for each data block that is transferred."
-</li>
 <li>Underspecification of the representation of the file that shall undergo the hash calculation.
 </li>
 <li>Correct response code to use for completion and errors.
@@ -551,6 +556,14 @@ Document History</h3>
 <li>The FTP server's right to refuse to calculate the hash is of course important to help against DOS risks.
 </li>
 <li>Partial file hashes.
+</li>
+</ul>
+
+<p>-02 : April , 2010.
+	    
+	    </p>
+<ul class="text">
+<li>Something, I'm sure.
 </li>
 </ul>
 

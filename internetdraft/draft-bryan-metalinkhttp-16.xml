@@ -625,9 +625,9 @@ other mirrors.</t>
 	  <organization></organization>
       <address><email>mnot@mnot.net</email></address>
     </author>
-    <date month="January" year="2010"/>
+    <date month="April" year="2010"/>
   </front>
-  <seriesInfo name="Internet-Draft" value="draft-nottingham-http-link-header-07"/>
+  <seriesInfo name="Internet-Draft" value="draft-nottingham-http-link-header-09"/>
 </reference>
 
 
@@ -711,9 +711,16 @@ other mirrors.</t>
 	      <uri>http://filezilla-project.org/</uri>		
 	    </address>
       </author>
-	<date month="March" year="2010"/>   
+      <author initials="D." surname="Stenberg" fullname="Daniel Stenberg">
+	    <organization></organization>
+	    <address>
+	      <email>daniel@haxx.se</email>
+	      <uri>http://www.haxx.se/</uri>
+	    </address>
+      </author>
+	<date month="April" year="2010"/>   
   </front>
-  <seriesInfo name="Internet-Draft" value="draft-bryan-ftp-hash-00"/>
+  <seriesInfo name="Internet-Draft" value="draft-bryan-ftp-hash-01"/>
 </reference>
 
 	  </references>
