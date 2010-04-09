@@ -4,7 +4,7 @@
 Network Working Group                                           A. Bryan
 Internet-Draft                                                  T. Kosse
 Intended status: Experimental                                D. Stenberg
-Expires: October 9, 2010                                   April 7, 2010
+Expires: October 10, 2010                                  April 8, 2010
 
 
                 FTP Extensions for Cryptographic Hashes
@@ -37,7 +37,7 @@ Status of this Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on October 9, 2010.
+   This Internet-Draft will expire on October 10, 2010.
 
 Copyright Notice
 
@@ -52,7 +52,7 @@ Copyright Notice
 
 
 
-Bryan, et al.            Expires October 9, 2010                [Page 1]
+Bryan, et al.           Expires October 10, 2010                [Page 1]
 
 Internet-Draft   FTP Extensions for Cryptographic Hashes      April 2010
 
@@ -68,20 +68,20 @@ Table of Contents
    1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . . . 3
      1.1.  Examples  . . . . . . . . . . . . . . . . . . . . . . . . . 3
    2.  Notational Conventions  . . . . . . . . . . . . . . . . . . . . 3
-   3.  The HASH Command (HASH) . . . . . . . . . . . . . . . . . . . . 3
+   3.  The HASH Command (HASH) . . . . . . . . . . . . . . . . . . . . 4
      3.1.  FEAT response for HASH  . . . . . . . . . . . . . . . . . . 4
      3.2.  Changing the HASH algorithm . . . . . . . . . . . . . . . . 5
-   4.  Command Usage . . . . . . . . . . . . . . . . . . . . . . . . . 5
+   4.  Command Usage . . . . . . . . . . . . . . . . . . . . . . . . . 6
    5.  IANA Considerations . . . . . . . . . . . . . . . . . . . . . . 6
    6.  Implementation Requirements . . . . . . . . . . . . . . . . . . 6
    7.  Security Considerations . . . . . . . . . . . . . . . . . . . . 6
    8.  References  . . . . . . . . . . . . . . . . . . . . . . . . . . 7
      8.1.  Normative References  . . . . . . . . . . . . . . . . . . . 7
      8.2.  Informative References  . . . . . . . . . . . . . . . . . . 7
-   Appendix A.  Acknowledgements and Contributors  . . . . . . . . . . 7
+   Appendix A.  Acknowledgements and Contributors  . . . . . . . . . . 8
    Appendix B.  List of Implementations with Non-standard
                 Cryptographic Hash Command . . . . . . . . . . . . . . 8
-   Appendix C.  Document History . . . . . . . . . . . . . . . . . . . 8
+   Appendix C.  Document History . . . . . . . . . . . . . . . . . . . 9
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . . . 9
 
 
@@ -108,7 +108,7 @@ Table of Contents
 
 
 
-Bryan, et al.            Expires October 9, 2010                [Page 2]
+Bryan, et al.           Expires October 10, 2010                [Page 2]
 
 Internet-Draft   FTP Extensions for Cryptographic Hashes      April 2010
 
@@ -152,23 +152,29 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes      April 2010
    document are to be interpreted as described in BCP 14, [RFC2119], as
    scoped to those conformance targets.
 
-   This document also uses notation defined in STD 9, [RFC0959].
+   This document also uses notation defined in STD 9, [RFC0959].  In
+   particular, the terms "reply", "user", "file", "pathname", "FTP
+   commands", "user-PI", "server-PI", "mode", "type", and "ASCII", are
+   all used here as defined there.
+
+   In examples, the "C>" lines are commands from user-PI to server-PI,
+   and the "S>" lines are server-PI replies.
 
    Syntax required is defined using the Augmented BNF defined in
+
+
+
+Bryan, et al.           Expires October 10, 2010                [Page 3]
+
+Internet-Draft   FTP Extensions for Cryptographic Hashes      April 2010
+
+
    [RFC5234].
 
 
 3.  The HASH Command (HASH)
 
    The HASH command allows for requesting the cryptographic hash of a
-
-
-
-Bryan, et al.            Expires October 9, 2010                [Page 3]
-
-Internet-Draft   FTP Extensions for Cryptographic Hashes      April 2010
-
-
    file.
 
    The syntax for the HASH command is:
@@ -206,23 +212,20 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes      April 2010
 
 3.1.  FEAT response for HASH
 
-   A server that supports HASH should advertise it in FEAT response
-   [RFC2389] with a list of all supported hash algorithms in a semicolon
-   separated list.  The hash algorithm that is currently selected is
-   marked with an asterisk.  In the example below, the "C>" lines are
-   commands from user-PI to server-PI, the "S>" lines are server-PI
-   replies.
+   A server that supports the HASH command MUST advertise it in FEAT
+   response [RFC2389] with a list of all supported hash algorithms in a
+   semicolon separated list.  The hash algorithm that is currently
+   selected MUST be marked with an asterisk.  This command word is case
+   insensitive, but it SHOULD be transmitted in upper case only.  That
 
 
 
-
-
-
-
-
-Bryan, et al.            Expires October 9, 2010                [Page 4]
+Bryan, et al.           Expires October 10, 2010                [Page 4]
 
 Internet-Draft   FTP Extensions for Cryptographic Hashes      April 2010
+
+
+   is, the response SHOULD be:
 
 
            C> feat
@@ -232,6 +235,9 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes      April 2010
            S>  HASH SHA-1*;MD5
            S>  MDTM
            S> 211 END
+
+   The single space indentation of each feature line is mandatory
+   [RFC2389].
 
    The IANA registry named "Hash Function Textual Names" defines values
    for hash types.  Hash names should be presented in uppercase, but
@@ -251,7 +257,7 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes      April 2010
    command as defined in [RFC2389] is used with HASH as the first
    argument.  If no second argument is passed, OPTS HASH simply returns
    the currently selected hash algorithm.  To change the algorithm, a
-   valid hashtype has to be given as second argument.  If the command is
+   valid hashtype MUST be given as second argument.  If the command is
    successful, all future calls to HASH until the next successful OPTS
    HASH command or until the session is reinitialized (REIN) will use
    the selected hash algorithm.
@@ -265,6 +271,16 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes      April 2010
            S> 501 Unknown algorithm, current selection not changed
 
 
+
+
+
+
+
+Bryan, et al.           Expires October 10, 2010                [Page 5]
+
+Internet-Draft   FTP Extensions for Cryptographic Hashes      April 2010
+
+
            hashopts-cmd = "OPTS HASH" [ SP hashtype ] CRLF
            hashopts-response = "200" SP hashtype CRLF
 
@@ -273,14 +289,6 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes      April 2010
 
    Client requests the cryptographic hash of a file with HASH command.
    Server replies with cryptographic hash of file.  Client downloads
-
-
-
-Bryan, et al.            Expires October 9, 2010                [Page 5]
-
-Internet-Draft   FTP Extensions for Cryptographic Hashes      April 2010
-
-
    file.  Client hashes the downloaded file and compares its hash to the
    hash obtained from the server.  This command could also be used to
    verify that an uploaded file is an exact copy.
@@ -321,6 +329,14 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes      April 2010
    example, continuously send HASH commands over multiple connections
    and thus consume most of the FTP server's CPU and disk I/O resources,
    leaving little room for other operations.  To mitigate this risk, a
+
+
+
+Bryan, et al.           Expires October 10, 2010                [Page 6]
+
+Internet-Draft   FTP Extensions for Cryptographic Hashes      April 2010
+
+
    server SHOULD cache the calculated hashes so that the hash of a file
    is only calculated once even if multiple hash requests are sent for
    that file.
@@ -329,14 +345,6 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes      April 2010
    affected by the amount of time the device needs to reposition its
    read-and-write heads.  A server SHOULD therefore avoid hashing
    multiple files at the same time which are located on the same
-
-
-
-Bryan, et al.            Expires October 9, 2010                [Page 6]
-
-Internet-Draft   FTP Extensions for Cryptographic Hashes      April 2010
-
-
    physical media and SHOULD instead hash them sequentially.  A possible
    solution is to use the 450 reply code of HASH to indicate that the
    server is already busy with another HASH operation.
@@ -377,20 +385,18 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes      April 2010
               draft-twine-ftpmd5-00 (work in progress), May 2002.
 
 
-Appendix A.  Acknowledgements and Contributors
-
-   Thanks to John C. Klensin, Alfred Hoenes, Daniel Stenberg, and James
-   Twine.
 
 
 
-
-
-
-
-Bryan, et al.            Expires October 9, 2010                [Page 7]
+Bryan, et al.           Expires October 10, 2010                [Page 7]
 
 Internet-Draft   FTP Extensions for Cryptographic Hashes      April 2010
+
+
+Appendix A.  Acknowledgements and Contributors
+
+   Thanks to John C. Klensin, Alfred Hoenes, James Twine, and Robert
+   McMurray.
 
 
 Appendix B.  List of Implementations with Non-standard Cryptographic
@@ -435,22 +441,19 @@ Appendix B.  List of Implementations with Non-standard Cryptographic
    o  zFTPServer
 
 
+
+
+
+Bryan, et al.           Expires October 10, 2010                [Page 8]
+
+Internet-Draft   FTP Extensions for Cryptographic Hashes      April 2010
+
+
 Appendix C.  Document History
 
    [[ to be removed by the RFC editor before publication as an RFC. ]]
 
    Known issues concerning this draft:
-
-
-
-
-Bryan, et al.            Expires October 9, 2010                [Page 8]
-
-Internet-Draft   FTP Extensions for Cryptographic Hashes      April 2010
-
-
-   o  Local HASH command: "Toggles number sign (#) printing for each
-      data block that is transferred."
    o  Underspecification of the representation of the file that shall
       undergo the hash calculation.
    o  Correct response code to use for completion and errors.
@@ -463,6 +466,9 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes      April 2010
    o  The FTP server's right to refuse to calculate the hash is of
       course important to help against DOS risks.
    o  Partial file hashes.
+
+   -02 : April , 2010.
+   o  Something, I'm sure.
 
    -01 : April 7, 2010.
    o  Changing HASH algorithm with OPTS.
@@ -491,6 +497,14 @@ Authors' Addresses
    URI:   http://filezilla-project.org/
 
 
+
+
+
+Bryan, et al.           Expires October 10, 2010                [Page 9]
+
+Internet-Draft   FTP Extensions for Cryptographic Hashes      April 2010
+
+
    Daniel Stenberg
 
    Email: daniel@haxx.se
@@ -500,5 +514,47 @@ Authors' Addresses
 
 
 
-Bryan, et al.            Expires October 9, 2010                [Page 9]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Bryan, et al.           Expires October 10, 2010               [Page 10]
 

@@ -827,9 +827,9 @@ Internet-Draft      Metalink/HTTP: Mirrors and Hashes      February 2010
               Identifiers (IRIs)", RFC 3987, January 2005.
 
    [draft-bryan-ftp-hash]
-              Bryan, A. and T. Kosse, "FTP Extensions for Cryptographic
-              Hashes", draft-bryan-ftp-hash-00 (work in progress),
-              March 2010.
+              Bryan, A., Kosse, T., and D. Stenberg, "FTP Extensions for
+              Cryptographic Hashes", draft-bryan-ftp-hash-01 (work in
+              progress), April 2010.
 
    [draft-bryan-metalink]
               Bryan, A., Tsujikawa, T., McNab, N., and P. Poeml, "The
@@ -846,8 +846,8 @@ Internet-Draft      Metalink/HTTP: Mirrors and Hashes      February 2010
 
    [draft-nottingham-http-link-header]
               Nottingham, M., "Web Linking",
-              draft-nottingham-http-link-header-07 (work in progress),
-              January 2010.
+              draft-nottingham-http-link-header-09 (work in progress),
+              April 2010.
 
 
 Appendix A.  Acknowledgements and Contributors
