@@ -225,7 +225,7 @@ class MetalinkFileBase:
         self.resources = []
         self.language = ""
         self.os = ""
-        self.size = 0
+        self.size = -1
         self.ed2k = ""
         self.magnet = ""
         self.do_ed2k = do_ed2k
@@ -448,7 +448,7 @@ class MetalinkFile4(MetalinkFileBase):
         if self.description.strip() != "":
             text += '      <description>'+self.description+'</description>\n'
         # File info
-        if self.size != 0:
+        if self.size > 0:
             text += '      <size>'+str(self.size)+'</size>\n'
         if self.language.strip() != "":
             text += '      <language>'+self.language+'</language>\n'
@@ -531,7 +531,7 @@ class MetalinkFile(MetalinkFileBase):
         else:
             text = '    <file>\n'
         # File info
-        if self.size != 0:
+        if self.size > 0:
             text += '      <size>'+str(self.size)+'</size>\n'
         if self.language.strip() != "":
             text += '      <language>'+self.language+'</language>\n'
@@ -893,7 +893,7 @@ class RSSAtomItem:
     def __init__(self):
         self.url = None
         self.title = None
-        self.size = 0
+        self.size = -1
 
 class RSSAtom():
     def __init__(self):
@@ -998,6 +998,55 @@ def open_compressed(fp):
     except IOError:
         compressedfp.seek(0)
         return compressedfp
+        
+class TemplateDecompress:
+    def __init__(self, filename=None):
+        self.handle = None
+        self.buffer = ""
+        if filename != None:
+            self.open(filename)
+        
+    def open(self, filename):
+        self.handle = open(filename, "rb")
+        # read text comments first, then switch to binary data
+        data = self.handle.readline()
+        while data.strip() != "":
+            data = self.handle.readline()
+            
+        return self.handle
+        
+    def read(self, size):
+        while len(self.buffer) < size:
+            self.buffer += self.get_chunk()
+            
+        buff = self.buffer[:size]
+        self.buffer = self.buffer[size:]
+        return buff
+    
+    def get_chunk(self):
+        type = self.handle.read(4)
+        #print "type:", type
+        length = int(binascii.hexlify(self.handle.read(6)[::-1]), 16)
+        value = self.handle.read(length-10)
+        
+        if type == "BZIP":
+            uncompressed = int(binascii.hexlify(value[:6][::-1]), 16)
+            data = value[6:]
+            data = bz2.decompress(data)
+            assert(len(data) == uncompressed)
+            return data
+        elif type == "DATA":
+            uncompressed = int(binascii.hexlify(value[:6][::-1]), 16)
+            data = value[6:]
+            data = zlib.decompress(data)
+            assert(len(data) == uncompressed)
+            return data
+        else:
+            print "Unexpected Jigdo template type %s." % type
+        return ""
+    
+    def close(self):
+        return self.handle.close()
 
 class Jigdo(Metalink):
     def __init__(self):
@@ -1084,49 +1133,6 @@ class Jigdo(Metalink):
         # need to pad hash out to multiple of both 6 (base 64) and 8 bits (1 byte characters)
         return base64.b64decode(base64hash + "AA", "-_")[:-2]
 
-    def temp2iso(self):
-        '''
-        load template into string in memory
-        '''
-        handle = open(os.path.basename(self.template), "rb")
-        
-        # read text comments first, then switch to binary data
-        data = handle.readline()
-        while data.strip() != "":
-            data = handle.readline()
-
-        data = handle.read(1024*1024)
-        text = ""
-
-        #decompress = bz2.BZ2Decompressor()
-        #zdecompress = zlib.decompressobj()
-        bzip = False
-        gzip = False
-        while data:
-            if data.startswith("BZIP"):
-                bzip = True
-                self.compression_type = "BZIP"
-                data = data[16:]
-            if data.startswith("DATA"):
-                gzip = True
-                self.compression_type = "GZIP"
-                #print self.get_size(data[4:10])
-                #print self.get_size(data[10:16])
-                data = data[16:]
-            if data.startswith("DESC"):
-                gzip = False
-                bzip = False
-
-            if bzip or gzip:
-                #newdata = decompress.decompress(data)
-                text += data
-                data = handle.read(1024*1024)
-            else:
-                data = handle.readline()
-        handle.close()
-        #print text
-        return text
-
     def get_size(self, string):
         total = 0
         for i in range(len(string)):
@@ -1135,40 +1141,67 @@ class Jigdo(Metalink):
         return total
 
     def mkiso(self):
-        text = self.temp2iso()
-
-        found = {}
-        for fileobj in self.files:
-            hexhash = fileobj.get_checksums()["md5"]
-            loc = text.find(binascii.unhexlify(hexhash))
-            if loc != -1:
-                if fileobj.filename.find("dists") != -1:
-                    print "FOUND:", fileobj.filename
-                found[loc] = fileobj.filename
-
-        decompressor = None
-        if self.compression_type == "BZIP":
-            decompressor = bz2.BZ2Decompressor()
-        elif self.compression_type == "GZIP":
-            decompressor = zlib.decompressobj()
-
+        # go to the end to read the DESC section
+        readhandle = open(os.path.basename(self.template), "rb")
+        readhandle.seek(-6, 2)
+        desclen = int(binascii.hexlify(readhandle.read(6)[::-1]), 16)
+        readhandle.seek(-(desclen-10), 2)
+        value = readhandle.read()
+        
+        # index DESC section into list
+        chunks = []
+        count= 0 
+        while len(value) > 6:
+            subtype = ord(value[0])
+            #print "subtype: %x" % subtype
+            sublength = int(binascii.hexlify(value[1:7][::-1]), 16)
+            #print "sublength:", sublength
+            value = value[7:]
+            if subtype == 6:
+                rsync = value[:8]
+                md5 = value[8:24]
+                value = value[24:]
+                chunks.append([6, sublength, binascii.hexlify(md5)])
+            elif subtype == 5:
+                filemd5 = value[:16]
+                blocklen = int(binascii.hexlify(value[16:20][::-1]), 16)
+                value = value[20:]
+            elif subtype == 2:
+                chunks.append([2, sublength])
+                count += 1
+            else:
+                print "Unknown DESC subtype %s." % subtype
+                raise
+        
+        readhandle.close()
+        
         handle = open(self.filename, "wb")
+        
+        templatedata = TemplateDecompress(os.path.basename(self.template))
+            
+        for chunk in chunks:
+            chunktype = chunk[0]
+            chunklen = chunk[1]
+            if chunktype == 6:
+                # read data from external files, errors if hash not found
+                fileobj = self.files[self.get_file_by_hash('md5', chunk[2])]
+                if chunklen != os.stat(fileobj.filename).st_size:
+                    print "Warning: File size mismatch for %s." % fileobj.filename
+                
+                tempfile = open(fileobj.filename, "rb")
+                filedata = tempfile.read(1024*1024)
+                while filedata:
+                    handle.write(filedata)
+                    filedata = tempfile.read(1024*1024)
+                tempfile.close()
+                
+            if chunktype == 2:
+                # read from template file here
+                handle.write(templatedata.read(chunklen))
 
-        keys = found.keys()
-        keys.sort()
-        start = 0
-        for loc in keys:
-            #print start, loc, found[loc]
-            #print "Adding %s to image..." % found[loc]
-            #sys.stdout.write(".")
-            lead = decompressor.decompress(text[start:loc])
-            if found[loc].find("dists") != -1:
-                print "Writing:", found[loc]
-            filedata = open(found[loc], "rb").read()
-            handle.write(lead + filedata)
-            start = loc + 16
-
+        templatedata.close()
         handle.close()
+        return binascii.hexlify(filemd5)
 
 class ParseINI(dict):
     '''
@@ -1180,7 +1213,10 @@ class ParseINI(dict):
     def readfp(self, fp):
         line = fp.readline()
         section = None
+        #print "Jigdo file contents"
+        #print "-" * 79
         while line:
+            #print line
             if not line.startswith("#") and line.strip() != "":
                 if line.startswith("["):
                     section = line[1:-2]
@@ -1189,7 +1225,7 @@ class ParseINI(dict):
                     parts = line.split("=", 1)
                     self[section].append((parts[0], parts[1].strip()))
             line = fp.readline()
-
+        #sys.exit()
     def items(self, section):
         try:
             return self[section]
