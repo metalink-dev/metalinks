@@ -6,7 +6,7 @@
 # URL: http://www.nabber.org/projects/
 # E-mail: webmaster@nabber.org
 #
-# Copyright: (C) 2007-2009, Neil McNab
+# Copyright: (C) 2007-2010, Neil McNab
 # License: GNU General Public License Version 2
 #   (http://www.gnu.org/copyleft/gpl.html)
 #
@@ -404,11 +404,8 @@ def download_file_urls(metalinkfile, force = False, handlers = {}, segmented = S
             print _("Already downloaded %s.") % os.path.basename(metalinkfile.filename)
             return metalinkfile.filename
 
-        if metalinkfile.size == 0 and not os.path.exists(metalinkfile.filename + ".temp"):
-            handlers["status"](1, actsize, actsize)
-            print ""
-            print _("Already downloaded %s.") % os.path.basename(metalinkfile.filename)
-            return metalinkfile.filename
+        if os.path.exists(metalinkfile.filename + ".temp"):
+            print _("Resuming download of %s.") % os.path.basename(metalinkfile.filename)
 
     directory = os.path.dirname(metalinkfile.filename)
     if not os.path.isdir(directory):
@@ -512,7 +509,7 @@ class NormalManager(Manager):
         self.start_number = 0
         self.number = 0
         self.count = 1
-        self.headers = headers
+        self.headers = headers.copy()
 
     def random_start(self):
         # do it the old way
@@ -572,10 +569,10 @@ class URLManager(Manager):
             self.status = False
             self.close_handler()
             return
-        headers = self.temp.info()
+        myheaders = self.temp.info()
 
         try:
-            self.size = int(headers['Content-Length'])
+            self.size = int(myheaders['Content-Length'])
         except KeyError:
             self.size = 0
 
@@ -770,6 +767,7 @@ def download_metalink(src, path, force = False, handlers = {}, segmented = SEGME
     Returns list of file paths if download(s) is successful
     Returns False otherwise (checksum fails)
     '''
+    headers = headers.copy()
 
     metalinkobj = parse_metalink(src, headers, nocheck)
     if metalinkobj == False:
@@ -843,12 +841,15 @@ def download_jigdo(src, path, force = False, handlers = {}, segmented = SEGMENTE
     for filenode in urllist:
         result = download_file_node(filenode, path, force, handlers, segmented, headers)
         if result:
-              results.append(result)
+            results.append(result)
     if len(results) == 0:
         return False
 
     print _("Reconstituting file...")
-    jigdo.mkiso()
+    md5 = jigdo.mkiso()
+    checksum = verify_checksum(jigdo.filename, {'md5': md5})
+    if not checksum:
+        print _("Checksum failed.")
     
     return results
 
@@ -884,7 +885,6 @@ def convert_jigdo(src, headers = {}):
 
 def download_file_node(item, path, force = False, handler = None, segmented=SEGMENTED, headers = {}):
     '''
-    Downloads a specific version of a program
     First parameter, file XML node
     Second parameter, file path to save to
     Third parameter, optional, force a new download even if a valid copy already exists
@@ -894,27 +894,17 @@ def download_file_node(item, path, force = False, handler = None, segmented=SEGM
     raise socket.error e.g. "Operation timed out"
     '''
 
-    urllist = {}
+    urllist = []
 
     for node in item.resources:
-        urllist[node.url] = node
+        urllist.append(node.url)
         
     if len(urllist) == 0:
         print _("No urls to download file from.")
         return False
 
-    hashes = item.hashlist
-    size = item.size
-    
     local_file = item.filename
-    #localfile = path_join(path, local_file)
     item.filename = path_join(path, local_file)
-
-    #extract chunk checksum information
-    chunksize = item.piecelength
-    
-    chunksums = {}
-    chunksums[item.piecetype] = item.pieces
 
     return download_file_urls(item, force, handler, segmented, headers)
 
@@ -940,10 +930,10 @@ def urlretrieve(url, filename, reporthook = None, headers = {}):
     i = 0
     counter = 0
     temp = urlopen(url, headers = headers)
-    headers = temp.info()
+    myheaders = temp.info()
     
     try:
-        size = int(headers['Content-Length'])
+        size = int(myheaders['Content-Length'])
     except KeyError:
         size = 0
 
@@ -1346,7 +1336,7 @@ class Segment_Manager(Manager):
     def __init__(self, metalinkfile, headers = {}):
         Manager.__init__(self)
 
-        self.headers = headers
+        self.headers = headers.copy()
         self.sockets = []
         self.chunks = []
         self.limit_per_host = LIMIT_PER_HOST
@@ -1850,7 +1840,7 @@ class Host_Segment:
         self.buffer = ""
         self.temp = ""
         self.cancel_handler = None
-        self.headers = headers
+        self.headers = headers.copy()
         
     def set_cancel_callback(self, handler):
         self.cancel_handler = handler
@@ -2275,13 +2265,14 @@ class HTTPConnection:
         '''
         raise socket.error e.g. "Operation timed out"
         '''
-        headers.update(self.headers)
+        myheaders = headers.copy()
+        myheaders.update(self.headers)
 
         #print "HTTP REQUEST:", headers
         if HTTP_PROXY == "":
             urlparts = urlparse.urlsplit(url)
             url = urlparts.path + "?" + urlparts.query
-        return self.conn.request(method, url, body, headers)
+        return self.conn.request(method, url, body, myheaders)
 
     def getresponse(self):
         return self.conn.getresponse()
@@ -2312,16 +2303,17 @@ class HTTPSConnection:
             self.conn = httplib.HTTPSConnection(host, port)
 
     def request(self, method, url, body="", headers={}):
-        headers.update(self.headers)
+        myheaders = headers.copy()
+        myheaders.update(self.headers)
         urlparts = urlparse.urlsplit(url)
         if HTTPS_PROXY != "":
             port = httplib.HTTPS_PORT
             if urlparts.port != None:
                 port = urlparts.port
-            return self.conn.request("CONNECT", urlparts.hostname + ":" + port, body, headers)
+            return self.conn.request("CONNECT", urlparts.hostname + ":" + port, body, myheaders)
         else:
             url = urlparts.path + "?" + urlparts.query
-            return self.conn.request("GET", url, body, headers)
+            return self.conn.request("GET", url, body, myheaders)
 
     def getresponse(self):
         return self.conn.getresponse()
