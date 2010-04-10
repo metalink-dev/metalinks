@@ -46,6 +46,7 @@ import xml.parsers.expat
 
 # for jigdo only
 import gzip
+import urllib2
 
 # handle missing module in jython
 try: import bz2
@@ -1080,17 +1081,16 @@ class Jigdo(Metalink):
 
         for item in configobj.items("Mirrorlists"):
             self.mirrordict[item[0]] = item[1].split(" ")[0]
-            try:
-                import download
-                temp = []
-                fp = download.urlopen(self.mirrordict[item[0]])
+
+            temp = []
+            fp = urllib2.urlopen(self.mirrordict[item[0]])
+            line = fp.readline()
+            while line:
+                if not line.startswith("#"):
+                    temp.append(line.strip())
                 line = fp.readline()
-                while line:
-                    if not line.startswith("#"):
-                        temp.append(line.strip())
-                    line = fp.readline()
-                serverdict[item[0]] = temp
-            except ImportError: pass
+            serverdict[item[0]] = temp
+            fp.close()
         
         for item in configobj.items("Image"):
             if item[0].lower() == "template":
