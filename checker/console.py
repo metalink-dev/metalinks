@@ -179,11 +179,6 @@ def run():
         return
 
     if options.check:
-        # remove filevar eventually
-        #mcheck = checker.Checker()
-        #mcheck.check_metalink(options.filevar)
-        #results = mcheck.get_results()
-        #print_totals(results)
         for item in args:
             print "=" * 79
             print item
@@ -194,14 +189,6 @@ def run():
         return
             
     if options.download:
-        # remove filevar eventually
-        #if options.filevar != None:
-        #    progress = ProgressBar()
-        #    result = download.get(options.filevar, os.getcwd(), handlers={"status": progress.download_update, "bitrate": progress.set_bitrate}, segmented = not options.nosegmented)
-        #    progress.download_end()
-        #    if not result:
-        #        sys.exit(-1)
-
         for item in args:
             progress = ProgressBar()
             result = download.get(item, options.writedir, handlers={"status": progress.download_update, "bitrate": progress.set_bitrate}, segmented = not options.nosegmented)
@@ -216,19 +203,6 @@ def run():
             progress.download_end()
             if not result:
                 sys.exit(-1)
-                
-    # remove eventually
-    elif not options.check:
-        #if options.filevar != None:
-        #    mcheck = checker.Checker()
-        #    mcheck.check_metalink(options.filevar)
-        #    results = mcheck.get_results()
-        #    print_totals(results)
-        for item in args:
-            mcheck = checker.Checker()
-            mcheck.check_metalink(item)
-            results = mcheck.get_results()
-            print_totals(results)
                         
     sys.exit(0)
     
