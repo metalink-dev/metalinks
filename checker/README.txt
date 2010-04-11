@@ -87,6 +87,13 @@
 #
 # CHANGELOG:
 #
+# Version 5.1
+# -----------
+# - Bugfixes for segmented downloads
+# - Native Jigdo download support
+# - Added download time
+# - Now requires Python 2.5 or newer because Metalink RFC requires SHA-256
+#
 # Version 5.0
 # -----------
 # - Added support for Metalink v4 (IETF RFC)

@@ -57,7 +57,7 @@ import StringIO
 import binascii
 import zlib
 
-GENERATOR = "Metalink Checker Version 5.0"
+GENERATOR = "Metalink Checker Version 5.1"
 
 RFC3339 = "%Y-%m-%dT%H:%M:%SZ"
 RFC822 = "%a, %d %b %Y %H:%M:%S +0000"
