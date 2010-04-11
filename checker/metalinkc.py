@@ -308,8 +308,8 @@ class Dummy:
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
 # Filename: $URL: https://metalinks.svn.sourceforge.net/svnroot/metalinks/checker/checker.py $
-# Last Updated: $Date: 2009-10-04 23:30:39 -0700 (Sun, 04 Oct 2009) $
-# Version: $Rev: 427 $
+# Last Updated: $Date: 2010-04-10 20:40:24 -0700 (Sat, 10 Apr 2010) $
+# Version: $Rev: 639 $
 # Author(s): Neil McNab
 #
 # Description:
@@ -830,7 +830,7 @@ checker.translate = translate
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
 # Filename: $URL: https://metalinks.svn.sourceforge.net/svnroot/metalinks/checker/download.py $
-# Last Updated: $Date: 2010-04-10 18:23:19 -0700 (Sat, 10 Apr 2010) $
+# Last Updated: $Date: 2010-04-10 20:40:24 -0700 (Sat, 10 Apr 2010) $
 # Author(s): Neil McNab
 #
 # Description:
@@ -4002,7 +4002,7 @@ GPG.translate = translate
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
 # Filename: $URL: https://metalinks.svn.sourceforge.net/svnroot/metalinks/checker/metalink.py $
-# Last Updated: $Date: 2010-04-10 16:47:16 -0700 (Sat, 10 Apr 2010) $
+# Last Updated: $Date: 2010-04-10 20:40:24 -0700 (Sat, 10 Apr 2010) $
 # Author(s): Hampus Wessman, Neil McNab
 #
 # Description:
