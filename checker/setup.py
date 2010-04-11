@@ -8,11 +8,11 @@ import glob
 import zipfile
 
 APP_NAME = 'metalink-checker'
-VERSION = '5.0'
+VERSION = '5.1'
 LICENSE = 'GPL'
 DESC = 'A metalink checker and download client.'
 AUTHOR_NAME = 'Neil McNab'
-EMAIL = 'webmaster@nabber.org'
+EMAIL = 'neil@nabber.org'
 URL = 'http://www.nabber.org/projects/'
 
 #main is first
