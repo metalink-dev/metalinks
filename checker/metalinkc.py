@@ -87,6 +87,13 @@
 #
 # CHANGELOG:
 #
+# Version 5.1
+# -----------
+# - Bugfixes for segmented downloads
+# - Native Jigdo download support
+# - Added download time
+# - Now requires Python 2.5 or newer because Metalink RFC requires SHA-256
+#
 # Version 5.0
 # -----------
 # - Added support for Metalink v4 (IETF RFC)
@@ -244,18 +251,6 @@ try: import win32process
 except ImportError: pass
 try: import bz2
 except ImportError: pass
-try:
-    import hashlib
-    md5 = hashlib
-    sha1 = hashlib
-    sha256 = hashlib
-except ImportError:
-    import md5
-    md5 = md5
-    import sha
-    sha1 = sha
-    sha1.sha1 = sha1.sha
-    sha256 = None
 import copy
 import gzip
 import httplib
@@ -294,7 +289,7 @@ class Dummy:
 # URL: http://www.nabber.org/projects/
 # E-mail: webmaster@nabber.org
 #
-# Copyright: (C) 2007-2009, Neil McNab
+# Copyright: (C) 2007-2010, Neil McNab
 # License: GNU General Public License Version 2
 #   (http://www.gnu.org/copyleft/gpl.html)
 #
@@ -334,7 +329,7 @@ class Dummy:
 
 
 NAME="Metalink Checker"
-VERSION="5.0"
+VERSION="5.1"
 
 #WEBSITE="http://www.metalinker.org"
 WEBSITE="http://www.nabber.org/projects/checker/"
@@ -816,7 +811,7 @@ checker.translate = translate
 # URL: http://www.nabber.org/projects/
 # E-mail: webmaster@nabber.org
 #
-# Copyright: (C) 2007-2009, Neil McNab
+# Copyright: (C) 2007-2010, Neil McNab
 # License: GNU General Public License Version 2
 #   (http://www.gnu.org/copyleft/gpl.html)
 #
@@ -835,7 +830,7 @@ checker.translate = translate
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
 # Filename: $URL: https://metalinks.svn.sourceforge.net/svnroot/metalinks/checker/download.py $
-# Last Updated: $Date: 2010-02-11 01:36:30 -0800 (Thu, 11 Feb 2010) $
+# Last Updated: $Date: 2010-04-10 18:23:19 -0700 (Sat, 10 Apr 2010) $
 # Author(s): Neil McNab
 #
 # Description:
@@ -873,7 +868,7 @@ checker.translate = translate
 #except ImportError: pass
 
 
-USER_AGENT = "Metalink Checker/5.0 +http://www.nabber.org/projects/"
+USER_AGENT = "Metalink Checker/5.1 +http://www.nabber.org/projects/"
 
 SEGMENTED = True
 LIMIT_PER_HOST = 1
@@ -1193,11 +1188,8 @@ def download_file_urls(metalinkfile, force = False, handlers = {}, segmented = S
             print _("Already downloaded %s.") % os.path.basename(metalinkfile.filename)
             return metalinkfile.filename
 
-        if metalinkfile.size == 0 and not os.path.exists(metalinkfile.filename + ".temp"):
-            handlers["status"](1, actsize, actsize)
-            print ""
-            print _("Already downloaded %s.") % os.path.basename(metalinkfile.filename)
-            return metalinkfile.filename
+        if os.path.exists(metalinkfile.filename + ".temp"):
+            print _("Resuming download of %s.") % os.path.basename(metalinkfile.filename)
 
     directory = os.path.dirname(metalinkfile.filename)
     if not os.path.isdir(directory):
@@ -1233,8 +1225,13 @@ class Manager:
         self.pause_handler = None
         self.status_handler = None
         self.bitrate_handler = None
+        self.time_handler = None
         self.status = True
+        self.size = -1
         self.end_bitrate()
+
+    def set_time_callback(self, handler):
+        self.time_handler = handler        
         
     def set_cancel_callback(self, handler):
         self.cancel_handler = handler
@@ -1289,7 +1286,20 @@ class Manager:
         if self.oldtime != None and (time.time() - self.oldtime) != 0:
             return ((bytes - self.oldsize) * 8 / 1024)/(time.time() - self.oldtime)
         return 0
-            
+        
+    def get_time(self, bytes):
+        bitrate = self.get_bitrate(bytes)
+        if bitrate == 0 or (self.size - bytes) < 0:
+            return "??:??"
+        
+        secondsleft = (self.size - bytes)/(bitrate*1024/8)
+        hours = secondsleft / 3600
+        minutes = (secondsleft % 3600) / 60
+        seconds = (secondsleft % 60)
+        if int(hours) > 0:
+            return "%.2d:%.2d:%.2d" % (hours, minutes, seconds)
+        return "%.2d:%.2d" % (minutes, seconds)
+        
 class NormalManager(Manager):
     def __init__(self, metalinkfile, headers = {}):
         Manager.__init__(self)
@@ -1301,7 +1311,7 @@ class NormalManager(Manager):
         self.start_number = 0
         self.number = 0
         self.count = 1
-        self.headers = headers
+        self.headers = headers.copy()
 
     def random_start(self):
         # do it the old way
@@ -1323,6 +1333,7 @@ class NormalManager(Manager):
             manager.set_cancel_callback(self.cancel_handler)
             manager.set_pause_callback(self.pause_handler)
             manager.set_bitrate_callback(self.bitrate_handler)
+            manager.set_time_callback(self.time_handler)
             self.get_bitrate = manager.get_bitrate
             self.status = manager.run()
 
@@ -1361,10 +1372,10 @@ class URLManager(Manager):
             self.status = False
             self.close_handler()
             return
-        headers = self.temp.info()
+        myheaders = self.temp.info()
 
         try:
-            self.size = int(headers['Content-Length'])
+            self.size = int(myheaders['Content-Length'])
         except KeyError:
             self.size = 0
 
@@ -1413,6 +1424,9 @@ class URLManager(Manager):
         if self.bitrate_handler != None:
             self.bitrate_handler(self.get_bitrate(self.counter * self.block_size))
 
+        if self.time_handler != None:
+            self.time_handler(self.get_time(self.counter * self.block_size))    
+            
         if not block:
             self.close_handler()
 
@@ -1559,6 +1573,7 @@ def download_metalink(src, path, force = False, handlers = {}, segmented = SEGME
     Returns list of file paths if download(s) is successful
     Returns False otherwise (checksum fails)
     '''
+    headers = headers.copy()
 
     metalinkobj = parse_metalink(src, headers, nocheck)
     if metalinkobj == False:
@@ -1632,12 +1647,15 @@ def download_jigdo(src, path, force = False, handlers = {}, segmented = SEGMENTE
     for filenode in urllist:
         result = download_file_node(filenode, path, force, handlers, segmented, headers)
         if result:
-              results.append(result)
+            results.append(result)
     if len(results) == 0:
         return False
 
     print _("Reconstituting file...")
-    jigdo.mkiso()
+    md5 = jigdo.mkiso()
+    checksum = verify_checksum(jigdo.filename, {'md5': md5})
+    if not checksum:
+        print _("Checksum failed.")
     
     return results
 
@@ -1673,7 +1691,6 @@ def convert_jigdo(src, headers = {}):
 
 def download_file_node(item, path, force = False, handler = None, segmented=SEGMENTED, headers = {}):
     '''
-    Downloads a specific version of a program
     First parameter, file XML node
     Second parameter, file path to save to
     Third parameter, optional, force a new download even if a valid copy already exists
@@ -1683,27 +1700,17 @@ def download_file_node(item, path, force = False, handler = None, segmented=SEGM
     raise socket.error e.g. "Operation timed out"
     '''
 
-    urllist = {}
+    urllist = []
 
     for node in item.resources:
-        urllist[node.url] = node
+        urllist.append(node.url)
         
     if len(urllist) == 0:
         print _("No urls to download file from.")
         return False
 
-    hashes = item.hashlist
-    size = item.size
-    
     local_file = item.filename
-    #localfile = path_join(path, local_file)
     item.filename = path_join(path, local_file)
-
-    #extract chunk checksum information
-    chunksize = item.piecelength
-    
-    chunksums = {}
-    chunksums[item.piecetype] = item.pieces
 
     return download_file_urls(item, force, handler, segmented, headers)
 
@@ -1729,10 +1736,10 @@ def urlretrieve(url, filename, reporthook = None, headers = {}):
     i = 0
     counter = 0
     temp = urlopen(url, headers = headers)
-    headers = temp.info()
+    myheaders = temp.info()
     
     try:
-        size = int(headers['Content-Length'])
+        size = int(myheaders['Content-Length'])
     except KeyError:
         size = 0
 
@@ -1893,9 +1900,6 @@ def verify_chunk_checksum(chunkstring, checksums={}):
     Returns True if first checksum provided is valid
     Returns True if no checksums are provided
     Returns False otherwise
-
-    Verification of hash types other than {md5,sha1} requires the hashlib
-    module to be present (Python 2.5 or newer).
     '''
 
     try:
@@ -1921,14 +1925,14 @@ def verify_chunk_checksum(chunkstring, checksums={}):
     except (KeyError, AttributeError): pass
     try:
         checksums["sha1"]
-        if sha1.sha1(chunkstring).hexdigest() == checksums["sha1"].lower():
+        if hashlib.sha1(chunkstring).hexdigest() == checksums["sha1"].lower():
             return True
         else:
             return False
     except KeyError: pass
     try:
         checksums["md5"]
-        if md5.md5(chunkstring).hexdigest() == checksums["md5"].lower():
+        if hashlib.md5(chunkstring).hexdigest() == checksums["md5"].lower():
             return True
         else:
             return False
@@ -1945,9 +1949,6 @@ def verify_checksum(local_file, checksums={}):
     Returns True if first checksum provided is valid
     Returns True if no checksums are provided
     Returns False otherwise
-
-    Verification of hash types other than {md5,sha1} requires the hashlib
-    module to be present (Python 2.5 or newer).
     '''
     
     try:
@@ -1979,7 +1980,7 @@ def verify_checksum(local_file, checksums={}):
     except (KeyError, AttributeError): pass
     try:
         checksums["sha1"]
-        if filehash(local_file, sha1.sha1()) == checksums["sha1"].lower():
+        if filehash(local_file, hashlib.sha1()) == checksums["sha1"].lower():
             return True
         else:
             #print "\nERROR: sha1 checksum failed for %s." % os.path.basename(local_file)
@@ -1987,7 +1988,7 @@ def verify_checksum(local_file, checksums={}):
     except KeyError: pass
     try:
         checksums["md5"]
-        if filehash(local_file, md5.md5()) == checksums["md5"].lower():
+        if filehash(local_file, hashlib.md5()) == checksums["md5"].lower():
             return True
         else:
             #print "\nERROR: md5 checksum failed for %s." % os.path.basename(local_file)
@@ -2141,7 +2142,7 @@ class Segment_Manager(Manager):
     def __init__(self, metalinkfile, headers = {}):
         Manager.__init__(self)
 
-        self.headers = headers
+        self.headers = headers.copy()
         self.sockets = []
         self.chunks = []
         self.limit_per_host = LIMIT_PER_HOST
@@ -2319,7 +2320,9 @@ class Segment_Manager(Manager):
             self.status_handler(self.byte_total(), 1, self.size)    
         if self.bitrate_handler != None:
             self.bitrate_handler(self.get_bitrate(self.byte_total()))
-        
+        if self.time_handler != None:
+            self.time_handler(self.get_time(self.byte_total()))
+            
         next = self.next_url()
         
         if next == None:
@@ -2645,7 +2648,7 @@ class Host_Segment:
         self.buffer = ""
         self.temp = ""
         self.cancel_handler = None
-        self.headers = headers
+        self.headers = headers.copy()
         
     def set_cancel_callback(self, handler):
         self.cancel_handler = handler
@@ -3070,13 +3073,14 @@ class HTTPConnection:
         '''
         raise socket.error e.g. "Operation timed out"
         '''
-        headers.update(self.headers)
+        myheaders = headers.copy()
+        myheaders.update(self.headers)
 
         #print "HTTP REQUEST:", headers
         if HTTP_PROXY == "":
             urlparts = urlparse.urlsplit(url)
             url = urlparts.path + "?" + urlparts.query
-        return self.conn.request(method, url, body, headers)
+        return self.conn.request(method, url, body, myheaders)
 
     def getresponse(self):
         return self.conn.getresponse()
@@ -3107,16 +3111,17 @@ class HTTPSConnection:
             self.conn = httplib.HTTPSConnection(host, port)
 
     def request(self, method, url, body="", headers={}):
-        headers.update(self.headers)
+        myheaders = headers.copy()
+        myheaders.update(self.headers)
         urlparts = urlparse.urlsplit(url)
         if HTTPS_PROXY != "":
             port = httplib.HTTPS_PORT
             if urlparts.port != None:
                 port = urlparts.port
-            return self.conn.request("CONNECT", urlparts.hostname + ":" + port, body, headers)
+            return self.conn.request("CONNECT", urlparts.hostname + ":" + port, body, myheaders)
         else:
             url = urlparts.path + "?" + urlparts.query
-            return self.conn.request("GET", url, body, headers)
+            return self.conn.request("GET", url, body, myheaders)
 
     def getresponse(self):
         return self.conn.getresponse()
@@ -3997,7 +4002,7 @@ GPG.translate = translate
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
 # Filename: $URL: https://metalinks.svn.sourceforge.net/svnroot/metalinks/checker/metalink.py $
-# Last Updated: $Date: 2010-02-27 13:31:13 -0800 (Sat, 27 Feb 2010) $
+# Last Updated: $Date: 2010-04-10 16:47:16 -0700 (Sat, 10 Apr 2010) $
 # Author(s): Hampus Wessman, Neil McNab
 #
 # Description:
@@ -4012,7 +4017,7 @@ GPG.translate = translate
 # handle missing module in jython
 
 
-GENERATOR = "Metalink Checker Version 5.0"
+GENERATOR = "Metalink Checker Version 5.1"
 
 RFC3339 = "%Y-%m-%dT%H:%M:%SZ"
 RFC822 = "%a, %d %b %Y %H:%M:%S +0000"
@@ -4181,7 +4186,7 @@ class MetalinkFileBase:
         self.resources = []
         self.language = ""
         self.os = ""
-        self.size = 0
+        self.size = -1
         self.ed2k = ""
         self.magnet = ""
         self.do_ed2k = do_ed2k
@@ -4241,14 +4246,12 @@ class MetalinkFileBase:
             if numpieces < 2: use_chunks = False
         # Hashes
         fp = open(filename, "rb")
-        md5hash = md5.md5()
-        sha1hash = sha1.sha1()
-        if sha256:
-            sha256hash = sha256.sha256()
-        else:
-            sha256hash = None
-            print "Hashlib not available. No support for SHA-256."
-        piecehash = sha1.sha1()
+
+        md5hash = hashlib.md5()
+        sha1hash = hashlib.sha1()
+        sha256hash = hashlib.sha256()
+        piecehash = hashlib.sha1()
+        
         piecenum = 0
         length = 0
         self.pieces = []
@@ -4290,13 +4293,13 @@ class MetalinkFileBase:
                     if length == self.piecelength:
                         print "Done with piece hash", len(self.pieces)
                         self.pieces.append(piecehash.hexdigest())
-                        piecehash = sha1.sha1()
+                        piecehash = sha.new()
                         length = 0
         if use_chunks:
             if length > 0:
                 print "Done with piece hash", len(self.pieces)
                 self.pieces.append(piecehash.hexdigest())
-                piecehash = sha1.sha1()
+                piecehash = sha.new()
             print "Total number of pieces:", len(self.pieces)
         fp.close()
         self.hashlist["md5"] = md5hash.hexdigest()
@@ -4406,7 +4409,7 @@ class MetalinkFile4(MetalinkFileBase):
         if self.description.strip() != "":
             text += '      <description>'+self.description+'</description>\n'
         # File info
-        if self.size != 0:
+        if self.size > 0:
             text += '      <size>'+str(self.size)+'</size>\n'
         if self.language.strip() != "":
             text += '      <language>'+self.language+'</language>\n'
@@ -4416,10 +4419,10 @@ class MetalinkFile4(MetalinkFileBase):
         for key in self.hashlist.keys():
             if key == 'pgp' and self.hashlist[key] != "":
                 text += '      <signature type="%s">' % key + self.hashlist[key] + '</signature>\n'
-            else:
+            elif self.hashlist[key] != "":
                 text += '      <hash type="%s">' % hashlookup(key) + self.hashlist[key].lower() + '</hash>\n'
         if len(self.pieces) > 1:
-            text += '      <pieces type="'+hashlookup(self.piecetype)+'" length="'+self.piecelength+'">\n'
+            text += '      <pieces type="'+hashlookup(self.piecetype)+'" length="'+str(self.piecelength)+'">\n'
             for id in range(len(self.pieces)):
                 text += '        <hash>'+self.pieces[id]+'</hash>\n'
             text += '      </pieces>\n'
@@ -4489,7 +4492,7 @@ class MetalinkFile(MetalinkFileBase):
         else:
             text = '    <file>\n'
         # File info
-        if self.size != 0:
+        if self.size > 0:
             text += '      <size>'+str(self.size)+'</size>\n'
         if self.language.strip() != "":
             text += '      <language>'+self.language+'</language>\n'
@@ -4502,7 +4505,7 @@ class MetalinkFile(MetalinkFileBase):
             for key in self.hashlist.keys():
                 if key == 'pgp' and self.hashlist[key] != "":
                     text += '      <signature type="%s">' % key + self.hashlist[key] + '</signature>\n'
-                else:
+                elif self.hashlist[key] != "":
                     text += '      <hash type="%s">' % key + self.hashlist[key].lower() + '</hash>\n'
             if len(self.pieces) > 1:
                 text += '        <pieces type="'+self.piecetype+'" length="'+str(self.piecelength)+'">\n'
@@ -4851,7 +4854,7 @@ class RSSAtomItem:
     def __init__(self):
         self.url = None
         self.title = None
-        self.size = 0
+        self.size = -1
 
 class RSSAtom():
     def __init__(self):
@@ -4956,6 +4959,55 @@ def open_compressed(fp):
     except IOError:
         compressedfp.seek(0)
         return compressedfp
+        
+class TemplateDecompress:
+    def __init__(self, filename=None):
+        self.handle = None
+        self.buffer = ""
+        if filename != None:
+            self.open(filename)
+        
+    def open(self, filename):
+        self.handle = open(filename, "rb")
+        # read text comments first, then switch to binary data
+        data = self.handle.readline()
+        while data.strip() != "":
+            data = self.handle.readline()
+            
+        return self.handle
+        
+    def read(self, size):
+        while len(self.buffer) < size:
+            self.buffer += self.get_chunk()
+            
+        buff = self.buffer[:size]
+        self.buffer = self.buffer[size:]
+        return buff
+    
+    def get_chunk(self):
+        type = self.handle.read(4)
+        #print "type:", type
+        length = int(binascii.hexlify(self.handle.read(6)[::-1]), 16)
+        value = self.handle.read(length-10)
+        
+        if type == "BZIP":
+            uncompressed = int(binascii.hexlify(value[:6][::-1]), 16)
+            data = value[6:]
+            data = bz2.decompress(data)
+            assert(len(data) == uncompressed)
+            return data
+        elif type == "DATA":
+            uncompressed = int(binascii.hexlify(value[:6][::-1]), 16)
+            data = value[6:]
+            data = zlib.decompress(data)
+            assert(len(data) == uncompressed)
+            return data
+        else:
+            print "Unexpected Jigdo template type %s." % type
+        return ""
+    
+    def close(self):
+        return self.handle.close()
 
 class Jigdo(Metalink):
     def __init__(self):
@@ -4989,16 +5041,16 @@ class Jigdo(Metalink):
 
         for item in configobj.items("Mirrorlists"):
             self.mirrordict[item[0]] = item[1].split(" ")[0]
-            try:
-                temp = []
-                fp = download.urlopen(self.mirrordict[item[0]])
+
+            temp = []
+            fp = urllib2.urlopen(self.mirrordict[item[0]])
+            line = fp.readline()
+            while line:
+                if not line.startswith("#"):
+                    temp.append(line.strip())
                 line = fp.readline()
-                while line:
-                    if not line.startswith("#"):
-                        temp.append(line.strip())
-                    line = fp.readline()
-                serverdict[item[0]] = temp
-            except ImportError: pass
+            serverdict[item[0]] = temp
+            fp.close()
         
         for item in configobj.items("Image"):
             if item[0].lower() == "template":
@@ -5041,49 +5093,6 @@ class Jigdo(Metalink):
         # need to pad hash out to multiple of both 6 (base 64) and 8 bits (1 byte characters)
         return base64.b64decode(base64hash + "AA", "-_")[:-2]
 
-    def temp2iso(self):
-        '''
-        load template into string in memory
-        '''
-        handle = open(os.path.basename(self.template), "rb")
-        
-        # read text comments first, then switch to binary data
-        data = handle.readline()
-        while data.strip() != "":
-            data = handle.readline()
-
-        data = handle.read(1024*1024)
-        text = ""
-
-        #decompress = bz2.BZ2Decompressor()
-        #zdecompress = zlib.decompressobj()
-        bzip = False
-        gzip = False
-        while data:
-            if data.startswith("BZIP"):
-                bzip = True
-                self.compression_type = "BZIP"
-                data = data[16:]
-            if data.startswith("DATA"):
-                gzip = True
-                self.compression_type = "GZIP"
-                #print self.get_size(data[4:10])
-                #print self.get_size(data[10:16])
-                data = data[16:]
-            if data.startswith("DESC"):
-                gzip = False
-                bzip = False
-
-            if bzip or gzip:
-                #newdata = decompress.decompress(data)
-                text += data
-                data = handle.read(1024*1024)
-            else:
-                data = handle.readline()
-        handle.close()
-        #print text
-        return text
-
     def get_size(self, string):
         total = 0
         for i in range(len(string)):
@@ -5092,40 +5101,67 @@ class Jigdo(Metalink):
         return total
 
     def mkiso(self):
-        text = self.temp2iso()
-
-        found = {}
-        for fileobj in self.files:
-            hexhash = fileobj.get_checksums()["md5"]
-            loc = text.find(binascii.unhexlify(hexhash))
-            if loc != -1:
-                if fileobj.filename.find("dists") != -1:
-                    print "FOUND:", fileobj.filename
-                found[loc] = fileobj.filename
-
-        decompressor = None
-        if self.compression_type == "BZIP":
-            decompressor = bz2.BZ2Decompressor()
-        elif self.compression_type == "GZIP":
-            decompressor = zlib.decompressobj()
-
+        # go to the end to read the DESC section
+        readhandle = open(os.path.basename(self.template), "rb")
+        readhandle.seek(-6, 2)
+        desclen = int(binascii.hexlify(readhandle.read(6)[::-1]), 16)
+        readhandle.seek(-(desclen-10), 2)
+        value = readhandle.read()
+        
+        # index DESC section into list
+        chunks = []
+        count= 0 
+        while len(value) > 6:
+            subtype = ord(value[0])
+            #print "subtype: %x" % subtype
+            sublength = int(binascii.hexlify(value[1:7][::-1]), 16)
+            #print "sublength:", sublength
+            value = value[7:]
+            if subtype == 6:
+                rsync = value[:8]
+                md5 = value[8:24]
+                value = value[24:]
+                chunks.append([6, sublength, binascii.hexlify(md5)])
+            elif subtype == 5:
+                filemd5 = value[:16]
+                blocklen = int(binascii.hexlify(value[16:20][::-1]), 16)
+                value = value[20:]
+            elif subtype == 2:
+                chunks.append([2, sublength])
+                count += 1
+            else:
+                print "Unknown DESC subtype %s." % subtype
+                raise
+        
+        readhandle.close()
+        
         handle = open(self.filename, "wb")
+        
+        templatedata = TemplateDecompress(os.path.basename(self.template))
+            
+        for chunk in chunks:
+            chunktype = chunk[0]
+            chunklen = chunk[1]
+            if chunktype == 6:
+                # read data from external files, errors if hash not found
+                fileobj = self.files[self.get_file_by_hash('md5', chunk[2])]
+                if chunklen != os.stat(fileobj.filename).st_size:
+                    print "Warning: File size mismatch for %s." % fileobj.filename
+                
+                tempfile = open(fileobj.filename, "rb")
+                filedata = tempfile.read(1024*1024)
+                while filedata:
+                    handle.write(filedata)
+                    filedata = tempfile.read(1024*1024)
+                tempfile.close()
+                
+            if chunktype == 2:
+                # read from template file here
+                handle.write(templatedata.read(chunklen))
 
-        keys = found.keys()
-        keys.sort()
-        start = 0
-        for loc in keys:
-            #print start, loc, found[loc]
-            #print "Adding %s to image..." % found[loc]
-            #sys.stdout.write(".")
-            lead = decompressor.decompress(text[start:loc])
-            if found[loc].find("dists") != -1:
-                print "Writing:", found[loc]
-            filedata = open(found[loc], "rb").read()
-            handle.write(lead + filedata)
-            start = loc + 16
-
+        templatedata.close()
         handle.close()
+        return binascii.hexlify(filemd5)
 
 class ParseINI(dict):
     '''
@@ -5137,7 +5173,10 @@ class ParseINI(dict):
     def readfp(self, fp):
         line = fp.readline()
         section = None
+        #print "Jigdo file contents"
+        #print "-" * 79
         while line:
+            #print line
             if not line.startswith("#") and line.strip() != "":
                 if line.startswith("["):
                     section = line[1:-2]
@@ -5146,7 +5185,7 @@ class ParseINI(dict):
                     parts = line.split("=", 1)
                     self[section].append((parts[0], parts[1].strip()))
             line = fp.readline()
-
+        #sys.exit()
     def items(self, section):
         try:
             return self[section]
@@ -5330,11 +5369,7 @@ def compute_ed2k(filename, size=None, ed2khash=None):
 
     return "ed2k://|file|%s|%s|%s|/" % (os.path.basename(filename), size, ed2khash)
 
-def ed2k_hash(filename):
-    
-    if hashlib == None:
-        return ""
-    
+def ed2k_hash(filename):    
     blocksize = 9728000
     size = os.path.getsize(filename)
 
@@ -5370,11 +5405,7 @@ def file_hash(filename, hashtype):
     '''
     returns checksum as a hex string
     '''
-    try:
-        hashfunc = getattr(hashlib, hashtype)
-    except ImportError:
-        hashfunc = getattr(hashtype, new)
-
+    hashfunc = getattr(hashlib, hashtype)
     hashobj = hashfunc()
     return filehash(filename, hashobj)
 
@@ -5426,6 +5457,7 @@ metalink.RSSAtom = RSSAtom
 metalink.RSSAtomItem = RSSAtomItem
 metalink.Resource = Resource
 metalink.Resource4 = Resource4
+metalink.TemplateDecompress = TemplateDecompress
 metalink.URLInfo = URLInfo
 metalink.XMLSEP = XMLSEP
 metalink.XMLTag = XMLTag
@@ -5472,8 +5504,8 @@ metalink.rfc3339_parsedate = rfc3339_parsedate
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
 # Filename: $URL: https://metalinks.svn.sourceforge.net/svnroot/metalinks/checker/console.py $
-# Last Updated: $Date: 2010-02-11 01:36:30 -0800 (Thu, 11 Feb 2010) $
-# Version: $Rev: 595 $
+# Last Updated: $Date: 2010-04-10 18:23:19 -0700 (Sat, 10 Apr 2010) $
+# Version: $Rev: 637 $
 # Author(s): Neil McNab
 #
 # Description:
@@ -5617,11 +5649,6 @@ def run():
         return
 
     if options.check:
-        # remove filevar eventually
-        #mcheck = checker.Checker()
-        #mcheck.check_metalink(options.filevar)
-        #results = mcheck.get_results()
-        #print_totals(results)
         for item in args:
             print "=" * 79
             print item
@@ -5632,17 +5659,9 @@ def run():
         return
             
     if options.download:
-        # remove filevar eventually
-        #if options.filevar != None:
-        #    progress = ProgressBar()
-        #    result = download.get(options.filevar, os.getcwd(), handlers={"status": progress.download_update, "bitrate": progress.set_bitrate}, segmented = not options.nosegmented)
-        #    progress.download_end()
-        #    if not result:
-        #        sys.exit(-1)
-
         for item in args:
             progress = ProgressBar()
-            result = download.get(item, options.writedir, handlers={"status": progress.download_update, "bitrate": progress.set_bitrate}, segmented = not options.nosegmented)
+            result = download.get(item, options.writedir, handlers={"status": progress.download_update, "bitrate": progress.set_bitrate, "time": progress.set_time}, segmented = not options.nosegmented)
             progress.download_end()
             if not result:
                 sys.exit(-1)
@@ -5650,23 +5669,10 @@ def run():
     if options.rss:
         for feed in args:
             progress = ProgressBar()
-            result = download.download_rss(feed, options.writedir, handlers={"status": progress.download_update, "bitrate": progress.set_bitrate}, segmented = not options.nosegmented)
+            result = download.download_rss(feed, options.writedir, handlers={"status": progress.download_update, "bitrate": progress.set_bitrate, "time": progress.set_time}, segmented = not options.nosegmented)
             progress.download_end()
             if not result:
                 sys.exit(-1)
-                
-    # remove eventually
-    elif not options.check:
-        #if options.filevar != None:
-        #    mcheck = checker.Checker()
-        #    mcheck.check_metalink(options.filevar)
-        #    results = mcheck.get_results()
-        #    print_totals(results)
-        for item in args:
-            mcheck = checker.Checker()
-            mcheck.check_metalink(item)
-            results = mcheck.get_results()
-            print_totals(results)
                         
     sys.exit(0)
     
@@ -5750,7 +5756,9 @@ class ProgressBar:
     def __init__(self, length = 79):
         self.length = length
         self.bitrate = None
+        self.time = None
         self.show_bitrate = True
+        self.show_time = True
         self.show_bytes = True
         self.show_percent = True
         #print ""
@@ -5790,18 +5798,25 @@ class ProgressBar:
             else:
                 bitinfo = " %.0f kbps" % self.bitrate
 
-        length = self.length - 2 - len(percenttxt) - len(bytes) - len(bitinfo)
+        timeinfo = ""
+        if self.time != None and self.time != "" and self.show_time:
+            timeinfo += " " + self.time
+                
+        length = self.length - 2 - len(percenttxt) - len(bytes) - len(bitinfo) - len(timeinfo)
 
         size = int(percent * length / 100)            
         bar = ("#" * size) + ("-" * (length - size))
         output = "[%s]" % bar
-        output += percenttxt + bytes + bitinfo
+        output += percenttxt + bytes + bitinfo + timeinfo
         
         self.line_reset()
         sys.stdout.write(output)
 
     def set_bitrate(self, bitrate):
         self.bitrate = bitrate
+        
+    def set_time(self, time):
+        self.time = time
 
     def update(self, count, total):
         if count > total:

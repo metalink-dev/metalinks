@@ -5,7 +5,7 @@
 # URL: http://www.nabber.org/projects/
 # E-mail: webmaster@nabber.org
 #
-# Copyright: (C) 2007-2009, Neil McNab
+# Copyright: (C) 2007-2010, Neil McNab
 # License: GNU General Public License Version 2
 #   (http://www.gnu.org/copyleft/gpl.html)
 #
@@ -64,7 +64,7 @@ import locale
 import gettext
 
 NAME="Metalink Checker"
-VERSION="5.0"
+VERSION="5.1"
 
 #WEBSITE="http://www.metalinker.org"
 WEBSITE="http://www.nabber.org/projects/checker/"
