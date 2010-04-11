@@ -441,8 +441,13 @@ class Manager:
         self.pause_handler = None
         self.status_handler = None
         self.bitrate_handler = None
+        self.time_handler = None
         self.status = True
+        self.size = -1
         self.end_bitrate()
+
+    def set_time_callback(self, handler):
+        self.time_handler = handler        
         
     def set_cancel_callback(self, handler):
         self.cancel_handler = handler
@@ -497,7 +502,20 @@ class Manager:
         if self.oldtime != None and (time.time() - self.oldtime) != 0:
             return ((bytes - self.oldsize) * 8 / 1024)/(time.time() - self.oldtime)
         return 0
-            
+        
+    def get_time(self, bytes):
+        bitrate = self.get_bitrate(bytes)
+        if bitrate == 0 or (self.size - bytes) < 0:
+            return "??:??"
+        
+        secondsleft = (self.size - bytes)/(bitrate*1024/8)
+        hours = secondsleft / 3600
+        minutes = (secondsleft % 3600) / 60
+        seconds = (secondsleft % 60)
+        if int(hours) > 0:
+            return "%.2d:%.2d:%.2d" % (hours, minutes, seconds)
+        return "%.2d:%.2d" % (minutes, seconds)
+        
 class NormalManager(Manager):
     def __init__(self, metalinkfile, headers = {}):
         Manager.__init__(self)
@@ -531,6 +549,7 @@ class NormalManager(Manager):
             manager.set_cancel_callback(self.cancel_handler)
             manager.set_pause_callback(self.pause_handler)
             manager.set_bitrate_callback(self.bitrate_handler)
+            manager.set_time_callback(self.time_handler)
             self.get_bitrate = manager.get_bitrate
             self.status = manager.run()
 
@@ -621,6 +640,9 @@ class URLManager(Manager):
         if self.bitrate_handler != None:
             self.bitrate_handler(self.get_bitrate(self.counter * self.block_size))
 
+        if self.time_handler != None:
+            self.time_handler(self.get_time(self.counter * self.block_size))    
+            
         if not block:
             self.close_handler()
 
@@ -1514,7 +1536,9 @@ class Segment_Manager(Manager):
             self.status_handler(self.byte_total(), 1, self.size)    
         if self.bitrate_handler != None:
             self.bitrate_handler(self.get_bitrate(self.byte_total()))
-        
+        if self.time_handler != None:
+            self.time_handler(self.get_time(self.byte_total()))
+            
         next = self.next_url()
         
         if next == None:

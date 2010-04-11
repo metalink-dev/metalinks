@@ -191,7 +191,7 @@ def run():
     if options.download:
         for item in args:
             progress = ProgressBar()
-            result = download.get(item, options.writedir, handlers={"status": progress.download_update, "bitrate": progress.set_bitrate}, segmented = not options.nosegmented)
+            result = download.get(item, options.writedir, handlers={"status": progress.download_update, "bitrate": progress.set_bitrate, "time": progress.set_time}, segmented = not options.nosegmented)
             progress.download_end()
             if not result:
                 sys.exit(-1)
@@ -199,7 +199,7 @@ def run():
     if options.rss:
         for feed in args:
             progress = ProgressBar()
-            result = download.download_rss(feed, options.writedir, handlers={"status": progress.download_update, "bitrate": progress.set_bitrate}, segmented = not options.nosegmented)
+            result = download.download_rss(feed, options.writedir, handlers={"status": progress.download_update, "bitrate": progress.set_bitrate, "time": progress.set_time}, segmented = not options.nosegmented)
             progress.download_end()
             if not result:
                 sys.exit(-1)
@@ -286,7 +286,9 @@ class ProgressBar:
     def __init__(self, length = 79):
         self.length = length
         self.bitrate = None
+        self.time = None
         self.show_bitrate = True
+        self.show_time = True
         self.show_bytes = True
         self.show_percent = True
         #print ""
@@ -326,18 +328,25 @@ class ProgressBar:
             else:
                 bitinfo = " %.0f kbps" % self.bitrate
 
-        length = self.length - 2 - len(percenttxt) - len(bytes) - len(bitinfo)
+        timeinfo = ""
+        if self.time != None and self.time != "" and self.show_time:
+            timeinfo += " " + self.time
+                
+        length = self.length - 2 - len(percenttxt) - len(bytes) - len(bitinfo) - len(timeinfo)
 
         size = int(percent * length / 100)            
         bar = ("#" * size) + ("-" * (length - size))
         output = "[%s]" % bar
-        output += percenttxt + bytes + bitinfo
+        output += percenttxt + bytes + bitinfo + timeinfo
         
         self.line_reset()
         sys.stdout.write(output)
 
     def set_bitrate(self, bitrate):
         self.bitrate = bitrate
+        
+    def set_time(self, time):
+        self.time = time
 
     def update(self, count, total):
         if count > total:
