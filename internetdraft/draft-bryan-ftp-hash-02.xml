@@ -86,7 +86,7 @@ HTTP has a similar feature named Instance Digests <xref target="RFC3230"/> which
 	document are to be interpreted as described in BCP 14, <xref target="RFC2119"/>, as scoped to those conformance targets.</t>
 	
 	<t>This document also uses notation defined in STD 9, <xref target="RFC0959"/>.
-	In particular, the terms "reply", "user", "file", "pathname", "FTP commands", "user-PI",
+	In particular, the terms "reply", "user", "file", "pathname", "FTP commands", "user-PI", "server-FTP process",
     "server-PI", "mode", "type", and "ASCII", are all used here as defined there.</t>
 	
 	<t>In examples, the "C&gt;" lines are commands from user-PI to server-PI, and the "S&gt;" lines are server-PI replies.</t>
@@ -97,7 +97,7 @@ HTTP has a similar feature named Instance Digests <xref target="RFC3230"/> which
 
 	  
 <section title="The HASH Command (HASH)" anchor="HASH">
-<t>The HASH command allows for requesting the cryptographic hash of a file.</t>
+<t>A new command "HASH" is added to the FTP command set to request the cryptographic hash of a file from a server-FTP process.</t>
 <t>The syntax for the HASH command is:
 
 <figure> 
@@ -127,7 +127,7 @@ Response code 450 is used to indicate the server is busy, e.g. already hashing o
 
 <t>The HASH command is useful for files transmitted in Image type mode (TYPE I) and Stream transfer mode (MODE S).</t>
 
-<section title="FEAT response for HASH">
+<section title="FEAT Command Response for HASH Command">
 
 <t>A server that supports the HASH command MUST advertise it in FEAT response <xref target="RFC2389"/> with a list of all supported hash algorithms in a semicolon separated list. The hash algorithm that is currently selected MUST be marked with an asterisk. This command word is
    case insensitive, but it SHOULD be transmitted in upper case only. That is, the response SHOULD be:</t>
