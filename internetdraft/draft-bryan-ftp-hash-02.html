@@ -144,7 +144,7 @@
 <tr><td class="header">Network Working Group</td><td class="header">A. Bryan</td></tr>
 <tr><td class="header">Internet-Draft</td><td class="header">T. Kosse</td></tr>
 <tr><td class="header">Intended status: Experimental</td><td class="header">D. Stenberg</td></tr>
-<tr><td class="header">Expires: October 10, 2010</td><td class="header">April 8, 2010</td></tr>
+<tr><td class="header">Expires: October 15, 2010</td><td class="header">April 13, 2010</td></tr>
 </table></td></tr></table>
 <h1><br />FTP Extensions for Cryptographic Hashes<br />draft-bryan-ftp-hash-02</h1>
 
@@ -169,7 +169,7 @@ and may be updated, replaced, or obsoleted by other documents at any time.
 It is inappropriate to use Internet-Drafts as reference material or to cite
 them other than as &ldquo;work in progress.&rdquo;</p>
 <p>
-This Internet-Draft will expire on October 10, 2010.</p>
+This Internet-Draft will expire on October 15, 2010.</p>
 
 <h3>Copyright Notice</h3>
 <p>
@@ -197,7 +197,7 @@ Notational Conventions<br />
 <a href="#HASH">3.</a>&nbsp;
 The HASH Command (HASH)<br />
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor4">3.1.</a>&nbsp;
-FEAT response for HASH<br />
+FEAT Command Response for HASH Command<br />
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor5">3.2.</a>&nbsp;
 Changing the HASH algorithm<br />
 <a href="#anchor6">4.</a>&nbsp;
@@ -266,7 +266,7 @@ Notational Conventions</h3>
 	document are to be interpreted as described in BCP 14, <a class='info' href='#RFC2119'>[RFC2119]<span> (</span><span class='info'>Bradner, S., &ldquo;Key words for use in RFCs to Indicate Requirement Levels,&rdquo; March&nbsp;1997.</span><span>)</span></a>, as scoped to those conformance targets.
 </p>
 <p>This document also uses notation defined in STD 9, <a class='info' href='#RFC0959'>[RFC0959]<span> (</span><span class='info'>Postel, J. and J. Reynolds, &ldquo;File Transfer Protocol,&rdquo; October&nbsp;1985.</span><span>)</span></a>.
-	In particular, the terms "reply", "user", "file", "pathname", "FTP commands", "user-PI",
+	In particular, the terms "reply", "user", "file", "pathname", "FTP commands", "user-PI", "server-FTP process",
     "server-PI", "mode", "type", and "ASCII", are all used here as defined there.
 </p>
 <p>In examples, the "C&gt;" lines are commands from user-PI to server-PI, and the "S&gt;" lines are server-PI replies.
@@ -278,7 +278,7 @@ Notational Conventions</h3>
 <a name="rfc.section.3"></a><h3>3.&nbsp;
 The HASH Command (HASH)</h3>
 
-<p>The HASH command allows for requesting the cryptographic hash of a file.
+<p>A new command "HASH" is added to the FTP command set to request the cryptographic hash of a file from a server-FTP process.
 </p>
 <p>The syntax for the HASH command is:
 
@@ -312,7 +312,7 @@ Response code 450 is used to indicate the server is busy, e.g. already hashing o
 <a name="anchor4"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.3.1"></a><h3>3.1.&nbsp;
-FEAT response for HASH</h3>
+FEAT Command Response for HASH Command</h3>
 
 <p>A server that supports the HASH command MUST advertise it in FEAT response <a class='info' href='#RFC2389'>[RFC2389]<span> (</span><span class='info'>Hethmon, P. and R. Elz, &ldquo;Feature negotiation mechanism for the File Transfer Protocol,&rdquo; August&nbsp;1998.</span><span>)</span></a> with a list of all supported hash algorithms in a semicolon separated list. The hash algorithm that is currently selected MUST be marked with an asterisk. This command word is
    case insensitive, but it SHOULD be transmitted in upper case only. That is, the response SHOULD be:
