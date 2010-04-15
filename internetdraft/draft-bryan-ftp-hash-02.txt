@@ -66,7 +66,7 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes      April 2010
 Table of Contents
 
    1.  Introduction . . . . . . . . . . . . . . . . . . . . . . . . .  3
-     1.1.  Examples . . . . . . . . . . . . . . . . . . . . . . . . .  3
+     1.1.  Example  . . . . . . . . . . . . . . . . . . . . . . . . .  3
    2.  Notational Conventions . . . . . . . . . . . . . . . . . . . .  3
    3.  The HASH Command (HASH)  . . . . . . . . . . . . . . . . . . .  4
      3.1.  HASH Command Errors  . . . . . . . . . . . . . . . . . . .  4
@@ -130,7 +130,7 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes      April 2010
    [[ Discussion of this draft should take place on
    apps-discuss@ietf.org. ]]
 
-1.1.  Examples
+1.1.  Example
 
    Example of HASH client request:
 
@@ -421,9 +421,9 @@ Appendix B.  List of Implementations with Non-standard Cryptographic
    to address this issue (it only supported one hash, MD5).
 
    An incomplete list of FTP clients and servers that have implemented
-   multiple commands (XMD5, XSHA, XSHA1, XSHA256, XSHA512, SITE SHOHASH,
-   SITE CHECKSUM, etc) that are not formally specified, leading to non-
-   interoperability and confusion.
+   multiple commands (XCRC, MD5/MMD5, XMD5, XSHA, XSHA1, XSHA256,
+   XSHA512, SITE SHOHASH, SITE CHECKSUM, etc) that are not formally
+   specified, leading to non-interoperability and confusion.
 
    o  Akamai NetStorage (supports SITE CHKHSH/SITE SHOHASH) p17-18
       http://pigdogslow.dyndns.org/NetStorage_UserGuide.pdf

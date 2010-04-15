@@ -43,7 +43,7 @@ boilerplate as described in RFC 5741.
 the title) for use on http://www.rfc-editor.org/rfcsearch.html. -->
 
       <abstract>
-	<t>The IANA registry named "Hypertext Transfer Protocol (HTTP) Digest Algorithm Values" defines values for digest algorithms used by Instance Digests in HTTP. Instance Digests in HTTP provide a digest, also known as a checksum or hash, of an entire representation of the current state of a
+	<t>The IANA registry named "Hypertext Transfer Protocol (HTTP) Digest Algorithm Values" defines values for digest algorithms used by Instance Digests in HTTP. Instance Digests in HTTP provide a digest, also known as a hash, of an entire representation of the current state of a
    resource. This document adds new values to the registry and updates previous values.
 </t>
       </abstract>    
@@ -54,13 +54,13 @@ the title) for use on http://www.rfc-editor.org/rfcsearch.html. -->
     <section title="Introduction">
       <t>The IANA registry named "Hypertext Transfer Protocol (HTTP) Digest Algorithm Values" defines values for digest algorithms used by Instance Digests in HTTP.</t>
 	  
-	  <t>Note: This is unrelated to HTTP Digest Authentication. Instance Digests in HTTP provide a digest, also known as a checksum or hash, of an entire representation of the current state of a
+	  <t>Note: This is unrelated to HTTP Digest Authentication. Instance Digests in HTTP provide a digest, also known as a hash, of an entire representation of the current state of a
    resource.</t>
 	  <t>The registry was created by <xref target="RFC3230"/> in 2002. This document adds new values to the registry and updates previous values that had redundant or outdated references.</t> 
 
 
-      <section title="Examples"><t><figure> 
-	  <preamble>Examples of Instance Digest for SHA-256:</preamble>
+      <section title="Example"><t><figure> 
+	  <preamble>Example of Instance Digest for SHA-256:</preamble>
 
 <!-- [rfced] Does this section contain more than one example? If not,
   may the title and text be changed to singular "Example"? -->
@@ -192,7 +192,7 @@ DYzYjRjYzFhOTlmNTQwYzI2M2QwM2U2MQ==
 
 		
 	    <section title="Acknowledgements and Contributors">
-		  <t>Thanks to Mark Nottingham, Eran Hammer-Lahav, Nils Maier, Lisa Dusseault, Alfred Hoenes, Pasi Eronen, Gonzalo Camarillo, and Radia Perlman.</t>
+		  <t>Thanks to Mark Nottingham, Eran Hammer-Lahav, Nils Maier, Lisa Dusseault, Alfred Hoenes, Pasi Eronen, Gonzalo Camarillo, Radia Perlman, and Jeffrey Mogul.</t>
     </section>
 
 	   

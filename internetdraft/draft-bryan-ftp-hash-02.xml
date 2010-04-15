@@ -60,7 +60,7 @@ HTTP has a similar feature named Instance Digests <xref target="RFC3230"/> which
       <t>[[ Discussion of this draft should take place on
       apps-discuss@ietf.org. ]]</t>
 	  
-      <section title="Examples"><t><figure> 
+      <section title="Example"><t><figure> 
 	  <preamble>Example of HASH client request:</preamble>
 	  
 	  <artwork type="example">
@@ -394,7 +394,7 @@ and a substituted malicious file could match.</t>
 	    <section title="List of Implementations with Non-standard Cryptographic Hash Command">
 		<t>[[ to be removed by the RFC editor before publication as an RFC. ]]</t>
 <t>At least one previous Internet Draft <xref target="draft-twine-ftpmd5"/>	 attempted to address this issue (it only supported one hash, MD5).</t>
-<t>An incomplete list of FTP clients and servers that have implemented multiple commands (XMD5, XSHA, XSHA1, XSHA256, XSHA512, SITE SHOHASH, SITE CHECKSUM, etc) that are not formally specified, leading to non-interoperability and confusion.</t>
+<t>An incomplete list of FTP clients and servers that have implemented multiple commands (XCRC, MD5/MMD5, XMD5, XSHA, XSHA1, XSHA256, XSHA512, SITE SHOHASH, SITE CHECKSUM, etc) that are not formally specified, leading to non-interoperability and confusion.</t>
 	    <t>
 	    <list style="symbols">
 
