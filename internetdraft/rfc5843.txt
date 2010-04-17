@@ -41,7 +41,7 @@ Copyright Notice
 Table of Contents
 
    1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . . . 2
-     1.1.  Examples  . . . . . . . . . . . . . . . . . . . . . . . . . 2
+     1.1.  Example . . . . . . . . . . . . . . . . . . . . . . . . . . 2
    2.  IANA Considerations . . . . . . . . . . . . . . . . . . . . . . 2
      2.1.  Previous Registrations Updated  . . . . . . . . . . . . . . 2
      2.2.  New Registrations . . . . . . . . . . . . . . . . . . . . . 3
@@ -71,9 +71,9 @@ RFC 5843        More Algorithms for HTTP Instance Digests     April 2010
    new values to the registry and updates previous values that had
    redundant or outdated references.
 
-1.1.  Examples
+1.1.  Example
 
-   Examples of Instance Digest for SHA-256:
+   Example of Instance Digest for SHA-256:
 
    Digest: SHA-256=MWVkMWQxYTRiMzk5MDQ0MzI3NGU5NDEyZTk5OWY1ZGFmNzgyZTJlO
    DYzYjRjYzFhOTlmNTQwYzI2M2QwM2U2MQ==
@@ -137,14 +137,14 @@ RFC 5843        More Algorithms for HTTP Instance Digests     April 2010
 
 4.  Changes Compared to RFC 3230
 
-   All previous values to the registry are still valid.
-
    The reference for base64 encoding has been updated for both MD5 and
    SHA.
 
    The reference for SHA has been updated.
 
    The SHA-256 and SHA-512 algorithms have been added to the registry.
+
+   All other previous values to the registry are still valid.
 
 5.  Normative References
 
@@ -172,8 +172,8 @@ RFC 5843        More Algorithms for HTTP Instance Digests     April 2010
 Appendix A.  Acknowledgements and Contributors
 
    Thanks to Mark Nottingham, Eran Hammer-Lahav, Nils Maier, Lisa
-   Dusseault, Alfred Hoenes, Pasi Eronen, Gonzalo Camarillo, and Radia
-   Perlman.
+   Dusseault, Alfred Hoenes, Pasi Eronen, Gonzalo Camarillo, Radia
+   Perlman, and Jeffrey Mogul.
 
 Author's Address
 
@@ -222,4 +222,3 @@ Author's Address
 
 Bryan                         Informational                     [Page 4]
 
-

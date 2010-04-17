@@ -22,10 +22,6 @@ boilerplate as described in RFC 5741.
       <title abbrev="More Algorithms for HTTP Instance Digests">Additional Hash Algorithms for HTTP Instance Digests</title>
       <author initials="A." surname="Bryan" fullname="Anthony Bryan">
 	    <organization></organization>
-
-<!-- [rfced] Would you like to add an organization here? Or be listed 
-   as "Consultant"? -->
-
 	    <address>
 		  <postal>
 			<street></street>
@@ -40,10 +36,10 @@ boilerplate as described in RFC 5741.
 	<date month="April" year="2010"/>        
 
 <!-- [rfced] Please insert any keywords (beyond those that appear in
-the title) for use on http://www.rfc-editor.org/rfcsearch.html. -->
+the title) for use on http://www.rfc-editor.org/rfcsearch.html. Hypertext Transfer Protocol (HTTP) Digest Algorithm Values registry update-->
 
       <abstract>
-	<t>The IANA registry named "Hypertext Transfer Protocol (HTTP) Digest Algorithm Values" defines values for digest algorithms used by Instance Digests in HTTP. Instance Digests in HTTP provide a digest, also known as a hash, of an entire representation of the current state of a
+	<t>The IANA registry named "Hypertext Transfer Protocol (HTTP) Digest Algorithm Values" defines values for digest algorithms used by Instance Digests in HTTP. Instance Digests in HTTP provide a digest, also known as a checksum or hash, of an entire representation of the current state of a
    resource. This document adds new values to the registry and updates previous values.
 </t>
       </abstract>    
@@ -54,7 +50,7 @@ the title) for use on http://www.rfc-editor.org/rfcsearch.html. -->
     <section title="Introduction">
       <t>The IANA registry named "Hypertext Transfer Protocol (HTTP) Digest Algorithm Values" defines values for digest algorithms used by Instance Digests in HTTP.</t>
 	  
-	  <t>Note: This is unrelated to HTTP Digest Authentication. Instance Digests in HTTP provide a digest, also known as a hash, of an entire representation of the current state of a
+	  <t>Note: This is unrelated to HTTP Digest Authentication. Instance Digests in HTTP provide a digest, also known as a checksum or hash, of an entire representation of the current state of a
    resource.</t>
 	  <t>The registry was created by <xref target="RFC3230"/> in 2002. This document adds new values to the registry and updates previous values that had redundant or outdated references.</t> 
 
@@ -63,7 +59,7 @@ the title) for use on http://www.rfc-editor.org/rfcsearch.html. -->
 	  <preamble>Example of Instance Digest for SHA-256:</preamble>
 
 <!-- [rfced] Does this section contain more than one example? If not,
-  may the title and text be changed to singular "Example"? -->
+  may the title and text be changed to singular "Example"? DONE-->
 	  
 	  <artwork type="example">
 Digest: SHA-256=MWVkMWQxYTRiMzk5MDQ0MzI3NGU5NDEyZTk5OWY1ZGFmNzgyZTJlO
@@ -126,10 +122,10 @@ DYzYjRjYzFhOTlmNTQwYzI2M2QwM2U2MQ==
 	  </section>
 	  
 	  <section title="Changes Compared to RFC 3230">
-	    <t>All previous values to the registry are still valid.</t>
 	    <t>The reference for base64 encoding has been updated for both MD5 and SHA.</t>
 		<t>The reference for SHA has been updated.</t>
         <t>The SHA-256 and SHA-512 algorithms have been added to the registry.</t>		
+	    <t>All other previous values to the registry are still valid.</t>
 	  </section>
 
 	</middle> 

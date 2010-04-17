@@ -11,7 +11,7 @@ Expires: October 18, 2010
 
 
     Metalink/HTTP: Mirrors and Cryptographic Hashes in HTTP Headers
-                      draft-bryan-metalinkhttp-16
+                      draft-bryan-metalinkhttp-17
 
 Abstract
 
