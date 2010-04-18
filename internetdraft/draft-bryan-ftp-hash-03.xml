@@ -158,7 +158,7 @@ Response code 450 is used to indicate the server is busy, e.g. already hashing o
 	  <artwork type="example">	
         hash-feat = SP "HASH" SP hashlist CRLF
         hashlist = 1*( hashname ["*"] ";" )
-        hashtype = 1*( hchar )
+        hashname = 1*( hchar )
         hchar = ALPHA / DIGIT / "-" / "_" / "/" / "." / ","
 
 </artwork></figure></t>
