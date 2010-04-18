@@ -144,7 +144,7 @@
 <tr><td class="header">Network Working Group</td><td class="header">A. Bryan</td></tr>
 <tr><td class="header">Internet-Draft</td><td class="header">T. Kosse</td></tr>
 <tr><td class="header">Intended status: Experimental</td><td class="header">D. Stenberg</td></tr>
-<tr><td class="header">Expires: October 18, 2010</td><td class="header">April 16, 2010</td></tr>
+<tr><td class="header">Expires: October 20, 2010</td><td class="header">April 18, 2010</td></tr>
 </table></td></tr></table>
 <h1><br />FTP Extensions for Cryptographic Hashes<br />draft-bryan-ftp-hash-02</h1>
 
@@ -169,7 +169,7 @@ and may be updated, replaced, or obsoleted by other documents at any time.
 It is inappropriate to use Internet-Drafts as reference material or to cite
 them other than as &ldquo;work in progress.&rdquo;</p>
 <p>
-This Internet-Draft will expire on October 18, 2010.</p>
+This Internet-Draft will expire on October 20, 2010.</p>
 
 <h3>Copyright Notice</h3>
 <p>
@@ -344,7 +344,7 @@ FEAT Command Response for HASH Command</h3>
 </p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
         hash-feat = SP "HASH" SP hashlist CRLF
         hashlist = 1*( hashname ["*"] ";" )
-        hashtype = 1*( hchar )
+        hashname = 1*( hchar )
         hchar = ALPHA / DIGIT / "-" / "_" / "/" / "." / ","
 
 </pre></div>
