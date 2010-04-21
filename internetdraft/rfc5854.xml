@@ -1449,7 +1449,7 @@ Anthony&nbsp;Bryan &lt;anthonybryan@gmail.com&gt;</t>
 	    otherwise-unprotected content. For example, a merchant
 	    might digitally sign a Metalink that lists a file download to verify its origin. Other merchants may wish to sign and encrypt Metalink Documents that list digital songs that have been purchased. Of course,
 	    many other examples are conceivable as well.</t>
-	    <t>Publishers are encouraged to offer Metalink documents via authenticated HTTP under TLS (Transport Layer Security) as specified in <xref target="RFC2818"/>. The choice of a secure content layer is entirely possible for content providers.</t>
+	    <t>Publishers are encouraged to offer Metalink documents via authenticated HTTP under Transport Layer Security (TLS) as specified in <xref target="RFC2818"/>. The choice of a secure content layer is entirely possible for content providers.</t>
 		
 		<t>Publishers are also encouraged to include digital signatures of the files within the Metalink Documents, if they are available, as described in <xref target="element.signature"/>.</t>
 		
