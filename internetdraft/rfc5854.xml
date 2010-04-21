@@ -1378,9 +1378,9 @@ structuredExtensionElement =
 
 	    <t>
 	      <list style="hanging"> 
-		<t hangText="MIME media type name:"> application</t>
-		<t hangText="MIME subtype name:"> metalink4+xml</t>
-		<t hangText="Mandatory parameters:"> None.</t> 
+		<t hangText="Type name:"> application</t>
+		<t hangText="Subtype name:"> metalink4+xml</t>
+		<t hangText="Required parameters:"> None.</t> 
 		<t hangText="Optional parameters:"> 
 		  <list style="hanging"> 
 		    <t hangText="&quot;charset&quot;:"> This parameter has semantics identical
@@ -1405,8 +1405,7 @@ structuredExtensionElement =
 		<t hangText="Published specification:"> This
 		specification.</t>
 		
-		<t hangText="Applications that use this media type:"> No known
-		applications currently use this media type.</t>
+		<t hangText="Applications that use this media type:"> File transfer applications.</t>
 
 	      </list>
 	    </t>
@@ -1434,7 +1433,10 @@ structuredExtensionElement =
 Anthony&nbsp;Bryan &lt;anthonybryan@gmail.com&gt;</t>
 
 		<t hangText="Intended usage:">
-		COMMON</t> <t hangText="Author/Change controller:">IESG</t>
+		COMMON</t>
+		<t hangText="Restrictions on usage:">
+		None.</t> 
+		<t hangText="Author/Change controller:">IESG</t>
 		</list></t>
         </section>
 

@@ -1289,11 +1289,11 @@ Bryan, et al.                Standards Track                   [Page 23]
 RFC 5854          Metalink Download Description Format        April 2010
 
 
-   MIME media type name:  application
+   Type name:  application
 
-   MIME subtype name:  metalink4+xml
+   Subtype name:  metalink4+xml
 
-   Mandatory parameters:  None.
+   Required parameters:  None.
 
    Optional parameters:
 
@@ -1315,8 +1315,7 @@ RFC 5854          Metalink Download Description Format        April 2010
 
    Published specification:  This specification.
 
-   Applications that use this media type:  No known applications
-      currently use this media type.
+   Applications that use this media type:  File transfer applications.
 
    Additional information:
 
@@ -1340,12 +1339,15 @@ RFC 5854          Metalink Download Description Format        April 2010
 
 
 
+
 Bryan, et al.                Standards Track                   [Page 24]
 
 RFC 5854          Metalink Download Description Format        April 2010
 
 
    Intended usage:  COMMON
+
+   Restrictions on usage:  None.
 
    Author/Change controller:  IESG
 
@@ -1362,7 +1364,7 @@ RFC 5854          Metalink Download Description Format        April 2010
    course, many other examples are conceivable as well.
 
    Publishers are encouraged to offer Metalink documents via
-   authenticated HTTP under TLS (Transport Layer Security) as specified
+   authenticated HTTP under Transport Layer Security (TLS) as specified
    in [RFC2818].  The choice of a secure content layer is entirely
    possible for content providers.
 
@@ -1391,8 +1393,6 @@ RFC 5854          Metalink Download Description Format        April 2010
    Metalink Documents with invalid signatures.
 
    Metalink Processors MUST NOT reject a Metalink Document containing
-   such a signature because they are not capable of verifying it; they
-   MUST continue processing and MAY inform the user of their failure to
 
 
 
@@ -1401,6 +1401,8 @@ Bryan, et al.                Standards Track                   [Page 25]
 RFC 5854          Metalink Download Description Format        April 2010
 
 
+   such a signature because they are not capable of verifying it; they
+   MUST continue processing and MAY inform the user of their failure to
    validate the signature.
 
    In other words, the presence of an element with the namespace URI
@@ -1447,8 +1449,6 @@ RFC 5854          Metalink Download Description Format        April 2010
    unrelated IRIs into Metalink Documents.
 
    Digital signatures address the issue of spoofing.
-
-
 
 
 
@@ -2182,4 +2182,3 @@ RFC 5854          Metalink Download Description Format        April 2010
 
 Bryan, et al.                Standards Track                   [Page 39]
 
-
