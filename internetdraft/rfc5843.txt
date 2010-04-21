@@ -1,9 +1,13 @@
 
 
 
-Network Working Group                                           A. Bryan
+
+
+
+Internet Engineering Task Force (IETF)                          A. Bryan
 Request for Comments: 5843                                    April 2010
 Category: Informational
+ISSN: 2070-1721
 
 
           Additional Hash Algorithms for HTTP Instance Digests
@@ -19,9 +23,19 @@ Abstract
 
 Status of This Memo
 
-   This memo provides information for the Internet community.  It does
-   not specify an Internet standard of any kind.  Distribution of this
-   memo is unlimited.
+   This document is not an Internet Standards Track specification; it is
+   published for informational purposes.
+
+   This document is a product of the Internet Engineering Task Force
+   (IETF).  It represents the consensus of the IETF community.  It has
+   received public review and has been approved for publication by the
+   Internet Engineering Steering Group (IESG).  Not all documents
+   approved by the IESG are a candidate for any level of Internet
+   Standard; see Section 2 of RFC 5741.
+
+   Information about the current status of this document, any errata,
+   and how to provide feedback on it may be obtained at
+   http://www.rfc-editor.org/info/rfc5843.
 
 Copyright Notice
 
@@ -38,17 +52,6 @@ Copyright Notice
    the Trust Legal Provisions and are provided without warranty as
    described in the Simplified BSD License.
 
-Table of Contents
-
-   1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . . . 2
-     1.1.  Example . . . . . . . . . . . . . . . . . . . . . . . . . . 2
-   2.  IANA Considerations . . . . . . . . . . . . . . . . . . . . . . 2
-     2.1.  Previous Registrations Updated  . . . . . . . . . . . . . . 2
-     2.2.  New Registrations . . . . . . . . . . . . . . . . . . . . . 3
-   3.  Security Considerations . . . . . . . . . . . . . . . . . . . . 3
-   4.  Changes Compared to RFC 3230  . . . . . . . . . . . . . . . . . 3
-   5.  Normative References  . . . . . . . . . . . . . . . . . . . . . 3
-   Appendix A.  Acknowledgements and Contributors  . . . . . . . . . . 4
 
 
 
@@ -56,6 +59,18 @@ Bryan                         Informational                     [Page 1]
 
 RFC 5843        More Algorithms for HTTP Instance Digests     April 2010
 
+
+Table of Contents
+
+   1. Introduction ....................................................2
+      1.1. Example ....................................................2
+   2. IANA Considerations .............................................2
+      2.1. Previous Registrations Updated .............................2
+      2.2. New Registrations ..........................................3
+   3. Security Considerations .........................................3
+   4. Changes Compared to RFC 3230 ....................................3
+   5. Normative References ............................................4
+   Appendix A. Acknowledgements and Contributors ......................5
 
 1.  Introduction
 
@@ -94,6 +109,13 @@ RFC 5843        More Algorithms for HTTP Instance Digests     April 2010
       output of this algorithm is encoded using the base64 encoding
       [RFC4648].
 
+
+
+Bryan                         Informational                     [Page 2]
+
+RFC 5843        More Algorithms for HTTP Instance Digests     April 2010
+
+
       Reference: [RFC1321], [RFC4648], this document.
 
       Digest Algorithm: SHA
@@ -102,16 +124,6 @@ RFC 5843        More Algorithms for HTTP Instance Digests     April 2010
       algorithm is encoded using the base64 encoding [RFC4648].
 
       Reference: [FIPS-180-3], [RFC4648], this document.
-
-
-
-
-
-
-Bryan                         Informational                     [Page 2]
-
-RFC 5843        More Algorithms for HTTP Instance Digests     April 2010
-
 
 2.2.  New Registrations
 
@@ -146,6 +158,20 @@ RFC 5843        More Algorithms for HTTP Instance Digests     April 2010
 
    All other previous values to the registry are still valid.
 
+
+
+
+
+
+
+
+
+
+Bryan                         Informational                     [Page 3]
+
+RFC 5843        More Algorithms for HTTP Instance Digests     April 2010
+
+
 5.  Normative References
 
    [FIPS-180-3]  National Institute of Standards and Technology (NIST),
@@ -164,7 +190,40 @@ RFC 5843        More Algorithms for HTTP Instance Digests     April 2010
 
 
 
-Bryan                         Informational                     [Page 3]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Bryan                         Informational                     [Page 4]
 
 RFC 5843        More Algorithms for HTTP Instance Digests     April 2010
 
@@ -220,5 +279,5 @@ Author's Address
 
 
 
-Bryan                         Informational                     [Page 4]
+Bryan                         Informational                     [Page 5]
 
