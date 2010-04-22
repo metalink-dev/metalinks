@@ -216,6 +216,9 @@ class Resource4:
         return valid
 
 class MetalinkFileBase:
+    '''
+    This should not be called directly, it is a base class.
+    '''
     def __init__(self, filename, attrs, do_ed2k, do_magnet):
         self.filename = filename
         self.errors = []
@@ -269,6 +272,12 @@ class MetalinkFileBase:
     
     def add_res(self, res):
         self.resources.append(res)
+        
+    def add_url(self, *args):
+        '''
+        Override this in your subclass
+        '''
+        pass
 
     def scan_file(self, filename, use_chunks=True, max_chunks=255, chunk_size=256, progresslistener=None):
         print "\nScanning file..."
@@ -292,7 +301,7 @@ class MetalinkFileBase:
         sha256hash = hashlib.sha256()
         piecehash = hashlib.sha1()
         
-        piecenum = 0
+        #piecenum = 0
         length = 0
         self.pieces = []
         self.piecetype = "sha1"
@@ -310,7 +319,7 @@ class MetalinkFileBase:
                     reads_left = reads_per_progress
                     progress += 1
                     result = progresslistener.Update(progress)
-                    if get_first(result) == False:
+                    if not get_first(result):
                         print "Canceling scan!"
                         return False
             # Process the data
@@ -333,13 +342,13 @@ class MetalinkFileBase:
                     if length == self.piecelength:
                         print "Done with piece hash", len(self.pieces)
                         self.pieces.append(piecehash.hexdigest())
-                        piecehash = sha.new()
+                        piecehash = hashlib.sha1()
                         length = 0
         if use_chunks:
             if length > 0:
                 print "Done with piece hash", len(self.pieces)
                 self.pieces.append(piecehash.hexdigest())
-                piecehash = sha.new()
+                piecehash = hashlib.sha1()
             print "Total number of pieces:", len(self.pieces)
         fp.close()
         self.hashlist["md5"] = md5hash.hexdigest()
@@ -463,8 +472,8 @@ class MetalinkFile4(MetalinkFileBase):
                 text += '      <hash type="%s">' % hashlookup(key) + self.hashlist[key].lower() + '</hash>\n'
         if len(self.pieces) > 1:
             text += '      <pieces type="'+hashlookup(self.piecetype)+'" length="'+str(self.piecelength)+'">\n'
-            for id in range(len(self.pieces)):
-                text += '        <hash>'+self.pieces[id]+'</hash>\n'
+            for idstr in range(len(self.pieces)):
+                text += '        <hash>'+self.pieces[idstr]+'</hash>\n'
             text += '      </pieces>\n'
         # File list
         for res in self.resources:
@@ -549,8 +558,8 @@ class MetalinkFile(MetalinkFileBase):
                     text += '      <hash type="%s">' % key + self.hashlist[key].lower() + '</hash>\n'
             if len(self.pieces) > 1:
                 text += '        <pieces type="'+self.piecetype+'" length="'+str(self.piecelength)+'">\n'
-                for id in range(len(self.pieces)):
-                    text += '          <hash piece="'+str(id)+'">'+self.pieces[id]+'</hash>\n'
+                for idstr in range(len(self.pieces)):
+                    text += '          <hash piece="'+str(idstr)+'">'+self.pieces[idstr]+'</hash>\n'
                 text += '        </pieces>\n'
             text += '      </verification>\n'
         # File list
@@ -583,6 +592,7 @@ class MetalinkBase:
         self.files = []
         self.generator = GENERATOR
         self.origin = ""
+        self.data = ""
 
         self.p = xml.parsers.expat.ParserCreate(namespace_separator=XMLSEP)
         self.p.buffer_text = True
@@ -591,6 +601,12 @@ class MetalinkBase:
         self.p.StartElementHandler = self.start_element
         self.p.EndElementHandler = self.end_element
         self.p.CharacterDataHandler = self.char_data
+        
+    def start_element(self, name, attrs):
+        pass
+        
+    def end_element(self, name):
+        pass
             
     def char_data(self, data):
         self.data += data #.strip()
@@ -620,14 +636,14 @@ class MetalinkBase:
 
     def validate_url(self, url):
         if url.endswith(".torrent"):
-            type = "bittorrent"
+            typestr = "bittorrent"
         else:
             chars = url.find(":")
-            type = url[:chars]
+            typestr = url[:chars]
         allowed_types = ["ftp", "ftps", "http", "https", "rsync", "bittorrent", "magnet", "ed2k"]
-        if not type in allowed_types:
+        if not typestr in allowed_types:
             return False
-        elif type in ['http', 'https', 'ftp', 'ftps', 'bittorrent']:
+        elif typestr in ['http', 'https', 'ftp', 'ftps', 'bittorrent']:
             m = re.search(r'\w+://.+\..+/.*', url)
             if m == None:
                 return False
@@ -735,7 +751,7 @@ class Metalink(MetalinkBase):
                 fileobj = self.files[-1]
                 fileobj.add_url(self.data.strip(), attrs=tag.attrs)
             elif name == "tags" and self.parent[-1].name != "file":
-                setattr(self, "tags", self.data.strip())
+                self.tags = self.data.strip()
             elif name in ("name", "url"):
                 setattr(self, self.parent[-1].name + "_" + name, self.data.strip())
             elif name in ("identity", "copyright", "description", "version", "upgrade"):
@@ -840,7 +856,7 @@ class Metalink4(MetalinkBase):
             if name in ("generator", "origin", "published", "updated"):
                 setattr(self, name, self.data.strip())
                 if name == "origin" and tag.attrs.has_key("dynamic"):
-                    setattr(self, "dynamic", tag.attrs["dynamic"])
+                    self.dynamic = tag.attrs["dynamic"]
             elif name in ("url", "metaurl"):
                 fileobj = self.files[-1]
                 fileobj.add_url(self.data.strip(), attrs=tag.attrs)
@@ -1025,18 +1041,18 @@ class TemplateDecompress:
         return buff
     
     def get_chunk(self):
-        type = self.handle.read(4)
+        typestr = self.handle.read(4)
         #print "type:", type
         length = int(binascii.hexlify(self.handle.read(6)[::-1]), 16)
         value = self.handle.read(length-10)
         
-        if type == "BZIP":
+        if typestr == "BZIP":
             uncompressed = int(binascii.hexlify(value[:6][::-1]), 16)
             data = value[6:]
             data = bz2.decompress(data)
             assert(len(data) == uncompressed)
             return data
-        elif type == "DATA":
+        elif typestr == "DATA":
             uncompressed = int(binascii.hexlify(value[:6][::-1]), 16)
             data = value[6:]
             data = zlib.decompress(data)
@@ -1158,13 +1174,13 @@ class Jigdo(Metalink):
             #print "sublength:", sublength
             value = value[7:]
             if subtype == 6:
-                rsync = value[:8]
+                #rsync = value[:8]
                 md5 = value[8:24]
                 value = value[24:]
                 chunks.append([6, sublength, binascii.hexlify(md5)])
             elif subtype == 5:
                 filemd5 = value[:16]
-                blocklen = int(binascii.hexlify(value[16:20][::-1]), 16)
+                #blocklen = int(binascii.hexlify(value[16:20][::-1]), 16)
                 value = value[20:]
             elif subtype == 2:
                 chunks.append([2, sublength])
@@ -1237,8 +1253,8 @@ def convert_4to3(metalinkobj4):
     
     for attr in ('generator', 'origin'):
         setattr(metalinkobj3, attr, getattr(metalinkobj4, attr))
-    if getattr(metalinkobj4, 'dynamic').lower() == "true":
-        setattr(metalinkobj3, 'type', 'dynamic')
+    if metalinkobj4.dynamic.lower() == "true":
+        metalinkobj3.type = 'dynamic'
         
     if metalinkobj4.published != "":
         metalinkobj3.pubdate = time.strftime(RFC822, rfc3339_parsedate(metalinkobj4.published))
