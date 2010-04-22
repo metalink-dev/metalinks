@@ -493,8 +493,7 @@ start = metalinkMetalink</pre></div>
       the sense used by XML).
 </p>
 <p>Metalink allows the use of Internationalized Resource Identifiers (IRIs), encoded according to <a class='info' href='#RFC3987'>[RFC3987]<span> (</span><span class='info'>Duerst, M. and M. Suignard, &ldquo;Internationalized Resource Identifiers (IRIs),&rdquo; January&nbsp;2005.</span><span>)</span></a>. Every
-      URI <a class='info' href='#RFC3986'>[RFC3986]<span> (</span><span class='info'>Berners-Lee, T., Fielding, R., and L. Masinter, &ldquo;Uniform Resource Identifier (URI): Generic Syntax,&rdquo; January&nbsp;2005.</span><span>)</span></a> is also an IRI, so a URI may be
-      used wherever below an IRI is named. 
+      URI <a class='info' href='#RFC3986'>[RFC3986]<span> (</span><span class='info'>Berners-Lee, T., Fielding, R., and L. Masinter, &ldquo;Uniform Resource Identifier (URI): Generic Syntax,&rdquo; January&nbsp;2005.</span><span>)</span></a> is also an IRI, so a URI may be used wherever an IRI is named below.
 
 
 
@@ -893,7 +892,7 @@ metalinkGenerator =
 <div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
 token          = 1*&lt;any CHAR except CTLs or separators&gt;
 separators     = "(" / ")" / "&lt;" / "&gt;" / "@"
-               / "," / ";" / ":" / "\" / &lt;"&gt;
+               / "," / ";" / ":" / "\" / DQUOTE
                / "/" / "[" / "]" / "?" / "="
                / "{" / "}" / SP / HTAB
 agent         = token ["/" agent-version]
@@ -1357,8 +1356,7 @@ Extending Metalink</h3>
 <a name="rfc.section.5.1"></a><h3>5.1.&nbsp;
 Extensions from Non-Metalink Vocabularies</h3>
 
-<p>This specification describes Metalink's XML markup
-	      vocabulary. 
+<p>This specification describes Metalink's XML vocabulary. 
 
 
 

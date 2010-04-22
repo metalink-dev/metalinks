@@ -339,7 +339,7 @@ RFC 5854          Metalink Download Description Format        April 2010
 
    Metalink allows the use of Internationalized Resource Identifiers
    (IRIs), encoded according to [RFC3987].  Every URI [RFC3986] is also
-   an IRI, so a URI may be used wherever below an IRI is named.  There
+   an IRI, so a URI may be used wherever an IRI is named below.  There
    is one special consideration: when an IRI that is not also a URI is
    given for dereferencing, it MUST be mapped to a URI using the steps
    in Section 3.1 of [RFC3987].
@@ -714,7 +714,7 @@ RFC 5854          Metalink Download Description Format        April 2010
 
    token          = 1*<any CHAR except CTLs or separators>
    separators     = "(" / ")" / "<" / ">" / "@"
-                  / "," / ";" / ":" / "\" / <">
+                  / "," / ";" / ":" / "\" / DQUOTE
                   / "/" / "[" / "]" / "?" / "="
                   / "{" / "}" / SP / HTAB
    agent         = token ["/" agent-version]
@@ -1162,9 +1162,9 @@ RFC 5854          Metalink Download Description Format        April 2010
 
 5.1.  Extensions from Non-Metalink Vocabularies
 
-   This specification describes Metalink's XML markup vocabulary.
-   Markup from other vocabularies ("foreign markup") can be used in a
-   Metalink Document.
+   This specification describes Metalink's XML vocabulary.  Markup from
+   other vocabularies ("foreign markup") can be used in a Metalink
+   Document.
 
 
 
