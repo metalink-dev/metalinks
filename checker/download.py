@@ -340,7 +340,7 @@ def get(src, path, checksums = {}, force = False, handlers = {}, segmented = SEG
     # assume metalink if ends with .metalink
 
     result = download_metalink(src, path, force, handlers, segmented, headers)
-    if not result:
+    if result:
         return result
             
     # assume normal file download here
