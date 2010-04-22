@@ -1319,20 +1319,20 @@ RFC 5854          Metalink Download Description Format        April 2010
 
    Additional information:
 
-   Magic number(s):  As specified for "application/xml" in [RFC3023],
-      Section 3.2.
+   Magic number(s):  None.
 
    File extension:  .meta4
-
-   Fragment identifiers:  As specified for "application/xml" in
-      [RFC3023], Section 5.
-
-   Base URI:  As specified in [RFC3023], Section 6.
 
    Macintosh File Type code:  TEXT
 
    Person and email address to contact for further information:
       Anthony Bryan <anthonybryan@gmail.com>
+
+   Intended usage:  COMMON
+
+   Restrictions on usage:  None.
+
+   Author:  Anthony Bryan <anthonybryan@gmail.com>
 
 
 
@@ -1345,11 +1345,7 @@ Bryan, et al.                Standards Track                   [Page 24]
 RFC 5854          Metalink Download Description Format        April 2010
 
 
-   Intended usage:  COMMON
-
-   Restrictions on usage:  None.
-
-   Author/Change controller:  IESG
+   Change controller:  IESG
 
 7.  Security Considerations
 
@@ -1393,6 +1389,10 @@ RFC 5854          Metalink Download Description Format        April 2010
    Metalink Documents with invalid signatures.
 
    Metalink Processors MUST NOT reject a Metalink Document containing
+   such a signature because they are not capable of verifying it; they
+   MUST continue processing and MAY inform the user of their failure to
+   validate the signature.
+
 
 
 
@@ -1400,10 +1400,6 @@ Bryan, et al.                Standards Track                   [Page 25]
 
 RFC 5854          Metalink Download Description Format        April 2010
 
-
-   such a signature because they are not capable of verifying it; they
-   MUST continue processing and MAY inform the user of their failure to
-   validate the signature.
 
    In other words, the presence of an element with the namespace URI
    "http://www.w3.org/2000/09/xmldsig#" and a local name of "Signature"
@@ -1449,6 +1445,10 @@ RFC 5854          Metalink Download Description Format        April 2010
    unrelated IRIs into Metalink Documents.
 
    Digital signatures address the issue of spoofing.
+
+
+
+
 
 
 
