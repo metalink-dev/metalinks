@@ -1683,12 +1683,13 @@ RFC 5854          Metalink Download Description Format        April 2010
 
    Juanita Anthony, and Zimmy Bryan.
 
-   We also thank the following contributors for assistance and review:
-   Eran Hammer-Lahav, Lisa Dusseault, Mark Nottingham, Peter Saint-
-   Andre, Julian Reschke, Chris Newman, Ian Macfarlane, Dave Cridland,
-   Barry Leiba, Uri Blumenthal, Paul Hoffman, Felix Sasaki, Matthias
-   Fuchs, Mark Baker, Scott Cantor, Brian Carpenter, Alexey Melnikov,
-   Lars Eggert, Pasi Eronen, Tim Polk, and Dan Romascanu.
+   Special thanks to Eran Hammer-Lahav, document shepherd, and Lisa
+   Dusseault, Area Director.  We also thank the following contributors
+   for assistance and review: Mark Nottingham, Peter Saint-Andre, Julian
+   Reschke, Chris Newman, Ian Macfarlane, Dave Cridland, Barry Leiba,
+   Uri Blumenthal, Paul Hoffman, Felix Sasaki, Matthias Fuchs, Mark
+   Baker, Scott Cantor, Brian Carpenter, Alexey Melnikov, Lars Eggert,
+   Pasi Eronen, Tim Polk, Dan Romascanu, and Bjoern Hoehrmann.
 
 Appendix B.  RELAX NG Compact Schema
 
@@ -1728,7 +1729,6 @@ Appendix B.  RELAX NG Compact Schema
 
    start = metalinkMetalink
 
-   metalinkMetalink =
 
 
 
@@ -1737,6 +1737,7 @@ Bryan, et al.                Standards Track                   [Page 31]
 RFC 5854          Metalink Download Description Format        April 2010
 
 
+   metalinkMetalink =
       element metalink:metalink {
          metalinkCommonAttributes,
          (metalinkFile+
@@ -1784,7 +1785,6 @@ RFC 5854          Metalink Download Description Format        April 2010
       element metalink:description {
          metalinkTextConstruct
       }
-
 
 
 
