@@ -68,13 +68,15 @@ import copy
 import socket
 import ftplib
 import httplib
-try: import GPG
-except: pass
 #import logging
 import base64
 import sys
 import gettext
 import binascii
+import random
+
+try: import GPG
+except: pass
 
 # for jython support
 #try: import bz2
@@ -82,6 +84,9 @@ import binascii
 import BaseHTTPServer
 
 try: import win32api
+except: pass
+
+try: import win32con
 except: pass
 
 USER_AGENT = "Metalink Checker/5.1 +http://www.nabber.org/projects/"
@@ -335,7 +340,7 @@ def get(src, path, checksums = {}, force = False, handlers = {}, segmented = SEG
     # assume metalink if ends with .metalink
 
     result = download_metalink(src, path, force, handlers, segmented, headers)
-    if result != False:
+    if not result:
         return result
             
     # assume normal file download here
@@ -477,6 +482,9 @@ class Manager:
                 result = self.cycle()
             
         return self.get_status()
+        
+    def cycle(self):
+        pass
          
     def get_status(self):
         return self.status
@@ -700,9 +708,9 @@ def parse_metalink(src, headers = {}, nocheck = False, ver=3):
                 try:
                     pri = mydict["pri"]
                 except KeyError: pass
-                type = ""
+                typestr = ""
                 try:
-                    type = mydict["type"]
+                    typestr = mydict["type"]
                 except KeyError: pass
                 try:
                     if mydict['rel'] == '"describedby"' and type=="application/metalink4+xml":
@@ -715,12 +723,12 @@ def parse_metalink(src, headers = {}, nocheck = False, ver=3):
                         fileobj.hashlist['pgp'] = fp.read()
                         fp.close()
                     elif mydict['rel'] == '"describedby"' or mydict['rel'] == '"duplicate"':
-                        fileobj.add_url(parts[0].strip(" <>"), type=type, priority=pri)
+                        fileobj.add_url(parts[0].strip(" <>"), type=typestr, priority=pri)
                 except KeyError: pass
             try:
                 hashes = myheaders['digest'].split(",")
-                for hash in hashes:
-                    parts = hash.split("=", 1)
+                for myhash in hashes:
+                    parts = myhash.split("=", 1)
                     if parts[0].strip() == 'sha':
                         fileobj.hashlist['sha-1'] = binascii.hexlify(binascii.a2b_base64(parts[1].strip()))
                     else:
@@ -760,7 +768,7 @@ def parse_rss(src, headers = {}):
     
 def download_rss(src, path, force = False, handlers = {}, segmented = SEGMENTED, headers = {}, nocheck = False):
     rssobj = parse_rss(src, headers)
-    if rssobj == False:
+    if not rssobj:
         return False
         
     urllist = rssobj.files
@@ -789,21 +797,21 @@ def download_metalink(src, path, force = False, handlers = {}, segmented = SEGME
     Returns list of file paths if download(s) is successful
     Returns False otherwise (checksum fails)
     '''
-    headers = headers.copy()
+    myheaders = headers.copy()
 
-    metalinkobj = parse_metalink(src, headers, nocheck)
-    if metalinkobj == False:
+    metalinkobj = parse_metalink(src, myheaders, nocheck)
+    if not metalinkobj:
         return False
         
     if is_remote(src):
-        headers['referer'] = src
+        myheaders['referer'] = src
 
     if metalinkobj.type == "dynamic":
         origin = metalinkobj.origin
         if origin != src and origin != "":
             print _("Downloading update from %s") % origin
             try:
-                return download_metalink(origin, path, force, handlers, segmented, headers)
+                return download_metalink(origin, path, force, handlers, segmented, myheaders)
             except: pass
 
     urllist = metalinkobj.files
@@ -818,7 +826,7 @@ def download_metalink(src, path, force = False, handlers = {}, segmented = SEGME
 
         if OS == None or len(ostag) == 0 or ostag[0].lower() == OS.lower():
             if "any" in LANG or len(langtag) == 0 or langtag.lower() in LANG:
-                result = download_file_node(filenode, path, force, handlers, segmented, headers)
+                result = download_file_node(filenode, path, force, handlers, segmented, myheaders)
                 if result:
                     results.append(result)
     if len(results) == 0:
@@ -1463,7 +1471,7 @@ class Segment_Manager(Manager):
         self.urls = newurls
         return newurls
             
-    def run(self):
+    def run(self, wait=0.1):
         '''
         ?
         '''
@@ -1482,7 +1490,7 @@ class Segment_Manager(Manager):
             #print "Set chunk size to %s." % self.chunk_size
         self.resume.update_block_size(self.chunk_size)
             
-        return Manager.run(self, 0.1)
+        return Manager.run(self, wait)
 
     def cycle(self):
         '''

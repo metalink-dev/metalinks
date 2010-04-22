@@ -337,7 +337,7 @@ class GPGSubprocess:
         child_stdin.close()
 
         # Get the response information
-        resp = self._read_response(child_stderr, result)
+        self._read_response(child_stderr, result)
 
         # Read the contents of the file from GPG's stdout
         result.data = ""
@@ -356,8 +356,8 @@ class GPGSubprocess:
         '''
         Verify the signature on the contents of the string 'data'
         '''
-        file = StringIO.StringIO(data)
-        return self.verify_file(file)
+        fileobj = StringIO.StringIO(data)
+        return self.verify_file(fileobj)
     
     def verify_file(self, file):
         '''
@@ -390,7 +390,7 @@ class GPGSubprocess:
 
         # Get the response information
         result = ImportResult()
-        resp = self._read_response(child_stderr, result)
+        self._read_response(child_stderr, result)
 
         return result
 
@@ -432,8 +432,8 @@ class GPGSubprocess:
 
     def encrypt(self, data, recipients):
         '''Encrypt the message contained in the string "data"'''
-        file = StringIO.StringIO(data)
-        return self.encrypt_file(file, recipients)
+        fileobj = StringIO.StringIO(data)
+        return self.encrypt_file(fileobj, recipients)
 
 
     # Not yet implemented, because I don't need these methods
@@ -552,7 +552,7 @@ def decode_header(binary_data):
             results['size'] = (ord(binary_data[0]) << 24) | (ord(binary_data[1]) << 16) | (ord(binary_data[2])) << 8 | ord(binary_data[3])
             binary_data = binary_data[4:]
         else:
-            print "not implemented, header length", length_octets
+            print "not implemented, header length", octet1
             return results
     else:
         # old format
