@@ -22,12 +22,6 @@ boilerplate as described in RFC 5741.
     <front>        
       <title abbrev="Metalink Download Description Format">The Metalink Download Description Format</title>		
       <author initials="A." surname="Bryan" fullname="Anthony Bryan">
-
-
-<!-- [rfced] A. Bryan, would you like to add an organization here?
-  Or be listed as "Consultant"? Just checking - although we note that your
-  answer was "No" regarding RFC 5843. -->
-
 	    <organization></organization>
 	    <address>
 		  <postal>
@@ -41,10 +35,6 @@ boilerplate as described in RFC 5741.
 	    </address>
       </author>
       <author initials="T." surname="Tsujikawa" fullname="Tatsuhiro Tsujikawa">
-
-<!-- [rfced] T. Tsujikawa, would you like to add an organization here?
-  Or be listed as "Consultant"? -->
-
         <organization></organization>
         <address>
           <email>tatsuhiro.t@gmail.com</email>
@@ -72,7 +62,21 @@ boilerplate as described in RFC 5741.
 	<date month="April" year="2010"/>     
 
    <!--[rfced] Please insert any keywords (beyond those that appear in
-   the title) for use on http://www.rfc-editor.org/rfcsearch.html. -->
+   the title) for use on http://www.rfc-editor.org/rfcsearch.html. 
+   
+file transfer
+mirrors
+data integrity
+hash
+xml
+http
+hypertext transfer protocol
+ftp
+file transfer protocol
+metadata
+torrent
+   
+   -->
 
       <abstract>
 	<t>This document specifies Metalink, an XML-based download description
@@ -269,8 +273,7 @@ start = metalinkMetalink</artwork>
       the sense used by XML).</t>
 	  
       <t>Metalink allows the use of Internationalized Resource Identifiers (IRIs), encoded according to <xref target="RFC3987"/>. Every
-      URI <xref target="RFC3986"/> is also an IRI, so a URI may be
-      used wherever below an IRI is named. 
+      URI <xref target="RFC3986"/> is also an IRI, so a URI may be used wherever an IRI is named below.
 
 <!--[rfced] Please rephrase to make the sentence above more clear.
 
@@ -710,7 +713,7 @@ fyi: suggest DQUOTE or %x22 instead of <">.
 	      <artwork type="ABNF">
 token          = 1*&lt;any CHAR except CTLs or separators&gt;
 separators     = "(" / ")" / "&lt;" / "&gt;" / "@"
-               / "," / ";" / ":" / "\" / &lt;"&gt;
+               / "," / ";" / ":" / "\" / DQUOTE
                / "/" / "[" / "]" / "?" / "="
                / "{" / "}" / SP / HTAB
 agent         = token ["/" agent-version]
@@ -1231,8 +1234,7 @@ metalinkVersion =
 
 	    <section title="Extensions from Non-Metalink Vocabularies">
 	    
-	      <t>This specification describes Metalink's XML markup
-	      vocabulary. 
+	      <t>This specification describes Metalink's XML vocabulary. 
 
 <!--[rfced] Is "XML markup" redundant? That is, could this be changed
 to "Metalink's XML vocabulary"?  -->
