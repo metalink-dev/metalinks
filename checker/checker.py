@@ -41,23 +41,16 @@
 #
 ########################################################################
 
-import optparse
-import urllib2
 import urlparse
 import os.path
-import random
 import sys
-import re
 import socket
-import base64
-import hashlib
 import httplib
 import ftplib
 import threading
 import time
 import binascii
 
-import metalink
 import download
 
 import locale
@@ -150,7 +143,7 @@ class Checker:
             print _("ERROR parsing XML.")
             raise
             
-        if metalinkobj == False:
+        if not metalinkobj:
             return False
         
         if metalinkobj.type == "dynamic":
@@ -171,8 +164,8 @@ class Checker:
 
         #results = {}
         for filenode in urllist:
-            size = filenode.size
-            name = filenode.filename
+            #size = filenode.size
+            #name = filenode.filename
             #print "=" * 79
             #print _("File") + ": %s " % name + _("Size") + ": %s" % size
             myheaders = {}
@@ -255,15 +248,15 @@ class Checker:
             digests = digest.split(",")
             for d in digests:
                 (name, value) = d.split("=", 2)
-                type = ""
+                typestr = ""
                 if name.lower() == "sha":
-                    type = "sha1"
+                    typestr = "sha1"
                 elif name.lower() == "md5":
-                    type = "md5"
+                    typestr = "md5"
                     
-                if type != "" and checksum == "?":
+                if typestr != "" and checksum == "?":
                     try:
-                        if binascii.hexlify(binascii.a2b_base64(value)).lower() == checksums[type].lower():
+                        if binascii.hexlify(binascii.a2b_base64(value)).lower() == checksums[typestr].lower():
                             checksum = _("OK")
                         else:
                             checksum = _("FAIL")

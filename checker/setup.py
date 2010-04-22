@@ -16,21 +16,21 @@ EMAIL = 'neil@nabber.org'
 URL = 'http://www.nabber.org/projects/'
 
 #main is first
-modules = ['console', 'metalink', 'GPG', 'download', 'checker']
-outputfile = "metalinkc.py"
+gmodules = ['console', 'metalink', 'GPG', 'download', 'checker']
+goutputfile = "metalinkc.py"
 
 readhandle = open("README.txt")
-header = readhandle.read()
+gheader = readhandle.read()
 readhandle.close()
 
 def merge(header, modules, outputfile):
-    modules.reverse()
-    modulelist = []
+    mymodules = modules
+    mymodules.reverse()
     imports = []
     redef = {}
 
-    for module in modules:
-        imports.extend(readfile(module, True, modules))
+    for module in mymodules:
+        imports.extend(readfile(module, True, mymodules))
 
         exec("import " + module)
         moduleobj = eval(module)
@@ -198,7 +198,7 @@ if sys.argv[1] == 'sdist':
       )
 
 elif sys.argv[1] == 'merge':
-    merge(header, modules, outputfile)
+    merge(gheader, gmodules, goutputfile)
 
 elif sys.argv[1] == 'translate':
     localegen()
@@ -208,7 +208,7 @@ elif sys.argv[1] == 'clean':
     clean()
 
 elif sys.argv[1] == 'py2exe':
-    merge(header, modules, outputfile)
+    merge(gheader, gmodules, goutputfile)
         
     import py2exe
 
