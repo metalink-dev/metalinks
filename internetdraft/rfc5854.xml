@@ -1415,15 +1415,9 @@ structuredExtensionElement =
 	    <t>
 	      <list style="hanging"> 
 		
-		<t hangText="Magic number(s):"> As specified for
-		"application/xml" in <xref target="RFC3023"/>, Section 3.2.</t>
+		<t hangText="Magic number(s):"> None.</t>
 
-		<t hangText="File extension:"> .meta4</t> 
-
-		<t hangText="Fragment identifiers:"> As specified for
-		"application/xml" in <xref target="RFC3023"/>, Section 5.</t>
-
-		<t hangText="Base URI:"> As specified in <xref target="RFC3023"/>, Section 6.</t> 
+		<t hangText="File extension:"> .meta4</t>
 
 		<t hangText="Macintosh File Type code:"> TEXT</t>
 
@@ -1435,8 +1429,12 @@ Anthony&nbsp;Bryan &lt;anthonybryan@gmail.com&gt;</t>
 		<t hangText="Intended usage:">
 		COMMON</t>
 		<t hangText="Restrictions on usage:">
-		None.</t> 
-		<t hangText="Author/Change controller:">IESG</t>
+		None.</t>
+		<t hangText="Author:">
+
+Anthony&nbsp;Bryan &lt;anthonybryan@gmail.com&gt;</t>
+
+		<t hangText="Change controller:">IESG</t>
 		</list></t>
         </section>
 
