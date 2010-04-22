@@ -108,9 +108,9 @@ class AutoScrollbar(Tkinter.Scrollbar):
                self.grid()
            Tkinter.Scrollbar.set(self, lo, hi)
        def pack(self, **kw):
-           raise TclError, "cannot use pack with this widget"
+           raise Tkinter.TclError, "cannot use pack with this widget"
        def place(self, **kw):
-           raise TclError, "cannot use place with this widget"
+           raise Tkinter.TclError, "cannot use place with this widget"
 
         
 class Application:
