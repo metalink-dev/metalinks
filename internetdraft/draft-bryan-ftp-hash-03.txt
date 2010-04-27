@@ -4,7 +4,7 @@
 Network Working Group                                           A. Bryan
 Internet-Draft                                                  T. Kosse
 Intended status: Experimental                                D. Stenberg
-Expires: October 20, 2010                                 April 18, 2010
+Expires: October 29, 2010                                 April 27, 2010
 
 
                 FTP Extensions for Cryptographic Hashes
@@ -37,7 +37,7 @@ Status of this Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on October 20, 2010.
+   This Internet-Draft will expire on October 29, 2010.
 
 Copyright Notice
 
@@ -52,7 +52,7 @@ Copyright Notice
 
 
 
-Bryan, et al.           Expires October 20, 2010                [Page 1]
+Bryan, et al.           Expires October 29, 2010                [Page 1]
 
 Internet-Draft   FTP Extensions for Cryptographic Hashes      April 2010
 
@@ -83,7 +83,7 @@ Table of Contents
    Appendix B.  List of Implementations with Non-standard
                 Cryptographic Hash Command  . . . . . . . . . . . . .  8
    Appendix C.  Document History  . . . . . . . . . . . . . . . . . . 10
-   Authors' Addresses . . . . . . . . . . . . . . . . . . . . . . . . 10
+   Authors' Addresses . . . . . . . . . . . . . . . . . . . . . . . . 11
 
 
 
@@ -108,7 +108,7 @@ Table of Contents
 
 
 
-Bryan, et al.           Expires October 20, 2010                [Page 2]
+Bryan, et al.           Expires October 29, 2010                [Page 2]
 
 Internet-Draft   FTP Extensions for Cryptographic Hashes      April 2010
 
@@ -164,7 +164,7 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes      April 2010
 
 
 
-Bryan, et al.           Expires October 20, 2010                [Page 3]
+Bryan, et al.           Expires October 29, 2010                [Page 3]
 
 Internet-Draft   FTP Extensions for Cryptographic Hashes      April 2010
 
@@ -220,7 +220,7 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes      April 2010
 
 
 
-Bryan, et al.           Expires October 20, 2010                [Page 4]
+Bryan, et al.           Expires October 29, 2010                [Page 4]
 
 Internet-Draft   FTP Extensions for Cryptographic Hashes      April 2010
 
@@ -276,7 +276,7 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes      April 2010
 
 
 
-Bryan, et al.           Expires October 20, 2010                [Page 5]
+Bryan, et al.           Expires October 29, 2010                [Page 5]
 
 Internet-Draft   FTP Extensions for Cryptographic Hashes      April 2010
 
@@ -332,7 +332,7 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes      April 2010
 
 
 
-Bryan, et al.           Expires October 20, 2010                [Page 6]
+Bryan, et al.           Expires October 29, 2010                [Page 6]
 
 Internet-Draft   FTP Extensions for Cryptographic Hashes      April 2010
 
@@ -388,7 +388,7 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes      April 2010
 
 
 
-Bryan, et al.           Expires October 20, 2010                [Page 7]
+Bryan, et al.           Expires October 29, 2010                [Page 7]
 
 Internet-Draft   FTP Extensions for Cryptographic Hashes      April 2010
 
@@ -408,8 +408,8 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes      April 2010
 
 Appendix A.  Acknowledgements and Contributors
 
-   Thanks to John C. Klensin, Alfred Hoenes, James Twine, and Robert
-   McMurray.
+   Thanks to John C. Klensin, Alfred Hoenes, James Twine, Robert
+   McMurray, and Mathias Berchtold.
 
 
 Appendix B.  List of Implementations with Non-standard Cryptographic
@@ -422,8 +422,8 @@ Appendix B.  List of Implementations with Non-standard Cryptographic
 
    An incomplete list of FTP clients and servers that have implemented
    multiple commands (XCRC, MD5/MMD5, XMD5, XSHA, XSHA1, XSHA256,
-   XSHA512, SITE SHOHASH, SITE CHECKSUM, etc) that are not formally
-   specified, leading to non-interoperability and confusion.
+   XSHA512, SITE SHOHASH, SITE CHECKSUM, CKSM, etc) that are not
+   formally specified, leading to non-interoperability and confusion.
 
    o  Akamai NetStorage (supports SITE CHKHSH/SITE SHOHASH) p17-18
       http://pigdogslow.dyndns.org/NetStorage_UserGuide.pdf
@@ -444,7 +444,7 @@ Appendix B.  List of Implementations with Non-standard Cryptographic
 
 
 
-Bryan, et al.           Expires October 20, 2010                [Page 8]
+Bryan, et al.           Expires October 29, 2010                [Page 8]
 
 Internet-Draft   FTP Extensions for Cryptographic Hashes      April 2010
 
@@ -464,7 +464,11 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes      April 2010
       http://www.g6ftpserver.com/en/information#features
    o  GlobalSCAPE's Secure FTP Server / EFT Server / CuteFTP clients
       (supports XCRC)
+   o  Globus FTP client / Globus Toolkit(supports CKSM) http://
+      www.globus.org/toolkit/releasenotes/3.2.0/gridftp_notes.html
    o  GoldenGate FTP (Ftp Full Java Server) (supports XCRC, XMD5, XSHA1)
+   o  GridFTP v2 Protocol Description (supports CKSM)
+      http://www.ogf.org/documents/GFD.47.pdf
    o  IceWarp FTP Server http://www.icewarp.com/products/ftp_server/
    o  ICS FTP client (supports XCRC, XMD5)
       http://www.magsys.co.uk/delphi/magics.asp
@@ -492,22 +496,21 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes      April 2010
    o  RaidenFTPD32 FTP server (supports XCRC, XMD5)
    o  Robo-FTP Server (supports XCRC, XMD5, XSHA1)
       http://kb.robo-ftp.com/change_log/show/61
-   o  SyncBackPro and SyncBackSE (supports XCRC)
-      http://www.2brightsparks.com/syncback/sbpro-changes.html
-   o  Secure FTP Factory (supports XCRC)
 
 
 
 
-
-Bryan, et al.           Expires October 20, 2010                [Page 9]
+Bryan, et al.           Expires October 29, 2010                [Page 9]
 
 Internet-Draft   FTP Extensions for Cryptographic Hashes      April 2010
 
 
+   o  SyncBackPro and SyncBackSE (supports XCRC)
+      http://www.2brightsparks.com/syncback/sbpro-changes.html
+   o  Secure FTP Factory (supports XCRC)
    o  Serv-U FTP Server (supports XCRC) http://www.serv-u.com/help/
       serv_u_help/additional_ftp_commands_supported_by_serv_u.htm
-   o  SmartFTP client (supports XCRC, XMD5, XSHA)
+   o  SmartFTP client (supports XCRC, XMD5, XSHA, CKSM)
       http://www.smartftp.com/features/
    o  Starksoft Ftp Component for .NET / Mono (supports XCRC, XMD5,
       XSHA1) http://www.starksoft.com/prod_ftp.html
@@ -548,17 +551,17 @@ Appendix C.  Document History
       only supported one hash, MD5).
 
    -00 : October 19, 2009.
-   o  Initial draft.
 
 
 
 
 
-
-
-Bryan, et al.           Expires October 20, 2010               [Page 10]
+Bryan, et al.           Expires October 29, 2010               [Page 10]
 
 Internet-Draft   FTP Extensions for Cryptographic Hashes      April 2010
+
+
+   o  Initial draft.
 
 
 Authors' Addresses
@@ -609,8 +612,5 @@ Authors' Addresses
 
 
 
-
-
-
-Bryan, et al.           Expires October 20, 2010               [Page 11]
+Bryan, et al.           Expires October 29, 2010               [Page 11]
 

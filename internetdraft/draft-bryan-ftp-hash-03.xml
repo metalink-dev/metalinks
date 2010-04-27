@@ -388,13 +388,13 @@ and a substituted malicious file could match.</t>
 	    </references> 
 
 	    <section title="Acknowledgements and Contributors">
-		  <t>Thanks to John C. Klensin, Alfred Hoenes, James Twine, and Robert McMurray.</t>
+		  <t>Thanks to John C. Klensin, Alfred Hoenes, James Twine, Robert McMurray, and Mathias Berchtold.</t>
     </section>
 
 	    <section title="List of Implementations with Non-standard Cryptographic Hash Command">
 		<t>[[ to be removed by the RFC editor before publication as an RFC. ]]</t>
 <t>At least one previous Internet Draft <xref target="draft-twine-ftpmd5"/>	 attempted to address this issue (it only supported one hash, MD5).</t>
-<t>An incomplete list of FTP clients and servers that have implemented multiple commands (XCRC, MD5/MMD5, XMD5, XSHA, XSHA1, XSHA256, XSHA512, SITE SHOHASH, SITE CHECKSUM, etc) that are not formally specified, leading to non-interoperability and confusion.</t>
+<t>An incomplete list of FTP clients and servers that have implemented multiple commands (XCRC, MD5/MMD5, XMD5, XSHA, XSHA1, XSHA256, XSHA512, SITE SHOHASH, SITE CHECKSUM, CKSM, etc) that are not formally specified, leading to non-interoperability and confusion.</t>
 	    <t>
 	    <list style="symbols">
 
@@ -414,7 +414,9 @@ and a substituted malicious file could match.</t>
 <t>FTP Voyager (supports XCRC) http://www.ftpvoyager.com/XCRC.asp</t>
 <t>Gene6 FTP Server http://www.g6ftpserver.com/en/information#features</t>
 <t>GlobalSCAPE's Secure FTP Server / EFT Server / CuteFTP clients (supports XCRC)</t>
+<t>Globus FTP client / Globus Toolkit(supports CKSM) http://www.globus.org/toolkit/releasenotes/3.2.0/gridftp_notes.html</t>
 <t>GoldenGate FTP (Ftp Full Java Server) (supports XCRC, XMD5, XSHA1)</t>
+<t>GridFTP v2 Protocol Description (supports CKSM) http://www.ogf.org/documents/GFD.47.pdf</t>
 <t>IceWarp FTP Server http://www.icewarp.com/products/ftp_server/</t>
 <t>ICS FTP client (supports XCRC, XMD5) http://www.magsys.co.uk/delphi/magics.asp</t>
 <t>ioFTPD (supports XCRC)</t>
@@ -433,7 +435,7 @@ and a substituted malicious file could match.</t>
 <t>SyncBackPro and SyncBackSE (supports XCRC) http://www.2brightsparks.com/syncback/sbpro-changes.html</t>
 <t>Secure FTP Factory (supports XCRC)</t>
 <t>Serv-U FTP Server (supports XCRC) http://www.serv-u.com/help/serv_u_help/additional_ftp_commands_supported_by_serv_u.htm</t>
-<t>SmartFTP client (supports XCRC, XMD5, XSHA) http://www.smartftp.com/features/</t>
+<t>SmartFTP client (supports XCRC, XMD5, XSHA, CKSM) http://www.smartftp.com/features/</t>
 <t>Starksoft Ftp Component for .NET / Mono (supports XCRC, XMD5, XSHA1) http://www.starksoft.com/prod_ftp.html</t>
 <t>Titan FTP Server (supports XCRC)</t>
 <t>Turbo FTP (supports XCRC)</t>
