@@ -4,9 +4,7 @@
 Network Working Group                                           A. Bryan
 Request for Comments: 5854                                  T. Tsujikawa
 Category: Standards Track                                       N. McNab
-
                                                                 P. Poeml
-                                                            Novell, Inc.
                                                               April 2010
 
 
@@ -49,6 +47,8 @@ Table of Contents
      1.2.  Namespace and Version  . . . . . . . . . . . . . . . . . .  5
      1.3.  Notational Conventions . . . . . . . . . . . . . . . . . .  6
    2.  Metalink Documents . . . . . . . . . . . . . . . . . . . . . .  6
+   3.  Common Metalink Constructs . . . . . . . . . . . . . . . . . .  7
+     3.1.  Text Constructs  . . . . . . . . . . . . . . . . . . . . .  7
 
 
 
@@ -57,8 +57,6 @@ Bryan, et al.                Standards Track                    [Page 1]
 RFC 5854          Metalink Download Description Format        April 2010
 
 
-   3.  Common Metalink Constructs . . . . . . . . . . . . . . . . . .  7
-     3.1.  Text Constructs  . . . . . . . . . . . . . . . . . . . . .  7
      3.2.  Date Constructs  . . . . . . . . . . . . . . . . . . . . .  8
    4.  Metalink Element Definitions . . . . . . . . . . . . . . . . .  9
      4.1.  Container Elements . . . . . . . . . . . . . . . . . . . .  9
@@ -104,6 +102,8 @@ RFC 5854          Metalink Download Description Format        April 2010
    Appendix A.  Acknowledgements and Contributors . . . . . . . . . . 30
    Appendix B.  RELAX NG Compact Schema . . . . . . . . . . . . . . . 31
    Index  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 36
+
+
 
 
 
@@ -1691,6 +1691,10 @@ RFC 5854          Metalink Download Description Format        April 2010
    Baker, Scott Cantor, Brian Carpenter, Alexey Melnikov, Lars Eggert,
    Pasi Eronen, Tim Polk, Dan Romascanu, and Bjoern Hoehrmann.
 
+   Peter Poeml wishes to acknowledge the support of SUSE Linux Products
+   GmbH / Novell Inc., where he was employed during much of the work on
+   this document.
+
 Appendix B.  RELAX NG Compact Schema
 
    This appendix is informative.
@@ -1725,10 +1729,6 @@ Appendix B.  RELAX NG Compact Schema
 
    metalinkDateConstruct =
       metalinkCommonAttributes,
-      xsd:dateTime
-
-   start = metalinkMetalink
-
 
 
 
@@ -1736,6 +1736,10 @@ Bryan, et al.                Standards Track                   [Page 31]
 
 RFC 5854          Metalink Download Description Format        April 2010
 
+
+      xsd:dateTime
+
+   start = metalinkMetalink
 
    metalinkMetalink =
       element metalink:metalink {
@@ -1781,10 +1785,6 @@ RFC 5854          Metalink Download Description Format        April 2010
          metalinkTextConstruct
       }
 
-   metalinkDescription =
-      element metalink:description {
-         metalinkTextConstruct
-      }
 
 
 
@@ -1792,6 +1792,11 @@ Bryan, et al.                Standards Track                   [Page 32]
 
 RFC 5854          Metalink Download Description Format        April 2010
 
+
+   metalinkDescription =
+      element metalink:description {
+         metalinkTextConstruct
+      }
 
    metalinkGenerator =
       element metalink:generator {
@@ -1837,17 +1842,17 @@ RFC 5854          Metalink Download Description Format        April 2010
          (metalinkUri)
       }
 
-   metalinkOS =
-      element metalink:os {
-         metalinkTextConstruct
-      }
-
 
 
 Bryan, et al.                Standards Track                   [Page 33]
 
 RFC 5854          Metalink Download Description Format        April 2010
 
+
+   metalinkOS =
+      element metalink:os {
+         metalinkTextConstruct
+      }
 
    metalinkPublished =
       element metalink:published {
@@ -1893,17 +1898,17 @@ RFC 5854          Metalink Download Description Format        April 2010
          metalinkTextConstruct
       }
 
-   # As defined in RFC 3066 and compatible with RFC 5646
-   metalinkLanguageTag = xsd:string {
-      pattern = "[A-Za-z]{1,8}(-[A-Za-z0-9]{1,8})*"
-   }
-
 
 
 Bryan, et al.                Standards Track                   [Page 34]
 
 RFC 5854          Metalink Download Description Format        April 2010
 
+
+   # As defined in RFC 3066 and compatible with RFC 5646
+   metalinkLanguageTag = xsd:string {
+      pattern = "[A-Za-z]{1,8}(-[A-Za-z0-9]{1,8})*"
+   }
 
    # Unconstrained; it's not entirely clear how IRI fit into
    # xsd:anyURI so let's not try to constrain it here
@@ -1948,11 +1953,6 @@ RFC 5854          Metalink Download Description Format        April 2010
          (attribute * { text }
           | text
           | anyElement)*
-   }
-
-   # EOF
-
-
 
 
 
@@ -1960,6 +1960,10 @@ Bryan, et al.                Standards Track                   [Page 35]
 
 RFC 5854          Metalink Download Description Format        April 2010
 
+
+   }
+
+   # EOF
 
 Index
 
@@ -2005,10 +2009,6 @@ Index
          metalinkUpdated  20
          metalinkURL  21
          metalinkVersion  21
-         simpleExtensionElement  22
-         structuredExtensionElement  23
-
-   H
 
 
 
@@ -2017,6 +2017,10 @@ Bryan, et al.                Standards Track                   [Page 36]
 RFC 5854          Metalink Download Description Format        April 2010
 
 
+         simpleExtensionElement  22
+         structuredExtensionElement  23
+
+   H
       hash XML element  14
 
    I
@@ -2061,10 +2065,6 @@ RFC 5854          Metalink Download Description Format        April 2010
       origin XML element  17
       os XML element  18
 
-   P
-      pieces XML element  12
-      published XML element  18
-      publisher XML element  18
 
 
 
@@ -2072,6 +2072,11 @@ Bryan, et al.                Standards Track                   [Page 37]
 
 RFC 5854          Metalink Download Description Format        April 2010
 
+
+   P
+      pieces XML element  12
+      published XML element  18
+      publisher XML element  18
 
    S
       signature mediatype ABNF  20
@@ -2110,14 +2115,9 @@ RFC 5854          Metalink Download Description Format        April 2010
          url  20
          version  21
 
-Authors' Addresses
 
-   Anthony Bryan
-   Pompano Beach, FL
-   USA
 
-   EMail: anthonybryan@gmail.com
-   URI:   http://www.metalinker.org
+
 
 
 
@@ -2127,6 +2127,16 @@ Authors' Addresses
 Bryan, et al.                Standards Track                   [Page 38]
 
 RFC 5854          Metalink Download Description Format        April 2010
+
+
+Authors' Addresses
+
+   Anthony Bryan
+   Pompano Beach, FL
+   USA
+
+   EMail: anthonybryan@gmail.com
+   URI:   http://www.metalinker.org
 
 
    Tatsuhiro Tsujikawa
@@ -2142,19 +2152,9 @@ RFC 5854          Metalink Download Description Format        April 2010
 
 
    Peter Poeml
-   Novell, Inc.
 
    EMail: poeml@mirrorbrain.org
    URI:   http://www.mirrorbrain.org/
-
-
-
-
-
-
-
-
-
 
 
 

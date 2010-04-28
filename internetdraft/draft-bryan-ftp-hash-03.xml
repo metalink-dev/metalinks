@@ -127,7 +127,7 @@ HTTP has a similar feature named Instance Digests <xref target="RFC3230"/> which
 
 <section title="HASH Command Errors">
 
-<t>The standard negative error codes 500 and 501 are sufficient to handle errors involving the HASH command (e.g., syntax errors). Response code 550 is used if the file can not be found. Response code 552 is used if the user isn't allowed to use the HASH command.
+<t>The standard negative error codes 500 and 501 are sufficient to handle errors involving the HASH command (e.g., syntax errors). Response code 501 is used if an unknown or unsupported algorithm has been requested. Response code 550 is used if the file can not be found. Response code 552 is used if the user is not allowed to use the HASH command.
 Response code 450 is used to indicate the server is busy, e.g. already hashing other files yet inviting the client to retry in future.</t>
 
 
@@ -399,7 +399,7 @@ and a substituted malicious file could match.</t>
 	    <list style="symbols">
 
 <t>Akamai NetStorage (supports SITE CHKHSH/SITE SHOHASH) p17-18 http://pigdogslow.dyndns.org/NetStorage_UserGuide.pdf</t>
-<t>Apache Ftp Server (supports MD5, MMD5 from draft-twine-ftpmd5) http://cwiki.apache.org/FTPSERVER/documentation.html</t>
+<t>Apache Ftp Server (supports MD5/MMD5 from draft-twine-ftpmd5) http://cwiki.apache.org/FTPSERVER/documentation.html</t>
 <t>Backup4all Pro (supports XCRC)</t>
 <t>Backup to FTP (supports XCRC)</t>
 <t>BlackMoon FTP Server (supports XCRC) http://www.blackmoonftpserver.com/portal/readmore/features.html</t>
@@ -407,7 +407,7 @@ and a substituted malicious file could match.</t>
 <t>Cerberus FTP server (supports XCRC, XMD5, XSHA1, XSHA256, XSHA512) http://www.softpedia.com/progChangelog/Cerberus-FTP-Server-Changelog-1904.html</t>
 <t>Core FTP Pro (supports XCRC)</t>
 <t>Cross FTP Server (supports MD5/MMD5)</t>
-<t>FileCOPA FTP Server (supports XMD5, XSHA1, XCRC) http://www.filecopa-ftpserver.com/features.html</t>
+<t>FileCOPA FTP Server (supports XCRC, XMD5, XSHA1) http://www.filecopa-ftpserver.com/features.html</t>
 <t>File Watchdogs FTP Server (supports XCRC, XMD5, XSHA1, XSHA256, XSHA512) http://www.filewatchdogs.com/ftpsitehosting/help/15559.htm</t>
 <t>FireFTP (supports XMD5, XSHA1) http://fireftp.mozdev.org/features.html</t>
 <t>FTP Daemon (supports SITE CHECKMETHOD/SITE CHECKSUM) http://www.pro-bono-publico.de/projects/ftpd.html</t>
@@ -464,7 +464,14 @@ and a substituted malicious file could match.</t>
 
 	    </list></t>
 
-<t>-02 : April , 2010.
+<t>-03 : April , 2010.
+	    
+	    <list style="symbols">
+
+          <t>Not much.</t>
+	    </list></t>
+
+<t>-02 : April 16, 2010.
 	    
 	    <list style="symbols">
 
