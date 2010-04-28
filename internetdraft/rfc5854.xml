@@ -53,7 +53,7 @@ boilerplate as described in RFC 5741.
         </address>
       </author>
       <author initials="P." surname="Poeml" fullname="Peter Poeml">
-        <organization>Novell, Inc.</organization>
+        <organization></organization>
         <address>
           <email>poeml@mirrorbrain.org</email>
           <uri>http://www.mirrorbrain.org/</uri>
@@ -2022,6 +2022,10 @@ Anthony&nbsp;Bryan &lt;anthonybryan@gmail.com&gt;</t>
 		  
 		  <t>Special thanks to Eran Hammer-Lahav, document shepherd, and Lisa Dusseault, Area Director. We also thank the following contributors for assistance and review: Mark Nottingham, Peter Saint-Andre, Julian Reschke, Chris Newman,
 		  Ian Macfarlane, Dave Cridland, Barry Leiba, Uri Blumenthal, Paul Hoffman, Felix Sasaki, Matthias Fuchs, Mark Baker, Scott Cantor, Brian Carpenter, Alexey Melnikov, Lars Eggert, Pasi Eronen, Tim Polk, Dan Romascanu, and Bjoern Hoehrmann.</t>
+
+          <t>Peter Poeml wishes to acknowledge the support of SUSE Linux
+          Products GmbH / Novell Inc., where he was employed during
+          much of the work on this document.</t>
 		  
 
 	    </section> 
