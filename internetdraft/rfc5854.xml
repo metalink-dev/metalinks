@@ -52,11 +52,18 @@ boilerplate as described in RFC 5741.
           <uri>http://www.nabber.org</uri>
         </address>
       </author>
-      <author initials="P." surname="Poeml" fullname="Peter Poeml">
-        <organization></organization>
+      <author initials="P." surname="Poeml" fullname="Dr. med. Peter Poeml">
+        <organization>MirrorBrain</organization>
         <address>
-          <email>poeml@mirrorbrain.org</email>
-          <uri>http://www.mirrorbrain.org/</uri>
+          <postal>
+            <street>Venloer Str. 317</street>
+            <city>Koeln</city>
+            <code>50823</code>
+            <country>DE</country>
+          </postal>
+          <phone>+49 221 6778 333 8</phone>
+          <email>peter@poeml.de</email>
+          <uri>http://mirrorbrain.org/~poeml/</uri>
         </address>
       </author>
 	<date month="April" year="2010"/>     
