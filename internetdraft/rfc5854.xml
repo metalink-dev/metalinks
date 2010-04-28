@@ -1043,13 +1043,16 @@ metalinkPublisher =
      attribute url { metalinkUri }?
    }</artwork></figure></t>
 
+	  <section title="The &quot;name&quot; Attribute"> 
 	  <t>The <xref target="element.publisher" format="none">metalink:publisher</xref> element MUST have a "name" attribute that
 	  indicates the human-readable name of the publisher.</t>
+	  </section>
 
-
+	  <section title="The &quot;url&quot; Attribute"> 
       <t>The <xref target="element.publisher" format="none">metalink:publisher</xref> element MAY have a "url" attribute
 	  whose value MUST be an IRI reference <xref target="RFC3987"/>.</t>
- 
+      </section>
+	  
 	</section> 
 
 	<section anchor="element.signature" title="The &quot;metalink:signature&quot; Element">
