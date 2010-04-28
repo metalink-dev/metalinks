@@ -244,10 +244,10 @@ users who would already be able to download the file.</t>
 
 <t>Currently, some of the hash types defined in the IANA registry named
 "Hash Function Textual Names" are considered insecure.  These include
-the whole Message Digest family of algorithms which are not suitable
+the whole Message Digest family of algorithms that are not suitable
 for cryptographically strong verification.  Malicious people could
 provide files that appear to be identical to another file because of
-a collision, i.e. the weak cryptographic hashes of the intended file
+a collision, i.e., the weak cryptographic hashes of the intended file
 and a substituted malicious file could match.</t>
 		
 	  </section>
