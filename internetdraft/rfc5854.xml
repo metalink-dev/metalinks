@@ -70,20 +70,20 @@ boilerplate as described in RFC 5741.
 
    <!--[rfced] Please insert any keywords (beyond those that appear in
    the title) for use on http://www.rfc-editor.org/rfcsearch.html. 
-   
-file transfer
-mirrors
-data integrity
-hash
-xml
-http
-hypertext transfer protocol
-ftp
-file transfer protocol
-metadata
-torrent
-   
    -->
+   
+      <keyword>file transfer</keyword>
+      <keyword>mirrors</keyword>
+      <keyword>data integrity</keyword>
+      <keyword>hash</keyword>
+      <keyword>xml</keyword>
+      <keyword>http</keyword>
+      <keyword>hypertext transfer protocol</keyword>
+      <keyword>ftp</keyword>
+      <keyword>file transfer protocol</keyword>
+      <keyword>metadata</keyword>
+      <keyword>torrent</keyword>
+   
 
       <abstract>
 	<t>This document specifies Metalink, an XML-based download description
