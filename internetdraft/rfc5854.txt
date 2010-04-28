@@ -84,7 +84,7 @@ RFC 5854          Metalink Download Description Format        April 2010
        4.2.16. The "metalink:url" Element . . . . . . . . . . . . . . 20
        4.2.17. The "metalink:version" Element . . . . . . . . . . . . 21
    5.  Extending Metalink . . . . . . . . . . . . . . . . . . . . . . 21
-     5.1.  Extensions from Non-Metalink Vocabularies  . . . . . . . . 21
+     5.1.  Extensions from Non-Metalink Vocabularies  . . . . . . . . 22
      5.2.  Extensions to the Metalink Vocabulary  . . . . . . . . . . 22
      5.3.  Processing Foreign Markup  . . . . . . . . . . . . . . . . 22
      5.4.  Extension Elements . . . . . . . . . . . . . . . . . . . . 22
@@ -92,7 +92,7 @@ RFC 5854          Metalink Download Description Format        April 2010
        5.4.2.  Structured Extension Elements  . . . . . . . . . . . . 23
    6.  IANA Considerations  . . . . . . . . . . . . . . . . . . . . . 23
      6.1.  XML Namespace Registration . . . . . . . . . . . . . . . . 23
-     6.2.  application/metalink4+xml MIME type  . . . . . . . . . . . 23
+     6.2.  application/metalink4+xml MIME type  . . . . . . . . . . . 24
    7.  Security Considerations  . . . . . . . . . . . . . . . . . . . 25
      7.1.  Digital Signatures . . . . . . . . . . . . . . . . . . . . 25
      7.2.  URIs and IRIs  . . . . . . . . . . . . . . . . . . . . . . 26
@@ -1016,8 +1016,12 @@ RFC 5854          Metalink Download Description Format        April 2010
         attribute url { metalinkUri }?
       }
 
+4.2.12.1.  The "name" Attribute
+
    The metalink:publisher element MUST have a "name" attribute that
    indicates the human-readable name of the publisher.
+
+4.2.12.2.  The "url" Attribute
 
    The metalink:publisher element MAY have a "url" attribute whose value
    MUST be an IRI reference [RFC3987].
@@ -1052,11 +1056,7 @@ RFC 5854          Metalink Download Description Format        April 2010
    -----END PGP SIGNATURE-----
    </signature>
 
-4.2.13.1.  The "mediatype" Attribute
 
-   metalink:signature elements MUST have a "mediatype" attribute that
-   indicates the MIME media type [RFC4288] of the included digital
-   signature.
 
 
 
@@ -1064,6 +1064,12 @@ Bryan, et al.                Standards Track                   [Page 19]
 
 RFC 5854          Metalink Download Description Format        April 2010
 
+
+4.2.13.1.  The "mediatype" Attribute
+
+   metalink:signature elements MUST have a "mediatype" attribute that
+   indicates the MIME media type [RFC4288] of the included digital
+   signature.
 
    Values for this attribute are defined below in ABNF notation
    [RFC5234].
@@ -1107,12 +1113,6 @@ RFC 5854          Metalink Download Description Format        April 2010
    container elements will contain multiple metalink:url elements, and
    each one SHOULD be a valid alternative to download the same file.
 
-   The metalink:url elements SHOULD be resolvable and, if resolvable,
-   SHOULD lead to identical files.
-
-   Metalink Processors MUST filter out invalid files obtained from
-   "metalink:url" elements by using information in the metalink:size
-   element and metalink:hash elements.
 
 
 
@@ -1120,6 +1120,13 @@ Bryan, et al.                Standards Track                   [Page 20]
 
 RFC 5854          Metalink Download Description Format        April 2010
 
+
+   The metalink:url elements SHOULD be resolvable and, if resolvable,
+   SHOULD lead to identical files.
+
+   Metalink Processors MUST filter out invalid files obtained from
+   "metalink:url" elements by using information in the metalink:size
+   element and metalink:hash elements.
 
    metalinkURL =
       element metalink:url {
@@ -1160,13 +1167,6 @@ RFC 5854          Metalink Download Description Format        April 2010
 
 5.  Extending Metalink
 
-5.1.  Extensions from Non-Metalink Vocabularies
-
-   This specification describes Metalink's XML vocabulary.  Markup from
-   other vocabularies ("foreign markup") can be used in a Metalink
-   Document.
-
-
 
 
 
@@ -1176,6 +1176,12 @@ Bryan, et al.                Standards Track                   [Page 21]
 
 RFC 5854          Metalink Download Description Format        April 2010
 
+
+5.1.  Extensions from Non-Metalink Vocabularies
+
+   This specification describes Metalink's XML vocabulary.  Markup from
+   other vocabularies ("foreign markup") can be used in a Metalink
+   Document.
 
 5.2.  Extensions to the Metalink Vocabulary
 
@@ -1219,12 +1225,6 @@ RFC 5854          Metalink Download Description Format        April 2010
    simpleExtensionElement =
       element * - metalink:* {
          text
-      }
-
-   The element can be interpreted as a simple property (or name/value
-   pair) of the parent element that encloses it.  The pair consisting of
-   the namespace URI of the element and the local name of the element
-   can be interpreted as the name of the property.  The character data
 
 
 
@@ -1233,6 +1233,12 @@ Bryan, et al.                Standards Track                   [Page 22]
 RFC 5854          Metalink Download Description Format        April 2010
 
 
+      }
+
+   The element can be interpreted as a simple property (or name/value
+   pair) of the parent element that encloses it.  The pair consisting of
+   the namespace URI of the element and the local name of the element
+   can be interpreted as the name of the property.  The character data
    content of the element can be interpreted as the value of the
    property.  If the element is empty, then the property value can be
    interpreted as an empty string.
@@ -1276,18 +1282,17 @@ RFC 5854          Metalink Download Description Format        April 2010
 
    XML: None.  Namespace URIs do not represent an XML specification.
 
-6.2.  application/metalink4+xml MIME type
-
-   A Metalink Document, when serialized as XML 1.0, can be identified
-   with the following media type:
-
-
 
 
 Bryan, et al.                Standards Track                   [Page 23]
 
 RFC 5854          Metalink Download Description Format        April 2010
 
+
+6.2.  application/metalink4+xml MIME type
+
+   A Metalink Document, when serialized as XML 1.0, can be identified
+   with the following media type:
 
    Type name:  application
 
@@ -1330,11 +1335,6 @@ RFC 5854          Metalink Download Description Format        April 2010
 
    Intended usage:  COMMON
 
-   Restrictions on usage:  None.
-
-   Author:  Anthony Bryan <anthonybryan@gmail.com>
-
-
 
 
 
@@ -1344,6 +1344,10 @@ Bryan, et al.                Standards Track                   [Page 24]
 
 RFC 5854          Metalink Download Description Format        April 2010
 
+
+   Restrictions on usage:  None.
+
+   Author:  Anthony Bryan <anthonybryan@gmail.com>
 
    Change controller:  IESG
 
@@ -1389,10 +1393,6 @@ RFC 5854          Metalink Download Description Format        April 2010
    Metalink Documents with invalid signatures.
 
    Metalink Processors MUST NOT reject a Metalink Document containing
-   such a signature because they are not capable of verifying it; they
-   MUST continue processing and MAY inform the user of their failure to
-   validate the signature.
-
 
 
 
@@ -1400,6 +1400,10 @@ Bryan, et al.                Standards Track                   [Page 25]
 
 RFC 5854          Metalink Download Description Format        April 2010
 
+
+   such a signature because they are not capable of verifying it; they
+   MUST continue processing and MAY inform the user of their failure to
+   validate the signature.
 
    In other words, the presence of an element with the namespace URI
    "http://www.w3.org/2000/09/xmldsig#" and a local name of "Signature"
@@ -1445,10 +1449,6 @@ RFC 5854          Metalink Download Description Format        April 2010
    unrelated IRIs into Metalink Documents.
 
    Digital signatures address the issue of spoofing.
-
-
-
-
 
 
 
@@ -1972,7 +1972,7 @@ Index
          metalinkGenerator  13
          metaurl mediatype  17
          signature mediatype  20
-      application/metalink4+xml Media Type  23
+      application/metalink4+xml Media Type  24
 
    C
       copyright XML element  13
@@ -2032,7 +2032,7 @@ RFC 5854          Metalink Download Description Format        April 2010
 
    M
       Media Type
-         application/metalink4+xml  23
+         application/metalink4+xml  24
       metalink XML element  9
       metalinkCommonAttributes grammar production  7
       metalinkCopyright grammar production  13
