@@ -2,6 +2,7 @@
 <html lang="en"><head><title>The Metalink Download Description Format</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="The Metalink Download Description Format">
+<meta name="keywords" content="file transfer, mirrors, data integrity, hash, xml, http, hypertext transfer protocol, ftp, file transfer protocol, metadata, torrent">
 <meta name="generator" content="xml2rfc v1.35 (http://xml.resource.org/)">
 <style type='text/css'><!--
         body {
@@ -152,7 +153,9 @@
 <tr><td class="header">Network Working Group</td><td class="header">A. Bryan</td></tr>
 <tr><td class="header">Request for Comments: 5854</td><td class="header">T. Tsujikawa</td></tr>
 <tr><td class="header">Category: Standards Track</td><td class="header">N. McNab</td></tr>
+<tr><td class="header">&nbsp;</td><td class="header">&nbsp;</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">P. Poeml</td></tr>
+<tr><td class="header">&nbsp;</td><td class="header">MirrorBrain</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">April 2010</td></tr>
 </table></td></tr></table>
 <h1><br />The Metalink Download Description Format</h1>
@@ -697,7 +700,7 @@ The &quot;metalink:file&quot; Element</h3>
 </p>
 <p>All <a class='info' href='#element.url'>metalink:url<span> (</span><span class='info'>The &quot;metalink:url&quot; Element</span><span>)</span></a> elements contained in each <a class='info' href='#element.file'>metalink:file<span> (</span><span class='info'>The &quot;metalink:file&quot; Element</span><span>)</span></a> element SHOULD lead to identical files. That is,
 	  each <a class='info' href='#element.url'>metalink:url<span> (</span><span class='info'>The &quot;metalink:url&quot; Element</span><span>)</span></a> element should be an alternative location for the same file and each 
-	  <a class='info' href='#element.metaurl'>metalink:metaurl<span> (</span><span class='info'>The &quot;metalink:metaurl&quot; Element</span><span>)</span></a> element should provide metadata to retrieve the same file in another way, such as a Peer-to-Peer network. Refer to Sections <a class='info' href='#element.url'>4.2.16<span> (</span><span class='info'>The &quot;metalink:url&quot; Element</span><span>)</span></a> and <a class='info' href='#element.metaurl'>4.2.8<span> (</span><span class='info'>The &quot;metalink:metaurl&quot; Element</span><span>)</span></a> for more information.
+	  <a class='info' href='#element.metaurl'>metalink:metaurl<span> (</span><span class='info'>The &quot;metalink:metaurl&quot; Element</span><span>)</span></a> element should provide metadata to retrieve the same file in another way, such as a Peer-to-Peer network. Refer to Sections <a class='info' href='#element.metaurl'>4.2.8<span> (</span><span class='info'>The &quot;metalink:metaurl&quot; Element</span><span>)</span></a> and <a class='info' href='#element.url'>4.2.16<span> (</span><span class='info'>The &quot;metalink:url&quot; Element</span><span>)</span></a> for more information.
 
 	    <a name='anchor40'></a><a name='anchor41'></a></p>
 <div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
@@ -2170,10 +2173,20 @@ anyForeignElement =
 <td class="author-text"><a href="http://www.nabber.org">http://www.nabber.org</a></td></tr>
 <tr cellpadding="3"><td>&nbsp;</td><td>&nbsp;</td></tr>
 <tr><td class="author-text">&nbsp;</td>
-<td class="author-text">Peter Poeml</td></tr>
+<td class="author-text">Dr. med. Peter Poeml</td></tr>
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text">MirrorBrain</td></tr>
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text">Venloer Str. 317</td></tr>
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text">Koeln  50823</td></tr>
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text">DE</td></tr>
+<tr><td class="author" align="right">Phone:&nbsp;</td>
+<td class="author-text">+49 221 6778 333 8</td></tr>
 <tr><td class="author" align="right">EMail:&nbsp;</td>
-<td class="author-text"><a href="mailto:poeml@mirrorbrain.org">poeml@mirrorbrain.org</a></td></tr>
+<td class="author-text"><a href="mailto:peter@poeml.de">peter@poeml.de</a></td></tr>
 <tr><td class="author" align="right">URI:&nbsp;</td>
-<td class="author-text"><a href="http://www.mirrorbrain.org/">http://www.mirrorbrain.org/</a></td></tr>
+<td class="author-text"><a href="http://mirrorbrain.org/~poeml/">http://mirrorbrain.org/~poeml/</a></td></tr>
 </table>
 </body></html>

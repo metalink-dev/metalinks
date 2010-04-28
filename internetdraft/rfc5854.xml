@@ -503,7 +503,7 @@ metalinkMetalink =
 	  
 	  <t>All <xref target="element.url" format="none">metalink:url</xref> elements contained in each <xref target="element.file" format="none">metalink:file</xref> element SHOULD lead to identical files. That is,
 	  each <xref target="element.url" format="none">metalink:url</xref> element should be an alternative location for the same file and each 
-	  <xref target="element.metaurl" format="none">metalink:metaurl</xref> element should provide metadata to retrieve the same file in another way, such as a Peer-to-Peer network. Refer to Sections <xref target="element.url" format="counter"/> and <xref target="element.metaurl" format="counter"/> for more information.
+	  <xref target="element.metaurl" format="none">metalink:metaurl</xref> element should provide metadata to retrieve the same file in another way, such as a Peer-to-Peer network. Refer to Sections <xref target="element.metaurl" format="counter"/> and <xref target="element.url" format="counter"/> for more information.
 
 	    <figure> 
         <iref item="metalinkFile grammar production" primary="true"/>
