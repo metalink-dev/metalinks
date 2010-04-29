@@ -1956,7 +1956,10 @@ class Ftp_Host_Segment(threading.Thread, Host_Segment):
                 return
             except (socket.error), error:
                 #print "reconnect", self.host.url
-                self.host.reconnect()
+                try:
+                    self.host.reconnect()
+                except:
+                    pass
                 retry = True
                 count += 1
             except (ftplib.error_temp), error:
