@@ -144,7 +144,7 @@
 <tr><td class="header">Network Working Group</td><td class="header">A. Bryan</td></tr>
 <tr><td class="header">Internet-Draft</td><td class="header">T. Kosse</td></tr>
 <tr><td class="header">Intended status: Experimental</td><td class="header">D. Stenberg</td></tr>
-<tr><td class="header">Expires: November 2, 2010</td><td class="header">May 1, 2010</td></tr>
+<tr><td class="header">Expires: November 3, 2010</td><td class="header">May 2, 2010</td></tr>
 </table></td></tr></table>
 <h1><br />FTP Extensions for Cryptographic Hashes<br />draft-bryan-ftp-hash-02</h1>
 
@@ -169,7 +169,7 @@ and may be updated, replaced, or obsoleted by other documents at any time.
 It is inappropriate to use Internet-Drafts as reference material or to cite
 them other than as &ldquo;work in progress.&rdquo;</p>
 <p>
-This Internet-Draft will expire on November 2, 2010.</p>
+This Internet-Draft will expire on November 3, 2010.</p>
 
 <h3>Copyright Notice</h3>
 <p>
@@ -219,7 +219,7 @@ Informative References<br />
 <a href="#anchor12">Appendix&nbsp;A.</a>&nbsp;
 Acknowledgements and Contributors<br />
 <a href="#anchor13">Appendix&nbsp;B.</a>&nbsp;
-List of Implementations with Non-standard Cryptographic Hash Command<br />
+List of Non-standard Cryptographic Hash or Checksum Commands and Implementations<br />
 <a href="#anchor14">Appendix&nbsp;C.</a>&nbsp;
 Document History<br />
 <a href="#rfc.authors">&#167;</a>&nbsp;
@@ -313,7 +313,7 @@ The HASH Command (HASH)</h3>
 <a name="rfc.section.3.1"></a><h3>3.1.&nbsp;
 HASH Command Errors</h3>
 
-<p>The standard negative error codes 500 and 501 are sufficient to handle errors involving the HASH command (e.g., syntax errors). Response code 501 is used if an unknown or unsupported algorithm has been requested. Response code 550 is used if the file can not be found. Response code 552 is used if the user is not allowed to use the HASH command.
+<p>The standard negative error codes 500 and 501 are used to handle errors involving the HASH command (e.g., syntax errors). Response code 501 is used if an unknown or unsupported algorithm has been requested. Response code 550 is used if the file can not be found. Response code 552 is used if the user is not allowed to use the HASH command.
 Response code 450 is used to indicate the server is busy, e.g. already hashing other files yet inviting the client to retry in future.
 </p>
 <a name="anchor5"></a><br /><hr />
@@ -486,7 +486,7 @@ Acknowledgements and Contributors</h3>
 <a name="anchor13"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.B"></a><h3>Appendix B.&nbsp;
-List of Implementations with Non-standard Cryptographic Hash Command</h3>
+List of Non-standard Cryptographic Hash or Checksum Commands and Implementations</h3>
 
 <p>[[ to be removed by the RFC editor before publication as an RFC. ]]
 </p>
@@ -495,15 +495,19 @@ List of Implementations with Non-standard Cryptographic Hash Command</h3>
 <p>
 	    </p>
 <ul class="text">
-<li>XCRC: By GlobalSCAPE in 2001. http://help.globalscape.com/help/secureserver2/File_Integrity_Checking.htm Usage: XCRC &lt;filename&gt; SP EP. SP is starting point and EP is ending point in bytes and are optional parameters.
+<li>CKSM: GridFTP v2 Protocol Description http://www.ogf.org/documents/GFD.47.pdf Usage: OPTS CKSM &lt;algorithm&gt; CRLF. Supports ADLER32, MD5, CRC32.
 </li>
-<li>MD5/MMD5: Internet Draft <a class='info' href='#draft-twine-ftpmd5'>[draft&#8209;twine&#8209;ftpmd5]<span> (</span><span class='info'>Twine, J., &ldquo;The MD5 and MMD5 FTP Command Extensions,&rdquo; May&nbsp;2002.</span><span>)</span></a> (it only supported one hash).
+<li>MD5/MMD5: Expired Internet Draft <a class='info' href='#draft-twine-ftpmd5'>[draft&#8209;twine&#8209;ftpmd5]<span> (</span><span class='info'>Twine, J., &ldquo;The MD5 and MMD5 FTP Command Extensions,&rdquo; May&nbsp;2002.</span><span>)</span></a> from 2002. Usage: MD5 &lt;filepath&gt; Algorithm specific command. Response codes: 251 positive completion, 500 Command Not Recognized, 502 Command Not Implemented, 504 Command Not Implemented for the Specified Argument.
 </li>
-<li>CKSM: GridFTP v2 Protocol Description http://www.ogf.org/documents/GFD.47.pdf Supported ADLER32, MD5, CRC32. Usage: OPTS CKSM &lt;algorithm&gt; CRLF.
+<li>SITE CHECKSUM: Usage: SITE check_login SP CHECKSUM SP pathname CRLF. Supports CRC32 and MD5.
 </li>
-<li>XMD5: XMD5 &lt;filename&gt; SP EP. Similar to XCRC.
+<li>SITE SHOHASH: Usage: site shohash [filename]. Supports MD5. Response codes: 200 positive completion.
 </li>
-<li>XSHA, XSHA1, XSHA256, XSHA512, SITE SHOHASH, SITE CHECKSUM.
+<li>XCRC: By GlobalSCAPE in 2001. http://help.globalscape.com/help/secureserver2/File_Integrity_Checking.htm Usage: XCRC &lt;filename&gt; SP EP. SP is starting point and EP is ending point in bytes and are optional parameters. Algorithm specific command. Response codes: 250 positive completion, 450 Requested file action not taken. (File is busy), 550 Requested action not taken. (File not found, no read permission, SP or EP not correct).
+</li>
+<li>XMD5: XMD5 &lt;filename&gt; SP EP. Similar to XCRC. Algorithm specific command.
+</li>
+<li>XSHA, XSHA1, XSHA256, XSHA512: Usage similar to XCRC, although SP/EP usage unknown. Algorithm specific commands.
 </li>
 </ul>
 
@@ -620,15 +624,13 @@ Document History</h3>
 </li>
 <li>Underspecification of the representation of the file that shall undergo the hash calculation.
 </li>
-<li>Possibly we should suggest that servers calculate the hash numbers in advance, like when the file gets uploaded to avoid the risk of this becoming a DOS-vector.
-</li>
 </ul>
 
 <p>-03 : April , 2010.
 	    
 	    </p>
 <ul class="text">
-<li>Not much.
+<li>List of non-standard checksum and hash commands and their implementations.
 </li>
 </ul>
 
