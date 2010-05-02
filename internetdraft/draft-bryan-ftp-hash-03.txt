@@ -4,7 +4,7 @@
 Network Working Group                                           A. Bryan
 Internet-Draft                                                  T. Kosse
 Intended status: Experimental                                D. Stenberg
-Expires: November 2, 2010                                    May 1, 2010
+Expires: November 3, 2010                                    May 2, 2010
 
 
                 FTP Extensions for Cryptographic Hashes
@@ -37,7 +37,7 @@ Status of this Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on November 2, 2010.
+   This Internet-Draft will expire on November 3, 2010.
 
 Copyright Notice
 
@@ -52,7 +52,7 @@ Copyright Notice
 
 
 
-Bryan, et al.           Expires November 2, 2010                [Page 1]
+Bryan, et al.           Expires November 3, 2010                [Page 1]
 
 Internet-Draft   FTP Extensions for Cryptographic Hashes        May 2010
 
@@ -80,9 +80,9 @@ Table of Contents
      8.1.  Normative References . . . . . . . . . . . . . . . . . . .  7
      8.2.  Informative References . . . . . . . . . . . . . . . . . .  8
    Appendix A.  Acknowledgements and Contributors . . . . . . . . . .  8
-   Appendix B.  List of Implementations with Non-standard
-                Cryptographic Hash Command  . . . . . . . . . . . . .  8
-   Appendix C.  Document History  . . . . . . . . . . . . . . . . . . 10
+   Appendix B.  List of Non-standard Cryptographic Hash or
+                Checksum Commands and Implementations . . . . . . . .  8
+   Appendix C.  Document History  . . . . . . . . . . . . . . . . . . 11
    Authors' Addresses . . . . . . . . . . . . . . . . . . . . . . . . 11
 
 
@@ -108,7 +108,7 @@ Table of Contents
 
 
 
-Bryan, et al.           Expires November 2, 2010                [Page 2]
+Bryan, et al.           Expires November 3, 2010                [Page 2]
 
 Internet-Draft   FTP Extensions for Cryptographic Hashes        May 2010
 
@@ -164,7 +164,7 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes        May 2010
 
 
 
-Bryan, et al.           Expires November 2, 2010                [Page 3]
+Bryan, et al.           Expires November 3, 2010                [Page 3]
 
 Internet-Draft   FTP Extensions for Cryptographic Hashes        May 2010
 
@@ -204,14 +204,14 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes        May 2010
 
 3.1.  HASH Command Errors
 
-   The standard negative error codes 500 and 501 are sufficient to
-   handle errors involving the HASH command (e.g., syntax errors).
-   Response code 501 is used if an unknown or unsupported algorithm has
-   been requested.  Response code 550 is used if the file can not be
-   found.  Response code 552 is used if the user is not allowed to use
-   the HASH command.  Response code 450 is used to indicate the server
-   is busy, e.g. already hashing other files yet inviting the client to
-   retry in future.
+   The standard negative error codes 500 and 501 are used to handle
+   errors involving the HASH command (e.g., syntax errors).  Response
+   code 501 is used if an unknown or unsupported algorithm has been
+   requested.  Response code 550 is used if the file can not be found.
+   Response code 552 is used if the user is not allowed to use the HASH
+   command.  Response code 450 is used to indicate the server is busy,
+   e.g. already hashing other files yet inviting the client to retry in
+   future.
 
 3.2.  FEAT Command Response for HASH Command
 
@@ -220,7 +220,7 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes        May 2010
 
 
 
-Bryan, et al.           Expires November 2, 2010                [Page 4]
+Bryan, et al.           Expires November 3, 2010                [Page 4]
 
 Internet-Draft   FTP Extensions for Cryptographic Hashes        May 2010
 
@@ -276,7 +276,7 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes        May 2010
 
 
 
-Bryan, et al.           Expires November 2, 2010                [Page 5]
+Bryan, et al.           Expires November 3, 2010                [Page 5]
 
 Internet-Draft   FTP Extensions for Cryptographic Hashes        May 2010
 
@@ -332,7 +332,7 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes        May 2010
 
 
 
-Bryan, et al.           Expires November 2, 2010                [Page 6]
+Bryan, et al.           Expires November 3, 2010                [Page 6]
 
 Internet-Draft   FTP Extensions for Cryptographic Hashes        May 2010
 
@@ -388,7 +388,7 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes        May 2010
 
 
 
-Bryan, et al.           Expires November 2, 2010                [Page 7]
+Bryan, et al.           Expires November 3, 2010                [Page 7]
 
 Internet-Draft   FTP Extensions for Cryptographic Hashes        May 2010
 
@@ -418,8 +418,8 @@ Appendix A.  Acknowledgements and Contributors
    McMurray, and Mathias Berchtold.
 
 
-Appendix B.  List of Implementations with Non-standard Cryptographic
-             Hash Command
+Appendix B.  List of Non-standard Cryptographic Hash or Checksum
+             Commands and Implementations
 
    [[ to be removed by the RFC editor before publication as an RFC. ]]
 
@@ -427,27 +427,42 @@ Appendix B.  List of Implementations with Non-standard Cryptographic
    formally specified, leading to non-interoperability and confusion.
    The commands, any specifications, and relevant details:
 
-   o  XCRC: By GlobalSCAPE in 2001. http://help.globalscape.com/help/
-      secureserver2/File_Integrity_Checking.htm Usage: XCRC <filename>
-      SP EP.  SP is starting point and EP is ending point in bytes and
-      are optional parameters.
-   o  MD5/MMD5: Internet Draft [draft-twine-ftpmd5] (it only supported
-      one hash).
    o  CKSM: GridFTP v2 Protocol Description
-      http://www.ogf.org/documents/GFD.47.pdf Supported ADLER32, MD5,
-      CRC32.  Usage: OPTS CKSM <algorithm> CRLF.
-   o  XMD5: XMD5 <filename> SP EP.  Similar to XCRC.
-   o  XSHA, XSHA1, XSHA256, XSHA512, SITE SHOHASH, SITE CHECKSUM.
+      http://www.ogf.org/documents/GFD.47.pdf Usage: OPTS CKSM
+      <algorithm> CRLF.  Supports ADLER32, MD5, CRC32.
+   o  MD5/MMD5: Expired Internet Draft [draft-twine-ftpmd5] from 2002.
+      Usage: MD5 <filepath> Algorithm specific command.  Response codes:
+      251 positive completion, 500 Command Not Recognized, 502 Command
+      Not Implemented, 504 Command Not Implemented for the Specified
+      Argument.
+   o  SITE CHECKSUM: Usage: SITE check_login SP CHECKSUM SP pathname
+      CRLF.  Supports CRC32 and MD5.
+   o  SITE SHOHASH: Usage: site shohash [filename].  Supports MD5.
+      Response codes: 200 positive completion.
 
-   An incomplete list of FTP clients and servers that have implemented
-   these commands:
 
 
 
-Bryan, et al.           Expires November 2, 2010                [Page 8]
+
+Bryan, et al.           Expires November 3, 2010                [Page 8]
 
 Internet-Draft   FTP Extensions for Cryptographic Hashes        May 2010
 
+
+   o  XCRC: By GlobalSCAPE in 2001. http://help.globalscape.com/help/
+      secureserver2/File_Integrity_Checking.htm Usage: XCRC <filename>
+      SP EP.  SP is starting point and EP is ending point in bytes and
+      are optional parameters.  Algorithm specific command.  Response
+      codes: 250 positive completion, 450 Requested file action not
+      taken.  (File is busy), 550 Requested action not taken.  (File not
+      found, no read permission, SP or EP not correct).
+   o  XMD5: XMD5 <filename> SP EP.  Similar to XCRC.  Algorithm specific
+      command.
+   o  XSHA, XSHA1, XSHA256, XSHA512: Usage similar to XCRC, although
+      SP/EP usage unknown.  Algorithm specific commands.
+
+   An incomplete list of FTP clients and servers that have implemented
+   these commands:
 
    o  Akamai NetStorage (supports SITE CHKHSH/SITE SHOHASH) p17-18
       http://pigdogslow.dyndns.org/NetStorage_UserGuide.pdf
@@ -480,6 +495,16 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes        May 2010
       (supports XCRC)
    o  Globus FTP client / Globus Toolkit(supports CKSM) http://
       www.globus.org/toolkit/releasenotes/3.2.0/gridftp_notes.html
+
+
+
+
+
+Bryan, et al.           Expires November 3, 2010                [Page 9]
+
+Internet-Draft   FTP Extensions for Cryptographic Hashes        May 2010
+
+
    o  GoldenGate FTP (Ftp Full Java Server) (supports XCRC, XMD5, XSHA1)
    o  IceWarp FTP Server http://www.icewarp.com/products/ftp_server/
    o  ICS FTP client (supports XCRC, XMD5)
@@ -496,15 +521,6 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes        May 2010
       http://www.nftpserver.com/history.php
    o  Null FTP (supports XCRC, XMD5, XSHA)
       http://www.sharewareconnection.com/null-ftp-client-pro.htm
-
-
-
-
-Bryan, et al.           Expires November 2, 2010                [Page 9]
-
-Internet-Draft   FTP Extensions for Cryptographic Hashes        May 2010
-
-
    o  Orenosv FTP Client (supports XCRC, XMD5)
       http://www.orenosv.com/orenosv/ftpcli_en.html
    o  ProFTPD module mod_digest (supports XCRC, XMD5, XSHA1, SHA256)
@@ -535,6 +551,16 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes        May 2010
    o  wuftpd (supports SITE CHECKMETHOD/SITE CHECKSUM)
    o  wzdFTPd (supports XCRC, XMD5)
       http://www.wzdftpd.net/wiki/index.php/Commands
+
+
+
+
+
+Bryan, et al.           Expires November 3, 2010               [Page 10]
+
+Internet-Draft   FTP Extensions for Cryptographic Hashes        May 2010
+
+
    o  Zalman FTP Client (supports XCRC)
       http://www.zalmansoftware.com/download.html
    o  zFTPServer
@@ -548,20 +574,10 @@ Appendix C.  Document History
    o  Partial file hashes, similar to the Content-MD5 HTTP Header.
    o  Underspecification of the representation of the file that shall
       undergo the hash calculation.
-   o  Possibly we should suggest that servers calculate the hash numbers
-      in advance, like when the file gets uploaded to avoid the risk of
-      this becoming a DOS-vector.
 
    -03 : April , 2010.
-
-
-
-Bryan, et al.           Expires November 2, 2010               [Page 10]
-
-Internet-Draft   FTP Extensions for Cryptographic Hashes        May 2010
-
-
-   o  Not much.
+   o  List of non-standard checksum and hash commands and their
+      implementations.
 
    -02 : April 16, 2010.
    o  Error codes section.
@@ -593,6 +609,14 @@ Authors' Addresses
    URI:   http://filezilla-project.org/
 
 
+
+
+
+Bryan, et al.           Expires November 3, 2010               [Page 11]
+
+Internet-Draft   FTP Extensions for Cryptographic Hashes        May 2010
+
+
    Daniel Stenberg
 
    Email: daniel@haxx.se
@@ -612,5 +636,37 @@ Authors' Addresses
 
 
 
-Bryan, et al.           Expires November 2, 2010               [Page 11]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Bryan, et al.           Expires November 3, 2010               [Page 12]
 
