@@ -606,13 +606,13 @@ metalinkDateConstruct =
 	</p>
 <div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
 ...
-&lt;updated&gt;2009-05-15T18:30:02Z&lt;/updated&gt;
+&lt;updated&gt;2010-05-01T12:15:02Z&lt;/updated&gt;
 ...
-&lt;updated&gt;2009-05-15T18:30:02.25Z&lt;/updated&gt;
+&lt;updated&gt;2010-05-01T12:15:02.25Z&lt;/updated&gt;
 ...
-&lt;updated&gt;2009-05-15T18:30:02+01:00&lt;/updated&gt;
+&lt;updated&gt;2010-05-01T12:15:02+01:00&lt;/updated&gt;
 ...
-&lt;updated&gt;2009-05-15T18:30:02.25+01:00&lt;/updated&gt;
+&lt;updated&gt;2010-05-01T12:15:02.25+01:00&lt;/updated&gt;
 ...
 </pre></div><p>
 
@@ -715,12 +715,12 @@ metalinkFile =
        &amp; metalinkLanguage*
        &amp; metalinkLogo?
        &amp; metalinkMetaURL*
-       &amp; metalinkURL*
        &amp; metalinkOS*
        &amp; metalinkPieces*
        &amp; metalinkPublisher?
        &amp; metalinkSignature?
        &amp; metalinkSize?
+       &amp; metalinkURL*
        &amp; metalinkVersion?
        &amp; extensionElement*)
    }</pre></div><p>
@@ -1072,7 +1072,7 @@ The &quot;priority&quot; Attribute</h3>
 The &quot;mediatype&quot; Attribute</h3>
 
 <p><a class='info' href='#element.metaurl'>metalink:metaurl<span> (</span><span class='info'>The &quot;metalink:metaurl&quot; Element</span><span>)</span></a> elements MUST have a "mediatype" attribute that indicates
-	    the Multipurpose Internet Mail Extensions (MIME) media type <a class='info' href='#RFC4288'>[RFC4288]<span> (</span><span class='info'>Freed, N. and J. Klensin, &ldquo;Media Type Specifications and Registration Procedures,&rdquo; December&nbsp;2005.</span><span>)</span></a> of the metadata available at the IRI. In the case of BitTorrent as specified in <a class='info' href='#BITTORRENT'>[BITTORRENT]<span> (</span><span class='info'>Cohen, B., &ldquo;The BitTorrent Protocol Specification,&rdquo; February&nbsp;2008.</span><span>)</span></a>, the value "torrent" is REQUIRED. Types without "/" are reserved. Currently, "torrent" is the only reserved value.
+	    the Multipurpose Internet Mail Extensions (MIME) media type <a class='info' href='#RFC4288'>[RFC4288]<span> (</span><span class='info'>Freed, N. and J. Klensin, &ldquo;Media Type Specifications and Registration Procedures,&rdquo; December&nbsp;2005.</span><span>)</span></a> of the metadata file available at the IRI. In the case of BitTorrent as specified in <a class='info' href='#BITTORRENT'>[BITTORRENT]<span> (</span><span class='info'>Cohen, B., &ldquo;The BitTorrent Protocol Specification,&rdquo; February&nbsp;2008.</span><span>)</span></a>, the value "torrent" is REQUIRED. Types without "/" are reserved. Currently, "torrent" is the only reserved value.
 </p>
 <p>Values for this attribute are defined below in ABNF notation <a class='info' href='#RFC5234'>[RFC5234]<span> (</span><span class='info'>Crocker, D., Ed. and P. Overell, &ldquo;Augmented BNF for Syntax Specifications: ABNF,&rdquo; January&nbsp;2008.</span><span>)</span></a>.
 <a name='anchor82'></a><a name='anchor83'></a></p>
@@ -1781,11 +1781,11 @@ Acknowledgements and Contributors</h3>
 <p>Paul Burkhead, Kristian Weston, Nicolas Alvarez, Urs Wolfer, Bridget and Ethan Fletcher, Patrick Ruckstuhl, Sebastien Willemijns, Micah Cowan, Ruben Kerkhof,  
           Danny Ayers, Nick Dominguez, Gary Zellerbach, James Clark, Daniel Stenberg, John and Sandra Sowder, Salvatore Musumeci, Steve Eshelman, 
           Lucas Hewett, Ryan Cronin, Dave Winquist, Bob Denison,
-          Wes Shelton, Kees Cook, Josh Colbert, Steve Kleisath, Chad Neptune, Nick Carrabba, Chris
-          Carrabba, Erin Solari, Derick Cordoba, Ryan Alexander, 
+          Wes Shelton, Josh Colbert, Steve Kleisath, Chad Neptune, Derick Cordoba, Nick Carrabba, Chris
+          Carrabba, Erin Solari, Ryan Alexander, 
           Tom Mainville, Janie Wargo, Jason Hansen, Tim Bray, Dan Brickley, Markus Hofmann, 
           Dan Connolly, Tim Berners-Lee, Louis Suarez-Potts, Ross Smith, Jeff Covey, 
-          Ed Lee, Shawn Wilsher, Mike Connor, Johan Svedberg, Dedric Carter, and Debi
+          Ed Lee, Shawn Wilsher, Mike Connor, Johan Svedberg, Kees Cook, Dedric Carter, and Debi
           Goulding. We also thank the Anthony Family, the Bryan Family, Juanita Anthony, and Zimmy Bryan.
 </p>
 <p>Special thanks to Eran Hammer-Lahav, document shepherd, and Lisa Dusseault, Area Director. We also thank the following contributors for assistance and review: Mark Nottingham, Peter Saint-Andre, Julian Reschke, Chris Newman,
@@ -1794,6 +1794,8 @@ Acknowledgements and Contributors</h3>
 <p>Peter Poeml wishes to acknowledge the support of SUSE Linux
           Products GmbH / Novell Inc., where he was employed during
           much of the work on this document.
+</p>
+<p>This document is dedicated to Sonora Bryan.
 </p>
 <a name="schema"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
@@ -1860,12 +1862,12 @@ metalinkFile =
        &amp; metalinkLanguage*
        &amp; metalinkLogo?
        &amp; metalinkMetaURL*
-       &amp; metalinkURL*
        &amp; metalinkOS*
        &amp; metalinkPieces*
        &amp; metalinkPublisher?
        &amp; metalinkSignature?
        &amp; metalinkSize?
+       &amp; metalinkURL*
        &amp; metalinkVersion?
        &amp; extensionElement*)
    }
