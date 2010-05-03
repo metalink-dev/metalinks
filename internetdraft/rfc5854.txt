@@ -811,8 +811,10 @@ RFC 5854          Metalink Download Description Format        April 2010
 
    metalink:hash elements MUST have a "type" attribute, if and only if
    it contains a hash of the complete file.  The IANA registry named
-   "Hash Function Textual Names" defines values for hash types.  See
-   Section 7.4 for security implications.
+   "Hash Function Textual Names" defines values for hash types.
+   metalink:hash elements MUST NOT have a "type" attribute, if they are
+   inside a metalink:pieces container element.  See Section 7.4 for
+   security implications.
 
 4.2.5.  The "metalink:identity" Element
 
@@ -831,8 +833,6 @@ RFC 5854          Metalink Download Description Format        April 2010
    code for the language of a file, per [RFC5646].
 
    Multiple metalink:language elements are allowed, for instance, to
-   describe a file such as an binary installation program that provides
-   multiple language options, a movie with multiple language tracks, or
 
 
 
@@ -841,6 +841,8 @@ Bryan, et al.                Standards Track                   [Page 15]
 RFC 5854          Metalink Download Description Format        April 2010
 
 
+   describe a file such as an binary installation program that provides
+   multiple language options, a movie with multiple language tracks, or
    a document in multiple languages.
 
    metalinkLanguage =
@@ -887,8 +889,6 @@ RFC 5854          Metalink Download Description Format        April 2010
    metalink:metaurl elements MAY have a priority attribute.  Values MUST
    be positive integers between 1 and 999999.  Lower values indicate a
    higher priority. metalink:metaurl elements without a priority
-   attribute are considered to have the lowest priority, i.e., 999999.
-   The priority values of metalink:metaurl and metalink:url elements are
 
 
 
@@ -897,6 +897,8 @@ Bryan, et al.                Standards Track                   [Page 16]
 RFC 5854          Metalink Download Description Format        April 2010
 
 
+   attribute are considered to have the lowest priority, i.e., 999999.
+   The priority values of metalink:metaurl and metalink:url elements are
    compared and those with the lowest values, starting with 1, are used
    first.  Multiple metalink:metaurl and metalink:url elements MAY have
    the same priority, i.e., one BitTorrent .torrent file and three FTP
@@ -943,8 +945,6 @@ RFC 5854          Metalink Download Description Format        April 2010
    The "metalink:origin" element is an IRI where the Metalink Document
    was originally published.  If the dynamic attribute of metalink:
    origin is "true", then updated versions of the Metalink can be found
-   at this IRI.
-
 
 
 
@@ -952,6 +952,8 @@ Bryan, et al.                Standards Track                   [Page 17]
 
 RFC 5854          Metalink Download Description Format        April 2010
 
+
+   at this IRI.
 
    metalinkOrigin =
       element metalink:origin {
@@ -999,8 +1001,6 @@ RFC 5854          Metalink Download Description Format        April 2010
    The "metalink:publisher" element contains a human-readable group or
    other entity that has published the file described in the Metalink
    Document and an IRI for more information.
-
-
 
 
 

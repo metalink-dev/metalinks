@@ -807,7 +807,7 @@ metalinkHash =
 
 
 	    <t><xref target="element.hash" format="none">metalink:hash</xref> elements MUST have a "type" attribute, if and only if
-        it contains a hash of the complete file. The IANA registry named "Hash Function Textual Names" defines values for hash types. See <xref target="security.hash"/> for security implications.</t>
+        it contains a hash of the complete file. The IANA registry named "Hash Function Textual Names" defines values for hash types. <xref target="element.hash" format="none">metalink:hash</xref> elements MUST NOT have a "type" attribute, if they are inside a <xref target="element.pieces" format="none">metalink:pieces</xref> container element. See <xref target="security.hash"/> for security implications.</t>
 		
 	  </section>
 
