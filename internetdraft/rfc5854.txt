@@ -641,7 +641,9 @@ RFC 5854          Metalink Download Description Format        April 2010
    cryptographic hashes of non-overlapping pieces of the file.  The
    cryptographic hashes MUST be listed in the same order as the
    corresponding pieces appear in the file, starting at the beginning of
-   the file.
+   the file.  Metalink Documents MAY contain one or multiple metalink:
+   pieces container elements, if each "type" attribute of metalink:
+   pieces has a unique value.
 
    metalinkPieces =
       element metalink:pieces {
@@ -663,8 +665,6 @@ RFC 5854          Metalink Download Description Format        April 2010
    metalink:pieces elements MUST have a "length" attribute, which is a
    positive integer that describes the length of the pieces of the file
    in octets.  The whole file is divided into non-overlapping pieces of
-   this length, starting from the beginning of the file.  That is, every
-   piece MUST be the same size, apart from the last piece, which is the
 
 
 
@@ -673,6 +673,8 @@ Bryan, et al.                Standards Track                   [Page 12]
 RFC 5854          Metalink Download Description Format        April 2010
 
 
+   this length, starting from the beginning of the file.  That is, every
+   piece MUST be the same size, apart from the last piece, which is the
    remainder.  The last piece extends to the end of the file, and it
    therefore MAY be shorter than the other pieces.
 
@@ -720,14 +722,14 @@ RFC 5854          Metalink Download Description Format        April 2010
    agent         = token ["/" agent-version]
    agent-version = token
 
-   Examples:
-
 
 
 Bryan, et al.                Standards Track                   [Page 13]
 
 RFC 5854          Metalink Download Description Format        April 2010
 
+
+   Examples:
 
    ...
    <generator>MirrorBrain/2.11</generator>
@@ -772,11 +774,9 @@ RFC 5854          Metalink Download Description Format        April 2010
    file. metalink:hash elements that are inside a metalink:pieces
    container element have a hash for that specific piece or chunk of the
    file, and are of the same hash type as the metalink:pieces element in
-   which they are contained.
-
-   metalink:hash elements without a "type" attribute MUST contain a hash
-   for that specific piece or chunk of the file and MUST be listed in
-   the same order as the corresponding pieces appear in the file,
+   which they are contained.  Metalink Documents MAY contain one or
+   multiple metalink:pieces container elements, if each "type" attribute
+   of metalink:pieces has a unique value.
 
 
 
@@ -785,6 +785,9 @@ Bryan, et al.                Standards Track                   [Page 14]
 RFC 5854          Metalink Download Description Format        April 2010
 
 
+   metalink:hash elements without a "type" attribute MUST contain a hash
+   for that specific piece or chunk of the file and MUST be listed in
+   the same order as the corresponding pieces appear in the file,
    starting at the beginning of the file.  The size of the piece is
    equal to the value of the "length" attribute of the metalink:pieces
    element, apart from the last piece, which is the remainder.  See
@@ -830,9 +833,6 @@ RFC 5854          Metalink Download Description Format        April 2010
    Multiple metalink:language elements are allowed, for instance, to
    describe a file such as an binary installation program that provides
    multiple language options, a movie with multiple language tracks, or
-   a document in multiple languages.
-
-
 
 
 
@@ -840,6 +840,8 @@ Bryan, et al.                Standards Track                   [Page 15]
 
 RFC 5854          Metalink Download Description Format        April 2010
 
+
+   a document in multiple languages.
 
    metalinkLanguage =
       element metalink:language {
@@ -887,8 +889,6 @@ RFC 5854          Metalink Download Description Format        April 2010
    higher priority. metalink:metaurl elements without a priority
    attribute are considered to have the lowest priority, i.e., 999999.
    The priority values of metalink:metaurl and metalink:url elements are
-   compared and those with the lowest values, starting with 1, are used
-   first.  Multiple metalink:metaurl and metalink:url elements MAY have
 
 
 
@@ -897,6 +897,8 @@ Bryan, et al.                Standards Track                   [Page 16]
 RFC 5854          Metalink Download Description Format        April 2010
 
 
+   compared and those with the lowest values, starting with 1, are used
+   first.  Multiple metalink:metaurl and metalink:url elements MAY have
    the same priority, i.e., one BitTorrent .torrent file and three FTP
    URIs could have priority="1".  See also the "priority" attribute of
    the metalink:url element.
@@ -942,8 +944,6 @@ RFC 5854          Metalink Download Description Format        April 2010
    was originally published.  If the dynamic attribute of metalink:
    origin is "true", then updated versions of the Metalink can be found
    at this IRI.
-
-
 
 
 
