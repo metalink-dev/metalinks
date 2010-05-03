@@ -406,13 +406,13 @@ metalinkDateConstruct =
 	<figure>
 	  <artwork type="example">
 ...
-&lt;updated&gt;2009-05-15T18:30:02Z&lt;/updated&gt;
+&lt;updated&gt;2010-05-01T12:15:02Z&lt;/updated&gt;
 ...
-&lt;updated&gt;2009-05-15T18:30:02.25Z&lt;/updated&gt;
+&lt;updated&gt;2010-05-01T12:15:02.25Z&lt;/updated&gt;
 ...
-&lt;updated&gt;2009-05-15T18:30:02+01:00&lt;/updated&gt;
+&lt;updated&gt;2010-05-01T12:15:02+01:00&lt;/updated&gt;
 ...
-&lt;updated&gt;2009-05-15T18:30:02.25+01:00&lt;/updated&gt;
+&lt;updated&gt;2010-05-01T12:15:02.25+01:00&lt;/updated&gt;
 ...
 </artwork>
 		   
@@ -520,12 +520,12 @@ metalinkFile =
        &amp; metalinkLanguage*
        &amp; metalinkLogo?
        &amp; metalinkMetaURL*
-       &amp; metalinkURL*
        &amp; metalinkOS*
        &amp; metalinkPieces*
        &amp; metalinkPublisher?
        &amp; metalinkSignature?
        &amp; metalinkSize?
+       &amp; metalinkURL*
        &amp; metalinkVersion?
        &amp; extensionElement*)
    }</artwork></figure></t>
@@ -917,7 +917,7 @@ metalinkMetaURL =
 	  <section title="The &quot;mediatype&quot; Attribute"> 
 
 	    <t><xref target="element.metaurl" format="none">metalink:metaurl</xref> elements MUST have a "mediatype" attribute that indicates
-	    the Multipurpose Internet Mail Extensions (MIME) media type <xref target="RFC4288"/> of the metadata available at the IRI. In the case of BitTorrent as specified in <xref target="BITTORRENT"/>, the value "torrent" is REQUIRED. Types without "/" are reserved. Currently, "torrent" is the only reserved value.</t>
+	    the Multipurpose Internet Mail Extensions (MIME) media type <xref target="RFC4288"/> of the metadata file available at the IRI. In the case of BitTorrent as specified in <xref target="BITTORRENT"/>, the value "torrent" is REQUIRED. Types without "/" are reserved. Currently, "torrent" is the only reserved value.</t>
         <t>Values for this attribute are defined below in ABNF notation <xref target="RFC5234"/>.
 <figure> 
 <iref item="metaurl mediatype ABNF" primary="true"/>
@@ -2023,11 +2023,11 @@ Anthony&nbsp;Bryan &lt;anthonybryan@gmail.com&gt;</t>
           <t>Paul Burkhead, Kristian Weston, Nicolas Alvarez, Urs Wolfer, Bridget and Ethan Fletcher, Patrick Ruckstuhl, Sebastien Willemijns, Micah Cowan, Ruben Kerkhof,  
           Danny Ayers, Nick Dominguez, Gary Zellerbach, James Clark, Daniel Stenberg, John and Sandra Sowder, Salvatore Musumeci, Steve Eshelman, 
           Lucas Hewett, Ryan Cronin, Dave Winquist, Bob Denison,
-          Wes Shelton, Kees Cook, Josh Colbert, Steve Kleisath, Chad Neptune, Nick Carrabba, Chris
-          Carrabba, Erin Solari, Derick Cordoba, Ryan Alexander, 
+          Wes Shelton, Josh Colbert, Steve Kleisath, Chad Neptune, Derick Cordoba, Nick Carrabba, Chris
+          Carrabba, Erin Solari, Ryan Alexander, 
           Tom Mainville, Janie Wargo, Jason Hansen, Tim Bray, Dan Brickley, Markus Hofmann, 
           Dan Connolly, Tim Berners-Lee, Louis Suarez-Potts, Ross Smith, Jeff Covey, 
-          Ed Lee, Shawn Wilsher, Mike Connor, Johan Svedberg, Dedric Carter, and Debi
+          Ed Lee, Shawn Wilsher, Mike Connor, Johan Svedberg, Kees Cook, Dedric Carter, and Debi
           Goulding. We also thank the Anthony Family, the Bryan Family, Juanita Anthony, and Zimmy Bryan.</t>
 		  
 		  <t>Special thanks to Eran Hammer-Lahav, document shepherd, and Lisa Dusseault, Area Director. We also thank the following contributors for assistance and review: Mark Nottingham, Peter Saint-Andre, Julian Reschke, Chris Newman,
@@ -2036,6 +2036,8 @@ Anthony&nbsp;Bryan &lt;anthonybryan@gmail.com&gt;</t>
           <t>Peter Poeml wishes to acknowledge the support of SUSE Linux
           Products GmbH / Novell Inc., where he was employed during
           much of the work on this document.</t>
+		  
+		  <t>This document is dedicated to Sonora Bryan.</t>
 		  
 
 	    </section> 
@@ -2103,12 +2105,12 @@ metalinkFile =
        &amp; metalinkLanguage*
        &amp; metalinkLogo?
        &amp; metalinkMetaURL*
-       &amp; metalinkURL*
        &amp; metalinkOS*
        &amp; metalinkPieces*
        &amp; metalinkPublisher?
        &amp; metalinkSignature?
        &amp; metalinkSize?
+       &amp; metalinkURL*
        &amp; metalinkVersion?
        &amp; extensionElement*)
    }

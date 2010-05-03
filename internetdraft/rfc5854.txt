@@ -430,13 +430,13 @@ RFC 5854          Metalink Download Description Format        April 2010
    Example Date constructs:
 
    ...
-   <updated>2009-05-15T18:30:02Z</updated>
+   <updated>2010-05-01T12:15:02Z</updated>
    ...
-   <updated>2009-05-15T18:30:02.25Z</updated>
+   <updated>2010-05-01T12:15:02.25Z</updated>
    ...
-   <updated>2009-05-15T18:30:02+01:00</updated>
+   <updated>2010-05-01T12:15:02+01:00</updated>
    ...
-   <updated>2009-05-15T18:30:02.25+01:00</updated>
+   <updated>2010-05-01T12:15:02.25+01:00</updated>
    ...
 
 
@@ -537,12 +537,12 @@ RFC 5854          Metalink Download Description Format        April 2010
           & metalinkLanguage*
           & metalinkLogo?
           & metalinkMetaURL*
-          & metalinkURL*
           & metalinkOS*
           & metalinkPieces*
           & metalinkPublisher?
           & metalinkSignature?
           & metalinkSize?
+          & metalinkURL*
           & metalinkVersion?
           & extensionElement*)
       }
@@ -909,7 +909,7 @@ RFC 5854          Metalink Download Description Format        April 2010
 
    metalink:metaurl elements MUST have a "mediatype" attribute that
    indicates the Multipurpose Internet Mail Extensions (MIME) media type
-   [RFC4288] of the metadata available at the IRI.  In the case of
+   [RFC4288] of the metadata file available at the IRI.  In the case of
    BitTorrent as specified in [BITTORRENT], the value "torrent" is
    REQUIRED.  Types without "/" are reserved.  Currently, "torrent" is
    the only reserved value.
@@ -1666,13 +1666,13 @@ Appendix A.  Acknowledgements and Contributors
    Cowan, Ruben Kerkhof, Danny Ayers, Nick Dominguez, Gary Zellerbach,
    James Clark, Daniel Stenberg, John and Sandra Sowder, Salvatore
    Musumeci, Steve Eshelman, Lucas Hewett, Ryan Cronin, Dave Winquist,
-   Bob Denison, Wes Shelton, Kees Cook, Josh Colbert, Steve Kleisath,
-   Chad Neptune, Nick Carrabba, Chris Carrabba, Erin Solari, Derick
-   Cordoba, Ryan Alexander, Tom Mainville, Janie Wargo, Jason Hansen,
-   Tim Bray, Dan Brickley, Markus Hofmann, Dan Connolly, Tim Berners-
-   Lee, Louis Suarez-Potts, Ross Smith, Jeff Covey, Ed Lee, Shawn
-   Wilsher, Mike Connor, Johan Svedberg, Dedric Carter, and Debi
-   Goulding.  We also thank the Anthony Family, the Bryan Family,
+   Bob Denison, Wes Shelton, Josh Colbert, Steve Kleisath, Chad Neptune,
+   Derick Cordoba, Nick Carrabba, Chris Carrabba, Erin Solari, Ryan
+   Alexander, Tom Mainville, Janie Wargo, Jason Hansen, Tim Bray, Dan
+   Brickley, Markus Hofmann, Dan Connolly, Tim Berners-Lee, Louis
+   Suarez-Potts, Ross Smith, Jeff Covey, Ed Lee, Shawn Wilsher, Mike
+   Connor, Johan Svedberg, Kees Cook, Dedric Carter, and Debi Goulding.
+   We also thank the Anthony Family, the Bryan Family, Juanita Anthony,
 
 
 
@@ -1681,7 +1681,7 @@ Bryan, et al.                Standards Track                   [Page 30]
 RFC 5854          Metalink Download Description Format        April 2010
 
 
-   Juanita Anthony, and Zimmy Bryan.
+   and Zimmy Bryan.
 
    Special thanks to Eran Hammer-Lahav, document shepherd, and Lisa
    Dusseault, Area Director.  We also thank the following contributors
@@ -1694,6 +1694,8 @@ RFC 5854          Metalink Download Description Format        April 2010
    Peter Poeml wishes to acknowledge the support of SUSE Linux Products
    GmbH / Novell Inc., where he was employed during much of the work on
    this document.
+
+   This document is dedicated to Sonora Bryan.
 
 Appendix B.  RELAX NG Compact Schema
 
@@ -1727,8 +1729,6 @@ Appendix B.  RELAX NG Compact Schema
 
    # Date Construct
 
-   metalinkDateConstruct =
-      metalinkCommonAttributes,
 
 
 
@@ -1737,6 +1737,8 @@ Bryan, et al.                Standards Track                   [Page 31]
 RFC 5854          Metalink Download Description Format        April 2010
 
 
+   metalinkDateConstruct =
+      metalinkCommonAttributes,
       xsd:dateTime
 
    start = metalinkMetalink
@@ -1763,12 +1765,12 @@ RFC 5854          Metalink Download Description Format        April 2010
           & metalinkLanguage*
           & metalinkLogo?
           & metalinkMetaURL*
-          & metalinkURL*
           & metalinkOS*
           & metalinkPieces*
           & metalinkPublisher?
           & metalinkSignature?
           & metalinkSize?
+          & metalinkURL*
           & metalinkVersion?
           & extensionElement*)
       }
@@ -1783,8 +1785,6 @@ RFC 5854          Metalink Download Description Format        April 2010
    metalinkCopyright =
       element metalink:copyright {
          metalinkTextConstruct
-      }
-
 
 
 
@@ -1792,6 +1792,8 @@ Bryan, et al.                Standards Track                   [Page 32]
 
 RFC 5854          Metalink Download Description Format        April 2010
 
+
+      }
 
    metalinkDescription =
       element metalink:description {
@@ -1839,8 +1841,6 @@ RFC 5854          Metalink Download Description Format        April 2010
       element metalink:origin {
          metalinkCommonAttributes,
          attribute dynamic { xsd:boolean }?,
-         (metalinkUri)
-      }
 
 
 
@@ -1848,6 +1848,9 @@ Bryan, et al.                Standards Track                   [Page 33]
 
 RFC 5854          Metalink Download Description Format        April 2010
 
+
+         (metalinkUri)
+      }
 
    metalinkOS =
       element metalink:os {
@@ -1894,9 +1897,6 @@ RFC 5854          Metalink Download Description Format        April 2010
       }
 
    metalinkVersion =
-      element metalink:version {
-         metalinkTextConstruct
-      }
 
 
 
@@ -1904,6 +1904,10 @@ Bryan, et al.                Standards Track                   [Page 34]
 
 RFC 5854          Metalink Download Description Format        April 2010
 
+
+      element metalink:version {
+         metalinkTextConstruct
+      }
 
    # As defined in RFC 3066 and compatible with RFC 5646
    metalinkLanguageTag = xsd:string {
@@ -1949,10 +1953,6 @@ RFC 5854          Metalink Download Description Format        April 2010
       }
 
    anyForeignElement =
-      element * - metalink:* {
-         (attribute * { text }
-          | text
-          | anyElement)*
 
 
 
@@ -1961,6 +1961,10 @@ Bryan, et al.                Standards Track                   [Page 35]
 RFC 5854          Metalink Download Description Format        April 2010
 
 
+      element * - metalink:* {
+         (attribute * { text }
+          | text
+          | anyElement)*
    }
 
    # EOF
@@ -2005,10 +2009,6 @@ Index
          metalinkPublisher  19
          metalinkSignature  19
          metalinkSize  20
-         metalinkTextConstruct  8
-         metalinkUpdated  20
-         metalinkURL  21
-         metalinkVersion  21
 
 
 
@@ -2017,6 +2017,10 @@ Bryan, et al.                Standards Track                   [Page 36]
 RFC 5854          Metalink Download Description Format        April 2010
 
 
+         metalinkTextConstruct  8
+         metalinkUpdated  20
+         metalinkURL  21
+         metalinkVersion  21
          simpleExtensionElement  22
          structuredExtensionElement  23
 
@@ -2061,10 +2065,6 @@ RFC 5854          Metalink Download Description Format        April 2010
       metaurl mediatype ABNF  17
       metaurl XML element  16
 
-   O
-      origin XML element  17
-      os XML element  18
-
 
 
 
@@ -2072,6 +2072,10 @@ Bryan, et al.                Standards Track                   [Page 37]
 
 RFC 5854          Metalink Download Description Format        April 2010
 
+
+   O
+      origin XML element  17
+      os XML element  18
 
    P
       pieces XML element  12
@@ -2114,10 +2118,6 @@ RFC 5854          Metalink Download Description Format        April 2010
          updated  20
          url  20
          version  21
-
-
-
-
 
 
 
