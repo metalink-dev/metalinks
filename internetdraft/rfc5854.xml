@@ -41,7 +41,7 @@ boilerplate as described in RFC 5741.
 			<street></street>
 			<city></city>
 			<region>Shiga</region>
-			<country>JP</country>
+			<country>Japan</country>
 		  </postal>
           <email>tatsuhiro.t@gmail.com</email>
           <uri>http://aria2.sourceforge.net</uri>
@@ -54,6 +54,12 @@ boilerplate as described in RFC 5741.
   be listed as "Consultant"? -->
 
         <address>
+		  <postal>
+			<street></street>
+		    <city>San Diego</city>
+			<region>CA</region>
+			<country>USA</country>
+		  </postal>
           <email>neil@nabber.org</email>
           <uri>http://www.nabber.org</uri>
         </address>
