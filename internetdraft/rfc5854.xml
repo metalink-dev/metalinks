@@ -37,6 +37,12 @@ boilerplate as described in RFC 5741.
       <author initials="T." surname="Tsujikawa" fullname="Tatsuhiro Tsujikawa">
         <organization></organization>
         <address>
+		  <postal>
+			<street></street>
+			<city></city>
+			<region>Shiga</region>
+			<country>JP</country>
+		  </postal>
           <email>tatsuhiro.t@gmail.com</email>
           <uri>http://aria2.sourceforge.net</uri>
         </address>
