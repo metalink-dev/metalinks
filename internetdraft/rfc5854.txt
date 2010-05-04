@@ -2140,12 +2140,16 @@ Authors' Addresses
 
 
    Tatsuhiro Tsujikawa
+   Shiga
+   Japan
 
    EMail: tatsuhiro.t@gmail.com
    URI:   http://aria2.sourceforge.net
 
 
    Neil McNab
+   San Diego, CA
+   USA
 
    EMail: neil@nabber.org
    URI:   http://www.nabber.org
@@ -2160,10 +2164,6 @@ Authors' Addresses
    Phone: +49 221 6778 333 8
    EMail: peter@poeml.de
    URI:   http://mirrorbrain.org/~poeml/
-
-
-
-
 
 
 
