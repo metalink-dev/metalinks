@@ -141,7 +141,7 @@ boilerplate as described in RFC 5741.
       which can peruse it in automatic ways or present the information to a human user. 
       User agents can fall back to alternate
       mirrors if the current one has an issue.  Thereby, clients
-      are enabled to work their way to a successful download even under adverse
+      are enabled to work their way to a successful download under adverse
       circumstances.  All this can be done transparently to the human user and the
       download is much more reliable and efficient.  In contrast, a traditional
       HTTP redirect to one mirror conveys only comparatively minimal information --
@@ -492,7 +492,7 @@ metalinkMetalink =
 	    not. Some applications (one example is full-text indexers)
 	    require a minimum amount of text to function
 	    reliably and predictably. Metalink publishers should be aware
-	    of these issues. It is RECOMMENDED that each <xref target="element.file" format="none">metalink:file</xref>
+	    of this. It is RECOMMENDED that each <xref target="element.file" format="none">metalink:file</xref>
 	    element contain a non-empty <xref target="element.description" format="none">metalink:description</xref> element, a
 	    non-empty <xref target="element.identity" format="none">metalink:identity</xref> element, a non-empty <xref target="element.version" format="none">metalink:version</xref> element, and a non-empty
 		<xref target="element.publisher" format="none">metalink:publisher</xref> element when these elements are present. However, the
@@ -547,7 +547,7 @@ metalinkFile =
 	  <xref target="element.url" format="none">metalink:url</xref> or <xref target="element.metaurl" format="none">metalink:metaurl</xref> elements. Significance is determined by the value of the "priority" attribute of the <xref target="element.url" format="none">metalink:url</xref> or <xref target="element.metaurl" format="none">metalink:metaurl</xref> elements.</t>
 
 	  <t>The following child elements are defined by this specification
-	  (note that it requires the presence of some of these elements):</t>
+	  (the presence of some of them is required):</t>
 
 	  <t> 
 	
@@ -616,7 +616,7 @@ metalinkFile =
     <iref item="pieces XML element" primary="true"/> 
 	      
 	  <t>The "<xref target="element.pieces" format="none">metalink:pieces</xref>" element acts as a container for a list of cryptographic hashes of
-non-overlapping pieces of the file. The cryptographic hashes MUST be listed in the same order as the corresponding pieces appear in the file, starting at
+contiguous, non-overlapping pieces of the file. The cryptographic hashes MUST be listed in the same order as the corresponding pieces appear in the file, starting at
       the beginning of the file. Metalink Documents MAY contain one or multiple <xref target="element.pieces" format="none">metalink:pieces</xref> container elements, if each "type" attribute of <xref target="element.pieces" format="none">metalink:pieces</xref> has a unique value.
 	  
 	    <figure>
@@ -998,7 +998,7 @@ metalinkOrigin =
     <iref item="os XML element" primary="true"/> 
 	      
 	  <t>The "<xref target="element.os" format="none">metalink:os</xref>" element is a Text construct that conveys an
-	  Operating System for a file. The IANA registry named "Operating System Names" defines values for OS types.
+	  Operating System that a file is suitable for. The IANA registry named "Operating System Names" defines values for OS types.
 	  
 	    <figure>
         <iref item="metalinkOS grammar production" primary="true"/>
@@ -1471,9 +1471,9 @@ Anthony&nbsp;Bryan &lt;anthonybryan@gmail.com&gt;</t>
 	    
 	    <t>Publishers of Metalink Documents may have sound reasons for signing
 	    otherwise-unprotected content. For example, a merchant
-	    might digitally sign a Metalink that lists a file download to verify its origin. Other merchants may wish to sign and encrypt Metalink Documents that list digital songs that have been purchased. Of course,
-	    many other examples are conceivable as well.</t>
-	    <t>Publishers are encouraged to offer Metalink documents via authenticated HTTP under Transport Layer Security (TLS) as specified in <xref target="RFC2818"/>. The choice of a secure content layer is entirely possible for content providers.</t>
+	    might digitally sign a Metalink that lists a file download to verify its origin. Other merchants may wish to sign and encrypt Metalink Documents that list digital songs that have been purchased. 
+	    Many other examples are conceivable.</t>
+	    <t>Publishers are encouraged to offer Metalink documents via authenticated HTTP under Transport Layer Security (TLS) as specified in <xref target="RFC2818"/>. The choice of a secure content layer rests entirely with the content providers.</t>
 		
 		<t>Publishers are also encouraged to include digital signatures of the files within the Metalink Documents, if they are available, as described in <xref target="element.signature"/>.</t>
 		
@@ -1505,9 +1505,9 @@ Anthony&nbsp;Bryan &lt;anthonybryan@gmail.com&gt;</t>
 
 	      <t>Section 6.5.1 of <xref target="REC-xmldsig-core"/> requires
 	      support for Canonical XML <xref target="REC-xml-c14n"/>. However, many
-	      implementers do not use it because signed XML documents
-	      enclosed in other XML documents have their signatures
-	      broken. Thus, Metalink Processors that verify signed Metalink
+	      implementers do not use it because enclosing signed XML documents
+	      into other XML documents breaks the signatures.
+	      Thus, Metalink Processors that verify signed Metalink
 	      Documents MUST be able to canonicalize with the
 	      exclusive XML canonicalization method identified by the
 	      URI "http://www.w3.org/2001/10/xml-exc-c14n#", as
@@ -1540,14 +1540,14 @@ Anthony&nbsp;Bryan &lt;anthonybryan@gmail.com&gt;</t>
 
 		  <t>There is potential for spoofing attacks where the attacker publishes
           Metalink Documents with false information. Malicious publishers might create Metalink Documents containing inaccurate information anywhere in the document.
-          Unaware downloaders could be deceived into downloading a malicious or worthless file. Malicious publishers could attempt a distributed denial-of-service attack by inserting unrelated IRIs into Metalink Documents.</t>
+          Unaware downloaders could be deceived into downloading malicious or worthless content. Malicious publishers could attempt a distributed denial-of-service attack by inserting unrelated IRIs into Metalink Documents.</t>
 	      
 		  <t>Digital signatures address the issue of spoofing.</t>
 	    </section>	
 		
 	    <section title="Cryptographic Hashes" anchor="security.hash">
 
-	      <t>Currently, some of the hash types defined in the IANA registry named "Hash Function Textual Names" are considered insecure. These include the whole Message Digest family of algorithms that are not suitable for cryptographically strong verification. Malicious people could provide files that appear to be identical to another file because of a collision, i.e., the weak cryptographic hashes of the intended file and a substituted malicious file could match.</t>
+	      <t>Currently, some of the hash types defined in the IANA registry named "Hash Function Textual Names" are considered insecure. These include the whole Message Digest family of algorithms that are not suitable for cryptographically strong verification. Malicious parties could provide files that appear to be identical to another file because of a collision, i.e., the weak cryptographic hashes of the intended file and a substituted malicious file could match.</t>
 		  <t>Metalink Generators and Processors MUST support "sha-256", which is SHA-256, as specified in <xref target="FIPS-180-3"/>, and MAY support stronger hashes.</t>
           <t>If a Metalink Document contains hashes, it SHOULD include "sha-256", which is SHA-256, or stronger.  It MAY also include other hashes from the IANA registry named "Hash Function Textual Names".</t>
 
