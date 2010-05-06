@@ -1136,7 +1136,7 @@ subtype-name = &lt;Defined in Section 4.2 of RFC 4288&gt;
 	    is mapped to a URI and 
 	    dereferenced. Note that the "<xref target="element.size" format="none">metalink:size</xref>" element MUST
    override the actual content length of the representation as reported
-   by the underlying protocol, and those that do not match will be discarded by Metalink Processors. This value MUST be a non-negative integer.
+   by the underlying protocol, and those that do not match MUST be discarded by Metalink Processors. This value MUST be a non-negative integer.
 	    <figure>
         <iref item="metalinkSize grammar production" primary="true"/>
         <iref item="Grammar" subitem="metalinkSize" primary="true"/>
