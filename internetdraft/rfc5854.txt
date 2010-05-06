@@ -1085,7 +1085,7 @@ RFC 5854          Metalink Download Description Format          May 2010
    returned when the IRI is mapped to a URI and dereferenced.  Note that
    the "metalink:size" element MUST override the actual content length
    of the representation as reported by the underlying protocol, and
-   those that do not match will be discarded by Metalink Processors.
+   those that do not match MUST be discarded by Metalink Processors.
    This value MUST be a non-negative integer.
 
    metalinkSize =
