@@ -78,7 +78,7 @@ boilerplate as described in RFC 5741.
           <uri>http://mirrorbrain.org/~poeml/</uri>
         </address>
       </author>
-	<date month="April" year="2010"/>     
+	<date month="May" year="2010"/>     
 
    <!--[rfced] Please insert any keywords (beyond those that appear in
    the title) for use on http://www.rfc-editor.org/rfcsearch.html. 
@@ -1505,9 +1505,9 @@ Anthony&nbsp;Bryan &lt;anthonybryan@gmail.com&gt;</t>
 
 	      <t>Section 6.5.1 of <xref target="REC-xmldsig-core"/> requires
 	      support for Canonical XML <xref target="REC-xml-c14n"/>. However, many
-	      implementers do not use it because enclosing signed XML documents
-	      into other XML documents breaks the signatures.
-	      Thus, Metalink Processors that verify signed Metalink
+-	      implementers do not use it because signed XML documents
+-	      enclosed in other XML documents have their signatures
+-	      broken. Thus, Metalink Processors that verify signed Metalink
 	      Documents MUST be able to canonicalize with the
 	      exclusive XML canonicalization method identified by the
 	      URI "http://www.w3.org/2001/10/xml-exc-c14n#", as
