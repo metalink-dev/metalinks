@@ -1375,9 +1375,9 @@ RFC 5854          Metalink Download Description Format          May 2010
    Normally, a publisher is in the best position to know how strong the
    protective signing ought to be on their content.  Thus, a publisher
    can choose weak or strong cryptography, and a Metalink Processor
-   would normally accept that.  There MAY be applications where the
-   Metalink Processor chooses to reject weak cryptography, but that is
-   not envisioned as the common use case.
+   SHOULD normally accept that.  There are potential applications where
+   the Metalink Processor chooses to reject weak cryptography, but that
+   is not envisioned as the common use case.
 
 7.1.  Digital Signatures
 
