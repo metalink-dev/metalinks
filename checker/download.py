@@ -122,6 +122,7 @@ PGP_KEY_STORE=None
 HTTP_PROXY=""
 FTP_PROXY=""
 HTTPS_PROXY=""
+SOCKS_PROXY=""
 
 # Streaming server setings to use
 HOST = "localhost"
