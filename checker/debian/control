@@ -1,7 +1,7 @@
 Source: metalink-checker
 Section: web
 Priority: extra
-Maintainer: Neil McNab <webmaster@nabber.org>
+Maintainer: Neil McNab <neil@nabber.org>
 Build-Depends: debhelper (>= 5)
 Standards-Version: 3.7.2
 
