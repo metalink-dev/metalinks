@@ -220,6 +220,11 @@ class MetalinkFileBase:
     This should not be called directly, it is a base class.
     '''
     def __init__(self, filename, attrs, do_ed2k, do_magnet):
+        filename = filename.replace("\\", "/")
+        filename = filename.lstrip("/.")
+        filename = filename.replace("/../", "")
+        if filename.endswith("/.."):
+            filename = filename[:-3]
         self.filename = filename
         self.errors = []
         self.hashlist = {}
