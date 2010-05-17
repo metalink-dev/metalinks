@@ -123,7 +123,13 @@ HTTP has a similar feature named Instance Digests <xref target="RFC3230"/> which
 <t>All hash values MUST be encoded in lowercase hexadecimal format.</t>
 
 
-<t>The HASH command is useful for files transmitted in Image type mode (TYPE I) and Stream transfer mode (MODE S).</t>
+<t>The HASH command is meant to be used for files transmitted in Image
+type mode (TYPE I) and Stream transfer mode (MODE S). The returned hash
+MUST be calculated over the raw octet data of the file irrespective of
+the selected data type, transfer mode or any other state affecting the
+transfer. In other words, if a client were to download a full file using
+TYPE I and MODE S and were to calculate the hash on the received octet
+data, it would be identical to the hash returned by HASH.</t>
 
 <section title="HASH Command Errors">
 
