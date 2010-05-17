@@ -4,7 +4,7 @@
 Network Working Group                                           A. Bryan
 Internet-Draft                                                  T. Kosse
 Intended status: Experimental                                D. Stenberg
-Expires: November 3, 2010                                    May 2, 2010
+Expires: November 17, 2010                                  May 16, 2010
 
 
                 FTP Extensions for Cryptographic Hashes
@@ -37,7 +37,7 @@ Status of this Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on November 3, 2010.
+   This Internet-Draft will expire on November 17, 2010.
 
 Copyright Notice
 
@@ -52,7 +52,7 @@ Copyright Notice
 
 
 
-Bryan, et al.           Expires November 3, 2010                [Page 1]
+Bryan, et al.           Expires November 17, 2010               [Page 1]
 
 Internet-Draft   FTP Extensions for Cryptographic Hashes        May 2010
 
@@ -70,7 +70,7 @@ Table of Contents
    2.  Notational Conventions . . . . . . . . . . . . . . . . . . . .  3
    3.  The HASH Command (HASH)  . . . . . . . . . . . . . . . . . . .  4
      3.1.  HASH Command Errors  . . . . . . . . . . . . . . . . . . .  4
-     3.2.  FEAT Command Response for HASH Command . . . . . . . . . .  4
+     3.2.  FEAT Command Response for HASH Command . . . . . . . . . .  5
      3.3.  Changing the HASH algorithm  . . . . . . . . . . . . . . .  5
    4.  Command Usage  . . . . . . . . . . . . . . . . . . . . . . . .  6
    5.  IANA Considerations  . . . . . . . . . . . . . . . . . . . . .  6
@@ -108,7 +108,7 @@ Table of Contents
 
 
 
-Bryan, et al.           Expires November 3, 2010                [Page 2]
+Bryan, et al.           Expires November 17, 2010               [Page 2]
 
 Internet-Draft   FTP Extensions for Cryptographic Hashes        May 2010
 
@@ -164,7 +164,7 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes        May 2010
 
 
 
-Bryan, et al.           Expires November 3, 2010                [Page 3]
+Bryan, et al.           Expires November 17, 2010               [Page 3]
 
 Internet-Draft   FTP Extensions for Cryptographic Hashes        May 2010
 
@@ -199,8 +199,14 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes        May 2010
 
    All hash values MUST be encoded in lowercase hexadecimal format.
 
-   The HASH command is useful for files transmitted in Image type mode
-   (TYPE I) and Stream transfer mode (MODE S).
+   The HASH command is meant to be used for files transmitted in Image
+   type mode (TYPE I) and Stream transfer mode (MODE S).  The returned
+   hash MUST be calculated over the raw octet data of the file
+   irrespective of the selected data type, transfer mode or any other
+   state affecting the transfer.  In other words, if a client were to
+   download a full file using TYPE I and MODE S and were to calculate
+   the hash on the received octet data, it would be identical to the
+   hash returned by HASH.
 
 3.1.  HASH Command Errors
 
@@ -211,20 +217,20 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes        May 2010
    Response code 552 is used if the user is not allowed to use the HASH
    command.  Response code 450 is used to indicate the server is busy,
    e.g. already hashing other files yet inviting the client to retry in
+
+
+
+Bryan, et al.           Expires November 17, 2010               [Page 4]
+
+Internet-Draft   FTP Extensions for Cryptographic Hashes        May 2010
+
+
    future.
 
 3.2.  FEAT Command Response for HASH Command
 
    A server that supports the HASH command MUST advertise it in FEAT
    response [RFC2389] with a list of all supported hash algorithms in a
-
-
-
-Bryan, et al.           Expires November 3, 2010                [Page 4]
-
-Internet-Draft   FTP Extensions for Cryptographic Hashes        May 2010
-
-
    semicolon separated list.  The hash algorithm that is currently
    selected MUST be marked with an asterisk.  This command word is case
    insensitive, but it SHOULD be transmitted in upper case only.  That
@@ -270,13 +276,7 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes        May 2010
 
 
 
-
-
-
-
-
-
-Bryan, et al.           Expires November 3, 2010                [Page 5]
+Bryan, et al.           Expires November 17, 2010               [Page 5]
 
 Internet-Draft   FTP Extensions for Cryptographic Hashes        May 2010
 
@@ -332,7 +332,7 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes        May 2010
 
 
 
-Bryan, et al.           Expires November 3, 2010                [Page 6]
+Bryan, et al.           Expires November 17, 2010               [Page 6]
 
 Internet-Draft   FTP Extensions for Cryptographic Hashes        May 2010
 
@@ -388,7 +388,7 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes        May 2010
 
 
 
-Bryan, et al.           Expires November 3, 2010                [Page 7]
+Bryan, et al.           Expires November 17, 2010               [Page 7]
 
 Internet-Draft   FTP Extensions for Cryptographic Hashes        May 2010
 
@@ -444,7 +444,7 @@ Appendix B.  List of Non-standard Cryptographic Hash or Checksum
 
 
 
-Bryan, et al.           Expires November 3, 2010                [Page 8]
+Bryan, et al.           Expires November 17, 2010               [Page 8]
 
 Internet-Draft   FTP Extensions for Cryptographic Hashes        May 2010
 
@@ -500,7 +500,7 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes        May 2010
 
 
 
-Bryan, et al.           Expires November 3, 2010                [Page 9]
+Bryan, et al.           Expires November 17, 2010               [Page 9]
 
 Internet-Draft   FTP Extensions for Cryptographic Hashes        May 2010
 
@@ -556,7 +556,7 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes        May 2010
 
 
 
-Bryan, et al.           Expires November 3, 2010               [Page 10]
+Bryan, et al.           Expires November 17, 2010              [Page 10]
 
 Internet-Draft   FTP Extensions for Cryptographic Hashes        May 2010
 
@@ -612,7 +612,7 @@ Authors' Addresses
 
 
 
-Bryan, et al.           Expires November 3, 2010               [Page 11]
+Bryan, et al.           Expires November 17, 2010              [Page 11]
 
 Internet-Draft   FTP Extensions for Cryptographic Hashes        May 2010
 
@@ -668,5 +668,5 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes        May 2010
 
 
 
-Bryan, et al.           Expires November 3, 2010               [Page 12]
+Bryan, et al.           Expires November 17, 2010              [Page 12]
 
