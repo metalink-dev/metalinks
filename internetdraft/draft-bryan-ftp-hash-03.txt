@@ -4,7 +4,7 @@
 Network Working Group                                           A. Bryan
 Internet-Draft                                                  T. Kosse
 Intended status: Experimental                                D. Stenberg
-Expires: November 17, 2010                                  May 16, 2010
+Expires: November 22, 2010                                  May 21, 2010
 
 
                 FTP Extensions for Cryptographic Hashes
@@ -37,7 +37,7 @@ Status of this Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on November 17, 2010.
+   This Internet-Draft will expire on November 22, 2010.
 
 Copyright Notice
 
@@ -52,7 +52,7 @@ Copyright Notice
 
 
 
-Bryan, et al.           Expires November 17, 2010               [Page 1]
+Bryan, et al.           Expires November 22, 2010               [Page 1]
 
 Internet-Draft   FTP Extensions for Cryptographic Hashes        May 2010
 
@@ -108,7 +108,7 @@ Table of Contents
 
 
 
-Bryan, et al.           Expires November 17, 2010               [Page 2]
+Bryan, et al.           Expires November 22, 2010               [Page 2]
 
 Internet-Draft   FTP Extensions for Cryptographic Hashes        May 2010
 
@@ -152,19 +152,19 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes        May 2010
    document are to be interpreted as described in BCP 14, [RFC2119], as
    scoped to those conformance targets.
 
+   In examples, the "C>" lines are commands from user-PI to server-PI,
+   and the "S>" lines are server-PI replies.
+
    This document also uses notation defined in STD 9, [RFC0959].  In
    particular, the terms "reply", "user", "file", "pathname", "FTP
    commands", "user-PI", "server-FTP process", "server-PI", "mode",
    "type", and "ASCII", are all used here as defined there.
 
-   In examples, the "C>" lines are commands from user-PI to server-PI,
-   and the "S>" lines are server-PI replies.
-
    Syntax required is defined using the Augmented BNF defined in
 
 
 
-Bryan, et al.           Expires November 17, 2010               [Page 3]
+Bryan, et al.           Expires November 22, 2010               [Page 3]
 
 Internet-Draft   FTP Extensions for Cryptographic Hashes        May 2010
 
@@ -182,8 +182,8 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes        May 2010
 
            hash = "HASH" SP <pathname>
 
-   As with all FTP commands, the "HASH" command label is interpreted in
-   a case-insensitive manner.
+   As with all FTP commands, the "HASH" command word is case
+   independent, and MAY be specified in any character case desired.
 
    The HASH command keyword MUST be followed by a single space (ASCII
    32) followed by the pathname.
@@ -220,7 +220,7 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes        May 2010
 
 
 
-Bryan, et al.           Expires November 17, 2010               [Page 4]
+Bryan, et al.           Expires November 22, 2010               [Page 4]
 
 Internet-Draft   FTP Extensions for Cryptographic Hashes        May 2010
 
@@ -229,24 +229,25 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes        May 2010
 
 3.2.  FEAT Command Response for HASH Command
 
-   A server that supports the HASH command MUST advertise it in FEAT
-   response [RFC2389] with a list of all supported hash algorithms in a
-   semicolon separated list.  The hash algorithm that is currently
-   selected MUST be marked with an asterisk.  This command word is case
-   insensitive, but it SHOULD be transmitted in upper case only.  That
-   is, the response SHOULD be:
+   A server-FTP process that supports the HASH command MUST include, in
+   the response to the FEAT command [RFC2389], a feature line indicating
+   that the HASH command is supported, along with a list of all
+   supported hash algorithms in a semicolon separated list.  The hash
+   algorithm that is currently selected MUST be marked with an asterisk.
+   This command word is case insensitive, but it SHOULD be transmitted
+   in upper case only.  That is, the response SHOULD be:
 
 
-           C> feat
+           C> FEAT
            S> 211-Extensions supported:
            S>  ...
            S>  HASH SHA-1*;MD5
            S>  ...
            S> 211 END
 
-   The ellipses indicate place holders where other features may be
-   included, and are not required.  The single space indentation of each
-   feature line is mandatory [RFC2389].
+   The ellipses indicate place holders where other features MAY be
+   listed, but this is OPTIONAL.  The single space indentation of each
+   feature line is REQUIRED by [RFC2389].
 
    The IANA registry named "Hash Function Textual Names" defines values
    for hash types.  Hash names should be presented in uppercase, but
@@ -275,8 +276,7 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes        May 2010
 
 
 
-
-Bryan, et al.           Expires November 17, 2010               [Page 5]
+Bryan, et al.           Expires November 22, 2010               [Page 5]
 
 Internet-Draft   FTP Extensions for Cryptographic Hashes        May 2010
 
@@ -325,14 +325,14 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes        May 2010
    All conforming implementations MUST at least support the SHA-1
    algorithm.  Implementations SHOULD NOT make any algorithm the default
    that is known to be weaker than SHA-1.  Support for any additional
-   algorithms is optional.
+   algorithms is OPTIONAL.
 
 
 
 
 
 
-Bryan, et al.           Expires November 17, 2010               [Page 6]
+Bryan, et al.           Expires November 22, 2010               [Page 6]
 
 Internet-Draft   FTP Extensions for Cryptographic Hashes        May 2010
 
@@ -388,7 +388,7 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes        May 2010
 
 
 
-Bryan, et al.           Expires November 17, 2010               [Page 7]
+Bryan, et al.           Expires November 22, 2010               [Page 7]
 
 Internet-Draft   FTP Extensions for Cryptographic Hashes        May 2010
 
@@ -444,7 +444,7 @@ Appendix B.  List of Non-standard Cryptographic Hash or Checksum
 
 
 
-Bryan, et al.           Expires November 17, 2010               [Page 8]
+Bryan, et al.           Expires November 22, 2010               [Page 8]
 
 Internet-Draft   FTP Extensions for Cryptographic Hashes        May 2010
 
@@ -500,7 +500,7 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes        May 2010
 
 
 
-Bryan, et al.           Expires November 17, 2010               [Page 9]
+Bryan, et al.           Expires November 22, 2010               [Page 9]
 
 Internet-Draft   FTP Extensions for Cryptographic Hashes        May 2010
 
@@ -556,7 +556,7 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes        May 2010
 
 
 
-Bryan, et al.           Expires November 17, 2010              [Page 10]
+Bryan, et al.           Expires November 22, 2010              [Page 10]
 
 Internet-Draft   FTP Extensions for Cryptographic Hashes        May 2010
 
@@ -612,7 +612,7 @@ Authors' Addresses
 
 
 
-Bryan, et al.           Expires November 17, 2010              [Page 11]
+Bryan, et al.           Expires November 22, 2010              [Page 11]
 
 Internet-Draft   FTP Extensions for Cryptographic Hashes        May 2010
 
@@ -668,5 +668,5 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes        May 2010
 
 
 
-Bryan, et al.           Expires November 17, 2010              [Page 12]
+Bryan, et al.           Expires November 22, 2010              [Page 12]
 
