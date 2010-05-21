@@ -8,7 +8,7 @@ Expires: November 22, 2010                                  May 21, 2010
 
 
                 FTP Extensions for Cryptographic Hashes
-                        draft-bryan-ftp-hash-03
+                        draft-bryan-ftp-hash-04
 
 Abstract
 
