@@ -144,7 +144,7 @@
 <tr><td class="header">Network Working Group</td><td class="header">A. Bryan</td></tr>
 <tr><td class="header">Internet-Draft</td><td class="header">T. Kosse</td></tr>
 <tr><td class="header">Intended status: Experimental</td><td class="header">D. Stenberg</td></tr>
-<tr><td class="header">Expires: November 17, 2010</td><td class="header">May 16, 2010</td></tr>
+<tr><td class="header">Expires: November 22, 2010</td><td class="header">May 21, 2010</td></tr>
 </table></td></tr></table>
 <h1><br />FTP Extensions for Cryptographic Hashes<br />draft-bryan-ftp-hash-02</h1>
 
@@ -169,7 +169,7 @@ and may be updated, replaced, or obsoleted by other documents at any time.
 It is inappropriate to use Internet-Drafts as reference material or to cite
 them other than as &ldquo;work in progress.&rdquo;</p>
 <p>
-This Internet-Draft will expire on November 17, 2010.</p>
+This Internet-Draft will expire on November 22, 2010.</p>
 
 <h3>Copyright Notice</h3>
 <p>
@@ -267,11 +267,11 @@ Notational Conventions</h3>
 	"SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
 	document are to be interpreted as described in BCP 14, <a class='info' href='#RFC2119'>[RFC2119]<span> (</span><span class='info'>Bradner, S., &ldquo;Key words for use in RFCs to Indicate Requirement Levels,&rdquo; March&nbsp;1997.</span><span>)</span></a>, as scoped to those conformance targets.
 </p>
+<p>In examples, the "C&gt;" lines are commands from user-PI to server-PI, and the "S&gt;" lines are server-PI replies.
+</p>
 <p>This document also uses notation defined in STD 9, <a class='info' href='#RFC0959'>[RFC0959]<span> (</span><span class='info'>Postel, J. and J. Reynolds, &ldquo;File Transfer Protocol,&rdquo; October&nbsp;1985.</span><span>)</span></a>.
 	In particular, the terms "reply", "user", "file", "pathname", "FTP commands", "user-PI", "server-FTP process",
     "server-PI", "mode", "type", and "ASCII", are all used here as defined there.
-</p>
-<p>In examples, the "C&gt;" lines are commands from user-PI to server-PI, and the "S&gt;" lines are server-PI replies.
 </p>
 <p>Syntax required is defined using the Augmented BNF defined in <a class='info' href='#RFC5234'>[RFC5234]<span> (</span><span class='info'>Crocker, D. and P. Overell, &ldquo;Augmented BNF for Syntax Specifications: ABNF,&rdquo; January&nbsp;2008.</span><span>)</span></a>.
 </p>
@@ -290,7 +290,7 @@ The HASH Command (HASH)</h3>
         hash = "HASH" SP &lt;pathname&gt;
 </pre></div>
 
-<p>As with all FTP commands, the "HASH" command label is interpreted in a case-insensitive manner.
+<p>As with all FTP commands, the "HASH" command word is case independent, and MAY be specified in any character case desired.
 </p>
 <p>The HASH command keyword MUST be followed by a single space (ASCII 32) followed by the pathname.
 </p>
@@ -327,13 +327,13 @@ Response code 450 is used to indicate the server is busy, e.g. already hashing o
 <a name="rfc.section.3.2"></a><h3>3.2.&nbsp;
 FEAT Command Response for HASH Command</h3>
 
-<p>A server that supports the HASH command MUST advertise it in FEAT response <a class='info' href='#RFC2389'>[RFC2389]<span> (</span><span class='info'>Hethmon, P. and R. Elz, &ldquo;Feature negotiation mechanism for the File Transfer Protocol,&rdquo; August&nbsp;1998.</span><span>)</span></a> with a list of all supported hash algorithms in a semicolon separated list. The hash algorithm that is currently selected MUST be marked with an asterisk. This command word is
+<p>A server-FTP process that supports the HASH command MUST include, in the response to the FEAT command <a class='info' href='#RFC2389'>[RFC2389]<span> (</span><span class='info'>Hethmon, P. and R. Elz, &ldquo;Feature negotiation mechanism for the File Transfer Protocol,&rdquo; August&nbsp;1998.</span><span>)</span></a>, a feature line indicating that the HASH command is supported, along with a list of all supported hash algorithms in a semicolon separated list. The hash algorithm that is currently selected MUST be marked with an asterisk. This command word is
    case insensitive, but it SHOULD be transmitted in upper case only. That is, the response SHOULD be:
 </p>
 <p>
 <p>
 </p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
-        C&gt; feat
+        C&gt; FEAT
         S&gt; 211-Extensions supported:
         S&gt;  ...
         S&gt;  HASH SHA-1*;MD5
@@ -341,7 +341,7 @@ FEAT Command Response for HASH Command</h3>
         S&gt; 211 END
 </pre></div>
 
-<p>The ellipses indicate place holders where other features may be included, and are not required. The single space indentation of each feature line is mandatory <a class='info' href='#RFC2389'>[RFC2389]<span> (</span><span class='info'>Hethmon, P. and R. Elz, &ldquo;Feature negotiation mechanism for the File Transfer Protocol,&rdquo; August&nbsp;1998.</span><span>)</span></a>.
+<p>The ellipses indicate place holders where other features MAY be listed, but this is OPTIONAL. The single space indentation of each feature line is REQUIRED by <a class='info' href='#RFC2389'>[RFC2389]<span> (</span><span class='info'>Hethmon, P. and R. Elz, &ldquo;Feature negotiation mechanism for the File Transfer Protocol,&rdquo; August&nbsp;1998.</span><span>)</span></a>.
 </p>
 <p>The IANA registry named "Hash Function Textual Names" defines values for hash types. Hash names should be presented in uppercase, but comparisons should be case-insensitive, e.g. MD5, md5, Md5 are all the same.
 </p>
@@ -411,7 +411,7 @@ IANA Considerations</h3>
 <a name="rfc.section.6"></a><h3>6.&nbsp;
 Implementation Requirements</h3>
 
-<p>All conforming implementations MUST at least support the SHA-1 algorithm. Implementations SHOULD NOT make any algorithm the default that is known to be weaker than SHA-1. Support for any additional algorithms is optional.
+<p>All conforming implementations MUST at least support the SHA-1 algorithm. Implementations SHOULD NOT make any algorithm the default that is known to be weaker than SHA-1. Support for any additional algorithms is OPTIONAL.
 </p>
 <a name="anchor9"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
