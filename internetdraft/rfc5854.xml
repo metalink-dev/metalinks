@@ -601,9 +601,11 @@ metalinkFile =
 &lt;file name="debian-amd64/sarge/Contents-amd64.gz"&gt;
 </artwork></figure></t>
         <t>In this example, a subdirectory "debian-amd64/sarge/" will be created
-           and a file named "Contents-amd64.gz" will be created inside it.  The path MUST NOT contain any directory traversal directives or
+           and a file named "Contents-amd64.gz" will be created inside it.</t>
+		<t><list style='empty'><t>Security Note:
+		   The path MUST NOT contain any directory traversal directives or
            information. The path MUST be relative.  The path MUST NOT begin with a "/", "./", or
-           "../"; contain "/../"; or end with "/..".</t>
+           "../"; contain "/../"; or end with "/..".</t></list></t>
 	  </section> 
 
 
