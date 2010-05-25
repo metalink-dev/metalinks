@@ -71,32 +71,32 @@ RFC 5854          Metalink Download Description Format          May 2010
        4.2.3.  The "metalink:generator" Element . . . . . . . . . . . 13
        4.2.4.  The "metalink:hash" Element  . . . . . . . . . . . . . 14
        4.2.5.  The "metalink:identity" Element  . . . . . . . . . . . 15
-       4.2.6.  The "metalink:language" Element  . . . . . . . . . . . 15
+       4.2.6.  The "metalink:language" Element  . . . . . . . . . . . 16
        4.2.7.  The "metalink:logo" Element  . . . . . . . . . . . . . 16
        4.2.8.  The "metalink:metaurl" Element . . . . . . . . . . . . 16
-       4.2.9.  The "metalink:origin" Element  . . . . . . . . . . . . 17
+       4.2.9.  The "metalink:origin" Element  . . . . . . . . . . . . 18
        4.2.10. The "metalink:os" Element  . . . . . . . . . . . . . . 18
        4.2.11. The "metalink:published" Element . . . . . . . . . . . 18
-       4.2.12. The "metalink:publisher" Element . . . . . . . . . . . 18
+       4.2.12. The "metalink:publisher" Element . . . . . . . . . . . 19
        4.2.13. The "metalink:signature" Element . . . . . . . . . . . 19
        4.2.14. The "metalink:size" Element  . . . . . . . . . . . . . 20
-       4.2.15. The "metalink:updated" Element . . . . . . . . . . . . 20
-       4.2.16. The "metalink:url" Element . . . . . . . . . . . . . . 20
-       4.2.17. The "metalink:version" Element . . . . . . . . . . . . 21
-   5.  Extending Metalink . . . . . . . . . . . . . . . . . . . . . . 21
+       4.2.15. The "metalink:updated" Element . . . . . . . . . . . . 21
+       4.2.16. The "metalink:url" Element . . . . . . . . . . . . . . 21
+       4.2.17. The "metalink:version" Element . . . . . . . . . . . . 22
+   5.  Extending Metalink . . . . . . . . . . . . . . . . . . . . . . 22
      5.1.  Extensions from Non-Metalink Vocabularies  . . . . . . . . 22
      5.2.  Extensions to the Metalink Vocabulary  . . . . . . . . . . 22
      5.3.  Processing Foreign Markup  . . . . . . . . . . . . . . . . 22
-     5.4.  Extension Elements . . . . . . . . . . . . . . . . . . . . 22
-       5.4.1.  Simple Extension Elements  . . . . . . . . . . . . . . 22
+     5.4.  Extension Elements . . . . . . . . . . . . . . . . . . . . 23
+       5.4.1.  Simple Extension Elements  . . . . . . . . . . . . . . 23
        5.4.2.  Structured Extension Elements  . . . . . . . . . . . . 23
-   6.  IANA Considerations  . . . . . . . . . . . . . . . . . . . . . 23
-     6.1.  XML Namespace Registration . . . . . . . . . . . . . . . . 23
+   6.  IANA Considerations  . . . . . . . . . . . . . . . . . . . . . 24
+     6.1.  XML Namespace Registration . . . . . . . . . . . . . . . . 24
      6.2.  application/metalink4+xml MIME type  . . . . . . . . . . . 24
    7.  Security Considerations  . . . . . . . . . . . . . . . . . . . 25
-     7.1.  Digital Signatures . . . . . . . . . . . . . . . . . . . . 25
-     7.2.  URIs and IRIs  . . . . . . . . . . . . . . . . . . . . . . 26
-     7.3.  Spoofing . . . . . . . . . . . . . . . . . . . . . . . . . 26
+     7.1.  Digital Signatures . . . . . . . . . . . . . . . . . . . . 26
+     7.2.  URIs and IRIs  . . . . . . . . . . . . . . . . . . . . . . 27
+     7.3.  Spoofing . . . . . . . . . . . . . . . . . . . . . . . . . 27
      7.4.  Cryptographic Hashes . . . . . . . . . . . . . . . . . . . 27
    8.  References . . . . . . . . . . . . . . . . . . . . . . . . . . 28
      8.1.  Normative References . . . . . . . . . . . . . . . . . . . 28
@@ -630,10 +630,12 @@ RFC 5854          Metalink Download Description Format          May 2010
    <file name="debian-amd64/sarge/Contents-amd64.gz">
 
    In this example, a subdirectory "debian-amd64/sarge/" will be created
-   and a file named "Contents-amd64.gz" will be created inside it.  The
-   path MUST NOT contain any directory traversal directives or
-   information.  The path MUST be relative.  The path MUST NOT begin
-   with a "/", "./", or "../"; contain "/../"; or end with "/..".
+   and a file named "Contents-amd64.gz" will be created inside it.
+
+      Security Note: The path MUST NOT contain any directory traversal
+      directives or information.  The path MUST be relative.  The path
+      MUST NOT begin with a "/", "./", or "../"; contain "/../"; or end
+      with "/..".
 
 4.1.3.  The "metalink:pieces" Element
 
@@ -660,11 +662,9 @@ RFC 5854          Metalink Download Description Format          May 2010
    Function Textual Names" defines values for hash types.  See
    Section 7.4 for security implications.
 
-4.1.3.2.  The "length" Attribute
 
-   metalink:pieces elements MUST have a "length" attribute, which is a
-   positive integer that describes the length of the pieces of the file
-   in octets.  The whole file is divided into non-overlapping pieces of
+
+
 
 
 
@@ -673,6 +673,11 @@ Bryan, et al.                Standards Track                   [Page 12]
 RFC 5854          Metalink Download Description Format          May 2010
 
 
+4.1.3.2.  The "length" Attribute
+
+   metalink:pieces elements MUST have a "length" attribute, which is a
+   positive integer that describes the length of the pieces of the file
+   in octets.  The whole file is divided into non-overlapping pieces of
    this length, starting from the beginning of the file.  That is, every
    piece MUST be the same size, apart from the last piece, which is the
    remainder.  The last piece extends to the end of the file, and it
@@ -714,13 +719,8 @@ RFC 5854          Metalink Download Description Format          May 2010
    The metalink:generator element's content is defined below in ABNF
    notation [RFC5234].
 
-   token          = 1*<any CHAR except CTLs or separators>
-   separators     = "(" / ")" / "<" / ">" / "@"
-                  / "," / ";" / ":" / "\" / DQUOTE
-                  / "/" / "[" / "]" / "?" / "="
-                  / "{" / "}" / SP / HTAB
-   agent         = token ["/" agent-version]
-   agent-version = token
+
+
 
 
 
@@ -728,6 +728,14 @@ Bryan, et al.                Standards Track                   [Page 13]
 
 RFC 5854          Metalink Download Description Format          May 2010
 
+
+   token          = 1*<any CHAR except CTLs or separators>
+   separators     = "(" / ")" / "<" / ">" / "@"
+                  / "," / ";" / ":" / "\" / DQUOTE
+                  / "/" / "[" / "]" / "?" / "="
+                  / "{" / "}" / SP / HTAB
+   agent         = token ["/" agent-version]
+   agent-version = token
 
    Examples:
 
@@ -770,6 +778,13 @@ RFC 5854          Metalink Download Description Format          May 2010
    <hash type="sha-256">fc87941af7fd7f03e53b34af393f4c14923d74...</hash>
  ...
 
+
+
+Bryan, et al.                Standards Track                   [Page 14]
+
+RFC 5854          Metalink Download Description Format          May 2010
+
+
    Metalink Documents MAY also contain hashes for individual pieces of a
    file. metalink:hash elements that are inside a metalink:pieces
    container element have a hash for that specific piece or chunk of the
@@ -777,13 +792,6 @@ RFC 5854          Metalink Download Description Format          May 2010
    which they are contained.  Metalink Documents MAY contain one or
    multiple metalink:pieces container elements, if each "type" attribute
    of metalink:pieces has a unique value.
-
-
-
-Bryan, et al.                Standards Track                   [Page 14]
-
-RFC 5854          Metalink Download Description Format          May 2010
-
 
    metalink:hash elements without a "type" attribute MUST contain a hash
    for that specific piece or chunk of the file and MUST be listed in
@@ -825,14 +833,6 @@ RFC 5854          Metalink Download Description Format          May 2010
    metalinkIdentity =
       element metalink:identity {
         metalinkTextConstruct
-      }
-
-4.2.6.  The "metalink:language" Element
-
-   The "metalink:language" element is a Text construct that conveys a
-   code for the language of a file, per [RFC5646].
-
-   Multiple metalink:language elements are allowed, for instance, to
 
 
 
@@ -841,6 +841,14 @@ Bryan, et al.                Standards Track                   [Page 15]
 RFC 5854          Metalink Download Description Format          May 2010
 
 
+      }
+
+4.2.6.  The "metalink:language" Element
+
+   The "metalink:language" element is a Text construct that conveys a
+   code for the language of a file, per [RFC5646].
+
+   Multiple metalink:language elements are allowed, for instance, to
    describe a file such as an binary installation program that provides
    multiple language options, a movie with multiple language tracks, or
    a document in multiple languages.
@@ -874,6 +882,21 @@ RFC 5854          Metalink Download Description Format          May 2010
    information in the metalink:hash element does not apply to these
    metadata files but to the files that are described by them.
 
+
+
+
+
+
+
+
+
+
+
+Bryan, et al.                Standards Track                   [Page 16]
+
+RFC 5854          Metalink Download Description Format          May 2010
+
+
    metalinkMetaURL =
       element metalink:metaurl {
          metalinkCommonAttributes,
@@ -889,14 +912,6 @@ RFC 5854          Metalink Download Description Format          May 2010
    metalink:metaurl elements MAY have a priority attribute.  Values MUST
    be positive integers between 1 and 999999.  Lower values indicate a
    higher priority. metalink:metaurl elements without a priority
-
-
-
-Bryan, et al.                Standards Track                   [Page 16]
-
-RFC 5854          Metalink Download Description Format          May 2010
-
-
    attribute are considered to have the lowest priority, i.e., 999999.
    The priority values of metalink:metaurl and metalink:url elements are
    compared and those with the lowest values, starting with 1, are used
@@ -928,6 +943,16 @@ RFC 5854          Metalink Download Description Format          May 2010
    a specific file in a BitTorrent .torrent file or a Metalink Document
    that describes multiple files.
 
+
+
+
+
+
+Bryan, et al.                Standards Track                   [Page 17]
+
+RFC 5854          Metalink Download Description Format          May 2010
+
+
    Directory information can also be contained in a "path/file" format
    only, as in:
 
@@ -945,14 +970,6 @@ RFC 5854          Metalink Download Description Format          May 2010
    The "metalink:origin" element is an IRI where the Metalink Document
    was originally published.  If the dynamic attribute of metalink:
    origin is "true", then updated versions of the Metalink can be found
-
-
-
-Bryan, et al.                Standards Track                   [Page 17]
-
-RFC 5854          Metalink Download Description Format          May 2010
-
-
    at this IRI.
 
    metalinkOrigin =
@@ -984,6 +1001,14 @@ RFC 5854          Metalink Download Description Format          May 2010
 
    The "metalink:published" element is a Date construct indicating an
    instant in time associated with an event early in the life cycle of
+
+
+
+Bryan, et al.                Standards Track                   [Page 18]
+
+RFC 5854          Metalink Download Description Format          May 2010
+
+
    the entry.
 
    metalinkPublished =
@@ -1001,13 +1026,6 @@ RFC 5854          Metalink Download Description Format          May 2010
    The "metalink:publisher" element contains a human-readable group or
    other entity that has published the file described in the Metalink
    Document and an IRI for more information.
-
-
-
-Bryan, et al.                Standards Track                   [Page 18]
-
-RFC 5854          Metalink Download Description Format          May 2010
-
 
    metalinkPublisher =
       element metalink:publisher {
@@ -1038,6 +1056,15 @@ RFC 5854          Metalink Download Description Format          May 2010
    Documents, as opposed to a digital signature of a file described in a
    Metalink Document, is covered in Section 7.1.
 
+
+
+
+
+Bryan, et al.                Standards Track                   [Page 19]
+
+RFC 5854          Metalink Download Description Format          May 2010
+
+
    metalinkSignature =
       element metalink:signature {
         attribute mediatype { text },
@@ -1055,15 +1082,6 @@ RFC 5854          Metalink Download Description Format          May 2010
    =ggAf
    -----END PGP SIGNATURE-----
    </signature>
-
-
-
-
-
-Bryan, et al.                Standards Track                   [Page 19]
-
-RFC 5854          Metalink Download Description Format          May 2010
-
 
 4.2.13.1.  The "mediatype" Attribute
 
@@ -1093,6 +1111,16 @@ RFC 5854          Metalink Download Description Format          May 2010
         xsd:nonNegativeInteger
       }
 
+
+
+
+
+
+Bryan, et al.                Standards Track                   [Page 20]
+
+RFC 5854          Metalink Download Description Format          May 2010
+
+
 4.2.15.  The "metalink:updated" Element
 
    The "metalink:updated" element is a Date construct indicating the
@@ -1112,14 +1140,6 @@ RFC 5854          Metalink Download Description Format          May 2010
    The "metalink:url" element contains a file IRI.  Most metalink:file
    container elements will contain multiple metalink:url elements, and
    each one SHOULD be a valid alternative to download the same file.
-
-
-
-
-Bryan, et al.                Standards Track                   [Page 20]
-
-RFC 5854          Metalink Download Description Format          May 2010
-
 
    The metalink:url elements SHOULD be resolvable and, if resolvable,
    SHOULD lead to identical files.
@@ -1148,6 +1168,15 @@ RFC 5854          Metalink Download Description Format          May 2010
    metalink:url elements can have the same priority, i.e., ten different
    mirrors could have priority="1".
 
+
+
+
+
+Bryan, et al.                Standards Track                   [Page 21]
+
+RFC 5854          Metalink Download Description Format          May 2010
+
+
 4.2.16.2.  The "location" Attribute
 
    metalink:url elements MAY have a "location" attribute, which is a
@@ -1166,16 +1195,6 @@ RFC 5854          Metalink Download Description Format          May 2010
       }
 
 5.  Extending Metalink
-
-
-
-
-
-
-Bryan, et al.                Standards Track                   [Page 21]
-
-RFC 5854          Metalink Download Description Format          May 2010
-
 
 5.1.  Extensions from Non-Metalink Vocabularies
 
@@ -1206,6 +1225,14 @@ RFC 5854          Metalink Download Description Format          May 2010
    When unknown foreign markup is encountered as a child of metalink:
    file, metalink:metalink, Metalink Processors MAY bypass the markup
    and any textual content and MUST NOT change their behavior as a
+
+
+
+Bryan, et al.                Standards Track                   [Page 22]
+
+RFC 5854          Metalink Download Description Format          May 2010
+
+
    result of the markup's presence.
 
 5.4.  Extension Elements
@@ -1225,14 +1252,6 @@ RFC 5854          Metalink Download Description Format          May 2010
    simpleExtensionElement =
       element * - metalink:* {
          text
-
-
-
-Bryan, et al.                Standards Track                   [Page 22]
-
-RFC 5854          Metalink Download Description Format          May 2010
-
-
       }
 
    The element can be interpreted as a simple property (or name/value
@@ -1262,6 +1281,14 @@ RFC 5854          Metalink Download Description Format          May 2010
    of its child elements, could be significant.
 
    This specification does not provide an interpretation of a Structured
+
+
+
+Bryan, et al.                Standards Track                   [Page 23]
+
+RFC 5854          Metalink Download Description Format          May 2010
+
+
    Extension element.  The syntax of the XML contained in the element
    (and an interpretation of how the element relates to its containing
    element) is defined by the specification of the Metalink extension.
@@ -1281,13 +1308,6 @@ RFC 5854          Metalink Download Description Format          May 2010
    document.
 
    XML: None.  Namespace URIs do not represent an XML specification.
-
-
-
-Bryan, et al.                Standards Track                   [Page 23]
-
-RFC 5854          Metalink Download Description Format          May 2010
-
 
 6.2.  application/metalink4+xml MIME type
 
@@ -1315,6 +1335,16 @@ RFC 5854          Metalink Download Description Format          May 2010
       shares the same security considerations as described in [RFC3023],
       Section 10.
 
+
+
+
+
+
+Bryan, et al.                Standards Track                   [Page 24]
+
+RFC 5854          Metalink Download Description Format          May 2010
+
+
    Interoperability considerations:  There are no known interoperability
       issues.
 
@@ -1334,16 +1364,6 @@ RFC 5854          Metalink Download Description Format          May 2010
       Anthony Bryan <anthonybryan@gmail.com>
 
    Intended usage:  COMMON
-
-
-
-
-
-
-Bryan, et al.                Standards Track                   [Page 24]
-
-RFC 5854          Metalink Download Description Format          May 2010
-
 
    Restrictions on usage:  None.
 
@@ -1373,6 +1393,14 @@ RFC 5854          Metalink Download Description Format          May 2010
    described in Section 4.2.13.
 
    Normally, a publisher is in the best position to know how strong the
+
+
+
+Bryan, et al.                Standards Track                   [Page 25]
+
+RFC 5854          Metalink Download Description Format          May 2010
+
+
    protective signing ought to be on their content.  Thus, a publisher
    can choose weak or strong cryptography, and a Metalink Processor
    SHOULD normally accept that.  There are potential applications where
@@ -1393,14 +1421,6 @@ RFC 5854          Metalink Download Description Format          May 2010
    Metalink Documents with invalid signatures.
 
    Metalink Processors MUST NOT reject a Metalink Document containing
-
-
-
-Bryan, et al.                Standards Track                   [Page 25]
-
-RFC 5854          Metalink Download Description Format          May 2010
-
-
    such a signature because they are not capable of verifying it; they
    MUST continue processing and MAY inform the user of their failure to
    validate the signature.
@@ -1429,6 +1449,14 @@ RFC 5854          Metalink Download Description Format          May 2010
    Metalink Documents MUST be able to verify RSA signatures, but do not
    need be able to verify DSA signatures.  Due to security issues that
    can arise if the keying material for message authentication code
+
+
+
+Bryan, et al.                Standards Track                   [Page 26]
+
+RFC 5854          Metalink Download Description Format          May 2010
+
+
    (MAC) authentication is not handled properly, Metalink Documents
    SHOULD NOT use MACs for signatures.
 
@@ -1450,13 +1478,6 @@ RFC 5854          Metalink Download Description Format          May 2010
 
    Digital signatures address the issue of spoofing.
 
-
-
-Bryan, et al.                Standards Track                   [Page 26]
-
-RFC 5854          Metalink Download Description Format          May 2010
-
-
 7.4.  Cryptographic Hashes
 
    Currently, some of the hash types defined in the IANA registry named
@@ -1474,27 +1495,6 @@ RFC 5854          Metalink Download Description Format          May 2010
    If a Metalink Document contains hashes, it SHOULD include "sha-256",
    which is SHA-256, or stronger.  It MAY also include other hashes from
    the IANA registry named "Hash Function Textual Names".
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -1973,7 +1973,7 @@ Index
 
    A
       ABNF
-         metalinkGenerator  13
+         metalinkGenerator  14
          metaurl mediatype  17
          signature mediatype  20
       application/metalink4+xml Media Type  24
@@ -2001,13 +2001,13 @@ Index
          metalinkLanguage  16
          metalinkLogo  16
          metalinkMetalink  9
-         metalinkMetaURL  16
+         metalinkMetaURL  17
          metalinkOrigin  18
          metalinkOS  18
          metalinkPieces  12
-         metalinkPublished  18
+         metalinkPublished  19
          metalinkPublisher  19
-         metalinkSignature  19
+         metalinkSignature  20
          metalinkSize  20
 
 
@@ -2018,10 +2018,10 @@ RFC 5854          Metalink Download Description Format          May 2010
 
 
          metalinkTextConstruct  8
-         metalinkUpdated  20
+         metalinkUpdated  21
          metalinkURL  21
-         metalinkVersion  21
-         simpleExtensionElement  22
+         metalinkVersion  22
+         simpleExtensionElement  23
          structuredExtensionElement  23
 
    H
@@ -2031,7 +2031,7 @@ RFC 5854          Metalink Download Description Format          May 2010
       identity XML element  15
 
    L
-      language XML element  15
+      language XML element  16
       logo XML element  16
 
    M
@@ -2043,25 +2043,25 @@ RFC 5854          Metalink Download Description Format          May 2010
       metalinkDateConstruct grammar production  8
       metalinkDescription grammar production  13
       metalinkFile grammar production  10
-      metalinkGenerator ABNF  13
+      metalinkGenerator ABNF  14
       metalinkGenerator grammar production  13
       metalinkHash grammar production  14
       metalinkIdentity grammar production  15
       metalinkLanguage grammar production  16
       metalinkLogo grammar production  16
       metalinkMetalink grammar production  9
-      metalinkMetaURL grammar production  16
+      metalinkMetaURL grammar production  17
       metalinkOrigin grammar production  18
       metalinkOS grammar production  18
       metalinkPieces grammar production  12
-      metalinkPublished grammar production  18
+      metalinkPublished grammar production  19
       metalinkPublisher grammar production  19
-      metalinkSignature grammar production  19
+      metalinkSignature grammar production  20
       metalinkSize grammar production  20
       metalinkTextConstruct grammar production  8
-      metalinkUpdated grammar production  20
+      metalinkUpdated grammar production  21
       metalinkURL grammar production  21
-      metalinkVersion grammar production  21
+      metalinkVersion grammar production  22
       metaurl mediatype ABNF  17
       metaurl XML element  16
 
@@ -2074,27 +2074,27 @@ RFC 5854          Metalink Download Description Format          May 2010
 
 
    O
-      origin XML element  17
+      origin XML element  18
       os XML element  18
 
    P
       pieces XML element  12
       published XML element  18
-      publisher XML element  18
+      publisher XML element  19
 
    S
       signature mediatype ABNF  20
       signature XML element  19
-      simpleExtensionElement grammar production  22
+      simpleExtensionElement grammar production  23
       size XML element  20
       structuredExtensionElement grammar production  23
 
    U
-      updated XML element  20
-      url XML element  20
+      updated XML element  21
+      url XML element  21
 
    V
-      version XML element  21
+      version XML element  22
 
    X
       XML Elements
@@ -2104,20 +2104,20 @@ RFC 5854          Metalink Download Description Format          May 2010
          generator  13
          hash  14
          identity  15
-         language  15
+         language  16
          logo  16
          metalink  9
          metaurl  16
-         origin  17
+         origin  18
          os  18
          pieces  12
          published  18
-         publisher  18
+         publisher  19
          signature  19
          size  20
-         updated  20
-         url  20
-         version  21
+         updated  21
+         url  21
+         version  22
 
 
 
