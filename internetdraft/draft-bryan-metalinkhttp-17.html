@@ -144,13 +144,12 @@
 <tr><td class="header">Network Working Group</td><td class="header">A. Bryan</td></tr>
 <tr><td class="header">Internet-Draft</td><td class="header">N. McNab</td></tr>
 <tr><td class="header">Intended status: Standards Track</td><td class="header">H. Nordstrom</td></tr>
-<tr><td class="header">Expires: October 3, 2010</td><td class="header">&nbsp;</td></tr>
-<tr><td class="header">&nbsp;</td><td class="header">A. Ford</td></tr>
-<tr><td class="header">&nbsp;</td><td class="header">Roke Manor Research</td></tr>
-<tr><td class="header">&nbsp;</td><td class="header">T. Tsujikawa</td></tr>
+<tr><td class="header">Expires: October 3, 2010</td><td class="header">T. Tsujikawa</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">&nbsp;</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">P. Poeml</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">MirrorBrain</td></tr>
+<tr><td class="header">&nbsp;</td><td class="header">A. Ford</td></tr>
+<tr><td class="header">&nbsp;</td><td class="header">Roke Manor Research</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">April 2010</td></tr>
 </table></td></tr></table>
 <h1><br />Metalink/HTTP: Mirrors and Cryptographic Hashes in HTTP Headers<br />draft-bryan-metalinkhttp-17</h1>
@@ -263,7 +262,7 @@ Authors' Addresses<br />
 <a name="rfc.section.1"></a><h3>1.&nbsp;
 Introduction</h3>
 
-<p>Metalink/HTTP is an alternative representation of Metalink information, which is usually presented as an XML-based document format <a class='info' href='#draft-bryan-metalink'>[draft&#8209;bryan&#8209;metalink]<span> (</span><span class='info'>Bryan, A., Tsujikawa, T., McNab, N., and P. Poeml, &ldquo;The Metalink Download Description Format,&rdquo; February&nbsp;2010.</span><span>)</span></a>. 
+<p>Metalink/HTTP is an alternative representation of Metalink information, which is usually presented as an XML-based document format <a class='info' href='#RFC5854'>[RFC5854]<span> (</span><span class='info'>Bryan, A., Tsujikawa, T., McNab, N., and P. Poeml, &ldquo;The Metalink Download Description Format,&rdquo; June&nbsp;2010.</span><span>)</span></a>. 
       Metalink/HTTP attempts to provide as much functionality as the Metalink/XML format by using existing standards such as Web Linking <a class='info' href='#draft-nottingham-http-link-header'>[draft&#8209;nottingham&#8209;http&#8209;link&#8209;header]<span> (</span><span class='info'>Nottingham, M., &ldquo;Web Linking,&rdquo; April&nbsp;2010.</span><span>)</span></a>, 
       Instance Digests in HTTP <a class='info' href='#RFC3230'>[RFC3230]<span> (</span><span class='info'>Mogul, J. and A. Van Hoff, &ldquo;Instance Digests in HTTP,&rdquo; January&nbsp;2002.</span><span>)</span></a>, and ETags. Metalink/HTTP is used to list
       information about a file to be downloaded. This can include lists of multiple URIs (mirrors), Peer-to-Peer information, cryptographic hashes, and digital signatures.
@@ -334,7 +333,7 @@ Notational Conventions</h3>
 <a name="rfc.section.2"></a><h3>2.&nbsp;
 Requirements</h3>
 
-<p>In this context, "Metalink" refers to Metalink/HTTP which consists of mirrors and cryptographic hashes in HTTP Headers as described in this document. "Metalink/XML" refers to the XML format described in <a class='info' href='#draft-bryan-metalink'>[draft&#8209;bryan&#8209;metalink]<span> (</span><span class='info'>Bryan, A., Tsujikawa, T., McNab, N., and P. Poeml, &ldquo;The Metalink Download Description Format,&rdquo; February&nbsp;2010.</span><span>)</span></a>.
+<p>In this context, "Metalink" refers to Metalink/HTTP which consists of mirrors and cryptographic hashes in HTTP Headers as described in this document. "Metalink/XML" refers to the XML format described in <a class='info' href='#RFC5854'>[RFC5854]<span> (</span><span class='info'>Bryan, A., Tsujikawa, T., McNab, N., and P. Poeml, &ldquo;The Metalink Download Description Format,&rdquo; June&nbsp;2010.</span><span>)</span></a>.
 </p>
 <p>Metalink resources include a Link header <a class='info' href='#draft-nottingham-http-link-header'>[draft&#8209;nottingham&#8209;http&#8209;link&#8209;header]<span> (</span><span class='info'>Nottingham, M., &ldquo;Web Linking,&rdquo; April&nbsp;2010.</span><span>)</span></a> to present a list of mirrors in the response to a client request for the resource. The cryptographic hash of a resource must be included via Instance Digests in HTTP <a class='info' href='#RFC3230'>[RFC3230]<span> (</span><span class='info'>Mogul, J. and A. Van Hoff, &ldquo;Instance Digests in HTTP,&rdquo; January&nbsp;2002.</span><span>)</span></a>.
 </p>
@@ -787,10 +786,10 @@ Signing</h3>
 <td class="author-text">Berners-Lee, T., Fielding, R., and L. Masinter, &ldquo;<a href="http://tools.ietf.org/html/rfc3986">Uniform Resource Identifier (URI): Generic Syntax</a>,&rdquo; STD&nbsp;66, RFC&nbsp;3986, January&nbsp;2005.</td></tr>
 <tr><td class="author-text" valign="top"><a name="RFC3987">[RFC3987]</a></td>
 <td class="author-text">Duerst, M. and M. Suignard, &ldquo;<a href="http://tools.ietf.org/html/rfc3987">Internationalized Resource Identifiers (IRIs)</a>,&rdquo; RFC&nbsp;3987, January&nbsp;2005.</td></tr>
+<tr><td class="author-text" valign="top"><a name="RFC5854">[RFC5854]</a></td>
+<td class="author-text"><a href="mailto:anthonybryan@gmail.com">Bryan, A.</a>, <a href="mailto:tatsuhiro.t@gmail.com">Tsujikawa, T.</a>, <a href="mailto:neil@nabber.org">McNab, N.</a>, and <a href="mailto:peter@poeml.de">P. Poeml</a>, &ldquo;<a href="http://tools.ietf.org/html/rfc5854">The Metalink Download Description Format</a>,&rdquo; RFC&nbsp;5854, June&nbsp;2010.</td></tr>
 <tr><td class="author-text" valign="top"><a name="draft-bryan-ftp-hash">[draft-bryan-ftp-hash]</a></td>
 <td class="author-text"><a href="mailto:anthonybryan@gmail.com">Bryan, A.</a>, <a href="mailto:tim.kosse@filezilla-project.org">Kosse, T.</a>, and <a href="mailto:daniel@haxx.se">D. Stenberg</a>, &ldquo;<a href="http://www.ietf.org/internet-drafts/draft-bryan-ftp-hash-02.txt">FTP Extensions for Cryptographic Hashes</a>,&rdquo; draft-bryan-ftp-hash-02 (work in progress), April&nbsp;2010.</td></tr>
-<tr><td class="author-text" valign="top"><a name="draft-bryan-metalink">[draft-bryan-metalink]</a></td>
-<td class="author-text"><a href="mailto:anthonybryan@gmail.com">Bryan, A.</a>, <a href="mailto:tatsuhiro.t@gmail.com">Tsujikawa, T.</a>, <a href="mailto:neil@nabber.org">McNab, N.</a>, and <a href="mailto:poeml@mirrorbrain.org">P. Poeml</a>, &ldquo;<a href="http://www.ietf.org/internet-drafts/draft-bryan-metalink-28.txt">The Metalink Download Description Format</a>,&rdquo; draft-bryan-metalink-28 (work in progress), February&nbsp;2010.</td></tr>
 <tr><td class="author-text" valign="top"><a name="draft-nottingham-http-link-header">[draft-nottingham-http-link-header]</a></td>
 <td class="author-text"><a href="mailto:mnot@mnot.net">Nottingham, M.</a>, &ldquo;<a href="http://www.ietf.org/internet-drafts/draft-nottingham-http-link-header-09.txt">Web Linking</a>,&rdquo; draft-nottingham-http-link-header-09 (work in progress), April&nbsp;2010.</td></tr>
 </table>
@@ -811,7 +810,7 @@ Comparisons to Similar Options</h3>
 
 <p>[[ to be removed by the RFC editor before publication as an RFC. ]]
 </p>
-<p>This draft, compared to the Metalink/XML format <a class='info' href='#draft-bryan-metalink'>[draft&#8209;bryan&#8209;metalink]<span> (</span><span class='info'>Bryan, A., Tsujikawa, T., McNab, N., and P. Poeml, &ldquo;The Metalink Download Description Format,&rdquo; February&nbsp;2010.</span><span>)</span></a> :
+<p>This draft, compared to the Metalink/XML format <a class='info' href='#RFC5854'>[RFC5854]<span> (</span><span class='info'>Bryan, A., Tsujikawa, T., McNab, N., and P. Poeml, &ldquo;The Metalink Download Description Format,&rdquo; June&nbsp;2010.</span><span>)</span></a> :
 </p>
 <p>
 	    </p>
@@ -862,7 +861,15 @@ Document History</h3>
 </li>
 </ul>
 
-<p>-16 : April , 2010.
+<p>-17 : June , 2010.
+	    
+	    </p>
+<ul class="text">
+<li>RFC 5854 Metalink/XML.
+</li>
+</ul>
+
+<p>-16 : April 16, 2010.
 	    
 	    </p>
 <ul class="text">
@@ -1032,21 +1039,6 @@ Document History</h3>
 <td class="author-text"><a href="http://www.henriknordstrom.net/">http://www.henriknordstrom.net/</a></td></tr>
 <tr cellpadding="3"><td>&nbsp;</td><td>&nbsp;</td></tr>
 <tr><td class="author-text">&nbsp;</td>
-<td class="author-text">Alan Ford</td></tr>
-<tr><td class="author-text">&nbsp;</td>
-<td class="author-text">Roke Manor Research</td></tr>
-<tr><td class="author-text">&nbsp;</td>
-<td class="author-text">Old Salisbury Lane</td></tr>
-<tr><td class="author-text">&nbsp;</td>
-<td class="author-text">Romsey, Hampshire  SO51 0ZN</td></tr>
-<tr><td class="author-text">&nbsp;</td>
-<td class="author-text">UK</td></tr>
-<tr><td class="author" align="right">Phone:&nbsp;</td>
-<td class="author-text">+44 1794 833 465</td></tr>
-<tr><td class="author" align="right">Email:&nbsp;</td>
-<td class="author-text"><a href="mailto:alan.ford@roke.co.uk">alan.ford@roke.co.uk</a></td></tr>
-<tr cellpadding="3"><td>&nbsp;</td><td>&nbsp;</td></tr>
-<tr><td class="author-text">&nbsp;</td>
 <td class="author-text">Tatsuhiro Tsujikawa</td></tr>
 <tr><td class="author-text">&nbsp;</td>
 <td class="author-text">Shiga</td></tr>
@@ -1073,5 +1065,20 @@ Document History</h3>
 <td class="author-text"><a href="mailto:peter@poeml.de">peter@poeml.de</a></td></tr>
 <tr><td class="author" align="right">URI:&nbsp;</td>
 <td class="author-text"><a href="http://mirrorbrain.org/~poeml/">http://mirrorbrain.org/~poeml/</a></td></tr>
+<tr cellpadding="3"><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text">Alan Ford</td></tr>
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text">Roke Manor Research</td></tr>
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text">Old Salisbury Lane</td></tr>
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text">Romsey, Hampshire  SO51 0ZN</td></tr>
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text">UK</td></tr>
+<tr><td class="author" align="right">Phone:&nbsp;</td>
+<td class="author-text">+44 1794 833 465</td></tr>
+<tr><td class="author" align="right">Email:&nbsp;</td>
+<td class="author-text"><a href="mailto:alan.ford@roke.co.uk">alan.ford@roke.co.uk</a></td></tr>
 </table>
 </body></html>

@@ -4,13 +4,12 @@
 Network Working Group                                           A. Bryan
 Internet-Draft                                                  N. McNab
 Intended status: Standards Track                            H. Nordstrom
-Expires: October 3, 2010
-                                                                 A. Ford
-                                                     Roke Manor Research
-                                                            T. Tsujikawa
+Expires: October 3, 2010                                    T. Tsujikawa
 
                                                                 P. Poeml
                                                              MirrorBrain
+                                                                 A. Ford
+                                                     Roke Manor Research
                                                               April 2010
 
 
@@ -49,6 +48,7 @@ Copyright Notice
 
    Copyright (c) 2010 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
+
 
 
 
@@ -117,13 +117,13 @@ Internet-Draft      Metalink/HTTP: Mirrors and Hashes         April 2010
 
    Metalink/HTTP is an alternative representation of Metalink
    information, which is usually presented as an XML-based document
-   format [draft-bryan-metalink].  Metalink/HTTP attempts to provide as
-   much functionality as the Metalink/XML format by using existing
-   standards such as Web Linking [draft-nottingham-http-link-header],
-   Instance Digests in HTTP [RFC3230], and ETags.  Metalink/HTTP is used
-   to list information about a file to be downloaded.  This can include
-   lists of multiple URIs (mirrors), Peer-to-Peer information,
-   cryptographic hashes, and digital signatures.
+   format [RFC5854].  Metalink/HTTP attempts to provide as much
+   functionality as the Metalink/XML format by using existing standards
+   such as Web Linking [draft-nottingham-http-link-header], Instance
+   Digests in HTTP [RFC3230], and ETags.  Metalink/HTTP is used to list
+   information about a file to be downloaded.  This can include lists of
+   multiple URIs (mirrors), Peer-to-Peer information, cryptographic
+   hashes, and digital signatures.
 
    Identical copies of a file are frequently accessible in multiple
    locations on the Internet over a variety of protocols (such as FTP,
@@ -240,7 +240,7 @@ Internet-Draft      Metalink/HTTP: Mirrors and Hashes         April 2010
    In this context, "Metalink" refers to Metalink/HTTP which consists of
    mirrors and cryptographic hashes in HTTP Headers as described in this
    document.  "Metalink/XML" refers to the XML format described in
-   [draft-bryan-metalink].
+   [RFC5854].
 
    Metalink resources include a Link header
    [draft-nottingham-http-link-header] to present a list of mirrors in
@@ -828,11 +828,11 @@ Internet-Draft      Metalink/HTTP: Mirrors and Hashes         April 2010
    [RFC3987]  Duerst, M. and M. Suignard, "Internationalized Resource
               Identifiers (IRIs)", RFC 3987, January 2005.
 
-   [draft-bryan-ftp-hash]
-              Bryan, A., Kosse, T., and D. Stenberg, "FTP Extensions for
-              Cryptographic Hashes", draft-bryan-ftp-hash-02 (work in
-              progress), April 2010.
+   [RFC5854]  Bryan, A., Tsujikawa, T., McNab, N., and P. Poeml, "The
+              Metalink Download Description Format", RFC 5854,
+              June 2010.
 
+   [draft-bryan-ftp-hash]
 
 
 
@@ -841,10 +841,9 @@ Bryan, et al.            Expires October 3, 2010               [Page 15]
 Internet-Draft      Metalink/HTTP: Mirrors and Hashes         April 2010
 
 
-   [draft-bryan-metalink]
-              Bryan, A., Tsujikawa, T., McNab, N., and P. Poeml, "The
-              Metalink Download Description Format",
-              draft-bryan-metalink-28 (work in progress), February 2010.
+              Bryan, A., Kosse, T., and D. Stenberg, "FTP Extensions for
+              Cryptographic Hashes", draft-bryan-ftp-hash-02 (work in
+              progress), April 2010.
 
    [draft-nottingham-http-link-header]
               Nottingham, M., "Web Linking",
@@ -867,8 +866,7 @@ Appendix B.  Comparisons to Similar Options
 
    [[ to be removed by the RFC editor before publication as an RFC. ]]
 
-   This draft, compared to the Metalink/XML format
-   [draft-bryan-metalink] :
+   This draft, compared to the Metalink/XML format [RFC5854] :
 
    o  (+) Reuses existing HTTP standards without much new besides a Link
       Relation Type.  It's more of a collection/coordinated feature set.
@@ -889,6 +887,8 @@ Appendix B.  Comparisons to Similar Options
    o  (-) Also, Metalink/XML files are easily mirrored on all servers.
       Even if usage in that case is not as transparent, it still gives
       access to users at all mirrors (FTP included) to all download
+      information with no changes needed to the server.
+
 
 
 
@@ -897,7 +897,6 @@ Bryan, et al.            Expires October 3, 2010               [Page 16]
 Internet-Draft      Metalink/HTTP: Mirrors and Hashes         April 2010
 
 
-      information with no changes needed to the server.
    o  (-) Not portable/archivable/emailable.  Metalink/XML is used to
       import/export transfer queues.  Not as easy for search engines to
       index?
@@ -922,7 +921,10 @@ Appendix C.  Document History
    o  Do we need an "official" MIME type for .torrent files or allow
       "application/x-bittorrent"?
 
-   -16 : April , 2010.
+   -17 : June , 2010.
+   o  RFC 5854 Metalink/XML.
+
+   -16 : April 16, 2010.
    o  Add draft-bryan-ftp-hash reference and FTP mirror coordination.
 
    -15 : December 31, 2009.
@@ -941,9 +943,7 @@ Appendix C.  Document History
    o  Mirror changes.
 
    -10 : October 15, 2009.
-   o  Mirror coordination changes.
 
-   -09 : October 12, 2009.
 
 
 
@@ -953,6 +953,9 @@ Bryan, et al.            Expires October 3, 2010               [Page 17]
 Internet-Draft      Metalink/HTTP: Mirrors and Hashes         April 2010
 
 
+   o  Mirror coordination changes.
+
+   -09 : October 12, 2009.
    o  Mirror location, coordination, and depth.
    o  Split HTTP Digest Algorithm Values Registration into
       draft-bryan-http-digest-algorithm-values-update.
@@ -1001,9 +1004,6 @@ Authors' Addresses
 
 
 
-
-
-
 Bryan, et al.            Expires October 3, 2010               [Page 18]
 
 Internet-Draft      Metalink/HTTP: Mirrors and Hashes         April 2010
@@ -1019,16 +1019,6 @@ Internet-Draft      Metalink/HTTP: Mirrors and Hashes         April 2010
 
    Email: henrik@henriknordstrom.net
    URI:   http://www.henriknordstrom.net/
-
-
-   Alan Ford
-   Roke Manor Research
-   Old Salisbury Lane
-   Romsey, Hampshire  SO51 0ZN
-   UK
-
-   Phone: +44 1794 833 465
-   Email: alan.ford@roke.co.uk
 
 
    Tatsuhiro Tsujikawa
@@ -1048,6 +1038,16 @@ Internet-Draft      Metalink/HTTP: Mirrors and Hashes         April 2010
    Phone: +49 221 6778 333 8
    Email: peter@poeml.de
    URI:   http://mirrorbrain.org/~poeml/
+
+
+   Alan Ford
+   Roke Manor Research
+   Old Salisbury Lane
+   Romsey, Hampshire  SO51 0ZN
+   UK
+
+   Phone: +44 1794 833 465
+   Email: alan.ford@roke.co.uk
 
 
 
