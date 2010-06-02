@@ -41,20 +41,6 @@
           <uri>http://www.henriknordstrom.net/</uri>
         </address>
       </author>
-  	  <author initials="A." surname="Ford" fullname="Alan Ford">
-        <organization>Roke Manor Research</organization>
-        <address>
-		  <postal>
-			<street>Old Salisbury Lane</street>
-			<city>Romsey</city>
-			<code>SO51 0ZN</code>
-			<region>Hampshire</region>
-			<country>UK</country>
-		  </postal>
-		  <phone>+44 1794 833 465</phone>
-          <email>alan.ford@roke.co.uk</email>
-        </address>
-      </author>
       <author initials="T." surname="Tsujikawa" fullname="Tatsuhiro Tsujikawa">
         <organization></organization>
         <address>
@@ -82,6 +68,20 @@
           <uri>http://mirrorbrain.org/~poeml/</uri>
         </address>
       </author>
+  	  <author initials="A." surname="Ford" fullname="Alan Ford">
+        <organization>Roke Manor Research</organization>
+        <address>
+		  <postal>
+			<street>Old Salisbury Lane</street>
+			<city>Romsey</city>
+			<code>SO51 0ZN</code>
+			<region>Hampshire</region>
+			<country>UK</country>
+		  </postal>
+		  <phone>+44 1794 833 465</phone>
+          <email>alan.ford@roke.co.uk</email>
+        </address>
+      </author>
 	<date month="April" year="2010"/>        
 
       <abstract>
@@ -95,7 +95,7 @@
   <middle>
     <section title="Introduction">
       
-      <t>Metalink/HTTP is an alternative representation of Metalink information, which is usually presented as an XML-based document format <xref target="draft-bryan-metalink"/>. 
+      <t>Metalink/HTTP is an alternative representation of Metalink information, which is usually presented as an XML-based document format <xref target="RFC5854"/>. 
       Metalink/HTTP attempts to provide as much functionality as the Metalink/XML format by using existing standards such as Web Linking <xref target="draft-nottingham-http-link-header"/>, 
       Instance Digests in HTTP <xref target="RFC3230"/>, and ETags. Metalink/HTTP is used to list
       information about a file to be downloaded. This can include lists of multiple URIs (mirrors), Peer-to-Peer information, cryptographic hashes, and digital signatures.</t>
@@ -157,7 +157,7 @@ DYzYjRjYzFhOTlmNTQwYzI2M2QwM2U2MQ==
     </section>
 
     <section title="Requirements" anchor="req">
-      <t>In this context, "Metalink" refers to Metalink/HTTP which consists of mirrors and cryptographic hashes in HTTP Headers as described in this document. "Metalink/XML" refers to the XML format described in <xref target="draft-bryan-metalink"/>.</t>
+      <t>In this context, "Metalink" refers to Metalink/HTTP which consists of mirrors and cryptographic hashes in HTTP Headers as described in this document. "Metalink/XML" refers to the XML format described in <xref target="RFC5854"/>.</t>
 	  
       <t>Metalink resources include a Link header <xref target="draft-nottingham-http-link-header"/> to present a list of mirrors in the response to a client request for the resource. The cryptographic hash of a resource must be included via Instance Digests in HTTP <xref target="RFC3230"/>.</t>
 	  
@@ -682,7 +682,7 @@ other mirrors.</t>
 <seriesInfo name="FIPS PUB" value="180-3"></seriesInfo>
 </reference>
 
-<reference anchor="draft-bryan-metalink">
+<reference anchor="RFC5854">
   <front>
       <title abbrev="Metalink Download Description Format">The Metalink Download Description Format</title>		
       <author initials="A." surname="Bryan" fullname="Anthony Bryan">
@@ -707,15 +707,15 @@ other mirrors.</t>
         </address>
       </author>
       <author initials="P." surname="Poeml" fullname="Peter Poeml">
-        <organization>Novell, Inc.</organization>
+        <organization>MirrorBrain</organization>
         <address>
-          <email>poeml@mirrorbrain.org</email>
-          <uri>http://www.mirrorbrain.org/</uri>
+          <email>peter@poeml.de</email>
+          <uri>http://mirrorbrain.org/~poeml/</uri>
         </address>
       </author>
-    <date month="February" year="2010"/>
+    <date month="June" year="2010"/>
   </front>
-  <seriesInfo name="Internet-Draft" value="draft-bryan-metalink-28"/>
+<seriesInfo name="RFC" value="5854"/>
 </reference>
 
 <reference anchor="draft-bryan-ftp-hash">
@@ -767,7 +767,7 @@ other mirrors.</t>
 	    <section title="Comparisons to Similar Options">
 
 		<t>[[ to be removed by the RFC editor before publication as an RFC. ]]</t>
-		<t>This draft, compared to the Metalink/XML format <xref target="draft-bryan-metalink"/> :</t>
+		<t>This draft, compared to the Metalink/XML format <xref target="RFC5854"/> :</t>
         <t>
 	    <list style="symbols">
 
@@ -798,7 +798,14 @@ other mirrors.</t>
 		  <t>Do we need an "official" MIME type for .torrent files or allow "application/x-bittorrent"?</t>
 	    </list></t>
 
-<t>-16 : April , 2010.
+<t>-17 : June , 2010.
+	    
+	    <list style="symbols">
+
+	      <t>RFC 5854 Metalink/XML.</t>
+	    </list></t>
+
+<t>-16 : April 16, 2010.
 	    
 	    <list style="symbols">
 
