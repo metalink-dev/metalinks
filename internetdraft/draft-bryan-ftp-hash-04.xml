@@ -11,7 +11,7 @@
 <?rfc inline="yes" ?>
 <!DOCTYPE rfc
   PUBLIC "" "rfc2629.dtd">
-<rfc category="exp" docName="draft-bryan-ftp-hash-04" ipr="trust200902">
+<rfc category="std" docName="draft-bryan-ftp-hash-04" ipr="trust200902">
     <front>        
       <title abbrev="FTP Extensions for Cryptographic Hashes">FTP Extensions for Cryptographic Hashes</title>
       <author initials="A." surname="Bryan" fullname="Anthony Bryan">
@@ -199,20 +199,6 @@ data, it would be identical to the hash returned by HASH.</t>
 
 </section>
 
-<section title="HASH Command Errors">
-
-<t>The server-PI SHOULD reply with a 500 reply if the HASH command is unrecognized or unimplemented.</t>
-
-<t>The server-PI SHOULD reply with a 501 reply to the OPTS HASH command if the user-PI has requested an unknown or unsupported algorithm.</t>
-
-<t>The server-PI SHOULD reply with a 550 reply if the HASH command is used on a file that can not be found.</t>
-
-<t>The server-PI SHOULD reply with a 552 reply if the user is not allowed to use the HASH command.</t>
-
-<t>The server-PI SHOULD reply with a 450 reply if the server is busy, e.g. already hashing other files yet inviting the client to retry in future.</t>
-
-</section>
-
 <section title="FEAT Command Response for HASH Command">
 
 <t>A server-FTP process that supports the HASH command MUST include, in the response to the FEAT command <xref target="RFC2389"/>, a feature line indicating that the HASH command is supported, along with a list of all supported hash algorithms in a semicolon separated list. The hash algorithm that is currently selected MUST be marked with an asterisk. The order of hash algorithms is insignificant. This command word is
@@ -245,6 +231,20 @@ data, it would be identical to the hash returned by HASH.</t>
 
 </section>
 
+<section title="HASH Command Errors">
+
+<t>The server-PI SHOULD reply with a 500 reply if the HASH command is unrecognized or unimplemented.</t>
+
+<t>The server-PI SHOULD reply with a 501 reply to the OPTS HASH command if the user-PI has requested an unknown or unsupported algorithm.</t>
+
+<t>The server-PI SHOULD reply with a 550 reply if the HASH command is used on a file that can not be found.</t>
+
+<t>The server-PI SHOULD reply with a 552 reply if the user is not allowed to use the HASH command.</t>
+
+<t>The server-PI SHOULD reply with a 450 reply if the server is busy, e.g. already hashing other files yet inviting the client to retry in future.</t>
+
+</section>
+
 </section>
 
 
@@ -263,7 +263,7 @@ data, it would be identical to the hash returned by HASH.</t>
 
 <section title="Implementation Requirements">
 
-	<t>All conforming implementations MUST at least support the SHA-1 algorithm. Implementations SHOULD NOT make any algorithm the default that is known to be weaker than SHA-1. Support for any additional algorithms is OPTIONAL.</t>
+	<t>All conforming implementations MUST at least support the SHA-1 algorithm <xref target="FIPS-180-3"/>. Implementations SHOULD NOT make any algorithm the default that is known to be weaker than SHA-1. Support for any additional algorithms is OPTIONAL.</t>
 
 
 	</section>
@@ -394,6 +394,16 @@ and a substituted malicious file could match.</t>
 <seriesInfo name="RFC" value="5234"/>
 </reference>
 
+<reference anchor="FIPS-180-3">
+<front>
+<title>Secure Hash Standard (SHS)</title>
+<author>
+    <organization>National Institute of Standards and Technology (NIST)</organization>
+</author>
+<date year="2008" month="October"></date>
+</front>
+<seriesInfo name="FIPS PUB" value="180-3"></seriesInfo>
+</reference>
 
 	  </references>
 
@@ -521,12 +531,20 @@ and a substituted malicious file could match.</t>
 		<t>Known issues concerning this draft:
 	    <list style="symbols"> 
 	      
-		  <t>Partial file hashes, similar to the Content-MD5 HTTP Header.</t>
+		  <t>Should HASH support partial file hashes, similar to the Content-MD5 HTTP Header.</t>
 		  <t>Underspecification of the representation of the file that shall undergo the hash calculation.</t>
+		  <t>Should the server response include the algorithm? i.e. "S&gt; 213 SHA-256 xxxxxxxxxxxxxxx"</t>
 
 	    </list></t>
 
-<t>-03 : April , 2010.
+<t>-04 : June, 2010.
+	    
+	    <list style="symbols">
+
+          <t>User-PI usage and command errors sections updated.</t>
+	    </list></t>
+
+<t>-03 : May 21, 2010.
 	    
 	    <list style="symbols">
 

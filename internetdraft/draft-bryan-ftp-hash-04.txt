@@ -3,7 +3,7 @@
 
 Network Working Group                                           A. Bryan
 Internet-Draft                                                  T. Kosse
-Intended status: Experimental                                D. Stenberg
+Intended status: Standards Track                             D. Stenberg
 Expires: December 10, 2010                                  June 8, 2010
 
 
@@ -71,11 +71,11 @@ Table of Contents
    3.  The HASH Command (HASH)  . . . . . . . . . . . . . . . . . . .  4
      3.1.  User-PI usage of HASH  . . . . . . . . . . . . . . . . . .  4
      3.2.  Changing the HASH algorithm  . . . . . . . . . . . . . . .  5
-     3.3.  HASH Command Errors  . . . . . . . . . . . . . . . . . . .  6
-     3.4.  FEAT Command Response for HASH Command . . . . . . . . . .  6
+     3.3.  FEAT Command Response for HASH Command . . . . . . . . . .  6
+     3.4.  HASH Command Errors  . . . . . . . . . . . . . . . . . . .  7
    4.  IANA Considerations  . . . . . . . . . . . . . . . . . . . . .  7
    5.  Implementation Requirements  . . . . . . . . . . . . . . . . .  7
-   6.  Security Considerations  . . . . . . . . . . . . . . . . . . .  8
+   6.  Security Considerations  . . . . . . . . . . . . . . . . . . .  7
    7.  References . . . . . . . . . . . . . . . . . . . . . . . . . .  8
      7.1.  Normative References . . . . . . . . . . . . . . . . . . .  8
      7.2.  Informative References . . . . . . . . . . . . . . . . . .  9
@@ -292,25 +292,7 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes       June 2010
            hashopts-cmd = "OPTS HASH" [ SP hashtype ] CRLF
            hashopts-response = "200" SP hashtype CRLF
 
-3.3.  HASH Command Errors
-
-   The server-PI SHOULD reply with a 500 reply if the HASH command is
-   unrecognized or unimplemented.
-
-   The server-PI SHOULD reply with a 501 reply to the OPTS HASH command
-   if the user-PI has requested an unknown or unsupported algorithm.
-
-   The server-PI SHOULD reply with a 550 reply if the HASH command is
-   used on a file that can not be found.
-
-   The server-PI SHOULD reply with a 552 reply if the user is not
-   allowed to use the HASH command.
-
-   The server-PI SHOULD reply with a 450 reply if the server is busy,
-   e.g. already hashing other files yet inviting the client to retry in
-   future.
-
-3.4.  FEAT Command Response for HASH Command
+3.3.  FEAT Command Response for HASH Command
 
    A server-FTP process that supports the HASH command MUST include, in
    the response to the FEAT command [RFC2389], a feature line indicating
@@ -320,21 +302,6 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes       June 2010
    The order of hash algorithms is insignificant.  This command word is
    case insensitive, but it SHOULD be transmitted in upper case only.
    That is, the response SHOULD be:
-
-
-
-
-
-
-
-
-
-
-
-
-Bryan, et al.           Expires December 10, 2010               [Page 6]
-
-Internet-Draft   FTP Extensions for Cryptographic Hashes       June 2010
 
 
            C> FEAT
@@ -361,6 +328,34 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes       June 2010
 
 
 
+
+
+
+
+Bryan, et al.           Expires December 10, 2010               [Page 6]
+
+Internet-Draft   FTP Extensions for Cryptographic Hashes       June 2010
+
+
+3.4.  HASH Command Errors
+
+   The server-PI SHOULD reply with a 500 reply if the HASH command is
+   unrecognized or unimplemented.
+
+   The server-PI SHOULD reply with a 501 reply to the OPTS HASH command
+   if the user-PI has requested an unknown or unsupported algorithm.
+
+   The server-PI SHOULD reply with a 550 reply if the HASH command is
+   used on a file that can not be found.
+
+   The server-PI SHOULD reply with a 552 reply if the user is not
+   allowed to use the HASH command.
+
+   The server-PI SHOULD reply with a 450 reply if the server is busy,
+   e.g. already hashing other files yet inviting the client to retry in
+   future.
+
+
 4.  IANA Considerations
 
    This new command is added to the "FTP Commands and Extensions"
@@ -382,9 +377,14 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes       June 2010
 5.  Implementation Requirements
 
    All conforming implementations MUST at least support the SHA-1
-   algorithm.  Implementations SHOULD NOT make any algorithm the default
-   that is known to be weaker than SHA-1.  Support for any additional
-   algorithms is OPTIONAL.
+   algorithm [FIPS-180-3].  Implementations SHOULD NOT make any
+   algorithm the default that is known to be weaker than SHA-1.  Support
+   for any additional algorithms is OPTIONAL.
+
+
+6.  Security Considerations
+
+   Calculating a file's hash is a CPU intensive operation and can easily
 
 
 
@@ -393,9 +393,6 @@ Bryan, et al.           Expires December 10, 2010               [Page 7]
 Internet-Draft   FTP Extensions for Cryptographic Hashes       June 2010
 
 
-6.  Security Considerations
-
-   Calculating a file's hash is a CPU intensive operation and can easily
    consume the available disk I/O resources.  If the HASH command isn't
    implemented carefully, a server could be vulnerable to a denial of
    service attack.  On an affected server a malicious user could, for
@@ -435,12 +432,15 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes       June 2010
 
 7.1.  Normative References
 
+   [FIPS-180-3]
+              National Institute of Standards and Technology (NIST),
+              "Secure Hash Standard (SHS)", FIPS PUB 180-3,
+              October 2008.
+
    [RFC0959]  Postel, J. and J. Reynolds, "File Transfer Protocol",
               STD 9, RFC 0959, October 1985.
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
-              Requirement Levels", BCP 14, RFC 2119, March 1997.
-
 
 
 
@@ -448,6 +448,8 @@ Bryan, et al.           Expires December 10, 2010               [Page 8]
 
 Internet-Draft   FTP Extensions for Cryptographic Hashes       June 2010
 
+
+              Requirement Levels", BCP 14, RFC 2119, March 1997.
 
    [RFC2389]  Hethmon, P. and R. Elz, "Feature negotiation mechanism for
               the File Transfer Protocol", RFC 2389, August 1998.
@@ -493,8 +495,6 @@ Appendix B.  List of Non-standard Cryptographic Hash or Checksum
       Argument.
    o  SITE CHECKSUM: Usage: SITE check_login SP CHECKSUM SP pathname
       CRLF.  Supports CRC32 and MD5.
-   o  SITE SHOHASH: Usage: site shohash [filename].  Supports MD5.
-      Response codes: 200 positive completion.
 
 
 
@@ -505,6 +505,8 @@ Bryan, et al.           Expires December 10, 2010               [Page 9]
 Internet-Draft   FTP Extensions for Cryptographic Hashes       June 2010
 
 
+   o  SITE SHOHASH: Usage: site shohash [filename].  Supports MD5.
+      Response codes: 200 positive completion.
    o  XCRC: By GlobalSCAPE in 2001. http://help.globalscape.com/help/
       secureserver2/File_Integrity_Checking.htm Usage: XCRC <filename>
       SP EP.  SP is starting point and EP is ending point in bytes and
@@ -549,8 +551,6 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes       June 2010
       http://www.g6ftpserver.com/en/information#features
    o  GlobalSCAPE's Secure FTP Server / EFT Server / CuteFTP clients
       (supports XCRC)
-   o  Globus FTP client / Globus Toolkit(supports CKSM) http://
-      www.globus.org/toolkit/releasenotes/3.2.0/gridftp_notes.html
 
 
 
@@ -561,6 +561,8 @@ Bryan, et al.           Expires December 10, 2010              [Page 10]
 Internet-Draft   FTP Extensions for Cryptographic Hashes       June 2010
 
 
+   o  Globus FTP client / Globus Toolkit(supports CKSM) http://
+      www.globus.org/toolkit/releasenotes/3.2.0/gridftp_notes.html
    o  GoldenGate FTP (Ftp Full Java Server) (supports XCRC, XMD5, XSHA1)
    o  IceWarp FTP Server http://www.icewarp.com/products/ftp_server/
    o  ICS FTP client (supports XCRC, XMD5)
@@ -605,8 +607,6 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes       June 2010
       XSHA256, XSHA512) http://ipswitchft.custhelp.com/app/answers/
       detail/a_id/671/kw/xmd5/r_id/166/sno/1
    o  wuftpd (supports SITE CHECKMETHOD/SITE CHECKSUM)
-   o  wzdFTPd (supports XCRC, XMD5)
-      http://www.wzdftpd.net/wiki/index.php/Commands
 
 
 
@@ -617,6 +617,8 @@ Bryan, et al.           Expires December 10, 2010              [Page 11]
 Internet-Draft   FTP Extensions for Cryptographic Hashes       June 2010
 
 
+   o  wzdFTPd (supports XCRC, XMD5)
+      http://www.wzdftpd.net/wiki/index.php/Commands
    o  Zalman FTP Client (supports XCRC)
       http://www.zalmansoftware.com/download.html
    o  zFTPServer
@@ -627,11 +629,17 @@ Appendix C.  Document History
    [[ to be removed by the RFC editor before publication as an RFC. ]]
 
    Known issues concerning this draft:
-   o  Partial file hashes, similar to the Content-MD5 HTTP Header.
+   o  Should HASH support partial file hashes, similar to the Content-
+      MD5 HTTP Header.
    o  Underspecification of the representation of the file that shall
       undergo the hash calculation.
+   o  Should the server response include the algorithm? i.e.  "S> 213
+      SHA-256 xxxxxxxxxxxxxxx"
 
-   -03 : April , 2010.
+   -04 : June, 2010.
+   o  User-PI usage and command errors sections updated.
+
+   -03 : May 21, 2010.
    o  List of non-standard checksum and hash commands and their
       implementations.
 
@@ -647,6 +655,22 @@ Appendix C.  Document History
 
    -00 : October 19, 2009.
    o  Initial draft.
+
+
+
+
+
+
+
+
+
+
+
+
+
+Bryan, et al.           Expires December 10, 2010              [Page 12]
+
+Internet-Draft   FTP Extensions for Cryptographic Hashes       June 2010
 
 
 Authors' Addresses
@@ -665,34 +689,10 @@ Authors' Addresses
    URI:   http://filezilla-project.org/
 
 
-
-
-
-Bryan, et al.           Expires December 10, 2010              [Page 12]
-
-Internet-Draft   FTP Extensions for Cryptographic Hashes       June 2010
-
-
    Daniel Stenberg
 
    Email: daniel@haxx.se
    URI:   http://www.haxx.se/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

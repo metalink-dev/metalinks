@@ -143,7 +143,7 @@
 <table summary="layout" width="66%" border="0" cellpadding="0" cellspacing="0"><tr><td><table summary="layout" width="100%" border="0" cellpadding="2" cellspacing="1">
 <tr><td class="header">Network Working Group</td><td class="header">A. Bryan</td></tr>
 <tr><td class="header">Internet-Draft</td><td class="header">T. Kosse</td></tr>
-<tr><td class="header">Intended status: Experimental</td><td class="header">D. Stenberg</td></tr>
+<tr><td class="header">Intended status: Standards Track</td><td class="header">D. Stenberg</td></tr>
 <tr><td class="header">Expires: December 10, 2010</td><td class="header">June 8, 2010</td></tr>
 </table></td></tr></table>
 <h1><br />FTP Extensions for Cryptographic Hashes<br />draft-bryan-ftp-hash-04</h1>
@@ -201,9 +201,9 @@ User-PI usage of HASH<br />
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor5">3.2.</a>&nbsp;
 Changing the HASH algorithm<br />
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor6">3.3.</a>&nbsp;
-HASH Command Errors<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor7">3.4.</a>&nbsp;
 FEAT Command Response for HASH Command<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor7">3.4.</a>&nbsp;
+HASH Command Errors<br />
 <a href="#IANA">4.</a>&nbsp;
 IANA Considerations<br />
 <a href="#anchor8">5.</a>&nbsp;
@@ -386,21 +386,6 @@ Changing the HASH algorithm</h3>
 <a name="anchor6"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.3.3"></a><h3>3.3.&nbsp;
-HASH Command Errors</h3>
-
-<p>The server-PI SHOULD reply with a 500 reply if the HASH command is unrecognized or unimplemented.
-</p>
-<p>The server-PI SHOULD reply with a 501 reply to the OPTS HASH command if the user-PI has requested an unknown or unsupported algorithm.
-</p>
-<p>The server-PI SHOULD reply with a 550 reply if the HASH command is used on a file that can not be found.
-</p>
-<p>The server-PI SHOULD reply with a 552 reply if the user is not allowed to use the HASH command.
-</p>
-<p>The server-PI SHOULD reply with a 450 reply if the server is busy, e.g. already hashing other files yet inviting the client to retry in future.
-</p>
-<a name="anchor7"></a><br /><hr />
-<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.3.4"></a><h3>3.4.&nbsp;
 FEAT Command Response for HASH Command</h3>
 
 <p>A server-FTP process that supports the HASH command MUST include, in the response to the FEAT command <a class='info' href='#RFC2389'>[RFC2389]<span> (</span><span class='info'>Hethmon, P. and R. Elz, &ldquo;Feature negotiation mechanism for the File Transfer Protocol,&rdquo; August&nbsp;1998.</span><span>)</span></a>, a feature line indicating that the HASH command is supported, along with a list of all supported hash algorithms in a semicolon separated list. The hash algorithm that is currently selected MUST be marked with an asterisk. The order of hash algorithms is insignificant. This command word is
@@ -431,6 +416,21 @@ FEAT Command Response for HASH Command</h3>
 
 </pre></div>
 
+<a name="anchor7"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.3.4"></a><h3>3.4.&nbsp;
+HASH Command Errors</h3>
+
+<p>The server-PI SHOULD reply with a 500 reply if the HASH command is unrecognized or unimplemented.
+</p>
+<p>The server-PI SHOULD reply with a 501 reply to the OPTS HASH command if the user-PI has requested an unknown or unsupported algorithm.
+</p>
+<p>The server-PI SHOULD reply with a 550 reply if the HASH command is used on a file that can not be found.
+</p>
+<p>The server-PI SHOULD reply with a 552 reply if the user is not allowed to use the HASH command.
+</p>
+<p>The server-PI SHOULD reply with a 450 reply if the server is busy, e.g. already hashing other files yet inviting the client to retry in future.
+</p>
 <a name="IANA"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4"></a><h3>4.&nbsp;
@@ -455,7 +455,7 @@ IANA Considerations</h3>
 <a name="rfc.section.5"></a><h3>5.&nbsp;
 Implementation Requirements</h3>
 
-<p>All conforming implementations MUST at least support the SHA-1 algorithm. Implementations SHOULD NOT make any algorithm the default that is known to be weaker than SHA-1. Support for any additional algorithms is OPTIONAL.
+<p>All conforming implementations MUST at least support the SHA-1 algorithm <a class='info' href='#FIPS-180-3'>[FIPS&#8209;180&#8209;3]<span> (</span><span class='info'>National Institute of Standards and Technology (NIST), &ldquo;Secure Hash Standard (SHS),&rdquo; October&nbsp;2008.</span><span>)</span></a>. Implementations SHOULD NOT make any algorithm the default that is known to be weaker than SHA-1. Support for any additional algorithms is OPTIONAL.
 </p>
 <a name="anchor9"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
@@ -504,6 +504,8 @@ References</h3>
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <h3>7.1.&nbsp;Normative References</h3>
 <table width="99%" border="0">
+<tr><td class="author-text" valign="top"><a name="FIPS-180-3">[FIPS-180-3]</a></td>
+<td class="author-text">National Institute of Standards and Technology (NIST), &ldquo;Secure Hash Standard (SHS),&rdquo; FIPS PUB&nbsp;180-3, October&nbsp;2008.</td></tr>
 <tr><td class="author-text" valign="top"><a name="RFC0959">[RFC0959]</a></td>
 <td class="author-text">Postel, J. and J. Reynolds, &ldquo;<a href="http://tools.ietf.org/html/rfc0959">File Transfer Protocol</a>,&rdquo; STD&nbsp;9, RFC&nbsp;0959, October&nbsp;1985.</td></tr>
 <tr><td class="author-text" valign="top"><a name="RFC2119">[RFC2119]</a></td>
@@ -670,13 +672,23 @@ Document History</h3>
 <p>Known issues concerning this draft:
 	    </p>
 <ul class="text">
-<li>Partial file hashes, similar to the Content-MD5 HTTP Header.
+<li>Should HASH support partial file hashes, similar to the Content-MD5 HTTP Header.
 </li>
 <li>Underspecification of the representation of the file that shall undergo the hash calculation.
 </li>
+<li>Should the server response include the algorithm? i.e. "S&gt; 213 SHA-256 xxxxxxxxxxxxxxx"
+</li>
 </ul>
 
-<p>-03 : April , 2010.
+<p>-04 : June, 2010.
+	    
+	    </p>
+<ul class="text">
+<li>User-PI usage and command errors sections updated.
+</li>
+</ul>
+
+<p>-03 : May 21, 2010.
 	    
 	    </p>
 <ul class="text">
