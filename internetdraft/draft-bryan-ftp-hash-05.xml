@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><?rfc linefile="1:draft-bryan-ftp-hash-04.xml"?>
+<?xml version="1.0" encoding="UTF-8"?><?rfc linefile="1:draft-bryan-ftp-hash-05.xml"?>
 <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
 <?rfc toc="yes" ?>
 <?rfc tocdepth="3" ?>
@@ -11,7 +11,7 @@
 <?rfc inline="yes" ?>
 <!DOCTYPE rfc
   PUBLIC "" "rfc2629.dtd">
-<rfc category="std" docName="draft-bryan-ftp-hash-04" ipr="trust200902">
+<rfc category="std" docName="draft-bryan-ftp-hash-05" ipr="trust200902">
     <front>        
       <title abbrev="FTP Extensions for Cryptographic Hashes">FTP Extensions for Cryptographic Hashes</title>
       <author initials="A." surname="Bryan" fullname="Anthony Bryan">
@@ -450,7 +450,7 @@ and a substituted malicious file could match.</t>
 	    </references> 
 
 	    <section title="Acknowledgements and Contributors">
-		  <t>Thanks to John C. Klensin, Alfred Hoenes, James Twine, Robert McMurray, and Mathias Berchtold.</t>
+		  <t>Thanks to John C. Klensin, Alfred Hoenes, James Twine, Robert McMurray, Mathias Berchtold, and Tatsuhiro Tsujikawa.</t>
     </section>
 
 	    <section title="List of Non-standard Cryptographic Hash or Checksum Commands and Implementations">
@@ -536,6 +536,13 @@ and a substituted malicious file could match.</t>
 
 	    </list></t>
 
+<t>-05 : June, 2010.
+	    
+	    <list style="symbols">
+
+          <t>...</t>
+	    </list></t>
+		
 <t>-04 : June 11, 2010.
 	    
 	    <list style="symbols">

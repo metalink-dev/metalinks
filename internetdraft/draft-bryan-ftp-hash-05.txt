@@ -8,7 +8,7 @@ Expires: December 13, 2010                                 June 11, 2010
 
 
                 FTP Extensions for Cryptographic Hashes
-                        draft-bryan-ftp-hash-04
+                        draft-bryan-ftp-hash-05
 
 Abstract
 
@@ -473,7 +473,7 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes       June 2010
 Appendix A.  Acknowledgements and Contributors
 
    Thanks to John C. Klensin, Alfred Hoenes, James Twine, Robert
-   McMurray, and Mathias Berchtold.
+   McMurray, Mathias Berchtold, and Tatsuhiro Tsujikawa.
 
 
 Appendix B.  List of Non-standard Cryptographic Hash or Checksum
@@ -636,6 +636,9 @@ Appendix C.  Document History
    o  Should the server response include the algorithm? i.e.  "S> 213
       SHA-256 xxxxxxxxxxxxxxx"
 
+   -05 : June, 2010.
+   o  ...
+
    -04 : June 11, 2010.
    o  User-PI usage and command errors sections updated.
 
@@ -655,9 +658,6 @@ Appendix C.  Document History
 
    -00 : October 19, 2009.
    o  Initial draft.
-
-
-
 
 
 
