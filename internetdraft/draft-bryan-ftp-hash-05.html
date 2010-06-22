@@ -144,7 +144,7 @@
 <tr><td class="header">Network Working Group</td><td class="header">A. Bryan</td></tr>
 <tr><td class="header">Internet-Draft</td><td class="header">T. Kosse</td></tr>
 <tr><td class="header">Intended status: Standards Track</td><td class="header">D. Stenberg</td></tr>
-<tr><td class="header">Expires: December 13, 2010</td><td class="header">June 11, 2010</td></tr>
+<tr><td class="header">Expires: December 24, 2010</td><td class="header">June 22, 2010</td></tr>
 </table></td></tr></table>
 <h1><br />FTP Extensions for Cryptographic Hashes<br />draft-bryan-ftp-hash-05</h1>
 
@@ -169,7 +169,7 @@ and may be updated, replaced, or obsoleted by other documents at any time.
 It is inappropriate to use Internet-Drafts as reference material or to cite
 them other than as &ldquo;work in progress.&rdquo;</p>
 <p>
-This Internet-Draft will expire on December 13, 2010.</p>
+This Internet-Draft will expire on December 24, 2010.</p>
 
 <h3>Copyright Notice</h3>
 <p>
@@ -233,7 +233,7 @@ Authors' Addresses<br />
 Introduction</h3>
 
 <p>The File Transfer Protocol <a class='info' href='#RFC0959'>[RFC0959]<span> (</span><span class='info'>Postel, J. and J. Reynolds, &ldquo;File Transfer Protocol,&rdquo; October&nbsp;1985.</span><span>)</span></a> does not offer any method to verify the integrity of a transferred file, nor can two files be compared against each other without actually transferring them first. Cryptographic hashes are a possible solution to this problem. In the past, several attempts have been made to add commands to obtain checksums and hashes,
-       however none have been formally specified, leading to non-interoperability and confusion. To solve these issues, this document specifies a new FTP command to be used by clients to request cryptographic hashes of files.
+       however none have been formally specified, leading to non-interoperability and confusion. (See Appendix B for more information). To solve these issues, this document specifies a new FTP command to be used by clients to request cryptographic hashes of files.
 HTTP has a similar feature named Instance Digests <a class='info' href='#RFC3230'>[RFC3230]<span> (</span><span class='info'>Mogul, J. and A. Van Hoff, &ldquo;Instance Digests in HTTP,&rdquo; January&nbsp;2002.</span><span>)</span></a> which allows a client to request the cryptographic hash of a file.
 </p>
 <p>[[ Discussion of this draft should take place on ftpext@ietf.org (or apps-discuss@ietf.org if necessary). ]]
@@ -269,8 +269,8 @@ Notational Conventions</h3>
 <p>In examples, the "C&gt;" lines are commands from user-PI to server-PI, and the "S&gt;" lines are server-PI replies.
 </p>
 <p>This document also uses notation defined in STD 9, <a class='info' href='#RFC0959'>[RFC0959]<span> (</span><span class='info'>Postel, J. and J. Reynolds, &ldquo;File Transfer Protocol,&rdquo; October&nbsp;1985.</span><span>)</span></a>.
-	In particular, the terms "reply", "user", "file", "pathname", "FTP commands", "user-PI", "server-FTP process",
-    "server-PI", "mode", "type", and "ASCII", are all used here as defined there.
+	In particular, the terms or commands "reply", "user", "file", "pathname", "FTP commands", "user-PI", "server-FTP process",
+    "server-PI", "mode", "type", "STOR", "RETR", and "ASCII", are all used here as defined there.
 </p>
 <p>Syntax required is defined using the Augmented BNF defined in <a class='info' href='#RFC5234'>[RFC5234]<span> (</span><span class='info'>Crocker, D. and P. Overell, &ldquo;Augmented BNF for Syntax Specifications: ABNF,&rdquo; January&nbsp;2008.</span><span>)</span></a>.
 </p>
@@ -401,7 +401,7 @@ FEAT Command Response for HASH Command</h3>
         S&gt; 211 END
 </pre></div>
 
-<p>The ellipses indicate place holders where other features MAY be listed, but this is OPTIONAL. The single space indentation of each feature line is REQUIRED by <a class='info' href='#RFC2389'>[RFC2389]<span> (</span><span class='info'>Hethmon, P. and R. Elz, &ldquo;Feature negotiation mechanism for the File Transfer Protocol,&rdquo; August&nbsp;1998.</span><span>)</span></a>.
+<p>The ellipses indicate place holders where other features may be listed, but this is optional. The single space indentation of each feature line is required by <a class='info' href='#RFC2389'>[RFC2389]<span> (</span><span class='info'>Hethmon, P. and R. Elz, &ldquo;Feature negotiation mechanism for the File Transfer Protocol,&rdquo; August&nbsp;1998.</span><span>)</span></a>.
 </p>
 <p>The IANA registry named "Hash Function Textual Names" defines values for hash types. Hash names should be presented in uppercase, but comparisons should be case-insensitive, e.g. MD5, md5, Md5 are all the same.
 </p>

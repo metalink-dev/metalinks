@@ -54,7 +54,7 @@
   <middle>
     <section title="Introduction">
 	<t>The File Transfer Protocol <xref target="RFC0959"/> does not offer any method to verify the integrity of a transferred file, nor can two files be compared against each other without actually transferring them first. Cryptographic hashes are a possible solution to this problem. In the past, several attempts have been made to add commands to obtain checksums and hashes,
-       however none have been formally specified, leading to non-interoperability and confusion. To solve these issues, this document specifies a new FTP command to be used by clients to request cryptographic hashes of files.
+       however none have been formally specified, leading to non-interoperability and confusion. (See Appendix B for more information). To solve these issues, this document specifies a new FTP command to be used by clients to request cryptographic hashes of files.
 HTTP has a similar feature named Instance Digests <xref target="RFC3230"/> which allows a client to request the cryptographic hash of a file.</t>
 
       <t>[[ Discussion of this draft should take place on ftpext@ietf.org (or apps-discuss@ietf.org if necessary). ]]</t>
@@ -87,8 +87,8 @@ HTTP has a similar feature named Instance Digests <xref target="RFC3230"/> which
 	<t>In examples, the "C&gt;" lines are commands from user-PI to server-PI, and the "S&gt;" lines are server-PI replies.</t>
 	
 	<t>This document also uses notation defined in STD 9, <xref target="RFC0959"/>.
-	In particular, the terms "reply", "user", "file", "pathname", "FTP commands", "user-PI", "server-FTP process",
-    "server-PI", "mode", "type", and "ASCII", are all used here as defined there.</t>
+	In particular, the terms or commands "reply", "user", "file", "pathname", "FTP commands", "user-PI", "server-FTP process",
+    "server-PI", "mode", "type", "STOR", "RETR", and "ASCII", are all used here as defined there.</t>
 
 	<t>Syntax required is defined using the Augmented BNF defined in <xref target="RFC5234"/>.</t>
 
@@ -214,7 +214,7 @@ data, it would be identical to the hash returned by HASH.</t>
         S&gt; 211 END
 </artwork></figure></t>
 
-<t>The ellipses indicate place holders where other features MAY be listed, but this is OPTIONAL. The single space indentation of each feature line is REQUIRED by <xref target="RFC2389"/>.</t>
+<t>The ellipses indicate place holders where other features may be listed, but this is optional. The single space indentation of each feature line is required by <xref target="RFC2389"/>.</t>
 
 <t>The IANA registry named "Hash Function Textual Names" defines values for hash types. Hash names should be presented in uppercase, but comparisons should be case-insensitive, e.g. MD5, md5, Md5 are all the same.</t>
 

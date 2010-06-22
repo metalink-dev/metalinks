@@ -4,7 +4,7 @@
 Network Working Group                                           A. Bryan
 Internet-Draft                                                  T. Kosse
 Intended status: Standards Track                             D. Stenberg
-Expires: December 13, 2010                                 June 11, 2010
+Expires: December 24, 2010                                 June 22, 2010
 
 
                 FTP Extensions for Cryptographic Hashes
@@ -37,7 +37,7 @@ Status of this Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on December 13, 2010.
+   This Internet-Draft will expire on December 24, 2010.
 
 Copyright Notice
 
@@ -52,7 +52,7 @@ Copyright Notice
 
 
 
-Bryan, et al.           Expires December 13, 2010               [Page 1]
+Bryan, et al.           Expires December 24, 2010               [Page 1]
 
 Internet-Draft   FTP Extensions for Cryptographic Hashes       June 2010
 
@@ -108,7 +108,7 @@ Table of Contents
 
 
 
-Bryan, et al.           Expires December 13, 2010               [Page 2]
+Bryan, et al.           Expires December 24, 2010               [Page 2]
 
 Internet-Draft   FTP Extensions for Cryptographic Hashes       June 2010
 
@@ -121,11 +121,12 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes       June 2010
    Cryptographic hashes are a possible solution to this problem.  In the
    past, several attempts have been made to add commands to obtain
    checksums and hashes, however none have been formally specified,
-   leading to non-interoperability and confusion.  To solve these
-   issues, this document specifies a new FTP command to be used by
-   clients to request cryptographic hashes of files.  HTTP has a similar
-   feature named Instance Digests [RFC3230] which allows a client to
-   request the cryptographic hash of a file.
+   leading to non-interoperability and confusion.  (See Appendix B for
+   more information).  To solve these issues, this document specifies a
+   new FTP command to be used by clients to request cryptographic hashes
+   of files.  HTTP has a similar feature named Instance Digests
+   [RFC3230] which allows a client to request the cryptographic hash of
+   a file.
 
    [[ Discussion of this draft should take place on ftpext@ietf.org (or
    apps-discuss@ietf.org if necessary). ]]
@@ -156,19 +157,19 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes       June 2010
    and the "S>" lines are server-PI replies.
 
    This document also uses notation defined in STD 9, [RFC0959].  In
-   particular, the terms "reply", "user", "file", "pathname", "FTP
-   commands", "user-PI", "server-FTP process", "server-PI", "mode",
-   "type", and "ASCII", are all used here as defined there.
-
-   Syntax required is defined using the Augmented BNF defined in
-
+   particular, the terms or commands "reply", "user", "file",
+   "pathname", "FTP commands", "user-PI", "server-FTP process",
+   "server-PI", "mode", "type", "STOR", "RETR", and "ASCII", are all
+   used here as defined there.
 
 
-Bryan, et al.           Expires December 13, 2010               [Page 3]
+
+Bryan, et al.           Expires December 24, 2010               [Page 3]
 
 Internet-Draft   FTP Extensions for Cryptographic Hashes       June 2010
 
 
+   Syntax required is defined using the Augmented BNF defined in
    [RFC5234].
 
 
@@ -219,8 +220,7 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes       June 2010
 
 
 
-
-Bryan, et al.           Expires December 13, 2010               [Page 4]
+Bryan, et al.           Expires December 24, 2010               [Page 4]
 
 Internet-Draft   FTP Extensions for Cryptographic Hashes       June 2010
 
@@ -276,7 +276,7 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes       June 2010
 
 
 
-Bryan, et al.           Expires December 13, 2010               [Page 5]
+Bryan, et al.           Expires December 24, 2010               [Page 5]
 
 Internet-Draft   FTP Extensions for Cryptographic Hashes       June 2010
 
@@ -311,9 +311,9 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes       June 2010
            S>  ...
            S> 211 END
 
-   The ellipses indicate place holders where other features MAY be
-   listed, but this is OPTIONAL.  The single space indentation of each
-   feature line is REQUIRED by [RFC2389].
+   The ellipses indicate place holders where other features may be
+   listed, but this is optional.  The single space indentation of each
+   feature line is required by [RFC2389].
 
    The IANA registry named "Hash Function Textual Names" defines values
    for hash types.  Hash names should be presented in uppercase, but
@@ -332,7 +332,7 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes       June 2010
 
 
 
-Bryan, et al.           Expires December 13, 2010               [Page 6]
+Bryan, et al.           Expires December 24, 2010               [Page 6]
 
 Internet-Draft   FTP Extensions for Cryptographic Hashes       June 2010
 
@@ -388,7 +388,7 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes       June 2010
 
 
 
-Bryan, et al.           Expires December 13, 2010               [Page 7]
+Bryan, et al.           Expires December 24, 2010               [Page 7]
 
 Internet-Draft   FTP Extensions for Cryptographic Hashes       June 2010
 
@@ -444,7 +444,7 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes       June 2010
 
 
 
-Bryan, et al.           Expires December 13, 2010               [Page 8]
+Bryan, et al.           Expires December 24, 2010               [Page 8]
 
 Internet-Draft   FTP Extensions for Cryptographic Hashes       June 2010
 
@@ -500,7 +500,7 @@ Appendix B.  List of Non-standard Cryptographic Hash or Checksum
 
 
 
-Bryan, et al.           Expires December 13, 2010               [Page 9]
+Bryan, et al.           Expires December 24, 2010               [Page 9]
 
 Internet-Draft   FTP Extensions for Cryptographic Hashes       June 2010
 
@@ -556,7 +556,7 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes       June 2010
 
 
 
-Bryan, et al.           Expires December 13, 2010              [Page 10]
+Bryan, et al.           Expires December 24, 2010              [Page 10]
 
 Internet-Draft   FTP Extensions for Cryptographic Hashes       June 2010
 
@@ -612,7 +612,7 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes       June 2010
 
 
 
-Bryan, et al.           Expires December 13, 2010              [Page 11]
+Bryan, et al.           Expires December 24, 2010              [Page 11]
 
 Internet-Draft   FTP Extensions for Cryptographic Hashes       June 2010
 
@@ -668,7 +668,7 @@ Appendix C.  Document History
 
 
 
-Bryan, et al.           Expires December 13, 2010              [Page 12]
+Bryan, et al.           Expires December 24, 2010              [Page 12]
 
 Internet-Draft   FTP Extensions for Cryptographic Hashes       June 2010
 
@@ -724,5 +724,5 @@ Authors' Addresses
 
 
 
-Bryan, et al.           Expires December 13, 2010              [Page 13]
+Bryan, et al.           Expires December 24, 2010              [Page 13]
 
