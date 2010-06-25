@@ -200,8 +200,8 @@ data, it would be identical to the hash returned by HASH.</t>
 
 <section title="FEAT Command Response for HASH Command">
 
-<t>A server-FTP process that supports the HASH command MUST include, in the response to the FEAT command <xref target="RFC2389"/>, a feature line indicating that the HASH command is supported, along with a list of all supported hash algorithms in a semicolon separated list. The hash algorithm that is currently selected MUST be marked with an asterisk. The order of hash algorithms is insignificant. This command word is
-   case insensitive, but it SHOULD be transmitted in upper case only. That is, the response SHOULD be:</t>
+<t>When replying to the FEAT command <xref target="RFC2389"/>, a server-FTP process that supports the HASH command MUST include a feature line indicating that the HASH command is supported, along with a list of all supported hash algorithms in a semicolon separated list. The hash algorithm that is currently selected MUST be marked with an asterisk. The order of hash algorithms is insignificant.
+This command word is case insensitive, and MAY be sent in any mixture of upper or lower case, however it SHOULD be sent in upper case. That is, the response SHOULD be:</t>
 
 <t><figure> 
 	  <preamble></preamble>
@@ -214,7 +214,7 @@ data, it would be identical to the hash returned by HASH.</t>
         S&gt; 211 END
 </artwork></figure></t>
 
-<t>The ellipses indicate place holders where other features may be listed, but this is optional. The single space indentation of each feature line is required by <xref target="RFC2389"/>.</t>
+<t>The ellipses indicate place holders where other features may be included, and are not required. The one-space indentation of the feature lines is mandatory <xref target="RFC2389"/>.</t>
 
 <t>The IANA registry named "Hash Function Textual Names" defines values for hash types. Hash names should be presented in uppercase, but comparisons should be case-insensitive, e.g. MD5, md5, Md5 are all the same.</t>
 
