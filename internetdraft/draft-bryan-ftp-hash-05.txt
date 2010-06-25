@@ -4,7 +4,7 @@
 Network Working Group                                           A. Bryan
 Internet-Draft                                                  T. Kosse
 Intended status: Standards Track                             D. Stenberg
-Expires: December 24, 2010                                 June 22, 2010
+Expires: December 26, 2010                                 June 24, 2010
 
 
                 FTP Extensions for Cryptographic Hashes
@@ -37,7 +37,7 @@ Status of this Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on December 24, 2010.
+   This Internet-Draft will expire on December 26, 2010.
 
 Copyright Notice
 
@@ -52,7 +52,7 @@ Copyright Notice
 
 
 
-Bryan, et al.           Expires December 24, 2010               [Page 1]
+Bryan, et al.           Expires December 26, 2010               [Page 1]
 
 Internet-Draft   FTP Extensions for Cryptographic Hashes       June 2010
 
@@ -108,7 +108,7 @@ Table of Contents
 
 
 
-Bryan, et al.           Expires December 24, 2010               [Page 2]
+Bryan, et al.           Expires December 26, 2010               [Page 2]
 
 Internet-Draft   FTP Extensions for Cryptographic Hashes       June 2010
 
@@ -164,7 +164,7 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes       June 2010
 
 
 
-Bryan, et al.           Expires December 24, 2010               [Page 3]
+Bryan, et al.           Expires December 26, 2010               [Page 3]
 
 Internet-Draft   FTP Extensions for Cryptographic Hashes       June 2010
 
@@ -220,7 +220,7 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes       June 2010
 
 
 
-Bryan, et al.           Expires December 24, 2010               [Page 4]
+Bryan, et al.           Expires December 26, 2010               [Page 4]
 
 Internet-Draft   FTP Extensions for Cryptographic Hashes       June 2010
 
@@ -276,7 +276,7 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes       June 2010
 
 
 
-Bryan, et al.           Expires December 24, 2010               [Page 5]
+Bryan, et al.           Expires December 26, 2010               [Page 5]
 
 Internet-Draft   FTP Extensions for Cryptographic Hashes       June 2010
 
@@ -294,14 +294,15 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes       June 2010
 
 3.3.  FEAT Command Response for HASH Command
 
-   A server-FTP process that supports the HASH command MUST include, in
-   the response to the FEAT command [RFC2389], a feature line indicating
+   When replying to the FEAT command [RFC2389], a server-FTP process
+   that supports the HASH command MUST include a feature line indicating
    that the HASH command is supported, along with a list of all
    supported hash algorithms in a semicolon separated list.  The hash
    algorithm that is currently selected MUST be marked with an asterisk.
    The order of hash algorithms is insignificant.  This command word is
-   case insensitive, but it SHOULD be transmitted in upper case only.
-   That is, the response SHOULD be:
+   case insensitive, and MAY be sent in any mixture of upper or lower
+   case, however it SHOULD be sent in upper case.  That is, the response
+   SHOULD be:
 
 
            C> FEAT
@@ -312,8 +313,8 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes       June 2010
            S> 211 END
 
    The ellipses indicate place holders where other features may be
-   listed, but this is optional.  The single space indentation of each
-   feature line is required by [RFC2389].
+   included, and are not required.  The one-space indentation of the
+   feature lines is mandatory [RFC2389].
 
    The IANA registry named "Hash Function Textual Names" defines values
    for hash types.  Hash names should be presented in uppercase, but
@@ -331,8 +332,7 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes       June 2010
 
 
 
-
-Bryan, et al.           Expires December 24, 2010               [Page 6]
+Bryan, et al.           Expires December 26, 2010               [Page 6]
 
 Internet-Draft   FTP Extensions for Cryptographic Hashes       June 2010
 
@@ -388,7 +388,7 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes       June 2010
 
 
 
-Bryan, et al.           Expires December 24, 2010               [Page 7]
+Bryan, et al.           Expires December 26, 2010               [Page 7]
 
 Internet-Draft   FTP Extensions for Cryptographic Hashes       June 2010
 
@@ -444,7 +444,7 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes       June 2010
 
 
 
-Bryan, et al.           Expires December 24, 2010               [Page 8]
+Bryan, et al.           Expires December 26, 2010               [Page 8]
 
 Internet-Draft   FTP Extensions for Cryptographic Hashes       June 2010
 
@@ -500,7 +500,7 @@ Appendix B.  List of Non-standard Cryptographic Hash or Checksum
 
 
 
-Bryan, et al.           Expires December 24, 2010               [Page 9]
+Bryan, et al.           Expires December 26, 2010               [Page 9]
 
 Internet-Draft   FTP Extensions for Cryptographic Hashes       June 2010
 
@@ -556,7 +556,7 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes       June 2010
 
 
 
-Bryan, et al.           Expires December 24, 2010              [Page 10]
+Bryan, et al.           Expires December 26, 2010              [Page 10]
 
 Internet-Draft   FTP Extensions for Cryptographic Hashes       June 2010
 
@@ -612,7 +612,7 @@ Internet-Draft   FTP Extensions for Cryptographic Hashes       June 2010
 
 
 
-Bryan, et al.           Expires December 24, 2010              [Page 11]
+Bryan, et al.           Expires December 26, 2010              [Page 11]
 
 Internet-Draft   FTP Extensions for Cryptographic Hashes       June 2010
 
@@ -668,7 +668,7 @@ Appendix C.  Document History
 
 
 
-Bryan, et al.           Expires December 24, 2010              [Page 12]
+Bryan, et al.           Expires December 26, 2010              [Page 12]
 
 Internet-Draft   FTP Extensions for Cryptographic Hashes       June 2010
 
@@ -724,5 +724,5 @@ Authors' Addresses
 
 
 
-Bryan, et al.           Expires December 24, 2010              [Page 13]
+Bryan, et al.           Expires December 26, 2010              [Page 13]
 
