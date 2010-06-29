@@ -83,7 +83,7 @@ Table of Contents
      7.2.  Informative References . . . . . . . . . . . . . . . . . . 10
    Appendix A.  Acknowledgements and Contributors . . . . . . . . . . 10
    Appendix B.  List of Non-standard Cryptographic Hash or
-                Checksum Commands and Implementations . . . . . . . . 11
+                Checksum Commands and Implementations . . . . . . . . 10
    Appendix C.  Document History  . . . . . . . . . . . . . . . . . . 13
    Authors' Addresses . . . . . . . . . . . . . . . . . . . . . . . . 14
 
@@ -477,15 +477,10 @@ Internet-Draft  FTP HASH Command for Cryptographic Hashes      June 2010
    leaving little room for other operations.  To mitigate this risk, a
    server SHOULD cache the calculated hashes so that the hash of a file
    is only calculated once even if multiple hash requests are sent for
-   that file.
-
-   For performance reasons, a server SHOULD a avoid hashing multiple
-   files at the same time which are located on the same physical media
-   and SHOULD instead hash them sequentially.  The FTP server's right to
-   refuse to calculate the hash is of course important to help against
-   denial-of-service risks.  A possible solution is to use the 450 reply
-   code of HASH to indicate that the server is already busy with another
-   HASH operation.
+   that file.  The FTP server's right to refuse to calculate the hash is
+   of course important to help against denial-of-service risks.  A
+   possible solution is to use the 450 reply code of HASH to indicate
+   that the server is already busy with another HASH operation.
 
    In addition, the HASH command can be used to draw conclusions about
    the contents of a file.  If the hash of a file on some server matches
@@ -497,17 +492,17 @@ Internet-Draft  FTP HASH Command for Cryptographic Hashes      June 2010
    named "Hash Function Textual Names" are considered insecure.  These
    include the whole Message Digest family of algorithms that are not
    suitable for cryptographically strong verification.  Malicious people
+   could provide files that appear to be identical to another file
+   because of a collision, i.e., the weak cryptographic hashes of the
+   intended file and a substituted malicious file could match.
+
+
 
 
 
 Bryan, et al.           Expires December 31, 2010               [Page 9]
 
 Internet-Draft  FTP HASH Command for Cryptographic Hashes      June 2010
-
-
-   could provide files that appear to be identical to another file
-   because of a collision, i.e., the weak cryptographic hashes of the
-   intended file and a substituted malicious file could match.
 
 
 7.  References
@@ -554,17 +549,17 @@ Appendix A.  Acknowledgements and Contributors
    Portions of [RFC3659] were wholly reused in this document.
 
 
+Appendix B.  List of Non-standard Cryptographic Hash or Checksum
+             Commands and Implementations
+
+   [[ to be removed by the RFC editor before publication as an RFC. ]]
+
 
 
 Bryan, et al.           Expires December 31, 2010              [Page 10]
 
 Internet-Draft  FTP HASH Command for Cryptographic Hashes      June 2010
 
-
-Appendix B.  List of Non-standard Cryptographic Hash or Checksum
-             Commands and Implementations
-
-   [[ to be removed by the RFC editor before publication as an RFC. ]]
 
    A number of similar checksum or hash commands exist, but are not
    formally specified, leading to non-interoperability and confusion.
@@ -607,6 +602,11 @@ Appendix B.  List of Non-standard Cryptographic Hash or Checksum
       http://www.blackmoonftpserver.com/portal/readmore/features.html
    o  C.P.A. Secure (supports XCRC)
       http://www.cpasecure.com/CPASecureVsSecureFTP.html
+   o  Cerberus FTP server (supports XCRC, XMD5, XSHA1, XSHA256, XSHA512)
+      http://www.softpedia.com/progChangelog/
+      Cerberus-FTP-Server-Changelog-1904.html
+   o  Core FTP Pro (supports XCRC)
+   o  Cross FTP Server (supports MD5/MMD5)
 
 
 
@@ -617,11 +617,6 @@ Bryan, et al.           Expires December 31, 2010              [Page 11]
 Internet-Draft  FTP HASH Command for Cryptographic Hashes      June 2010
 
 
-   o  Cerberus FTP server (supports XCRC, XMD5, XSHA1, XSHA256, XSHA512)
-      http://www.softpedia.com/progChangelog/
-      Cerberus-FTP-Server-Changelog-1904.html
-   o  Core FTP Pro (supports XCRC)
-   o  Cross FTP Server (supports MD5/MMD5)
    o  FileCOPA FTP Server (supports XCRC, XMD5, XSHA1)
       http://www.filecopa-ftpserver.com/features.html
    o  File Watchdogs FTP Server (supports XCRC, XMD5, XSHA1, XSHA256,
@@ -663,6 +658,11 @@ Internet-Draft  FTP HASH Command for Cryptographic Hashes      June 2010
    o  Quick 'n Easy FTP Server (supports XCRC) http://
       www.pablosoftwaresolutions.com/html/
       quick__n_easy_ftp_server_pro.html
+   o  RaidenFTPD32 FTP server (supports XCRC, XMD5)
+   o  Robo-FTP Server (supports XCRC, XMD5, XSHA1)
+      http://kb.robo-ftp.com/change_log/show/61
+   o  SyncBackPro and SyncBackSE (supports XCRC)
+      http://www.2brightsparks.com/syncback/sbpro-changes.html
 
 
 
@@ -673,11 +673,6 @@ Bryan, et al.           Expires December 31, 2010              [Page 12]
 Internet-Draft  FTP HASH Command for Cryptographic Hashes      June 2010
 
 
-   o  RaidenFTPD32 FTP server (supports XCRC, XMD5)
-   o  Robo-FTP Server (supports XCRC, XMD5, XSHA1)
-      http://kb.robo-ftp.com/change_log/show/61
-   o  SyncBackPro and SyncBackSE (supports XCRC)
-      http://www.2brightsparks.com/syncback/sbpro-changes.html
    o  Secure FTP Factory (supports XCRC)
    o  Serv-U FTP Server (supports XCRC) http://www.serv-u.com/help/
       serv_u_help/additional_ftp_commands_supported_by_serv_u.htm
@@ -721,6 +716,11 @@ Appendix C.  Document History
    o  List of non-standard checksum and hash commands and their
       implementations.
 
+   -02 : April 16, 2010.
+   o  Error codes section.
+
+   -01 : April 7, 2010.
+
 
 
 
@@ -729,10 +729,6 @@ Bryan, et al.           Expires December 31, 2010              [Page 13]
 Internet-Draft  FTP HASH Command for Cryptographic Hashes      June 2010
 
 
-   -02 : April 16, 2010.
-   o  Error codes section.
-
-   -01 : April 7, 2010.
    o  Changing HASH algorithm with OPTS.
    o  Reference RFC 5797 and add IANA Considerations section.
    o  Informative Reference to expired Internet Draft
@@ -763,6 +759,10 @@ Authors' Addresses
 
    Email: daniel@haxx.se
    URI:   http://www.haxx.se/
+
+
+
+
 
 
 

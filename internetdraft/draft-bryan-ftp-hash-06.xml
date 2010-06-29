@@ -358,11 +358,7 @@ consume most of the FTP server's resources, leaving little room for other
 operations.
 To mitigate this risk, a server SHOULD cache the calculated hashes so
 that the hash of a file is only calculated once even if multiple hash
-requests are sent for that file.</t>
-
-<t>For performance reasons, a server SHOULD a avoid hashing multiple files at the
-same time which are located on the same physical media and SHOULD
-instead hash them sequentially. The FTP server's right to refuse to calculate the hash is of course important to help against denial-of-service risks. A possible solution is to use the 450
+requests are sent for that file. The FTP server's right to refuse to calculate the hash is of course important to help against denial-of-service risks. A possible solution is to use the 450
 reply code of HASH to indicate that the server is already busy with
 another HASH operation.</t>
 
