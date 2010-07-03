@@ -4,7 +4,7 @@
 Network Working Group                                           A. Bryan
 Internet-Draft                                                  T. Kosse
 Intended status: Standards Track                             D. Stenberg
-Expires: December 31, 2010                                 June 29, 2010
+Expires: January 4, 2011                                    July 3, 2010
 
 
       File Transfer Protocol HASH Command for Cryptographic Hashes
@@ -37,7 +37,7 @@ Status of this Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on December 31, 2010.
+   This Internet-Draft will expire on January 4, 2011.
 
 Copyright Notice
 
@@ -52,9 +52,9 @@ Copyright Notice
 
 
 
-Bryan, et al.           Expires December 31, 2010               [Page 1]
+Bryan, et al.            Expires January 4, 2011                [Page 1]
 
-Internet-Draft  FTP HASH Command for Cryptographic Hashes      June 2010
+Internet-Draft  FTP HASH Command for Cryptographic Hashes      July 2010
 
 
    to this document.  Code Components extracted from this document must
@@ -83,7 +83,7 @@ Table of Contents
      7.2.  Informative References . . . . . . . . . . . . . . . . . . 10
    Appendix A.  Acknowledgements and Contributors . . . . . . . . . . 10
    Appendix B.  List of Non-standard Cryptographic Hash or
-                Checksum Commands and Implementations . . . . . . . . 10
+                Checksum Commands and Implementations . . . . . . . . 11
    Appendix C.  Document History  . . . . . . . . . . . . . . . . . . 13
    Authors' Addresses . . . . . . . . . . . . . . . . . . . . . . . . 14
 
@@ -108,9 +108,9 @@ Table of Contents
 
 
 
-Bryan, et al.           Expires December 31, 2010               [Page 2]
+Bryan, et al.            Expires January 4, 2011                [Page 2]
 
-Internet-Draft  FTP HASH Command for Cryptographic Hashes      June 2010
+Internet-Draft  FTP HASH Command for Cryptographic Hashes      July 2010
 
 
 1.  Introduction
@@ -140,7 +140,7 @@ Internet-Draft  FTP HASH Command for Cryptographic Hashes      June 2010
    HASH server response with Positive Completion code and the requested
    hash using the currently selected algorithm:
 
-      S> 213 80bc95fd391772fa61c91ed68567f0980bb45fd9
+      S> 213 SHA-1 80bc95fd391772fa61c91ed68567f0980bb45fd9 filename.ext
 
 
 2.  Document Conventions
@@ -154,21 +154,22 @@ Internet-Draft  FTP HASH Command for Cryptographic Hashes      June 2010
    scoped to those conformance targets.
 
    This document also uses notation defined in STD 9, [RFC0959].  In
-   particular, the terms or commands "reply", "user", "file",
-   "pathname", "FTP commands", "user-PI" (user protocol interpreter),
-   "server-FTP process", "server-PI", "mode", "type", "STOR", "RETR",
-   and "ASCII", are all used here as defined there.
+   particular, the terms or commands "reply", "user", "file", "FTP
+   commands", "user-PI" (user protocol interpreter), "server-FTP
+   process", "server-PI", "mode", "type", "STOR", "RETR", and "ASCII",
+   are all used here as defined there.  The term "pathname" is used as
+   defined in Section 2.2 of [RFC3659].
 
    In the examples of FTP dialogs presented in this document, lines that
-   begin "C> " were sent over the control connection from the user-PI to
 
 
 
-Bryan, et al.           Expires December 31, 2010               [Page 3]
+Bryan, et al.            Expires January 4, 2011                [Page 3]
 
-Internet-Draft  FTP HASH Command for Cryptographic Hashes      June 2010
+Internet-Draft  FTP HASH Command for Cryptographic Hashes      July 2010
 
 
+   begin "C> " were sent over the control connection from the user-PI to
    the server-PI, and lines that begin "S> " were sent over the control
    connection from the server-PI to the user-PI.  In all cases, the
    prefixes shown above, including the one space, have been added for
@@ -219,10 +220,9 @@ Internet-Draft  FTP HASH Command for Cryptographic Hashes      June 2010
 
 
 
-
-Bryan, et al.           Expires December 31, 2010               [Page 4]
+Bryan, et al.            Expires January 4, 2011                [Page 4]
 
-Internet-Draft  FTP HASH Command for Cryptographic Hashes      June 2010
+Internet-Draft  FTP HASH Command for Cryptographic Hashes      July 2010
 
 
    Throughout this document, replies will be identified by the three
@@ -256,7 +256,7 @@ Internet-Draft  FTP HASH Command for Cryptographic Hashes      June 2010
 
 
       hash-response = hash-ok / error-response
-      hash-ok       = "213" SP 1*HEXDIGIT CRLF
+      hash-ok       = "213" SP hashname SP 1*HEXDIGIT CRLF SP <pathname>
 
    All hash values MUST be encoded in lowercase hexadecimal format.
 
@@ -266,19 +266,19 @@ Internet-Draft  FTP HASH Command for Cryptographic Hashes      June 2010
 
    The HASH command is meant to be used for files transmitted in Image
    type mode (TYPE I) and Stream transfer mode (MODE S).  The returned
-   hash MUST be calculated over the raw octet data of the file
-   irrespective of the selected data type, transfer mode or any other
-   state affecting the transfer.  In other words, if a client were to
-   download a full file using TYPE I and MODE S and were to calculate
-   the hash on the received octet data, it would be identical to the
-   hash returned by HASH.
+   hash MUST be calculated as if a client were to download the full file
+   using TYPE I and MODE S and were to calculate the hash on the
+   received octet data.  In other words, if a client were to download a
+   full file using TYPE I and MODE S and were to calculate the hash on
+   the received octet data, it would be identical to the hash returned
+   by HASH.
 
 
 
 
-Bryan, et al.           Expires December 31, 2010               [Page 5]
+Bryan, et al.            Expires January 4, 2011                [Page 5]
 
-Internet-Draft  FTP HASH Command for Cryptographic Hashes      June 2010
+Internet-Draft  FTP HASH Command for Cryptographic Hashes      July 2010
 
 
 3.1.  FEAT Command Response for HASH Command
@@ -332,9 +332,9 @@ Internet-Draft  FTP HASH Command for Cryptographic Hashes      June 2010
 
 
 
-Bryan, et al.           Expires December 31, 2010               [Page 6]
+Bryan, et al.            Expires January 4, 2011                [Page 6]
 
-Internet-Draft  FTP HASH Command for Cryptographic Hashes      June 2010
+Internet-Draft  FTP HASH Command for Cryptographic Hashes      July 2010
 
 
       C> OPTS HASH
@@ -388,9 +388,9 @@ Internet-Draft  FTP HASH Command for Cryptographic Hashes      June 2010
 
 
 
-Bryan, et al.           Expires December 31, 2010               [Page 7]
+Bryan, et al.            Expires January 4, 2011                [Page 7]
 
-Internet-Draft  FTP HASH Command for Cryptographic Hashes      June 2010
+Internet-Draft  FTP HASH Command for Cryptographic Hashes      July 2010
 
 
       C> OPTS HASH
@@ -407,7 +407,7 @@ Internet-Draft  FTP HASH Command for Cryptographic Hashes      June 2010
 
 
       C> HASH filename.ext
-      S> 213 f0ad929cd259957e160ea442eb80986b5f01...
+      S> 213 SHA-256 f0ad929cd259957e160ea442eb80986b5f... filename.ext
 
    Client downloads file.  Client hashes the downloaded file and
    compares its hash to the hash obtained from the server.  The HASH
@@ -425,6 +425,10 @@ Internet-Draft  FTP HASH Command for Cryptographic Hashes      June 2010
    The server-PI SHOULD reply with a 550 reply if the HASH command is
    used on a file that can not be found.
 
+   The server-PI SHOULD reply with a 551 reply if the server-PI can not
+   calculate the hash of a file because it is unable to deliver the file
+   with TYPE I and MODE S.
+
    The server-PI SHOULD reply with a 552 reply if the user is not
    allowed to use the HASH command.
 
@@ -438,16 +442,16 @@ Internet-Draft  FTP HASH Command for Cryptographic Hashes      June 2010
    This new command is added to the "FTP Commands and Extensions"
    registry created by [RFC5797].
 
+
+
+Bryan, et al.            Expires January 4, 2011                [Page 8]
+
+Internet-Draft  FTP HASH Command for Cryptographic Hashes      July 2010
+
+
    Command Name: HASH
 
    Description: Cryptographic Hash of a file
-
-
-
-Bryan, et al.           Expires December 31, 2010               [Page 8]
-
-Internet-Draft  FTP HASH Command for Cryptographic Hashes      June 2010
-
 
    FEAT String: HASH
 
@@ -475,12 +479,16 @@ Internet-Draft  FTP HASH Command for Cryptographic Hashes      June 2010
    for example, continuously send HASH commands over multiple
    connections and thus consume most of the FTP server's resources,
    leaving little room for other operations.  To mitigate this risk, a
-   server SHOULD cache the calculated hashes so that the hash of a file
-   is only calculated once even if multiple hash requests are sent for
-   that file.  The FTP server's right to refuse to calculate the hash is
-   of course important to help against denial-of-service risks.  A
-   possible solution is to use the 450 reply code of HASH to indicate
-   that the server is already busy with another HASH operation.
+   server MAY cache the calculated hashes so that the hash of a file is
+   only calculated once even if multiple hash requests are sent for that
+   file, provided it updates or invalidates the cached hash when the
+   content of the corresponding file changes.  A server may refuse to
+   process a HASH command for many reasons, one of which may be a
+   suspected denial-of-service attack.  A client MUST be able to
+   understand that refusal to process HASH commands may be transient (if
+   indicated by a 4xy response) and MAY be honoured later if the server
+   so decides.  A client MUST allow that a HASH command might take a
+   reasonably long time to complete.
 
    In addition, the HASH command can be used to draw conclusions about
    the contents of a file.  If the hash of a file on some server matches
@@ -489,20 +497,20 @@ Internet-Draft  FTP HASH Command for Cryptographic Hashes      June 2010
    to users who would already be able to download the file.
 
    Currently, some of the hash algorithms defined in the IANA registry
+
+
+
+Bryan, et al.            Expires January 4, 2011                [Page 9]
+
+Internet-Draft  FTP HASH Command for Cryptographic Hashes      July 2010
+
+
    named "Hash Function Textual Names" are considered insecure.  These
    include the whole Message Digest family of algorithms that are not
    suitable for cryptographically strong verification.  Malicious people
    could provide files that appear to be identical to another file
    because of a collision, i.e., the weak cryptographic hashes of the
    intended file and a substituted malicious file could match.
-
-
-
-
-
-Bryan, et al.           Expires December 31, 2010               [Page 9]
-
-Internet-Draft  FTP HASH Command for Cryptographic Hashes      June 2010
 
 
 7.  References
@@ -544,7 +552,16 @@ Internet-Draft  FTP HASH Command for Cryptographic Hashes      June 2010
 Appendix A.  Acknowledgements and Contributors
 
    Thanks to John C. Klensin, Alfred Hoenes, James Twine, Robert
-   McMurray, Mathias Berchtold, and Tatsuhiro Tsujikawa.
+   McMurray, Mathias Berchtold, Tatsuhiro Tsujikawa, and Paul Ford-
+
+
+
+Bryan, et al.            Expires January 4, 2011               [Page 10]
+
+Internet-Draft  FTP HASH Command for Cryptographic Hashes      July 2010
+
+
+   Hutchinson.
 
    Portions of [RFC3659] were wholly reused in this document.
 
@@ -553,13 +570,6 @@ Appendix B.  List of Non-standard Cryptographic Hash or Checksum
              Commands and Implementations
 
    [[ to be removed by the RFC editor before publication as an RFC. ]]
-
-
-
-Bryan, et al.           Expires December 31, 2010              [Page 10]
-
-Internet-Draft  FTP HASH Command for Cryptographic Hashes      June 2010
-
 
    A number of similar checksum or hash commands exist, but are not
    formally specified, leading to non-interoperability and confusion.
@@ -597,6 +607,16 @@ Internet-Draft  FTP HASH Command for Cryptographic Hashes      June 2010
    o  Apache Ftp Server (supports MD5/MMD5 from draft-twine-ftpmd5)
       http://cwiki.apache.org/FTPSERVER/documentation.html
    o  Backup4all Pro (supports XCRC)
+
+
+
+
+
+Bryan, et al.            Expires January 4, 2011               [Page 11]
+
+Internet-Draft  FTP HASH Command for Cryptographic Hashes      July 2010
+
+
    o  Backup to FTP (supports XCRC)
    o  BlackMoon FTP Server (supports XCRC)
       http://www.blackmoonftpserver.com/portal/readmore/features.html
@@ -607,16 +627,6 @@ Internet-Draft  FTP HASH Command for Cryptographic Hashes      June 2010
       Cerberus-FTP-Server-Changelog-1904.html
    o  Core FTP Pro (supports XCRC)
    o  Cross FTP Server (supports MD5/MMD5)
-
-
-
-
-
-Bryan, et al.           Expires December 31, 2010              [Page 11]
-
-Internet-Draft  FTP HASH Command for Cryptographic Hashes      June 2010
-
-
    o  FileCOPA FTP Server (supports XCRC, XMD5, XSHA1)
       http://www.filecopa-ftpserver.com/features.html
    o  File Watchdogs FTP Server (supports XCRC, XMD5, XSHA1, XSHA256,
@@ -653,6 +663,16 @@ Internet-Draft  FTP HASH Command for Cryptographic Hashes      June 2010
       http://www.orenosv.com/orenosv/ftpcli_en.html
    o  ProFTPD module mod_digest (supports XCRC, XMD5, XSHA1, SHA256)
       http://www.smartftp.com/oss/proftpd/mod_digest.html
+
+
+
+
+
+Bryan, et al.            Expires January 4, 2011               [Page 12]
+
+Internet-Draft  FTP HASH Command for Cryptographic Hashes      July 2010
+
+
    o  PSFTPd Secure FTP Server (supports XCRC, XMD5, XSHA)
       http://www.psftp.de/psftpd_fo.php
    o  Quick 'n Easy FTP Server (supports XCRC) http://
@@ -663,16 +683,6 @@ Internet-Draft  FTP HASH Command for Cryptographic Hashes      June 2010
       http://kb.robo-ftp.com/change_log/show/61
    o  SyncBackPro and SyncBackSE (supports XCRC)
       http://www.2brightsparks.com/syncback/sbpro-changes.html
-
-
-
-
-
-Bryan, et al.           Expires December 31, 2010              [Page 12]
-
-Internet-Draft  FTP HASH Command for Cryptographic Hashes      June 2010
-
-
    o  Secure FTP Factory (supports XCRC)
    o  Serv-U FTP Server (supports XCRC) http://www.serv-u.com/help/
       serv_u_help/additional_ftp_commands_supported_by_serv_u.htm
@@ -701,12 +711,24 @@ Appendix C.  Document History
    Known issues concerning this draft:
    o  Should HASH support partial file hashes, similar to the Content-
       MD5 HTTP Header.
-   o  Underspecification of the representation of the file that shall
-      undergo the hash calculation.
-   o  Should the server response include the algorithm? i.e.  "S> 213
-      SHA-256 xxxxxxxxxxxxxxx"
+   o  Section needs improvement: which files should a server process a
+      HASH command for a logged in user?
+   o  What should happen if somebody attempts to HASH something that
+      isn't a file (e.g. it's a directory)?
+
+   -06 : July, 2010.
+   o  Change server reply format.
 
    -05 : June 29, 2010.
+
+
+
+
+Bryan, et al.            Expires January 4, 2011               [Page 13]
+
+Internet-Draft  FTP HASH Command for Cryptographic Hashes      July 2010
+
+
    o  Add Basic Tokens and Server Replies subsections from RFC 3659.
 
    -04 : June 11, 2010.
@@ -720,15 +742,6 @@ Appendix C.  Document History
    o  Error codes section.
 
    -01 : April 7, 2010.
-
-
-
-
-Bryan, et al.           Expires December 31, 2010              [Page 13]
-
-Internet-Draft  FTP HASH Command for Cryptographic Hashes      June 2010
-
-
    o  Changing HASH algorithm with OPTS.
    o  Reference RFC 5797 and add IANA Considerations section.
    o  Informative Reference to expired Internet Draft
@@ -767,18 +780,5 @@ Authors' Addresses
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-Bryan, et al.           Expires December 31, 2010              [Page 14]
+Bryan, et al.            Expires January 4, 2011               [Page 14]
 

@@ -144,7 +144,7 @@
 <tr><td class="header">Network Working Group</td><td class="header">A. Bryan</td></tr>
 <tr><td class="header">Internet-Draft</td><td class="header">T. Kosse</td></tr>
 <tr><td class="header">Intended status: Standards Track</td><td class="header">D. Stenberg</td></tr>
-<tr><td class="header">Expires: December 31, 2010</td><td class="header">June 29, 2010</td></tr>
+<tr><td class="header">Expires: January 4, 2011</td><td class="header">July 3, 2010</td></tr>
 </table></td></tr></table>
 <h1><br />File Transfer Protocol HASH Command for Cryptographic Hashes<br />draft-bryan-ftp-hash-06</h1>
 
@@ -169,7 +169,7 @@ and may be updated, replaced, or obsoleted by other documents at any time.
 It is inappropriate to use Internet-Drafts as reference material or to cite
 them other than as &ldquo;work in progress.&rdquo;</p>
 <p>
-This Internet-Draft will expire on December 31, 2010.</p>
+This Internet-Draft will expire on January 4, 2011.</p>
 
 <h3>Copyright Notice</h3>
 <p>
@@ -256,7 +256,7 @@ Example</h3>
 <p>
 <p>HASH server response with Positive Completion code and the requested hash using the currently selected algorithm:
 </p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
-   S&gt; 213 80bc95fd391772fa61c91ed68567f0980bb45fd9
+   S&gt; 213 SHA-1 80bc95fd391772fa61c91ed68567f0980bb45fd9 filename.ext
 </pre></div>
 
 <a name="anchor3"></a><br /><hr />
@@ -271,8 +271,8 @@ Document Conventions</h3>
 	document are to be interpreted as described in BCP 14, <a class='info' href='#RFC2119'>[RFC2119]<span> (</span><span class='info'>Bradner, S., &ldquo;Key words for use in RFCs to Indicate Requirement Levels,&rdquo; March&nbsp;1997.</span><span>)</span></a>, as scoped to those conformance targets.
 </p>
 <p>This document also uses notation defined in STD 9, <a class='info' href='#RFC0959'>[RFC0959]<span> (</span><span class='info'>Postel, J. and J. Reynolds, &ldquo;File Transfer Protocol,&rdquo; October&nbsp;1985.</span><span>)</span></a>.
-	In particular, the terms or commands "reply", "user", "file", "pathname", "FTP commands", "user-PI" (user protocol interpreter), "server-FTP process",
-    "server-PI", "mode", "type", "STOR", "RETR", and "ASCII", are all used here as defined there.
+	In particular, the terms or commands "reply", "user", "file", "FTP commands", "user-PI" (user protocol interpreter), "server-FTP process",
+    "server-PI", "mode", "type", "STOR", "RETR", and "ASCII", are all used here as defined there. The term "pathname" is used as defined in Section 2.2 of <a class='info' href='#RFC3659'>[RFC3659]<span> (</span><span class='info'>Hethmon, P., &ldquo;Extensions to FTP,&rdquo; March&nbsp;2007.</span><span>)</span></a>.
 </p>
 <p>In the examples of FTP dialogs presented in this document, lines that
    begin "C&gt; " were sent over the control connection from the user-PI to
@@ -367,7 +367,7 @@ The HASH Command (HASH)</h3>
 <p>
 </p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
    hash-response = hash-ok / error-response
-   hash-ok       = "213" SP 1*HEXDIGIT CRLF
+   hash-ok       = "213" SP hashname SP 1*HEXDIGIT CRLF SP &lt;pathname&gt;
 </pre></div>
 
 <p>All hash values MUST be encoded in lowercase hexadecimal format.
@@ -375,10 +375,10 @@ The HASH Command (HASH)</h3>
 <p>The HASH command uses the currently selected hash algorithm. The currently selected hash algorithm can be determined with FEAT or OPTS HASH, and changed with OPTS HASH.
 </p>
 <p>The HASH command is meant to be used for files transmitted in Image
-type mode (TYPE I) and Stream transfer mode (MODE S). The returned hash
-MUST be calculated over the raw octet data of the file irrespective of
-the selected data type, transfer mode or any other state affecting the
-transfer. In other words, if a client were to download a full file using
+type mode (TYPE I) and Stream transfer mode (MODE S). The returned hash 
+MUST be calculated as if a client were to download the full file using 
+TYPE I and MODE S and were to calculate the hash on the received octet 
+data. In other words, if a client were to download a full file using
 TYPE I and MODE S and were to calculate the hash on the received octet
 data, it would be identical to the hash returned by HASH.
 </p>
@@ -497,7 +497,7 @@ User-PI usage of HASH</h3>
 <p>
 </p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
    C&gt; HASH filename.ext
-   S&gt; 213 f0ad929cd259957e160ea442eb80986b5f01...
+   S&gt; 213 SHA-256 f0ad929cd259957e160ea442eb80986b5f... filename.ext
 </pre></div>
 
 <p>Client downloads file. Client hashes the downloaded file and compares its hash to the hash obtained from the server. The HASH command could also be used to verify that an uploaded file has the same hash as the local file.
@@ -512,6 +512,8 @@ HASH Command Errors</h3>
 <p>The server-PI SHOULD reply with a 501 reply to the OPTS HASH command if the user-PI has requested an unknown or unsupported algorithm.
 </p>
 <p>The server-PI SHOULD reply with a 550 reply if the HASH command is used on a file that can not be found.
+</p>
+<p>The server-PI SHOULD reply with a 551 reply if the server-PI can not calculate the hash of a file because it is unable to deliver the file with TYPE I and MODE S.
 </p>
 <p>The server-PI SHOULD reply with a 552 reply if the user is not allowed to use the HASH command.
 </p>
@@ -554,11 +556,15 @@ On an affected server a malicious user could, for example,
 continuously send HASH commands over multiple connections and thus
 consume most of the FTP server's resources, leaving little room for other
 operations.
-To mitigate this risk, a server SHOULD cache the calculated hashes so
+To mitigate this risk, a server MAY cache the calculated hashes so
 that the hash of a file is only calculated once even if multiple hash
-requests are sent for that file. The FTP server's right to refuse to calculate the hash is of course important to help against denial-of-service risks. A possible solution is to use the 450
-reply code of HASH to indicate that the server is already busy with
-another HASH operation.
+requests are sent for that file, provided it
+updates or invalidates the cached hash when the content of the corresponding
+file changes. A server may refuse to process a HASH command for many reasons, 
+one of which may be a suspected denial-of-service attack. A client MUST be 
+able to understand that refusal to process HASH commands may be transient 
+(if indicated by a 4xy response) and MAY be honoured later if the server so 
+decides. A client MUST allow that a HASH command might take a reasonably long time to complete. 
 </p>
 <p>In addition, the HASH command can be used to draw conclusions about the
 contents of a file. If the hash of a file on some server matches the
@@ -614,7 +620,7 @@ References</h3>
 <a name="rfc.section.A"></a><h3>Appendix A.&nbsp;
 Acknowledgements and Contributors</h3>
 
-<p>Thanks to John C. Klensin, Alfred Hoenes, James Twine, Robert McMurray, Mathias Berchtold, and Tatsuhiro Tsujikawa.
+<p>Thanks to John C. Klensin, Alfred Hoenes, James Twine, Robert McMurray, Mathias Berchtold, Tatsuhiro Tsujikawa, and Paul Ford-Hutchinson.
 </p>
 <p>Portions of <a class='info' href='#RFC3659'>[RFC3659]<span> (</span><span class='info'>Hethmon, P., &ldquo;Extensions to FTP,&rdquo; March&nbsp;2007.</span><span>)</span></a> were wholly reused in this document.
 </p>
@@ -757,9 +763,17 @@ Document History</h3>
 <ul class="text">
 <li>Should HASH support partial file hashes, similar to the Content-MD5 HTTP Header.
 </li>
-<li>Underspecification of the representation of the file that shall undergo the hash calculation.
+<li>Section needs improvement: which files should a server process a HASH command for a logged in user?
 </li>
-<li>Should the server response include the algorithm? i.e. "S&gt; 213 SHA-256 xxxxxxxxxxxxxxx"
+<li>What should happen if somebody attempts to HASH something that isn't a file (e.g. it's a directory)?
+</li>
+</ul>
+
+<p>-06 : July, 2010.
+	    
+	    </p>
+<ul class="text">
+<li>Change server reply format.
 </li>
 </ul>
 
