@@ -256,7 +256,7 @@ Internet-Draft  FTP HASH Command for Cryptographic Hashes      July 2010
 
 
       hash-response = hash-ok / error-response
-      hash-ok       = "213" SP hashname SP 1*HEXDIGIT CRLF SP <pathname>
+      hash-ok       = "213" SP hashname SP 1*HEXDIGIT SP <pathname> CRLF
 
    All hash values MUST be encoded in lowercase hexadecimal format.
 
@@ -496,7 +496,7 @@ Internet-Draft  FTP HASH Command for Cryptographic Hashes      July 2010
    To prevent this scenario it suffices to limit use of the HASH command
    to users who would already be able to download the file.
 
-   Currently, some of the hash algorithms defined in the IANA registry
+   This mechanism simply allows the FTP protocol to expose HASH values
 
 
 
@@ -505,12 +505,9 @@ Bryan, et al.            Expires January 4, 2011                [Page 9]
 Internet-Draft  FTP HASH Command for Cryptographic Hashes      July 2010
 
 
-   named "Hash Function Textual Names" are considered insecure.  These
-   include the whole Message Digest family of algorithms that are not
-   suitable for cryptographically strong verification.  Malicious people
-   could provide files that appear to be identical to another file
-   because of a collision, i.e., the weak cryptographic hashes of the
-   intended file and a substituted malicious file could match.
+   of files, using the currently chosen mechanism, accessible to the
+   server by the client.  The suitability or otherwise of a specific
+   hash algorithm for a specific purpose is an implementation decision.
 
 
 7.  References
@@ -553,17 +550,15 @@ Appendix A.  Acknowledgements and Contributors
 
    Thanks to John C. Klensin, Alfred Hoenes, James Twine, Robert
    McMurray, Mathias Berchtold, Tatsuhiro Tsujikawa, and Paul Ford-
+   Hutchinson.
+
+   Portions of [RFC3659] were wholly reused in this document.
 
 
 
 Bryan, et al.            Expires January 4, 2011               [Page 10]
 
 Internet-Draft  FTP HASH Command for Cryptographic Hashes      July 2010
-
-
-   Hutchinson.
-
-   Portions of [RFC3659] were wholly reused in this document.
 
 
 Appendix B.  List of Non-standard Cryptographic Hash or Checksum
@@ -607,6 +602,11 @@ Appendix B.  List of Non-standard Cryptographic Hash or Checksum
    o  Apache Ftp Server (supports MD5/MMD5 from draft-twine-ftpmd5)
       http://cwiki.apache.org/FTPSERVER/documentation.html
    o  Backup4all Pro (supports XCRC)
+   o  Backup to FTP (supports XCRC)
+   o  BlackMoon FTP Server (supports XCRC)
+      http://www.blackmoonftpserver.com/portal/readmore/features.html
+   o  C.P.A. Secure (supports XCRC)
+      http://www.cpasecure.com/CPASecureVsSecureFTP.html
 
 
 
@@ -617,11 +617,6 @@ Bryan, et al.            Expires January 4, 2011               [Page 11]
 Internet-Draft  FTP HASH Command for Cryptographic Hashes      July 2010
 
 
-   o  Backup to FTP (supports XCRC)
-   o  BlackMoon FTP Server (supports XCRC)
-      http://www.blackmoonftpserver.com/portal/readmore/features.html
-   o  C.P.A. Secure (supports XCRC)
-      http://www.cpasecure.com/CPASecureVsSecureFTP.html
    o  Cerberus FTP server (supports XCRC, XMD5, XSHA1, XSHA256, XSHA512)
       http://www.softpedia.com/progChangelog/
       Cerberus-FTP-Server-Changelog-1904.html
@@ -663,6 +658,11 @@ Internet-Draft  FTP HASH Command for Cryptographic Hashes      July 2010
       http://www.orenosv.com/orenosv/ftpcli_en.html
    o  ProFTPD module mod_digest (supports XCRC, XMD5, XSHA1, SHA256)
       http://www.smartftp.com/oss/proftpd/mod_digest.html
+   o  PSFTPd Secure FTP Server (supports XCRC, XMD5, XSHA)
+      http://www.psftp.de/psftpd_fo.php
+   o  Quick 'n Easy FTP Server (supports XCRC) http://
+      www.pablosoftwaresolutions.com/html/
+      quick__n_easy_ftp_server_pro.html
 
 
 
@@ -673,11 +673,6 @@ Bryan, et al.            Expires January 4, 2011               [Page 12]
 Internet-Draft  FTP HASH Command for Cryptographic Hashes      July 2010
 
 
-   o  PSFTPd Secure FTP Server (supports XCRC, XMD5, XSHA)
-      http://www.psftp.de/psftpd_fo.php
-   o  Quick 'n Easy FTP Server (supports XCRC) http://
-      www.pablosoftwaresolutions.com/html/
-      quick__n_easy_ftp_server_pro.html
    o  RaidenFTPD32 FTP server (supports XCRC, XMD5)
    o  Robo-FTP Server (supports XCRC, XMD5, XSHA1)
       http://kb.robo-ftp.com/change_log/show/61
@@ -720,7 +715,12 @@ Appendix C.  Document History
    o  Change server reply format.
 
    -05 : June 29, 2010.
+   o  Add Basic Tokens and Server Replies subsections from RFC 3659.
 
+   -04 : June 11, 2010.
+   o  User-PI usage and command errors sections updated.
+
+   -03 : May 21, 2010.
 
 
 
@@ -729,12 +729,6 @@ Bryan, et al.            Expires January 4, 2011               [Page 13]
 Internet-Draft  FTP HASH Command for Cryptographic Hashes      July 2010
 
 
-   o  Add Basic Tokens and Server Replies subsections from RFC 3659.
-
-   -04 : June 11, 2010.
-   o  User-PI usage and command errors sections updated.
-
-   -03 : May 21, 2010.
    o  List of non-standard checksum and hash commands and their
       implementations.
 
@@ -772,6 +766,12 @@ Authors' Addresses
 
    Email: daniel@haxx.se
    URI:   http://www.haxx.se/
+
+
+
+
+
+
 
 
 
