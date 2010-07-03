@@ -367,7 +367,7 @@ The HASH Command (HASH)</h3>
 <p>
 </p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
    hash-response = hash-ok / error-response
-   hash-ok       = "213" SP hashname SP 1*HEXDIGIT CRLF SP &lt;pathname&gt;
+   hash-ok       = "213" SP hashname SP 1*HEXDIGIT SP &lt;pathname&gt; CRLF
 </pre></div>
 
 <p>All hash values MUST be encoded in lowercase hexadecimal format.
@@ -572,13 +572,10 @@ hash of some known file, then both files are likely identical. To
 prevent this scenario it suffices to limit use of the HASH command to
 users who would already be able to download the file.
 </p>
-<p>Currently, some of the hash algorithms defined in the IANA registry named
-"Hash Function Textual Names" are considered insecure.  These include
-the whole Message Digest family of algorithms that are not suitable
-for cryptographically strong verification.  Malicious people could
-provide files that appear to be identical to another file because of
-a collision, i.e., the weak cryptographic hashes of the intended file
-and a substituted malicious file could match.
+<p>This mechanism simply allows the FTP protocol to expose HASH values of files,
+using the currently chosen mechanism,  accessible to the server by the client.
+The suitability or otherwise of a specific hash algorithm for a specific 
+purpose is an implementation decision.
 </p>
 <a name="rfc.references"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
