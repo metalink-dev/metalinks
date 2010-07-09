@@ -8,7 +8,7 @@ Expires: January 10, 2011                                   July 9, 2010
 
 
       File Transfer Protocol HASH Command for Cryptographic Hashes
-                        draft-bryan-ftp-hash-06
+                        draft-bryan-ftp-hash-07
 
 Abstract
 
