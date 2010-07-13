@@ -67,7 +67,7 @@ HTTP has a similar feature named Instance Digests <xref target="RFC3230"/> which
 </artwork></figure></t>
 
 <t><figure> 
-	  <preamble>HASH server response with Positive Completion code and the requested hash using the currently selected algorithm:</preamble>
+	  <preamble>HASH server response with Positive Completion code, the currently selected HASH algorithm, the requested hash of the file, and the pathname of the file:</preamble>
 	  <artwork type="example">
    S&gt; 213 SHA-1 80bc95fd391772fa61c91ed68567f0980bb45fd9 filename.ext
 </artwork></figure></t>
@@ -212,7 +212,7 @@ This command word is case insensitive, and MAY be sent in any mixture of upper o
 
 <t>The ellipses indicate place holders where other features may be included, and are not required. The one-space indentation of the feature lines is mandatory <xref target="RFC2389"/>.</t>
 
-<t>The IANA registry named "Hash Function Textual Names" defines values for hash algorithms. Hash names should be presented in uppercase, but comparisons should be case-insensitive, e.g. MD5, md5, Md5 are all the same.</t>
+<t>The IANA registry named "Hash Function Textual Names" defines values for hash algorithms. Hash names SHOULD be presented in uppercase, but comparisons should be case-insensitive, e.g. MD5, md5, Md5 are all the same.</t>
 
 <t><figure> 
 	  <preamble></preamble>
@@ -270,7 +270,7 @@ This command word is case insensitive, and MAY be sent in any mixture of upper o
 
 <section title="User-PI usage of HASH">
 
-<t>The user-PI issues the FEAT command to query the server-PI about which algorithm is currently selected. This also reveals the other algorithms that the server supports. In this example, the SHA-1 algorithm is currently selected.</t>
+<t>The user-PI issues the FEAT command to query the server-PI about which algorithm is currently selected. This also reveals the other algorithms that the server supports. In this example, the SHA-1 algorithm is currently selected, as indicated by the asterisk.</t>
 
 <t><figure> 
 	  <preamble></preamble>
@@ -299,7 +299,7 @@ This command word is case insensitive, and MAY be sent in any mixture of upper o
    S&gt; 200 SHA-256
 </artwork></figure></t>
 
-<t>The user-PI requests the cryptographic hash of a file with HASH command. Server-PI replies with cryptographic hash of file.
+<t>The user-PI requests the cryptographic hash of a file with HASH command. Server-PI replies with the Positive Completion code, the currently selected HASH algorithm, the requested hash of the file, and the pathname of the file.
 <figure>
 	  <preamble></preamble>
 	  <artwork type="example">
@@ -463,6 +463,17 @@ purpose is an implementation decision.</t>
 <seriesInfo name="RFC" value="2389"/>
 </reference>
 
+<reference anchor="RFC3659">
+
+<front>
+<title>Extensions to FTP</title>
+<author initials="P." surname="Hethmon" fullname="P. Hethmon">
+<organization/></author>
+<date year="2007" month="March"/></front>
+
+<seriesInfo name="RFC" value="3659"/>
+</reference>
+
 <reference anchor="RFC5234">
 
 <front>
@@ -504,17 +515,6 @@ purpose is an implementation decision.</t>
 <date year="2002" month="January"/></front>
 
 <seriesInfo name="RFC" value="3230"/>
-</reference>
-
-<reference anchor="RFC3659">
-
-<front>
-<title>Extensions to FTP</title>
-<author initials="P." surname="Hethmon" fullname="P. Hethmon">
-<organization/></author>
-<date year="2007" month="March"/></front>
-
-<seriesInfo name="RFC" value="3659"/>
 </reference>
 
 <reference anchor="RFC5797">
@@ -631,14 +631,19 @@ purpose is an implementation decision.</t>
 		  <t>What should happen if somebody attempts to HASH something that isn't a file (e.g. it's a directory)?</t>
 
 	    </list></t>
+<t>-07 : July, 2010.
+	    
+	    <list style="symbols">
 
-<t>-06 : July, 2010.
+          <t>...</t>
+	    </list></t>
+
+<t>-06 : July 9, 2010.
 	    
 	    <list style="symbols">
 
           <t>Change server reply format.</t>
 	    </list></t>
-
 
 <t>-05 : June 29, 2010.
 	    

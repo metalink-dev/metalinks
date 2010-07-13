@@ -144,7 +144,7 @@
 <tr><td class="header">Network Working Group</td><td class="header">A. Bryan</td></tr>
 <tr><td class="header">Internet-Draft</td><td class="header">T. Kosse</td></tr>
 <tr><td class="header">Intended status: Standards Track</td><td class="header">D. Stenberg</td></tr>
-<tr><td class="header">Expires: January 10, 2011</td><td class="header">July 9, 2010</td></tr>
+<tr><td class="header">Expires: January 13, 2011</td><td class="header">July 12, 2010</td></tr>
 </table></td></tr></table>
 <h1><br />File Transfer Protocol HASH Command for Cryptographic Hashes<br />draft-bryan-ftp-hash-07</h1>
 
@@ -169,7 +169,7 @@ and may be updated, replaced, or obsoleted by other documents at any time.
 It is inappropriate to use Internet-Drafts as reference material or to cite
 them other than as &ldquo;work in progress.&rdquo;</p>
 <p>
-This Internet-Draft will expire on January 10, 2011.</p>
+This Internet-Draft will expire on January 13, 2011.</p>
 
 <h3>Copyright Notice</h3>
 <p>
@@ -254,7 +254,7 @@ Example</h3>
 </pre></div>
 
 <p>
-<p>HASH server response with Positive Completion code and the requested hash using the currently selected algorithm:
+<p>HASH server response with Positive Completion code, the currently selected HASH algorithm, the requested hash of the file, and the pathname of the file:
 </p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
    S&gt; 213 SHA-1 80bc95fd391772fa61c91ed68567f0980bb45fd9 filename.ext
 </pre></div>
@@ -403,7 +403,7 @@ This command word is case insensitive, and MAY be sent in any mixture of upper o
 
 <p>The ellipses indicate place holders where other features may be included, and are not required. The one-space indentation of the feature lines is mandatory <a class='info' href='#RFC2389'>[RFC2389]<span> (</span><span class='info'>Hethmon, P. and R. Elz, &ldquo;Feature negotiation mechanism for the File Transfer Protocol,&rdquo; August&nbsp;1998.</span><span>)</span></a>.
 </p>
-<p>The IANA registry named "Hash Function Textual Names" defines values for hash algorithms. Hash names should be presented in uppercase, but comparisons should be case-insensitive, e.g. MD5, md5, Md5 are all the same.
+<p>The IANA registry named "Hash Function Textual Names" defines values for hash algorithms. Hash names SHOULD be presented in uppercase, but comparisons should be case-insensitive, e.g. MD5, md5, Md5 are all the same.
 </p>
 <p>
 <p>
@@ -463,7 +463,7 @@ OPTS Parameters for HASH</h3>
 <a name="rfc.section.3.3"></a><h3>3.3.&nbsp;
 User-PI usage of HASH</h3>
 
-<p>The user-PI issues the FEAT command to query the server-PI about which algorithm is currently selected. This also reveals the other algorithms that the server supports. In this example, the SHA-1 algorithm is currently selected.
+<p>The user-PI issues the FEAT command to query the server-PI about which algorithm is currently selected. This also reveals the other algorithms that the server supports. In this example, the SHA-1 algorithm is currently selected, as indicated by the asterisk.
 </p>
 <p>
 <p>
@@ -492,7 +492,7 @@ User-PI usage of HASH</h3>
    S&gt; 200 SHA-256
 </pre></div>
 
-<p>The user-PI requests the cryptographic hash of a file with HASH command. Server-PI replies with cryptographic hash of file.
+<p>The user-PI requests the cryptographic hash of a file with HASH command. Server-PI replies with the Positive Completion code, the currently selected HASH algorithm, the requested hash of the file, and the pathname of the file.
 
 <p>
 </p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
@@ -601,6 +601,8 @@ References</h3>
 <td class="author-text"><a href="mailto:sob@harvard.edu">Bradner, S.</a>, &ldquo;<a href="http://tools.ietf.org/html/rfc2119">Key words for use in RFCs to Indicate Requirement Levels</a>,&rdquo; BCP&nbsp;14, RFC&nbsp;2119, March&nbsp;1997.</td></tr>
 <tr><td class="author-text" valign="top"><a name="RFC2389">[RFC2389]</a></td>
 <td class="author-text">Hethmon, P. and R. Elz, &ldquo;<a href="http://tools.ietf.org/html/rfc2389">Feature negotiation mechanism for the File Transfer Protocol</a>,&rdquo; RFC&nbsp;2389, August&nbsp;1998.</td></tr>
+<tr><td class="author-text" valign="top"><a name="RFC3659">[RFC3659]</a></td>
+<td class="author-text">Hethmon, P., &ldquo;<a href="http://tools.ietf.org/html/rfc3659">Extensions to FTP</a>,&rdquo; RFC&nbsp;3659, March&nbsp;2007.</td></tr>
 <tr><td class="author-text" valign="top"><a name="RFC5234">[RFC5234]</a></td>
 <td class="author-text">Crocker, D. and P. Overell, &ldquo;<a href="http://tools.ietf.org/html/rfc5234">Augmented BNF for Syntax Specifications: ABNF</a>,&rdquo; STD&nbsp;68, RFC&nbsp;5234, January&nbsp;2008.</td></tr>
 </table>
@@ -611,8 +613,6 @@ References</h3>
 <table width="99%" border="0">
 <tr><td class="author-text" valign="top"><a name="RFC3230">[RFC3230]</a></td>
 <td class="author-text">Mogul, J. and A. Van Hoff, &ldquo;<a href="http://tools.ietf.org/html/rfc3230">Instance Digests in HTTP</a>,&rdquo; RFC&nbsp;3230, January&nbsp;2002.</td></tr>
-<tr><td class="author-text" valign="top"><a name="RFC3659">[RFC3659]</a></td>
-<td class="author-text">Hethmon, P., &ldquo;<a href="http://tools.ietf.org/html/rfc3659">Extensions to FTP</a>,&rdquo; RFC&nbsp;3659, March&nbsp;2007.</td></tr>
 <tr><td class="author-text" valign="top"><a name="RFC5797">[RFC5797]</a></td>
 <td class="author-text">Klensin, J. and A. Hoenes, &ldquo;<a href="http://tools.ietf.org/html/rfc5797">FTP Command and Extension Registry</a>,&rdquo; RFC&nbsp;5797, March&nbsp;2010.</td></tr>
 <tr><td class="author-text" valign="top"><a name="draft-twine-ftpmd5">[draft-twine-ftpmd5]</a></td>
@@ -773,7 +773,15 @@ Document History</h3>
 </li>
 </ul>
 
-<p>-06 : July, 2010.
+<p>-07 : July, 2010.
+	    
+	    </p>
+<ul class="text">
+<li>...
+</li>
+</ul>
+
+<p>-06 : July 9, 2010.
 	    
 	    </p>
 <ul class="text">
