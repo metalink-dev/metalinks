@@ -313,6 +313,11 @@ This command word is case insensitive, and MAY be sent in any mixture of upper o
 
 <section title="HASH Command Errors">
 
+
+<t>The server-PI SHOULD reply with a 4xy reply if the user requests the HASH of a directory.</t>
+
+<t>The server-PI SHOULD reply with a 450 reply if the server is busy, e.g. already hashing other files yet inviting the client to retry in the future.</t>
+
 <t>The server-PI SHOULD reply with a 500 reply if the HASH command is unrecognized or unimplemented.</t>
 
 <t>The server-PI SHOULD reply with a 501 reply to the OPTS HASH command if the user-PI has requested an unknown or unsupported algorithm.</t>
@@ -323,7 +328,6 @@ This command word is case insensitive, and MAY be sent in any mixture of upper o
 
 <t>The server-PI SHOULD reply with a 552 reply if the user is not allowed to use the HASH command.</t>
 
-<t>The server-PI SHOULD reply with a 450 reply if the server is busy, e.g. already hashing other files yet inviting the client to retry in the future.</t>
 
 </section>
 
