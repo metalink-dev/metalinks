@@ -418,9 +418,6 @@ Internet-Draft  FTP HASH Command for Cryptographic Hashes      July 2010
 
 3.4.  HASH Command Errors
 
-   The server-PI SHOULD reply with a 4xy reply if the user requests the
-   HASH of a directory.
-
    The server-PI SHOULD reply with a 450 reply if the server is busy,
    e.g. already hashing other files yet inviting the client to retry in
    the future.
@@ -440,6 +437,9 @@ Internet-Draft  FTP HASH Command for Cryptographic Hashes      July 2010
 
    The server-PI SHOULD reply with a 552 reply if the user is not
    allowed to use the HASH command.
+
+   The server-PI SHOULD reply with a 553 reply if the user requests the
+   HASH of a directory, which is not allowed.
 
 
 
