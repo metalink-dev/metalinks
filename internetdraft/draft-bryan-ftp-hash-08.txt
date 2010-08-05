@@ -8,7 +8,7 @@ Expires: February 6, 2011                                 August 5, 2010
 
 
       File Transfer Protocol HASH Command for Cryptographic Hashes
-                        draft-bryan-ftp-hash-07
+                        draft-bryan-ftp-hash-08
 
 Abstract
 
@@ -718,7 +718,7 @@ Appendix C.  Document History
    o  Section needs improvement: which files should a server process a
       HASH command for a logged in user?
 
-   -07 : August 5, 2010.
+   -07 : July 27, 2010.
 
 
 
