@@ -5,9 +5,9 @@ Network Working Group                                          J. Postel
 Internet-Draft                                               J. Reynolds
 Obsoletes: 959,1639                                                  ISI
 (if approved)                                                 P. Hethmon
-Intended status: Standards Track                        Hethmon Brothers
-Expires: February 11, 2011                                        R. Elz
-                                                 University of Melbourne
+Updates: 1123 (if approved)                             Hethmon Brothers
+Intended status: Standards Track                                  R. Elz
+Expires: February 11, 2011                       University of Melbourne
                                                                M. Allman
                                                      NASA Lewis Research
                                                 Center/Sterling Software
@@ -89,22 +89,22 @@ Table of Contents
      3.1.   Data Representation and Storage  . . . . . . . . . . . .  17
        3.1.1.  Data Types  . . . . . . . . . . . . . . . . . . . . .  17
        3.1.2.  Data Structures . . . . . . . . . . . . . . . . . . .  21
-     3.2.   Establishing Data Connections  . . . . . . . . . . . . .  23
+     3.2.   Establishing Data Connections  . . . . . . . . . . . . .  24
      3.3.   Data Connection Management . . . . . . . . . . . . . . .  25
-     3.4.   Transmission Modes . . . . . . . . . . . . . . . . . . .  25
+     3.4.   Transmission Modes . . . . . . . . . . . . . . . . . . .  26
        3.4.1.  Stream Mode . . . . . . . . . . . . . . . . . . . . .  26
        3.4.2.  Block Mode  . . . . . . . . . . . . . . . . . . . . .  27
        3.4.3.  Compressed Mode . . . . . . . . . . . . . . . . . . .  28
-     3.5.   Error Recovery and Restart . . . . . . . . . . . . . . .  29
+     3.5.   Error Recovery and Restart . . . . . . . . . . . . . . .  30
    4.  File Transfer Functions . . . . . . . . . . . . . . . . . . .  30
-     4.1.   FTP Commands . . . . . . . . . . . . . . . . . . . . . .  30
+     4.1.   FTP Commands . . . . . . . . . . . . . . . . . . . . . .  31
        4.1.1.  Access Control Commands . . . . . . . . . . . . . . .  31
        4.1.2.  Transfer Parameter Commands . . . . . . . . . . . . .  33
        4.1.3.  FTP Service Commands  . . . . . . . . . . . . . . . .  39
-       4.1.4.  Feature Negotiation Mechanism . . . . . . . . . . . .  44
-       4.1.5.  Extensions to FTP . . . . . . . . . . . . . . . . . .  48
-       4.1.6.  Other Extensions  . . . . . . . . . . . . . . . . . .  99
-     4.2.   FTP Replies  . . . . . . . . . . . . . . . . . . . . . .  99
+       4.1.4.  Feature Negotiation Mechanism . . . . . . . . . . . .  45
+       4.1.5.  Extensions to FTP . . . . . . . . . . . . . . . . . .  49
+       4.1.6.  Other Extensions  . . . . . . . . . . . . . . . . . . 100
+       4.1.7.  Non-standard Command Verbs  . . . . . . . . . . . . . 100
 
 
 
@@ -113,41 +113,41 @@ Postel, et al.          Expires February 11, 2011               [Page 2]
 Internet-Draft           File Transfer Protocol              August 2010
 
 
-       4.2.1.  Reply Code By Function Groups . . . . . . . . . . . . 103
-       4.2.2.  Numeric Order List of Reply Codes . . . . . . . . . . 104
-   5.  Declarative Specifications  . . . . . . . . . . . . . . . . . 106
-     5.1.   Minimum Implementation . . . . . . . . . . . . . . . . . 106
-     5.2.   Connections  . . . . . . . . . . . . . . . . . . . . . . 106
-     5.3.   Commands . . . . . . . . . . . . . . . . . . . . . . . . 108
-       5.3.1.  FTP Commands  . . . . . . . . . . . . . . . . . . . . 108
-       5.3.2.  FTP Command Arguments . . . . . . . . . . . . . . . . 109
-     5.4.   Sequencing of Commands and Replies . . . . . . . . . . . 110
-   6.  State Diagrams  . . . . . . . . . . . . . . . . . . . . . . . 114
-   7.  Typical FTP Scenario  . . . . . . . . . . . . . . . . . . . . 118
-   8.  Connection Establishment  . . . . . . . . . . . . . . . . . . 119
-   9.  IANA Considerations . . . . . . . . . . . . . . . . . . . . . 119
-   10. Security Considerations . . . . . . . . . . . . . . . . . . . 120
-     10.1.  Privacy and Passwords with Clear Text Protocols  . . . . 120
-     10.2.  Securing FTP with TLS  . . . . . . . . . . . . . . . . . 120
-     10.3.  The Bounce Attack  . . . . . . . . . . . . . . . . . . . 120
-       10.3.1. Protecting Against the Bounce Attack  . . . . . . . . 121
-     10.4.  Restricted Access  . . . . . . . . . . . . . . . . . . . 121
-     10.5.  Protecting Passwords Against Brute Force Attacks . . . . 122
-     10.6.  Protecting Usernames . . . . . . . . . . . . . . . . . . 122
-     10.7.  Port Stealing  . . . . . . . . . . . . . . . . . . . . . 123
-     10.8.  Software-Base Security Problems  . . . . . . . . . . . . 123
-     10.9.  Server Capabilities Exposed by FEAT  . . . . . . . . . . 124
-     10.10. SIZE and MLSx  . . . . . . . . . . . . . . . . . . . . . 124
-   11. References  . . . . . . . . . . . . . . . . . . . . . . . . . 125
-     11.1.  Normative References . . . . . . . . . . . . . . . . . . 125
-     11.2.  Informative References . . . . . . . . . . . . . . . . . 125
-   Appendix A.  Page Structure . . . . . . . . . . . . . . . . . . . 126
-   Appendix B.  Directory Commands . . . . . . . . . . . . . . . . . 128
-   Appendix C.  RFCs on FTP  . . . . . . . . . . . . . . . . . . . . 131
-   Appendix D.  Acknowledgements and Contributors  . . . . . . . . . 134
-   Appendix E.  Changelog from RFC 959 and TODO  . . . . . . . . . . 134
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . . 135
-
+     4.2.   FTP Replies  . . . . . . . . . . . . . . . . . . . . . . 100
+       4.2.1.  Reply Code By Function Groups . . . . . . . . . . . . 105
+       4.2.2.  Numeric Order List of Reply Codes . . . . . . . . . . 107
+   5.  Declarative Specifications  . . . . . . . . . . . . . . . . . 109
+     5.1.   Minimum Implementation . . . . . . . . . . . . . . . . . 109
+     5.2.   Connections  . . . . . . . . . . . . . . . . . . . . . . 109
+     5.3.   Commands . . . . . . . . . . . . . . . . . . . . . . . . 111
+       5.3.1.  FTP Commands  . . . . . . . . . . . . . . . . . . . . 112
+       5.3.2.  FTP Command Arguments . . . . . . . . . . . . . . . . 113
+     5.4.   Sequencing of Commands and Replies . . . . . . . . . . . 114
+   6.  State Diagrams  . . . . . . . . . . . . . . . . . . . . . . . 118
+   7.  Typical FTP Scenario  . . . . . . . . . . . . . . . . . . . . 122
+   8.  Connection Establishment  . . . . . . . . . . . . . . . . . . 123
+   9.  IANA Considerations . . . . . . . . . . . . . . . . . . . . . 123
+   10. Security Considerations . . . . . . . . . . . . . . . . . . . 124
+     10.1.  Privacy and Passwords with Clear Text Protocols  . . . . 124
+     10.2.  Securing FTP with TLS  . . . . . . . . . . . . . . . . . 124
+     10.3.  The Bounce Attack  . . . . . . . . . . . . . . . . . . . 124
+       10.3.1. Protecting Against the Bounce Attack  . . . . . . . . 125
+     10.4.  Restricted Access  . . . . . . . . . . . . . . . . . . . 125
+     10.5.  Protecting Passwords Against Brute Force Attacks . . . . 126
+     10.6.  Protecting Usernames . . . . . . . . . . . . . . . . . . 126
+     10.7.  Port Stealing  . . . . . . . . . . . . . . . . . . . . . 127
+     10.8.  Software-Base Security Problems  . . . . . . . . . . . . 127
+     10.9.  Server Capabilities Exposed by FEAT  . . . . . . . . . . 128
+     10.10. SIZE and MLSx  . . . . . . . . . . . . . . . . . . . . . 128
+   11. References  . . . . . . . . . . . . . . . . . . . . . . . . . 129
+     11.1.  Normative References . . . . . . . . . . . . . . . . . . 129
+     11.2.  Informative References . . . . . . . . . . . . . . . . . 130
+   Appendix A.  Page Structure . . . . . . . . . . . . . . . . . . . 130
+   Appendix B.  Directory Commands . . . . . . . . . . . . . . . . . 132
+   Appendix C.  RFCs on FTP  . . . . . . . . . . . . . . . . . . . . 135
+   Appendix D.  Acknowledgements and Contributors  . . . . . . . . . 138
+   Appendix E.  Changelog from RFC 959 and TODO  . . . . . . . . . . 138
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . . 139
 
 
 
@@ -1048,15 +1048,15 @@ Internet-Draft           File Transfer Protocol              August 2010
    sent in the 8-bit transmission bytes packed so that 9 transmission
    bytes carried two host words.
 
+   An FTP program MUST support TYPE I ("IMAGE" or binary type) as well
+   as TYPE L 8 ("LOCAL" type with logical byte size 8).  A machine whose
+   memory is organized into m-bit words, where m is not a multiple of 8,
+   MAY also support TYPE L m.
+
 3.1.1.5.  Format Control
 
    The types ASCII and EBCDIC also take a second (optional) parameter;
    this is to indicate what kind of vertical format control, if any, is
-   associated with a file.  The following data representation types are
-   defined in FTP:
-
-   A character file may be transferred to a host for one of three
-   purposes: for printing, for storage and later retrieval, or for
 
 
 
@@ -1065,6 +1065,11 @@ Postel, et al.          Expires February 11, 2011              [Page 19]
 Internet-Draft           File Transfer Protocol              August 2010
 
 
+   associated with a file.  The following data representation types are
+   defined in FTP:
+
+   A character file may be transferred to a host for one of three
+   purposes: for printing, for storage and later retrieval, or for
    processing.  If a file is sent for printing, the receiving host must
    know how the vertical format control is represented.  In the second
    case, it must be possible to store a file at a host and then retrieve
@@ -1094,6 +1099,9 @@ Internet-Draft           File Transfer Protocol              August 2010
    appropriately. <CRLF>, in exactly this sequence, also denotes end-of-
    line.
 
+   A host that makes no distinction between TYPE N and TYPE T SHOULD
+   implement TYPE T to be identical to TYPE N.
+
 3.1.1.5.3.  Carriage Control (ASA)
 
    The file contains ASA (FORTRAN) vertical format control characters.
@@ -1107,19 +1115,18 @@ Internet-Draft           File Transfer Protocol              August 2010
    The ASA Standard specifies the following control characters:
 
 
+
+Postel, et al.          Expires February 11, 2011              [Page 20]
+
+Internet-Draft           File Transfer Protocol              August 2010
+
+
                      Character     Vertical Spacing
 
                      blank         Move paper up one line
                      0             Move paper up two lines
                      1             Move paper to top of next page
                      +             No movement, i.e., overprint
-
-
-
-Postel, et al.          Expires February 11, 2011              [Page 20]
-
-Internet-Draft           File Transfer Protocol              August 2010
-
 
    Clearly there must be some way for a printer process to distinguish
    the end of the structural entity.  If a file has record structure
@@ -1162,13 +1169,6 @@ Internet-Draft           File Transfer Protocol              August 2010
    about the file.
 
    With some sites being naturally file-oriented and others naturally
-   record-oriented there may be problems if a file with one structure is
-   sent to a host oriented to the other.  If a text file is sent with
-   record-structure to a host which is file oriented, then that host
-   should apply an internal transformation to the file based on the
-   record structure.  Obviously, this transformation should be useful,
-   but it must also be invertible so that an identical file may be
-   retrieved using record structure.
 
 
 
@@ -1176,6 +1176,14 @@ Postel, et al.          Expires February 11, 2011              [Page 21]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
+
+   record-oriented there may be problems if a file with one structure is
+   sent to a host oriented to the other.  If a text file is sent with
+   record-structure to a host which is file oriented, then that host
+   should apply an internal transformation to the file based on the
+   record structure.  An FTP transformation between record-structure and
+   file-structure SHOULD be invertible, to the extent possible while
+   making the result useful on the target host.
 
    In the case of a file being sent with file-structure to a record-
    oriented host, there exists the question of what criteria the host
@@ -1203,6 +1211,11 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 3.1.2.3.  Page Structure
 
+   Implementation of page structure is NOT RECOMMENDED in general.
+   However, if a host system does need to implement FTP for "random
+   access" or "holey" files, it MUST use the defined page structure
+   format rather than define a new private FTP format.
+
    To transmit files that are discontinuous, FTP defines a page
    structure.  Files of this type are sometimes known as "random access
    files" or even as "holey files".  In these files there is sometimes
@@ -1212,6 +1225,14 @@ Internet-Draft           File Transfer Protocol              August 2010
    pages.
 
    To provide for various page sizes and associated information, each
+
+
+
+Postel, et al.          Expires February 11, 2011              [Page 22]
+
+Internet-Draft           File Transfer Protocol              August 2010
+
+
    page is sent with a page header.  The page header has the following
    defined fields:
 
@@ -1225,13 +1246,6 @@ Internet-Draft           File Transfer Protocol              August 2010
    The logical page number of this section of the file.  This is not the
    transmission sequence number of this page, but the index used to
    identify this page of the file.
-
-
-
-Postel, et al.          Expires February 11, 2011              [Page 22]
-
-Internet-Draft           File Transfer Protocol              August 2010
-
 
    Data Length
 
@@ -1267,6 +1281,14 @@ Internet-Draft           File Transfer Protocol              August 2010
    Further header fields may be used to supply per page control
    information, for example, per page access control.
 
+
+
+
+Postel, et al.          Expires February 11, 2011              [Page 23]
+
+Internet-Draft           File Transfer Protocol              August 2010
+
+
    All fields are one logical byte in length.  The logical byte size is
    specified by the TYPE command.  See Appendix A for further details
    and a specific case at the page structure.
@@ -1281,14 +1303,6 @@ Internet-Draft           File Transfer Protocol              August 2010
 
    The mechanics of transferring data consists of setting up the data
    connection to the appropriate ports and choosing the parameters for
-
-
-
-Postel, et al.          Expires February 11, 2011              [Page 23]
-
-Internet-Draft           File Transfer Protocol              August 2010
-
-
    transfer.  Both the user and the server-DTPs have a default data
    port.  The user-process default data port is the same as the control
    connection port (i.e., U).  The server-process default data port is
@@ -1323,6 +1337,14 @@ Internet-Draft           File Transfer Protocol              August 2010
 
    In general, it is the server's responsibility to maintain the data
    connection--to initiate it and to close it.  The exception to this is
+
+
+
+Postel, et al.          Expires February 11, 2011              [Page 24]
+
+Internet-Draft           File Transfer Protocol              August 2010
+
+
    when the user-DTP is sending the data in a transfer mode that
    requires the connection to be closed to indicate EOF.  The server
    MUST close the data connection under the following conditions:
@@ -1335,15 +1357,6 @@ Internet-Draft           File Transfer Protocol              August 2010
       3.  The port specification is changed by a command from the user.
 
       4.  The control connection is closed legally or otherwise.
-
-
-
-
-
-Postel, et al.          Expires February 11, 2011              [Page 24]
-
-Internet-Draft           File Transfer Protocol              August 2010
-
 
       5.  An irrecoverable error condition occurs.
 
@@ -1363,7 +1376,9 @@ Internet-Draft           File Transfer Protocol              August 2010
    port with the PASV command.  Since a connection is defined by the
    pair of addresses, either of these actions is enough to get a
    different data connection, still it is permitted to do both commands
-   to use new ports on both ends of the data connection.
+   to use new ports on both ends of the data connection.  A User-FTP
+   that uses STREAM mode SHOULD send a PORT command to assign a non-
+   default data port before each transfer command is issued.
 
    Reuse of the Data Connection: When using the stream mode of data
    transfer the end of the file MUST be indicated by closing the
@@ -1378,6 +1393,14 @@ Internet-Draft           File Transfer Protocol              August 2010
    A comment on transfer modes.  The stream transfer mode is inherently
    unreliable, since one can not determine if the connection closed
    prematurely or not.  The other transfer modes (Block, Compressed) do
+
+
+
+Postel, et al.          Expires February 11, 2011              [Page 25]
+
+Internet-Draft           File Transfer Protocol              August 2010
+
+
    not close the connection to indicate the end of file.  They have
    enough FTP encoding that the data connection can be parsed to
    determine the end of the file.  Thus using these modes one can leave
@@ -1393,13 +1416,6 @@ Internet-Draft           File Transfer Protocol              August 2010
    interacts with the structure attribute to determine the type of
    processing.  In the compressed mode, the representation type
    determines the filler byte.
-
-
-
-Postel, et al.          Expires February 11, 2011              [Page 25]
-
-Internet-Draft           File Transfer Protocol              August 2010
-
 
    All data transfers MUST be completed with an end-of-file (EOF) which
    MAY be explicitly stated or implied by the closing of the data
@@ -1433,6 +1449,14 @@ Internet-Draft           File Transfer Protocol              August 2010
    allowed.
 
    In a record structured file EOR and EOF will each be indicated by a
+
+
+
+Postel, et al.          Expires February 11, 2011              [Page 26]
+
+Internet-Draft           File Transfer Protocol              August 2010
+
+
    two-byte control code.  The first byte of the control code will be
    all ones, the escape character.  The second byte will have the low
    order bit on and zeros elsewhere for EOR and the second low order bit
@@ -1445,17 +1469,6 @@ Internet-Draft           File Transfer Protocol              August 2010
    If the structure is a file structure, the EOF is indicated by the
    sending host closing the data connection and all bytes are data
    bytes.
-
-
-
-
-
-
-
-Postel, et al.          Expires February 11, 2011              [Page 26]
-
-Internet-Draft           File Transfer Protocol              August 2010
-
 
 3.4.2.  Block Mode
 
@@ -1495,6 +1508,11 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
+Postel, et al.          Expires February 11, 2011              [Page 27]
+
+Internet-Draft           File Transfer Protocol              August 2010
+
+
                Code     Meaning
 
                 128     End of data block is EOR
@@ -1505,13 +1523,6 @@ Internet-Draft           File Transfer Protocol              August 2010
    With this encoding, more than one descriptor coded condition may
    exist for a particular block.  As many bits as necessary may be
    flagged.
-
-
-
-Postel, et al.          Expires February 11, 2011              [Page 27]
-
-Internet-Draft           File Transfer Protocol              August 2010
-
 
    The restart marker is embedded in the data stream as an integral
    number of 8-bit bytes representing printable characters in the
@@ -1551,6 +1562,13 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
+
+
+Postel, et al.          Expires February 11, 2011              [Page 28]
+
+Internet-Draft           File Transfer Protocol              August 2010
+
+
             Byte string:
 
                 1       7                8                     8
@@ -1560,14 +1578,6 @@ Internet-Draft           File Transfer Protocol              August 2010
                                              ^             ^
                                              |---n bytes---|
                                                  of data
-
-
-
-
-Postel, et al.          Expires February 11, 2011              [Page 28]
-
-Internet-Draft           File Transfer Protocol              August 2010
-
 
    String of n data bytes d(1),..., d(n) Count n must be positive.
 
@@ -1607,6 +1617,14 @@ Internet-Draft           File Transfer Protocol              August 2010
    most effectively used to reduce the size of printer files such as
    those generated by RJE hosts.
 
+
+
+
+Postel, et al.          Expires February 11, 2011              [Page 29]
+
+Internet-Draft           File Transfer Protocol              August 2010
+
+
 3.5.  Error Recovery and Restart
 
    There is no provision for detecting bits lost or scrambled in data
@@ -1617,14 +1635,6 @@ Internet-Draft           File Transfer Protocol              August 2010
 
    The restart procedure is defined only for the block and compressed
    modes of data transfer.  It requires the sender of data to insert a
-
-
-
-Postel, et al.          Expires February 11, 2011              [Page 29]
-
-Internet-Draft           File Transfer Protocol              August 2010
-
-
    special marker code in the data stream with some marker information.
    The marker information has meaning only to the sender, but MUST
    consist of printable characters in the default or negotiated language
@@ -1663,6 +1673,14 @@ Internet-Draft           File Transfer Protocol              August 2010
    data connection and transfer the data.  If the second party to the
    data transfer (the passive transfer process) is the user-DTP, then it
    is governed through the internal protocol of the user-FTP host; if it
+
+
+
+Postel, et al.          Expires February 11, 2011              [Page 30]
+
+Internet-Draft           File Transfer Protocol              August 2010
+
+
    is a second server-DTP, then it is governed by its PI on command from
    the user-PI.  The FTP replies are discussed in the next section.  In
    the description of a few of the commands in this section, it is
@@ -1673,14 +1691,6 @@ Internet-Draft           File Transfer Protocol              August 2010
    The IANA "FTP Commands and Extensions" Registry created by [RFC5797]
    available at http://www.iana.org/assignments/ftp-commands-extensions/
    ftp-commands-extensions.xhtml contains a comprehensive list of FTP
-
-
-
-Postel, et al.          Expires February 11, 2011              [Page 30]
-
-Internet-Draft           File Transfer Protocol              August 2010
-
-
    commands and extensions, along with references and more information.
 
 4.1.1.  Access Control Commands
@@ -1719,6 +1729,14 @@ Internet-Draft           File Transfer Protocol              August 2010
 
       The argument field is a Telnet string identifying the user's
       account.  The command is not necessarily related to the USER
+
+
+
+Postel, et al.          Expires February 11, 2011              [Page 31]
+
+Internet-Draft           File Transfer Protocol              August 2010
+
+
       command, as some sites may require an account for login and others
       only for specific access, such as storing files.  In the latter
       case the command may arrive at any time.
@@ -1729,14 +1747,6 @@ Internet-Draft           File Transfer Protocol              August 2010
       the other hand, if account information is NOT required for login,
       the reply to a successful PASSword command is 230; and if the
       account information is needed for a command issued later in the
-
-
-
-Postel, et al.          Expires February 11, 2011              [Page 31]
-
-Internet-Draft           File Transfer Protocol              August 2010
-
-
       dialogue, the server should return a 332 or 532 reply depending on
       whether it stores (pending receipt of the ACCounT command) or
       discards the command, respectively.
@@ -1776,6 +1786,13 @@ Internet-Draft           File Transfer Protocol              August 2010
 
    LOGOUT (QUIT)
 
+
+
+Postel, et al.          Expires February 11, 2011              [Page 32]
+
+Internet-Draft           File Transfer Protocol              August 2010
+
+
       This command terminates a USER and if file transfer is not in
       progress, the server closes the control connection.  If file
       transfer is in progress, the connection will remain open for
@@ -1783,15 +1800,6 @@ Internet-Draft           File Transfer Protocol              August 2010
       process is transferring files for several USERs but does not wish
       to close and then reopen connections for each, then the REIN
       command should be used instead of QUIT.
-
-
-
-
-
-Postel, et al.          Expires February 11, 2011              [Page 32]
-
-Internet-Draft           File Transfer Protocol              August 2010
-
 
       An unexpected close on the control connection will cause the
       server to take the effective action of an abort (ABOR) and a
@@ -1832,14 +1840,6 @@ Internet-Draft           File Transfer Protocol              August 2010
       response to this command includes the host and port address this
       server is listening on.
 
-   REPRESENTATION TYPE (TYPE)
-
-      The argument specifies the representation type as described in
-      Section 3.1.1.  Several types take a second parameter.  The first
-      parameter is denoted by a single Telnet character, as is the
-      second Format parameter for ASCII and EBCDIC; the second parameter
-      for local byte is a decimal integer to indicate Bytesize.  The
-      parameters are separated by a <SP> (Space, ASCII code 32).
 
 
 
@@ -1848,6 +1848,21 @@ Postel, et al.          Expires February 11, 2011              [Page 33]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
+
+      A server-FTP MUST implement the PASV command.
+
+      If multiple third-party transfers are to be executed during the
+      same session, a new PASV command MUST be issued before each
+      transfer command, to obtain a unique port pair.
+
+   REPRESENTATION TYPE (TYPE)
+
+      The argument specifies the representation type as described in
+      Section 3.1.1.  Several types take a second parameter.  The first
+      parameter is denoted by a single Telnet character, as is the
+      second Format parameter for ASCII and EBCDIC; the second parameter
+      for local byte is a decimal integer to indicate Bytesize.  The
+      parameters are separated by a <SP> (Space, ASCII code 32).
 
       The following codes are assigned for type:
 
@@ -1880,6 +1895,16 @@ Internet-Draft           File Transfer Protocol              August 2010
 
          P - Page structure
 
+
+
+
+
+
+Postel, et al.          Expires February 11, 2011              [Page 34]
+
+Internet-Draft           File Transfer Protocol              August 2010
+
+
       The default structure is File.
 
    TRANSFER MODE (MODE)
@@ -1894,16 +1919,6 @@ Internet-Draft           File Transfer Protocol              August 2010
          B - Block
 
          C - Compressed
-
-
-
-
-
-
-Postel, et al.          Expires February 11, 2011              [Page 34]
-
-Internet-Draft           File Transfer Protocol              August 2010
-
 
       The default transfer mode is Stream.
 
@@ -1938,6 +1953,14 @@ Internet-Draft           File Transfer Protocol              August 2010
 
    The EPRT command keyword MUST be followed by a single space (ASCII
    32).  Following the space, a delimiter character (<d>) MUST be
+
+
+
+Postel, et al.          Expires February 11, 2011              [Page 35]
+
+Internet-Draft           File Transfer Protocol              August 2010
+
+
    specified.  The delimiter character MUST be one of the ASCII
    characters in range 33-126 inclusive.  The character "|" (ASCII 124)
    is recommended unless it coincides with a character needed to encode
@@ -1951,14 +1974,6 @@ Internet-Draft           File Transfer Protocol              August 2010
    "Address Family Numbers" Registry at http://www.iana.org/assignments/
    address-family-numbers/address-family-numbers.xhtml as examples,
    according to the following table:
-
-
-
-
-
-Postel, et al.          Expires February 11, 2011              [Page 35]
-
-Internet-Draft           File Transfer Protocol              August 2010
 
 
            AF Number   Protocol
@@ -1995,6 +2010,13 @@ Internet-Draft           File Transfer Protocol              August 2010
    protocol and the network address "1080::8:800:200C:417A" to open a
    TCP data connection on port 5282.
 
+
+
+Postel, et al.          Expires February 11, 2011              [Page 36]
+
+Internet-Draft           File Transfer Protocol              August 2010
+
+
    Upon receipt of a valid EPRT command, the server MUST return a code
    of 200 (Command OK).  The standard negative error code 500 and 501
    [RFC0959] are sufficient to handle most errors (e.g., syntax errors)
@@ -2009,14 +2031,6 @@ Internet-Draft           File Transfer Protocol              August 2010
 
    The text portion of the response MUST indicate which network
    protocols the server does support.  If the network protocol is
-
-
-
-Postel, et al.          Expires February 11, 2011              [Page 36]
-
-Internet-Draft           File Transfer Protocol              August 2010
-
-
    unsupported, the format of the response string MUST be:
 
 
@@ -2051,6 +2065,14 @@ Internet-Draft           File Transfer Protocol              August 2010
    address, which may be needed in the EPSV response in the future.  The
    response code for entering passive mode using an extended address
    MUST be 229.  The interpretation of this code, according to [RFC0959]
+
+
+
+Postel, et al.          Expires February 11, 2011              [Page 37]
+
+Internet-Draft           File Transfer Protocol              August 2010
+
+
    is:
 
 
@@ -2065,14 +2087,6 @@ Internet-Draft           File Transfer Protocol              August 2010
 
    The portion of the string enclosed in parentheses MUST be the exact
    string needed by the EPRT command to open the data connection, as
-
-
-
-Postel, et al.          Expires February 11, 2011              [Page 37]
-
-Internet-Draft           File Transfer Protocol              August 2010
-
-
    specified above.
 
    The first two fields contained in the parenthesis MUST be blank.  The
@@ -2107,6 +2121,14 @@ Internet-Draft           File Transfer Protocol              August 2010
 
    If the requested protocol is supported by the server, it SHOULD use
    the protocol.  If not, the server MUST return the 522 error messages
+
+
+
+Postel, et al.          Expires February 11, 2011              [Page 38]
+
+Internet-Draft           File Transfer Protocol              August 2010
+
+
    as outlined in Section 4.1.2.1.1.
 
    Finally, the EPSV command can be used with the argument "ALL" to
@@ -2121,13 +2143,6 @@ Internet-Draft           File Transfer Protocol              August 2010
    connection setup commands other than EPSV (i.e., EPRT, PORT, PASV, et
    al.).  This use of the EPSV command is further explained in
    Section 4.1.2.1.3.
-
-
-
-Postel, et al.          Expires February 11, 2011              [Page 38]
-
-Internet-Draft           File Transfer Protocol              August 2010
-
 
 4.1.2.1.3.  Command Usage
 
@@ -2162,6 +2177,14 @@ Internet-Draft           File Transfer Protocol              August 2010
    users.  The commands MAY be in any order except that a "rename from"
    command MUST be followed by a "rename to" command and the restart
    command MUST be followed by the interrupted service command (e.g.,
+
+
+
+Postel, et al.          Expires February 11, 2011              [Page 39]
+
+Internet-Draft           File Transfer Protocol              August 2010
+
+
    STOR or RETR).  The data, when transferred in response to FTP service
    commands, shall always be sent over the data connection, except for
    certain informative replies.  The following commands specify FTP
@@ -2176,15 +2199,6 @@ Internet-Draft           File Transfer Protocol              August 2010
 
    STORE (STOR)
 
-
-
-
-
-Postel, et al.          Expires February 11, 2011              [Page 39]
-
-Internet-Draft           File Transfer Protocol              August 2010
-
-
       This command causes the server-DTP to accept the data transferred
       via the data connection and to store the data as a file at the
       server site.  If the file specified in the pathname exists at the
@@ -2194,10 +2208,19 @@ Internet-Draft           File Transfer Protocol              August 2010
 
    STORE UNIQUE (STOU)
 
-      This command behaves like STOR except that the resultant file is
-      to be created in the current directory under a name unique to that
-      directory.  The 250 Transfer Started response must include the
-      name generated.
+      The STOU command stores into a uniquely named file.  When it
+      receives an STOU command, a Server-FTP MUST return the actual file
+      name in the "125 Transfer Starting" or the "150 Opening Data
+      Connection" message that precedes the transfer (the 250 reply code
+      mentioned in [RFC0959] is incorrect).  The exact format of these
+      messages is hereby defined to be as follows:
+
+         125 FILE: pppp
+
+         150 FILE: pppp
+
+      where pppp represents the unique pathname of the file that will be
+      written.
 
    APPEND (with create) (APPE)
 
@@ -2209,6 +2232,14 @@ Internet-Draft           File Transfer Protocol              August 2010
       the server site.
 
    ALLOCATE (ALLO)
+
+
+
+
+Postel, et al.          Expires February 11, 2011              [Page 40]
+
+Internet-Draft           File Transfer Protocol              August 2010
+
 
       This command may be required by some servers to reserve sufficient
       storage to accommodate the new file to be transferred.  The
@@ -2234,13 +2265,6 @@ Internet-Draft           File Transfer Protocol              August 2010
 
    RENAME TO (RNTO)
 
-
-
-Postel, et al.          Expires February 11, 2011              [Page 40]
-
-Internet-Draft           File Transfer Protocol              August 2010
-
-
       This command specifies the new pathname of the file specified in
       the immediately preceding "rename from" command.  Together the two
       commands cause a file to be renamed.
@@ -2263,6 +2287,15 @@ Internet-Draft           File Transfer Protocol              August 2010
       In the first case, the server closes the data connection (if it is
       open) and responds with a 226 reply, indicating that the abort
       command was successfully processed.
+
+
+
+
+
+Postel, et al.          Expires February 11, 2011              [Page 41]
+
+Internet-Draft           File Transfer Protocol              August 2010
+
 
       In the second case, the server aborts the FTP service in progress
       and closes the data connection, returning a 426 reply to indicate
@@ -2289,14 +2322,6 @@ Internet-Draft           File Transfer Protocol              August 2010
       This command causes the directory specified in the pathname to be
       created as a directory (if the pathname is absolute) or as a
       subdirectory of the current working directory (if the pathname is
-
-
-
-Postel, et al.          Expires February 11, 2011              [Page 41]
-
-Internet-Draft           File Transfer Protocol              August 2010
-
-
       relative).  See Appendix B.
 
    PRINT WORKING DIRECTORY (PWD)
@@ -2321,6 +2346,13 @@ Internet-Draft           File Transfer Protocol              August 2010
 
    NAME LIST (NLST)
 
+
+
+Postel, et al.          Expires February 11, 2011              [Page 42]
+
+Internet-Draft           File Transfer Protocol              August 2010
+
+
       This command causes a directory listing to be sent from server to
       user site.  The pathname should specify a directory or other
       system-specific file group descriptor; a null argument implies the
@@ -2341,18 +2373,14 @@ Internet-Draft           File Transfer Protocol              August 2010
       The nature of these services and the specification of their syntax
       can be stated in a reply to the HELP SITE command.
 
+      A Server-FTP SHOULD use the SITE command for non-standard
+      features, rather than invent new private commands or
+      unstandardized extensions to existing commands.
+
    SYSTEM (SYST)
 
       This command is used to find out the type of operating system at
       the server.  The reply shall have as its first word one of the
-
-
-
-Postel, et al.          Expires February 11, 2011              [Page 42]
-
-Internet-Draft           File Transfer Protocol              August 2010
-
-
       system names listed in the current version of the IANA "Operating
       System Names" Registry (
       http://www.iana.org/assignments/operating-system-names at the time
@@ -2373,6 +2401,14 @@ Internet-Draft           File Transfer Protocol              August 2010
       given, the server MAY respond with a list of file names or
       attributes associated with that specification.  If no argument is
       given, the server should return general status information about
+
+
+
+Postel, et al.          Expires February 11, 2011              [Page 43]
+
+Internet-Draft           File Transfer Protocol              August 2010
+
+
       the server FTP process.  This should include current values of all
       transfer parameters and the status of connections.
 
@@ -2401,21 +2437,33 @@ Internet-Draft           File Transfer Protocol              August 2010
    specifications of the Telnet protocol will be cited.
 
    FTP commands are "Telnet strings" terminated by the "Telnet end of
+   line code".  The command codes themselves are alphabetic characters
+   terminated by the character <SP> (Space) if parameters follow and
+   Telnet-EOL otherwise.  Implementors MUST NOT assume any
+   correspondence between READ boundaries on the control connection and
+   the Telnet EOL sequences (CR LF).  The command codes and the
+   semantics of commands are described in this section; the detailed
+   syntax of commands is specified in Section 5.3, the reply sequences
+   are discussed in Section 5.4, and scenarios illustrating the use of
+   commands are provided in Section 7.
+
+   LIST and NLST Commands
+
+      The data returned by an NLST command MUST contain only a simple
+      list of legal pathnames, such that the server can use them
+      directly as the arguments of subsequent data transfer commands for
+      the individual files.
+
+      The data returned by a LIST or NLST command SHOULD use an implied
+      TYPE AN, unless the current type is EBCDIC, in which case an
+      implied TYPE EN SHOULD be used.
 
 
 
-Postel, et al.          Expires February 11, 2011              [Page 43]
+Postel, et al.          Expires February 11, 2011              [Page 44]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
-
-   line code".  The command codes themselves are alphabetic characters
-   terminated by the character <SP> (Space) if parameters follow and
-   Telnet-EOL otherwise.  The command codes and the semantics of
-   commands are described in this section; the detailed syntax of
-   commands is specified in Section 5.3, the reply sequences are
-   discussed in Section 5.4, and scenarios illustrating the use of
-   commands are provided in Section 7.
 
    Special Action
 
@@ -2457,20 +2505,21 @@ Internet-Draft           File Transfer Protocol              August 2010
    extended mechanisms, that it supports.  That is, all defined and
    specified commands and features not defined in [RFC0959], or this
    document, must be included in the FEAT command output in the form
-
-
-
-Postel, et al.          Expires February 11, 2011              [Page 44]
-
-Internet-Draft           File Transfer Protocol              August 2010
-
-
    specified in the document that defines the extension.
 
    User-FTP PIs must expect to see, in FEAT command responses, unknown
    features listed.  This is not an error, and simply indicates that the
    server-FTP implementor has seen, and implemented, the specification
    of a new feature that is unknown to the user-FTP.
+
+
+
+
+
+Postel, et al.          Expires February 11, 2011              [Page 45]
+
+Internet-Draft           File Transfer Protocol              August 2010
+
 
 4.1.4.1.  Feature (FEAT) Command Syntax
 
@@ -2513,14 +2562,6 @@ Internet-Draft           File Transfer Protocol              August 2010
         feature-parms   = 1*TCHAR
 
    Note that each feature line in the feature-listing begins with a
-
-
-
-Postel, et al.          Expires February 11, 2011              [Page 45]
-
-Internet-Draft           File Transfer Protocol              August 2010
-
-
    single space.  That space is not optional, nor does it indicate
    general white space.  This space guarantees that the feature line can
 
@@ -2528,6 +2569,14 @@ Internet-Draft           File Transfer Protocol              August 2010
    required even where there is no possibility of ambiguity.
 
    Each extension supported must be listed on a separate line to
+
+
+
+Postel, et al.          Expires February 11, 2011              [Page 46]
+
+Internet-Draft           File Transfer Protocol              August 2010
+
+
    facilitate the possible inclusion of parameters supported by each
    extension command.  The feature-label to be used in the response to
    the FEAT command will be specified as each new feature is added to
@@ -2569,14 +2618,6 @@ Internet-Draft           File Transfer Protocol              August 2010
    possesses some attribute or other.
 
    The order in which the features are returned is of no importance,
-
-
-
-Postel, et al.          Expires February 11, 2011              [Page 46]
-
-Internet-Draft           File Transfer Protocol              August 2010
-
-
    server-FTP processes are not required to implement any particular
    order, or even to consistently return the same order when the command
    is repeated.
@@ -2584,6 +2625,14 @@ Internet-Draft           File Transfer Protocol              August 2010
    FTP implementations which support FEAT MUST include in the response
    to the FEAT command all properly documented FTP extensions beyond
    those commands and mechanisms described in RFC959, including any
+
+
+
+Postel, et al.          Expires February 11, 2011              [Page 47]
+
+Internet-Draft           File Transfer Protocol              August 2010
+
+
    which existed before the existence of FEAT.  That is, when a client
    receives a FEAT response from an FTP server, it can assume that the
    only extensions the server supports are those that are listed in the
@@ -2620,19 +2669,6 @@ Internet-Draft           File Transfer Protocol              August 2010
    particular command there are no options available for that command.
 
 
-
-
-
-
-
-
-
-
-Postel, et al.          Expires February 11, 2011              [Page 47]
-
-Internet-Draft           File Transfer Protocol              August 2010
-
-
    Request Syntax:
         opts             = opts-cmd SP command-name
                                [ SP command-options ] CRLF
@@ -2645,6 +2681,14 @@ Internet-Draft           File Transfer Protocol              August 2010
         opts-good        = "200" SP response-message CRLF
         opts-bad         = "451" SP response-message CRLF /
                            "501" SP response-message CRLF
+
+
+
+Postel, et al.          Expires February 11, 2011              [Page 48]
+
+Internet-Draft           File Transfer Protocol              August 2010
+
+
         response-message = *TCHAR
 
 
@@ -2681,14 +2725,6 @@ Internet-Draft           File Transfer Protocol              August 2010
    the new MLST command is recommended as a superior alternative.
 
    When attempting to restart a RETRieve, the user-FTP can use the MDTM
-
-
-
-Postel, et al.          Expires February 11, 2011              [Page 48]
-
-Internet-Draft           File Transfer Protocol              August 2010
-
-
    command or the "modify" fact to check if the modification time of the
    source file is more recent than the modification time of the
    partially transferred file.  If it is, then most likely the source
@@ -2701,6 +2737,14 @@ Internet-Draft           File Transfer Protocol              August 2010
    initial RETRieval, and compare that with the modification time before
    a RESTart.  If they differ, the files may have changed, and RESTart
    would be inadvisable.  Where this is not possible, the user-FTP
+
+
+
+Postel, et al.          Expires February 11, 2011              [Page 49]
+
+Internet-Draft           File Transfer Protocol              August 2010
+
+
    should make sure to allow for possible clock skew when comparing
    times.
 
@@ -2737,14 +2781,6 @@ Internet-Draft           File Transfer Protocol              August 2010
    The server-PI will respond to the MDTM command with a 213 reply
    giving the last modification time of the file whose pathname was
    supplied, or a 550 reply if the file does not exist, the modification
-
-
-
-Postel, et al.          Expires February 11, 2011              [Page 49]
-
-Internet-Draft           File Transfer Protocol              August 2010
-
-
    time is unavailable, or some other error has occurred.
 
 
@@ -2754,6 +2790,16 @@ Internet-Draft           File Transfer Protocol              August 2010
    Note that when the 213 response is issued, that is, when there is no
    error, the format MUST be exactly as specified.  Multi-line responses
    are not permitted.
+
+
+
+
+
+
+Postel, et al.          Expires February 11, 2011              [Page 50]
+
+Internet-Draft           File Transfer Protocol              August 2010
+
 
 4.1.5.1.2.  Error Responses
 
@@ -2796,7 +2842,17 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 11, 2011              [Page 50]
+
+
+
+
+
+
+
+
+
+
+Postel, et al.          Expires February 11, 2011              [Page 51]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -2852,7 +2908,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 11, 2011              [Page 51]
+Postel, et al.          Expires February 11, 2011              [Page 52]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -2908,7 +2964,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 11, 2011              [Page 52]
+Postel, et al.          Expires February 11, 2011              [Page 53]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -2964,7 +3020,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 11, 2011              [Page 53]
+Postel, et al.          Expires February 11, 2011              [Page 54]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -2984,9 +3040,31 @@ Internet-Draft           File Transfer Protocol              August 2010
    point.  The receiving DTP can keep a list of these restart markers,
    and correlate them with how the file is being saved.  To restart the
    file transfer, the receiver just sends back that last restart marker,
-   and both sides know how to resume the data transfer.  Note that there
-   are some flaws in the description of the restart mechanism in STD 9,
-   [RFC0959].  See section 4.1.3.4 of [RFC1123] for the corrections.
+   and both sides know how to resume the data transfer.
+
+   A restart reply message, sent over the control connection from the
+   receiving FTP to the User-FTP, has the format:
+
+      110 MARK ssss = rrrr
+
+   Here:
+
+      * ssss is a text string that appeared in a Restart Marker in the
+      data stream and encodes a position in the sender's file system;
+
+      * rrrr encodes the corresponding position in the receiver's file
+      system.
+
+   The encoding, which is specific to a particular file system and
+   network implementation, is always generated and interpreted by the
+   same system, either sender or receiver.
+
+   When an FTP that implements restart receives a Restart Marker in the
+   data stream, it SHOULD force the data to that point to be written to
+   stable storage before encoding the corresponding position rrrr.  An
+   FTP sending Restart Markers MUST NOT assume that 110 replies will be
+   returned synchronously with the data, i.e., it must not await a 110
+   reply before sending more data.
 
 4.1.5.3.1.  Restarting in STREAM Mode
 
@@ -2995,6 +3073,14 @@ Internet-Draft           File Transfer Protocol              August 2010
    inserted into the data stream, they would be indistinguishable from
    data.  For this reason, the FTP specification [RFC0959] did not
    provide the ability to do restarts in stream mode.  However, there is
+
+
+
+Postel, et al.          Expires February 11, 2011              [Page 55]
+
+Internet-Draft           File Transfer Protocol              August 2010
+
+
    not really a need to have explicit restart markers in this case, as
    restart markers can be implied by the octet offset into the data
    stream.
@@ -3017,14 +3103,6 @@ Internet-Draft           File Transfer Protocol              August 2010
    determine the offset with finite, but perhaps non-negligible, effort.
    In the worst case, an FTP process may need to open a data connection
    to itself, set the appropriate transfer type and structure, and
-
-
-
-Postel, et al.          Expires February 11, 2011              [Page 54]
-
-Internet-Draft           File Transfer Protocol              August 2010
-
-
    actually transmit the file, counting the transmitted octets.
 
    If the user-FTP process is intending to restart a retrieve, it will
@@ -3051,6 +3129,14 @@ Internet-Draft           File Transfer Protocol              August 2010
    modifications required to satisfy the TYPE ASCII CR-LF end-of-line
    convention.
 
+
+
+
+Postel, et al.          Expires February 11, 2011              [Page 56]
+
+Internet-Draft           File Transfer Protocol              August 2010
+
+
 4.1.5.3.3.  Syntax
 
    The syntax for the REST command when the current transfer mode is
@@ -3073,14 +3159,6 @@ Internet-Draft           File Transfer Protocol              August 2010
                          error-response
 
    Server-FTP processes may permit transfer commands other than RETR and
-
-
-
-Postel, et al.          Expires February 11, 2011              [Page 55]
-
-Internet-Draft           File Transfer Protocol              August 2010
-
-
    STOR, such as APPE and STOU, to complete a restart; however, this is
    not recommended.  STOU (store unique) is undefined in this usage, as
    storing the remainder of a file into a unique file name is rarely
@@ -3107,6 +3185,14 @@ Internet-Draft           File Transfer Protocol              August 2010
    The REST command must be the last command issued before the data
    transfer command that is to cause a restarted, rather than a
    complete, file transfer.  The effect of issuing a REST command at any
+
+
+
+Postel, et al.          Expires February 11, 2011              [Page 57]
+
+Internet-Draft           File Transfer Protocol              August 2010
+
+
    other time is undefined.  The server-PI may react to a badly
    positioned REST command by issuing an error response to the following
    command, not being a restartable data transfer command, or it may
@@ -3127,15 +3213,6 @@ Internet-Draft           File Transfer Protocol              August 2010
    following transfer command is issued.  Such errors will cause that
    transfer request to be rejected with an error indicating the invalid
    restart attempt.
-
-
-
-
-
-Postel, et al.          Expires February 11, 2011              [Page 56]
-
-Internet-Draft           File Transfer Protocol              August 2010
-
 
 4.1.5.3.4.    FEAT Response for REST
 
@@ -3164,6 +3241,14 @@ Internet-Draft           File Transfer Protocol              August 2010
    Assume that the transfer of a largish file has previously been
    interrupted after 802816 octets had been received, that the previous
    transfer was with TYPE=I, and that it has been verified that the file
+
+
+
+Postel, et al.          Expires February 11, 2011              [Page 58]
+
+Internet-Draft           File Transfer Protocol              August 2010
+
+
    on the server has not since changed.
 
 
@@ -3185,14 +3270,6 @@ Internet-Draft           File Transfer Protocol              August 2010
    store (NVFS) provided by a server.  This specification does not alter
    that.  However, it has become common for servers to attempt to
    provide at least file system naming conventions modeled loosely upon
-
-
-
-Postel, et al.          Expires February 11, 2011              [Page 57]
-
-Internet-Draft           File Transfer Protocol              August 2010
-
-
    those of the UNIX(TM) file system.  This is a tree-structured file
    system, built of directories, each of which can contain other
    directories, or other kinds of files, or both.  Each file and
@@ -3220,6 +3297,14 @@ Internet-Draft           File Transfer Protocol              August 2010
    names, a server-PI implementing TVFS must encode that character in
    some manner whenever file or directory names are being returned to
    the user-PI, and reverse that encoding whenever such names are being
+
+
+
+Postel, et al.          Expires February 11, 2011              [Page 59]
+
+Internet-Draft           File Transfer Protocol              August 2010
+
+
    accepted from the user-PI.
 
    The encoding method to be used is not specified here.  Where some
@@ -3240,14 +3325,6 @@ Internet-Draft           File Transfer Protocol              August 2010
    make that name impossible to transmit over a data connection.
    Consequently, it should be avoided, or if that is impossible to
    achieve, it MUST be encoded in some reversible way.
-
-
-
-
-Postel, et al.          Expires February 11, 2011              [Page 58]
-
-Internet-Draft           File Transfer Protocol              August 2010
-
 
 4.1.5.4.2.  TVFS Pathnames
 
@@ -3276,6 +3353,14 @@ Internet-Draft           File Transfer Protocol              August 2010
    it cannot be represented in any other directory.  A fully qualified
    pathname is valid to reference the named file or directory from any
    location (that is, regardless of what the current working directory
+
+
+
+Postel, et al.          Expires February 11, 2011              [Page 60]
+
+Internet-Draft           File Transfer Protocol              August 2010
+
+
    may be) in the virtual file store.
 
    Any pathname that is not a fully qualified pathname may be referred
@@ -3297,13 +3382,6 @@ Internet-Draft           File Transfer Protocol              August 2010
    + It is not required, or expected, that there be only one fully
    qualified pathname that will reference any particular file or
    directory.
-
-
-
-Postel, et al.          Expires February 11, 2011              [Page 59]
-
-Internet-Draft           File Transfer Protocol              August 2010
-
 
    + As a caveat, though the TVFS file store is basically tree
    structured, there is no requirement that any file or directory have
@@ -3332,6 +3410,13 @@ Internet-Draft           File Transfer Protocol              August 2010
    irrelevant, and hence map two names that appear to be distinct onto
    the same underlying file.
 
+
+
+Postel, et al.          Expires February 11, 2011              [Page 61]
+
+Internet-Draft           File Transfer Protocol              August 2010
+
+
    + There are no defined "magic" names, like ".", ".." or "C:".
    Servers may implement such names, with any semantics they choose, but
    are not required to do so.
@@ -3353,14 +3438,6 @@ Internet-Draft           File Transfer Protocol              August 2010
 
    Later specifications may add to the TVFS definition.  Such additions
    should be notified by means of additional text appended to the TVFS
-
-
-
-Postel, et al.          Expires February 11, 2011              [Page 60]
-
-Internet-Draft           File Transfer Protocol              August 2010
-
-
    feature line.  Such specifications, if any, will define the extra
    text.
 
@@ -3387,6 +3464,15 @@ Internet-Draft           File Transfer Protocol              August 2010
 
    The TVFS feature adds no new commands to the FTP command repertoire.
 
+
+
+
+
+Postel, et al.          Expires February 11, 2011              [Page 62]
+
+Internet-Draft           File Transfer Protocol              August 2010
+
+
 4.1.5.4.4.  OPTS for TVFS
 
    There are no options in this TVFS specification, and hence there is
@@ -3401,20 +3487,6 @@ Internet-Draft           File Transfer Protocol              August 2010
    and Q) and the C directory also two non-directory files (also named P
    and Q, by chance).  The D directory is empty, that is, contains no
    files or directories.  This structure may depicted graphically as...
-
-
-
-
-
-
-
-
-
-
-
-Postel, et al.          Expires February 11, 2011              [Page 61]
-
-Internet-Draft           File Transfer Protocol              August 2010
 
 
                (unnamed root)
@@ -3449,6 +3521,14 @@ Internet-Draft           File Transfer Protocol              August 2010
    directory, as the contents of each is different.  Nor do any of / /A
    /A/C or /A/D. However /A/C and /B might be the same directory, there
    is insufficient information given to tell.  Any of the other
+
+
+
+Postel, et al.          Expires February 11, 2011              [Page 63]
+
+Internet-Draft           File Transfer Protocol              August 2010
+
+
    pathnames (/X /Y /A/Z /A/C/P /A/C/Q /B/P and /B/Q) may refer to the
    same underlying files, in almost any combination.
 
@@ -3465,13 +3545,6 @@ Internet-Draft           File Transfer Protocol              August 2010
 
    These all refer to the same files or directories as the corresponding
    fully qualified path with "/A/" prepended.
-
-
-
-Postel, et al.          Expires February 11, 2011              [Page 62]
-
-Internet-Draft           File Transfer Protocol              August 2010
-
 
    That those pathnames all exist does not imply that the TVFS server
    will necessarily grant any kind of access rights to the named paths,
@@ -3504,6 +3577,14 @@ Internet-Draft           File Transfer Protocol              August 2010
    commands differ from the LIST command in that the format of the
    replies is strictly defined although extensible.
 
+
+
+
+Postel, et al.          Expires February 11, 2011              [Page 64]
+
+Internet-Draft           File Transfer Protocol              August 2010
+
+
    Two commands are defined, MLST and MLSD.  MLST provides data about
    exactly the object named on its command line, and no others.  MLSD,
    on the other, lists the contents of a directory if a directory is
@@ -3521,14 +3602,6 @@ Internet-Draft           File Transfer Protocol              August 2010
    character sets which are 8-bit, but specifying that FTP
    implementations are to specifically allow the transmission and
    reception of 8-bit bytes, with all bits significant, over the control
-
-
-
-Postel, et al.          Expires February 11, 2011              [Page 63]
-
-Internet-Draft           File Transfer Protocol              August 2010
-
-
    connection.  That is, all 256 possible octet values are permitted.
    The MLSx command allows both UTF-8/Unicode and "raw" forms as
    arguments, and in responses both to the MLST and MLSD commands, and
@@ -3560,6 +3633,14 @@ Internet-Draft           File Transfer Protocol              August 2010
    listing of the current directory, unless a pathname that represents
    the directory happens to be known.  In particular, there is no
    defined shorthand name for the current directory.  This does not
+
+
+
+Postel, et al.          Expires February 11, 2011              [Page 65]
+
+Internet-Draft           File Transfer Protocol              August 2010
+
+
    prohibit any particular server-PI implementing such a shorthand.
 
    No title, header, or summary, lines, or any other formatting, other
@@ -3574,16 +3655,6 @@ Internet-Draft           File Transfer Protocol              August 2010
 
          mlst             = "MLst" [ SP pathname ] CRLF
          mlsd             = "MLsD" [ SP pathname ] CRLF
-
-
-
-
-
-
-Postel, et al.          Expires February 11, 2011              [Page 64]
-
-Internet-Draft           File Transfer Protocol              August 2010
-
 
 4.1.5.5.2.  Format of MLSx Response
 
@@ -3618,6 +3689,14 @@ Internet-Draft           File Transfer Protocol              August 2010
          value            = *SCHAR
 
    Upon receipt of an MLSx command, the server will verify the
+
+
+
+Postel, et al.          Expires February 11, 2011              [Page 66]
+
+Internet-Draft           File Transfer Protocol              August 2010
+
+
    parameter, and if invalid return an error-response.  For this
    purpose, the parameter should be considered to be invalid if the
    client issuing the command does not have permission to perform the
@@ -3633,14 +3712,6 @@ Internet-Draft           File Transfer Protocol              August 2010
    identical.
 
    Note that for MLST the fact set is preceded by a space.  That is
-
-
-
-Postel, et al.          Expires February 11, 2011              [Page 65]
-
-Internet-Draft           File Transfer Protocol              August 2010
-
-
    provided to guarantee that the fact set cannot be accidentally
    interpreted as the terminating line of the control response, but is
    required even when that would not be possible.  Exactly one space
@@ -3675,6 +3746,13 @@ Internet-Draft           File Transfer Protocol              August 2010
    modification time, creation time, a unique identifier, and a file/
    directory flag.
 
+
+
+Postel, et al.          Expires February 11, 2011              [Page 67]
+
+Internet-Draft           File Transfer Protocol              August 2010
+
+
    The complete format for a successful reply to the MLSD command would
    be:
 
@@ -3689,14 +3767,6 @@ Internet-Draft           File Transfer Protocol              August 2010
    NOT vary the format by, for example, inserting extra spaces for
    readability, replacing spaces by tabs, including header or title
    lines, or inserting blank lines, or in any other way alter this
-
-
-
-Postel, et al.          Expires February 11, 2011              [Page 66]
-
-Internet-Draft           File Transfer Protocol              August 2010
-
-
    format.  Exactly one space is always required after the set of facts
    (which may be empty).  More spaces may be present on a line if, and
    only if, the pathname presented contains significant spaces.  The set
@@ -3731,6 +3801,14 @@ Internet-Draft           File Transfer Protocol              August 2010
    File names are not restricted to UTF-8, however treatment of
    arbitrary character encodings is not specified by this standard.
    Applications are encouraged to treat non-UTF-8 encodings of file
+
+
+
+Postel, et al.          Expires February 11, 2011              [Page 68]
+
+Internet-Draft           File Transfer Protocol              August 2010
+
+
    names as octet sequences.
 
    Note that this encoding is unrelated to that of the contents of the
@@ -3745,14 +3823,6 @@ Internet-Draft           File Transfer Protocol              August 2010
    as was specified in the MLST command, or, where TVFS is supported, a
    fully qualified TVFS path naming the same file.  Where no argument
    was given to the MLST command, the server-PI may either include an
-
-
-
-Postel, et al.          Expires February 11, 2011              [Page 67]
-
-Internet-Draft           File Transfer Protocol              August 2010
-
-
    empty file name in the response, or it may supply a name that refers
    to the current directory, if such a name is available.  Where TVFS is
    supported, a fully qualified pathname of the current directory SHOULD
@@ -3787,6 +3857,14 @@ Internet-Draft           File Transfer Protocol              August 2010
    the MLSD response from which the cdir was obtained by using the file
    name components of the listing.
 
+
+
+
+Postel, et al.          Expires February 11, 2011              [Page 69]
+
+Internet-Draft           File Transfer Protocol              August 2010
+
+
 4.1.5.5.4.  Format of Facts
 
    The "facts" for a file in a reply to a MLSx command consist of
@@ -3801,14 +3879,6 @@ Internet-Draft           File Transfer Protocol              August 2010
    lines for presentation here only)
 
    size=4161;lang=en-US;modify=19970214165800;create=19961001124534;
-
-
-
-Postel, et al.          Expires February 11, 2011              [Page 68]
-
-Internet-Draft           File Transfer Protocol              August 2010
-
-
    type=file;x.myfact=foo,bar;
 
 4.1.5.5.5.  Standard Facts
@@ -3844,6 +3914,13 @@ Internet-Draft           File Transfer Protocol              August 2010
    For example:
 
 
+
+
+Postel, et al.          Expires February 11, 2011              [Page 70]
+
+Internet-Draft           File Transfer Protocol              August 2010
+
+
          x.desc -- File description
 
 4.1.5.5.5.1.  The Type Fact
@@ -3856,13 +3933,6 @@ Internet-Draft           File Transfer Protocol              August 2010
    the object listed on the same line of the MLST response.
 
    Five values are possible for the type fact:
-
-
-
-
-Postel, et al.          Expires February 11, 2011              [Page 69]
-
-Internet-Draft           File Transfer Protocol              August 2010
 
 
          file         -- a file entry
@@ -3899,6 +3969,14 @@ Internet-Draft           File Transfer Protocol              August 2010
    and facts about that directory.  In a sense, it can be viewed as
    representing the title of the listing, in a machine friendly format.
    It may appear at any point of the listing, it is not restricted to
+
+
+
+Postel, et al.          Expires February 11, 2011              [Page 71]
+
+Internet-Draft           File Transfer Protocol              August 2010
+
+
    appearing at the start, though frequently may do so, and may occur
    multiple times.  It MUST NOT be included if the type fact is not
    included, or there would be no way for the user-PI to distinguish the
@@ -3913,14 +3991,6 @@ Internet-Draft           File Transfer Protocol              August 2010
 
    Where TVFS is not supported, the only defined semantics associated
    with a "type=cdir" entry are that, provided the current working
-
-
-
-Postel, et al.          Expires February 11, 2011              [Page 70]
-
-Internet-Draft           File Transfer Protocol              August 2010
-
-
    directory of the server-PI has not been changed, a pathname of type
    "cdir" may be used as an argument to a CWD command, which will cause
    the current directory of the server-PI to change so that the
@@ -3955,6 +4025,14 @@ Internet-Draft           File Transfer Protocol              August 2010
    directory in which there is an entry of type=dir that refers to the
    directory in which the type=pdir entity was found.  Thus it is not
    required that all entities with type=pdir refer to the same
+
+
+
+Postel, et al.          Expires February 11, 2011              [Page 72]
+
+Internet-Draft           File Transfer Protocol              August 2010
+
+
    directory.  The "unique" fact (if supported and supplied) can be used
    to determine whether there is a relationship between the type=pdir
    entries or not.
@@ -3968,14 +4046,6 @@ Internet-Draft           File Transfer Protocol              August 2010
          os-type   = "OS." os-name "=" os-kind
          os-name   = <an IANA registered operating system name>
          os-kind   = token
-
-
-
-
-Postel, et al.          Expires February 11, 2011              [Page 71]
-
-Internet-Draft           File Transfer Protocol              August 2010
-
 
    The "os-name" indicates the specific system type that supports the
    particular localtype.  OS specific types are registered by the IANA
@@ -4011,6 +4081,14 @@ Internet-Draft           File Transfer Protocol              August 2010
 
    treated as a unit, or treated as a directory allowing the sub-files
    within it to be referenced.  When this is done, the pathname returned
+
+
+
+Postel, et al.          Expires February 11, 2011              [Page 73]
+
+Internet-Draft           File Transfer Protocol              August 2010
+
+
    with each entry MUST be identical to the others representing the same
    file.
 
@@ -4024,13 +4102,6 @@ Internet-Draft           File Transfer Protocol              August 2010
    files, and unique fact tokens should be maintained, and remain
    consistent, for at least the lifetime of the control connection from
    user-PI to server-PI.
-
-
-
-
-Postel, et al.          Expires February 11, 2011              [Page 72]
-
-Internet-Draft           File Transfer Protocol              August 2010
 
 
          unique-fact  = "Unique" "=" token
@@ -4067,6 +4138,13 @@ Internet-Draft           File Transfer Protocol              August 2010
 
          modify-fact  = "Modify" "=" time-val
 
+
+
+Postel, et al.          Expires February 11, 2011              [Page 74]
+
+Internet-Draft           File Transfer Protocol              August 2010
+
+
 4.1.5.5.5.4.  The create Fact
 
    The create fact indicates when a file, or directory, was first
@@ -4081,14 +4159,6 @@ Internet-Draft           File Transfer Protocol              August 2010
    Implementation Note: Implementors of this fact on UNIX(TM) systems
    should note that the unix "stat" "st_ctime" field does not give
    creation time, and that unix file systems do not record creation time
-
-
-
-Postel, et al.          Expires February 11, 2011              [Page 73]
-
-Internet-Draft           File Transfer Protocol              August 2010
-
-
    at all.  Unix (and POSIX) implementations will normally not include
    this fact.
 
@@ -4123,6 +4193,14 @@ Internet-Draft           File Transfer Protocol              August 2010
    applied to it if it is a directory, and otherwise that the DELE
    command may be applied to it.
 
+
+
+
+Postel, et al.          Expires February 11, 2011              [Page 75]
+
+Internet-Draft           File Transfer Protocol              August 2010
+
+
    The "e" permission applies to the directory types.  When set on an
    object of type=dir, type=cdir, or type=pdir it indicates that a CWD
    command naming the object should succeed, and the user should be able
@@ -4136,14 +4214,6 @@ Internet-Draft           File Transfer Protocol              August 2010
    The "l" permission applies to the directory file types, and indicates
    that the listing commands, LIST, NLST, and MLSD may be applied to the
    directory in question.
-
-
-
-
-Postel, et al.          Expires February 11, 2011              [Page 74]
-
-Internet-Draft           File Transfer Protocol              August 2010
-
 
    The "m" permission applies to directory types, and indicates that the
    MKD command may be used to create a new directory within the
@@ -4179,6 +4249,14 @@ Internet-Draft           File Transfer Protocol              August 2010
    server running on the UNIX(TM) operating system, the server should
    check that the directory named is empty, and that the user has write
    permission on both the directory under consideration, and its parent
+
+
+
+Postel, et al.          Expires February 11, 2011              [Page 76]
+
+Internet-Draft           File Transfer Protocol              August 2010
+
+
    directory.
 
    Some systems may have more specific permissions than those listed
@@ -4193,14 +4271,6 @@ Internet-Draft           File Transfer Protocol              August 2010
    The lang fact describes the natural language of the file name for use
    in display purposes.  Values used here should be taken from the
    language registry of the IANA.  See [12] for the syntax, and
-
-
-
-Postel, et al.          Expires February 11, 2011              [Page 75]
-
-Internet-Draft           File Transfer Protocol              August 2010
-
-
    procedures, related to language tags.
 
 
@@ -4236,6 +4306,13 @@ Internet-Draft           File Transfer Protocol              August 2010
 
          size-fact  = "Size" "=" 1*DIGIT
 
+
+
+Postel, et al.          Expires February 11, 2011              [Page 77]
+
+Internet-Draft           File Transfer Protocol              August 2010
+
+
 4.1.5.5.5.8.  The media-type Fact
 
    The media-type fact represents the IANA media type of the file named,
@@ -4249,14 +4326,6 @@ Internet-Draft           File Transfer Protocol              August 2010
    type values must be determined in an unambiguous way such as file
    system tagging of media-type or by user configuration.  This fact
    gives information about the content of the file named.  Both the
-
-
-
-Postel, et al.          Expires February 11, 2011              [Page 76]
-
-Internet-Draft           File Transfer Protocol              August 2010
-
-
    primary media type, and any appropriate subtype should be given,
    separated by a slash "/" as is traditional.
 
@@ -4292,6 +4361,14 @@ Internet-Draft           File Transfer Protocol              August 2010
    operating system names.
 
    The value of an OS dependent fact may be whatever is appropriate to
+
+
+
+Postel, et al.          Expires February 11, 2011              [Page 78]
+
+Internet-Draft           File Transfer Protocol              August 2010
+
+
    convey the information available.  It must be encoded as a "token" as
    defined in Section 2.1 however.
 
@@ -4305,14 +4382,6 @@ Internet-Draft           File Transfer Protocol              August 2010
 
    Implementations may also make available other facts of their own
    choosing.  As the method of interpretation of such information will
-
-
-
-Postel, et al.          Expires February 11, 2011              [Page 77]
-
-Internet-Draft           File Transfer Protocol              August 2010
-
-
    generally not be widely understood, server-PIs should be aware that
    clients will typically ignore any local facts provided.  As there is
    no registration of locally defined facts, it is entirely possible
@@ -4348,6 +4417,14 @@ Internet-Draft           File Transfer Protocol              August 2010
    In the examples shown, only relevant commands and responses have been
    included.  This is not to imply that other commands (including
    authentication, directory modification, PORT or PASV commands, or
+
+
+
+Postel, et al.          Expires February 11, 2011              [Page 79]
+
+Internet-Draft           File Transfer Protocol              August 2010
+
+
    similar) would not be present in an actual connection, or were not,
    in fact, actually used in the examples before editing.  Note also
    that the formats shown are those that are transmitted between client
@@ -4355,18 +4432,6 @@ Internet-Draft           File Transfer Protocol              August 2010
    user of the client.
 
 4.1.5.5.7.1.  Simple MLST
-
-
-
-
-
-
-
-
-
-Postel, et al.          Expires February 11, 2011              [Page 78]
-
-Internet-Draft           File Transfer Protocol              August 2010
 
 
    C> PWD
@@ -4408,21 +4473,18 @@ Internet-Draft           File Transfer Protocol              August 2010
    example.  The MLST fact line this time shows that the file listed is
    a directory, that it was last modified at 08:52:15 on the 7th of
    November, 1998 UTC, and that the user has permission to enter the
+
+
+
+Postel, et al.          Expires February 11, 2011              [Page 80]
+
+Internet-Draft           File Transfer Protocol              August 2010
+
+
    directory, and to list its contents, but not to modify it in any way.
    Again, the fully qualified pathname of the directory listed is given.
 
 4.1.5.5.7.3.  MLSD of a directory
-
-
-
-
-
-
-
-
-Postel, et al.          Expires February 11, 2011              [Page 79]
-
-Internet-Draft           File Transfer Protocol              August 2010
 
 
 C> MLSD tmp
@@ -4470,13 +4532,7 @@ S> 226 MLSD completed
 
 
 
-
-
-
-
-
-
-Postel, et al.          Expires February 11, 2011              [Page 80]
+Postel, et al.          Expires February 11, 2011              [Page 81]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -4532,7 +4588,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 11, 2011              [Page 81]
+Postel, et al.          Expires February 11, 2011              [Page 82]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -4588,7 +4644,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 11, 2011              [Page 82]
+Postel, et al.          Expires February 11, 2011              [Page 83]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -4644,7 +4700,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 11, 2011              [Page 83]
+Postel, et al.          Expires February 11, 2011              [Page 84]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -4700,7 +4756,7 @@ S> 226 Listing completed.
 
 
 
-Postel, et al.          Expires February 11, 2011              [Page 84]
+Postel, et al.          Expires February 11, 2011              [Page 85]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -4756,7 +4812,7 @@ S> 257 "/iana/assignments" is current directory.
 
 
 
-Postel, et al.          Expires February 11, 2011              [Page 85]
+Postel, et al.          Expires February 11, 2011              [Page 86]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -4812,7 +4868,7 @@ S> 226 MLSD completed
 
 
 
-Postel, et al.          Expires February 11, 2011              [Page 86]
+Postel, et al.          Expires February 11, 2011              [Page 87]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -4868,7 +4924,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 11, 2011              [Page 87]
+Postel, et al.          Expires February 11, 2011              [Page 88]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -4924,7 +4980,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 11, 2011              [Page 88]
+Postel, et al.          Expires February 11, 2011              [Page 89]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -4980,7 +5036,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 11, 2011              [Page 89]
+Postel, et al.          Expires February 11, 2011              [Page 90]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -5036,7 +5092,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 11, 2011              [Page 90]
+Postel, et al.          Expires February 11, 2011              [Page 91]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -5092,7 +5148,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 11, 2011              [Page 91]
+Postel, et al.          Expires February 11, 2011              [Page 92]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -5148,7 +5204,7 @@ S>  MLST Type*;Size*;Modify*;Perm*;Unique*;UNIX.mode;UNIX.chgd;X.hidden;
 
 
 
-Postel, et al.          Expires February 11, 2011              [Page 92]
+Postel, et al.          Expires February 11, 2011              [Page 93]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -5204,7 +5260,7 @@ S> 211 End
 
 
 
-Postel, et al.          Expires February 11, 2011              [Page 93]
+Postel, et al.          Expires February 11, 2011              [Page 94]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -5260,7 +5316,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 11, 2011              [Page 94]
+Postel, et al.          Expires February 11, 2011              [Page 95]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -5316,7 +5372,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 11, 2011              [Page 95]
+Postel, et al.          Expires February 11, 2011              [Page 96]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -5372,7 +5428,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 11, 2011              [Page 96]
+Postel, et al.          Expires February 11, 2011              [Page 97]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -5428,7 +5484,7 @@ S> 250 End
 
 
 
-Postel, et al.          Expires February 11, 2011              [Page 97]
+Postel, et al.          Expires February 11, 2011              [Page 98]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -5484,7 +5540,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 11, 2011              [Page 98]
+Postel, et al.          Expires February 11, 2011              [Page 99]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -5498,6 +5554,34 @@ Internet-Draft           File Transfer Protocol              August 2010
 
       [RFC2640] describes OPTIONAL extension: LANG.
 
+   A User-FTP program MUST implement a "QUOTE" command that will pass an
+   arbitrary character string to the server and display all resulting
+   response messages to the user.
+
+   To make the "QUOTE" command useful, a User-FTP SHOULD send transfer
+   control commands to the server as the user enters them, rather than
+   saving all the commands and sending them to the server only when a
+   data transfer is started.
+
+4.1.7.  Non-standard Command Verbs
+
+   FTP allows "experimental" commands, whose names begin with "X".  If
+   these commands are subsequently adopted as standards, there may still
+   be existing implementations using the "X" form.  At present, this is
+   true for the directory commands:
+
+                   RFC 959   "Experimental"
+
+                     MKD        XMKD
+                     RMD        XRMD
+                     PWD        XPWD
+                     CDUP       XCUP
+                     CWD        XCWD
+
+   All FTP implementations SHOULD recognize both forms of these
+   commands, by simply equating them with extra entries in the command
+   lookup table.
+
 4.2.  FTP Replies
 
    Replies to File Transfer Protocol commands are devised to ensure the
@@ -5509,6 +5593,14 @@ Internet-Draft           File Transfer Protocol              August 2010
    occur in sequential groups, such as USER, PASS and ACCT, or RNFR and
    RNTO.  The replies show the existence of an intermediate state if all
    preceding commands have been successful.  A failure at any point in
+
+
+
+Postel, et al.          Expires February 11, 2011             [Page 100]
+
+Internet-Draft           File Transfer Protocol              August 2010
+
+
    the sequence necessitates the repetition of the entire sequence from
    the beginning.
 
@@ -5537,14 +5629,6 @@ Internet-Draft           File Transfer Protocol              August 2010
    designate it as the last.  At least one of these must contain the
    appropriate reply code to indicate the state of the transaction.  To
    satisfy all factions, it was decided that both the first and last
-
-
-
-Postel, et al.          Expires February 11, 2011              [Page 99]
-
-Internet-Draft           File Transfer Protocol              August 2010
-
-
    line codes should be the same.
 
    Thus the format for multi-line replies is that the first line will
@@ -5565,6 +5649,14 @@ Internet-Draft           File Transfer Protocol              August 2010
    occurrence of the same reply code, followed by <SP> (Space), at the
    beginning of a line, and ignore all intermediary lines.  If an
    intermediary line begins with a 3-digit number, the Server must pad
+
+
+
+Postel, et al.          Expires February 11, 2011             [Page 101]
+
+Internet-Draft           File Transfer Protocol              August 2010
+
+
    the front to avoid confusion.
 
    This scheme allows standard system routines to be used for reply
@@ -5576,8 +5668,51 @@ Internet-Draft           File Transfer Protocol              August 2010
 
    This scheme assumes that multi-line replies may not be nested.
 
+   A Server-FTP MUST send only correctly formatted replies on the
+   control connection.  Note that [RFC0959] (unlike earlier versions of
+   the FTP specification) contains no provision for a "spontaneous"
+   reply message.
+
+   A Server-FTP SHOULD use the reply codes defined here whenever they
+   apply.  However, a server-FTP MAY use a different reply code when
+   needed, as long as the general rules of this section are followed.
+   When the implementor has a choice between a 4xx and 5xx reply code, a
+   Server-FTP SHOULD send a 4xx (temporary failure) code when there is
+   any reasonable possibility that a failed FTP will succeed a few hours
+   later.
+
+   A User-FTP SHOULD generally use only the highest-order digit of a
+   3-digit reply code for making a procedural decision, to prevent
+   difficulties when a Server-FTP uses non-standard reply codes.
+
+   A User-FTP MUST be able to handle multi-line replies.  If the
+   implementation imposes a limit on the number of lines and if this
+   limit is exceeded, the User-FTP MUST recover, e.g., by ignoring the
+   excess lines until the end of the multi-line reply is reached.
+
+   A User-FTP SHOULD NOT interpret a 421 reply code ("Service not
+   available, closing control connection") specially, but SHOULD detect
+   closing of the control connection by the server.
+
+   A User-FTP SHOULD display to the user the full text of all error
+   reply messages it receives.  It SHOULD have a "verbose" mode in which
+   all commands it sends and the full text and reply codes it receives
+   are displayed, for diagnosis of problems.
+
+   The state machine in a User-FTP SHOULD be forgiving of missing and
+   unexpected reply messages, in order to maintain command
+   synchronization with the server.
+
    The three digits of the reply each have a special significance.  This
    is intended to allow a range of very simple to very sophisticated
+
+
+
+Postel, et al.          Expires February 11, 2011             [Page 102]
+
+Internet-Draft           File Transfer Protocol              August 2010
+
+
    responses by the user-process.  The first digit denotes whether the
    response is good, bad or incomplete.  (Referring to the state
    diagram), an unsophisticated user-process will be able to determine
@@ -5592,14 +5727,6 @@ Internet-Draft           File Transfer Protocol              August 2010
          There are five values for the first digit of the reply code:
 
             1yz   Positive Preliminary reply
-
-
-
-
-Postel, et al.          Expires February 11, 2011             [Page 100]
-
-Internet-Draft           File Transfer Protocol              August 2010
-
 
                The requested action is being initiated; expect another
                reply before proceeding with a new command.  (The
@@ -5634,6 +5761,14 @@ Internet-Draft           File Transfer Protocol              August 2010
                return to the beginning of the command sequence, if any.
                It is difficult to assign a meaning to "transient",
                particularly when two distinct sites (Server- and
+
+
+
+Postel, et al.          Expires February 11, 2011             [Page 103]
+
+Internet-Draft           File Transfer Protocol              August 2010
+
+
                User-processes) have to agree on the interpretation.
                Each reply in the 4yz category might have a slightly
                different time value, but the intent is that the
@@ -5648,14 +5783,6 @@ Internet-Draft           File Transfer Protocol              August 2010
                implementation.)
 
             5yz   Permanent Negative Completion reply
-
-
-
-
-Postel, et al.          Expires February 11, 2011             [Page 101]
-
-Internet-Draft           File Transfer Protocol              August 2010
-
 
                The command was not accepted and the requested action did
                not take place.  The User-process is discouraged from
@@ -5690,6 +5817,14 @@ Internet-Draft           File Transfer Protocol              August 2010
                   other file system action.
 
    The third digit gives a finer gradation of meaning in each of the
+
+
+
+Postel, et al.          Expires February 11, 2011             [Page 104]
+
+Internet-Draft           File Transfer Protocol              August 2010
+
+
    function categories, specified by the second digit.  The list of
    replies below will illustrate this.  Note that the text associated
    with each reply is recommended, rather than mandatory, and MAY even
@@ -5705,14 +5840,6 @@ Internet-Draft           File Transfer Protocol              August 2010
       to be returned.  If the command is not implemented by a particular
       Server-FTP process because it has no relevance to that computer
       system, for example ALLO at a TOPS20 site, a Positive Completion
-
-
-
-Postel, et al.          Expires February 11, 2011             [Page 102]
-
-Internet-Draft           File Transfer Protocol              August 2010
-
-
       reply is still desired so that the simple User-process knows it
       can proceed with its course of action.  A 202 reply is used in
       this case with, for example, the reply text: "No storage
@@ -5733,14 +5860,27 @@ Internet-Draft           File Transfer Protocol              August 2010
          502 Command not implemented.
          503 Bad sequence of commands.
          504 Command not implemented for that parameter.
+
          110 Restart marker reply.
-             In this case, the text is exact and not left to the
-             particular implementation; it must read:
-                  MARK yyyy = mmmm
-             Where yyyy is User-process data stream marker, and mmmm
-             server's equivalent marker (note the spaces between markers
-             and "=").
+             A restart reply message, sent over the control connection
+             from the receiving FTP to the User-FTP, has the format:
+                  110 MARK ssss = rrrr
+             Here:
+               * ssss is a text string that appeared in a
+                 Restart Marker in the data stream and encodes a
+                 position in the sender's file system;
+               * rrrr encodes the corresponding position in the
+                 receiver's file system.
+             See section on REST.
          211 System status, or system help reply.
+
+
+
+Postel, et al.          Expires February 11, 2011             [Page 105]
+
+Internet-Draft           File Transfer Protocol              August 2010
+
+
          212 Directory status.
          213 File status.
          214 Help message.
@@ -5761,14 +5901,6 @@ Internet-Draft           File Transfer Protocol              August 2010
          125 Data connection already open; transfer starting.
          225 Data connection open; no transfer in progress.
          425 Can't open data connection.
-
-
-
-Postel, et al.          Expires February 11, 2011             [Page 103]
-
-Internet-Draft           File Transfer Protocol              August 2010
-
-
          226 Closing data connection.
              Requested file action successful (for example, file
              transfer or file abort).
@@ -5797,34 +5929,50 @@ Internet-Draft           File Transfer Protocol              August 2010
              Exceeded storage allocation (for current directory or
              dataset).
          553 Requested action not taken.
+
+
+
+Postel, et al.          Expires February 11, 2011             [Page 106]
+
+Internet-Draft           File Transfer Protocol              August 2010
+
+
              File name not allowed.
+         554 Requested action not taken: invalid REST parameter.
+             A 554 reply may result from a FTP service command that
+             follows a REST command.  The reply indicates that the
+             existing file at the Server-FTP cannot be repositioned
+             as specified in the REST.
+         555 Requested action not taken: type or stru mismatch.
+             A 555 reply may result from an APPE command or from any
+             FTP service command following a REST command.  The
+             reply indicates that there is some mismatch between the
+             current transfer parameters (type and stru) and the
+             attributes of the existing file.
 
 4.2.2.  Numeric Order List of Reply Codes
 
 
          110 Restart marker reply.
-             In this case, the text is exact and not left to the
-             particular implementation; it must read:
-                  MARK yyyy = mmmm
-             Where yyyy is User-process data stream marker, and mmmm
-             server's equivalent marker (note the spaces between markers
-             and "=").
+             A restart reply message, sent over the control connection
+             from the receiving FTP to the User-FTP, has the format:
+                  110 MARK ssss = rrrr
+             Here:
+               * ssss is a text string that appeared in a
+                 Restart Marker in the data stream and encodes a
+                 position in the sender's file system;
+               * rrrr encodes the corresponding position in the
+                 receiver's file system.
+             See section on REST.
          120 Service ready in nnn minutes.
          125 Data connection already open; transfer starting.
          150 File status okay; about to open data connection.
+
          200 Command okay.
          202 Command not implemented, superfluous at this site.
          211 System status, or system help reply.
          212 Directory status.
          213 File status.
-
-
-
-Postel, et al.          Expires February 11, 2011             [Page 104]
-
-Internet-Draft           File Transfer Protocol              August 2010
-
-
          214 Help message.
              On how to use the server or the meaning of a particular
              non-standard command.  This reply is useful only to the
@@ -5837,12 +5985,21 @@ Internet-Draft           File Transfer Protocol              August 2010
              Logged out if appropriate.
          225 Data connection open; no transfer in progress.
          226 Closing data connection.
+
+
+
+Postel, et al.          Expires February 11, 2011             [Page 107]
+
+Internet-Draft           File Transfer Protocol              August 2010
+
+
              Requested file action successful (for example, file
              transfer or file abort).
          227 Entering Passive Mode (h1,h2,h3,h4,p1,p2).
          230 User logged in, proceed.
          250 Requested file action okay, completed.
          257 "PATHNAME" created.
+
          331 User name okay, need password.
          332 Need account for login.
          350 Requested file action pending further information.
@@ -5857,6 +6014,7 @@ Internet-Draft           File Transfer Protocol              August 2010
          451 Requested action aborted: local error in processing.
          452 Requested action not taken.
              Insufficient storage space in system.
+
          500 Syntax error, command unrecognized.
              This may include errors such as command line too long.
          501 Syntax error in parameters or arguments.
@@ -5873,30 +6031,52 @@ Internet-Draft           File Transfer Protocol              August 2010
              dataset).
          553 Requested action not taken.
              File name not allowed.
+         554 Requested action not taken: invalid REST parameter.
+             A 554 reply may result from a FTP service command that
+             follows a REST command.  The reply indicates that the
+             existing file at the Server-FTP cannot be repositioned
+             as specified in the REST.
+         555 Requested action not taken: type or stru mismatch.
+             A 555 reply may result from an APPE command or from any
+             FTP service command following a REST command.  The
+             reply indicates that there is some mismatch between the
+             current transfer parameters (type and stru) and the
 
 
 
-Postel, et al.          Expires February 11, 2011             [Page 105]
+Postel, et al.          Expires February 11, 2011             [Page 108]
 
 Internet-Draft           File Transfer Protocol              August 2010
+
+
+             attributes of the existing file.
 
 
 5.  Declarative Specifications
 
 5.1.  Minimum Implementation
 
-   In order to make FTP workable without needless error messages, the
-   following minimum implementation is required for all servers:
+   The following commands and options MUST be supported by every server-
+   FTP and user-FTP, except in cases where the underlying file system or
+   operating system does not allow or support a particular command.
 
 
-            TYPE - ASCII Non-print
-            MODE - Stream
-            STRUCTURE - File, Record
-            COMMANDS - USER, QUIT, PORT,
-                       TYPE, MODE, STRU,
-                         for the default values
-                       RETR, STOR,
-                       NOOP.
+            Type: ASCII Non-print, IMAGE, LOCAL 8
+            Mode: Stream
+            Structure: File, Record*
+            Commands:
+               USER, PASS, ACCT,
+               PORT, PASV,
+               TYPE, MODE, STRU,
+               RETR, STOR, APPE,
+               RNFR, RNTO, DELE,
+               CWD,  CDUP, RMD,  MKD,  PWD,
+               LIST, NLST,
+               SYST, STAT,
+               HELP, NOOP, QUIT.
+
+   *Record structure is REQUIRED only for hosts whose file systems
+   support record structure.
 
    The default values for transfer parameters are:
 
@@ -5917,25 +6097,29 @@ Internet-Draft           File Transfer Protocol              August 2010
    Protocol Handbook [IPTW].  Servers are under no obligation to provide
    for editing of command lines and MAY require that it be done in the
    user host.  The control connection shall be closed by the server at
+
+
+
+Postel, et al.          Expires February 11, 2011             [Page 109]
+
+Internet-Draft           File Transfer Protocol              August 2010
+
+
    the user's request after all transfers and replies are completed.
 
    The user-DTP MUST "listen" on the specified data port; this may be
    the default user port (U) or a port specified in the PORT command.
    The server shall initiate the data connection from his own default
    data port (L-1) using the specified user data port.  The direction of
-   the transfer and the port used will be determined by the FTP service
-   command.
+   the transfer will be determined by the FTP service command.
+
+   On a multihomed server host, the default data transfer port (L-1)
+   MUST be associated with the same local IP address as the
+   corresponding control connection to port L.
 
    Note that all FTP implementation MUST support data transfer using the
    default port, and that only the USER-PI MAY initiate the use of non-
    default ports.
-
-
-
-Postel, et al.          Expires February 11, 2011             [Page 106]
-
-Internet-Draft           File Transfer Protocol              August 2010
-
 
    When data is to be transferred between two servers, A and B (refer to
    Figure 2), the user-PI, C, sets up control connections with both
@@ -5969,6 +6153,14 @@ Internet-Draft           File Transfer Protocol              August 2010
    The data connection shall be closed by the server under the
    conditions described in Section 3.2.  If the data connection is to be
    closed following a data transfer where closing the connection is not
+
+
+
+Postel, et al.          Expires February 11, 2011             [Page 110]
+
+Internet-Draft           File Transfer Protocol              August 2010
+
+
    required to indicate the end-of-file, the server must do so
    immediately.  Waiting until after a new transfer command is not
    permitted because the user-process will have already tested the data
@@ -5983,15 +6175,20 @@ Internet-Draft           File Transfer Protocol              August 2010
    closed by the other side, it should promptly read any remaining data
    queued on the connection and issue the close on its own side.
 
+   A Server-FTP process SHOULD have an idle timeout, which will
+   terminate the process and close the control connection if the server
+   is inactive (i.e., no command or data transfer in progress) for a
+   long period of time.  The idle timeout time SHOULD be configurable,
+   and the default should be at least 5 minutes.
 
+   A client FTP process ("User-PI" in [RFC0959]) will need timeouts on
+   responses only if it is invoked from a program.
 
-
-
-
-Postel, et al.          Expires February 11, 2011             [Page 107]
-
-Internet-Draft           File Transfer Protocol              August 2010
-
+   A user-FTP MUST NOT send any Telnet controls other than SYNCH and IP
+   on an FTP control connection.  In particular, it MUST NOT attempt to
+   negotiate Telnet options on the control connection.  However, a
+   server-FTP MUST be capable of accepting and refusing Telnet
+   negotiations (i.e., sending DONT/WONT).
 
 5.3.  Commands
 
@@ -6012,6 +6209,13 @@ Internet-Draft           File Transfer Protocol              August 2010
    This also applies to any symbols representing parameter values, such
    as "A" or "a" for ASCII TYPE.  The command codes and the argument
    fields are separated by one or more spaces.
+
+
+
+Postel, et al.          Expires February 11, 2011             [Page 111]
+
+Internet-Draft           File Transfer Protocol              August 2010
+
 
    The argument field consists of a variable length character string
    ending with the character sequence <CRLF> (Carriage Return, Line
@@ -6044,7 +6248,27 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 11, 2011             [Page 108]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Postel, et al.          Expires February 11, 2011             [Page 112]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -6100,7 +6324,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 11, 2011             [Page 109]
+Postel, et al.          Expires February 11, 2011             [Page 113]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -6156,7 +6380,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 11, 2011             [Page 110]
+Postel, et al.          Expires February 11, 2011             [Page 114]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -6212,7 +6436,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 11, 2011             [Page 111]
+Postel, et al.          Expires February 11, 2011             [Page 115]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -6268,7 +6492,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 11, 2011             [Page 112]
+Postel, et al.          Expires February 11, 2011             [Page 116]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -6324,7 +6548,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 11, 2011             [Page 113]
+Postel, et al.          Expires February 11, 2011             [Page 117]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -6380,7 +6604,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 11, 2011             [Page 114]
+Postel, et al.          Expires February 11, 2011             [Page 118]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -6436,7 +6660,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 11, 2011             [Page 115]
+Postel, et al.          Expires February 11, 2011             [Page 119]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -6492,7 +6716,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 11, 2011             [Page 116]
+Postel, et al.          Expires February 11, 2011             [Page 120]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -6548,7 +6772,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 11, 2011             [Page 117]
+Postel, et al.          Expires February 11, 2011             [Page 121]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -6604,7 +6828,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 11, 2011             [Page 118]
+Postel, et al.          Expires February 11, 2011             [Page 122]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -6660,7 +6884,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 11, 2011             [Page 119]
+Postel, et al.          Expires February 11, 2011             [Page 123]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -6716,7 +6940,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 11, 2011             [Page 120]
+Postel, et al.          Expires February 11, 2011             [Page 124]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -6772,7 +6996,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 11, 2011             [Page 121]
+Postel, et al.          Expires February 11, 2011             [Page 125]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -6828,7 +7052,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 11, 2011             [Page 122]
+Postel, et al.          Expires February 11, 2011             [Page 126]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -6884,7 +7108,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 11, 2011             [Page 123]
+Postel, et al.          Expires February 11, 2011             [Page 127]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -6940,7 +7164,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 11, 2011             [Page 124]
+Postel, et al.          Expires February 11, 2011             [Page 128]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -6962,14 +7186,26 @@ Internet-Draft           File Transfer Protocol              August 2010
    [RFC0959]  Postel, J. and J. Reynolds, "File Transfer Protocol",
               STD 9, RFC 959, October 1985.
 
+   [RFC1123]  Braden, R., "Requirements for Internet Hosts - Application
+              and Support", STD 3, RFC 1123, October 1989.
+
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119, March 1997.
 
    [RFC2228]  Horowitz, M., "FTP Security Extensions", RFC 2228,
               October 1997.
 
+   [RFC2389]  Hethmon, P. and R. Elz, "Feature negotiation mechanism for
+              the File Transfer Protocol", RFC 2389, August 1998.
+
+   [RFC2428]  Allman, M., Ostermann, S., and C. Metz, "FTP Extensions
+              for IPv6 and NATs", RFC 2428, September 1998.
+
    [RFC2460]  Deering, S. and R. Hinden, "Internet Protocol, Version 6
               (IPv6) Specification", RFC 2460, December 1998.
+
+   [RFC2577]  Allman, M. and S. Ostermann, "FTP Security
+              Considerations", RFC 2577, May 1999.
 
    [RFC2640]  Curtin, B., "Internationalization of the File Transfer
               Protocol", RFC 2640, July 1999.
@@ -6979,30 +7215,20 @@ Internet-Draft           File Transfer Protocol              August 2010
    [RFC4217]  Ford-Hutchinson, P., "Securing FTP with TLS", RFC 4217,
               October 2005.
 
-11.2.  Informative References
-
-   [RFC1123]  Braden, R., "Requirements for Internet Hosts - Application
-              and Support", STD 3, RFC 1123, October 1989.
-
-   [RFC1639]  Piscitello, D., "FTP Operation Over Big Address Records
-              (FOOBAR)", RFC 1639, June 1994.
-
-   [RFC2389]  Hethmon, P. and R. Elz, "Feature negotiation mechanism for
-              the File Transfer Protocol", RFC 2389, August 1998.
-
-   [RFC2428]  Allman, M., Ostermann, S., and C. Metz, "FTP Extensions
-              for IPv6 and NATs", RFC 2428, September 1998.
 
 
 
 
-Postel, et al.          Expires February 11, 2011             [Page 125]
+
+Postel, et al.          Expires February 11, 2011             [Page 129]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
 
-   [RFC2577]  Allman, M. and S. Ostermann, "FTP Security
-              Considerations", RFC 2577, May 1999.
+11.2.  Informative References
+
+   [RFC1639]  Piscitello, D., "FTP Operation Over Big Address Records
+              (FOOBAR)", RFC 1639, June 1994.
 
    [RFC5234]  Crocker, D. and P. Overell, "Augmented BNF for Syntax
               Specifications: ABNF", STD 68, RFC 5234, January 2008.
@@ -7047,16 +7273,16 @@ Appendix A.  Page Structure
    contiguous.  There may be empty page table slots between occupied
    ones.  Also, the end of file pointer is simply a number.  There is no
    requirement that it in fact point at the "last" datum in the file.
-   Ordinary sequential I/O calls in TOPS-20 will cause the end of file
-   pointer to be left after the last datum written, but other operations
 
 
 
-Postel, et al.          Expires February 11, 2011             [Page 126]
+Postel, et al.          Expires February 11, 2011             [Page 130]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
 
+   Ordinary sequential I/O calls in TOPS-20 will cause the end of file
+   pointer to be left after the last datum written, but other operations
    may cause it not to be so, if a particular programming system so
    requires.
 
@@ -7106,9 +7332,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-
-
-Postel, et al.          Expires February 11, 2011             [Page 127]
+Postel, et al.          Expires February 11, 2011             [Page 131]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -7164,7 +7388,7 @@ Appendix B.  Directory Commands
 
 
 
-Postel, et al.          Expires February 11, 2011             [Page 128]
+Postel, et al.          Expires February 11, 2011             [Page 132]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -7220,7 +7444,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 11, 2011             [Page 129]
+Postel, et al.          Expires February 11, 2011             [Page 133]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -7276,7 +7500,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 11, 2011             [Page 130]
+Postel, et al.          Expires February 11, 2011             [Page 134]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -7332,7 +7556,7 @@ Appendix C.  RFCs on FTP
 
 
 
-Postel, et al.          Expires February 11, 2011             [Page 131]
+Postel, et al.          Expires February 11, 2011             [Page 135]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -7388,7 +7612,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 11, 2011             [Page 132]
+Postel, et al.          Expires February 11, 2011             [Page 136]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -7444,7 +7668,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 11, 2011             [Page 133]
+Postel, et al.          Expires February 11, 2011             [Page 137]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -7500,12 +7724,14 @@ Appendix E.  Changelog from RFC 959 and TODO
 
 
 
-Postel, et al.          Expires February 11, 2011             [Page 134]
+Postel, et al.          Expires February 11, 2011             [Page 138]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
 
       Incorporate [RFC0959] Errata.
+
+      Incorporate [RFC1123] into the various sections that it updated.
 
       Incorporate [RFC2389] FEAT at Section 4.1.4.
 
@@ -7526,10 +7752,8 @@ Internet-Draft           File Transfer Protocol              August 2010
       Haven't added all RFC3659 references; 3659 references to section
       10 (not included here) are not updated.
 
-      Determine if changes in RFC 1123 should be applied.
-
-      Triage and include or reference other FTP RFCs - RFC 2228, 2640,
-      2773?, 4217.
+      Triage and include or reference other FTP RFCs - RFC 2228 (new
+      reply codes and reply type 6yz), 2640, 2773?, 4217.
 
       Update BNF to ABNF.
 
@@ -7556,7 +7780,7 @@ Authors' Addresses
 
 
 
-Postel, et al.          Expires February 11, 2011             [Page 135]
+Postel, et al.          Expires February 11, 2011             [Page 139]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -7612,7 +7836,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 11, 2011             [Page 136]
+Postel, et al.          Expires February 11, 2011             [Page 140]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -7668,5 +7892,5 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 11, 2011             [Page 137]
+Postel, et al.          Expires February 11, 2011             [Page 141]
 
