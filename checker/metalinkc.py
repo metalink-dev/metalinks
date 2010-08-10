@@ -247,6 +247,8 @@ try: import GPG
 except: pass
 try: import win32api
 except: pass
+try: import win32con
+except: pass
 try: import win32process
 except ImportError: pass
 try: import bz2
@@ -255,7 +257,7 @@ import copy
 import gzip
 import httplib
 import binascii
-import urllib2
+import ftplib
 import sys
 import gettext
 import BaseHTTPServer
@@ -266,7 +268,7 @@ import threading
 import calendar
 import zlib
 import os.path
-import ftplib
+import urllib2
 import os
 import rfc822
 import xml.parsers.expat
@@ -308,8 +310,8 @@ class Dummy:
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
 # Filename: $URL: https://metalinks.svn.sourceforge.net/svnroot/metalinks/checker/checker.py $
-# Last Updated: $Date: 2010-04-10 20:40:24 -0700 (Sat, 10 Apr 2010) $
-# Version: $Rev: 639 $
+# Last Updated: $Date: 2010-04-21 22:05:23 -0700 (Wed, 21 Apr 2010) $
+# Version: $Rev: 653 $
 # Author(s): Neil McNab
 #
 # Description:
@@ -414,7 +416,7 @@ class Checker:
             print _("ERROR parsing XML.")
             raise
             
-        if metalinkobj == False:
+        if not metalinkobj:
             return False
         
         if metalinkobj.type == "dynamic":
@@ -435,8 +437,8 @@ class Checker:
 
         #results = {}
         for filenode in urllist:
-            size = filenode.size
-            name = filenode.filename
+            #size = filenode.size
+            #name = filenode.filename
             #print "=" * 79
             #print _("File") + ": %s " % name + _("Size") + ": %s" % size
             myheaders = {}
@@ -519,15 +521,15 @@ class Checker:
             digests = digest.split(",")
             for d in digests:
                 (name, value) = d.split("=", 2)
-                type = ""
+                typestr = ""
                 if name.lower() == "sha":
-                    type = "sha1"
+                    typestr = "sha1"
                 elif name.lower() == "md5":
-                    type = "md5"
+                    typestr = "md5"
                     
-                if type != "" and checksum == "?":
+                if typestr != "" and checksum == "?":
                     try:
-                        if binascii.hexlify(binascii.a2b_base64(value)).lower() == checksums[type].lower():
+                        if binascii.hexlify(binascii.a2b_base64(value)).lower() == checksums[typestr].lower():
                             checksum = _("OK")
                         else:
                             checksum = _("FAIL")
@@ -830,7 +832,7 @@ checker.translate = translate
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
 # Filename: $URL: https://metalinks.svn.sourceforge.net/svnroot/metalinks/checker/download.py $
-# Last Updated: $Date: 2010-04-10 20:40:24 -0700 (Sat, 10 Apr 2010) $
+# Last Updated: $Date: 2010-08-09 22:57:41 -0400 (Mon, 09 Aug 2010) $
 # Author(s): Neil McNab
 #
 # Description:
@@ -863,9 +865,11 @@ checker.translate = translate
 #import thread
 #import logging
 
+
 # for jython support
 #try: import bz2
 #except ImportError: pass
+
 
 
 USER_AGENT = "Metalink Checker/5.1 +http://www.nabber.org/projects/"
@@ -901,6 +905,7 @@ PGP_KEY_STORE=None
 HTTP_PROXY=""
 FTP_PROXY=""
 HTTPS_PROXY=""
+SOCKS_PROXY=""
 
 # Streaming server setings to use
 HOST = "localhost"
@@ -1119,7 +1124,7 @@ def get(src, path, checksums = {}, force = False, handlers = {}, segmented = SEG
     # assume metalink if ends with .metalink
 
     result = download_metalink(src, path, force, handlers, segmented, headers)
-    if result != False:
+    if result:
         return result
             
     # assume normal file download here
@@ -1261,6 +1266,9 @@ class Manager:
                 result = self.cycle()
             
         return self.get_status()
+        
+    def cycle(self):
+        pass
          
     def get_status(self):
         return self.status
@@ -1484,9 +1492,9 @@ def parse_metalink(src, headers = {}, nocheck = False, ver=3):
                 try:
                     pri = mydict["pri"]
                 except KeyError: pass
-                type = ""
+                typestr = ""
                 try:
-                    type = mydict["type"]
+                    typestr = mydict["type"]
                 except KeyError: pass
                 try:
                     if mydict['rel'] == '"describedby"' and type=="application/metalink4+xml":
@@ -1499,12 +1507,12 @@ def parse_metalink(src, headers = {}, nocheck = False, ver=3):
                         fileobj.hashlist['pgp'] = fp.read()
                         fp.close()
                     elif mydict['rel'] == '"describedby"' or mydict['rel'] == '"duplicate"':
-                        fileobj.add_url(parts[0].strip(" <>"), type=type, priority=pri)
+                        fileobj.add_url(parts[0].strip(" <>"), type=typestr, priority=pri)
                 except KeyError: pass
             try:
                 hashes = myheaders['digest'].split(",")
-                for hash in hashes:
-                    parts = hash.split("=", 1)
+                for myhash in hashes:
+                    parts = myhash.split("=", 1)
                     if parts[0].strip() == 'sha':
                         fileobj.hashlist['sha-1'] = binascii.hexlify(binascii.a2b_base64(parts[1].strip()))
                     else:
@@ -1544,7 +1552,7 @@ def parse_rss(src, headers = {}):
     
 def download_rss(src, path, force = False, handlers = {}, segmented = SEGMENTED, headers = {}, nocheck = False):
     rssobj = parse_rss(src, headers)
-    if rssobj == False:
+    if not rssobj:
         return False
         
     urllist = rssobj.files
@@ -1573,21 +1581,21 @@ def download_metalink(src, path, force = False, handlers = {}, segmented = SEGME
     Returns list of file paths if download(s) is successful
     Returns False otherwise (checksum fails)
     '''
-    headers = headers.copy()
+    myheaders = headers.copy()
 
-    metalinkobj = parse_metalink(src, headers, nocheck)
-    if metalinkobj == False:
+    metalinkobj = parse_metalink(src, myheaders, nocheck)
+    if not metalinkobj:
         return False
         
     if is_remote(src):
-        headers['referer'] = src
+        myheaders['referer'] = src
 
     if metalinkobj.type == "dynamic":
         origin = metalinkobj.origin
         if origin != src and origin != "":
             print _("Downloading update from %s") % origin
             try:
-                return download_metalink(origin, path, force, handlers, segmented, headers)
+                return download_metalink(origin, path, force, handlers, segmented, myheaders)
             except: pass
 
     urllist = metalinkobj.files
@@ -1602,7 +1610,7 @@ def download_metalink(src, path, force = False, handlers = {}, segmented = SEGME
 
         if OS == None or len(ostag) == 0 or ostag[0].lower() == OS.lower():
             if "any" in LANG or len(langtag) == 0 or langtag.lower() in LANG:
-                result = download_file_node(filenode, path, force, handlers, segmented, headers)
+                result = download_file_node(filenode, path, force, handlers, segmented, myheaders)
                 if result:
                     results.append(result)
     if len(results) == 0:
@@ -2247,7 +2255,7 @@ class Segment_Manager(Manager):
         self.urls = newurls
         return newurls
             
-    def run(self):
+    def run(self, wait=0.1):
         '''
         ?
         '''
@@ -2266,7 +2274,7 @@ class Segment_Manager(Manager):
             #print "Set chunk size to %s." % self.chunk_size
         self.resume.update_block_size(self.chunk_size)
             
-        return Manager.run(self, 0.1)
+        return Manager.run(self, wait)
 
     def cycle(self):
         '''
@@ -2732,7 +2740,10 @@ class Ftp_Host_Segment(threading.Thread, Host_Segment):
                 return
             except (socket.error), error:
                 #print "reconnect", self.host.url
-                self.host.reconnect()
+                try:
+                    self.host.reconnect()
+                except:
+                    pass
                 retry = True
                 count += 1
             except (ftplib.error_temp), error:
@@ -2975,20 +2986,11 @@ class FTP:
         if FTP_PROXY != "":
             # parse proxy URL
             url = urlparse.urlparse(FTP_PROXY)
-            if url[0] == "" or url[0] == "http":
-                port = httplib.HTTP_PORT
-                if url[1].find("@") != -1:
-                    host = url[1].split("@", 2)[1]
-                else:
-                    host = url[1]
-                    
-                try:
-                    if url.port != None:
-                        port = url.port
-                    if url.username != None:
-                        self.headers["Proxy-authorization"] = "Basic " + base64.encodestring(url.username+':'+url.password) + "\r\n"
-                except AttributeError:
-                    pass
+            if url.scheme == "" or url.scheme == "http": 
+                host = url.hostname 
+                port = url.port 
+                if url.username != None: 
+                    self.headers["Proxy-authorization"] = "Basic " + base64.encodestring(url.username+':'+url.password) + "\r\n"
                 self.conn = httplib.HTTPConnection(host, port)
             else:
                 raise AssertionError, _("Transport not supported for FTP_PROXY, %s") % url.scheme
@@ -3044,7 +3046,8 @@ class FTP:
             return self.conn.ntransfercmd(cmd, rest)
 
     def voidcmd(self, *args):
-        return self.conn.voidcmd(*args)
+        if FTP_PROXY == "":
+            return self.conn.voidcmd(*args)
 
     def quit(self):
         if FTP_PROXY != "":
@@ -3237,6 +3240,7 @@ download.PGP_KEY_STORE = PGP_KEY_STORE
 download.PORT = PORT
 download.PROTOCOLS = PROTOCOLS
 download.SEGMENTED = SEGMENTED
+download.SOCKS_PROXY = SOCKS_PROXY
 download.Segment_Manager = Segment_Manager
 download.StreamRequest = StreamRequest
 download.StreamServer = StreamServer
@@ -3604,7 +3608,7 @@ class GPGSubprocess:
         child_stdin.close()
 
         # Get the response information
-        resp = self._read_response(child_stderr, result)
+        self._read_response(child_stderr, result)
 
         # Read the contents of the file from GPG's stdout
         result.data = ""
@@ -3623,8 +3627,8 @@ class GPGSubprocess:
         '''
         Verify the signature on the contents of the string 'data'
         '''
-        file = StringIO.StringIO(data)
-        return self.verify_file(file)
+        fileobj = StringIO.StringIO(data)
+        return self.verify_file(fileobj)
     
     def verify_file(self, file):
         '''
@@ -3657,7 +3661,7 @@ class GPGSubprocess:
 
         # Get the response information
         result = ImportResult()
-        resp = self._read_response(child_stderr, result)
+        self._read_response(child_stderr, result)
 
         return result
 
@@ -3699,8 +3703,8 @@ class GPGSubprocess:
 
     def encrypt(self, data, recipients):
         '''Encrypt the message contained in the string "data"'''
-        file = StringIO.StringIO(data)
-        return self.encrypt_file(file, recipients)
+        fileobj = StringIO.StringIO(data)
+        return self.encrypt_file(fileobj, recipients)
 
 
     # Not yet implemented, because I don't need these methods
@@ -3819,7 +3823,7 @@ def decode_header(binary_data):
             results['size'] = (ord(binary_data[0]) << 24) | (ord(binary_data[1]) << 16) | (ord(binary_data[2])) << 8 | ord(binary_data[3])
             binary_data = binary_data[4:]
         else:
-            print "not implemented, header length", length_octets
+            print "not implemented, header length", octet1
             return results
     else:
         # old format
@@ -4002,7 +4006,7 @@ GPG.translate = translate
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
 # Filename: $URL: https://metalinks.svn.sourceforge.net/svnroot/metalinks/checker/metalink.py $
-# Last Updated: $Date: 2010-04-10 20:40:24 -0700 (Sat, 10 Apr 2010) $
+# Last Updated: $Date: 2010-05-13 23:32:51 -0700 (Thu, 13 May 2010) $
 # Author(s): Hampus Wessman, Neil McNab
 #
 # Description:
@@ -4176,7 +4180,15 @@ class Resource4:
         return valid
 
 class MetalinkFileBase:
+    '''
+    This should not be called directly, it is a base class.
+    '''
     def __init__(self, filename, attrs, do_ed2k, do_magnet):
+        filename = filename.replace("\\", "/")
+        filename = filename.lstrip("/.")
+        filename = filename.replace("/../", "")
+        if filename.endswith("/.."):
+            filename = filename[:-3]
         self.filename = filename
         self.errors = []
         self.hashlist = {}
@@ -4229,6 +4241,12 @@ class MetalinkFileBase:
     
     def add_res(self, res):
         self.resources.append(res)
+        
+    def add_url(self, *args):
+        '''
+        Override this in your subclass
+        '''
+        pass
 
     def scan_file(self, filename, use_chunks=True, max_chunks=255, chunk_size=256, progresslistener=None):
         print "\nScanning file..."
@@ -4252,7 +4270,7 @@ class MetalinkFileBase:
         sha256hash = hashlib.sha256()
         piecehash = hashlib.sha1()
         
-        piecenum = 0
+        #piecenum = 0
         length = 0
         self.pieces = []
         self.piecetype = "sha1"
@@ -4270,7 +4288,7 @@ class MetalinkFileBase:
                     reads_left = reads_per_progress
                     progress += 1
                     result = progresslistener.Update(progress)
-                    if get_first(result) == False:
+                    if not get_first(result):
                         print "Canceling scan!"
                         return False
             # Process the data
@@ -4293,13 +4311,13 @@ class MetalinkFileBase:
                     if length == self.piecelength:
                         print "Done with piece hash", len(self.pieces)
                         self.pieces.append(piecehash.hexdigest())
-                        piecehash = sha.new()
+                        piecehash = hashlib.sha1()
                         length = 0
         if use_chunks:
             if length > 0:
                 print "Done with piece hash", len(self.pieces)
                 self.pieces.append(piecehash.hexdigest())
-                piecehash = sha.new()
+                piecehash = hashlib.sha1()
             print "Total number of pieces:", len(self.pieces)
         fp.close()
         self.hashlist["md5"] = md5hash.hexdigest()
@@ -4423,8 +4441,8 @@ class MetalinkFile4(MetalinkFileBase):
                 text += '      <hash type="%s">' % hashlookup(key) + self.hashlist[key].lower() + '</hash>\n'
         if len(self.pieces) > 1:
             text += '      <pieces type="'+hashlookup(self.piecetype)+'" length="'+str(self.piecelength)+'">\n'
-            for id in range(len(self.pieces)):
-                text += '        <hash>'+self.pieces[id]+'</hash>\n'
+            for idstr in range(len(self.pieces)):
+                text += '        <hash>'+self.pieces[idstr]+'</hash>\n'
             text += '      </pieces>\n'
         # File list
         for res in self.resources:
@@ -4509,8 +4527,8 @@ class MetalinkFile(MetalinkFileBase):
                     text += '      <hash type="%s">' % key + self.hashlist[key].lower() + '</hash>\n'
             if len(self.pieces) > 1:
                 text += '        <pieces type="'+self.piecetype+'" length="'+str(self.piecelength)+'">\n'
-                for id in range(len(self.pieces)):
-                    text += '          <hash piece="'+str(id)+'">'+self.pieces[id]+'</hash>\n'
+                for idstr in range(len(self.pieces)):
+                    text += '          <hash piece="'+str(idstr)+'">'+self.pieces[idstr]+'</hash>\n'
                 text += '        </pieces>\n'
             text += '      </verification>\n'
         # File list
@@ -4543,6 +4561,7 @@ class MetalinkBase:
         self.files = []
         self.generator = GENERATOR
         self.origin = ""
+        self.data = ""
 
         self.p = xml.parsers.expat.ParserCreate(namespace_separator=XMLSEP)
         self.p.buffer_text = True
@@ -4551,6 +4570,12 @@ class MetalinkBase:
         self.p.StartElementHandler = self.start_element
         self.p.EndElementHandler = self.end_element
         self.p.CharacterDataHandler = self.char_data
+        
+    def start_element(self, name, attrs):
+        pass
+        
+    def end_element(self, name):
+        pass
             
     def char_data(self, data):
         self.data += data #.strip()
@@ -4580,14 +4605,14 @@ class MetalinkBase:
 
     def validate_url(self, url):
         if url.endswith(".torrent"):
-            type = "bittorrent"
+            typestr = "bittorrent"
         else:
             chars = url.find(":")
-            type = url[:chars]
+            typestr = url[:chars]
         allowed_types = ["ftp", "ftps", "http", "https", "rsync", "bittorrent", "magnet", "ed2k"]
-        if not type in allowed_types:
+        if not typestr in allowed_types:
             return False
-        elif type in ['http', 'https', 'ftp', 'ftps', 'bittorrent']:
+        elif typestr in ['http', 'https', 'ftp', 'ftps', 'bittorrent']:
             m = re.search(r'\w+://.+\..+/.*', url)
             if m == None:
                 return False
@@ -4695,7 +4720,7 @@ class Metalink(MetalinkBase):
                 fileobj = self.files[-1]
                 fileobj.add_url(self.data.strip(), attrs=tag.attrs)
             elif name == "tags" and self.parent[-1].name != "file":
-                setattr(self, "tags", self.data.strip())
+                self.tags = self.data.strip()
             elif name in ("name", "url"):
                 setattr(self, self.parent[-1].name + "_" + name, self.data.strip())
             elif name in ("identity", "copyright", "description", "version", "upgrade"):
@@ -4800,7 +4825,7 @@ class Metalink4(MetalinkBase):
             if name in ("generator", "origin", "published", "updated"):
                 setattr(self, name, self.data.strip())
                 if name == "origin" and tag.attrs.has_key("dynamic"):
-                    setattr(self, "dynamic", tag.attrs["dynamic"])
+                    self.dynamic = tag.attrs["dynamic"]
             elif name in ("url", "metaurl"):
                 fileobj = self.files[-1]
                 fileobj.add_url(self.data.strip(), attrs=tag.attrs)
@@ -4985,18 +5010,18 @@ class TemplateDecompress:
         return buff
     
     def get_chunk(self):
-        type = self.handle.read(4)
+        typestr = self.handle.read(4)
         #print "type:", type
         length = int(binascii.hexlify(self.handle.read(6)[::-1]), 16)
         value = self.handle.read(length-10)
         
-        if type == "BZIP":
+        if typestr == "BZIP":
             uncompressed = int(binascii.hexlify(value[:6][::-1]), 16)
             data = value[6:]
             data = bz2.decompress(data)
             assert(len(data) == uncompressed)
             return data
-        elif type == "DATA":
+        elif typestr == "DATA":
             uncompressed = int(binascii.hexlify(value[:6][::-1]), 16)
             data = value[6:]
             data = zlib.decompress(data)
@@ -5118,13 +5143,13 @@ class Jigdo(Metalink):
             #print "sublength:", sublength
             value = value[7:]
             if subtype == 6:
-                rsync = value[:8]
+                #rsync = value[:8]
                 md5 = value[8:24]
                 value = value[24:]
                 chunks.append([6, sublength, binascii.hexlify(md5)])
             elif subtype == 5:
                 filemd5 = value[:16]
-                blocklen = int(binascii.hexlify(value[16:20][::-1]), 16)
+                #blocklen = int(binascii.hexlify(value[16:20][::-1]), 16)
                 value = value[20:]
             elif subtype == 2:
                 chunks.append([2, sublength])
@@ -5197,8 +5222,8 @@ def convert_4to3(metalinkobj4):
     
     for attr in ('generator', 'origin'):
         setattr(metalinkobj3, attr, getattr(metalinkobj4, attr))
-    if getattr(metalinkobj4, 'dynamic').lower() == "true":
-        setattr(metalinkobj3, 'type', 'dynamic')
+    if metalinkobj4.dynamic.lower() == "true":
+        metalinkobj3.type = 'dynamic'
         
     if metalinkobj4.published != "":
         metalinkobj3.pubdate = time.strftime(RFC822, rfc3339_parsedate(metalinkobj4.published))
