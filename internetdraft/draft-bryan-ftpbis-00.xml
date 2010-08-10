@@ -12,7 +12,7 @@
 <?rfc inline="yes" ?>
 <!DOCTYPE rfc
   PUBLIC "" "rfc2629.dtd">
-<rfc category="std" docName="draft-bryan-ftpbis-00" obsoletes="959,1639" ipr="trust200902">
+<rfc category="std" docName="draft-bryan-ftpbis-00" updates="1123" obsoletes="959,1639" ipr="trust200902">
     <front>        
       <title abbrev="File Transfer Protocol">File Transfer Protocol (FTP)</title>
       <author initials="J." surname="Postel" fullname="Jon Postel">
@@ -994,6 +994,11 @@ user-PI
             may send data to one another in words by using TYPE L 36.
             The data would be sent in the 8-bit transmission bytes
             packed so that 9 transmission bytes carried two host words.
+</t><t>
+            An FTP program MUST support TYPE I ("IMAGE" or binary type)
+            as well as TYPE L 8 ("LOCAL" type with logical byte size 8).
+            A machine whose memory is organized into m-bit words, where
+            m is not a multiple of 8, MAY also support TYPE L m.
 </t>
 </section>
 
@@ -1041,6 +1046,9 @@ user-PI
                (i.e., &lt;CR&gt;, &lt;LF&gt;, &lt;NL&gt;, &lt;VT&gt;, &lt;FF&gt;) which the printer
                process will interpret appropriately.  &lt;CRLF&gt;, in exactly
                this sequence, also denotes end-of-line.
+</t><t>
+            A host that makes no distinction between TYPE N and TYPE T
+            SHOULD implement TYPE T to be identical to TYPE N.
 </t>
 </section>
 
@@ -1130,9 +1138,9 @@ user-PI
          text file is sent with record-structure to a host which is file
          oriented, then that host should apply an internal
          transformation to the file based on the record structure.
-         Obviously, this transformation should be useful, but it must
-         also be invertible so that an identical file may be retrieved
-         using record structure.
+            An FTP transformation between record-structure and file-structure SHOULD be invertible, to the extent possible while
+            making the result useful on the target host.
+
 </t><t>
          In the case of a file being sent with file-structure to a
          record-oriented host, there exists the question of what
@@ -1167,6 +1175,12 @@ user-PI
 </section>
 <section anchor="sec-3.1.2.3" title="Page Structure">
 
+<t>         Implementation of page structure is NOT RECOMMENDED in
+            general. However, if a host system does need to implement
+            FTP for "random access" or "holey" files, it MUST use the
+            defined page structure format rather than define a new
+            private FTP format.
+</t>
 <t>
             To transmit files that are discontinuous, FTP defines a page
             structure.  Files of this type are sometimes known as
@@ -1325,6 +1339,10 @@ user-PI
       enough to get a different data connection, still it is permitted
       to do both commands to use new ports on both ends of the data
       connection.
+            A User-FTP that uses STREAM mode SHOULD send a PORT command
+            to assign a non-default data port before each transfer
+            command is issued.
+
 </t><t>
       Reuse of the Data Connection:  When using the stream mode of data
       transfer the end of the file MUST be indicated by closing the
@@ -1811,7 +1829,14 @@ DATA PORT (PORT)
             port (which is not its default data port) and to wait for a
             connection rather than initiate one upon receipt of a
             transfer command.  The response to this command includes the
-            host and port address this server is listening on.
+            host and port address this server is listening on.</t>
+<t>
+            A server-FTP MUST implement the PASV command.
+</t><t>
+            If multiple third-party transfers are to be executed during
+            the same session, a new PASV command MUST be issued before
+            each transfer command, to obtain a unique port pair.
+
 </t></list></t>
 <t>
          REPRESENTATION TYPE (TYPE)
@@ -2187,10 +2212,22 @@ DATA PORT (PORT)
 <t>
          STORE UNIQUE (STOU)
 <list><t>
-            This command behaves like STOR except that the resultant
-            file is to be created in the current directory under a name
-            unique to that directory.  The 250 Transfer Started response
-            must include the name generated.
+            The STOU command stores into a uniquely named file.  When it
+            receives an STOU command, a Server-FTP MUST return the
+            actual file name in the "125 Transfer Starting" or the "150
+            Opening Data Connection" message that precedes the transfer
+            (the 250 reply code mentioned in <xref target="RFC0959"/> is incorrect).  The
+            exact format of these messages is hereby defined to be as
+            follows:
+<list><t>
+                125 FILE: pppp
+</t><t>
+                150 FILE: pppp
+</t></list></t>
+<t>
+            where pppp represents the unique pathname of the file that
+            will be written.
+
 </t></list></t>
 
 <t>
@@ -2348,6 +2385,10 @@ DATA PORT (PORT)
             the protocol.  The nature of these services and the
             specification of their syntax can be stated in a reply to
             the HELP SITE command.
+</t><t>
+            A Server-FTP SHOULD use the SITE command for non-standard
+            features, rather than invent new private commands or
+            unstandardized extensions to existing commands.
 </t></list></t>
 
 <t>
@@ -2414,12 +2455,31 @@ the time of this writing)
    FTP commands are &quot;Telnet strings&quot; terminated by the &quot;Telnet end of
    line code&quot;.  The command codes themselves are alphabetic characters
    terminated by the character &lt;SP&gt; (Space) if parameters follow and
-   Telnet-EOL otherwise.  The command codes and the semantics of
+   Telnet-EOL otherwise.  
+            Implementors MUST NOT assume any correspondence between READ
+            boundaries on the control connection and the Telnet EOL
+            sequences (CR LF).
+   The command codes and the semantics of
    commands are described in this section; the detailed syntax of
    commands is specified in <xref target="sec-5.3"/>, the reply sequences
    are discussed in <xref target="sec-5.4"/>,
    and scenarios illustrating the use of commands are provided in <xref target="sec-7"/>.
+</t>
+<t>LIST and NLST Commands
+<list><t>
+            The data returned by an NLST command MUST contain only a
+            simple list of legal pathnames, such that the server can use
+            them directly as the arguments of subsequent data transfer
+            commands for the individual files.
 </t><t>
+            The data returned by a LIST or NLST command SHOULD use an
+            implied TYPE AN, unless the current type is EBCDIC, in which
+            case an implied TYPE EN SHOULD be used.
+</t>
+</list>
+</t>
+
+<t>
 Special Action
 </t><t>
    FTP commands may be partitioned as those specifying access-control
@@ -2977,10 +3037,38 @@ Response Syntax:
    point.  The receiving DTP can keep a list of these restart markers,
    and correlate them with how the file is being saved.  To restart the
    file transfer, the receiver just sends back that last restart marker,
-   and both sides know how to resume the data transfer.  Note that there
-   are some flaws in the description of the restart mechanism in STD 9,
-   <xref target="RFC0959"/>.  See section 4.1.3.4 of <xref target="RFC1123"/> for the
-   corrections.
+   and both sides know how to resume the data transfer.  
+</t>
+<t>A restart
+            reply message, sent over the control connection from the
+            receiving FTP to the User-FTP, has the format:
+<list>
+<t>
+                110 MARK ssss = rrrr
+</t></list></t>
+<t>
+            Here:
+<list>
+<t>
+            *    ssss is a text string that appeared in a Restart Marker
+                 in the data stream and encodes a position in the
+                 sender's file system;
+</t><t>
+            *    rrrr encodes the corresponding position in the
+                 receiver's file system.
+</t></list></t>
+<t>
+            The encoding, which is specific to a particular file system
+            and network implementation, is always generated and
+            interpreted by the same system, either sender or receiver.
+</t><t>
+            When an FTP that implements restart receives a Restart
+            Marker in the data stream, it SHOULD force the data to that
+            point to be written to stable storage before encoding the
+            corresponding position rrrr.  An FTP sending Restart Markers
+            MUST NOT assume that 110 replies will be returned
+            synchronously with the data, i.e., it must not await a 110
+            reply before sending more data.
 </t>
 
 <section title="Restarting in STREAM Mode">
@@ -5323,7 +5411,44 @@ S&gt; 250 End
 </list>
 </t>
 
+<t>
+            A User-FTP program MUST implement a "QUOTE" command that
+            will pass an arbitrary character string to the server and
+            display all resulting response messages to the user.
+</t><t>
+            To make the "QUOTE" command useful, a User-FTP SHOULD send
+            transfer control commands to the server as the user enters
+            them, rather than saving all the commands and sending them
+            to the server only when a data transfer is started.
+</t>
+
 </section>
+
+<section title="Non-standard Command Verbs">
+<t>
+            FTP allows "experimental" commands, whose names begin with
+            "X".  If these commands are subsequently adopted as
+            standards, there may still be existing implementations using
+            the "X" form.  At present, this is true for the directory
+            commands:
+	 <figure>
+	  <artwork type="example">
+                RFC 959   "Experimental"
+
+                  MKD        XMKD
+                  RMD        XRMD
+                  PWD        XPWD
+                  CDUP       XCUP
+                  CWD        XCWD
+</artwork>
+</figure>
+</t><t>
+            All FTP implementations SHOULD recognize both forms of these
+            commands, by simply equating them with extra entries in the
+            command lookup table.
+</t>
+</section>
+
 
 
 </section>
@@ -5404,6 +5529,47 @@ S&gt; 250 End
             text line should be offset by some neutral text, like Space.
 </t><t>
          This scheme assumes that multi-line replies may not be nested.
+</t><t>		 
+            A Server-FTP MUST send only correctly formatted replies on
+            the control connection.  Note that <xref target="RFC0959"/> (unlike earlier
+            versions of the FTP specification) contains no provision for a
+            "spontaneous" reply message.
+</t><t>
+            A Server-FTP SHOULD use the reply codes defined here
+            whenever they apply.  However, a server-FTP MAY use a
+            different reply code when needed, as long as the general
+            rules of this section are followed. When the implementor has
+            a choice between a 4xx and 5xx reply code, a Server-FTP
+            SHOULD send a 4xx (temporary failure) code when there is any
+            reasonable possibility that a failed FTP will succeed a few
+            hours later.
+</t><t>
+            A User-FTP SHOULD generally use only the highest-order digit
+            of a 3-digit reply code for making a procedural decision, to
+            prevent difficulties when a Server-FTP uses non-standard
+            reply codes.
+</t><t>
+            A User-FTP MUST be able to handle multi-line replies.  If
+            the implementation imposes a limit on the number of lines
+            and if this limit is exceeded, the User-FTP MUST recover,
+            e.g., by ignoring the excess lines until the end of the
+            multi-line reply is reached.
+</t><t>
+            A User-FTP SHOULD NOT interpret a 421 reply code ("Service
+            not available, closing control connection") specially, but
+            SHOULD detect closing of the control connection by the
+            server.
+</t><t>
+            A User-FTP SHOULD display to the user the full text of all
+            error reply messages it receives.  It SHOULD have a
+            "verbose" mode in which all commands it sends and the full
+            text and reply codes it receives are displayed, for
+            diagnosis of problems.
+</t><t>
+            The state machine in a User-FTP SHOULD be forgiving of
+            missing and unexpected reply messages, in order to maintain
+            command synchronization with the server.
+
 </t><t>
       The three digits of the reply each have a special significance.
       This is intended to allow a range of very simple to very
@@ -5553,13 +5719,18 @@ S&gt; 250 End
       502 Command not implemented.
       503 Bad sequence of commands.
       504 Command not implemented for that parameter.
+
       110 Restart marker reply.
-          In this case, the text is exact and not left to the
-          particular implementation; it must read:
-               MARK yyyy = mmmm
-          Where yyyy is User-process data stream marker, and mmmm
-          server's equivalent marker (note the spaces between markers
-          and &quot;=&quot;).
+          A restart reply message, sent over the control connection 
+          from the receiving FTP to the User-FTP, has the format:
+               110 MARK ssss = rrrr
+          Here:
+            * ssss is a text string that appeared in a 
+              Restart Marker in the data stream and encodes a 
+              position in the sender's file system;
+            * rrrr encodes the corresponding position in the
+              receiver's file system.
+          See section on REST.
       211 System status, or system help reply.
       212 Directory status.
       213 File status.
@@ -5610,6 +5781,17 @@ S&gt; 250 End
           dataset).
       553 Requested action not taken.
           File name not allowed.
+      554 Requested action not taken: invalid REST parameter.
+          A 554 reply may result from a FTP service command that
+          follows a REST command.  The reply indicates that the
+          existing file at the Server-FTP cannot be repositioned
+          as specified in the REST.
+      555 Requested action not taken: type or stru mismatch.
+          A 555 reply may result from an APPE command or from any
+          FTP service command following a REST command.  The
+          reply indicates that there is some mismatch between the
+          current transfer parameters (type and stru) and the
+          attributes of the existing file.
 </artwork>
 </figure>         
 </t>
@@ -5620,15 +5802,20 @@ S&gt; 250 End
 <figure>
 	  <artwork type="example">
       110 Restart marker reply.
-          In this case, the text is exact and not left to the
-          particular implementation; it must read:
-               MARK yyyy = mmmm
-          Where yyyy is User-process data stream marker, and mmmm
-          server's equivalent marker (note the spaces between markers
-          and &quot;=&quot;).
+          A restart reply message, sent over the control connection 
+          from the receiving FTP to the User-FTP, has the format:
+               110 MARK ssss = rrrr
+          Here:
+            * ssss is a text string that appeared in a 
+              Restart Marker in the data stream and encodes a 
+              position in the sender's file system;
+            * rrrr encodes the corresponding position in the
+              receiver's file system.
+          See section on REST.
       120 Service ready in nnn minutes.
       125 Data connection already open; transfer starting.
       150 File status okay; about to open data connection.
+	  
       200 Command okay.
       202 Command not implemented, superfluous at this site.
       211 System status, or system help reply.
@@ -5651,11 +5838,12 @@ S&gt; 250 End
       227 Entering Passive Mode (h1,h2,h3,h4,p1,p2).
       230 User logged in, proceed.
       250 Requested file action okay, completed.
-      257 &quot;PATHNAME&quot; created.       
+      257 &quot;PATHNAME&quot; created.
+	  
       331 User name okay, need password.
       332 Need account for login.
       350 Requested file action pending further information.
-         
+
       421 Service not available, closing control connection.
           This may be a reply to any command if the service knows it
           must shut down.
@@ -5666,6 +5854,7 @@ S&gt; 250 End
       451 Requested action aborted: local error in processing.
       452 Requested action not taken.
           Insufficient storage space in system.
+
       500 Syntax error, command unrecognized.
           This may include errors such as command line too long.
       501 Syntax error in parameters or arguments.
@@ -5682,6 +5871,17 @@ S&gt; 250 End
           dataset).
       553 Requested action not taken.
           File name not allowed.
+      554 Requested action not taken: invalid REST parameter.
+          A 554 reply may result from a FTP service command that
+          follows a REST command.  The reply indicates that the
+          existing file at the Server-FTP cannot be repositioned
+          as specified in the REST.
+      555 Requested action not taken: type or stru mismatch.
+          A 555 reply may result from an APPE command or from any
+          FTP service command following a REST command.  The
+          reply indicates that there is some mismatch between the
+          current transfer parameters (type and stru) and the
+          attributes of the existing file.
 </artwork>
 </figure>         
 </t>
@@ -5693,21 +5893,32 @@ S&gt; 250 End
 
 <section anchor="sec-5.1" title="Minimum Implementation">
 <t>
-      In order to make FTP workable without needless error messages, the
-      following minimum implementation is required for all servers:
+            The following commands and options MUST be supported by
+            every server-FTP and user-FTP, except in cases where the
+            underlying file system or operating system does not allow or
+            support a particular command.
 </t><t>
 <figure>
 	  <artwork type="example">
-         TYPE - ASCII Non-print
-         MODE - Stream
-         STRUCTURE - File, Record
-         COMMANDS - USER, QUIT, PORT,
-                    TYPE, MODE, STRU,
-                      for the default values
-                    RETR, STOR,
-                    NOOP.
+         Type: ASCII Non-print, IMAGE, LOCAL 8
+         Mode: Stream
+         Structure: File, Record*
+         Commands:
+            USER, PASS, ACCT,
+            PORT, PASV,
+            TYPE, MODE, STRU,
+            RETR, STOR, APPE,
+            RNFR, RNTO, DELE,
+            CWD,  CDUP, RMD,  MKD,  PWD,
+            LIST, NLST,
+            SYST, STAT,
+            HELP, NOOP, QUIT.
 </artwork>
-</figure></t><t>
+</figure></t>
+<t>            *Record structure is REQUIRED only for hosts whose file
+            systems support record structure.
+</t>
+<t>
       The default values for transfer parameters are:
 </t><t>
 <figure>
@@ -5739,8 +5950,12 @@ S&gt; 250 End
       the default user port (U) or a port specified in the PORT command.
       The server shall initiate the data connection from his own default
       data port (L-1) using the specified user data port.  The direction
-      of the transfer and the port used will be determined by the FTP
+      of the transfer will be determined by the FTP
       service command.
+</t><t>
+            On a multihomed server host, the default data transfer port
+            (L-1) MUST be associated with the same local IP address as
+            the corresponding control connection to port L.
 </t><t>
       Note that all FTP implementation MUST support data transfer using
       the default port, and that only the USER-PI MAY initiate the use
@@ -5798,6 +6013,23 @@ S&gt; 250 End
       being closed by the other side, it should promptly read any
       remaining data queued on the connection and issue the close on its
       own side.
+</t><t>
+            A Server-FTP process SHOULD have an idle timeout, which will
+            terminate the process and close the control connection if
+            the server is inactive (i.e., no command or data transfer in
+            progress) for a long period of time.  The idle timeout time
+            SHOULD be configurable, and the default should be at least 5
+            minutes.
+</t><t>
+            A client FTP process ("User-PI" in <xref target="RFC0959"/>) will need
+            timeouts on responses only if it is invoked from a program.
+</t><t>
+            A user-FTP MUST NOT send any Telnet controls other than
+            SYNCH and IP on an FTP control connection. In particular, it
+            MUST NOT attempt to negotiate Telnet options on the control
+            connection.  However, a server-FTP MUST be capable of
+            accepting and refusing Telnet negotiations (i.e., sending
+            DONT/WONT).
 </t>
 </section>
 
@@ -6812,6 +7044,29 @@ Debug Code
 
 </reference>
 
+<reference anchor='RFC1123'>
+
+<front>
+<title>Requirements for Internet Hosts - Application and Support</title>
+<author initials='R.' surname='Braden' fullname='Robert Braden'>
+<organization>University of Southern California (USC), Information Sciences Institute</organization>
+<address>
+<postal>
+<street>4676 Admiralty Way</street>
+<city>Marina del Rey</city>
+<region>CA</region>
+
+<code>90292-6695</code>
+<country>US</country></postal>
+<phone>+1 213 822 1511</phone>
+<email>Braden@ISI.EDU</email></address></author>
+<date year='1989' month='October' /></front>
+
+<seriesInfo name='STD' value='3' />
+<seriesInfo name='RFC' value='1123' />
+<format type='TXT' octets='245503' target='http://www.rfc-editor.org/rfc/rfc1123.txt' />
+</reference>
+
 <reference anchor="RFC2119">
 
 <front>
@@ -6999,87 +7254,6 @@ Debug Code
 <format type='TXT' octets='57204' target='http://www.rfc-editor.org/rfc/rfc2640.txt' />
 </reference>
 
-
-<reference anchor='RFC3659'>
-
-<front>
-<title>Extensions to FTP</title>
-<author initials='P.' surname='Hethmon' fullname='P. Hethmon'>
-<organization /></author>
-<date year='2007' month='March' />
-<abstract>
-<t>This document specifies new FTP commands to obtain listings of remote directories in a defined format, and to permit restarts of interrupted data transfers in STREAM mode.  It allows character sets other than US-ASCII, and also defines an optional virtual file storage structure. [STANDARDS TRACK]</t></abstract></front>
-
-<seriesInfo name='RFC' value='3659' />
-<format type='TXT' octets='137962' target='http://www.rfc-editor.org/rfc/rfc3659.txt' />
-</reference>
-
-<reference anchor='RFC4217'>
-
-<front>
-<title>Securing FTP with TLS</title>
-<author initials='P.' surname='Ford-Hutchinson' fullname='P. Ford-Hutchinson'>
-<organization /></author>
-<date year='2005' month='October' />
-<abstract>
-<t>This document describes a mechanism that can be used by FTP clients and servers to implement security and authentication using the TLS protocol defined by RFC 2246, "The TLS Protocol Version 1.0.", and the extensions to the FTP protocol defined by RFC 2228, "FTP Security Extensions". It describes the subset of the extensions that are required and the parameters to be used, discusses some of the policy issues that clients and servers will need to take, considers some of the implications of those policies, and discusses some expected behaviours of implementations to allow interoperation. This document is intended to provide TLS support for FTP in a similar way to that provided for SMTP in RFC 2487, "SMTP Service Extension for Secure SMTP over Transport Layer Security", and HTTP in RFC 2817, "Upgrading to TLS Within HTTP/1.1.".&lt;/t>&lt;t> This specification is in accordance with RFC 959, "File Transfer Protocol". It relies on RFC 2246, "The TLS Protocol Version 1.0.", and RFC 2228, "FTP Security Extensions". [STANDARDS TRACK]</t></abstract></front>
-
-<seriesInfo name='RFC' value='4217' />
-
-<format type='TXT' octets='61180' target='http://www.rfc-editor.org/rfc/rfc4217.txt' />
-</reference>
-
-
-</references>
-
-<references title="Informative References">
-
-<reference anchor='RFC1123'>
-
-<front>
-<title>Requirements for Internet Hosts - Application and Support</title>
-<author initials='R.' surname='Braden' fullname='Robert Braden'>
-<organization>University of Southern California (USC), Information Sciences Institute</organization>
-<address>
-<postal>
-<street>4676 Admiralty Way</street>
-<city>Marina del Rey</city>
-<region>CA</region>
-
-<code>90292-6695</code>
-<country>US</country></postal>
-<phone>+1 213 822 1511</phone>
-<email>Braden@ISI.EDU</email></address></author>
-<date year='1989' month='October' /></front>
-
-<seriesInfo name='STD' value='3' />
-<seriesInfo name='RFC' value='1123' />
-<format type='TXT' octets='245503' target='http://www.rfc-editor.org/rfc/rfc1123.txt' />
-</reference>
-
-
-<reference anchor='RFC1639'>
-
-<front>
-<title abbrev='FTP Over Big Address'>FTP Operation Over Big Address Records (FOOBAR)</title>
-<author initials='D.' surname='Piscitello' fullname='David M. Piscitello'>
-<organization>Core Competence, Inc.</organization>
-<address>
-<postal>
-<street>1620 Tuckerstown Road</street>
-<city>Dresher</city>
-<region>PA</region>
-<code>19025</code>
-<country>US</country></postal>
-<email>dave@corecom.com</email></address></author>
-<date year='1994' month='June' />
-<abstract>
-<t>This paper describes a convention for specifying address families other than the default Internet address family in FTP commands and replies.</t></abstract></front>
-
-<seriesInfo name='RFC' value='1639' />
-<format type='TXT' octets='10055' target='http://www.rfc-editor.org/rfc/rfc1639.txt' />
-</reference>
-
 <reference anchor='RFC2389'>
 
 <front>
@@ -7224,6 +7398,64 @@ Debug Code
 
 <seriesInfo name='RFC' value='2577' />
 <format type='TXT' octets='17870' target='http://www.rfc-editor.org/rfc/rfc2577.txt' />
+</reference>
+
+<reference anchor='RFC3659'>
+
+<front>
+<title>Extensions to FTP</title>
+<author initials='P.' surname='Hethmon' fullname='P. Hethmon'>
+<organization /></author>
+<date year='2007' month='March' />
+<abstract>
+<t>This document specifies new FTP commands to obtain listings of remote directories in a defined format, and to permit restarts of interrupted data transfers in STREAM mode.  It allows character sets other than US-ASCII, and also defines an optional virtual file storage structure. [STANDARDS TRACK]</t></abstract></front>
+
+<seriesInfo name='RFC' value='3659' />
+<format type='TXT' octets='137962' target='http://www.rfc-editor.org/rfc/rfc3659.txt' />
+</reference>
+
+<reference anchor='RFC4217'>
+
+<front>
+<title>Securing FTP with TLS</title>
+<author initials='P.' surname='Ford-Hutchinson' fullname='P. Ford-Hutchinson'>
+<organization /></author>
+<date year='2005' month='October' />
+<abstract>
+<t>This document describes a mechanism that can be used by FTP clients and servers to implement security and authentication using the TLS protocol defined by RFC 2246, "The TLS Protocol Version 1.0.", and the extensions to the FTP protocol defined by RFC 2228, "FTP Security Extensions". It describes the subset of the extensions that are required and the parameters to be used, discusses some of the policy issues that clients and servers will need to take, considers some of the implications of those policies, and discusses some expected behaviours of implementations to allow interoperation. This document is intended to provide TLS support for FTP in a similar way to that provided for SMTP in RFC 2487, "SMTP Service Extension for Secure SMTP over Transport Layer Security", and HTTP in RFC 2817, "Upgrading to TLS Within HTTP/1.1.".&lt;/t>&lt;t> This specification is in accordance with RFC 959, "File Transfer Protocol". It relies on RFC 2246, "The TLS Protocol Version 1.0.", and RFC 2228, "FTP Security Extensions". [STANDARDS TRACK]</t></abstract></front>
+
+<seriesInfo name='RFC' value='4217' />
+
+<format type='TXT' octets='61180' target='http://www.rfc-editor.org/rfc/rfc4217.txt' />
+</reference>
+
+
+</references>
+
+<references title="Informative References">
+
+
+
+<reference anchor='RFC1639'>
+
+<front>
+<title abbrev='FTP Over Big Address'>FTP Operation Over Big Address Records (FOOBAR)</title>
+<author initials='D.' surname='Piscitello' fullname='David M. Piscitello'>
+<organization>Core Competence, Inc.</organization>
+<address>
+<postal>
+<street>1620 Tuckerstown Road</street>
+<city>Dresher</city>
+<region>PA</region>
+<code>19025</code>
+<country>US</country></postal>
+<email>dave@corecom.com</email></address></author>
+<date year='1994' month='June' />
+<abstract>
+<t>This paper describes a convention for specifying address families other than the default Internet address family in FTP commands and replies.</t></abstract></front>
+
+<seriesInfo name='RFC' value='1639' />
+<format type='TXT' octets='10055' target='http://www.rfc-editor.org/rfc/rfc1639.txt' />
 </reference>
 
 <reference anchor="RFC5234">
@@ -7713,6 +7945,7 @@ RFC 5797 "FTP Command and Extension Registry"
 <t>Changelog from RFC 959.
 <list>
 <t>Incorporate <xref target="RFC0959"/> Errata.</t>
+<t>Incorporate <xref target="RFC1123"/> into the various sections that it updated.</t>
 <t>Incorporate <xref target="RFC2389"/> FEAT at <xref target="sec-4.1.4"/>.</t>
 <t>Incorporate <xref target="RFC2428"/> "FTP Extensions for IPv6 and NATs" at <xref target="sec-4.1.2.1"/>.</t>
 <t>Incorporate <xref target="RFC2577"/> in <xref target="sec-10"/>.</t>
@@ -7724,8 +7957,7 @@ RFC 5797 "FTP Command and Extension Registry"
 <t>TODO
 <list>
 <t>Haven't added all RFC3659 references; 3659 references to section 10 (not included here) are not updated.</t>
-<t>Determine if changes in RFC 1123 should be applied.</t>
-<t>Triage and include or reference other FTP RFCs - RFC 2228, 2640, 2773?, 4217.</t>
+<t>Triage and include or reference other FTP RFCs - RFC 2228 (new reply codes and reply type 6yz), 2640, 2773?, 4217.</t>
 <t>Update BNF to ABNF.</t>
 <t>Standardize command organization (subsections?) like EPRT/EPSV, with separated ABNF?</t>
 <t>Move the whole sentence that is <xref target="sec-8"/> into <xref target="sec-3.2"/>?</t>

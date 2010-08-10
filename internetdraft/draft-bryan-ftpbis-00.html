@@ -145,9 +145,9 @@
 <tr><td class="header">Internet-Draft</td><td class="header">J. Reynolds</td></tr>
 <tr><td class="header">Obsoletes: <a href='http://tools.ietf.org/html/rfc959'>959</a>, <a href='http://tools.ietf.org/html/rfc1639'>1639</a></td><td class="header">ISI</td></tr>
 <tr><td class="header">(if&nbsp;approved)</td><td class="header">P. Hethmon</td></tr>
-<tr><td class="header">Intended status: Standards Track</td><td class="header">Hethmon Brothers</td></tr>
-<tr><td class="header">Expires: February 11, 2011</td><td class="header">R. Elz</td></tr>
-<tr><td class="header">&nbsp;</td><td class="header">University of Melbourne</td></tr>
+<tr><td class="header">Updates: <a href='http://tools.ietf.org/html/rfc1123'>1123</a> (if&nbsp;approved)</td><td class="header">Hethmon Brothers</td></tr>
+<tr><td class="header">Intended status: Standards Track</td><td class="header">R. Elz</td></tr>
+<tr><td class="header">Expires: February 11, 2011</td><td class="header">University of Melbourne</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">M. Allman</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">NASA Lewis Research</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">Center/Sterling Software</td></tr>
@@ -265,6 +265,8 @@ Feature Negotiation Mechanism<br />
 Extensions to FTP<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor64">4.1.6.</a>&nbsp;
 Other Extensions<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor65">4.1.7.</a>&nbsp;
+Non-standard Command Verbs<br />
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="#sec-4.2">4.2.</a>&nbsp;
 FTP Replies<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#sec-4.2.1">4.2.1.</a>&nbsp;
@@ -299,23 +301,23 @@ Security Considerations<br />
 Privacy and Passwords with Clear Text Protocols<br />
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="#sec-10.2">10.2.</a>&nbsp;
 Securing FTP with TLS<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor65">10.3.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor66">10.3.</a>&nbsp;
 The Bounce Attack<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor66">10.3.1.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor67">10.3.1.</a>&nbsp;
 Protecting Against the Bounce Attack<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor67">10.4.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor68">10.4.</a>&nbsp;
 Restricted Access<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor68">10.5.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor69">10.5.</a>&nbsp;
 Protecting Passwords Against Brute Force Attacks<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor69">10.6.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor70">10.6.</a>&nbsp;
 Protecting Usernames<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor70">10.7.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor71">10.7.</a>&nbsp;
 Port Stealing<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor71">10.8.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor72">10.8.</a>&nbsp;
 Software-Base Security Problems<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor72">10.9.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor73">10.9.</a>&nbsp;
 Server Capabilities Exposed by FEAT<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor73">10.10.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor74">10.10.</a>&nbsp;
 SIZE and MLSx<br />
 <a href="#rfc.references1">11.</a>&nbsp;
 References<br />
@@ -329,7 +331,7 @@ Page Structure<br />
 Directory Commands<br />
 <a href="#Appendix-C">Appendix&nbsp;C.</a>&nbsp;
 RFCs on FTP<br />
-<a href="#anchor76">Appendix&nbsp;D.</a>&nbsp;
+<a href="#anchor77">Appendix&nbsp;D.</a>&nbsp;
 Acknowledgements and Contributors<br />
 <a href="#Appendix-D">Appendix&nbsp;E.</a>&nbsp;
 Changelog from RFC 959 and TODO<br />
@@ -1541,6 +1543,13 @@ Local Type</h3>
             packed so that 9 transmission bytes carried two host words.
 
 </p>
+<p>
+            An FTP program MUST support TYPE I ("IMAGE" or binary type)
+            as well as TYPE L 8 ("LOCAL" type with logical byte size 8).
+            A machine whose memory is organized into m-bit words, where
+            m is not a multiple of 8, MAY also support TYPE L m.
+
+</p>
 <a name="sec-3.1.1.5"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.3.1.1.5"></a><h3>3.1.1.5.&nbsp;
@@ -1604,6 +1613,11 @@ Telnet Format Controls</h3>
                (i.e., &lt;CR&gt;, &lt;LF&gt;, &lt;NL&gt;, &lt;VT&gt;, &lt;FF&gt;) which the printer
                process will interpret appropriately.  &lt;CRLF&gt;, in exactly
                this sequence, also denotes end-of-line.
+
+</p>
+<p>
+            A host that makes no distinction between TYPE N and TYPE T
+            SHOULD implement TYPE T to be identical to TYPE N.
 
 </p>
 <a name="sec-3.1.1.5.3"></a><br /><hr />
@@ -1705,9 +1719,9 @@ Data Structures</h3>
          text file is sent with record-structure to a host which is file
          oriented, then that host should apply an internal
          transformation to the file based on the record structure.
-         Obviously, this transformation should be useful, but it must
-         also be invertible so that an identical file may be retrieved
-         using record structure.
+            An FTP transformation between record-structure and file-structure SHOULD be invertible, to the extent possible while
+            making the result useful on the target host.
+
 
 </p>
 <p>
@@ -1758,6 +1772,13 @@ Record Structure</h3>
 <a name="rfc.section.3.1.2.3"></a><h3>3.1.2.3.&nbsp;
 Page Structure</h3>
 
+<p>         Implementation of page structure is NOT RECOMMENDED in
+            general. However, if a host system does need to implement
+            FTP for "random access" or "holey" files, it MUST use the
+            defined page structure format rather than define a new
+            private FTP format.
+
+</p>
 <p>
             To transmit files that are discontinuous, FTP defines a page
             structure.  Files of this type are sometimes known as
@@ -1985,6 +2006,10 @@ Data Connection Management</h3>
       enough to get a different data connection, still it is permitted
       to do both commands to use new ports on both ends of the data
       connection.
+            A User-FTP that uses STREAM mode SHOULD send a PORT command
+            to assign a non-default data port before each transfer
+            command is issued.
+
 
 </p>
 <p>
@@ -2603,6 +2628,16 @@ DATA PORT (PORT)
             connection rather than initiate one upon receipt of a
             transfer command.  The response to this command includes the
             host and port address this server is listening on.
+</p>
+<p>
+            A server-FTP MUST implement the PASV command.
+
+</p>
+<p>
+            If multiple third-party transfers are to be executed during
+            the same session, a new PASV command MUST be issued before
+            each transfer command, to obtain a unique port pair.
+
 
 </p>
 </blockquote>
@@ -3087,10 +3122,29 @@ FTP Service Commands</h3>
 </p>
 <blockquote class="text">
 <p>
-            This command behaves like STOR except that the resultant
-            file is to be created in the current directory under a name
-            unique to that directory.  The 250 Transfer Started response
-            must include the name generated.
+            The STOU command stores into a uniquely named file.  When it
+            receives an STOU command, a Server-FTP MUST return the
+            actual file name in the "125 Transfer Starting" or the "150
+            Opening Data Connection" message that precedes the transfer
+            (the 250 reply code mentioned in <a class='info' href='#RFC0959'>[RFC0959]<span> (</span><span class='info'>Postel, J. and J. Reynolds, &ldquo;File Transfer Protocol,&rdquo; October&nbsp;1985.</span><span>)</span></a> is incorrect).  The
+            exact format of these messages is hereby defined to be as
+            follows:
+</p>
+<blockquote class="text">
+<p>
+                125 FILE: pppp
+
+</p>
+<p>
+                150 FILE: pppp
+
+</p>
+</blockquote>
+
+<p>
+            where pppp represents the unique pathname of the file that
+            will be written.
+
 
 </p>
 </blockquote>
@@ -3304,6 +3358,12 @@ FTP Service Commands</h3>
             the HELP SITE command.
 
 </p>
+<p>
+            A Server-FTP SHOULD use the SITE command for non-standard
+            features, rather than invent new private commands or
+            unstandardized extensions to existing commands.
+
+</p>
 </blockquote>
 
 <p>
@@ -3389,11 +3449,34 @@ the time of this writing)
    FTP commands are &quot;Telnet strings&quot; terminated by the &quot;Telnet end of
    line code&quot;.  The command codes themselves are alphabetic characters
    terminated by the character &lt;SP&gt; (Space) if parameters follow and
-   Telnet-EOL otherwise.  The command codes and the semantics of
+   Telnet-EOL otherwise.  
+            Implementors MUST NOT assume any correspondence between READ
+            boundaries on the control connection and the Telnet EOL
+            sequences (CR LF).
+   The command codes and the semantics of
    commands are described in this section; the detailed syntax of
    commands is specified in <a class='info' href='#sec-5.3'>Section&nbsp;5.3<span> (</span><span class='info'>Commands</span><span>)</span></a>, the reply sequences
    are discussed in <a class='info' href='#sec-5.4'>Section&nbsp;5.4<span> (</span><span class='info'>Sequencing of Commands and Replies</span><span>)</span></a>,
    and scenarios illustrating the use of commands are provided in <a class='info' href='#sec-7'>Section&nbsp;7<span> (</span><span class='info'>Typical FTP Scenario</span><span>)</span></a>.
+
+</p>
+<p>LIST and NLST Commands
+</p>
+<blockquote class="text">
+<p>
+            The data returned by an NLST command MUST contain only a
+            simple list of legal pathnames, such that the server can use
+            them directly as the arguments of subsequent data transfer
+            commands for the individual files.
+
+</p>
+<p>
+            The data returned by a LIST or NLST command SHOULD use an
+            implied TYPE AN, unless the current type is EBCDIC, in which
+            case an implied TYPE EN SHOULD be used.
+
+</p>
+</blockquote><p>
 
 </p>
 <p>
@@ -4117,10 +4200,51 @@ Restart of Interrupted Transfer (REST)</h3>
    point.  The receiving DTP can keep a list of these restart markers,
    and correlate them with how the file is being saved.  To restart the
    file transfer, the receiver just sends back that last restart marker,
-   and both sides know how to resume the data transfer.  Note that there
-   are some flaws in the description of the restart mechanism in STD 9,
-   <a class='info' href='#RFC0959'>[RFC0959]<span> (</span><span class='info'>Postel, J. and J. Reynolds, &ldquo;File Transfer Protocol,&rdquo; October&nbsp;1985.</span><span>)</span></a>.  See section 4.1.3.4 of <a class='info' href='#RFC1123'>[RFC1123]<span> (</span><span class='info'>Braden, R., &ldquo;Requirements for Internet Hosts - Application and Support,&rdquo; October&nbsp;1989.</span><span>)</span></a> for the
-   corrections.
+   and both sides know how to resume the data transfer.  
+
+</p>
+<p>A restart
+            reply message, sent over the control connection from the
+            receiving FTP to the User-FTP, has the format:
+</p>
+<blockquote class="text">
+<p>
+                110 MARK ssss = rrrr
+
+</p>
+</blockquote>
+
+<p>
+            Here:
+</p>
+<blockquote class="text">
+<p>
+            *    ssss is a text string that appeared in a Restart Marker
+                 in the data stream and encodes a position in the
+                 sender's file system;
+
+</p>
+<p>
+            *    rrrr encodes the corresponding position in the
+                 receiver's file system.
+
+</p>
+</blockquote>
+
+<p>
+            The encoding, which is specific to a particular file system
+            and network implementation, is always generated and
+            interpreted by the same system, either sender or receiver.
+
+</p>
+<p>
+            When an FTP that implements restart receives a Restart
+            Marker in the data stream, it SHOULD force the data to that
+            point to be written to stable storage before encoding the
+            corresponding position rrrr.  An FTP sending Restart Markers
+            MUST NOT assume that 110 replies will be returned
+            synchronously with the data, i.e., it must not await a 110
+            reply before sending more data.
 
 </p>
 <a name="anchor10"></a><br /><hr />
@@ -6943,6 +7067,49 @@ Other Extensions</h3>
 </blockquote><p>
 
 </p>
+<p>
+            A User-FTP program MUST implement a "QUOTE" command that
+            will pass an arbitrary character string to the server and
+            display all resulting response messages to the user.
+
+</p>
+<p>
+            To make the "QUOTE" command useful, a User-FTP SHOULD send
+            transfer control commands to the server as the user enters
+            them, rather than saving all the commands and sending them
+            to the server only when a data transfer is started.
+
+</p>
+<a name="anchor65"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.4.1.7"></a><h3>4.1.7.&nbsp;
+Non-standard Command Verbs</h3>
+
+<p>
+            FTP allows "experimental" commands, whose names begin with
+            "X".  If these commands are subsequently adopted as
+            standards, there may still be existing implementations using
+            the "X" form.  At present, this is true for the directory
+            commands:
+	 </p>
+<div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
+                RFC 959   "Experimental"
+
+                  MKD        XMKD
+                  RMD        XRMD
+                  PWD        XPWD
+                  CDUP       XCUP
+                  CWD        XCWD
+</pre></div><p>
+
+
+</p>
+<p>
+            All FTP implementations SHOULD recognize both forms of these
+            commands, by simply equating them with extra entries in the
+            command lookup table.
+
+</p>
 <a name="sec-4.2"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.2"></a><h3>4.2.&nbsp;
@@ -7039,6 +7206,61 @@ FTP Replies</h3>
 </p>
 <p>
          This scheme assumes that multi-line replies may not be nested.
+
+</p>
+<p>		 
+            A Server-FTP MUST send only correctly formatted replies on
+            the control connection.  Note that <a class='info' href='#RFC0959'>[RFC0959]<span> (</span><span class='info'>Postel, J. and J. Reynolds, &ldquo;File Transfer Protocol,&rdquo; October&nbsp;1985.</span><span>)</span></a> (unlike earlier
+            versions of the FTP specification) contains no provision for a
+            "spontaneous" reply message.
+
+</p>
+<p>
+            A Server-FTP SHOULD use the reply codes defined here
+            whenever they apply.  However, a server-FTP MAY use a
+            different reply code when needed, as long as the general
+            rules of this section are followed. When the implementor has
+            a choice between a 4xx and 5xx reply code, a Server-FTP
+            SHOULD send a 4xx (temporary failure) code when there is any
+            reasonable possibility that a failed FTP will succeed a few
+            hours later.
+
+</p>
+<p>
+            A User-FTP SHOULD generally use only the highest-order digit
+            of a 3-digit reply code for making a procedural decision, to
+            prevent difficulties when a Server-FTP uses non-standard
+            reply codes.
+
+</p>
+<p>
+            A User-FTP MUST be able to handle multi-line replies.  If
+            the implementation imposes a limit on the number of lines
+            and if this limit is exceeded, the User-FTP MUST recover,
+            e.g., by ignoring the excess lines until the end of the
+            multi-line reply is reached.
+
+</p>
+<p>
+            A User-FTP SHOULD NOT interpret a 421 reply code ("Service
+            not available, closing control connection") specially, but
+            SHOULD detect closing of the control connection by the
+            server.
+
+</p>
+<p>
+            A User-FTP SHOULD display to the user the full text of all
+            error reply messages it receives.  It SHOULD have a
+            "verbose" mode in which all commands it sends and the full
+            text and reply codes it receives are displayed, for
+            diagnosis of problems.
+
+</p>
+<p>
+            The state machine in a User-FTP SHOULD be forgiving of
+            missing and unexpected reply messages, in order to maintain
+            command synchronization with the server.
+
 
 </p>
 <p>
@@ -7206,13 +7428,18 @@ Reply Code By Function Groups</h3>
       502 Command not implemented.
       503 Bad sequence of commands.
       504 Command not implemented for that parameter.
+
       110 Restart marker reply.
-          In this case, the text is exact and not left to the
-          particular implementation; it must read:
-               MARK yyyy = mmmm
-          Where yyyy is User-process data stream marker, and mmmm
-          server's equivalent marker (note the spaces between markers
-          and "=").
+          A restart reply message, sent over the control connection
+          from the receiving FTP to the User-FTP, has the format:
+               110 MARK ssss = rrrr
+          Here:
+            * ssss is a text string that appeared in a
+              Restart Marker in the data stream and encodes a
+              position in the sender's file system;
+            * rrrr encodes the corresponding position in the
+              receiver's file system.
+          See section on REST.
       211 System status, or system help reply.
       212 Directory status.
       213 File status.
@@ -7263,6 +7490,17 @@ Reply Code By Function Groups</h3>
           dataset).
       553 Requested action not taken.
           File name not allowed.
+      554 Requested action not taken: invalid REST parameter.
+          A 554 reply may result from a FTP service command that
+          follows a REST command.  The reply indicates that the
+          existing file at the Server-FTP cannot be repositioned
+          as specified in the REST.
+      555 Requested action not taken: type or stru mismatch.
+          A 555 reply may result from an APPE command or from any
+          FTP service command following a REST command.  The
+          reply indicates that there is some mismatch between the
+          current transfer parameters (type and stru) and the
+          attributes of the existing file.
 </pre></div><p>
          
 
@@ -7276,15 +7514,20 @@ Numeric Order List of Reply Codes</h3>
 </p>
 <div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
       110 Restart marker reply.
-          In this case, the text is exact and not left to the
-          particular implementation; it must read:
-               MARK yyyy = mmmm
-          Where yyyy is User-process data stream marker, and mmmm
-          server's equivalent marker (note the spaces between markers
-          and "=").
+          A restart reply message, sent over the control connection
+          from the receiving FTP to the User-FTP, has the format:
+               110 MARK ssss = rrrr
+          Here:
+            * ssss is a text string that appeared in a
+              Restart Marker in the data stream and encodes a
+              position in the sender's file system;
+            * rrrr encodes the corresponding position in the
+              receiver's file system.
+          See section on REST.
       120 Service ready in nnn minutes.
       125 Data connection already open; transfer starting.
       150 File status okay; about to open data connection.
+
       200 Command okay.
       202 Command not implemented, superfluous at this site.
       211 System status, or system help reply.
@@ -7308,6 +7551,7 @@ Numeric Order List of Reply Codes</h3>
       230 User logged in, proceed.
       250 Requested file action okay, completed.
       257 "PATHNAME" created.
+
       331 User name okay, need password.
       332 Need account for login.
       350 Requested file action pending further information.
@@ -7322,6 +7566,7 @@ Numeric Order List of Reply Codes</h3>
       451 Requested action aborted: local error in processing.
       452 Requested action not taken.
           Insufficient storage space in system.
+
       500 Syntax error, command unrecognized.
           This may include errors such as command line too long.
       501 Syntax error in parameters or arguments.
@@ -7338,6 +7583,17 @@ Numeric Order List of Reply Codes</h3>
           dataset).
       553 Requested action not taken.
           File name not allowed.
+      554 Requested action not taken: invalid REST parameter.
+          A 554 reply may result from a FTP service command that
+          follows a REST command.  The reply indicates that the
+          existing file at the Server-FTP cannot be repositioned
+          as specified in the REST.
+      555 Requested action not taken: type or stru mismatch.
+          A 555 reply may result from an APPE command or from any
+          FTP service command following a REST command.  The
+          reply indicates that there is some mismatch between the
+          current transfer parameters (type and stru) and the
+          attributes of the existing file.
 </pre></div><p>
          
 
@@ -7353,22 +7609,33 @@ Declarative Specifications</h3>
 Minimum Implementation</h3>
 
 <p>
-      In order to make FTP workable without needless error messages, the
-      following minimum implementation is required for all servers:
+            The following commands and options MUST be supported by
+            every server-FTP and user-FTP, except in cases where the
+            underlying file system or operating system does not allow or
+            support a particular command.
 
 </p>
 <p>
 </p>
 <div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
-         TYPE - ASCII Non-print
-         MODE - Stream
-         STRUCTURE - File, Record
-         COMMANDS - USER, QUIT, PORT,
-                    TYPE, MODE, STRU,
-                      for the default values
-                    RETR, STOR,
-                    NOOP.
+         Type: ASCII Non-print, IMAGE, LOCAL 8
+         Mode: Stream
+         Structure: File, Record*
+         Commands:
+            USER, PASS, ACCT,
+            PORT, PASV,
+            TYPE, MODE, STRU,
+            RETR, STOR, APPE,
+            RNFR, RNTO, DELE,
+            CWD,  CDUP, RMD,  MKD,  PWD,
+            LIST, NLST,
+            SYST, STAT,
+            HELP, NOOP, QUIT.
 </pre></div><p>
+
+</p>
+<p>            *Record structure is REQUIRED only for hosts whose file
+            systems support record structure.
 
 </p>
 <p>
@@ -7412,8 +7679,14 @@ Connections</h3>
       the default user port (U) or a port specified in the PORT command.
       The server shall initiate the data connection from his own default
       data port (L-1) using the specified user data port.  The direction
-      of the transfer and the port used will be determined by the FTP
+      of the transfer will be determined by the FTP
       service command.
+
+</p>
+<p>
+            On a multihomed server host, the default data transfer port
+            (L-1) MUST be associated with the same local IP address as
+            the corresponding control connection to port L.
 
 </p>
 <p>
@@ -7482,6 +7755,29 @@ Connections</h3>
       being closed by the other side, it should promptly read any
       remaining data queued on the connection and issue the close on its
       own side.
+
+</p>
+<p>
+            A Server-FTP process SHOULD have an idle timeout, which will
+            terminate the process and close the control connection if
+            the server is inactive (i.e., no command or data transfer in
+            progress) for a long period of time.  The idle timeout time
+            SHOULD be configurable, and the default should be at least 5
+            minutes.
+
+</p>
+<p>
+            A client FTP process ("User-PI" in <a class='info' href='#RFC0959'>[RFC0959]<span> (</span><span class='info'>Postel, J. and J. Reynolds, &ldquo;File Transfer Protocol,&rdquo; October&nbsp;1985.</span><span>)</span></a>) will need
+            timeouts on responses only if it is invoked from a program.
+
+</p>
+<p>
+            A user-FTP MUST NOT send any Telnet controls other than
+            SYNCH and IP on an FTP control connection. In particular, it
+            MUST NOT attempt to negotiate Telnet options on the control
+            connection.  However, a server-FTP MUST be capable of
+            accepting and refusing Telnet negotiations (i.e., sending
+            DONT/WONT).
 
 </p>
 <a name="sec-5.3"></a><br /><hr />
@@ -8271,7 +8567,7 @@ Securing FTP with TLS</h3>
    behaviours of implementations to allow interoperation.
 
 </p>
-<a name="anchor65"></a><br /><hr />
+<a name="anchor66"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.10.3"></a><h3>10.3.&nbsp;
 The Bounce Attack</h3>
@@ -8301,7 +8597,7 @@ The Bounce Attack</h3>
    attackers.
 
 </p>
-<a name="anchor66"></a><br /><hr />
+<a name="anchor67"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.10.3.1"></a><h3>10.3.1.&nbsp;
 Protecting Against the Bounce Attack</h3>
@@ -8351,7 +8647,7 @@ Protecting Against the Bounce Attack</h3>
    be necessary in a particular environment.
 
 </p>
-<a name="anchor67"></a><br /><hr />
+<a name="anchor68"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.10.4"></a><h3>10.4.&nbsp;
 Restricted Access</h3>
@@ -8381,7 +8677,7 @@ Restricted Access</h3>
    outlined in <a class='info' href='#RFC2228'>[RFC2228]<span> (</span><span class='info'>Horowitz, M., &ldquo;FTP Security Extensions,&rdquo; October&nbsp;1997.</span><span>)</span></a>.
 
 </p>
-<a name="anchor68"></a><br /><hr />
+<a name="anchor69"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.10.5"></a><h3>10.5.&nbsp;
 Protecting Passwords Against Brute Force Attacks</h3>
@@ -8411,7 +8707,7 @@ Protecting Passwords Against Brute Force Attacks</h3>
    the attack to disable access by a valid user.
 
 </p>
-<a name="anchor69"></a><br /><hr />
+<a name="anchor70"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.10.6"></a><h3>10.6.&nbsp;
 Protecting Usernames</h3>
@@ -8426,7 +8722,7 @@ Protecting Usernames</h3>
    username.
 
 </p>
-<a name="anchor70"></a><br /><hr />
+<a name="anchor71"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.10.7"></a><h3>10.7.&nbsp;
 Port Stealing</h3>
@@ -8446,7 +8742,7 @@ Port Stealing</h3>
    mechanisms.
 
 </p>
-<a name="anchor71"></a><br /><hr />
+<a name="anchor72"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.10.8"></a><h3>10.8.&nbsp;
 Software-Base Security Problems</h3>
@@ -8504,7 +8800,7 @@ Debug Code
    or similar mechanisms before releasing their software.
 
 </p>
-<a name="anchor72"></a><br /><hr />
+<a name="anchor73"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.10.9"></a><h3>10.9.&nbsp;
 Server Capabilities Exposed by FEAT</h3>
@@ -8528,7 +8824,7 @@ Server Capabilities Exposed by FEAT</h3>
    addressed where those features are defined.
 
 </p>
-<a name="anchor73"></a><br /><hr />
+<a name="anchor74"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.10.10"></a><h3>10.10.&nbsp;
 SIZE and MLSx</h3>
@@ -8578,12 +8874,20 @@ References</h3>
 <td class="author-text">Postel, J. and J. Reynolds, &ldquo;<a href="http://tools.ietf.org/html/rfc854">Telnet Protocol Specification</a>,&rdquo; STD&nbsp;8, RFC&nbsp;854, May&nbsp;1983 (<a href="http://www.rfc-editor.org/rfc/rfc854.txt">TXT</a>).</td></tr>
 <tr><td class="author-text" valign="top"><a name="RFC0959">[RFC0959]</a></td>
 <td class="author-text">Postel, J. and J. Reynolds, &ldquo;<a href="http://tools.ietf.org/html/rfc959">File Transfer Protocol</a>,&rdquo; STD&nbsp;9, RFC&nbsp;959, October&nbsp;1985 (<a href="http://www.rfc-editor.org/rfc/rfc959.txt">TXT</a>).</td></tr>
+<tr><td class="author-text" valign="top"><a name="RFC1123">[RFC1123]</a></td>
+<td class="author-text"><a href="mailto:Braden@ISI.EDU">Braden, R.</a>, &ldquo;<a href="http://tools.ietf.org/html/rfc1123">Requirements for Internet Hosts - Application and Support</a>,&rdquo; STD&nbsp;3, RFC&nbsp;1123, October&nbsp;1989 (<a href="http://www.rfc-editor.org/rfc/rfc1123.txt">TXT</a>).</td></tr>
 <tr><td class="author-text" valign="top"><a name="RFC2119">[RFC2119]</a></td>
 <td class="author-text"><a href="mailto:sob@harvard.edu">Bradner, S.</a>, &ldquo;<a href="http://tools.ietf.org/html/rfc2119">Key words for use in RFCs to Indicate Requirement Levels</a>,&rdquo; BCP&nbsp;14, RFC&nbsp;2119, March&nbsp;1997.</td></tr>
 <tr><td class="author-text" valign="top"><a name="RFC2228">[RFC2228]</a></td>
 <td class="author-text"><a href="mailto:marc@cygnus.com">Horowitz, M.</a>, &ldquo;<a href="http://tools.ietf.org/html/rfc2228">FTP Security Extensions</a>,&rdquo; RFC&nbsp;2228, October&nbsp;1997 (<a href="http://www.rfc-editor.org/rfc/rfc2228.txt">TXT</a>, <a href="http://xml.resource.org/public/rfc/html/rfc2228.html">HTML</a>, <a href="http://xml.resource.org/public/rfc/xml/rfc2228.xml">XML</a>).</td></tr>
+<tr><td class="author-text" valign="top"><a name="RFC2389">[RFC2389]</a></td>
+<td class="author-text"><a href="mailto:phethmon@hethmon.com">Hethmon, P.</a> and <a href="mailto:kre@munnari.OZ.AU">R. Elz</a>, &ldquo;<a href="http://tools.ietf.org/html/rfc2389">Feature negotiation mechanism for the File Transfer Protocol</a>,&rdquo; RFC&nbsp;2389, August&nbsp;1998 (<a href="http://www.rfc-editor.org/rfc/rfc2389.txt">TXT</a>, <a href="http://xml.resource.org/public/rfc/html/rfc2389.html">HTML</a>, <a href="http://xml.resource.org/public/rfc/xml/rfc2389.xml">XML</a>).</td></tr>
+<tr><td class="author-text" valign="top"><a name="RFC2428">[RFC2428]</a></td>
+<td class="author-text"><a href="mailto:mallman@lerc.nasa.gov">Allman, M.</a>, <a href="mailto:ostermann@cs.ohiou.edu">Ostermann, S.</a>, and <a href="mailto:cmetz@inner.net">C. Metz</a>, &ldquo;<a href="http://tools.ietf.org/html/rfc2428">FTP Extensions for IPv6 and NATs</a>,&rdquo; RFC&nbsp;2428, September&nbsp;1998 (<a href="http://www.rfc-editor.org/rfc/rfc2428.txt">TXT</a>, <a href="http://xml.resource.org/public/rfc/html/rfc2428.html">HTML</a>, <a href="http://xml.resource.org/public/rfc/xml/rfc2428.xml">XML</a>).</td></tr>
 <tr><td class="author-text" valign="top"><a name="RFC2460">[RFC2460]</a></td>
 <td class="author-text"><a href="mailto:deering@cisco.com">Deering, S.</a> and <a href="mailto:hinden@iprg.nokia.com">R. Hinden</a>, &ldquo;<a href="http://tools.ietf.org/html/rfc2460">Internet Protocol, Version 6 (IPv6) Specification</a>,&rdquo; RFC&nbsp;2460, December&nbsp;1998 (<a href="http://www.rfc-editor.org/rfc/rfc2460.txt">TXT</a>, <a href="http://xml.resource.org/public/rfc/html/rfc2460.html">HTML</a>, <a href="http://xml.resource.org/public/rfc/xml/rfc2460.xml">XML</a>).</td></tr>
+<tr><td class="author-text" valign="top"><a name="RFC2577">[RFC2577]</a></td>
+<td class="author-text"><a href="mailto:mallman@grc.nasa.gov">Allman, M.</a> and <a href="mailto:ostermann@cs.ohiou.edu">S. Ostermann</a>, &ldquo;<a href="http://tools.ietf.org/html/rfc2577">FTP Security Considerations</a>,&rdquo; RFC&nbsp;2577, May&nbsp;1999 (<a href="http://www.rfc-editor.org/rfc/rfc2577.txt">TXT</a>).</td></tr>
 <tr><td class="author-text" valign="top"><a name="RFC2640">[RFC2640]</a></td>
 <td class="author-text"><a href="mailto:curtinw@ftm.disa.mil">Curtin, B.</a>, &ldquo;<a href="http://tools.ietf.org/html/rfc2640">Internationalization of the File Transfer Protocol</a>,&rdquo; RFC&nbsp;2640, July&nbsp;1999 (<a href="http://www.rfc-editor.org/rfc/rfc2640.txt">TXT</a>).</td></tr>
 <tr><td class="author-text" valign="top"><a name="RFC3659">[RFC3659]</a></td>
@@ -8596,16 +8900,8 @@ References</h3>
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <h3>11.2.&nbsp;Informative References</h3>
 <table width="99%" border="0">
-<tr><td class="author-text" valign="top"><a name="RFC1123">[RFC1123]</a></td>
-<td class="author-text"><a href="mailto:Braden@ISI.EDU">Braden, R.</a>, &ldquo;<a href="http://tools.ietf.org/html/rfc1123">Requirements for Internet Hosts - Application and Support</a>,&rdquo; STD&nbsp;3, RFC&nbsp;1123, October&nbsp;1989 (<a href="http://www.rfc-editor.org/rfc/rfc1123.txt">TXT</a>).</td></tr>
 <tr><td class="author-text" valign="top"><a name="RFC1639">[RFC1639]</a></td>
 <td class="author-text"><a href="mailto:dave@corecom.com">Piscitello, D.</a>, &ldquo;<a href="http://tools.ietf.org/html/rfc1639">FTP Operation Over Big Address Records (FOOBAR)</a>,&rdquo; RFC&nbsp;1639, June&nbsp;1994 (<a href="http://www.rfc-editor.org/rfc/rfc1639.txt">TXT</a>).</td></tr>
-<tr><td class="author-text" valign="top"><a name="RFC2389">[RFC2389]</a></td>
-<td class="author-text"><a href="mailto:phethmon@hethmon.com">Hethmon, P.</a> and <a href="mailto:kre@munnari.OZ.AU">R. Elz</a>, &ldquo;<a href="http://tools.ietf.org/html/rfc2389">Feature negotiation mechanism for the File Transfer Protocol</a>,&rdquo; RFC&nbsp;2389, August&nbsp;1998 (<a href="http://www.rfc-editor.org/rfc/rfc2389.txt">TXT</a>, <a href="http://xml.resource.org/public/rfc/html/rfc2389.html">HTML</a>, <a href="http://xml.resource.org/public/rfc/xml/rfc2389.xml">XML</a>).</td></tr>
-<tr><td class="author-text" valign="top"><a name="RFC2428">[RFC2428]</a></td>
-<td class="author-text"><a href="mailto:mallman@lerc.nasa.gov">Allman, M.</a>, <a href="mailto:ostermann@cs.ohiou.edu">Ostermann, S.</a>, and <a href="mailto:cmetz@inner.net">C. Metz</a>, &ldquo;<a href="http://tools.ietf.org/html/rfc2428">FTP Extensions for IPv6 and NATs</a>,&rdquo; RFC&nbsp;2428, September&nbsp;1998 (<a href="http://www.rfc-editor.org/rfc/rfc2428.txt">TXT</a>, <a href="http://xml.resource.org/public/rfc/html/rfc2428.html">HTML</a>, <a href="http://xml.resource.org/public/rfc/xml/rfc2428.xml">XML</a>).</td></tr>
-<tr><td class="author-text" valign="top"><a name="RFC2577">[RFC2577]</a></td>
-<td class="author-text"><a href="mailto:mallman@grc.nasa.gov">Allman, M.</a> and <a href="mailto:ostermann@cs.ohiou.edu">S. Ostermann</a>, &ldquo;<a href="http://tools.ietf.org/html/rfc2577">FTP Security Considerations</a>,&rdquo; RFC&nbsp;2577, May&nbsp;1999 (<a href="http://www.rfc-editor.org/rfc/rfc2577.txt">TXT</a>).</td></tr>
 <tr><td class="author-text" valign="top"><a name="RFC5234">[RFC5234]</a></td>
 <td class="author-text">Crocker, D. and P. Overell, &ldquo;<a href="http://tools.ietf.org/html/rfc5234">Augmented BNF for Syntax Specifications: ABNF</a>,&rdquo; STD&nbsp;68, RFC&nbsp;5234, January&nbsp;2008.</td></tr>
 <tr><td class="author-text" valign="top"><a name="RFC5797">[RFC5797]</a></td>
@@ -9301,7 +9597,7 @@ RFC 4823 "FTP Transport for Secure Peer-to-Peer Business Data Interchange over t
 RFC 5797 "FTP Command and Extension Registry"
 
 </p>
-<a name="anchor76"></a><br /><hr />
+<a name="anchor77"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.D"></a><h3>Appendix D.&nbsp;
 Acknowledgements and Contributors</h3>
@@ -9317,6 +9613,8 @@ Changelog from RFC 959 and TODO</h3>
 </p>
 <blockquote class="text">
 <p>Incorporate <a class='info' href='#RFC0959'>[RFC0959]<span> (</span><span class='info'>Postel, J. and J. Reynolds, &ldquo;File Transfer Protocol,&rdquo; October&nbsp;1985.</span><span>)</span></a> Errata.
+</p>
+<p>Incorporate <a class='info' href='#RFC1123'>[RFC1123]<span> (</span><span class='info'>Braden, R., &ldquo;Requirements for Internet Hosts - Application and Support,&rdquo; October&nbsp;1989.</span><span>)</span></a> into the various sections that it updated.
 </p>
 <p>Incorporate <a class='info' href='#RFC2389'>[RFC2389]<span> (</span><span class='info'>Hethmon, P. and R. Elz, &ldquo;Feature negotiation mechanism for the File Transfer Protocol,&rdquo; August&nbsp;1998.</span><span>)</span></a> FEAT at <a class='info' href='#sec-4.1.4'>Section&nbsp;4.1.4<span> (</span><span class='info'>Feature Negotiation Mechanism</span><span>)</span></a>.
 </p>
@@ -9338,9 +9636,7 @@ Changelog from RFC 959 and TODO</h3>
 <blockquote class="text">
 <p>Haven't added all RFC3659 references; 3659 references to section 10 (not included here) are not updated.
 </p>
-<p>Determine if changes in RFC 1123 should be applied.
-</p>
-<p>Triage and include or reference other FTP RFCs - RFC 2228, 2640, 2773?, 4217.
+<p>Triage and include or reference other FTP RFCs - RFC 2228 (new reply codes and reply type 6yz), 2640, 2773?, 4217.
 </p>
 <p>Update BNF to ABNF.
 </p>
