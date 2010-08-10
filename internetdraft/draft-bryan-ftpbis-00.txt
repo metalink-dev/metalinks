@@ -339,14 +339,14 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 2.2.1.  Pathname Syntax
 
-   Except where TVFS is supported (see Section 6), this specification
-   imposes no syntax upon pathnames.  Nor does it restrict the character
-   set from which pathnames are created.  This does not imply that the
-   NVFS is required to make sense of all possible pathnames.  Server-PIs
-   may restrict the syntax of valid pathnames in their NVFS in any
-   manner appropriate to their implementation or underlying file system.
-   Similarly, a server-PI may parse the pathname and assign meaning to
-   the components detected.
+   Except where TVFS is supported (see Section 4.1.5.4), this
+   specification imposes no syntax upon pathnames.  Nor does it restrict
+   the character set from which pathnames are created.  This does not
+   imply that the NVFS is required to make sense of all possible
+   pathnames.  Server-PIs may restrict the syntax of valid pathnames in
+   their NVFS in any manner appropriate to their implementation or
+   underlying file system.  Similarly, a server-PI may parse the
+   pathname and assign meaning to the components detected.
 
 2.2.2.  Wildcarding
 
@@ -2107,7 +2107,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
    If the requested protocol is supported by the server, it SHOULD use
    the protocol.  If not, the server MUST return the 522 error messages
-   as outlined in section 2.
+   as outlined in Section 4.1.2.1.1.
 
    Finally, the EPSV command can be used with the argument "ALL" to
    inform Network Address Translators that the EPRT command (as well as
@@ -2119,8 +2119,8 @@ Internet-Draft           File Transfer Protocol              August 2010
 
    Upon receipt of an EPSV ALL command, the server MUST reject all data
    connection setup commands other than EPSV (i.e., EPRT, PORT, PASV, et
-   al.).  This use of the EPSV command is further explained in section
-   4.
+   al.).  This use of the EPSV command is further explained in
+   Section 4.1.2.1.3.
 
 
 
@@ -2956,8 +2956,8 @@ Internet-Draft           File Transfer Protocol              August 2010
    may take considerable effort on the part of the server-PI, user-PIs
    should not used this command unless this precision is essential (such
    as when about to restart an interrupted transfer).  For other uses,
-   the "Size" fact of the MLST command (see section 7.5.7) ought be
-   requested.
+   the "Size" fact of the MLST command (see Section 4.1.5.5.5.7) ought
+   be requested.
 
 
 
@@ -3033,7 +3033,7 @@ Internet-Draft           File Transfer Protocol              August 2010
    to restart sending the file, it needs to be able to determine how
    much data was previously sent, and correctly received and saved.  A
    new FTP command is needed to get this information.  This is the
-   purpose of the SIZE command, as documented in section 4.
+   purpose of the SIZE command, as documented in Section 4.1.5.2.
 
 4.1.5.3.2.  Error Recovery and Restart
 
@@ -3703,12 +3703,12 @@ Internet-Draft           File Transfer Protocol              August 2010
    of facts must not contain any spaces anywhere inside it.  Facts
    should be provided in each output line only if they both provide
    relevant information about the file named on the same line, and they
-   are in the set requested by the user-PI.  See section 7.9 (page 51).
+   are in the set requested by the user-PI.  See Section 4.1.5.5.9.
    There is no requirement that the same set of facts be provided for
    each file, or that the facts presented occur in the same order for
    each file.
 
-4.1.5.5.2.1.    Error Responses to MLSx commands
+4.1.5.5.2.1.  Error Responses to MLSx commands
 
    Many of the 4xy and 5xy responses defined in section 4.2 of STD 9,
    [RFC0959] are possible in response to the MLST and MLSD commands.  In
@@ -3779,7 +3779,7 @@ Internet-Draft           File Transfer Protocol              August 2010
    When TVFS is supported, a user-PI can refer to any file or directory
    in the listing by combining a type "cdir" name, with the appropriate
    name from the directory listing using the procedure defined in
-   section 6.2.
+   Section 4.1.5.4.2.
 
    Alternatively, whether TVFS is supported or not, the user-PI can
    issue a CWD command ([RFC0959]) giving a name of type "cdir" from the
@@ -3794,7 +3794,7 @@ Internet-Draft           File Transfer Protocol              August 2010
    pairs each followed by semi-colon (";") characters.  An individual
    fact may not contain a semi-colon in its name or value.  The complete
    series of facts may not contain the space character.  See the
-   definition or "RCHAR" in section 2.1 for a list of the characters
+   definition or "RCHAR" in Section 2.1 for a list of the characters
    that can occur in a fact value.  Not all are applicable to all facts.
 
    A sample of a typical series of facts would be: (spread over two
@@ -3906,10 +3906,10 @@ Internet-Draft           File Transfer Protocol              August 2010
 
    Where TVFS is supported by the server-FTP, this name may be used to
    construct pathnames with which to refer to the files and directories
-   returned in the same MLSD output (see section 6.2).  These pathnames
-   are only expected to work when the server-PI's position in the NVFS
-   file tree is the same as its position when the MLSD command was
-   issued, unless a fully qualified pathname results.
+   returned in the same MLSD output (see Section 4.1.5.4.2).  These
+   pathnames are only expected to work when the server-PI's position in
+   the NVFS file tree is the same as its position when the MLSD command
+   was issued, unless a fully qualified pathname results.
 
    Where TVFS is not supported, the only defined semantics associated
    with a "type=cdir" entry are that, provided the current working
@@ -4225,10 +4225,10 @@ Internet-Draft           File Transfer Protocol              August 2010
    time of a MLST and RETR operation.
 
    Clients that need highly accurate size information for some
-   particular reason should use the SIZE command as defined in section
-   4.  The most common need for this accuracy is likely to be in
-   conjunction with the REST command described in section 5.  The size
-   fact, on the other hand, should be used for purposes such as
+   particular reason should use the SIZE command as defined in
+   Section 4.1.5.2.  The most common need for this accuracy is likely to
+   be in conjunction with the REST command described in Section 4.1.5.3.
+   The size fact, on the other hand, should be used for purposes such as
    indicating to a human user the approximate size of the file to be
    transferred, and perhaps to give an idea of expected transfer
    completion time.
@@ -4293,7 +4293,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
    The value of an OS dependent fact may be whatever is appropriate to
    convey the information available.  It must be encoded as a "token" as
-   defined in section 2.1 however.
+   defined in Section 2.1 however.
 
    In order to allow reliable inter-operation between users of system
    dependent facts, the IANA will maintain a registry of system
@@ -4323,7 +4323,7 @@ Internet-Draft           File Transfer Protocol              August 2010
    that they do comprehend.
 
    Local fact names all begin with the sequence "X.".  The rest of the
-   name is a "token" (see section 2.1).  The value of a local fact can
+   name is a "token" (see Section 2.1).  The value of a local fact can
    be anything at all, provided it can be encoded as a "token".
 
 4.1.5.5.7.  MLSx Examples
@@ -5455,7 +5455,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
    The arguments to all of these commands should be processed the same
    way that MLST commands and responses are processed with respect to
-   handling embedded spaces, CRs and NULs.  See section 2.2.
+   handling embedded spaces, CRs and NULs.  See Section 2.2.
 
 4.1.5.7.  Character Sets and Internationalization
 
@@ -7523,6 +7523,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
    TODO
 
+      Haven't added all RFC3659 references; 3659 references to section
+      10 (not included here) are not updated.
+
       Determine if changes in RFC 1123 should be applied.
 
       Triage and include or reference other FTP RFCs - RFC 2228, 2640,
@@ -7535,7 +7538,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
       Move the whole sentence that is Section 8 into Section 3.2?
 
-      Use old IPR value?
+      Use old IPR value because we're using old text?
 
       Author listing/credits in compound document done correctly?
 
@@ -7548,9 +7551,6 @@ Authors' Addresses
 
    Joyce Reynolds
    ISI
-
-
-
 
 
 

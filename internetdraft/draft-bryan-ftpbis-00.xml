@@ -256,7 +256,7 @@
 </t>
 <section anchor="sec-2.2.1" title="Pathname Syntax">
 <t>
-   Except where TVFS is supported (see Section 6), this specification
+   Except where TVFS is supported (see <xref target="tvfs"/>), this specification
    imposes no syntax upon pathnames.  Nor does it restrict the character
    set from which pathnames are created.  This does not imply that the
    NVFS is required to make sense of all possible pathnames.  Server-PIs
@@ -1904,7 +1904,7 @@ DATA PORT (PORT)
    PORT and PASV are replaced with EPRT and EPSV, respectively.
 </t>
 
-<section anchor="4.1.2.1.1" title="The EPRT Command">
+<section anchor="sec-4.1.2.1.1" title="The EPRT Command">
 <t>
    The EPRT command allows for the specification of an extended address
    for the data connection.  The extended address MUST consist of the
@@ -2095,7 +2095,7 @@ DATA PORT (PORT)
 </t><t>
    If the requested protocol is supported by the server, it SHOULD use
    the protocol.  If not, the server MUST return the 522 error messages
-   as outlined in section 2.
+   as outlined in <xref target="sec-4.1.2.1.1"/>.
 </t><t>
    Finally, the EPSV command can be used with the argument &quot;ALL&quot; to
    inform Network Address Translators that the EPRT command (as well as
@@ -2111,12 +2111,11 @@ DATA PORT (PORT)
 </t><t>
    Upon receipt of an EPSV ALL command, the server MUST reject all data
    connection setup commands other than EPSV (i.e., EPRT, PORT, PASV, et
-   al.).  This use of the EPSV command is further explained in section
-   4.
+   al.).  This use of the EPSV command is further explained in <xref target="sec-4.1.2.1.3"/>.
 </t><t>
 </t>
 </section>
-<section anchor="4.1.2.1.3" title="Command Usage">
+<section anchor="sec-4.1.2.1.3" title="Command Usage">
 <t>
    For all FTP transfers where the control and data connection(s) are
    being established between the same two machines, the EPSV command
@@ -2830,7 +2829,7 @@ Response Syntax:
 
 </section>
 </section>
-<section title="File SIZE">
+<section anchor="size" title="File SIZE">
 <t>
    The FTP command, SIZE OF FILE (SIZE), is used to obtain the transfer
    size of a file from the server-FTP process.  This is the exact number
@@ -2957,13 +2956,13 @@ Response Syntax:
    may take considerable effort on the part of the server-PI, user-PIs
    should not used this command unless this precision is essential (such
    as when about to restart an interrupted transfer).  For other uses,
-   the &quot;Size&quot; fact of the MLST command (see section 7.5.7) ought be
+   the &quot;Size&quot; fact of the MLST command (see <xref target="sizefact"/>) ought be
    requested.
 </t>
 
 </section>
 </section>
-<section title="Restart of Interrupted Transfer (REST)">
+<section anchor="rest" title="Restart of Interrupted Transfer (REST)">
 <t>
    To avoid having to resend the entire file if the file is only
    partially transferred, both sides need some way to agree on where in
@@ -3020,7 +3019,7 @@ Response Syntax:
    to restart sending the file, it needs to be able to determine how
    much data was previously sent, and correctly received and saved.  A
    new FTP command is needed to get this information.  This is the
-   purpose of the SIZE command, as documented in section 4.
+   purpose of the SIZE command, as documented in <xref target="size"/>.
 </t>
 
 </section>
@@ -3173,7 +3172,7 @@ Response Syntax:
 
 </section>
 </section>
-<section title="A Trivial Virtual File Store (TVFS)">
+<section anchor="tvfs" title="A Trivial Virtual File Store (TVFS)">
 <t>
    Traditionally, FTP has placed almost no constraints upon the file
    store (NVFS) provided by a server.  This specification does not alter
@@ -3230,7 +3229,7 @@ Response Syntax:
 </t>
 
 </section>
-<section title="TVFS Pathnames">
+<section anchor="tvfspathnames" title="TVFS Pathnames">
 <t>
    A TVFS &quot;Pathname&quot; combines the file or directory name of a target
    file or directory, with the directory names of zero or more enclosing
@@ -3653,13 +3652,13 @@ Response Syntax:
    of facts must not contain any spaces anywhere inside it.  Facts
    should be provided in each output line only if they both provide
    relevant information about the file named on the same line, and they
-   are in the set requested by the user-PI.  See section 7.9 (page 51).
+   are in the set requested by the user-PI.  See <xref target="mlst-opts"/>.
    There is no requirement that the same set of facts be provided for
    each file, or that the facts presented occur in the same order for
    each file.
 </t>
 
-<section anchor="sec-7.2.1" title="  Error Responses to MLSx commands">
+<section title="Error Responses to MLSx commands">
 <t>
    Many of the 4xy and 5xy responses defined in section 4.2 of STD 9,
    <xref target="RFC0959"/> are possible in response to the MLST and MLSD commands.
@@ -3726,7 +3725,7 @@ Response Syntax:
    When TVFS is supported, a user-PI can refer to any file or directory
    in the listing by combining a type &quot;cdir&quot; name, with the appropriate
    name from the directory listing using the procedure defined in
-   section 6.2.
+   <xref target="tvfspathnames"/>.
 </t><t>
    Alternatively, whether TVFS is supported or not, the user-PI can
    issue a CWD command (<xref target="RFC0959"/>) giving a name of type &quot;cdir&quot; from the
@@ -3744,7 +3743,7 @@ Response Syntax:
    pairs each followed by semi-colon (&quot;;&quot;) characters.  An individual
    fact may not contain a semi-colon in its name or value.  The complete
    series of facts may not contain the space character.  See the
-   definition or &quot;RCHAR&quot; in section 2.1 for a list of the characters
+   definition or &quot;RCHAR&quot; in <xref target="sec-2.1"/> for a list of the characters
    that can occur in a fact value.  Not all are applicable to all facts.
 </t><t>
    A sample of a typical series of facts would be: (spread over two
@@ -3862,7 +3861,7 @@ Response Syntax:
 </t><t>
    Where TVFS is supported by the server-FTP, this name may be used to
    construct pathnames with which to refer to the files and directories
-   returned in the same MLSD output (see section 6.2).  These pathnames
+   returned in the same MLSD output (see <xref target="tvfspathnames"/>).  These pathnames
    are only expected to work when the server-PI's position in the NVFS
    file tree is the same as its position when the MLSD command was
    issued, unless a fully qualified pathname results.
@@ -4160,7 +4159,7 @@ Response Syntax:
 </t>
 
 </section>
-<section title="The size Fact">
+<section anchor="sizefact" title="The size Fact">
 <t>
    The size fact applies to non-directory file types and should always
    reflect the approximate size of the file.  This should be as accurate
@@ -4173,9 +4172,9 @@ Response Syntax:
    time of a MLST and RETR operation.
 </t><t>
    Clients that need highly accurate size information for some
-   particular reason should use the SIZE command as defined in section
-   4.  The most common need for this accuracy is likely to be in
-   conjunction with the REST command described in section 5.  The size
+   particular reason should use the SIZE command as defined in <xref target="size"/>.
+   The most common need for this accuracy is likely to be in
+   conjunction with the REST command described in <xref target="rest"/>.  The size
    fact, on the other hand, should be used for purposes such as
    indicating to a human user the approximate size of the file to be
    transferred, and perhaps to give an idea of expected transfer
@@ -4252,7 +4251,7 @@ Response Syntax:
 </t><t>
    The value of an OS dependent fact may be whatever is appropriate to
    convey the information available.  It must be encoded as a &quot;token&quot; as
-   defined in section 2.1 however.
+   defined in <xref target="sec-2.1"/> however.
 </t><t>
    In order to allow reliable inter-operation between users of system
    dependent facts, the IANA will maintain a registry of system
@@ -4276,7 +4275,7 @@ Response Syntax:
    that they do comprehend.
 </t><t>
    Local fact names all begin with the sequence &quot;X.&quot;.  The rest of the
-   name is a &quot;token&quot; (see section 2.1).  The value of a local fact can
+   name is a &quot;token&quot; (see <xref target="sec-2.1"/>).  The value of a local fact can
    be anything at all, provided it can be encoded as a &quot;token&quot;.
 </t>
 
@@ -4316,12 +4315,12 @@ Response Syntax:
 <t>
 	 <figure>
 	  <artwork type="example">
-C> PWD
-S> 257 "/tmp" is current directory.
-C> MLst cap60.pl198.tar.gz
-S> 250- Listing cap60.pl198.tar.gz
-S>  Type=file;Size=1024990;Perm=r; /tmp/cap60.pl198.tar.gz
-S> 250 End
+C&gt; PWD
+S&gt; 257 "/tmp" is current directory.
+C&gt; MLst cap60.pl198.tar.gz
+S&gt; 250- Listing cap60.pl198.tar.gz
+S&gt;  Type=file;Size=1024990;Perm=r; /tmp/cap60.pl198.tar.gz
+S&gt; 250 End
 </artwork>
 </figure>
 </t>
@@ -4351,12 +4350,12 @@ S> 250 End
 <t>
 	 <figure>
 	  <artwork type="example">
-C> PWD
-S> 257 "/" is current directory.
-C> MLst tmp
-S> 250- Listing tmp
-S>  Type=dir;Modify=19981107085215;Perm=el; /tmp
-S> 250 End
+C&gt; PWD
+S&gt; 257 "/" is current directory.
+C&gt; MLst tmp
+S&gt; 250- Listing tmp
+S&gt;  Type=dir;Modify=19981107085215;Perm=el; /tmp
+S&gt; 250 End
 </artwork>
 </figure>
 </t>
@@ -4376,22 +4375,22 @@ S> 250 End
 <t>
 	 <figure>
 	  <artwork type="example">
-C> MLSD tmp
-S> 150 BINARY connection open for MLSD tmp
-D> Type=cdir;Modify=19981107085215;Perm=el; tmp
-D> Type=cdir;Modify=19981107085215;Perm=el; /tmp
-D> Type=pdir;Modify=19990112030508;Perm=el; ..
-D> Type=file;Size=25730;Modify=19940728095854;Perm=; capmux.tar.z
-D> Type=file;Size=1830;Modify=19940916055648;Perm=r; hatch.c
-D> Type=file;Size=25624;Modify=19951003165342;Perm=r; MacIP-02.txt
-D> Type=file;Size=2154;Modify=19950501105033;Perm=r; uar.netbsd.patch
-D> Type=file;Size=54757;Modify=19951105101754;Perm=r; iptnnladev.1.0.sit.hqx
-D> Type=file;Size=226546;Modify=19970515023901;Perm=r; melbcs.tif
-D> Type=file;Size=12927;Modify=19961025135602;Perm=r; tardis.1.6.sit.hqx
-D> Type=file;Size=17867;Modify=19961025135602;Perm=r; timelord.1.4.sit.hqx
-D> Type=file;Size=224907;Modify=19980615100045;Perm=r; uar.1.2.3.sit.hqx
-D> Type=file;Size=1024990;Modify=19980130010322;Perm=r; cap60.pl198.tar.gz
-S> 226 MLSD completed
+C&gt; MLSD tmp
+S&gt; 150 BINARY connection open for MLSD tmp
+D&gt; Type=cdir;Modify=19981107085215;Perm=el; tmp
+D&gt; Type=cdir;Modify=19981107085215;Perm=el; /tmp
+D&gt; Type=pdir;Modify=19990112030508;Perm=el; ..
+D&gt; Type=file;Size=25730;Modify=19940728095854;Perm=; capmux.tar.z
+D&gt; Type=file;Size=1830;Modify=19940916055648;Perm=r; hatch.c
+D&gt; Type=file;Size=25624;Modify=19951003165342;Perm=r; MacIP-02.txt
+D&gt; Type=file;Size=2154;Modify=19950501105033;Perm=r; uar.netbsd.patch
+D&gt; Type=file;Size=54757;Modify=19951105101754;Perm=r; iptnnladev.1.0.sit.hqx
+D&gt; Type=file;Size=226546;Modify=19970515023901;Perm=r; melbcs.tif
+D&gt; Type=file;Size=12927;Modify=19961025135602;Perm=r; tardis.1.6.sit.hqx
+D&gt; Type=file;Size=17867;Modify=19961025135602;Perm=r; timelord.1.4.sit.hqx
+D&gt; Type=file;Size=224907;Modify=19980615100045;Perm=r; uar.1.2.3.sit.hqx
+D&gt; Type=file;Size=1024990;Modify=19980130010322;Perm=r; cap60.pl198.tar.gz
+S&gt; 226 MLSD completed
 </artwork>
 </figure>
 </t>
@@ -4424,38 +4423,38 @@ S> 226 MLSD completed
 <t>
 	 <figure>
 	  <artwork type="example">
-C> MLst test
-S> 250- Listing test
-S>  Type=dir;Perm=el;Unique=keVO1+ZF4 test
-S> 250 End
-C> MLSD test
-S> 150 BINARY connection open for MLSD test
-D> Type=cdir;Perm=el;Unique=keVO1+ZF4; test
-D> Type=pdir;Perm=e;Unique=keVO1+d?3; ..
-D> Type=OS.unix=slink:/foobar;Perm=;Unique=keVO1+4G4; foobar
-D> Type=OS.unix=chr-13/29;Perm=;Unique=keVO1+5G4; device
-D> Type=OS.unix=blk-11/108;Perm=;Unique=keVO1+6G4; block
-D> Type=file;Perm=awr;Unique=keVO1+8G4; writable
-D> Type=dir;Perm=cpmel;Unique=keVO1+7G4; promiscuous
-D> Type=dir;Perm=;Unique=keVO1+1t2; no-exec
-D> Type=file;Perm=r;Unique=keVO1+EG4; two words
-D> Type=file;Perm=r;Unique=keVO1+IH4;  leading space
-D> Type=file;Perm=r;Unique=keVO1+1G4; file1
-D> Type=dir;Perm=cpmel;Unique=keVO1+7G4; incoming
-D> Type=file;Perm=r;Unique=keVO1+1G4; file2
-D> Type=file;Perm=r;Unique=keVO1+1G4; file3
-D> Type=file;Perm=r;Unique=keVO1+1G4; file4
-S> 226 MLSD completed
-C> MLSD test/incoming
-S> 150 BINARY connection open for MLSD test/incoming
-D> Type=cdir;Perm=cpmel;Unique=keVO1+7G4; test/incoming
-D> Type=pdir;Perm=el;Unique=keVO1+ZF4; ..
-D> Type=file;Perm=awdrf;Unique=keVO1+EH4; bar
-D> Type=file;Perm=awdrf;Unique=keVO1+LH4;
-D> Type=file;Perm=rf;Unique=keVO1+1G4; file5
-D> Type=file;Perm=rf;Unique=keVO1+1G4; file6
-D> Type=dir;Perm=cpmdelf;Unique=keVO1+!s2; empty
-S> 226 MLSD completed
+C&gt; MLst test
+S&gt; 250- Listing test
+S&gt;  Type=dir;Perm=el;Unique=keVO1+ZF4 test
+S&gt; 250 End
+C&gt; MLSD test
+S&gt; 150 BINARY connection open for MLSD test
+D&gt; Type=cdir;Perm=el;Unique=keVO1+ZF4; test
+D&gt; Type=pdir;Perm=e;Unique=keVO1+d?3; ..
+D&gt; Type=OS.unix=slink:/foobar;Perm=;Unique=keVO1+4G4; foobar
+D&gt; Type=OS.unix=chr-13/29;Perm=;Unique=keVO1+5G4; device
+D&gt; Type=OS.unix=blk-11/108;Perm=;Unique=keVO1+6G4; block
+D&gt; Type=file;Perm=awr;Unique=keVO1+8G4; writable
+D&gt; Type=dir;Perm=cpmel;Unique=keVO1+7G4; promiscuous
+D&gt; Type=dir;Perm=;Unique=keVO1+1t2; no-exec
+D&gt; Type=file;Perm=r;Unique=keVO1+EG4; two words
+D&gt; Type=file;Perm=r;Unique=keVO1+IH4;  leading space
+D&gt; Type=file;Perm=r;Unique=keVO1+1G4; file1
+D&gt; Type=dir;Perm=cpmel;Unique=keVO1+7G4; incoming
+D&gt; Type=file;Perm=r;Unique=keVO1+1G4; file2
+D&gt; Type=file;Perm=r;Unique=keVO1+1G4; file3
+D&gt; Type=file;Perm=r;Unique=keVO1+1G4; file4
+S&gt; 226 MLSD completed
+C&gt; MLSD test/incoming
+S&gt; 150 BINARY connection open for MLSD test/incoming
+D&gt; Type=cdir;Perm=cpmel;Unique=keVO1+7G4; test/incoming
+D&gt; Type=pdir;Perm=el;Unique=keVO1+ZF4; ..
+D&gt; Type=file;Perm=awdrf;Unique=keVO1+EH4; bar
+D&gt; Type=file;Perm=awdrf;Unique=keVO1+LH4;
+D&gt; Type=file;Perm=rf;Unique=keVO1+1G4; file5
+D&gt; Type=file;Perm=rf;Unique=keVO1+1G4; file6
+D&gt; Type=dir;Perm=cpmdelf;Unique=keVO1+!s2; empty
+S&gt; 226 MLSD completed
 </artwork>
 </figure>
 </t>
@@ -4527,10 +4526,10 @@ S> 226 MLSD completed
 <t>
 	 <figure>
 	  <artwork type="example">
-C> MLst file1
-S> 250- Listing file1
-S>  Type=file;Modify=19990929003355.237; file1
-S> 250 End
+C&gt; MLst file1
+S&gt; 250- Listing file1
+S&gt;  Type=file;Modify=19990929003355.237; file1
+S&gt; 250 End
 </artwork>
 </figure>
 </t>
@@ -4547,42 +4546,42 @@ S> 250 End
 <t>
 	 <figure>
 	  <artwork type="example">
-C> MLST
-S> 250-Begin
-S>  type=dir;unique=AQkAAAAAAAABCAAA; /
-S> 250 End.
-C> MLSD
-S> 150 Opening ASCII mode data connection for MLS.
-D> type=cdir;unique=AQkAAAAAAAABCAAA; /
-D> type=dir;unique=AQkAAAAAAAABEAAA; bin
-D> type=dir;unique=AQkAAAAAAAABGAAA; etc
-D> type=dir;unique=AQkAAAAAAAAB8AwA; halflife
-D> type=dir;unique=AQkAAAAAAAABoAAA; incoming
-D> type=dir;unique=AQkAAAAAAAABIAAA; lib
-D> type=dir;unique=AQkAAAAAAAABWAEA; linux
-D> type=dir;unique=AQkAAAAAAAABKAEA; ncftpd
-D> type=dir;unique=AQkAAAAAAAABGAEA; outbox
-D> type=dir;unique=AQkAAAAAAAABuAAA; quake2
-D> type=dir;unique=AQkAAAAAAAABQAEA; winstuff
-S> 226 Listing completed.
-C> MLSD linux
-S> 150 Opening ASCII mode data connection for MLS.
-D> type=cdir;unique=AQkAAAAAAAABWAEA; /linux
-D> type=pdir;unique=AQkAAAAAAAABCAAA; /
-D> type=dir;unique=AQkAAAAAAAABeAEA; firewall
-D> type=file;size=12;unique=AQkAAAAAAAACWAEA; helo_world
-D> type=dir;unique=AQkAAAAAAAABYAEA; kernel
-D> type=dir;unique=AQkAAAAAAAABmAEA; scripts
-D> type=dir;unique=AQkAAAAAAAABkAEA; security
-S> 226 Listing completed.
-C> MLSD linux/kernel
-S> 150 Opening ASCII mode data connection for MLS.
-D> type=cdir;unique=AQkAAAAAAAABYAEA; /linux/kernel
-D> type=pdir;unique=AQkAAAAAAAABWAEA; /linux
-D> type=file;size=6704;unique=AQkAAAAAAAADYAEA; k.config
-D> type=file;size=7269221;unique=AQkAAAAAAAACYAEA; linux-2.0.36.tar.gz
-D> type=file;size=12514594;unique=AQkAAAAAAAAEYAEA; linux-2.1.130.tar.gz
-S> 226 Listing completed.
+C&gt; MLST
+S&gt; 250-Begin
+S&gt;  type=dir;unique=AQkAAAAAAAABCAAA; /
+S&gt; 250 End.
+C&gt; MLSD
+S&gt; 150 Opening ASCII mode data connection for MLS.
+D&gt; type=cdir;unique=AQkAAAAAAAABCAAA; /
+D&gt; type=dir;unique=AQkAAAAAAAABEAAA; bin
+D&gt; type=dir;unique=AQkAAAAAAAABGAAA; etc
+D&gt; type=dir;unique=AQkAAAAAAAAB8AwA; halflife
+D&gt; type=dir;unique=AQkAAAAAAAABoAAA; incoming
+D&gt; type=dir;unique=AQkAAAAAAAABIAAA; lib
+D&gt; type=dir;unique=AQkAAAAAAAABWAEA; linux
+D&gt; type=dir;unique=AQkAAAAAAAABKAEA; ncftpd
+D&gt; type=dir;unique=AQkAAAAAAAABGAEA; outbox
+D&gt; type=dir;unique=AQkAAAAAAAABuAAA; quake2
+D&gt; type=dir;unique=AQkAAAAAAAABQAEA; winstuff
+S&gt; 226 Listing completed.
+C&gt; MLSD linux
+S&gt; 150 Opening ASCII mode data connection for MLS.
+D&gt; type=cdir;unique=AQkAAAAAAAABWAEA; /linux
+D&gt; type=pdir;unique=AQkAAAAAAAABCAAA; /
+D&gt; type=dir;unique=AQkAAAAAAAABeAEA; firewall
+D&gt; type=file;size=12;unique=AQkAAAAAAAACWAEA; helo_world
+D&gt; type=dir;unique=AQkAAAAAAAABYAEA; kernel
+D&gt; type=dir;unique=AQkAAAAAAAABmAEA; scripts
+D&gt; type=dir;unique=AQkAAAAAAAABkAEA; security
+S&gt; 226 Listing completed.
+C&gt; MLSD linux/kernel
+S&gt; 150 Opening ASCII mode data connection for MLS.
+D&gt; type=cdir;unique=AQkAAAAAAAABYAEA; /linux/kernel
+D&gt; type=pdir;unique=AQkAAAAAAAABWAEA; /linux
+D&gt; type=file;size=6704;unique=AQkAAAAAAAADYAEA; k.config
+D&gt; type=file;size=7269221;unique=AQkAAAAAAAACYAEA; linux-2.0.36.tar.gz
+D&gt; type=file;size=12514594;unique=AQkAAAAAAAAEYAEA; linux-2.1.130.tar.gz
+S&gt; 226 Listing completed.
 </artwork>
 </figure>
 </t>
@@ -4599,50 +4598,50 @@ S> 226 Listing completed.
 <t>
 	 <figure>
 	  <artwork type="example">
-C> MLSD
-S> 150 BINARY connection open for MLSD .
-D> Type=cdir;Modify=19990219183438; /iana/assignments
-D> Type=pdir;Modify=19990112030453; ..
-D> Type=dir;Modify=19990219073522; media-types
-D> Type=dir;Modify=19990112033515; character-set-info
-D> Type=dir;Modify=19990112033529; languages
-D> Type=file;Size=44242;Modify=19990217230400; character-sets
-D> Type=file;Size=1947;Modify=19990209215600; operating-system-names
-S> 226 MLSD completed
-C> MLSD media-types
-S> 150 BINARY connection open for MLSD media-types
-D> Type=cdir;Modify=19990219073522; media-types
-D> Type=cdir;Modify=19990219073522; /iana/assignments/media-types
-D> Type=pdir;Modify=19990219183438; ..
-D> Type=dir;Modify=19990112033045; text
-D> Type=dir;Modify=19990219183442; image
-D> Type=dir;Modify=19990112033216; multipart
-D> Type=dir;Modify=19990112033254; video
-D> Type=file;Size=30249;Modify=19990218032700; media-types
-S> 226 MLSD completed
-C> MLSD character-set-info
-S> 150 BINARY connection open for MLSD character-set-info
-D> Type=cdir;Modify=19990112033515; character-set-info
-D> Type=cdir;Modify=19990112033515; /iana/assignments/character-set-info
-D> Type=pdir;Modify=19990219183438; ..
-D> Type=file;Size=1234;Modify=19980903020400; windows-1251
-D> Type=file;Size=4557;Modify=19980922001400; tis-620
-D> Type=file;Size=801;Modify=19970324130000; ibm775
-D> Type=file;Size=552;Modify=19970320130000; ibm866
-D> Type=file;Size=922;Modify=19960505140000; windows-1258
-S> 226 MLSD completed
-C> MLSD languages
-S> 150 BINARY connection open for MLSD languages
-D> Type=cdir;Modify=19990112033529; languages
-D> Type=cdir;Modify=19990112033529; /iana/assignments/languages
-D> Type=pdir;Modify=19990219183438; ..
-D> Type=file;Size=2391;Modify=19980309130000; default
-D> Type=file;Size=943;Modify=19980309130000; tags
-D> Type=file;Size=870;Modify=19971026130000; navajo
-D> Type=file;Size=699;Modify=19950911140000; no-bok
-S> 226 MLSD completed
-C> PWD
-S> 257 "/iana/assignments" is current directory.
+C&gt; MLSD
+S&gt; 150 BINARY connection open for MLSD .
+D&gt; Type=cdir;Modify=19990219183438; /iana/assignments
+D&gt; Type=pdir;Modify=19990112030453; ..
+D&gt; Type=dir;Modify=19990219073522; media-types
+D&gt; Type=dir;Modify=19990112033515; character-set-info
+D&gt; Type=dir;Modify=19990112033529; languages
+D&gt; Type=file;Size=44242;Modify=19990217230400; character-sets
+D&gt; Type=file;Size=1947;Modify=19990209215600; operating-system-names
+S&gt; 226 MLSD completed
+C&gt; MLSD media-types
+S&gt; 150 BINARY connection open for MLSD media-types
+D&gt; Type=cdir;Modify=19990219073522; media-types
+D&gt; Type=cdir;Modify=19990219073522; /iana/assignments/media-types
+D&gt; Type=pdir;Modify=19990219183438; ..
+D&gt; Type=dir;Modify=19990112033045; text
+D&gt; Type=dir;Modify=19990219183442; image
+D&gt; Type=dir;Modify=19990112033216; multipart
+D&gt; Type=dir;Modify=19990112033254; video
+D&gt; Type=file;Size=30249;Modify=19990218032700; media-types
+S&gt; 226 MLSD completed
+C&gt; MLSD character-set-info
+S&gt; 150 BINARY connection open for MLSD character-set-info
+D&gt; Type=cdir;Modify=19990112033515; character-set-info
+D&gt; Type=cdir;Modify=19990112033515; /iana/assignments/character-set-info
+D&gt; Type=pdir;Modify=19990219183438; ..
+D&gt; Type=file;Size=1234;Modify=19980903020400; windows-1251
+D&gt; Type=file;Size=4557;Modify=19980922001400; tis-620
+D&gt; Type=file;Size=801;Modify=19970324130000; ibm775
+D&gt; Type=file;Size=552;Modify=19970320130000; ibm866
+D&gt; Type=file;Size=922;Modify=19960505140000; windows-1258
+S&gt; 226 MLSD completed
+C&gt; MLSD languages
+S&gt; 150 BINARY connection open for MLSD languages
+D&gt; Type=cdir;Modify=19990112033529; languages
+D&gt; Type=cdir;Modify=19990112033529; /iana/assignments/languages
+D&gt; Type=pdir;Modify=19990219183438; ..
+D&gt; Type=file;Size=2391;Modify=19980309130000; default
+D&gt; Type=file;Size=943;Modify=19980309130000; tags
+D&gt; Type=file;Size=870;Modify=19971026130000; navajo
+D&gt; Type=file;Size=699;Modify=19950911140000; no-bok
+S&gt; 226 MLSD completed
+C&gt; PWD
+S&gt; 257 "/iana/assignments" is current directory.
 </artwork>
 </figure>
 </t>
@@ -4670,19 +4669,19 @@ S> 257 "/iana/assignments" is current directory.
 <t>
 	 <figure>
 	  <artwork type="example">
-C> MlsD
-S> 150 BINARY connection open for MLSD .
-D> Type=pdir;Modify=19990929011228;Perm=el;Unique=keVO1+ZF4; ..
-D> Type=file;Size=4096;Modify=19990929011440;Perm=r;Unique=keVO1+Bd8; FILE2
-D> Type=file;Size=4096;Modify=19990929011440;Perm=r;Unique=keVO1+aG8; file3
-D> Type=file;Size=4096;Modify=19990929011440;Perm=r;Unique=keVO1+ag8; FILE3
-D> Type=file;Size=4096;Modify=19990929011440;Perm=r;Unique=keVO1+bD8; file1
-D> Type=file;Size=4096;Modify=19990929011440;Perm=r;Unique=keVO1+bD8; file2
-D> Type=file;Size=4096;Modify=19990929011440;Perm=r;Unique=keVO1+Ag8; File3
-D> Type=file;Size=4096;Modify=19990929011440;Perm=r;Unique=keVO1+bD8; File1
-D> Type=file;Size=4096;Modify=19990929011440;Perm=r;Unique=keVO1+Bd8; File2
-D> Type=file;Size=4096;Modify=19990929011440;Perm=r;Unique=keVO1+bd8; FILE1
-S> 226 MLSD completed
+C&gt; MlsD
+S&gt; 150 BINARY connection open for MLSD .
+D&gt; Type=pdir;Modify=19990929011228;Perm=el;Unique=keVO1+ZF4; ..
+D&gt; Type=file;Size=4096;Modify=19990929011440;Perm=r;Unique=keVO1+Bd8; FILE2
+D&gt; Type=file;Size=4096;Modify=19990929011440;Perm=r;Unique=keVO1+aG8; file3
+D&gt; Type=file;Size=4096;Modify=19990929011440;Perm=r;Unique=keVO1+ag8; FILE3
+D&gt; Type=file;Size=4096;Modify=19990929011440;Perm=r;Unique=keVO1+bD8; file1
+D&gt; Type=file;Size=4096;Modify=19990929011440;Perm=r;Unique=keVO1+bD8; file2
+D&gt; Type=file;Size=4096;Modify=19990929011440;Perm=r;Unique=keVO1+Ag8; File3
+D&gt; Type=file;Size=4096;Modify=19990929011440;Perm=r;Unique=keVO1+bD8; File1
+D&gt; Type=file;Size=4096;Modify=19990929011440;Perm=r;Unique=keVO1+Bd8; File2
+D&gt; Type=file;Size=4096;Modify=19990929011440;Perm=r;Unique=keVO1+bd8; FILE1
+S&gt; 226 MLSD completed
 </artwork>
 </figure>
 </t>
@@ -4727,50 +4726,50 @@ S> 226 MLSD completed
 <t>
 	 <figure>
 	  <artwork type="example">
-C> MlsD
-S> 150 File Listing Follows in IMAGE / Binary mode.
-D> type=cdir;modify=19990426150227;perm=el; /MISC
-D> type=pdir;modify=19791231130000;perm=el; /
-D> type=dir;modify=19990426150227;perm=el; CVS
-D> type=dir;modify=19990426150228;perm=el; SRC
-S> 226 Transfer finished successfully.
-C> MlsD src
-S> 150 File Listing Follows in IMAGE / Binary mode.
-D> type=cdir;modify=19990426150228;perm=el; /MISC/src
-D> type=pdir;modify=19990426150227;perm=el; /MISC
-D> type=dir;modify=19990426150228;perm=el; CVS
-D> type=dir;modify=19990426150228;perm=el; INSTALL
-D> type=dir;modify=19990426150230;perm=el; INSTALLI
-D> type=dir;modify=19990426150230;perm=el; TREES
-S> 226 Transfer finished successfully.
-C> MlsD src/install
-S> 150 File Listing Follows in IMAGE / Binary mode.
-D> type=cdir;modify=19990426150228;perm=el; /MISC/src/install
-D> type=pdir;modify=19990426150228;perm=el; /MISC/src
-D> type=file;modify=19990406234304;perm=r;size=20059; BOOTPC.C
-D> type=file;modify=19980401170153;perm=r;size=278; BOOTPC.H
-D> type=file;modify=19990413153736;perm=r;size=54220; BOOTPC.O
-D> type=file;modify=19990223044003;perm=r;size=3389; CDROM.C
-D> type=file;modify=19990413153739;perm=r;size=30192; CDROM.O
-D> type=file;modify=19981119155324;perm=r;size=1055; CHANGELO
-D> type=file;modify=19981204171040;perm=r;size=8297; COMMANDS.C
-D> type=file;modify=19980508041749;perm=r;size=580; COMMANDS.H
-D> type=file;modify=19990419052351;perm=r;size=54264; URLMETHO.O
-D> type=file;modify=19980218161629;perm=r;size=993; WINDOWS.C
-D> type=file;modify=19970912154859;perm=r;size=146; WINDOWS.H
-D> type=file;modify=19990413153731;perm=r;size=16812; WINDOWS.O
-D> type=file;modify=19990322174959;perm=r;size=129; _CVSIGNO
-D> type=file;modify=19990413153640;perm=r;size=82536; _DEPEND
-S> 226 Transfer finished successfully.
-C> MLst src/install/windows.c
-S> 250-Listing src/install/windows.c
-S>  type=file;perm=r;size=993; /misc/src/install/windows.c
-S> 250 End
-S> ftp> mlst SRC/INSTALL/WINDOWS.C
-C> MLst SRC/INSTALL/WINDOWS.C
-S> 250-Listing SRC/INSTALL/WINDOWS.C
-S>  type=file;perm=r;size=993; /misc/SRC/INSTALL/WINDOWS.C
-S> 250 End
+C&gt; MlsD
+S&gt; 150 File Listing Follows in IMAGE / Binary mode.
+D&gt; type=cdir;modify=19990426150227;perm=el; /MISC
+D&gt; type=pdir;modify=19791231130000;perm=el; /
+D&gt; type=dir;modify=19990426150227;perm=el; CVS
+D&gt; type=dir;modify=19990426150228;perm=el; SRC
+S&gt; 226 Transfer finished successfully.
+C&gt; MlsD src
+S&gt; 150 File Listing Follows in IMAGE / Binary mode.
+D&gt; type=cdir;modify=19990426150228;perm=el; /MISC/src
+D&gt; type=pdir;modify=19990426150227;perm=el; /MISC
+D&gt; type=dir;modify=19990426150228;perm=el; CVS
+D&gt; type=dir;modify=19990426150228;perm=el; INSTALL
+D&gt; type=dir;modify=19990426150230;perm=el; INSTALLI
+D&gt; type=dir;modify=19990426150230;perm=el; TREES
+S&gt; 226 Transfer finished successfully.
+C&gt; MlsD src/install
+S&gt; 150 File Listing Follows in IMAGE / Binary mode.
+D&gt; type=cdir;modify=19990426150228;perm=el; /MISC/src/install
+D&gt; type=pdir;modify=19990426150228;perm=el; /MISC/src
+D&gt; type=file;modify=19990406234304;perm=r;size=20059; BOOTPC.C
+D&gt; type=file;modify=19980401170153;perm=r;size=278; BOOTPC.H
+D&gt; type=file;modify=19990413153736;perm=r;size=54220; BOOTPC.O
+D&gt; type=file;modify=19990223044003;perm=r;size=3389; CDROM.C
+D&gt; type=file;modify=19990413153739;perm=r;size=30192; CDROM.O
+D&gt; type=file;modify=19981119155324;perm=r;size=1055; CHANGELO
+D&gt; type=file;modify=19981204171040;perm=r;size=8297; COMMANDS.C
+D&gt; type=file;modify=19980508041749;perm=r;size=580; COMMANDS.H
+D&gt; type=file;modify=19990419052351;perm=r;size=54264; URLMETHO.O
+D&gt; type=file;modify=19980218161629;perm=r;size=993; WINDOWS.C
+D&gt; type=file;modify=19970912154859;perm=r;size=146; WINDOWS.H
+D&gt; type=file;modify=19990413153731;perm=r;size=16812; WINDOWS.O
+D&gt; type=file;modify=19990322174959;perm=r;size=129; _CVSIGNO
+D&gt; type=file;modify=19990413153640;perm=r;size=82536; _DEPEND
+S&gt; 226 Transfer finished successfully.
+C&gt; MLst src/install/windows.c
+S&gt; 250-Listing src/install/windows.c
+S&gt;  type=file;perm=r;size=993; /misc/src/install/windows.c
+S&gt; 250 End
+S&gt; ftp> mlst SRC/INSTALL/WINDOWS.C
+C&gt; MLst SRC/INSTALL/WINDOWS.C
+S&gt; 250-Listing SRC/INSTALL/WINDOWS.C
+S&gt;  type=file;perm=r;size=993; /misc/SRC/INSTALL/WINDOWS.C
+S&gt; 250 End
 </artwork>
 </figure>
 
@@ -4793,42 +4792,42 @@ S> 250 End
 <t>
 	 <figure>
 	  <artwork type="example">
-C> MLst f
-S> 250-MLST f
-S>  Type=dir;Modify=20000710052229;Unique=AAD/AAAABIA; f
-S> 250 End
-C> CWD f
-S> 250 CWD command successful.
-C> MLSD
-S> 150 Opening ASCII mode data connection for 'MLSD'.
-D> Type=cdir;Unique=AAD/AAAABIA; .
-D> Type=pdir;Unique=AAD/AAAAAAI; ..
-D> Type=file;Size=987;Unique=AAD/AAAABIE; Makefile
-D> Type=file;Size=20148;Unique=AAD/AAAABII; conf.c
-D> Type=file;Size=11111;Unique=AAD/AAAABIM; extern.h
-D> Type=file;Size=38721;Unique=AAD/AAAABIQ; ftpcmd.y
-D> Type=file;Size=17922;Unique=AAD/AAAABIU; ftpd.8
-D> Type=file;Size=60732;Unique=AAD/AAAABIY; ftpd.c
-D> Type=file;Size=3127;Unique=AAD/AAAABIc; logwtmp.c
-D> Type=file;Size=2294;Unique=AAD/AAAABIg; pathnames.h
-D> Type=file;Size=7605;Unique=AAD/AAAABIk; popen.c
-D> Type=file;Size=9951;Unique=AAD/AAAABIo; ftpd.conf.5
-D> Type=file;Size=5023;Unique=AAD/AAAABIs; ftpusers.5
-D> Type=file;Size=3547;Unique=AAD/AAAABIw; logutmp.c
-D> Type=file;Size=2064;Unique=AAD/AAAABI0; version.h
-D> Type=file;Size=20420;Unique=AAD/AAAAAAM; cmds.c
-D> Type=file;Size=15864;Unique=AAD/AAAAAAg; ls.c
-D> Type=file;Size=2898;Unique=AAD/AAAAAAk; ls.h
-D> Type=file;Size=2769;Unique=AAD/AAAAAAo; lsextern.h
-D> Type=file;Size=2042;Unique=AAD/AAAAAAs; stat_flags.h
-D> Type=file;Size=5708;Unique=AAD/AAAAAAw; cmp.c
-D> Type=file;Size=9280;Unique=AAD/AAAAAA0; print.c
-D> Type=file;Size=4657;Unique=AAD/AAAAAA4; stat_flags.c
-D> Type=file;Size=2664;Unique=AAD/AAAAAA8; util.c
-D> Type=file;Size=10383;Unique=AAD/AAAABJ0; ftpd.conf.cat5
-D> Type=file;Size=3631;Unique=AAD/AAAABJ4; ftpusers.cat5
-D> Type=file;Size=17729;Unique=AAD/AAAABJ8; ftpd.cat8
-S> 226 MLSD complete.
+C&gt; MLst f
+S&gt; 250-MLST f
+S&gt;  Type=dir;Modify=20000710052229;Unique=AAD/AAAABIA; f
+S&gt; 250 End
+C&gt; CWD f
+S&gt; 250 CWD command successful.
+C&gt; MLSD
+S&gt; 150 Opening ASCII mode data connection for 'MLSD'.
+D&gt; Type=cdir;Unique=AAD/AAAABIA; .
+D&gt; Type=pdir;Unique=AAD/AAAAAAI; ..
+D&gt; Type=file;Size=987;Unique=AAD/AAAABIE; Makefile
+D&gt; Type=file;Size=20148;Unique=AAD/AAAABII; conf.c
+D&gt; Type=file;Size=11111;Unique=AAD/AAAABIM; extern.h
+D&gt; Type=file;Size=38721;Unique=AAD/AAAABIQ; ftpcmd.y
+D&gt; Type=file;Size=17922;Unique=AAD/AAAABIU; ftpd.8
+D&gt; Type=file;Size=60732;Unique=AAD/AAAABIY; ftpd.c
+D&gt; Type=file;Size=3127;Unique=AAD/AAAABIc; logwtmp.c
+D&gt; Type=file;Size=2294;Unique=AAD/AAAABIg; pathnames.h
+D&gt; Type=file;Size=7605;Unique=AAD/AAAABIk; popen.c
+D&gt; Type=file;Size=9951;Unique=AAD/AAAABIo; ftpd.conf.5
+D&gt; Type=file;Size=5023;Unique=AAD/AAAABIs; ftpusers.5
+D&gt; Type=file;Size=3547;Unique=AAD/AAAABIw; logutmp.c
+D&gt; Type=file;Size=2064;Unique=AAD/AAAABI0; version.h
+D&gt; Type=file;Size=20420;Unique=AAD/AAAAAAM; cmds.c
+D&gt; Type=file;Size=15864;Unique=AAD/AAAAAAg; ls.c
+D&gt; Type=file;Size=2898;Unique=AAD/AAAAAAk; ls.h
+D&gt; Type=file;Size=2769;Unique=AAD/AAAAAAo; lsextern.h
+D&gt; Type=file;Size=2042;Unique=AAD/AAAAAAs; stat_flags.h
+D&gt; Type=file;Size=5708;Unique=AAD/AAAAAAw; cmp.c
+D&gt; Type=file;Size=9280;Unique=AAD/AAAAAA0; print.c
+D&gt; Type=file;Size=4657;Unique=AAD/AAAAAA4; stat_flags.c
+D&gt; Type=file;Size=2664;Unique=AAD/AAAAAA8; util.c
+D&gt; Type=file;Size=10383;Unique=AAD/AAAABJ0; ftpd.conf.cat5
+D&gt; Type=file;Size=3631;Unique=AAD/AAAABJ4; ftpusers.cat5
+D&gt; Type=file;Size=17729;Unique=AAD/AAAABJ8; ftpd.cat8
+S&gt; 226 MLSD complete.
 </artwork>
 </figure>
 </t>
@@ -4848,87 +4847,87 @@ S> 226 MLSD complete.
 <t>
 	 <figure>
 	  <artwork type="example">
-C> PASV
-S> 227 Entering Passive Mode (127,0,0,1,255,46)
-C> MLSD
-S> 150 I tink I tee a trisector tree
-D> Type=file;Unique=aaaaafUYqaaa;Perm=rf;Size=15741; x
-D> Type=cdir;Unique=aaaaacUYqaaa;Perm=cpmel; /
-D> Type=file;Unique=aaaaajUYqaaa;Perm=rf;Size=5760; x4
-D> Type=dir;Unique=aaabcaUYqaaa;Perm=elf; sub
-D> Type=file;Unique=aaaaagUYqaaa;Perm=rf;Size=8043; x1
-D> Type=dir;Unique=aaab8aUYqaaa;Perm=cpmelf; files
-D> Type=file;Unique=aaaaahUYqaaa;Perm=rf;Size=4983; x2
-D> Type=file;Unique=aaaaaiUYqaaa;Perm=rf;Size=6854; x3
-S> 226 That's all folks...
-C> CWD sub
-S> 250 CWD command successful.
-C> PWD
-S> 257 "/sub" is current directory.
-C> PASV
-S> 227 Entering Passive Mode (127,0,0,1,255,44)
-C> MLSD
-S> 150 I tink I tee a trisector tree
-D> Type=dir;Unique=aaabceUYqaaa;Perm=elf; dir
-D> Type=file;Unique=aaabcbUYqaaa;Perm=rf;Size=0; y1
-D> Type=file;Unique=aaabccUYqaaa;Perm=rf;Size=0; y2
-D> Type=file;Unique=aaabcdUYqaaa;Perm=rf;Size=0; y3
-D> Type=pdir;Unique=aaaaacUYqaaa;Perm=cpmel; /
-D> Type=pdir;Unique=aaaaacUYqaaa;Perm=cpmel; ..
-D> Type=cdir;Unique=aaabcaUYqaaa;Perm=el; /sub
-S> 226 That's all folks...
-C> PASV
-S> 227 Entering Passive Mode (127,0,0,1,255,42)
-C> MLSD dir
-S> 150 I tink I tee a trisector tree
-D> Type=pdir;Unique=aaabcaUYqaaa;Perm=el; /sub
-D> Type=pdir;Unique=aaabcaUYqaaa;Perm=el; ..
-D> Type=file;Unique=aaab8cUYqaaa;Perm=r;Size=15039; mlst.c
-D> Type=dir;Unique=aaabcfUYqaaa;Perm=el; ect
-D> Type=cdir;Unique=aaabceUYqaaa;Perm=el; dir
-D> Type=cdir;Unique=aaabceUYqaaa;Perm=el; /sub/dir
-D> Type=dir;Unique=aaabchUYqaaa;Perm=el; misc
-D> Type=file;Unique=aaab8bUYqaaa;Perm=r;Size=34589; ftpd.c
-S> 226 That's all folks...
-C> CWD dir/ect
-S> 250 CWD command successful.
-C> PWD
-S> 257 "/sub/dir/ect" is current directory.
-C> PASV
-S> 227 Entering Passive Mode (127,0,0,1,255,40)
-C> MLSD
-S> 150 I tink I tee a trisector tree
-D> Type=dir;Unique=aaabcgUYqaaa;Perm=el; ory
-D> Type=pdir;Unique=aaabceUYqaaa;Perm=el; /sub/dir
-D> Type=pdir;Unique=aaabceUYqaaa;Perm=el; ..
-D> Type=cdir;Unique=aaabcfUYqaaa;Perm=el; /sub/dir/ect
-S> 226 That's all folks...
-C> CWD /files
-S> 250 CWD command successful.
-C> PASV
-S> 227 Entering Passive Mode (127,0,0,1,255,36)
-C> MLSD
-S> 150 I tink I tee a trisector tree
-D> Type=cdir;Unique=aaab8aUYqaaa;Perm=cpmel; /files
-D> Type=pdir;Unique=aaaaacUYqaaa;Perm=cpmel; /
-D> Type=pdir;Unique=aaaaacUYqaaa;Perm=cpmel; ..
-D> Type=file;Unique=aaab8cUYqaaa;Perm=rf;Size=15039; mlst.c
-D> Type=file;Unique=aaab8bUYqaaa;Perm=rf;Size=34589; ftpd.c
-S> 226 That's all folks...
-C> RNFR mlst.c
-S> 350 File exists, ready for destination name
-C> RNTO list.c
-S> 250 RNTO command successful.
-C> PASV
-S> 227 Entering Passive Mode (127,0,0,1,255,34)
-C> MLSD
-S> 150 I tink I tee a trisector tree
-D> Type=file;Unique=aaab8cUYqaaa;Perm=rf;Size=15039; list.c
-D> Type=pdir;Unique=aaaaacUYqaaa;Perm=cpmel; /
-D> Type=pdir;Unique=aaaaacUYqaaa;Perm=cpmel; ..
-D> Type=file;Unique=aaab8bUYqaaa;Perm=rf;Size=34589; ftpd.c
-D> Type=cdir;Unique=aaab8aUYqaaa;Perm=cpmel; /files
-S> 226 That's all folks...
+C&gt; PASV
+S&gt; 227 Entering Passive Mode (127,0,0,1,255,46)
+C&gt; MLSD
+S&gt; 150 I tink I tee a trisector tree
+D&gt; Type=file;Unique=aaaaafUYqaaa;Perm=rf;Size=15741; x
+D&gt; Type=cdir;Unique=aaaaacUYqaaa;Perm=cpmel; /
+D&gt; Type=file;Unique=aaaaajUYqaaa;Perm=rf;Size=5760; x4
+D&gt; Type=dir;Unique=aaabcaUYqaaa;Perm=elf; sub
+D&gt; Type=file;Unique=aaaaagUYqaaa;Perm=rf;Size=8043; x1
+D&gt; Type=dir;Unique=aaab8aUYqaaa;Perm=cpmelf; files
+D&gt; Type=file;Unique=aaaaahUYqaaa;Perm=rf;Size=4983; x2
+D&gt; Type=file;Unique=aaaaaiUYqaaa;Perm=rf;Size=6854; x3
+S&gt; 226 That's all folks...
+C&gt; CWD sub
+S&gt; 250 CWD command successful.
+C&gt; PWD
+S&gt; 257 "/sub" is current directory.
+C&gt; PASV
+S&gt; 227 Entering Passive Mode (127,0,0,1,255,44)
+C&gt; MLSD
+S&gt; 150 I tink I tee a trisector tree
+D&gt; Type=dir;Unique=aaabceUYqaaa;Perm=elf; dir
+D&gt; Type=file;Unique=aaabcbUYqaaa;Perm=rf;Size=0; y1
+D&gt; Type=file;Unique=aaabccUYqaaa;Perm=rf;Size=0; y2
+D&gt; Type=file;Unique=aaabcdUYqaaa;Perm=rf;Size=0; y3
+D&gt; Type=pdir;Unique=aaaaacUYqaaa;Perm=cpmel; /
+D&gt; Type=pdir;Unique=aaaaacUYqaaa;Perm=cpmel; ..
+D&gt; Type=cdir;Unique=aaabcaUYqaaa;Perm=el; /sub
+S&gt; 226 That's all folks...
+C&gt; PASV
+S&gt; 227 Entering Passive Mode (127,0,0,1,255,42)
+C&gt; MLSD dir
+S&gt; 150 I tink I tee a trisector tree
+D&gt; Type=pdir;Unique=aaabcaUYqaaa;Perm=el; /sub
+D&gt; Type=pdir;Unique=aaabcaUYqaaa;Perm=el; ..
+D&gt; Type=file;Unique=aaab8cUYqaaa;Perm=r;Size=15039; mlst.c
+D&gt; Type=dir;Unique=aaabcfUYqaaa;Perm=el; ect
+D&gt; Type=cdir;Unique=aaabceUYqaaa;Perm=el; dir
+D&gt; Type=cdir;Unique=aaabceUYqaaa;Perm=el; /sub/dir
+D&gt; Type=dir;Unique=aaabchUYqaaa;Perm=el; misc
+D&gt; Type=file;Unique=aaab8bUYqaaa;Perm=r;Size=34589; ftpd.c
+S&gt; 226 That's all folks...
+C&gt; CWD dir/ect
+S&gt; 250 CWD command successful.
+C&gt; PWD
+S&gt; 257 "/sub/dir/ect" is current directory.
+C&gt; PASV
+S&gt; 227 Entering Passive Mode (127,0,0,1,255,40)
+C&gt; MLSD
+S&gt; 150 I tink I tee a trisector tree
+D&gt; Type=dir;Unique=aaabcgUYqaaa;Perm=el; ory
+D&gt; Type=pdir;Unique=aaabceUYqaaa;Perm=el; /sub/dir
+D&gt; Type=pdir;Unique=aaabceUYqaaa;Perm=el; ..
+D&gt; Type=cdir;Unique=aaabcfUYqaaa;Perm=el; /sub/dir/ect
+S&gt; 226 That's all folks...
+C&gt; CWD /files
+S&gt; 250 CWD command successful.
+C&gt; PASV
+S&gt; 227 Entering Passive Mode (127,0,0,1,255,36)
+C&gt; MLSD
+S&gt; 150 I tink I tee a trisector tree
+D&gt; Type=cdir;Unique=aaab8aUYqaaa;Perm=cpmel; /files
+D&gt; Type=pdir;Unique=aaaaacUYqaaa;Perm=cpmel; /
+D&gt; Type=pdir;Unique=aaaaacUYqaaa;Perm=cpmel; ..
+D&gt; Type=file;Unique=aaab8cUYqaaa;Perm=rf;Size=15039; mlst.c
+D&gt; Type=file;Unique=aaab8bUYqaaa;Perm=rf;Size=34589; ftpd.c
+S&gt; 226 That's all folks...
+C&gt; RNFR mlst.c
+S&gt; 350 File exists, ready for destination name
+C&gt; RNTO list.c
+S&gt; 250 RNTO command successful.
+C&gt; PASV
+S&gt; 227 Entering Passive Mode (127,0,0,1,255,34)
+C&gt; MLSD
+S&gt; 150 I tink I tee a trisector tree
+D&gt; Type=file;Unique=aaab8cUYqaaa;Perm=rf;Size=15039; list.c
+D&gt; Type=pdir;Unique=aaaaacUYqaaa;Perm=cpmel; /
+D&gt; Type=pdir;Unique=aaaaacUYqaaa;Perm=cpmel; ..
+D&gt; Type=file;Unique=aaab8bUYqaaa;Perm=rf;Size=34589; ftpd.c
+D&gt; Type=cdir;Unique=aaab8aUYqaaa;Perm=cpmel; /files
+S&gt; 226 That's all folks...
 
 </artwork>
 </figure>
@@ -4987,15 +4986,15 @@ S> 226 That's all folks...
 <t>
 	 <figure>
 	  <artwork type="example">
-C> Feat
-S> 211- Features supported
-S>  REST STREAM
-S>  MDTM
-S>  SIZE
-S>  TVFS
-S>  UTF8
-S>  MLST Type*;Size*;Modify*;Perm*;Unique*;UNIX.mode;UNIX.chgd;X.hidden;
-S> 211 End
+C&gt; Feat
+S&gt; 211- Features supported
+S&gt;  REST STREAM
+S&gt;  MDTM
+S&gt;  SIZE
+S&gt;  TVFS
+S&gt;  UTF8
+S&gt;  MLST Type*;Size*;Modify*;Perm*;Unique*;UNIX.mode;UNIX.chgd;X.hidden;
+S&gt; 211 End
 </artwork>
 </figure>
 </t>
@@ -5011,17 +5010,17 @@ S> 211 End
 <t>
 	 <figure>
 	  <artwork type="example">
-C> Feat
-S> 211-Extensions supported:
-S>  CLNT
-S>  MDTM
-S>  MLST type*;size*;modify*;UNIX.mode*;UNIX.owner;UNIX.group;unique;
-S>  PASV
-S>  REST STREAM
-S>  SIZE
-S>  TVFS
-S>  Compliance Level: 19981201 (IETF mlst-05)
-S> 211 End.
+C&gt; Feat
+S&gt; 211-Extensions supported:
+S&gt;  CLNT
+S&gt;  MDTM
+S&gt;  MLST type*;size*;modify*;UNIX.mode*;UNIX.owner;UNIX.group;unique;
+S&gt;  PASV
+S&gt;  REST STREAM
+S&gt;  SIZE
+S&gt;  TVFS
+S&gt;  Compliance Level: 19981201 (IETF mlst-05)
+S&gt; 211 End.
 </artwork>
 </figure>
 </t>
@@ -5039,14 +5038,14 @@ S> 211 End.
 <t>
 	 <figure>
 	  <artwork type="example">
-C> FEAT
-S> 211-Features supported
-S>  MDTM
-S>  MLST Type*;Size*;Modify*;Perm;Unique*;
-S>  REST STREAM
-S>  SIZE
-S>  TVFS
-S> 211 End
+C&gt; FEAT
+S&gt; 211-Features supported
+S&gt;  MDTM
+S&gt;  MLST Type*;Size*;Modify*;Perm;Unique*;
+S&gt;  REST STREAM
+S&gt;  SIZE
+S&gt;  TVFS
+S&gt; 211 End
 </artwork>
 </figure>
 </t>
@@ -5061,7 +5060,7 @@ S> 211 End
 
 </section>
 </section>
-<section title="OPTS Parameters for MLST">
+<section anchor="mlst-opts" title="OPTS Parameters for MLST">
 <t>
    For the MLSx commands, the Client-FTP may specify a list of facts it
    wishes to be returned in all subsequent MLSx commands until another
@@ -5143,34 +5142,34 @@ S> 211 End
 <t>
 	 <figure>
 	  <artwork type="example">
-C> Feat
-S> 211- Features supported
-S>  MLST Type*;Size;Modify*;Perm;Unique;UNIX.mode;UNIX.chgd;X.hidden;
-S> 211 End
-C> OptS Mlst Type;UNIX.mode;Perm;
-S> 200 MLST OPTS Type;Perm;UNIX.mode;
-C> Feat
-S> 211- Features supported
-S>  MLST Type*;Size;Modify;Perm*;Unique;UNIX.mode*;UNIX.chgd;X.hidden;
-S> 211 End
-C> opts MLst lang;type;charset;create;
-S> 200 MLST OPTS Type;
-C> Feat
-S> 211- Features supported
-S>  MLST Type*;Size;Modify;Perm;Unique;UNIX.mode;UNIX.chgd;X.hidden;
-S> 211 End
-C> OPTS mlst size;frogs;
-S> 200 MLST OPTS Size;
-C> Feat
-S> 211- Features supported
-S>  MLST Type;Size*;Modify;Perm;Unique;UNIX.mode;UNIX.chgd;X.hidden;
-S> 211 End
-C> opts MLst unique type;
-S> 501 Invalid MLST options
-C> Feat
-S> 211- Features supported
-S>  MLST Type;Size*;Modify;Perm;Unique;UNIX.mode;UNIX.chgd;X.hidden;
-S> 211 End
+C&gt; Feat
+S&gt; 211- Features supported
+S&gt;  MLST Type*;Size;Modify*;Perm;Unique;UNIX.mode;UNIX.chgd;X.hidden;
+S&gt; 211 End
+C&gt; OptS Mlst Type;UNIX.mode;Perm;
+S&gt; 200 MLST OPTS Type;Perm;UNIX.mode;
+C&gt; Feat
+S&gt; 211- Features supported
+S&gt;  MLST Type*;Size;Modify;Perm*;Unique;UNIX.mode*;UNIX.chgd;X.hidden;
+S&gt; 211 End
+C&gt; opts MLst lang;type;charset;create;
+S&gt; 200 MLST OPTS Type;
+C&gt; Feat
+S&gt; 211- Features supported
+S&gt;  MLST Type*;Size;Modify;Perm;Unique;UNIX.mode;UNIX.chgd;X.hidden;
+S&gt; 211 End
+C&gt; OPTS mlst size;frogs;
+S&gt; 200 MLST OPTS Size;
+C&gt; Feat
+S&gt; 211- Features supported
+S&gt;  MLST Type;Size*;Modify;Perm;Unique;UNIX.mode;UNIX.chgd;X.hidden;
+S&gt; 211 End
+C&gt; opts MLst unique type;
+S&gt; 501 Invalid MLST options
+C&gt; Feat
+S&gt; 211- Features supported
+S&gt;  MLST Type;Size*;Modify;Perm;Unique;UNIX.mode;UNIX.chgd;X.hidden;
+S&gt; 211 End
 </artwork>
 </figure>
 </t>
@@ -5199,50 +5198,50 @@ S> 211 End
 <t>
 	 <figure>
 	  <artwork type="example">
-C> Feat
-S> 211- Features supported
-S>  MLST Type*;Size*;Modify*;Perm*;Unique*;UNIX.mode;UNIX.chgd;X.hidden;
-S> 211 End
-C> Opts MLST
-S> 200 MLST OPTS
-C> Feat
-S> 211- Features supported
-S>  MLST Type;Size;Modify;Perm;Unique;UNIX.mode;UNIX.chgd;X.hidden;
-S> 211 End
-C> MLst tmp
-S> 250- Listing tmp
-S>   /tmp
-S> 250 End
-C> OPTS mlst unique;size;
-S> 200 MLST OPTS Size;Unique;
-C>  MLst tmp
-S> 250- Listing tmp
-S>  Unique=keVO1+YZ5; /tmp
-S> 250 End
-C> OPTS mlst unique;type;modify;
-S> 200 MLST OPTS Type;Modify;Unique;
-C> MLst tmp
-S> 250- Listing tmp
-S>  Type=dir;Modify=19990930152225;Unique=keVO1+YZ5; /tmp
-S> 250 End
-C> OPTS mlst fish;cakes;
-S> 200 MLST OPTS
-C> MLst tmp
-S> 250- Listing tmp
-S>   /tmp
-S> 250 End
-C> OptS Mlst Modify;Unique;
-S> 200 MLST OPTS Modify;Unique;
-C> MLst tmp
-S> 250- Listing tmp
-S>  Modify=19990930152225;Unique=keVO1+YZ5; /tmp
-S> 250 End
-C> opts MLst fish cakes;
-S> 501 Invalid MLST options
-C> MLst tmp
-S> 250- Listing tmp
-S>  Modify=19990930152225;Unique=keVO1+YZ5; /tmp
-S> 250 End
+C&gt; Feat
+S&gt; 211- Features supported
+S&gt;  MLST Type*;Size*;Modify*;Perm*;Unique*;UNIX.mode;UNIX.chgd;X.hidden;
+S&gt; 211 End
+C&gt; Opts MLST
+S&gt; 200 MLST OPTS
+C&gt; Feat
+S&gt; 211- Features supported
+S&gt;  MLST Type;Size;Modify;Perm;Unique;UNIX.mode;UNIX.chgd;X.hidden;
+S&gt; 211 End
+C&gt; MLst tmp
+S&gt; 250- Listing tmp
+S&gt;   /tmp
+S&gt; 250 End
+C&gt; OPTS mlst unique;size;
+S&gt; 200 MLST OPTS Size;Unique;
+C&gt;  MLst tmp
+S&gt; 250- Listing tmp
+S&gt;  Unique=keVO1+YZ5; /tmp
+S&gt; 250 End
+C&gt; OPTS mlst unique;type;modify;
+S&gt; 200 MLST OPTS Type;Modify;Unique;
+C&gt; MLst tmp
+S&gt; 250- Listing tmp
+S&gt;  Type=dir;Modify=19990930152225;Unique=keVO1+YZ5; /tmp
+S&gt; 250 End
+C&gt; OPTS mlst fish;cakes;
+S&gt; 200 MLST OPTS
+C&gt; MLst tmp
+S&gt; 250- Listing tmp
+S&gt;   /tmp
+S&gt; 250 End
+C&gt; OptS Mlst Modify;Unique;
+S&gt; 200 MLST OPTS Modify;Unique;
+C&gt; MLst tmp
+S&gt; 250- Listing tmp
+S&gt;  Modify=19990930152225;Unique=keVO1+YZ5; /tmp
+S&gt; 250 End
+C&gt; opts MLst fish cakes;
+S&gt; 501 Invalid MLST options
+C&gt; MLst tmp
+S&gt; 250- Listing tmp
+S&gt;  Modify=19990930152225;Unique=keVO1+YZ5; /tmp
+S&gt; 250 End
 </artwork>
 </figure>
 </t>
@@ -5280,7 +5279,7 @@ S> 250 End
 </t><t>
    The arguments to all of these commands should be processed the same
    way that MLST commands and responses are processed with respect to
-   handling embedded spaces, CRs and NULs.  See section 2.2.
+   handling embedded spaces, CRs and NULs.  See <xref target="sec-2.2"/>.
 </t>
 
 </section>
@@ -7724,12 +7723,13 @@ RFC 5797 "FTP Command and Extension Registry"
 </t>
 <t>TODO
 <list>
+<t>Haven't added all RFC3659 references; 3659 references to section 10 (not included here) are not updated.</t>
 <t>Determine if changes in RFC 1123 should be applied.</t>
 <t>Triage and include or reference other FTP RFCs - RFC 2228, 2640, 2773?, 4217.</t>
 <t>Update BNF to ABNF.</t>
 <t>Standardize command organization (subsections?) like EPRT/EPSV, with separated ABNF?</t>
 <t>Move the whole sentence that is <xref target="sec-8"/> into <xref target="sec-3.2"/>?</t>
-<t>Use old IPR value?</t>
+<t>Use old IPR value because we're using old text?</t>
 <t>Author listing/credits in compound document done correctly?</t>
 </list>
 </t>
