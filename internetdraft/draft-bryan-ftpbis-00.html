@@ -263,7 +263,7 @@ FTP Service Commands<br />
 Feature Negotiation Mechanism<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#sec-4.1.5">4.1.5.</a>&nbsp;
 Extensions to FTP<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor69">4.1.6.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor64">4.1.6.</a>&nbsp;
 Other Extensions<br />
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="#sec-4.2">4.2.</a>&nbsp;
 FTP Replies<br />
@@ -299,23 +299,23 @@ Security Considerations<br />
 Privacy and Passwords with Clear Text Protocols<br />
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="#sec-10.2">10.2.</a>&nbsp;
 Securing FTP with TLS<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor70">10.3.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor65">10.3.</a>&nbsp;
 The Bounce Attack<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor71">10.3.1.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor66">10.3.1.</a>&nbsp;
 Protecting Against the Bounce Attack<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor72">10.4.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor67">10.4.</a>&nbsp;
 Restricted Access<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor73">10.5.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor68">10.5.</a>&nbsp;
 Protecting Passwords Against Brute Force Attacks<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor74">10.6.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor69">10.6.</a>&nbsp;
 Protecting Usernames<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor75">10.7.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor70">10.7.</a>&nbsp;
 Port Stealing<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor76">10.8.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor71">10.8.</a>&nbsp;
 Software-Base Security Problems<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor77">10.9.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor72">10.9.</a>&nbsp;
 Server Capabilities Exposed by FEAT<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor78">10.10.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor73">10.10.</a>&nbsp;
 SIZE and MLSx<br />
 <a href="#rfc.references1">11.</a>&nbsp;
 References<br />
@@ -329,7 +329,7 @@ Page Structure<br />
 Directory Commands<br />
 <a href="#Appendix-C">Appendix&nbsp;C.</a>&nbsp;
 RFCs on FTP<br />
-<a href="#anchor81">Appendix&nbsp;D.</a>&nbsp;
+<a href="#anchor76">Appendix&nbsp;D.</a>&nbsp;
 Acknowledgements and Contributors<br />
 <a href="#Appendix-D">Appendix&nbsp;E.</a>&nbsp;
 Changelog from RFC 959 and TODO<br />
@@ -540,7 +540,7 @@ Pathnames</h3>
 Pathname Syntax</h3>
 
 <p>
-   Except where TVFS is supported (see Section 6), this specification
+   Except where TVFS is supported (see <a class='info' href='#tvfs'>Section&nbsp;4.1.5.4<span> (</span><span class='info'>A Trivial Virtual File Store (TVFS)</span><span>)</span></a>), this specification
    imposes no syntax upon pathnames.  Nor does it restrict the character
    set from which pathnames are created.  This does not imply that the
    NVFS is required to make sense of all possible pathnames.  Server-PIs
@@ -2733,7 +2733,7 @@ Extensions for IPv6 and NATs: Extended Port (EPRT) and Extended Passive Mode (EP
    PORT and PASV are replaced with EPRT and EPSV, respectively.
 
 </p>
-<a name="4.1.2.1.1"></a><br /><hr />
+<a name="sec-4.1.2.1.1"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.1.2.1.1"></a><h3>4.1.2.1.1.&nbsp;
 The EPRT Command</h3>
@@ -2976,7 +2976,7 @@ The EPSV Command</h3>
 <p>
    If the requested protocol is supported by the server, it SHOULD use
    the protocol.  If not, the server MUST return the 522 error messages
-   as outlined in section 2.
+   as outlined in <a class='info' href='#sec-4.1.2.1.1'>Section&nbsp;4.1.2.1.1<span> (</span><span class='info'>The EPRT Command</span><span>)</span></a>.
 
 </p>
 <p>
@@ -2998,14 +2998,13 @@ The EPSV Command</h3>
 <p>
    Upon receipt of an EPSV ALL command, the server MUST reject all data
    connection setup commands other than EPSV (i.e., EPRT, PORT, PASV, et
-   al.).  This use of the EPSV command is further explained in section
-   4.
+   al.).  This use of the EPSV command is further explained in <a class='info' href='#sec-4.1.2.1.3'>Section&nbsp;4.1.2.1.3<span> (</span><span class='info'>Command Usage</span><span>)</span></a>.
 
 </p>
 <p>
 
 </p>
-<a name="4.1.2.1.3"></a><br /><hr />
+<a name="sec-4.1.2.1.3"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.1.2.1.3"></a><h3>4.1.2.1.3.&nbsp;
 Command Usage</h3>
@@ -3929,7 +3928,7 @@ MDTM Examples</h3>
    named &quot;19990929043300 file6&quot;.
 
 </p>
-<a name="anchor6"></a><br /><hr />
+<a name="size"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.1.5.2"></a><h3>4.1.5.2.&nbsp;
 File SIZE</h3>
@@ -3958,7 +3957,7 @@ File SIZE</h3>
    precise information is acceptable.
 
 </p>
-<a name="anchor7"></a><br /><hr />
+<a name="anchor6"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.1.5.2.1"></a><h3>4.1.5.2.1.&nbsp;
 Syntax</h3>
@@ -3999,7 +3998,7 @@ Syntax</h3>
    are not permitted.
 
 </p>
-<a name="anchor8"></a><br /><hr />
+<a name="anchor7"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.1.5.2.2"></a><h3>4.1.5.2.2.&nbsp;
 Error Responses</h3>
@@ -4018,7 +4017,7 @@ Error Responses</h3>
    also possible in appropriate circumstances.
 
 </p>
-<a name="anchor9"></a><br /><hr />
+<a name="anchor8"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.1.5.2.3"></a><h3>4.1.5.2.3.&nbsp;
 FEAT Response for SIZE</h3>
@@ -4051,7 +4050,7 @@ FEAT Response for SIZE</h3>
    feature lines is mandatory <a class='info' href='#RFC2389'>[RFC2389]<span> (</span><span class='info'>Hethmon, P. and R. Elz, &ldquo;Feature negotiation mechanism for the File Transfer Protocol,&rdquo; August&nbsp;1998.</span><span>)</span></a>.
 
 </p>
-<a name="anchor10"></a><br /><hr />
+<a name="anchor9"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.1.5.2.4"></a><h3>4.1.5.2.4.&nbsp;
 Size Examples</h3>
@@ -4093,11 +4092,11 @@ Size Examples</h3>
    may take considerable effort on the part of the server-PI, user-PIs
    should not used this command unless this precision is essential (such
    as when about to restart an interrupted transfer).  For other uses,
-   the &quot;Size&quot; fact of the MLST command (see section 7.5.7) ought be
+   the &quot;Size&quot; fact of the MLST command (see <a class='info' href='#sizefact'>Section&nbsp;4.1.5.5.5.7<span> (</span><span class='info'>The size Fact</span><span>)</span></a>) ought be
    requested.
 
 </p>
-<a name="anchor11"></a><br /><hr />
+<a name="rest"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.1.5.3"></a><h3>4.1.5.3.&nbsp;
 Restart of Interrupted Transfer (REST)</h3>
@@ -4124,7 +4123,7 @@ Restart of Interrupted Transfer (REST)</h3>
    corrections.
 
 </p>
-<a name="anchor12"></a><br /><hr />
+<a name="anchor10"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.1.5.3.1"></a><h3>4.1.5.3.1.&nbsp;
 Restarting in STREAM Mode</h3>
@@ -4170,10 +4169,10 @@ Restarting in STREAM Mode</h3>
    to restart sending the file, it needs to be able to determine how
    much data was previously sent, and correctly received and saved.  A
    new FTP command is needed to get this information.  This is the
-   purpose of the SIZE command, as documented in section 4.
+   purpose of the SIZE command, as documented in <a class='info' href='#size'>Section&nbsp;4.1.5.2<span> (</span><span class='info'>File SIZE</span><span>)</span></a>.
 
 </p>
-<a name="anchor13"></a><br /><hr />
+<a name="anchor11"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.1.5.3.2"></a><h3>4.1.5.3.2.&nbsp;
 Error Recovery and Restart</h3>
@@ -4196,7 +4195,7 @@ Error Recovery and Restart</h3>
    convention.
 
 </p>
-<a name="anchor14"></a><br /><hr />
+<a name="anchor12"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.1.5.3.3"></a><h3>4.1.5.3.3.&nbsp;
 Syntax</h3>
@@ -4290,7 +4289,7 @@ Syntax</h3>
    restart attempt.
 
 </p>
-<a name="anchor15"></a><br /><hr />
+<a name="anchor13"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.1.5.3.4"></a><h3>4.1.5.3.4.&nbsp;
   FEAT Response for REST</h3>
@@ -4325,7 +4324,7 @@ Syntax</h3>
    feature lines is mandatory <a class='info' href='#RFC2389'>[RFC2389]<span> (</span><span class='info'>Hethmon, P. and R. Elz, &ldquo;Feature negotiation mechanism for the File Transfer Protocol,&rdquo; August&nbsp;1998.</span><span>)</span></a>.
 
 </p>
-<a name="anchor16"></a><br /><hr />
+<a name="anchor14"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.1.5.3.5"></a><h3>4.1.5.3.5.&nbsp;
 REST Example</h3>
@@ -4355,7 +4354,7 @@ REST Example</h3>
 
 
 </p>
-<a name="anchor17"></a><br /><hr />
+<a name="tvfs"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.1.5.4"></a><h3>4.1.5.4.&nbsp;
 A Trivial Virtual File Store (TVFS)</h3>
@@ -4389,7 +4388,7 @@ A Trivial Virtual File Store (TVFS)</h3>
    File Store (TVFS), if implemented, provides that mechanism.
 
 </p>
-<a name="anchor18"></a><br /><hr />
+<a name="anchor15"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.1.5.4.1"></a><h3>4.1.5.4.1.&nbsp;
 TVFS File Names</h3>
@@ -4429,7 +4428,7 @@ TVFS File Names</h3>
    achieve, it MUST be encoded in some reversible way.
 
 </p>
-<a name="anchor19"></a><br /><hr />
+<a name="tvfspathnames"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.1.5.4.2"></a><h3>4.1.5.4.2.&nbsp;
 TVFS Pathnames</h3>
@@ -4487,7 +4486,7 @@ TVFS Pathnames</h3>
    sequence.
 
 </p>
-<a name="anchor20"></a><br /><hr />
+<a name="anchor16"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.1.5.4.2.1"></a><h3>4.1.5.4.2.1.&nbsp;
 Notes</h3>
@@ -4548,7 +4547,7 @@ Notes</h3>
       properties of a file store.  Only the naming scheme is defined.
 
 </p>
-<a name="anchor21"></a><br /><hr />
+<a name="anchor17"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.1.5.4.3"></a><h3>4.1.5.4.3.&nbsp;
 FEAT Response for TVFS</h3>
@@ -4609,7 +4608,7 @@ FEAT Response for TVFS</h3>
    The TVFS feature adds no new commands to the FTP command repertoire.
 
 </p>
-<a name="anchor22"></a><br /><hr />
+<a name="anchor18"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.1.5.4.4"></a><h3>4.1.5.4.4.&nbsp;
 OPTS for TVFS</h3>
@@ -4622,7 +4621,7 @@ OPTS for TVFS</h3>
 <p>
 
 </p>
-<a name="anchor23"></a><br /><hr />
+<a name="anchor19"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.1.5.4.5"></a><h3>4.1.5.4.5.&nbsp;
 TVFS Examples</h3>
@@ -4745,7 +4744,7 @@ TVFS Examples</h3>
    paths.
 
 </p>
-<a name="anchor24"></a><br /><hr />
+<a name="anchor20"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.1.5.5"></a><h3>4.1.5.5.&nbsp;
 Listings for Machine Processing (MLST and MLSD)</h3>
@@ -4785,7 +4784,7 @@ Listings for Machine Processing (MLST and MLSD)</h3>
    all other FTP commands which take pathnames as arguments.
 
 </p>
-<a name="anchor25"></a><br /><hr />
+<a name="anchor21"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.1.5.5.1"></a><h3>4.1.5.5.1.&nbsp;
 Format of MLSx Requests</h3>
@@ -4844,7 +4843,7 @@ Format of MLSx Requests</h3>
 
 
 </p>
-<a name="anchor26"></a><br /><hr />
+<a name="anchor22"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.1.5.5.2"></a><h3>4.1.5.5.2.&nbsp;
 Format of MLSx Response</h3>
@@ -4976,16 +4975,16 @@ Format of MLSx Response</h3>
    of facts must not contain any spaces anywhere inside it.  Facts
    should be provided in each output line only if they both provide
    relevant information about the file named on the same line, and they
-   are in the set requested by the user-PI.  See section 7.9 (page 51).
+   are in the set requested by the user-PI.  See <a class='info' href='#mlst-opts'>Section&nbsp;4.1.5.5.9<span> (</span><span class='info'>OPTS Parameters for MLST</span><span>)</span></a>.
    There is no requirement that the same set of facts be provided for
    each file, or that the facts presented occur in the same order for
    each file.
 
 </p>
-<a name="sec-7.2.1"></a><br /><hr />
+<a name="anchor23"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.1.5.5.2.1"></a><h3>4.1.5.5.2.1.&nbsp;
-  Error Responses to MLSx commands</h3>
+Error Responses to MLSx commands</h3>
 
 <p>
    Many of the 4xy and 5xy responses defined in section 4.2 of STD 9,
@@ -4999,7 +4998,7 @@ Format of MLSx Response</h3>
    also possible in appropriate circumstances.
 
 </p>
-<a name="anchor27"></a><br /><hr />
+<a name="anchor24"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.1.5.5.3"></a><h3>4.1.5.5.3.&nbsp;
 File Name Encoding</h3>
@@ -5029,7 +5028,7 @@ File Name Encoding</h3>
    &quot;Internationalization of the File Transfer Protocol&quot; <a class='info' href='#RFC2640'>[RFC2640]<span> (</span><span class='info'>Curtin, B., &ldquo;Internationalization of the File Transfer Protocol,&rdquo; July&nbsp;1999.</span><span>)</span></a>.
 
 </p>
-<a name="anchor28"></a><br /><hr />
+<a name="anchor25"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.1.5.5.3.1"></a><h3>4.1.5.5.3.1.&nbsp;
 Notes about the File Name</h3>
@@ -5071,7 +5070,7 @@ Notes about the File Name</h3>
    When TVFS is supported, a user-PI can refer to any file or directory
    in the listing by combining a type &quot;cdir&quot; name, with the appropriate
    name from the directory listing using the procedure defined in
-   section 6.2.
+   <a class='info' href='#tvfspathnames'>Section&nbsp;4.1.5.4.2<span> (</span><span class='info'>TVFS Pathnames</span><span>)</span></a>.
 
 </p>
 <p>
@@ -5082,7 +5081,7 @@ Notes about the File Name</h3>
    name components of the listing.
 
 </p>
-<a name="anchor29"></a><br /><hr />
+<a name="anchor26"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.1.5.5.4"></a><h3>4.1.5.5.4.&nbsp;
 Format of Facts</h3>
@@ -5093,7 +5092,7 @@ Format of Facts</h3>
    pairs each followed by semi-colon (&quot;;&quot;) characters.  An individual
    fact may not contain a semi-colon in its name or value.  The complete
    series of facts may not contain the space character.  See the
-   definition or &quot;RCHAR&quot; in section 2.1 for a list of the characters
+   definition or &quot;RCHAR&quot; in <a class='info' href='#sec-2.1'>Section&nbsp;2.1<span> (</span><span class='info'>Basic Tokens</span><span>)</span></a> for a list of the characters
    that can occur in a fact value.  Not all are applicable to all facts.
 
 </p>
@@ -5107,7 +5106,7 @@ Format of Facts</h3>
    type=file;x.myfact=foo,bar;
 
 </p>
-<a name="anchor30"></a><br /><hr />
+<a name="anchor27"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.1.5.5.5"></a><h3>4.1.5.5.5.&nbsp;
 Standard Facts</h3>
@@ -5168,7 +5167,7 @@ Standard Facts</h3>
 
 
 </p>
-<a name="anchor31"></a><br /><hr />
+<a name="anchor28"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.1.5.5.5.1"></a><h3>4.1.5.5.5.1.&nbsp;
 The Type Fact</h3>
@@ -5218,7 +5217,7 @@ The Type Fact</h3>
    string.
 
 </p>
-<a name="anchor32"></a><br /><hr />
+<a name="anchor29"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.1.5.5.5.1.1"></a><h3>4.1.5.5.5.1.1.&nbsp;
 type=file</h3>
@@ -5230,7 +5229,7 @@ type=file</h3>
    still be meaningful.
 
 </p>
-<a name="anchor33"></a><br /><hr />
+<a name="anchor30"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.1.5.5.5.1.2"></a><h3>4.1.5.5.5.1.2.&nbsp;
 type=cdir</h3>
@@ -5255,7 +5254,7 @@ type=cdir</h3>
 <p>
    Where TVFS is supported by the server-FTP, this name may be used to
    construct pathnames with which to refer to the files and directories
-   returned in the same MLSD output (see section 6.2).  These pathnames
+   returned in the same MLSD output (see <a class='info' href='#tvfspathnames'>Section&nbsp;4.1.5.4.2<span> (</span><span class='info'>TVFS Pathnames</span><span>)</span></a>).  These pathnames
    are only expected to work when the server-PI's position in the NVFS
    file tree is the same as its position when the MLSD command was
    issued, unless a fully qualified pathname results.
@@ -5270,7 +5269,7 @@ type=cdir</h3>
    directory that was listed in its current working directory.
 
 </p>
-<a name="anchor34"></a><br /><hr />
+<a name="anchor31"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.1.5.5.5.1.3"></a><h3>4.1.5.5.5.1.3.&nbsp;
 type=dir</h3>
@@ -5282,7 +5281,7 @@ type=dir</h3>
    the object of an MLSD command.
 
 </p>
-<a name="anchor35"></a><br /><hr />
+<a name="anchor32"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.1.5.5.5.1.4"></a><h3>4.1.5.5.5.1.4.&nbsp;
 type=pdir</h3>
@@ -5317,7 +5316,7 @@ type=pdir</h3>
    entries or not.
 
 </p>
-<a name="anchor36"></a><br /><hr />
+<a name="anchor33"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.1.5.5.5.1.5"></a><h3>4.1.5.5.5.1.5.&nbsp;
 System Defined Types</h3>
@@ -5364,7 +5363,7 @@ System Defined Types</h3>
    appropriate, or not represented at all.
 
 </p>
-<a name="anchor37"></a><br /><hr />
+<a name="anchor34"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.1.5.5.5.1.6"></a><h3>4.1.5.5.5.1.6.&nbsp;
 Multiple Types</h3>
@@ -5385,7 +5384,7 @@ Multiple Types</h3>
    file.
 
 </p>
-<a name="anchor38"></a><br /><hr />
+<a name="anchor35"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.1.5.5.5.2"></a><h3>4.1.5.5.5.2.&nbsp;
 The unique Fact</h3>
@@ -5421,7 +5420,7 @@ The unique Fact</h3>
    underlying object.
 
 </p>
-<a name="anchor39"></a><br /><hr />
+<a name="anchor36"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.1.5.5.5.3"></a><h3>4.1.5.5.5.3.&nbsp;
 The modify Fact</h3>
@@ -5455,7 +5454,7 @@ The modify Fact</h3>
 	  
 
 </p>
-<a name="anchor40"></a><br /><hr />
+<a name="anchor37"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.1.5.5.5.4"></a><h3>4.1.5.5.5.4.&nbsp;
 The create Fact</h3>
@@ -5484,7 +5483,7 @@ The create Fact</h3>
       include this fact.
 
 </p>
-<a name="anchor41"></a><br /><hr />
+<a name="anchor38"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.1.5.5.5.5"></a><h3>4.1.5.5.5.5.&nbsp;
 The perm Fact</h3>
@@ -5610,7 +5609,7 @@ The perm Fact</h3>
       correctly represent what is permitted.
 
 </p>
-<a name="anchor42"></a><br /><hr />
+<a name="anchor39"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.1.5.5.5.6"></a><h3>4.1.5.5.5.6.&nbsp;
 The lang Fact</h3>
@@ -5638,7 +5637,7 @@ The lang Fact</h3>
    about the encoding of its name.
 
 </p>
-<a name="anchor43"></a><br /><hr />
+<a name="sizefact"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.1.5.5.5.7"></a><h3>4.1.5.5.5.7.&nbsp;
 The size Fact</h3>
@@ -5659,9 +5658,9 @@ The size Fact</h3>
 </p>
 <p>
    Clients that need highly accurate size information for some
-   particular reason should use the SIZE command as defined in section
-   4.  The most common need for this accuracy is likely to be in
-   conjunction with the REST command described in section 5.  The size
+   particular reason should use the SIZE command as defined in <a class='info' href='#size'>Section&nbsp;4.1.5.2<span> (</span><span class='info'>File SIZE</span><span>)</span></a>.
+   The most common need for this accuracy is likely to be in
+   conjunction with the REST command described in <a class='info' href='#rest'>Section&nbsp;4.1.5.3<span> (</span><span class='info'>Restart of Interrupted Transfer (REST)</span><span>)</span></a>.  The size
    fact, on the other hand, should be used for purposes such as
    indicating to a human user the approximate size of the file to be
    transferred, and perhaps to give an idea of expected transfer
@@ -5676,7 +5675,7 @@ The size Fact</h3>
 
 
 </p>
-<a name="anchor44"></a><br /><hr />
+<a name="anchor40"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.1.5.5.5.8"></a><h3>4.1.5.5.5.8.&nbsp;
 The media-type Fact</h3>
@@ -5704,7 +5703,7 @@ The media-type Fact</h3>
    separated by a slash &quot;/&quot; as is traditional.
 
 </p>
-<a name="anchor45"></a><br /><hr />
+<a name="anchor41"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.1.5.5.5.9"></a><h3>4.1.5.5.5.9.&nbsp;
 The charset Fact</h3>
@@ -5726,7 +5725,7 @@ The charset Fact</h3>
 
 
 </p>
-<a name="anchor46"></a><br /><hr />
+<a name="anchor42"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.1.5.5.5.10"></a><h3>4.1.5.5.5.10.&nbsp;
 Required Facts</h3>
@@ -5737,7 +5736,7 @@ Required Facts</h3>
    support at least the type, perm, size, unique, and modify facts.
 
 </p>
-<a name="anchor47"></a><br /><hr />
+<a name="anchor43"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.1.5.5.6"></a><h3>4.1.5.5.6.&nbsp;
 System Dependent and Local Facts</h3>
@@ -5748,7 +5747,7 @@ System Dependent and Local Facts</h3>
    peculiar to the underlying file system.
 
 </p>
-<a name="anchor48"></a><br /><hr />
+<a name="anchor44"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.1.5.5.6.1"></a><h3>4.1.5.5.6.1.&nbsp;
 System Dependent Facts</h3>
@@ -5763,7 +5762,7 @@ System Dependent Facts</h3>
 <p>
    The value of an OS dependent fact may be whatever is appropriate to
    convey the information available.  It must be encoded as a &quot;token&quot; as
-   defined in section 2.1 however.
+   defined in <a class='info' href='#sec-2.1'>Section&nbsp;2.1<span> (</span><span class='info'>Basic Tokens</span><span>)</span></a> however.
 
 </p>
 <p>
@@ -5774,7 +5773,7 @@ System Dependent Facts</h3>
    to be accomplished according to the procedures of section 10.
 
 </p>
-<a name="anchor49"></a><br /><hr />
+<a name="anchor45"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.1.5.5.6.2"></a><h3>4.1.5.5.6.2.&nbsp;
 Local Facts</h3>
@@ -5794,11 +5793,11 @@ Local Facts</h3>
 </p>
 <p>
    Local fact names all begin with the sequence &quot;X.&quot;.  The rest of the
-   name is a &quot;token&quot; (see section 2.1).  The value of a local fact can
+   name is a &quot;token&quot; (see <a class='info' href='#sec-2.1'>Section&nbsp;2.1<span> (</span><span class='info'>Basic Tokens</span><span>)</span></a>).  The value of a local fact can
    be anything at all, provided it can be encoded as a &quot;token&quot;.
 
 </p>
-<a name="anchor50"></a><br /><hr />
+<a name="anchor46"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.1.5.5.7"></a><h3>4.1.5.5.7.&nbsp;
 MLSx Examples</h3>
@@ -5833,7 +5832,7 @@ MLSx Examples</h3>
    user of the client.
 
 </p>
-<a name="anchor51"></a><br /><hr />
+<a name="anchor47"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.1.5.5.7.1"></a><h3>4.1.5.5.7.1.&nbsp;
 Simple MLST</h3>
@@ -5871,7 +5870,7 @@ S&gt; 250 End
    particularly interesting.
 
 </p>
-<a name="anchor52"></a><br /><hr />
+<a name="anchor48"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.1.5.5.7.2"></a><h3>4.1.5.5.7.2.&nbsp;
 MLST of a directory</h3>
@@ -5898,7 +5897,7 @@ S&gt; 250 End
    Again, the fully qualified pathname of the directory listed is given.
 
 </p>
-<a name="anchor53"></a><br /><hr />
+<a name="anchor49"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.1.5.5.7.3"></a><h3>4.1.5.5.7.3.&nbsp;
 MLSD of a directory</h3>
@@ -5948,7 +5947,7 @@ S&gt; 226 MLSD completed
    included in the fact lines for the directory types shown.
 
 </p>
-<a name="anchor54"></a><br /><hr />
+<a name="anchor50"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.1.5.5.7.4"></a><h3>4.1.5.5.7.4.&nbsp;
 A More Complex Example</h3>
@@ -6064,7 +6063,7 @@ S&gt; 226 MLSD completed
    modifiable.
 
 </p>
-<a name="anchor55"></a><br /><hr />
+<a name="anchor51"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.1.5.5.7.5"></a><h3>4.1.5.5.7.5.&nbsp;
 More Accurate Time Information</h3>
@@ -6086,7 +6085,7 @@ S&gt; 250 End
    September, 1999.
 
 </p>
-<a name="anchor56"></a><br /><hr />
+<a name="anchor52"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.1.5.5.7.6"></a><h3>4.1.5.5.7.6.&nbsp;
 A Different Server</h3>
@@ -6140,7 +6139,7 @@ S&gt; 226 Listing completed.
    &quot;pdir&quot; entry.
 
 </p>
-<a name="anchor57"></a><br /><hr />
+<a name="anchor53"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.1.5.5.7.7"></a><h3>4.1.5.5.7.7.&nbsp;
 Some IANA Files</h3>
@@ -6203,7 +6202,7 @@ S&gt; 257 "/iana/assignments" is current directory.
    listings are much longer.
 
 </p>
-<a name="anchor58"></a><br /><hr />
+<a name="anchor54"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.1.5.5.7.8"></a><h3>4.1.5.5.7.8.&nbsp;
 A Stress Test of Case (In)dependence</h3>
@@ -6283,7 +6282,7 @@ S&gt; 226 MLSD completed
    examples.
 
 </p>
-<a name="anchor59"></a><br /><hr />
+<a name="anchor55"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.1.5.5.7.9"></a><h3>4.1.5.5.7.9.&nbsp;
 Example from Another Server</h3>
@@ -6353,7 +6352,7 @@ S&gt; 250 End
    itself to select the case of the names it returns.
 
 </p>
-<a name="anchor60"></a><br /><hr />
+<a name="anchor56"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.1.5.5.7.10"></a><h3>4.1.5.5.7.10.&nbsp;
 A Server Listing Itself</h3>
@@ -6410,7 +6409,7 @@ S&gt; 226 MLSD complete.
    though that exchange has not been shown here.
 
 </p>
-<a name="anchor61"></a><br /><hr />
+<a name="anchor57"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.1.5.5.7.11"></a><h3>4.1.5.5.7.11.&nbsp;
 A Server with a Difference</h3>
@@ -6516,7 +6515,7 @@ S&gt; 226 That's all folks...
    inclined.  The server also uses obnoxiously &quot;cute&quot; messages.
 
 </p>
-<a name="anchor62"></a><br /><hr />
+<a name="anchor58"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.1.5.5.8"></a><h3>4.1.5.5.8.&nbsp;
 FEAT Response for MLSx</h3>
@@ -6560,7 +6559,7 @@ FEAT Response for MLSx</h3>
    the MLST feature indicates that both MLST and MLSD are supported.
 
 </p>
-<a name="anchor63"></a><br /><hr />
+<a name="anchor59"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.1.5.5.8.1"></a><h3>4.1.5.5.8.1.&nbsp;
 Examples</h3>
@@ -6640,7 +6639,7 @@ S&gt; 211 End
    supported by this server are enabled by default.
 
 </p>
-<a name="anchor64"></a><br /><hr />
+<a name="mlst-opts"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.1.5.5.9"></a><h3>4.1.5.5.9.&nbsp;
 OPTS Parameters for MLST</h3>
@@ -6702,7 +6701,7 @@ OPTS Parameters for MLST</h3>
    authentication of the user-PI, but may choose to permit them.
 
 </p>
-<a name="anchor65"></a><br /><hr />
+<a name="anchor60"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.1.5.5.9.1"></a><h3>4.1.5.5.9.1.&nbsp;
 OPTS MLST Response</h3>
@@ -6740,7 +6739,7 @@ OPTS MLST Response</h3>
    returned in any case, or mixture of cases.
 
 </p>
-<a name="anchor66"></a><br /><hr />
+<a name="anchor61"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.1.5.5.9.2"></a><h3>4.1.5.5.9.2.&nbsp;
 Examples</h3>
@@ -6862,7 +6861,7 @@ S&gt; 250 End
    deliberately, or because none of the facts requested were available.
 
 </p>
-<a name="anchor67"></a><br /><hr />
+<a name="anchor62"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.1.5.6"></a><h3>4.1.5.6.&nbsp;
 Impact on Other FTP Commands</h3>
@@ -6892,10 +6891,10 @@ Impact on Other FTP Commands</h3>
 <p>
    The arguments to all of these commands should be processed the same
    way that MLST commands and responses are processed with respect to
-   handling embedded spaces, CRs and NULs.  See section 2.2.
+   handling embedded spaces, CRs and NULs.  See <a class='info' href='#sec-2.2'>Section&nbsp;2.2<span> (</span><span class='info'>Pathnames</span><span>)</span></a>.
 
 </p>
-<a name="anchor68"></a><br /><hr />
+<a name="anchor63"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.1.5.7"></a><h3>4.1.5.7.&nbsp;
 Character Sets and Internationalization</h3>
@@ -6930,7 +6929,7 @@ Character Sets and Internationalization</h3>
    be obtained via other means.
 
 </p>
-<a name="anchor69"></a><br /><hr />
+<a name="anchor64"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.1.6"></a><h3>4.1.6.&nbsp;
 Other Extensions</h3>
@@ -8272,7 +8271,7 @@ Securing FTP with TLS</h3>
    behaviours of implementations to allow interoperation.
 
 </p>
-<a name="anchor70"></a><br /><hr />
+<a name="anchor65"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.10.3"></a><h3>10.3.&nbsp;
 The Bounce Attack</h3>
@@ -8302,7 +8301,7 @@ The Bounce Attack</h3>
    attackers.
 
 </p>
-<a name="anchor71"></a><br /><hr />
+<a name="anchor66"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.10.3.1"></a><h3>10.3.1.&nbsp;
 Protecting Against the Bounce Attack</h3>
@@ -8352,7 +8351,7 @@ Protecting Against the Bounce Attack</h3>
    be necessary in a particular environment.
 
 </p>
-<a name="anchor72"></a><br /><hr />
+<a name="anchor67"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.10.4"></a><h3>10.4.&nbsp;
 Restricted Access</h3>
@@ -8382,7 +8381,7 @@ Restricted Access</h3>
    outlined in <a class='info' href='#RFC2228'>[RFC2228]<span> (</span><span class='info'>Horowitz, M., &ldquo;FTP Security Extensions,&rdquo; October&nbsp;1997.</span><span>)</span></a>.
 
 </p>
-<a name="anchor73"></a><br /><hr />
+<a name="anchor68"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.10.5"></a><h3>10.5.&nbsp;
 Protecting Passwords Against Brute Force Attacks</h3>
@@ -8412,7 +8411,7 @@ Protecting Passwords Against Brute Force Attacks</h3>
    the attack to disable access by a valid user.
 
 </p>
-<a name="anchor74"></a><br /><hr />
+<a name="anchor69"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.10.6"></a><h3>10.6.&nbsp;
 Protecting Usernames</h3>
@@ -8427,7 +8426,7 @@ Protecting Usernames</h3>
    username.
 
 </p>
-<a name="anchor75"></a><br /><hr />
+<a name="anchor70"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.10.7"></a><h3>10.7.&nbsp;
 Port Stealing</h3>
@@ -8447,7 +8446,7 @@ Port Stealing</h3>
    mechanisms.
 
 </p>
-<a name="anchor76"></a><br /><hr />
+<a name="anchor71"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.10.8"></a><h3>10.8.&nbsp;
 Software-Base Security Problems</h3>
@@ -8505,7 +8504,7 @@ Debug Code
    or similar mechanisms before releasing their software.
 
 </p>
-<a name="anchor77"></a><br /><hr />
+<a name="anchor72"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.10.9"></a><h3>10.9.&nbsp;
 Server Capabilities Exposed by FEAT</h3>
@@ -8529,7 +8528,7 @@ Server Capabilities Exposed by FEAT</h3>
    addressed where those features are defined.
 
 </p>
-<a name="anchor78"></a><br /><hr />
+<a name="anchor73"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.10.10"></a><h3>10.10.&nbsp;
 SIZE and MLSx</h3>
@@ -9302,7 +9301,7 @@ RFC 4823 "FTP Transport for Secure Peer-to-Peer Business Data Interchange over t
 RFC 5797 "FTP Command and Extension Registry"
 
 </p>
-<a name="anchor81"></a><br /><hr />
+<a name="anchor76"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.D"></a><h3>Appendix D.&nbsp;
 Acknowledgements and Contributors</h3>
@@ -9337,6 +9336,8 @@ Changelog from RFC 959 and TODO</h3>
 <p>TODO
 </p>
 <blockquote class="text">
+<p>Haven't added all RFC3659 references; 3659 references to section 10 (not included here) are not updated.
+</p>
 <p>Determine if changes in RFC 1123 should be applied.
 </p>
 <p>Triage and include or reference other FTP RFCs - RFC 2228, 2640, 2773?, 4217.
@@ -9347,7 +9348,7 @@ Changelog from RFC 959 and TODO</h3>
 </p>
 <p>Move the whole sentence that is <a class='info' href='#sec-8'>Section&nbsp;8<span> (</span><span class='info'>Connection Establishment</span><span>)</span></a> into <a class='info' href='#sec-3.2'>Section&nbsp;3.2<span> (</span><span class='info'>Establishing Data Connections</span><span>)</span></a>?
 </p>
-<p>Use old IPR value?
+<p>Use old IPR value because we're using old text?
 </p>
 <p>Author listing/credits in compound document done correctly?
 </p>
