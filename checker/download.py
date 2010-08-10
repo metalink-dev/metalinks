@@ -2203,20 +2203,11 @@ class FTP:
         if FTP_PROXY != "":
             # parse proxy URL
             url = urlparse.urlparse(FTP_PROXY)
-            if url[0] == "" or url[0] == "http":
-                port = httplib.HTTP_PORT
-                if url[1].find("@") != -1:
-                    host = url[1].split("@", 2)[1]
-                else:
-                    host = url[1]
-                    
-                try:
-                    if url.port != None:
-                        port = url.port
-                    if url.username != None:
-                        self.headers["Proxy-authorization"] = "Basic " + base64.encodestring(url.username+':'+url.password) + "\r\n"
-                except AttributeError:
-                    pass
+            if url.scheme == "" or url.scheme == "http": 
+                host = url.hostname 
+                port = url.port 
+                if url.username != None: 
+                    self.headers["Proxy-authorization"] = "Basic " + base64.encodestring(url.username+':'+url.password) + "\r\n"
                 self.conn = httplib.HTTPConnection(host, port)
             else:
                 raise AssertionError, _("Transport not supported for FTP_PROXY, %s") % url.scheme
@@ -2272,7 +2263,8 @@ class FTP:
             return self.conn.ntransfercmd(cmd, rest)
 
     def voidcmd(self, *args):
-        return self.conn.voidcmd(*args)
+        if FTP_PROXY == "":
+            return self.conn.voidcmd(*args)
 
     def quit(self):
         if FTP_PROXY != "":
