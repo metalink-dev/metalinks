@@ -3034,7 +3034,6 @@ Response Syntax:
 </t><t>
    When using TYPE ASCII or IMAGE, the SIZE command will return the
    number of octets that would actually be transferred if the file were
-</t><t>
    to be sent between the two systems, i.e., with type IMAGE, the SIZE
    normally would be the number of octets in the file.  With type ASCII,
    the SIZE would be the number of octets in the file including any
@@ -3519,7 +3518,6 @@ Response Syntax:
    contents of the current working directory, and MLST must return a
    listing giving information about the current working directory
    itself.  For these purposes, the contents of a directory are whatever
-</t><t>
    file or directory names (not pathnames) the server-PI will allow to
    be referenced when the current working directory is the directory
    named, and which the server-PI desires to reveal to the user-PI.
@@ -3681,7 +3679,6 @@ Response Syntax:
    An FTP implementation supporting the MLSx commands must be 8-bit
    clean.  This is necessary in order to transmit UTF-8 encoded file
    names.  This specification recommends the use of UTF-8 encoded file
-</t><t>
    names.  FTP implementations SHOULD use UTF-8 whenever possible to
    encourage the maximum inter-operability.
 </t><t>
@@ -4085,7 +4082,6 @@ Response Syntax:
 </t><t>
    The &quot;e&quot; permission applies to the directory types.  When set on an
    object of type=dir, type=cdir, or type=pdir it indicates that a CWD
-</t><t>
    command naming the object should succeed, and the user should be able
    to enter the directory named.  For type=pdir it also indicates that
    the CDUP command may succeed (if this particular pathname is the one
@@ -4311,7 +4307,6 @@ Response Syntax:
    similar) would not be present in an actual connection, or were not,
    in fact, actually used in the examples before editing.  Note also
    that the formats shown are those that are transmitted between client
-</t><t>
    and server, not formats that would normally ever be reported to the
    user of the client.
 </t>
@@ -4980,7 +4975,6 @@ S> 226 That's all folks...
    optional asterisk appears after a factname, that fact will be
    included in MLST format responses, until an &quot;OPTS MLST&quot; is given to
    alter the list of facts returned.  After that, subsequent FEAT
-</t><t>
    commands will return the asterisk to show the facts selected by the
    most recent &quot;OPTS MLST&quot;.
 </t><t>
@@ -5104,7 +5098,6 @@ S> 211 End
    clients should use particular caution before requesting any facts not
    in that set.  That is, while other facts may be available from the
    server, clients should refrain from requesting such facts unless
-</t><t>
    there is a particular operational requirement for that particular
    information, which ought be more significant than perhaps simply
    improving the information displayed to an end user.
@@ -5908,6 +5901,7 @@ FIXME       EPSV&lt;space&gt;&lt;net-prt&gt;
 <figure> 
 <artwork type="ABNF">
 FIXME UPDATE TO ABNF
+UPDATE FOR IPv6?
            &lt;username&gt; ::= &lt;string&gt;
            &lt;password&gt; ::= &lt;string&gt;
            &lt;account-information&gt; ::= &lt;string&gt;
@@ -5930,7 +5924,6 @@ FIXME UPDATE TO ABNF
                          | L &lt;sp&gt; &lt;byte-size&gt;
            &lt;structure-code&gt; ::= F | R | P
            &lt;mode-code&gt; ::= S | B | C
-           &lt;pathname&gt; ::= &lt;string&gt;
            &lt;decimal-integer&gt; ::= any decimal integer
 </artwork></figure>
 
