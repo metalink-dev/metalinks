@@ -323,8 +323,8 @@ Internet-Draft           File Transfer Protocol              August 2010
 
    Implementors should also be aware that, although Telnet NVT
    conventions are used over the control connections, Telnet option
-   negotiation MUST NOT be attempted.  See section 4.1.2.12 of
-   [RFC1123].
+   negotiation MUST NOT be attempted.  See Section 5.2.
+
 
 
 
@@ -413,9 +413,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 2.4.  Server Replies
 
-   Section 4.2 of [RFC0959] defines the format and meaning of replies by
-   the server-PI to FTP commands from the user-PI.  Those reply
-   conventions are used here without change.
+   Section 4.2 defines the format and meaning of replies by the
+   server-PI to FTP commands from the user-PI.  Those reply conventions
+   are used here without change.
 
 
          error-response = error-code SP *TCHAR CRLF
@@ -427,7 +427,7 @@ Internet-Draft           File Transfer Protocol              August 2010
    explicitly stated, that is not intended to imply that multi-line
    responses are not permitted.  Implementors should assume that, unless
    stated to the contrary, any reply to any FTP command (including QUIT)
-   may use the multi-line format described in [RFC0959].
+   may use the multi-line format described in Section 4.2.
 
    Throughout this document, replies will be identified by the three
    digit code that is their first element.  Thus the term "500 reply"
