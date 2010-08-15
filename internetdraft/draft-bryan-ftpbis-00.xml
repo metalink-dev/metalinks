@@ -7938,33 +7938,39 @@ RFC 5797 "FTP Command and Extension Registry"
 
 </section>
 
-	    <section title="Acknowledgements and Contributors">
+	    <section anchor="Appendix-D" title="Acknowledgements and Contributors">
 		  <t>This document is a compendium of various FTP RFCs and their errata, and most are quoted directly. Where differences exist, they are to update the text to current references and make the text coherent as a whole.</t>
     </section>
 
-<section anchor="Appendix-D" title="Changelog from RFC 959 and TODO">
+<section anchor="Appendix-E" title="Changelog from RFC 959 and TODO">
 
 <t>Changelog from RFC 959.
 <list>
 <t>Incorporate <xref target="RFC0959"/> Errata.</t>
-<t>Incorporate <xref target="RFC1123"/> into the various sections that it updated.</t>
-<t>Incorporate <xref target="RFC2389"/> FEAT at <xref target="sec-4.1.4"/>.</t>
+<t>Incorporate FTP specific clarifications (Sec 4.1) from <xref target="RFC1123"/> “Requirements for Internet Hosts - Application and Support” into the various sections that it updated.</t>
+<t>Incorporate <xref target="RFC2389"/> “Feature negotiation mechanism for the File Transfer Protocol” at <xref target="sec-4.1.4"/>.</t>
 <t>Incorporate <xref target="RFC2428"/> "FTP Extensions for IPv6 and NATs" at <xref target="sec-4.1.2.1"/>.</t>
-<t>Incorporate <xref target="RFC2577"/> in <xref target="sec-10"/>.</t>
-<t>Incorporate <xref target="RFC3659"/> Section 3 through Section 9 in <xref target="sec-4.1.5"/> and its Section 2 into <xref target="sec-2"/>.</t>
-<t>Include abstract of <xref target="RFC4217"/> in <xref target="sec-10.2"/>.</t>
-<t>BCP 14 wording.</t>
+<t>Incorporate <xref target="RFC2577"/> "FTP Security Considerations" in <xref target="sec-10"/>.</t>
+<t>Incorporate <xref target="RFC3659"/> "Extensions to FTP" Section 3 through Section 9 in <xref target="sec-4.1.5"/> and its Section 2 into <xref target="sec-2"/>.</t>
+<t>Include abstract of <xref target="RFC4217"/> “Securing FTP with TLS” in <xref target="sec-10.2"/>.</t>
+<t>Update <xref target="Appendix-C"/> to include all known FTP RFCs.</t>
+<t>Use BCP 14/<xref target="RFC2119"/> key words in text from <xref target="RFC0959"/> sections.</t>
 </list>
 </t>
 <t>TODO
 <list>
-<t>Haven't added all RFC3659 references; 3659 references to section 10 (not included here) are not updated.</t>
-<t>Triage and include or reference other FTP RFCs - RFC 2228 (new reply codes and reply type 6yz), 2640, 2773?, 4217.</t>
+<t>BCP 14/<xref target="RFC2119"/> key words incomplete.</t>
+<t><xref target="RFC3659"/> references currently incomplete; also, <xref target="RFC3659"/> internal references to section 10 (which is not included in this draft) are not updated.</t>
+<t>Triage and include or reference other FTP RFCs: <xref target="RFC2228"/> (more reply codes and reply type 6yz), <xref target="RFC2640"/>, 2773?, <xref target="RFC4217"/>.</t>
+<t>File recently found errata to older RFCs. Figure out if <xref target="RFC1123"/> errata should be filed against itself ("Updates: 959") or to <xref target="RFC0959"/> ("Updated by: 1123").</t>
 <t>Update BNF to ABNF.</t>
-<t>Standardize command organization (subsections?) like EPRT/EPSV, with separated ABNF?</t>
-<t>Move the whole sentence that is <xref target="sec-8"/> into <xref target="sec-3.2"/>?</t>
-<t>Use old IPR value because we're using old text?</t>
-<t>Author listing/credits in compound document done correctly?</t>
+<t>Should we organize commands in a standard format (subsections?) like EPRT/EPSV (<xref target="sec-4.1.2.1"/>), with separated ABNF?</t>
+<t>Should we update IP Address:Port description to ABNF? Or standardize on one example: h1,h2,h3,h4,p1,p2 or A1,A2,A3,A4,a1,a2?</t>
+<t>Should we move the whole sentence that is <xref target="sec-8"/> into <xref target="sec-3.2"/>?</t>
+<t>Should we deprecate features that are no longer common?</t>
+<t>Should we obsolete outdated RFCs (like 1639) with "Obsoletes:"?</t>
+<t>Should we use old IPR value because we're using old text?</t>
+<t>Are the author listing/credits in compound document done correctly? Some are deceased or inactive or may be otherwise hard to contact.</t>
 </list>
 </t>
 </section>
