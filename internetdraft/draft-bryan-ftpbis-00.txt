@@ -7790,7 +7790,8 @@ Internet-Draft           File Transfer Protocol              August 2010
 
       Should we deprecate features that are no longer common?
 
-      Should we obsolete outdated RFCs (like 1639) with "Obsoletes:"?
+      Should we obsolete outdated RFCs (like 775, 1639) with
+      "Obsoletes:"?
 
       Should we use old IPR value because we're using old text?
 
@@ -7828,7 +7829,6 @@ Authors' Addresses
    Australia
 
    Email: kre@munnari.OZ.AU
-
 
 
 

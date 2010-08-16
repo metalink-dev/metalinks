@@ -7968,7 +7968,7 @@ RFC 5797 "FTP Command and Extension Registry"
 <t>Should we update IP Address:Port description to ABNF? Or standardize on one example: h1,h2,h3,h4,p1,p2 or A1,A2,A3,A4,a1,a2?</t>
 <t>Should we move the whole sentence that is <xref target="sec-8"/> into <xref target="sec-3.2"/>?</t>
 <t>Should we deprecate features that are no longer common?</t>
-<t>Should we obsolete outdated RFCs (like 1639) with "Obsoletes:"?</t>
+<t>Should we obsolete outdated RFCs (like 775, 1639) with "Obsoletes:"?</t>
 <t>Should we use old IPR value because we're using old text?</t>
 <t>Are the author listing/credits in compound document done correctly? Some are deceased or inactive or may be otherwise hard to contact.</t>
 </list>
