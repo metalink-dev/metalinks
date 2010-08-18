@@ -3,11 +3,11 @@
 
 Network Working Group                                          J. Postel
 Internet-Draft                                               J. Reynolds
-Obsoletes: 959,1639                                                  ISI
+Obsoletes: 775,959,1639                                              ISI
 (if approved)                                                 P. Hethmon
 Updates: 1123 (if approved)                             Hethmon Brothers
 Intended status: Standards Track                                  R. Elz
-Expires: February 16, 2011                       University of Melbourne
+Expires: February 19, 2011                       University of Melbourne
                                                                M. Allman
                                                      NASA Lewis Research
                                                 Center/Sterling Software
@@ -16,7 +16,7 @@ Expires: February 16, 2011                       University of Melbourne
                                                                  C. Metz
                                                            The Inner Net
                                                            A. Bryan, Ed.
-                                                         August 15, 2010
+                                                         August 18, 2010
 
 
                       File Transfer Protocol (FTP)
@@ -45,14 +45,14 @@ Status of this Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on February 16, 2011.
+   This Internet-Draft will expire on February 19, 2011.
 
 Copyright Notice
 
 
 
 
-Postel, et al.          Expires February 16, 2011               [Page 1]
+Postel, et al.          Expires February 19, 2011               [Page 1]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -108,7 +108,7 @@ Table of Contents
 
 
 
-Postel, et al.          Expires February 16, 2011               [Page 2]
+Postel, et al.          Expires February 19, 2011               [Page 2]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -164,7 +164,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011               [Page 3]
+Postel, et al.          Expires February 19, 2011               [Page 3]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -220,7 +220,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011               [Page 4]
+Postel, et al.          Expires February 19, 2011               [Page 4]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -276,7 +276,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011               [Page 5]
+Postel, et al.          Expires February 19, 2011               [Page 5]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -332,7 +332,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011               [Page 6]
+Postel, et al.          Expires February 19, 2011               [Page 6]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -388,7 +388,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011               [Page 7]
+Postel, et al.          Expires February 19, 2011               [Page 7]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -444,7 +444,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011               [Page 8]
+Postel, et al.          Expires February 19, 2011               [Page 8]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -500,7 +500,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011               [Page 9]
+Postel, et al.          Expires February 19, 2011               [Page 9]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -556,7 +556,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 10]
+Postel, et al.          Expires February 19, 2011              [Page 10]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -612,7 +612,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 11]
+Postel, et al.          Expires February 19, 2011              [Page 11]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -668,7 +668,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 12]
+Postel, et al.          Expires February 19, 2011              [Page 12]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -724,7 +724,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 13]
+Postel, et al.          Expires February 19, 2011              [Page 13]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -780,7 +780,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 14]
+Postel, et al.          Expires February 19, 2011              [Page 14]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -836,7 +836,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 15]
+Postel, et al.          Expires February 19, 2011              [Page 15]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -892,7 +892,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 16]
+Postel, et al.          Expires February 19, 2011              [Page 16]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -948,7 +948,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 17]
+Postel, et al.          Expires February 19, 2011              [Page 17]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -1004,7 +1004,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 18]
+Postel, et al.          Expires February 19, 2011              [Page 18]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -1060,7 +1060,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 19]
+Postel, et al.          Expires February 19, 2011              [Page 19]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -1116,7 +1116,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 20]
+Postel, et al.          Expires February 19, 2011              [Page 20]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -1172,7 +1172,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 21]
+Postel, et al.          Expires February 19, 2011              [Page 21]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -1228,7 +1228,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 22]
+Postel, et al.          Expires February 19, 2011              [Page 22]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -1284,7 +1284,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 23]
+Postel, et al.          Expires February 19, 2011              [Page 23]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -1340,7 +1340,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 24]
+Postel, et al.          Expires February 19, 2011              [Page 24]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -1396,7 +1396,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 25]
+Postel, et al.          Expires February 19, 2011              [Page 25]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -1452,7 +1452,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 26]
+Postel, et al.          Expires February 19, 2011              [Page 26]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -1508,7 +1508,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 27]
+Postel, et al.          Expires February 19, 2011              [Page 27]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -1564,7 +1564,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 28]
+Postel, et al.          Expires February 19, 2011              [Page 28]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -1620,7 +1620,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 29]
+Postel, et al.          Expires February 19, 2011              [Page 29]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -1676,7 +1676,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 30]
+Postel, et al.          Expires February 19, 2011              [Page 30]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -1732,7 +1732,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 31]
+Postel, et al.          Expires February 19, 2011              [Page 31]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -1788,7 +1788,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 32]
+Postel, et al.          Expires February 19, 2011              [Page 32]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -1844,7 +1844,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 33]
+Postel, et al.          Expires February 19, 2011              [Page 33]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -1900,7 +1900,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 34]
+Postel, et al.          Expires February 19, 2011              [Page 34]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -1956,7 +1956,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 35]
+Postel, et al.          Expires February 19, 2011              [Page 35]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -2012,7 +2012,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 36]
+Postel, et al.          Expires February 19, 2011              [Page 36]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -2068,7 +2068,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 37]
+Postel, et al.          Expires February 19, 2011              [Page 37]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -2124,7 +2124,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 38]
+Postel, et al.          Expires February 19, 2011              [Page 38]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -2180,7 +2180,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 39]
+Postel, et al.          Expires February 19, 2011              [Page 39]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -2236,7 +2236,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 40]
+Postel, et al.          Expires February 19, 2011              [Page 40]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -2292,7 +2292,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 41]
+Postel, et al.          Expires February 19, 2011              [Page 41]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -2348,7 +2348,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 42]
+Postel, et al.          Expires February 19, 2011              [Page 42]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -2404,7 +2404,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 43]
+Postel, et al.          Expires February 19, 2011              [Page 43]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -2460,7 +2460,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 44]
+Postel, et al.          Expires February 19, 2011              [Page 44]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -2516,7 +2516,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 45]
+Postel, et al.          Expires February 19, 2011              [Page 45]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -2572,7 +2572,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 46]
+Postel, et al.          Expires February 19, 2011              [Page 46]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -2628,7 +2628,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 47]
+Postel, et al.          Expires February 19, 2011              [Page 47]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -2684,7 +2684,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 48]
+Postel, et al.          Expires February 19, 2011              [Page 48]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -2740,7 +2740,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 49]
+Postel, et al.          Expires February 19, 2011              [Page 49]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -2796,7 +2796,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 50]
+Postel, et al.          Expires February 19, 2011              [Page 50]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -2852,7 +2852,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 51]
+Postel, et al.          Expires February 19, 2011              [Page 51]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -2908,7 +2908,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 52]
+Postel, et al.          Expires February 19, 2011              [Page 52]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -2964,7 +2964,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 53]
+Postel, et al.          Expires February 19, 2011              [Page 53]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -3020,7 +3020,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 54]
+Postel, et al.          Expires February 19, 2011              [Page 54]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -3076,7 +3076,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 55]
+Postel, et al.          Expires February 19, 2011              [Page 55]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -3132,7 +3132,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 56]
+Postel, et al.          Expires February 19, 2011              [Page 56]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -3188,7 +3188,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 57]
+Postel, et al.          Expires February 19, 2011              [Page 57]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -3244,7 +3244,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 58]
+Postel, et al.          Expires February 19, 2011              [Page 58]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -3300,7 +3300,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 59]
+Postel, et al.          Expires February 19, 2011              [Page 59]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -3356,7 +3356,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 60]
+Postel, et al.          Expires February 19, 2011              [Page 60]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -3412,7 +3412,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 61]
+Postel, et al.          Expires February 19, 2011              [Page 61]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -3468,7 +3468,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 62]
+Postel, et al.          Expires February 19, 2011              [Page 62]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -3524,7 +3524,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 63]
+Postel, et al.          Expires February 19, 2011              [Page 63]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -3580,7 +3580,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 64]
+Postel, et al.          Expires February 19, 2011              [Page 64]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -3636,7 +3636,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 65]
+Postel, et al.          Expires February 19, 2011              [Page 65]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -3692,7 +3692,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 66]
+Postel, et al.          Expires February 19, 2011              [Page 66]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -3748,7 +3748,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 67]
+Postel, et al.          Expires February 19, 2011              [Page 67]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -3804,7 +3804,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 68]
+Postel, et al.          Expires February 19, 2011              [Page 68]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -3860,7 +3860,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 69]
+Postel, et al.          Expires February 19, 2011              [Page 69]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -3916,7 +3916,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 70]
+Postel, et al.          Expires February 19, 2011              [Page 70]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -3972,7 +3972,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 71]
+Postel, et al.          Expires February 19, 2011              [Page 71]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -4028,7 +4028,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 72]
+Postel, et al.          Expires February 19, 2011              [Page 72]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -4084,7 +4084,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 73]
+Postel, et al.          Expires February 19, 2011              [Page 73]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -4140,7 +4140,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 74]
+Postel, et al.          Expires February 19, 2011              [Page 74]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -4196,7 +4196,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 75]
+Postel, et al.          Expires February 19, 2011              [Page 75]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -4252,7 +4252,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 76]
+Postel, et al.          Expires February 19, 2011              [Page 76]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -4308,7 +4308,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 77]
+Postel, et al.          Expires February 19, 2011              [Page 77]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -4364,7 +4364,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 78]
+Postel, et al.          Expires February 19, 2011              [Page 78]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -4420,7 +4420,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 79]
+Postel, et al.          Expires February 19, 2011              [Page 79]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -4476,7 +4476,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 80]
+Postel, et al.          Expires February 19, 2011              [Page 80]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -4532,7 +4532,7 @@ S> 226 MLSD completed
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 81]
+Postel, et al.          Expires February 19, 2011              [Page 81]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -4588,7 +4588,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 82]
+Postel, et al.          Expires February 19, 2011              [Page 82]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -4644,7 +4644,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 83]
+Postel, et al.          Expires February 19, 2011              [Page 83]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -4700,7 +4700,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 84]
+Postel, et al.          Expires February 19, 2011              [Page 84]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -4756,7 +4756,7 @@ S> 226 Listing completed.
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 85]
+Postel, et al.          Expires February 19, 2011              [Page 85]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -4812,7 +4812,7 @@ S> 257 "/iana/assignments" is current directory.
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 86]
+Postel, et al.          Expires February 19, 2011              [Page 86]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -4868,7 +4868,7 @@ S> 226 MLSD completed
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 87]
+Postel, et al.          Expires February 19, 2011              [Page 87]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -4924,7 +4924,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 88]
+Postel, et al.          Expires February 19, 2011              [Page 88]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -4980,7 +4980,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 89]
+Postel, et al.          Expires February 19, 2011              [Page 89]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -5036,7 +5036,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 90]
+Postel, et al.          Expires February 19, 2011              [Page 90]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -5092,7 +5092,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 91]
+Postel, et al.          Expires February 19, 2011              [Page 91]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -5148,7 +5148,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 92]
+Postel, et al.          Expires February 19, 2011              [Page 92]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -5204,7 +5204,7 @@ S>  MLST Type*;Size*;Modify*;Perm*;Unique*;UNIX.mode;UNIX.chgd;X.hidden;
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 93]
+Postel, et al.          Expires February 19, 2011              [Page 93]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -5260,7 +5260,7 @@ S> 211 End
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 94]
+Postel, et al.          Expires February 19, 2011              [Page 94]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -5316,7 +5316,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 95]
+Postel, et al.          Expires February 19, 2011              [Page 95]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -5372,7 +5372,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 96]
+Postel, et al.          Expires February 19, 2011              [Page 96]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -5428,7 +5428,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 97]
+Postel, et al.          Expires February 19, 2011              [Page 97]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -5484,7 +5484,7 @@ S> 250 End
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 98]
+Postel, et al.          Expires February 19, 2011              [Page 98]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -5540,7 +5540,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011              [Page 99]
+Postel, et al.          Expires February 19, 2011              [Page 99]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -5596,7 +5596,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011             [Page 100]
+Postel, et al.          Expires February 19, 2011             [Page 100]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -5652,7 +5652,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011             [Page 101]
+Postel, et al.          Expires February 19, 2011             [Page 101]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -5708,7 +5708,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011             [Page 102]
+Postel, et al.          Expires February 19, 2011             [Page 102]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -5764,7 +5764,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011             [Page 103]
+Postel, et al.          Expires February 19, 2011             [Page 103]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -5820,7 +5820,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011             [Page 104]
+Postel, et al.          Expires February 19, 2011             [Page 104]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -5876,7 +5876,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011             [Page 105]
+Postel, et al.          Expires February 19, 2011             [Page 105]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -5932,7 +5932,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011             [Page 106]
+Postel, et al.          Expires February 19, 2011             [Page 106]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -5988,7 +5988,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011             [Page 107]
+Postel, et al.          Expires February 19, 2011             [Page 107]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -6044,7 +6044,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011             [Page 108]
+Postel, et al.          Expires February 19, 2011             [Page 108]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -6100,7 +6100,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011             [Page 109]
+Postel, et al.          Expires February 19, 2011             [Page 109]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -6156,7 +6156,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011             [Page 110]
+Postel, et al.          Expires February 19, 2011             [Page 110]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -6212,7 +6212,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011             [Page 111]
+Postel, et al.          Expires February 19, 2011             [Page 111]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -6268,7 +6268,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011             [Page 112]
+Postel, et al.          Expires February 19, 2011             [Page 112]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -6324,7 +6324,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011             [Page 113]
+Postel, et al.          Expires February 19, 2011             [Page 113]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -6380,7 +6380,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011             [Page 114]
+Postel, et al.          Expires February 19, 2011             [Page 114]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -6436,7 +6436,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011             [Page 115]
+Postel, et al.          Expires February 19, 2011             [Page 115]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -6492,7 +6492,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011             [Page 116]
+Postel, et al.          Expires February 19, 2011             [Page 116]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -6548,7 +6548,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011             [Page 117]
+Postel, et al.          Expires February 19, 2011             [Page 117]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -6604,7 +6604,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011             [Page 118]
+Postel, et al.          Expires February 19, 2011             [Page 118]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -6660,7 +6660,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011             [Page 119]
+Postel, et al.          Expires February 19, 2011             [Page 119]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -6716,7 +6716,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011             [Page 120]
+Postel, et al.          Expires February 19, 2011             [Page 120]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -6772,7 +6772,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011             [Page 121]
+Postel, et al.          Expires February 19, 2011             [Page 121]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -6828,7 +6828,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011             [Page 122]
+Postel, et al.          Expires February 19, 2011             [Page 122]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -6884,7 +6884,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011             [Page 123]
+Postel, et al.          Expires February 19, 2011             [Page 123]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -6940,7 +6940,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011             [Page 124]
+Postel, et al.          Expires February 19, 2011             [Page 124]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -6996,7 +6996,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011             [Page 125]
+Postel, et al.          Expires February 19, 2011             [Page 125]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -7052,7 +7052,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011             [Page 126]
+Postel, et al.          Expires February 19, 2011             [Page 126]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -7108,7 +7108,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011             [Page 127]
+Postel, et al.          Expires February 19, 2011             [Page 127]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -7164,7 +7164,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011             [Page 128]
+Postel, et al.          Expires February 19, 2011             [Page 128]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -7220,7 +7220,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011             [Page 129]
+Postel, et al.          Expires February 19, 2011             [Page 129]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -7276,7 +7276,7 @@ Appendix A.  Page Structure
 
 
 
-Postel, et al.          Expires February 16, 2011             [Page 130]
+Postel, et al.          Expires February 19, 2011             [Page 130]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -7332,7 +7332,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011             [Page 131]
+Postel, et al.          Expires February 19, 2011             [Page 131]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -7388,7 +7388,7 @@ Appendix B.  Directory Commands
 
 
 
-Postel, et al.          Expires February 16, 2011             [Page 132]
+Postel, et al.          Expires February 19, 2011             [Page 132]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -7444,7 +7444,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011             [Page 133]
+Postel, et al.          Expires February 19, 2011             [Page 133]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -7500,7 +7500,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011             [Page 134]
+Postel, et al.          Expires February 19, 2011             [Page 134]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -7556,7 +7556,7 @@ Appendix C.  RFCs on FTP
 
 
 
-Postel, et al.          Expires February 16, 2011             [Page 135]
+Postel, et al.          Expires February 19, 2011             [Page 135]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -7612,7 +7612,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011             [Page 136]
+Postel, et al.          Expires February 19, 2011             [Page 136]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -7668,7 +7668,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011             [Page 137]
+Postel, et al.          Expires February 19, 2011             [Page 137]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -7724,7 +7724,7 @@ Appendix E.  Changelog from RFC 959 and TODO
 
 
 
-Postel, et al.          Expires February 16, 2011             [Page 138]
+Postel, et al.          Expires February 19, 2011             [Page 138]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -7780,7 +7780,7 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011             [Page 139]
+Postel, et al.          Expires February 19, 2011             [Page 139]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -7836,7 +7836,7 @@ Authors' Addresses
 
 
 
-Postel, et al.          Expires February 16, 2011             [Page 140]
+Postel, et al.          Expires February 19, 2011             [Page 140]
 
 Internet-Draft           File Transfer Protocol              August 2010
 
@@ -7892,5 +7892,5 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 16, 2011             [Page 141]
+Postel, et al.          Expires February 19, 2011             [Page 141]
 

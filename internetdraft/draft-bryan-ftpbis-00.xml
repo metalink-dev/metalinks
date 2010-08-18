@@ -12,7 +12,7 @@
 <?rfc inline="yes" ?>
 <!DOCTYPE rfc
   PUBLIC "" "rfc2629.dtd">
-<rfc category="std" docName="draft-bryan-ftpbis-00" updates="1123" obsoletes="959,1639" ipr="trust200902">
+<rfc category="std" docName="draft-bryan-ftpbis-00" updates="1123" obsoletes="775,959,1639" ipr="trust200902">
     <front>        
       <title abbrev="File Transfer Protocol">File Transfer Protocol (FTP)</title>
       <author initials="J." surname="Postel" fullname="Jon Postel">
