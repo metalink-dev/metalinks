@@ -2812,7 +2812,7 @@ Response Syntax:
    entity or because the information is not available for the entity
    named, then a 550 reply should be sent.  Where the command cannot be
    correctly parsed, a 500 or 501 reply should be sent, as specified in
-   <xref target="RFC0959"/>.  Various 4xy replies are also possible in appropriate
+   <xref target="RFC0959"/>.  Various 4yz replies are also possible in appropriate
    circumstances.
 </t>
 
@@ -2955,7 +2955,7 @@ Response Syntax:
    command MUST NOT be taken by the client as an indication that the
    file cannot be transferred in the current MODE and TYPE.  A server
    may generate this error for other reasons -- for instance if the
-   processing overhead is considered too great.  Various 4xy replies are
+   processing overhead is considered too great.  Various 4yz replies are
    also possible in appropriate circumstances.
 </t>
 
@@ -3750,14 +3750,14 @@ Response Syntax:
 
 <section title="Error Responses to MLSx commands">
 <t>
-   Many of the 4xy and 5xy responses defined in section 4.2 of STD 9,
+   Many of the 4yz and 5yz responses defined in section 4.2 of STD 9,
    <xref target="RFC0959"/> are possible in response to the MLST and MLSD commands.
    In particular, syntax errors can generate 500 or 501 replies.  Giving
    a pathname that exists but is not a directory as the argument to a
    MLSD command generates a 501 reply.  Giving a name that does not
    exist, or for which access permission (to obtain directory
    information as requested) is not granted will elicit a 550 reply.
-   Other replies (530, 553, 503, 504, and any of the 4xy replies) are
+   Other replies (530, 553, 503, 504, and any of the 4yz replies) are
    also possible in appropriate circumstances.
 </t>
 
@@ -5785,7 +5785,7 @@ S&gt; 250 End
 </section>
 
 
-<section anchor="sec-4.2.1" title="Reply Code By Function Groups">
+<section anchor="sec-4.2.2" title="Reply Code By Function Groups">
 <t>
 <figure>
 	  <artwork type="example">
@@ -5904,7 +5904,7 @@ S&gt; 250 End
 </figure>         
 </t>
 </section>
-<section anchor="sec-4.2.2" title="Numeric Order List of Reply Codes">
+<section anchor="sec-4.2.3" title="Numeric Order List of Reply Codes">
 
 <t>
 <figure>
