@@ -3920,7 +3920,7 @@ Error Responses</h3>
    entity or because the information is not available for the entity
    named, then a 550 reply should be sent.  Where the command cannot be
    correctly parsed, a 500 or 501 reply should be sent, as specified in
-   <a class='info' href='#RFC0959'>[RFC0959]<span> (</span><span class='info'>Postel, J. and J. Reynolds, &ldquo;File Transfer Protocol,&rdquo; October&nbsp;1985.</span><span>)</span></a>.  Various 4xy replies are also possible in appropriate
+   <a class='info' href='#RFC0959'>[RFC0959]<span> (</span><span class='info'>Postel, J. and J. Reynolds, &ldquo;File Transfer Protocol,&rdquo; October&nbsp;1985.</span><span>)</span></a>.  Various 4yz replies are also possible in appropriate
    circumstances.
 
 </p>
@@ -4100,7 +4100,7 @@ Error Responses</h3>
    command MUST NOT be taken by the client as an indication that the
    file cannot be transferred in the current MODE and TYPE.  A server
    may generate this error for other reasons -- for instance if the
-   processing overhead is considered too great.  Various 4xy replies are
+   processing overhead is considered too great.  Various 4yz replies are
    also possible in appropriate circumstances.
 
 </p>
@@ -5115,14 +5115,14 @@ Format of MLSx Response</h3>
 Error Responses to MLSx commands</h3>
 
 <p>
-   Many of the 4xy and 5xy responses defined in section 4.2 of STD 9,
+   Many of the 4yz and 5yz responses defined in section 4.2 of STD 9,
    <a class='info' href='#RFC0959'>[RFC0959]<span> (</span><span class='info'>Postel, J. and J. Reynolds, &ldquo;File Transfer Protocol,&rdquo; October&nbsp;1985.</span><span>)</span></a> are possible in response to the MLST and MLSD commands.
    In particular, syntax errors can generate 500 or 501 replies.  Giving
    a pathname that exists but is not a directory as the argument to a
    MLSD command generates a 501 reply.  Giving a name that does not
    exist, or for which access permission (to obtain directory
    information as requested) is not granted will elicit a 550 reply.
-   Other replies (530, 553, 503, 504, and any of the 4xy replies) are
+   Other replies (530, 553, 503, 504, and any of the 4yz replies) are
    also possible in appropriate circumstances.
 
 </p>
