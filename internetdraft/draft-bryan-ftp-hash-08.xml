@@ -328,6 +328,9 @@ This command word is case insensitive, and MAY be sent in any mixture of upper o
 
 <t>The server-PI SHOULD reply with a 553 reply if the user requests the HASH of a directory, which is not allowed.</t>
 
+<t>The server-PI SHOULD reply with a 5yz reply if the HASH command is used on a file that cannot be processed for policy reasons. (For example, the file size exceeds the server's hashing policy.)</t>
+
+
 </section>
 
 </section>
@@ -371,7 +374,12 @@ file changes. A server may refuse to process a HASH command for many reasons,
 one of which may be a suspected denial-of-service attack. A client MUST be 
 able to understand that refusal to process HASH commands may be transient 
 (if indicated by a 4xy response) and MAY be honoured later if the server so 
-decides. A client MUST allow that a HASH command might take a reasonably long time to complete. </t>
+decides. A client MUST allow that a HASH command might take a reasonably long time to complete.</t>
+
+<t>Server operators might wish to allow the HASH command but restrict its use to certain files, for
+example, the file size exceeds the server's hashing policy.
+A client MUST be able to understand that refusal to process HASH commands may be permanent 
+(if indicated by a 5xy response) and will not be honoured later.</t>
 
 <t>In addition, the HASH command can be used to draw conclusions about the
 contents of a file. If the hash of a file on some server matches the
@@ -632,6 +640,13 @@ purpose is an implementation decision.</t>
 		  <t>Section needs improvement: which files should a server process a HASH command for a logged in user?</t>
 
 	    </list></t>
+<t>-08 : August , 2010.
+	    
+	    <list style="symbols">
+
+          <t>Servers that allow HASH but restrict its use to certain files.</t>
+	    </list></t>
+		
 <t>-07 : August 5, 2010.
 	    
 	    <list style="symbols">

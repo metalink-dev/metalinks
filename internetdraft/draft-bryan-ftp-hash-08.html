@@ -144,7 +144,7 @@
 <tr><td class="header">Network Working Group</td><td class="header">A. Bryan</td></tr>
 <tr><td class="header">Internet-Draft</td><td class="header">T. Kosse</td></tr>
 <tr><td class="header">Intended status: Standards Track</td><td class="header">D. Stenberg</td></tr>
-<tr><td class="header">Expires: February 6, 2011</td><td class="header">August 5, 2010</td></tr>
+<tr><td class="header">Expires: February 21, 2011</td><td class="header">August 20, 2010</td></tr>
 </table></td></tr></table>
 <h1><br />File Transfer Protocol HASH Command for Cryptographic Hashes<br />draft-bryan-ftp-hash-08</h1>
 
@@ -169,7 +169,7 @@ and may be updated, replaced, or obsoleted by other documents at any time.
 It is inappropriate to use Internet-Drafts as reference material or to cite
 them other than as &ldquo;work in progress.&rdquo;</p>
 <p>
-This Internet-Draft will expire on February 6, 2011.</p>
+This Internet-Draft will expire on February 21, 2011.</p>
 
 <h3>Copyright Notice</h3>
 <p>
@@ -521,6 +521,8 @@ HASH Command Errors</h3>
 </p>
 <p>The server-PI SHOULD reply with a 553 reply if the user requests the HASH of a directory, which is not allowed.
 </p>
+<p>The server-PI SHOULD reply with a 5yz reply if the HASH command is used on a file that cannot be processed for policy reasons. (For example, the file size exceeds the server's hashing policy.)
+</p>
 <a name="IANA"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4"></a><h3>4.&nbsp;
@@ -568,7 +570,12 @@ file changes. A server may refuse to process a HASH command for many reasons,
 one of which may be a suspected denial-of-service attack. A client MUST be 
 able to understand that refusal to process HASH commands may be transient 
 (if indicated by a 4xy response) and MAY be honoured later if the server so 
-decides. A client MUST allow that a HASH command might take a reasonably long time to complete. 
+decides. A client MUST allow that a HASH command might take a reasonably long time to complete.
+</p>
+<p>Server operators might wish to allow the HASH command but restrict its use to certain files, for
+example, the file size exceeds the server's hashing policy.
+A client MUST be able to understand that refusal to process HASH commands may be permanent 
+(if indicated by a 5xy response) and will not be honoured later.
 </p>
 <p>In addition, the HASH command can be used to draw conclusions about the
 contents of a file. If the hash of a file on some server matches the
@@ -768,6 +775,14 @@ Document History</h3>
 	    </p>
 <ul class="text">
 <li>Section needs improvement: which files should a server process a HASH command for a logged in user?
+</li>
+</ul>
+
+<p>-08 : August , 2010.
+	    
+	    </p>
+<ul class="text">
+<li>Servers that allow HASH but restrict its use to certain files.
 </li>
 </ul>
 
