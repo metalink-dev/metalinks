@@ -4,7 +4,7 @@
 Network Working Group                                           A. Bryan
 Internet-Draft                                                  T. Kosse
 Intended status: Standards Track                             D. Stenberg
-Expires: February 21, 2011                               August 20, 2010
+Expires: February 22, 2011                               August 21, 2010
 
 
       File Transfer Protocol HASH Command for Cryptographic Hashes
@@ -37,7 +37,7 @@ Status of this Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on February 21, 2011.
+   This Internet-Draft will expire on February 22, 2011.
 
 Copyright Notice
 
@@ -52,7 +52,7 @@ Copyright Notice
 
 
 
-Bryan, et al.           Expires February 21, 2011               [Page 1]
+Bryan, et al.           Expires February 22, 2011               [Page 1]
 
 Internet-Draft  FTP HASH Command for Cryptographic Hashes    August 2010
 
@@ -108,7 +108,7 @@ Table of Contents
 
 
 
-Bryan, et al.           Expires February 21, 2011               [Page 2]
+Bryan, et al.           Expires February 22, 2011               [Page 2]
 
 Internet-Draft  FTP HASH Command for Cryptographic Hashes    August 2010
 
@@ -164,7 +164,7 @@ Internet-Draft  FTP HASH Command for Cryptographic Hashes    August 2010
 
 
 
-Bryan, et al.           Expires February 21, 2011               [Page 3]
+Bryan, et al.           Expires February 22, 2011               [Page 3]
 
 Internet-Draft  FTP HASH Command for Cryptographic Hashes    August 2010
 
@@ -220,7 +220,7 @@ Internet-Draft  FTP HASH Command for Cryptographic Hashes    August 2010
 
 
 
-Bryan, et al.           Expires February 21, 2011               [Page 4]
+Bryan, et al.           Expires February 22, 2011               [Page 4]
 
 Internet-Draft  FTP HASH Command for Cryptographic Hashes    August 2010
 
@@ -276,7 +276,7 @@ Internet-Draft  FTP HASH Command for Cryptographic Hashes    August 2010
 
 
 
-Bryan, et al.           Expires February 21, 2011               [Page 5]
+Bryan, et al.           Expires February 22, 2011               [Page 5]
 
 Internet-Draft  FTP HASH Command for Cryptographic Hashes    August 2010
 
@@ -332,7 +332,7 @@ Internet-Draft  FTP HASH Command for Cryptographic Hashes    August 2010
 
 
 
-Bryan, et al.           Expires February 21, 2011               [Page 6]
+Bryan, et al.           Expires February 22, 2011               [Page 6]
 
 Internet-Draft  FTP HASH Command for Cryptographic Hashes    August 2010
 
@@ -388,7 +388,7 @@ Internet-Draft  FTP HASH Command for Cryptographic Hashes    August 2010
 
 
 
-Bryan, et al.           Expires February 21, 2011               [Page 7]
+Bryan, et al.           Expires February 22, 2011               [Page 7]
 
 Internet-Draft  FTP HASH Command for Cryptographic Hashes    August 2010
 
@@ -444,14 +444,14 @@ Internet-Draft  FTP HASH Command for Cryptographic Hashes    August 2010
 
 
 
-Bryan, et al.           Expires February 21, 2011               [Page 8]
+Bryan, et al.           Expires February 22, 2011               [Page 8]
 
 Internet-Draft  FTP HASH Command for Cryptographic Hashes    August 2010
 
 
    The server-PI SHOULD reply with a 5yz reply if the HASH command is
    used on a file that cannot be processed for policy reasons.  (For
-   example, the file size exceeds the server's hashing policy.)
+   example, if the file size exceeds the server's hashing policy.)
 
 
 4.  IANA Considerations
@@ -500,22 +500,22 @@ Internet-Draft  FTP HASH Command for Cryptographic Hashes    August 2010
 
 
 
-Bryan, et al.           Expires February 21, 2011               [Page 9]
+Bryan, et al.           Expires February 22, 2011               [Page 9]
 
 Internet-Draft  FTP HASH Command for Cryptographic Hashes    August 2010
 
 
    suspected denial-of-service attack.  A client MUST be able to
    understand that refusal to process HASH commands may be transient (if
-   indicated by a 4xy response) and MAY be honoured later if the server
+   indicated by a 4yz response) and MAY be honoured later if the server
    so decides.  A client MUST allow that a HASH command might take a
    reasonably long time to complete.
 
    Server operators might wish to allow the HASH command but restrict
-   its use to certain files, for example, the file size exceeds the
+   its use to certain files, for example, if the file size exceeds the
    server's hashing policy.  A client MUST be able to understand that
    refusal to process HASH commands may be permanent (if indicated by a
-   5xy response) and will not be honoured later.
+   5yz response) and will not be honoured later.
 
    In addition, the HASH command can be used to draw conclusions about
    the contents of a file.  If the hash of a file on some server matches
@@ -556,7 +556,7 @@ Internet-Draft  FTP HASH Command for Cryptographic Hashes    August 2010
 
 
 
-Bryan, et al.           Expires February 21, 2011              [Page 10]
+Bryan, et al.           Expires February 22, 2011              [Page 10]
 
 Internet-Draft  FTP HASH Command for Cryptographic Hashes    August 2010
 
@@ -612,7 +612,7 @@ Appendix B.  List of Non-standard Cryptographic Hash or Checksum
 
 
 
-Bryan, et al.           Expires February 21, 2011              [Page 11]
+Bryan, et al.           Expires February 22, 2011              [Page 11]
 
 Internet-Draft  FTP HASH Command for Cryptographic Hashes    August 2010
 
@@ -668,7 +668,7 @@ Internet-Draft  FTP HASH Command for Cryptographic Hashes    August 2010
 
 
 
-Bryan, et al.           Expires February 21, 2011              [Page 12]
+Bryan, et al.           Expires February 22, 2011              [Page 12]
 
 Internet-Draft  FTP HASH Command for Cryptographic Hashes    August 2010
 
@@ -724,7 +724,7 @@ Internet-Draft  FTP HASH Command for Cryptographic Hashes    August 2010
 
 
 
-Bryan, et al.           Expires February 21, 2011              [Page 13]
+Bryan, et al.           Expires February 22, 2011              [Page 13]
 
 Internet-Draft  FTP HASH Command for Cryptographic Hashes    August 2010
 
@@ -780,7 +780,7 @@ Appendix C.  Document History
 
 
 
-Bryan, et al.           Expires February 21, 2011              [Page 14]
+Bryan, et al.           Expires February 22, 2011              [Page 14]
 
 Internet-Draft  FTP HASH Command for Cryptographic Hashes    August 2010
 
@@ -836,5 +836,5 @@ Authors' Addresses
 
 
 
-Bryan, et al.           Expires February 21, 2011              [Page 15]
+Bryan, et al.           Expires February 22, 2011              [Page 15]
 
