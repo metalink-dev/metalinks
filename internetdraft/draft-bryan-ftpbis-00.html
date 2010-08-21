@@ -147,7 +147,7 @@
 <tr><td class="header">(if&nbsp;approved)</td><td class="header">P. Hethmon</td></tr>
 <tr><td class="header">Updates: <a href='http://tools.ietf.org/html/rfc1123'>1123</a> (if&nbsp;approved)</td><td class="header">Hethmon Brothers</td></tr>
 <tr><td class="header">Intended status: Standards Track</td><td class="header">R. Elz</td></tr>
-<tr><td class="header">Expires: February 19, 2011</td><td class="header">University of Melbourne</td></tr>
+<tr><td class="header">Expires: February 21, 2011</td><td class="header">University of Melbourne</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">M. Allman</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">NASA Lewis Research</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">Center/Sterling Software</td></tr>
@@ -156,7 +156,7 @@
 <tr><td class="header">&nbsp;</td><td class="header">C. Metz</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">The Inner Net</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">A. Bryan, Ed.</td></tr>
-<tr><td class="header">&nbsp;</td><td class="header">August 18, 2010</td></tr>
+<tr><td class="header">&nbsp;</td><td class="header">August 20, 2010</td></tr>
 </table></td></tr></table>
 <h1><br />File Transfer Protocol (FTP)<br />draft-bryan-ftpbis-00</h1>
 
@@ -184,7 +184,7 @@ and may be updated, replaced, or obsoleted by other documents at any time.
 It is inappropriate to use Internet-Drafts as reference material or to cite
 them other than as &ldquo;work in progress.&rdquo;</p>
 <p>
-This Internet-Draft will expire on February 19, 2011.</p>
+This Internet-Draft will expire on February 21, 2011.</p>
 
 <h3>Copyright Notice</h3>
 <p>
@@ -269,9 +269,11 @@ Other Extensions<br />
 Non-standard Command Verbs<br />
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="#sec-4.2">4.2.</a>&nbsp;
 FTP Replies<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#sec-4.2.1">4.2.1.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor66">4.2.1.</a>&nbsp;
+Protected Replies from RFC 2228<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#sec-4.2.1">4.2.2.</a>&nbsp;
 Reply Code By Function Groups<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#sec-4.2.2">4.2.2.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#sec-4.2.2">4.2.3.</a>&nbsp;
 Numeric Order List of Reply Codes<br />
 <a href="#sec-5">5.</a>&nbsp;
 Declarative Specifications<br />
@@ -301,23 +303,23 @@ Security Considerations<br />
 Privacy and Passwords with Clear Text Protocols<br />
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="#sec-10.2">10.2.</a>&nbsp;
 Securing FTP with TLS<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor66">10.3.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor67">10.3.</a>&nbsp;
 The Bounce Attack<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor67">10.3.1.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor68">10.3.1.</a>&nbsp;
 Protecting Against the Bounce Attack<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor68">10.4.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor69">10.4.</a>&nbsp;
 Restricted Access<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor69">10.5.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor70">10.5.</a>&nbsp;
 Protecting Passwords Against Brute Force Attacks<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor70">10.6.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor71">10.6.</a>&nbsp;
 Protecting Usernames<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor71">10.7.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor72">10.7.</a>&nbsp;
 Port Stealing<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor72">10.8.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor73">10.8.</a>&nbsp;
 Software-Base Security Problems<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor73">10.9.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor74">10.9.</a>&nbsp;
 Server Capabilities Exposed by FEAT<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor74">10.10.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor75">10.10.</a>&nbsp;
 SIZE and MLSx<br />
 <a href="#rfc.references1">11.</a>&nbsp;
 References<br />
@@ -7414,9 +7416,84 @@ FTP Replies</h3>
 </blockquote><p>
 
 </p>
-<a name="sec-4.2.1"></a><br /><hr />
+<a name="anchor66"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.2.1"></a><h3>4.2.1.&nbsp;
+Protected Replies from RFC 2228</h3>
+
+<p>
+</p>
+<div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
+         6yz   Protected reply
+
+            There are three reply codes of this type.  The first, reply
+            code 631 indicates an integrity protected reply.  The
+            second, reply code 632, indicates a confidentiality and
+            integrity protected reply.  the third, reply code 633,
+            indicates a confidentiality protected reply.
+
+            The text part of a 631 reply is a Telnet string consisting
+            of a base 64 encoded "safe" message produced by a security
+            mechanism specific message integrity procedure.  The text
+            part of a 632 reply is a Telnet string consisting of a base
+            64 encoded "private" message produced by a security
+            mechanism specific message confidentiality and integrity
+            procedure.  The text part of a 633 reply is a Telnet string
+            consisting of a base 64 encoded "confidential" message
+            produced by a security mechanism specific message
+            confidentiality procedure.
+
+            The client will decode and verify the encoded reply.  How
+            failures decoding or verifying replies are handled is
+            implementation-specific.  An end-of-line code need not be
+            included, but if one is included, it must be a Telnet end-
+            of-line code, not a local end-of-line code.
+
+            A protected reply may only be sent if a security data
+            exchange has succeeded.
+
+            The 63z reply may be a multiline reply.  In this case, the
+            plaintext reply must be broken up into a number of
+            fragments.  Each fragment must be protected, then base 64
+            encoded in order into a separate line of the multiline
+            reply.  There need not be any correspondence between the
+            line breaks in the plaintext reply and the encoded reply.
+            Telnet end-of-line codes must appear in the plaintext of the
+            encoded reply, except for the final end-of-line code, which
+            is optional.
+
+            The multiline reply must be formatted more strictly than the
+            continuation specification in RFC0959.  In particular, each
+            line before the last must be formed by the reply code,
+            followed immediately by a hyphen, followed by a base 64
+            encoded fragment of the reply.
+
+            For example, if the plaintext reply is
+
+               123-First line
+               Second line
+                 234 A line beginning with numbers
+               123 The last line
+
+            then the resulting protected reply could be any of the
+            following (the first example has a line break only to fit
+            within the margins):
+
+  631 base64(protect("123-First line\r\nSecond line\r\n  234 A line
+  631-base64(protect("123-First line\r\n"))
+  631-base64(protect("Second line\r\n"))
+  631-base64(protect("  234 A line beginning with numbers\r\n"))
+  631 base64(protect("123 The last line"))
+
+  631-base64(protect("123-First line\r\nSecond line\r\n  234 A line b"))
+  631 base64(protect("eginning with numbers\r\n123 The last line\r\n"))
+</pre></div><p>
+
+
+</p>
+<a name="sec-4.2.1"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.4.2.2"></a><h3>4.2.2.&nbsp;
 Reply Code By Function Groups</h3>
 
 <p>
@@ -7470,10 +7547,40 @@ Reply Code By Function Groups</h3>
       227 Entering Passive Mode (h1,h2,h3,h4,p1,p2).
 
       230 User logged in, proceed.
-      530 Not logged in.
+      232 User logged in, authorized by security data exchange.
+      234 Security data exchange complete.
+      235 [ADAT=base64data]
+            ; This reply indicates that the security data exchange
+            ; completed successfully.  The square brackets are not
+            ; to be included in the reply, but indicate that
+            ; security data in the reply is optional.
       331 User name okay, need password.
       332 Need account for login.
+      334 [ADAT=base64data]
+            ; This reply indicates that the requested security mechanism
+            ; is ok, and includes security data to be used by the client
+            ; to construct the next command.  The square brackets are
+            ; not to be included in the reply, but indicate that
+            ; security data in the reply is optional.
+      335 [ADAT=base64data]
+            ; This reply indicates that the security data is
+            ; acceptable, and more is required to complete the
+            ; security data exchange.  The square brackets
+            ; are not to be included in the reply, but indicate
+            ; that security data in the reply is optional.
+      336 Username okay, need password.  Challenge is "...."
+            ; The exact representation of the challenge should be chosen
+            ; by the mechanism to be sensible to the human user of the
+            ; system.
+      431 Need some unavailable resource to process security.
+      530 Not logged in.
       532 Need account for storing files.
+      533 Command protection level denied for policy reasons.
+      534 Request denied for policy reasons.
+      535 Failed security check (hash, sequence, etc).
+      536 Requested PROT level not supported by mechanism.
+      537 Command protection level not supported by security mechanism.
+
 
       150 File status okay; about to open data connection.
       250 Requested file action okay, completed.
@@ -7509,7 +7616,7 @@ Reply Code By Function Groups</h3>
 </p>
 <a name="sec-4.2.2"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.4.2.2"></a><h3>4.2.2.&nbsp;
+<a name="rfc.section.4.2.3"></a><h3>4.2.3.&nbsp;
 Numeric Order List of Reply Codes</h3>
 
 <p>
@@ -7551,11 +7658,34 @@ Numeric Order List of Reply Codes</h3>
           transfer or file abort).
       227 Entering Passive Mode (h1,h2,h3,h4,p1,p2).
       230 User logged in, proceed.
+      232 User logged in, authorized by security data exchange.
+      234 Security data exchange complete.
+      235 [ADAT=base64data]
+            ; This reply indicates that the security data exchange
+            ; completed successfully.  The square brackets are not
+            ; to be included in the reply, but indicate that
+            ; security data in the reply is optional.
       250 Requested file action okay, completed.
       257 "PATHNAME" created.
 
       331 User name okay, need password.
       332 Need account for login.
+      334 [ADAT=base64data]
+            ; This reply indicates that the requested security mechanism
+            ; is ok, and includes security data to be used by the client
+            ; to construct the next command.  The square brackets are
+            ; not to be included in the reply, but indicate that
+            ; security data in the reply is optional.
+      335 [ADAT=base64data]
+            ; This reply indicates that the security data is
+            ; acceptable, and more is required to complete the
+            ; security data exchange.  The square brackets
+            ; are not to be included in the reply, but indicate
+            ; that security data in the reply is optional.
+      336 Username okay, need password.  Challenge is "...."
+            ; The exact representation of the challenge should be chosen
+            ; by the mechanism to be sensible to the human user of the
+            ; system.
       350 Requested file action pending further information.
 
       421 Service not available, closing control connection.
@@ -7563,6 +7693,7 @@ Numeric Order List of Reply Codes</h3>
           must shut down.
       425 Can't open data connection.
       426 Connection closed; transfer aborted.
+      431 Need some unavailable resource to process security.
       450 Requested file action not taken.
           File unavailable (e.g., file busy).
       451 Requested action aborted: local error in processing.
@@ -7577,6 +7708,11 @@ Numeric Order List of Reply Codes</h3>
       504 Command not implemented for that parameter.
       530 Not logged in.
       532 Need account for storing files.
+      533 Command protection level denied for policy reasons.
+      534 Request denied for policy reasons.
+      535 Failed security check (hash, sequence, etc).
+      536 Requested PROT level not supported by mechanism.
+      537 Command protection level not supported by security mechanism.
       550 Requested action not taken.
           File unavailable (e.g., file not found, no access).
       551 Requested action aborted: page type unknown.
@@ -8569,7 +8705,7 @@ Securing FTP with TLS</h3>
    behaviours of implementations to allow interoperation.
 
 </p>
-<a name="anchor66"></a><br /><hr />
+<a name="anchor67"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.10.3"></a><h3>10.3.&nbsp;
 The Bounce Attack</h3>
@@ -8599,7 +8735,7 @@ The Bounce Attack</h3>
    attackers.
 
 </p>
-<a name="anchor67"></a><br /><hr />
+<a name="anchor68"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.10.3.1"></a><h3>10.3.1.&nbsp;
 Protecting Against the Bounce Attack</h3>
@@ -8649,7 +8785,7 @@ Protecting Against the Bounce Attack</h3>
    be necessary in a particular environment.
 
 </p>
-<a name="anchor68"></a><br /><hr />
+<a name="anchor69"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.10.4"></a><h3>10.4.&nbsp;
 Restricted Access</h3>
@@ -8679,7 +8815,7 @@ Restricted Access</h3>
    outlined in <a class='info' href='#RFC2228'>[RFC2228]<span> (</span><span class='info'>Horowitz, M., &ldquo;FTP Security Extensions,&rdquo; October&nbsp;1997.</span><span>)</span></a>.
 
 </p>
-<a name="anchor69"></a><br /><hr />
+<a name="anchor70"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.10.5"></a><h3>10.5.&nbsp;
 Protecting Passwords Against Brute Force Attacks</h3>
@@ -8709,7 +8845,7 @@ Protecting Passwords Against Brute Force Attacks</h3>
    the attack to disable access by a valid user.
 
 </p>
-<a name="anchor70"></a><br /><hr />
+<a name="anchor71"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.10.6"></a><h3>10.6.&nbsp;
 Protecting Usernames</h3>
@@ -8724,7 +8860,7 @@ Protecting Usernames</h3>
    username.
 
 </p>
-<a name="anchor71"></a><br /><hr />
+<a name="anchor72"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.10.7"></a><h3>10.7.&nbsp;
 Port Stealing</h3>
@@ -8744,7 +8880,7 @@ Port Stealing</h3>
    mechanisms.
 
 </p>
-<a name="anchor72"></a><br /><hr />
+<a name="anchor73"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.10.8"></a><h3>10.8.&nbsp;
 Software-Base Security Problems</h3>
@@ -8802,7 +8938,7 @@ Debug Code
    or similar mechanisms before releasing their software.
 
 </p>
-<a name="anchor73"></a><br /><hr />
+<a name="anchor74"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.10.9"></a><h3>10.9.&nbsp;
 Server Capabilities Exposed by FEAT</h3>
@@ -8826,7 +8962,7 @@ Server Capabilities Exposed by FEAT</h3>
    addressed where those features are defined.
 
 </p>
-<a name="anchor74"></a><br /><hr />
+<a name="anchor75"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.10.10"></a><h3>10.10.&nbsp;
 SIZE and MLSx</h3>
@@ -9632,6 +9768,8 @@ Changelog from RFC 959 and TODO</h3>
 </p>
 <p>Use BCP 14/<a class='info' href='#RFC2119'>[RFC2119]<span> (</span><span class='info'>Bradner, S., &ldquo;Key words for use in RFCs to Indicate Requirement Levels,&rdquo; March&nbsp;1997.</span><span>)</span></a> key words in text from <a class='info' href='#RFC0959'>[RFC0959]<span> (</span><span class='info'>Postel, J. and J. Reynolds, &ldquo;File Transfer Protocol,&rdquo; October&nbsp;1985.</span><span>)</span></a> sections.
 </p>
+<p>Partially include <a class='info' href='#RFC2228'>[RFC2228]<span> (</span><span class='info'>Horowitz, M., &ldquo;FTP Security Extensions,&rdquo; October&nbsp;1997.</span><span>)</span></a>: ONLY reply codes and reply type 6yz.
+</p>
 </blockquote><p>
 
 </p>
@@ -9650,7 +9788,7 @@ Changelog from RFC 959 and TODO</h3>
 </p>
 <p>Should we organize commands in a standard format (subsections?) like EPRT/EPSV (<a class='info' href='#sec-4.1.2.1'>Section&nbsp;4.1.2.1<span> (</span><span class='info'>Extensions for IPv6 and NATs: Extended Port (EPRT) and Extended Passive Mode (EPSV)</span><span>)</span></a>), with separated ABNF?
 </p>
-<p>Should we update IP Address:Port description to ABNF? Or standardize on one example: h1,h2,h3,h4,p1,p2 or A1,A2,A3,A4,a1,a2?
+<p>Should we update IP Address:Port description to ABNF? (We could borrow from HOST). Or standardize on one example: h1,h2,h3,h4,p1,p2 or A1,A2,A3,A4,a1,a2?
 </p>
 <p>Should we move the whole sentence that is <a class='info' href='#sec-8'>Section&nbsp;8<span> (</span><span class='info'>Connection Establishment</span><span>)</span></a> into <a class='info' href='#sec-3.2'>Section&nbsp;3.2<span> (</span><span class='info'>Establishing Data Connections</span><span>)</span></a>?
 </p>
