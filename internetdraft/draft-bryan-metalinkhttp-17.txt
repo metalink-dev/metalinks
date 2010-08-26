@@ -842,13 +842,13 @@ Internet-Draft      Metalink/HTTP: Mirrors and Hashes         April 2010
 
 
               Bryan, A., Kosse, T., and D. Stenberg, "FTP Extensions for
-              Cryptographic Hashes", draft-bryan-ftp-hash-02 (work in
-              progress), April 2010.
+              Cryptographic Hashes", draft-bryan-ftp-hash-07 (work in
+              progress), August 2010.
 
    [draft-nottingham-http-link-header]
               Nottingham, M., "Web Linking",
-              draft-nottingham-http-link-header-09 (work in progress),
-              April 2010.
+              draft-nottingham-http-link-header-10 (work in progress),
+              May 2010.
 
 
 Appendix A.  Acknowledgements and Contributors
@@ -921,7 +921,7 @@ Appendix C.  Document History
    o  Do we need an "official" MIME type for .torrent files or allow
       "application/x-bittorrent"?
 
-   -17 : June , 2010.
+   -17 : August , 2010.
    o  RFC 5854 Metalink/XML.
 
    -16 : April 16, 2010.
