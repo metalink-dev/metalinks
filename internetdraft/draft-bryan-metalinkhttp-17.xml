@@ -655,9 +655,9 @@ other mirrors.</t>
 	  <organization></organization>
       <address><email>mnot@mnot.net</email></address>
     </author>
-    <date month="April" year="2010"/>
+    <date month="May" year="2010"/>
   </front>
-  <seriesInfo name="Internet-Draft" value="draft-nottingham-http-link-header-09"/>
+  <seriesInfo name="Internet-Draft" value="draft-nottingham-http-link-header-10"/>
 </reference>
 
 
@@ -748,9 +748,9 @@ other mirrors.</t>
 	      <uri>http://www.haxx.se/</uri>
 	    </address>
       </author>
-	<date month="April" year="2010"/>   
+	<date month="August" year="2010"/>   
   </front>
-  <seriesInfo name="Internet-Draft" value="draft-bryan-ftp-hash-02"/>
+  <seriesInfo name="Internet-Draft" value="draft-bryan-ftp-hash-07"/>
 </reference>
 
 	  </references>
@@ -798,7 +798,7 @@ other mirrors.</t>
 		  <t>Do we need an "official" MIME type for .torrent files or allow "application/x-bittorrent"?</t>
 	    </list></t>
 
-<t>-17 : June , 2010.
+<t>-17 : August , 2010.
 	    
 	    <list style="symbols">
 
