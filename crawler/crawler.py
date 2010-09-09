@@ -49,7 +49,7 @@ METADIR = "/var/www/nabber/projects/metalink/crawler/index/"
 
 CACHETIME = 3600*24*6
 PAUSETIME = 1
-SKIPEXT = ["rpm","jpg","mpg","iso","gif","png","drpm","img","zip",'dmg','md5','sha1','sha256','exe','txt','gz','bz2','cz','sh','pdf']
+SKIPEXT = ["magnet","rpm","jpg","mpg","iso","gif","png","drpm","img","zip",'dmg','md5','sha1','sha256','exe','txt','gz','bz2','cz','sh','pdf']
 
 class LinkParser(HTMLParser.HTMLParser):
     def __init__(self, url):
