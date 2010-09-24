@@ -1,55 +1,96 @@
-# From: http://mathieu.fenniak.net/import-zlib-vs-net-framework/
+# Copyright (c) 2006 Seo Sanghyeon
 
-import System
-from System import IO, Collections, Array
+# Based on Mathieu Fenniak's work dated 2006-06-04
+# http://mathieu.fenniak.net/import-zlib-vs-net-framework/
 
-Z_SYNC_FLUSH = 2
+# 2006-10-08 sanxiyn Created
 
-def _string_to_bytearr(buf):
-    retval = Array.CreateInstance(System.Byte, len(buf))
-    for i in range(len(buf)):
-        retval[i] = ord(buf[i])
-    return retval
+from System.IO import MemoryStream
+from System.IO.Compression import CompressionMode, DeflateStream
 
-def _bytearr_to_string(bytes):
-    retval = ""
-    for i in range(bytes.Length):
-        retval += chr(bytes[i])
-    return retval
+# --------------------------------------------------------------------
+# Utilities
 
-def _read_bytes(stream):
-    ms = IO.MemoryStream()
-    buf = Array.CreateInstance(System.Byte, 2048)
+from System import Array, Byte
+
+from System.Text import Encoding
+raw = Encoding.GetEncoding('iso-8859-1')
+
+def _make_buffer(size):
+    return Array.CreateInstance(Byte, size)
+
+def _read_to_end(stream, bufsize=4096):
+    buffer = _make_buffer(bufsize)
+    memory = MemoryStream()
     while True:
-        bytes = stream.Read(buf, 0, buf.Length)
-        if bytes == 0:
+        count = stream.Read(buffer, 0, bufsize)
+        if not count:
             break
-        else:
-            ms.Write(buf, 0, bytes)
-    retval = ms.ToArray()
-    ms.Close()
-    return retval
+        memory.Write(buffer, 0, count)
+    bytes = memory.ToArray()
+    memory.Close()
+    return bytes
 
-def decompress(data):
-    bytes = _string_to_bytearr(data)
-    ms = IO.MemoryStream()
-    ms.Write(bytes, 0, bytes.Length)
-    ms.Position = 0  # fseek 0
-    gz = IO.Compression.DeflateStream(ms, IO.Compression.CompressionMode.Decompress)
-    bytes = _read_bytes(gz)
-    retval = _bytearr_to_string(bytes)
-    gz.Close()
-    return retval
+# --------------------------------------------------------------------
+# ZLIB data format (RFC 1950)
 
-def compress(data):
-    bytes = _string_to_bytearr(data)
-    ms = IO.MemoryStream()
-    gz = IO.Compression.DeflateStream(ms, IO.Compression.CompressionMode.Compress, True)
-    gz.Write(bytes, 0, bytes.Length)
-    gz.Close()
-    ms.Position = 0 # fseek 0
-    bytes = ms.ToArray()
-    retval = _bytearr_to_string(bytes)
-    ms.Close()
-    return retval
+DEFLATED = 8
+MAX_WBITS = 15
 
+def adler32(string, value=1):
+    mod = 65521
+    s2, s1 = divmod(value, 65536)
+    for char in string:
+        s1 += ord(char)
+        s2 += s1
+        s1 %= mod
+        s2 %= mod
+    return s2 * 65536 + s1
+
+def _zlib_header(wbits=MAX_WBITS):
+    CM = DEFLATED
+    CINFO = wbits - 8
+    CMF = CM + (CINFO << 4)
+    FDICT = 0
+    FLEVEL = 0
+    temp = (FDICT << 5) + (FLEVEL << 6) + (CMF << 8)
+    FCHECK = -temp % 31
+    FLG = FCHECK + (FDICT << 5) + (FLEVEL << 6)
+    return chr(CMF) + chr(FLG)
+
+def _zlib_footer(string):
+    sum = adler32(string)
+    # unsigned long network byte order
+    import struct
+    return struct.pack('!L', sum)
+
+# --------------------------------------------------------------------
+# Compression and decompression
+
+def compress(string, level=6):
+    bytes = raw.GetBytes(string)
+    stream = MemoryStream()
+    zstream = DeflateStream(stream, CompressionMode.Compress, True)
+    zstream.Write(bytes, 0, len(bytes))
+    zstream.Close()
+    compressed = raw.GetString(stream.ToArray())
+    stream.Close()
+
+    header = _zlib_header()
+    footer = _zlib_footer(string)
+    return header + compressed + footer
+
+def decompress(string, wbits=MAX_WBITS):
+    # Python Library Reference states:
+    # When wbits is negative, the header is suppressed
+    if wbits < 0:
+        pass
+    else:
+        string = string[2:-4] # strip header and footer
+
+    bytes = raw.GetBytes(string)
+    stream = MemoryStream(bytes)
+    zstream = DeflateStream(stream, CompressionMode.Decompress)
+    decompressed = raw.GetString(_read_to_end(zstream))
+    zstream.Close()
+    return decompressed
