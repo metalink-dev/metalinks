@@ -25,16 +25,18 @@ from System.Net.Sockets import AddressFamily, ProtocolType, SocketType
 ClrSocketType = SocketType
 
 from System.Text import Encoding
-raw = Encoding.GetEncoding('iso-8859-1')
+raw = Encoding.GetEncoding('utf-8')
 
 def _make_buffer(size):
     return Array.CreateInstance(Byte, size)
 
+_GLOBAL_DEFAULT_TIMEOUT = object()
+
 AF_INET = AddressFamily.InterNetwork
 AF_UNSPEC = AddressFamily.Unspecified
 SOCK_STREAM = ClrSocketType.Stream
-SOCK_DGRAM = ClrSocketType.Dgram
-IPPROTO_IP = ProtocolType.IP
+SOCK_DGRAM = 2
+IPPROTO_IP = 0
 
 SOL_SOCKET = 65535
 SO_REUSEADDR = 4
@@ -176,50 +178,52 @@ def inet_ntoa(packed):
 # --------------------------------------------------------------------
 # DNS functions
 
-from System.Net import Dns
+# TODO implement these
 
-def _safe_gethostbyname(hostname):
-    if not hostname:
-        hostname = str(IPAddress.Any)
-    return Dns.GetHostByName(hostname)
-
-def _entry_to_triple(entry):
-    hostname = entry.HostName
-    aliaslist = list(entry.Aliases)
-    ipaddrlist = map(str, entry.AddressList)
-    return hostname, aliaslist, ipaddrlist
-
-def gethostname():
-    return Dns.GetHostName()
-
-def gethostbyname(hostname):
-    entry = _safe_gethostbyname(hostname)
-    return str(entry.AddressList[0])
-
-def gethostbyname_ex(hostname):
-    entry = _safe_gethostbyname(hostname)
-    return _entry_to_triple(entry)
-
-def gethostbyaddr(address):
-    entry = Dns.GetHostByAddress(address)
-    return _entry_to_triple(entry)
-
-def getfqdn(hostname=''):
-    if not hostname:
-        hostname = Dns.GetHostName()
-    entry = Dns.GetHostByName(hostname)
-    return entry.HostName
-
-def getaddrinfo(host, port, family=AF_INET, socktype=SOCK_STREAM,
-                proto=IPPROTO_IP, flags=None):
-    entry = _safe_gethostbyname(host)
-    family = Enum.ToObject(AddressFamily, family)
-    socktype = Enum.ToObject(ClrSocketType, socktype)
-    proto = Enum.ToObject(ProtocolType, proto)
-    if family == AF_UNSPEC:
-        family = AF_INET
-    return [ (family, socktype, proto, '', (str(ip), port))
-             for ip in entry.AddressList ]
+##from System.Net import Dns
+##
+##def _safe_gethostbyname(hostname):
+##    if not hostname:
+##        hostname = str(IPAddress.Any)
+##    return Dns.GetHostByName(hostname)
+##
+##def _entry_to_triple(entry):
+##    hostname = entry.HostName
+##    aliaslist = list(entry.Aliases)
+##    ipaddrlist = map(str, entry.AddressList)
+##    return hostname, aliaslist, ipaddrlist
+##
+##def gethostname():
+##    return Dns.GetHostName()
+##
+##def gethostbyname(hostname):
+##    entry = _safe_gethostbyname(hostname)
+##    return str(entry.AddressList[0])
+##
+##def gethostbyname_ex(hostname):
+##    entry = _safe_gethostbyname(hostname)
+##    return _entry_to_triple(entry)
+##
+##def gethostbyaddr(address):
+##    entry = Dns.GetHostByAddress(address)
+##    return _entry_to_triple(entry)
+##
+##def getfqdn(hostname=''):
+##    if not hostname:
+##        hostname = Dns.GetHostName()
+##    entry = Dns.GetHostByName(hostname)
+##    return entry.HostName
+##
+##def getaddrinfo(host, port, family=AF_INET, socktype=SOCK_STREAM,
+##                proto=IPPROTO_IP, flags=None):
+##    entry = _safe_gethostbyname(host)
+##    family = Enum.ToObject(AddressFamily, family)
+##    socktype = Enum.ToObject(ClrSocketType, socktype)
+##    proto = Enum.ToObject(ProtocolType, proto)
+##    if family == AF_UNSPEC:
+##        family = AF_INET
+##    return [ (family, socktype, proto, '', (str(ip), port))
+##             for ip in entry.AddressList ]
 
 try:
     from ssl import ssl
