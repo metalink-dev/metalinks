@@ -1,6 +1,6 @@
 SET PYTHONLIB=c:\python26\lib
 
-xcopy /Y %PYTHONLIB%\*.py src\.
+xcopy /Y /EXCLUDE:exclude.txt %PYTHONLIB%\*.py src\.
 
 Chiron /d:src /z:app.xap
 
