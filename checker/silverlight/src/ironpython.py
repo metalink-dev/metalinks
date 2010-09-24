@@ -15,12 +15,12 @@ class Writer(object):
 output_writer = Writer()  
 sys.stdout = output_writer
 
-def override_builtin(name):
-    sys.modules[name] = module = imp.new_module(name)
-    for path in sys.path:
-        filename = os.path.join(path, name + '.py')
-        try:
-            execfile(file, module.__dict__)
-        except: pass
+##def override_builtin(name):
+##    sys.modules[name] = module = imp.new_module(name)
+##    for path in sys.path:
+##        filename = os.path.join(path, name + '.py')
+##        try:
+##            execfile(file, module.__dict__)
+##        except: pass
 
 #override_builtin('socket')
