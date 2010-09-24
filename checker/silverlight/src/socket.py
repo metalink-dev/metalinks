@@ -17,9 +17,9 @@
 from System import Array, Byte, Enum
 
 from System.Net import IPAddress, IPEndPoint
-from System.Net.Sockets import Socket, SocketException, NetworkStream
+from System.Net.Sockets import Socket, SocketException#, NetworkStream
 from System.Net.Sockets import AddressFamily, ProtocolType, SocketType
-from System.Net.Sockets import SocketOptionLevel, SocketOptionName
+#from System.Net.Sockets import SocketOptionLevel, SocketOptionName
 
 # Name collision with the Python interface
 ClrSocketType = SocketType
@@ -36,8 +36,8 @@ SOCK_STREAM = ClrSocketType.Stream
 SOCK_DGRAM = ClrSocketType.Dgram
 IPPROTO_IP = ProtocolType.IP
 
-SOL_SOCKET = SocketOptionLevel.Socket
-SO_REUSEADDR = SocketOptionName.ReuseAddress
+SOL_SOCKET = 65535
+SO_REUSEADDR = 4
 
 AI_PASSIVE = None
 
@@ -147,9 +147,9 @@ class PythonSocket:
         endpoint = self.socket.RemoteEndPoint
         return _endpoint_to_address(endpoint)
 
-    def makefile(self, mode='r', bufsize=-1):
-        stream = NetworkStream(self.socket)
-        return file(stream, mode)
+##    def makefile(self, mode='r', bufsize=-1):
+##        stream = NetworkStream(self.socket)
+##        return file(stream, mode)
 
 def socket(family=AF_INET, type=SOCK_STREAM, proto=IPPROTO_IP):
     family = Enum.ToObject(AddressFamily, family)

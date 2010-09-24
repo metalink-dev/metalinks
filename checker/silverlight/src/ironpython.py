@@ -23,4 +23,4 @@ def override_builtin(name):
             execfile(file, module.__dict__)
         except: pass
 
-override_builtin('socket')
+#override_builtin('socket')
