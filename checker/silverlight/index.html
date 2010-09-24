@@ -10,28 +10,17 @@
     }
   </style>
 
-  <!-- Formatting for DLR error handling -->
-  <link type="text/css" rel="stylesheet" href="assets/stylesheets/error.css" />
-
-  <!-- 
-    Error handling for when DLR errors are disabled (with 
-    reportErrors=false, or not defined at all)
-  -->
-  <script type="text/javascript">
-    function onSilverlightError(sender, args) {
-      if (args.errorType == "InitializeError")  {
-        var errorDiv = document.getElementById("errorLocation");
-        if (errorDiv != null)
-          errorDiv.innerHTML = args.errorType + "- " + args.errorMessage;
-      }
-    }
-  </script>
+    <!-- Basic stylesheet for application -->
+    <link type="text/css" rel="stylesheet" href="assets/stylesheets/screen.css" />
+    <!-- Formatting for Dynamic Language error window -->
+    <link type="text/css" rel="stylesheet" href="assets/stylesheets/error.css" />
+    <!-- Defines "onSilverlightError" function for Silverlight plugin -->
+    <script type="text/javascript" src="assets/javascripts/error.js"></script>
 </head>
 
 <body>
-	<h1>Minimal IronPython and Silverlight Example 2</h1>
-	<p>Part of the <a href="http://www.voidspace.org.uk/ironpython/silverlight/">Voidspace IronPython and Silverlight Tutorials</a>.</p>
-  <!-- 
+	<h1>Minimal IronPython and Silverlight with XAML Example</h1>
+	<p>Part of the <a href="http://www.voidspace.org.uk/ironpython/silverlight/">Voidspace IronPython and Silverlight Tutorials</a>.</p>  <!-- 
     Syntax/Runtime errors from Silverlight will be displayed here.
     This will contain debugging information and should be removed 
     or hidden when debugging is completed 
@@ -40,7 +29,7 @@
 
   <div id="silverlightControlHost" width="480" height="320">
     
-    <object data="data:application/x-silverlight," type="application/x-silverlight-2-b1" width="480" height="320">
+    <object data="data:application/x-silverlight," type="application/x-silverlight-2" width="480" height="320">
       <param name="source" value="app.xap"/>
       <param name="onerror" value="onSilverlightError" />
       <param name="background" value="#00000000" />

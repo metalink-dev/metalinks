@@ -5,12 +5,6 @@ div.silverlightDlrErrorReport {
   color: black;
   background-color: white;
   text-align: left;
-  /*position: absolute;
-  top: 0px;
-  bottom: 0px;
-  left: 0px;
-  right: 0px;
-  background-color: #ccc;*/
 }
 
 div.silverlightDlrErrorReport a,
@@ -26,7 +20,6 @@ div.silverlightDlrErrorReport a:hover {
 }
 
 div.silverlightDlrErrorWrapper {
-  overflow: auto;
   background-color: white;
 
   position: absolute;
@@ -47,6 +40,7 @@ h2.silverlightDlrErrorMessage {
   color: white;
   padding: 5px;
   font-size: 18px;
+  overflow: auto;
 }
 
 div.silverlightDlrErrorSource {
@@ -78,6 +72,8 @@ div.silverlightDlrErrorType {
 code.silverlightDlrErrorStackTrace {
   display: block;
   padding: 5px 10px;
+  max-height: 100px;
+  overflow: auto;
 }
 div.silverlightDlrErrorStackTraceLine {
   border-bottom: 1px solid #bbb;
