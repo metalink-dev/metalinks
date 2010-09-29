@@ -144,13 +144,13 @@
 <tr><td class="header">Network Working Group</td><td class="header">A. Bryan</td></tr>
 <tr><td class="header">Internet-Draft</td><td class="header">N. McNab</td></tr>
 <tr><td class="header">Intended status: Standards Track</td><td class="header">H. Nordstrom</td></tr>
-<tr><td class="header">Expires: March 17, 2011</td><td class="header">T. Tsujikawa</td></tr>
+<tr><td class="header">Expires: April 2, 2011</td><td class="header">T. Tsujikawa</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">&nbsp;</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">P. Poeml</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">MirrorBrain</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">A. Ford</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">Roke Manor Research</td></tr>
-<tr><td class="header">&nbsp;</td><td class="header">September 13, 2010</td></tr>
+<tr><td class="header">&nbsp;</td><td class="header">September 29, 2010</td></tr>
 </table></td></tr></table>
 <h1><br />Metalink/HTTP: Mirrors and Cryptographic Hashes in HTTP Headers<br />draft-bryan-metalinkhttp-18</h1>
 
@@ -175,7 +175,7 @@ and may be updated, replaced, or obsoleted by other documents at any time.
 It is inappropriate to use Internet-Drafts as reference material or to cite
 them other than as &ldquo;work in progress.&rdquo;</p>
 <p>
-This Internet-Draft will expire on March 17, 2011.</p>
+This Internet-Draft will expire on April 2, 2011.</p>
 
 <h3>Copyright Notice</h3>
 <p>
@@ -264,7 +264,7 @@ Introduction</h3>
 
 <p>Metalink/HTTP is an alternative representation of Metalink information, which is usually presented as an XML-based document format <a class='info' href='#RFC5854'>[RFC5854]<span> (</span><span class='info'>Bryan, A., Tsujikawa, T., McNab, N., and P. Poeml, &ldquo;The Metalink Download Description Format,&rdquo; June&nbsp;2010.</span><span>)</span></a>. 
       Metalink/HTTP attempts to provide as much functionality as the Metalink/XML format by using existing standards such as Web Linking <a class='info' href='#draft-nottingham-http-link-header'>[draft&#8209;nottingham&#8209;http&#8209;link&#8209;header]<span> (</span><span class='info'>Nottingham, M., &ldquo;Web Linking,&rdquo; May&nbsp;2010.</span><span>)</span></a>, 
-      Instance Digests in HTTP <a class='info' href='#RFC3230'>[RFC3230]<span> (</span><span class='info'>Mogul, J. and A. Van Hoff, &ldquo;Instance Digests in HTTP,&rdquo; January&nbsp;2002.</span><span>)</span></a>, and ETags. Metalink/HTTP is used to list
+      Instance Digests in HTTP <a class='info' href='#RFC3230'>[RFC3230]<span> (</span><span class='info'>Mogul, J. and A. Van Hoff, &ldquo;Instance Digests in HTTP,&rdquo; January&nbsp;2002.</span><span>)</span></a>, and ETags <a class='info' href='#RFC2616'>[RFC2616]<span> (</span><span class='info'>Fielding, R., Gettys, J., Mogul, J., Frystyk, H., Masinter, L., Leach, P., and T. Berners-Lee, &ldquo;Hypertext Transfer Protocol -- HTTP/1.1,&rdquo; June&nbsp;1999.</span><span>)</span></a>. Metalink/HTTP is used to list
       information about a file to be downloaded. This can include lists of multiple URIs (mirrors), Peer-to-Peer information, cryptographic hashes, and digital signatures.
 </p>
 <p>Identical copies of a file are frequently accessible in multiple locations on the Internet over a variety of protocols (such as FTP, HTTP, and Peer-to-Peer).
@@ -339,13 +339,13 @@ Requirements</h3>
 </p>
 <p>Metalink servers are HTTP servers with one or more Metalink
  resources. Mirror and cryptographic hash information provided by the originating Metalink server MUST be considered authoritative. Metalink servers and their associated mirror servers
-      SHOULD all share the same ETag policy (ETag Synchronization), i.e. based on the file contents (cryptographic hash) and not server-unique filesystem metadata. The emitted ETag MAY be implemented the same as the Instance Digest for simplicity. Metalink servers MAY offer Metalink/XML documents that contain cryptographic hashes of parts of the file and other information.
+      are RECOMMENDED to all share the same ETag policy (ETag Synchronization), i.e. based on the file contents (cryptographic hash) and not server-unique filesystem metadata. The emitted ETag MAY be implemented the same as the Instance Digest for simplicity. Metalink servers MAY offer Metalink/XML documents that contain cryptographic hashes of parts of the file and other information.
 </p>
 <p>Mirror servers are typically FTP or HTTP servers that "mirror" another server. That is, they provide identical copies of (at least some) files that are also on the mirrored server. 
-      Mirror servers MAY be Metalink servers. Mirror servers MUST support serving partial content. HTTP mirror servers SHOULD share the same ETag policy as the originating Metalink server. HTTP Mirror servers SHOULD support Instance Digests in HTTP <a class='info' href='#RFC3230'>[RFC3230]<span> (</span><span class='info'>Mogul, J. and A. Van Hoff, &ldquo;Instance Digests in HTTP,&rdquo; January&nbsp;2002.</span><span>)</span></a>.
+      Mirror servers MAY be Metalink servers. Mirror servers are RECOMMENDED to support serving partial content. HTTP mirror servers are RECOMMENDED to share the same ETag policy as the originating Metalink server. HTTP Mirror servers are RECOMMENDED to support Instance Digests in HTTP <a class='info' href='#RFC3230'>[RFC3230]<span> (</span><span class='info'>Mogul, J. and A. Van Hoff, &ldquo;Instance Digests in HTTP,&rdquo; January&nbsp;2002.</span><span>)</span></a>.
 </p>
 <p>Metalink clients use the mirrors provided by a Metalink server with Link header <a class='info' href='#draft-nottingham-http-link-header'>[draft&#8209;nottingham&#8209;http&#8209;link&#8209;header]<span> (</span><span class='info'>Nottingham, M., &ldquo;Web Linking,&rdquo; May&nbsp;2010.</span><span>)</span></a>. Metalink clients MUST support HTTP and MAY support FTP, BitTorrent, 
-      or other download methods. Metalink clients MUST switch downloads from one mirror to another if the mirror becomes unreachable. Metalink clients SHOULD support multi-source, or parallel, 
+      or other download methods. Metalink clients MUST switch downloads from one mirror to another if the mirror becomes unreachable. Metalink clients are RECOMMENDED to support multi-source, or parallel, 
       downloads, where portions of a file are downloaded from multiple mirrors simultaneously (and optionally, from Peer-to-Peer sources). Metalink clients MUST support Instance Digests in HTTP <a class='info' href='#RFC3230'>[RFC3230]<span> (</span><span class='info'>Mogul, J. and A. Van Hoff, &ldquo;Instance Digests in HTTP,&rdquo; January&nbsp;2002.</span><span>)</span></a> by 
       requesting and verifying cryptographic hashes. Metalink clients MAY make use of digital signatures if they are offered.
 </p>
@@ -799,9 +799,9 @@ Signing</h3>
 <a name="rfc.section.A"></a><h3>Appendix A.&nbsp;
 Acknowledgements and Contributors</h3>
 
-<p>Thanks to the Metalink community, Mark Handley, Mark Nottingham, Daniel Stenberg, Tatsuhiro Tsujikawa, Peter Poeml, Matt Domsch, Micah Cowan, and David Morris.
+<p>Thanks to the Metalink community, Mark Nottingham, Daniel Stenberg, Matt Domsch, Micah Cowan, and David Morris.
 </p>
-<p>Support for simultaneous download from multiple mirrors is based upon work by Mark Handley and Javier Vela Diago, who also provided validation of the benefits of this approach.
+<p>Mark Handley and Javier Vela Diago did work on simultaneous download from multiple mirrors, which also provided validation of the benefits of this approach.
 </p>
 <a name="anchor16"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
@@ -861,7 +861,15 @@ Document History</h3>
 </li>
 </ul>
 
-<p>-17 : August , 2010.
+<p>-18 : September , 2010.
+	    
+	    </p>
+<ul class="text">
+<li>More realistic requirements.
+</li>
+</ul>
+
+<p>-17 : September 13 , 2010.
 	    
 	    </p>
 <ul class="text">
