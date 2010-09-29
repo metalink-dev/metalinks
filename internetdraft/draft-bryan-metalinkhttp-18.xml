@@ -97,7 +97,7 @@
       
       <t>Metalink/HTTP is an alternative representation of Metalink information, which is usually presented as an XML-based document format <xref target="RFC5854"/>. 
       Metalink/HTTP attempts to provide as much functionality as the Metalink/XML format by using existing standards such as Web Linking <xref target="draft-nottingham-http-link-header"/>, 
-      Instance Digests in HTTP <xref target="RFC3230"/>, and ETags. Metalink/HTTP is used to list
+      Instance Digests in HTTP <xref target="RFC3230"/>, and ETags <xref target="RFC2616"/>. Metalink/HTTP is used to list
       information about a file to be downloaded. This can include lists of multiple URIs (mirrors), Peer-to-Peer information, cryptographic hashes, and digital signatures.</t>
       
       <t>Identical copies of a file are frequently accessible in multiple locations on the Internet over a variety of protocols (such as FTP, HTTP, and Peer-to-Peer).
@@ -163,14 +163,14 @@ DYzYjRjYzFhOTlmNTQwYzI2M2QwM2U2MQ==
 	  
 	  <t>Metalink servers are HTTP servers with one or more Metalink
  resources. Mirror and cryptographic hash information provided by the originating Metalink server MUST be considered authoritative. Metalink servers and their associated mirror servers
-      SHOULD all share the same ETag policy (ETag Synchronization), i.e. based on the file contents (cryptographic hash) and not server-unique filesystem metadata. The emitted ETag MAY be implemented the same as the Instance Digest for simplicity. Metalink servers MAY offer Metalink/XML documents that contain cryptographic hashes of parts of the file and other information.</t>
+      are RECOMMENDED to all share the same ETag policy (ETag Synchronization), i.e. based on the file contents (cryptographic hash) and not server-unique filesystem metadata. The emitted ETag MAY be implemented the same as the Instance Digest for simplicity. Metalink servers MAY offer Metalink/XML documents that contain cryptographic hashes of parts of the file and other information.</t>
 
       <t>Mirror servers are typically FTP or HTTP servers that "mirror" another server. That is, they provide identical copies of (at least some) files that are also on the mirrored server. 
-      Mirror servers MAY be Metalink servers. Mirror servers MUST support serving partial content. HTTP mirror servers SHOULD share the same ETag policy as the originating Metalink server. HTTP Mirror servers SHOULD support Instance Digests in HTTP <xref target="RFC3230"/>.</t>
+      Mirror servers MAY be Metalink servers. Mirror servers are RECOMMENDED to support serving partial content. HTTP mirror servers are RECOMMENDED to share the same ETag policy as the originating Metalink server. HTTP Mirror servers are RECOMMENDED to support Instance Digests in HTTP <xref target="RFC3230"/>.</t>
 
 
       <t>Metalink clients use the mirrors provided by a Metalink server with Link header <xref target="draft-nottingham-http-link-header"/>. Metalink clients MUST support HTTP and MAY support FTP, BitTorrent, 
-      or other download methods. Metalink clients MUST switch downloads from one mirror to another if the mirror becomes unreachable. Metalink clients SHOULD support multi-source, or parallel, 
+      or other download methods. Metalink clients MUST switch downloads from one mirror to another if the mirror becomes unreachable. Metalink clients are RECOMMENDED to support multi-source, or parallel, 
       downloads, where portions of a file are downloaded from multiple mirrors simultaneously (and optionally, from Peer-to-Peer sources). Metalink clients MUST support Instance Digests in HTTP <xref target="RFC3230"/> by 
       requesting and verifying cryptographic hashes. Metalink clients MAY make use of digital signatures if they are offered.</t>
 	  
@@ -758,9 +758,9 @@ other mirrors.</t>
 
 
 	    <section title="Acknowledgements and Contributors">
-		  <t>Thanks to the Metalink community, Mark Handley, Mark Nottingham, Daniel Stenberg, Tatsuhiro Tsujikawa, Peter Poeml, Matt Domsch, Micah Cowan, and David Morris.</t>
+		  <t>Thanks to the Metalink community, Mark Nottingham, Daniel Stenberg, Matt Domsch, Micah Cowan, and David Morris.</t>
 		  
-          <t>Support for simultaneous download from multiple mirrors is based upon work by Mark Handley and Javier Vela Diago, who also provided validation of the benefits of this approach.</t>
+          <t>Mark Handley and Javier Vela Diago did work on simultaneous download from multiple mirrors, which also provided validation of the benefits of this approach.</t>
 
 	    </section> 
 
@@ -798,7 +798,14 @@ other mirrors.</t>
 		  <t>Do we need an "official" MIME type for .torrent files or allow "application/x-bittorrent"?</t>
 	    </list></t>
 
-<t>-17 : August , 2010.
+<t>-18 : September , 2010.
+	    
+	    <list style="symbols">
+
+	      <t>More realistic requirements.</t>
+	    </list></t>
+
+<t>-17 : September 13 , 2010.
 	    
 	    <list style="symbols">
 
