@@ -4,13 +4,13 @@
 Network Working Group                                           A. Bryan
 Internet-Draft                                                  N. McNab
 Intended status: Standards Track                            H. Nordstrom
-Expires: April 2, 2011                                      T. Tsujikawa
+Expires: May 7, 2011                                        T. Tsujikawa
 
                                                                 P. Poeml
                                                              MirrorBrain
                                                                  A. Ford
                                                      Roke Manor Research
-                                                      September 29, 2010
+                                                        November 3, 2010
 
 
     Metalink/HTTP: Mirrors and Cryptographic Hashes in HTTP Headers
@@ -42,7 +42,7 @@ Status of this Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on April 2, 2011.
+   This Internet-Draft will expire on May 7, 2011.
 
 Copyright Notice
 
@@ -52,9 +52,9 @@ Copyright Notice
 
 
 
-Bryan, et al.             Expires April 2, 2011                 [Page 1]
+Bryan, et al.              Expires May 7, 2011                  [Page 1]
 
-Internet-Draft      Metalink/HTTP: Mirrors and Hashes     September 2010
+Internet-Draft      Metalink/HTTP: Mirrors and Hashes      November 2010
 
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -80,7 +80,7 @@ Table of Contents
      3.2.  Mirror Geographical Location . . . . . . . . . . . . . . .  6
      3.3.  Coordinated Mirror Policies  . . . . . . . . . . . . . . .  7
      3.4.  Mirror Depth . . . . . . . . . . . . . . . . . . . . . . .  7
-   4.  Peer-to-Peer / Metainfo  . . . . . . . . . . . . . . . . . . .  8
+   4.  Peer-to-Peer / Metainfo  . . . . . . . . . . . . . . . . . . .  7
      4.1.  Metalink/XML Files . . . . . . . . . . . . . . . . . . . .  8
    5.  OpenPGP Signatures . . . . . . . . . . . . . . . . . . . . . .  8
    6.  Cryptographic Hashes of Whole Files  . . . . . . . . . . . . .  8
@@ -108,9 +108,9 @@ Table of Contents
 
 
 
-Bryan, et al.             Expires April 2, 2011                 [Page 2]
+Bryan, et al.              Expires May 7, 2011                  [Page 2]
 
-Internet-Draft      Metalink/HTTP: Mirrors and Hashes     September 2010
+Internet-Draft      Metalink/HTTP: Mirrors and Hashes      November 2010
 
 
 1.  Introduction
@@ -119,11 +119,11 @@ Internet-Draft      Metalink/HTTP: Mirrors and Hashes     September 2010
    information, which is usually presented as an XML-based document
    format [RFC5854].  Metalink/HTTP attempts to provide as much
    functionality as the Metalink/XML format by using existing standards
-   such as Web Linking [draft-nottingham-http-link-header], Instance
-   Digests in HTTP [RFC3230], and ETags [RFC2616].  Metalink/HTTP is
-   used to list information about a file to be downloaded.  This can
-   include lists of multiple URIs (mirrors), Peer-to-Peer information,
-   cryptographic hashes, and digital signatures.
+   such as Web Linking [RFC5988], Instance Digests in HTTP [RFC3230],
+   and ETags [RFC2616].  Metalink/HTTP is used to list information about
+   a file to be downloaded.  This can include lists of multiple URIs
+   (mirrors), Peer-to-Peer information, cryptographic hashes, and
+   digital signatures.
 
    Identical copies of a file are frequently accessible in multiple
    locations on the Internet over a variety of protocols (such as FTP,
@@ -164,9 +164,9 @@ Internet-Draft      Metalink/HTTP: Mirrors and Hashes     September 2010
 
 
 
-Bryan, et al.             Expires April 2, 2011                 [Page 3]
+Bryan, et al.              Expires May 7, 2011                  [Page 3]
 
-Internet-Draft      Metalink/HTTP: Mirrors and Hashes     September 2010
+Internet-Draft      Metalink/HTTP: Mirrors and Hashes      November 2010
 
 
    download even under adverse circumstances.  All this is done
@@ -220,9 +220,9 @@ Internet-Draft      Metalink/HTTP: Mirrors and Hashes     September 2010
 
 
 
-Bryan, et al.             Expires April 2, 2011                 [Page 4]
+Bryan, et al.              Expires May 7, 2011                  [Page 4]
 
-Internet-Draft      Metalink/HTTP: Mirrors and Hashes     September 2010
+Internet-Draft      Metalink/HTTP: Mirrors and Hashes      November 2010
 
 
 1.3.  Notational Conventions
@@ -242,11 +242,10 @@ Internet-Draft      Metalink/HTTP: Mirrors and Hashes     September 2010
    document.  "Metalink/XML" refers to the XML format described in
    [RFC5854].
 
-   Metalink resources include a Link header
-   [draft-nottingham-http-link-header] to present a list of mirrors in
-   the response to a client request for the resource.  The cryptographic
-   hash of a resource must be included via Instance Digests in HTTP
-   [RFC3230].
+   Metalink resources include a Link header [RFC5988] to present a list
+   of mirrors in the response to a client request for the resource.  The
+   cryptographic hash of a resource must be included via Instance
+   Digests in HTTP [RFC3230].
 
    Metalink servers are HTTP servers with one or more Metalink
    resources.  Mirror and cryptographic hash information provided by the
@@ -269,31 +268,30 @@ Internet-Draft      Metalink/HTTP: Mirrors and Hashes     September 2010
    [RFC3230].
 
    Metalink clients use the mirrors provided by a Metalink server with
-   Link header [draft-nottingham-http-link-header].  Metalink clients
-   MUST support HTTP and MAY support FTP, BitTorrent, or other download
-   methods.  Metalink clients MUST switch downloads from one mirror to
-   another if the mirror becomes unreachable.  Metalink clients are
+   Link header [RFC5988].  Metalink clients MUST support HTTP and MAY
+   support FTP, BitTorrent, or other download methods.  Metalink clients
+   MUST switch downloads from one mirror to another if the mirror
+   becomes unreachable.  Metalink clients are RECOMMENDED to support
+   multi-source, or parallel, downloads, where portions of a file are
 
 
 
-Bryan, et al.             Expires April 2, 2011                 [Page 5]
+Bryan, et al.              Expires May 7, 2011                  [Page 5]
 
-Internet-Draft      Metalink/HTTP: Mirrors and Hashes     September 2010
+Internet-Draft      Metalink/HTTP: Mirrors and Hashes      November 2010
 
 
-   RECOMMENDED to support multi-source, or parallel, downloads, where
-   portions of a file are downloaded from multiple mirrors
-   simultaneously (and optionally, from Peer-to-Peer sources).  Metalink
-   clients MUST support Instance Digests in HTTP [RFC3230] by requesting
-   and verifying cryptographic hashes.  Metalink clients MAY make use of
-   digital signatures if they are offered.
+   downloaded from multiple mirrors simultaneously (and optionally, from
+   Peer-to-Peer sources).  Metalink clients MUST support Instance
+   Digests in HTTP [RFC3230] by requesting and verifying cryptographic
+   hashes.  Metalink clients MAY make use of digital signatures if they
+   are offered.
 
 
 3.  Mirrors / Multiple Download Locations
 
-   Mirrors are specified with the Link header
-   [draft-nottingham-http-link-header] and a relation type of
-   "duplicate" as defined in Section 9.
+   Mirrors are specified with the Link header [RFC5988] and a relation
+   type of "duplicate" as defined in Section 9.
 
    A brief Metalink server response with two mirrors only:
 
@@ -329,16 +327,15 @@ Internet-Draft      Metalink/HTTP: Mirrors and Hashes     September 2010
    two letter country code for the geographical location of the physical
    server the URI is used to access.  A client may use this information
    to select a mirror, or set of mirrors, that are geographically near
-
-
-
-Bryan, et al.             Expires April 2, 2011                 [Page 6]
-
-Internet-Draft      Metalink/HTTP: Mirrors and Hashes     September 2010
-
-
    (if the client has access to such information), with the aim of
    reducing network load at inter-country bottlenecks.
+
+
+
+Bryan, et al.              Expires May 7, 2011                  [Page 6]
+
+Internet-Draft      Metalink/HTTP: Mirrors and Hashes      November 2010
+
 
 3.3.  Coordinated Mirror Policies
 
@@ -384,22 +381,20 @@ Internet-Draft      Metalink/HTTP: Mirrors and Hashes     September 2010
    down.
 
 
-
-
-
-
-Bryan, et al.             Expires April 2, 2011                 [Page 7]
-
-Internet-Draft      Metalink/HTTP: Mirrors and Hashes     September 2010
-
-
 4.  Peer-to-Peer / Metainfo
 
    Metainfo files, which describe ways to download a file over Peer-to-
    Peer networks or otherwise, are specified with the Link header
-   [draft-nottingham-http-link-header] and a relation type of
-   "describedby" and a type parameter that indicates the MIME type of
-   the metadata available at the URI.
+
+
+
+Bryan, et al.              Expires May 7, 2011                  [Page 7]
+
+Internet-Draft      Metalink/HTTP: Mirrors and Hashes      November 2010
+
+
+   [RFC5988] and a relation type of "describedby" and a type parameter
+   that indicates the MIME type of the metadata available at the URI.
 
    A brief Metalink server response with .torrent and .metalink:
 
@@ -421,9 +416,9 @@ Internet-Draft      Metalink/HTTP: Mirrors and Hashes     September 2010
 
 5.  OpenPGP Signatures
 
-   OpenPGP signatures are specified with the Link header
-   [draft-nottingham-http-link-header] and a relation type of
-   "describedby" and a type parameter of "application/pgp-signature".
+   OpenPGP signatures are specified with the Link header [RFC5988] and a
+   relation type of "describedby" and a type parameter of "application/
+   pgp-signature".
 
    A brief Metalink server response with OpenPGP signature only:
 
@@ -438,21 +433,20 @@ Internet-Draft      Metalink/HTTP: Mirrors and Hashes     September 2010
    Metalink servers MUST provide Instance Digests in HTTP [RFC3230] for
    files they describe with mirrors.  Mirror servers SHOULD as well.
 
-
-
-
-
-
-
-Bryan, et al.             Expires April 2, 2011                 [Page 8]
-
-Internet-Draft      Metalink/HTTP: Mirrors and Hashes     September 2010
-
-
    A brief Metalink server response with cryptographic hash:
 
    Digest: SHA-256=MWVkMWQxYTRiMzk5MDQ0MzI3NGU5NDEyZTk5OWY1ZGFmNzgyZTJlO
    DYzYjRjYzFhOTlmNTQwYzI2M2QwM2U2MQ==
+
+
+
+
+
+
+
+Bryan, et al.              Expires May 7, 2011                  [Page 8]
+
+Internet-Draft      Metalink/HTTP: Mirrors and Hashes      November 2010
 
 
 7.  Client / Server Multi-source Download Interaction
@@ -495,16 +489,6 @@ Internet-Draft      Metalink/HTTP: Mirrors and Hashes     September 2010
    o  Mirror profile link, which may describe the mirror's priority,
       whether it shares the ETag policy of the originating Metalink
       server, geographical location, and mirror depth.
-
-
-
-
-
-Bryan, et al.             Expires April 2, 2011                 [Page 9]
-
-Internet-Draft      Metalink/HTTP: Mirrors and Hashes     September 2010
-
-
    o  Peer-to-peer information.
    o  Metalink/XML, which can include partial file cryptographic hashes
       to repair a file.
@@ -513,6 +497,14 @@ Internet-Draft      Metalink/HTTP: Mirrors and Hashes     September 2010
 
    (Alternatively, the client could have requested a HEAD only, and then
    skipped to making the following decisions on every available mirror
+
+
+
+Bryan, et al.              Expires May 7, 2011                  [Page 9]
+
+Internet-Draft      Metalink/HTTP: Mirrors and Hashes      November 2010
+
+
    server found via the Link headers)
 
    If the object is large and gets delivered slower than expected then
@@ -553,17 +545,21 @@ Internet-Draft      Metalink/HTTP: Mirrors and Hashes     September 2010
    If-Match: "thvDyvhfIqlvFe+A9MYgxAfm1q5="
    Referer: http://www.example.com/distribution/example.ext
 
-
-
-
-Bryan, et al.             Expires April 2, 2011                [Page 10]
-
-Internet-Draft      Metalink/HTTP: Mirrors and Hashes     September 2010
-
-
    The mirror servers respond with a 206 Partial Content HTTP status
    code and appropriate "Content-Length" and "Content Range" header
    fields.  The mirror server response, with data, to the above request:
+
+
+
+
+
+
+
+
+Bryan, et al.              Expires May 7, 2011                 [Page 10]
+
+Internet-Draft      Metalink/HTTP: Mirrors and Hashes      November 2010
+
 
    HTTP/1.1 206 Partial Content
    Accept-Ranges: bytes
@@ -609,18 +605,18 @@ Internet-Draft      Metalink/HTTP: Mirrors and Hashes     September 2010
    the error is still detectable, after the download has completed, when
    the merged response is verified.
 
-
-
-
-Bryan, et al.             Expires April 2, 2011                [Page 11]
-
-Internet-Draft      Metalink/HTTP: Mirrors and Hashes     September 2010
-
-
    ETags can not be used for verifying the integrity of the received
    content.  But it is a guarantee issued by the Metalink server that
    the content is correct for that ETag.  And if the ETag given by the
    mirror server matches the ETag given by the master server, then we
+
+
+
+Bryan, et al.              Expires May 7, 2011                 [Page 11]
+
+Internet-Draft      Metalink/HTTP: Mirrors and Hashes      November 2010
+
+
    have a chain of trust where the master server authorizes these
    responses as valid for that object.
 
@@ -666,16 +662,17 @@ Internet-Draft      Metalink/HTTP: Mirrors and Hashes     September 2010
    the download.  Metalink servers are not required to offer partial
    file cryptographic hashes, but they are encouraged to do so.
 
-
-
-Bryan, et al.             Expires April 2, 2011                [Page 12]
-
-Internet-Draft      Metalink/HTTP: Mirrors and Hashes     September 2010
-
-
    If the object cryptographic hash does not match the Instance Digest
    then fetch the Metalink/XML as specified in Section 4.1, where
    partial file cryptographic hashes may be found, allowing detection of
+
+
+
+Bryan, et al.              Expires May 7, 2011                 [Page 12]
+
+Internet-Draft      Metalink/HTTP: Mirrors and Hashes      November 2010
+
+
    which server returned incorrect data.  If the Instance Digest
    computation does not match then the client needs to fetch the partial
    file cryptographic hashes, if available, and from there figure out
@@ -721,15 +718,15 @@ Internet-Draft      Metalink/HTTP: Mirrors and Hashes     September 2010
    be increased to perhaps 1MByte.  As network bandwidths increase, we
    expect these numbers to increase appropriately, so that the time to
    transfer a chunk remains significantly larger than the latency of
-
-
-
-Bryan, et al.             Expires April 2, 2011                [Page 13]
-
-Internet-Draft      Metalink/HTTP: Mirrors and Hashes     September 2010
-
-
    requesting a chunk from a server.
+
+
+
+
+
+Bryan, et al.              Expires May 7, 2011                 [Page 13]
+
+Internet-Draft      Metalink/HTTP: Mirrors and Hashes      November 2010
 
 
 9.  IANA Considerations
@@ -778,15 +775,16 @@ Internet-Draft      Metalink/HTTP: Mirrors and Hashes     September 2010
    a collision, i.e. the weak cryptographic hashes of the intended file
    and a substituted malicious file could match.
 
-
-
-Bryan, et al.             Expires April 2, 2011                [Page 14]
-
-Internet-Draft      Metalink/HTTP: Mirrors and Hashes     September 2010
-
-
    If a Metalink contains whole file hashes as described in Section 6,
    it SHOULD include "sha-256" which is SHA-256, as specified in
+
+
+
+Bryan, et al.              Expires May 7, 2011                 [Page 14]
+
+Internet-Draft      Metalink/HTTP: Mirrors and Hashes      November 2010
+
+
    [FIPS-180-3], or stronger.  It MAY also include other hashes.
 
 10.4.  Signing
@@ -832,23 +830,20 @@ Internet-Draft      Metalink/HTTP: Mirrors and Hashes     September 2010
               Metalink Download Description Format", RFC 5854,
               June 2010.
 
+   [RFC5988]  Nottingham, M., "Web Linking", RFC 5988, October 2010.
+
    [draft-bryan-ftp-hash]
 
 
 
-Bryan, et al.             Expires April 2, 2011                [Page 15]
+Bryan, et al.              Expires May 7, 2011                 [Page 15]
 
-Internet-Draft      Metalink/HTTP: Mirrors and Hashes     September 2010
+Internet-Draft      Metalink/HTTP: Mirrors and Hashes      November 2010
 
 
               Bryan, A., Kosse, T., and D. Stenberg, "FTP Extensions for
-              Cryptographic Hashes", draft-bryan-ftp-hash-07 (work in
-              progress), August 2010.
-
-   [draft-nottingham-http-link-header]
-              Nottingham, M., "Web Linking",
-              draft-nottingham-http-link-header-10 (work in progress),
-              May 2010.
+              Cryptographic Hashes", draft-bryan-ftp-hash-08 (work in
+              progress), October 2010.
 
 
 Appendix A.  Acknowledgements and Contributors
@@ -887,22 +882,19 @@ Appendix B.  Comparisons to Similar Options
       Even if usage in that case is not as transparent, it still gives
       access to users at all mirrors (FTP included) to all download
       information with no changes needed to the server.
-
-
-
-
-
-Bryan, et al.             Expires April 2, 2011                [Page 16]
-
-Internet-Draft      Metalink/HTTP: Mirrors and Hashes     September 2010
-
-
    o  (-) Not portable/archivable/emailable.  Metalink/XML is used to
       import/export transfer queues.  Not as easy for search engines to
       index?
    o  (-) Not as rich metadata.
    o  (-) Not able to add multiple files to a download queue or create
       directory structure.
+
+
+
+
+Bryan, et al.              Expires May 7, 2011                 [Page 16]
+
+Internet-Draft      Metalink/HTTP: Mirrors and Hashes      November 2010
 
 
 Appendix C.  Document History
@@ -943,16 +935,6 @@ Appendix C.  Document History
    o  Clarifications.
 
    -11 : October 23, 2009.
-
-
-
-
-
-Bryan, et al.             Expires April 2, 2011                [Page 17]
-
-Internet-Draft      Metalink/HTTP: Mirrors and Hashes     September 2010
-
-
    o  Mirror changes.
 
    -10 : October 15, 2009.
@@ -962,6 +944,14 @@ Internet-Draft      Metalink/HTTP: Mirrors and Hashes     September 2010
    o  Mirror location, coordination, and depth.
    o  Split HTTP Digest Algorithm Values Registration into
       draft-bryan-http-digest-algorithm-values-update.
+
+
+
+
+Bryan, et al.              Expires May 7, 2011                 [Page 17]
+
+Internet-Draft      Metalink/HTTP: Mirrors and Hashes      November 2010
+
 
    -08 : October 4, 2009.
    o  Clarifications.
@@ -993,22 +983,6 @@ Internet-Draft      Metalink/HTTP: Mirrors and Hashes     September 2010
    o  Initial draft.
 
 
-
-
-
-
-
-
-
-
-
-
-
-Bryan, et al.             Expires April 2, 2011                [Page 18]
-
-Internet-Draft      Metalink/HTTP: Mirrors and Hashes     September 2010
-
-
 Authors' Addresses
 
    Anthony Bryan
@@ -1023,6 +997,16 @@ Authors' Addresses
 
    Email: neil@nabber.org
    URI:   http://www.nabber.org
+
+
+
+
+
+
+
+Bryan, et al.              Expires May 7, 2011                 [Page 18]
+
+Internet-Draft      Metalink/HTTP: Mirrors and Hashes      November 2010
 
 
    Henrik Nordstrom
@@ -1048,21 +1032,6 @@ Authors' Addresses
    Phone: +49 221 6778 333 8
    Email: peter@poeml.de
    URI:   http://mirrorbrain.org/~poeml/
-
-
-
-
-
-
-
-
-
-
-
-
-Bryan, et al.             Expires April 2, 2011                [Page 19]
-
-Internet-Draft      Metalink/HTTP: Mirrors and Hashes     September 2010
 
 
    Alan Ford
@@ -1091,30 +1060,5 @@ Internet-Draft      Metalink/HTTP: Mirrors and Hashes     September 2010
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Bryan, et al.             Expires April 2, 2011                [Page 20]
+Bryan, et al.              Expires May 7, 2011                 [Page 19]
 
