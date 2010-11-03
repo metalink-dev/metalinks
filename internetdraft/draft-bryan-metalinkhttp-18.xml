@@ -82,7 +82,7 @@
           <email>alan.ford@roke.co.uk</email>
         </address>
       </author>
-	<date month="September" year="2010"/>        
+	<date year="2010"/>        
 
       <abstract>
     <t>This document specifies Metalink/HTTP: Mirrors and Cryptographic Hashes in HTTP Headers, a different way to get information that is usually contained in the Metalink XML-based download description format. 
@@ -96,7 +96,7 @@
     <section title="Introduction">
       
       <t>Metalink/HTTP is an alternative representation of Metalink information, which is usually presented as an XML-based document format <xref target="RFC5854"/>. 
-      Metalink/HTTP attempts to provide as much functionality as the Metalink/XML format by using existing standards such as Web Linking <xref target="draft-nottingham-http-link-header"/>, 
+      Metalink/HTTP attempts to provide as much functionality as the Metalink/XML format by using existing standards such as Web Linking <xref target="RFC5988"/>, 
       Instance Digests in HTTP <xref target="RFC3230"/>, and ETags <xref target="RFC2616"/>. Metalink/HTTP is used to list
       information about a file to be downloaded. This can include lists of multiple URIs (mirrors), Peer-to-Peer information, cryptographic hashes, and digital signatures.</t>
       
@@ -159,7 +159,7 @@ DYzYjRjYzFhOTlmNTQwYzI2M2QwM2U2MQ==
     <section title="Requirements" anchor="req">
       <t>In this context, "Metalink" refers to Metalink/HTTP which consists of mirrors and cryptographic hashes in HTTP Headers as described in this document. "Metalink/XML" refers to the XML format described in <xref target="RFC5854"/>.</t>
 	  
-      <t>Metalink resources include a Link header <xref target="draft-nottingham-http-link-header"/> to present a list of mirrors in the response to a client request for the resource. The cryptographic hash of a resource must be included via Instance Digests in HTTP <xref target="RFC3230"/>.</t>
+      <t>Metalink resources include a Link header <xref target="RFC5988"/> to present a list of mirrors in the response to a client request for the resource. The cryptographic hash of a resource must be included via Instance Digests in HTTP <xref target="RFC3230"/>.</t>
 	  
 	  <t>Metalink servers are HTTP servers with one or more Metalink
  resources. Mirror and cryptographic hash information provided by the originating Metalink server MUST be considered authoritative. Metalink servers and their associated mirror servers
@@ -169,7 +169,7 @@ DYzYjRjYzFhOTlmNTQwYzI2M2QwM2U2MQ==
       Mirror servers MAY be Metalink servers. Mirror servers are RECOMMENDED to support serving partial content. HTTP mirror servers are RECOMMENDED to share the same ETag policy as the originating Metalink server. HTTP Mirror servers are RECOMMENDED to support Instance Digests in HTTP <xref target="RFC3230"/>.</t>
 
 
-      <t>Metalink clients use the mirrors provided by a Metalink server with Link header <xref target="draft-nottingham-http-link-header"/>. Metalink clients MUST support HTTP and MAY support FTP, BitTorrent, 
+      <t>Metalink clients use the mirrors provided by a Metalink server with Link header <xref target="RFC5988"/>. Metalink clients MUST support HTTP and MAY support FTP, BitTorrent, 
       or other download methods. Metalink clients MUST switch downloads from one mirror to another if the mirror becomes unreachable. Metalink clients are RECOMMENDED to support multi-source, or parallel, 
       downloads, where portions of a file are downloaded from multiple mirrors simultaneously (and optionally, from Peer-to-Peer sources). Metalink clients MUST support Instance Digests in HTTP <xref target="RFC3230"/> by 
       requesting and verifying cryptographic hashes. Metalink clients MAY make use of digital signatures if they are offered.</t>
@@ -177,7 +177,7 @@ DYzYjRjYzFhOTlmNTQwYzI2M2QwM2U2MQ==
 	  </section>
 	
     <section title="Mirrors / Multiple Download Locations" anchor="mirrors">
-      <t>Mirrors are specified with the Link header <xref target="draft-nottingham-http-link-header"/> and a relation type of "duplicate" as defined in <xref target="IANA"/>.</t>
+      <t>Mirrors are specified with the Link header <xref target="RFC5988"/> and a relation type of "duplicate" as defined in <xref target="IANA"/>.</t>
 
 <t><figure> 
 	  <preamble>A brief Metalink server response with two mirrors only:</preamble>	  
@@ -237,7 +237,7 @@ rel="duplicate"; pri=1; pref=1; depth=4
 	  </section>
 
     <section title="Peer-to-Peer / Metainfo" anchor="p2p">
-      <t>Metainfo files, which describe ways to download a file over Peer-to-Peer networks or otherwise, are specified with the Link header <xref target="draft-nottingham-http-link-header"/> and a relation type of "describedby" and a type parameter that indicates
+      <t>Metainfo files, which describe ways to download a file over Peer-to-Peer networks or otherwise, are specified with the Link header <xref target="RFC5988"/> and a relation type of "describedby" and a type parameter that indicates
    the MIME type of the metadata available at the URI.</t>
 <t><figure> 
 	  <preamble>A brief Metalink server response with .torrent and .metalink:</preamble>	
@@ -259,7 +259,7 @@ type="application/metalink4+xml"
     </section>
 
     <section title="OpenPGP Signatures" anchor="openpgp">
-      <t>OpenPGP signatures are specified with the Link header <xref target="draft-nottingham-http-link-header"/> and a relation type of "describedby" and a type parameter of "application/pgp-signature".</t>
+      <t>OpenPGP signatures are specified with the Link header <xref target="RFC5988"/> and a relation type of "describedby" and a type parameter of "application/pgp-signature".</t>
 <t><figure> 
 	  <preamble>A brief Metalink server response with OpenPGP signature only:</preamble>
 	  <artwork type="example">
@@ -648,16 +648,16 @@ other mirrors.</t>
 </reference>
 
 
-<reference anchor="draft-nottingham-http-link-header">
+<reference anchor="RFC5988">
   <front>
     <title abbrev="Web Linking">Web Linking</title>
     <author initials="M." surname="Nottingham" fullname="Mark Nottingham">
 	  <organization></organization>
       <address><email>mnot@mnot.net</email></address>
     </author>
-    <date month="May" year="2010"/>
+    <date month="October" year="2010"/>
   </front>
-  <seriesInfo name="Internet-Draft" value="draft-nottingham-http-link-header-10"/>
+  <seriesInfo name="RFC" value="5988"/>
 </reference>
 
 
@@ -748,9 +748,9 @@ other mirrors.</t>
 	      <uri>http://www.haxx.se/</uri>
 	    </address>
       </author>
-	<date month="August" year="2010"/>   
+	<date month="October" year="2010"/>   
   </front>
-  <seriesInfo name="Internet-Draft" value="draft-bryan-ftp-hash-07"/>
+  <seriesInfo name="Internet-Draft" value="draft-bryan-ftp-hash-08"/>
 </reference>
 
 	  </references>
