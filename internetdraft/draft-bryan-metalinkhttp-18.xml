@@ -169,9 +169,9 @@ DYzYjRjYzFhOTlmNTQwYzI2M2QwM2U2MQ==
       Mirror servers MAY be Metalink servers. Mirror servers are RECOMMENDED to support serving partial content. HTTP mirror servers are RECOMMENDED to share the same ETag policy as the originating Metalink server. HTTP Mirror servers are RECOMMENDED to support Instance Digests in HTTP <xref target="RFC3230"/>.</t>
 
 
-      <t>Metalink clients use the mirrors provided by a Metalink server with Link header <xref target="RFC5988"/>. Metalink clients MUST support HTTP and MAY support FTP, BitTorrent, 
-      or other download methods. Metalink clients MUST switch downloads from one mirror to another if the mirror becomes unreachable. Metalink clients are RECOMMENDED to support multi-source, or parallel, 
-      downloads, where portions of a file are downloaded from multiple mirrors simultaneously (and optionally, from Peer-to-Peer sources). Metalink clients MUST support Instance Digests in HTTP <xref target="RFC3230"/> by 
+      <t>Metalink clients use the mirrors provided by a Metalink server with Link header <xref target="RFC5988"/>. Metalink clients MUST support HTTP and are RECOMMENDED to support FTP. Metalink clients MAY support BitTorrent, 
+      or other download methods. Metalink clients are RECOMMENDED to switch downloads from one mirror to another if a mirror becomes unreachable. Metalink clients are RECOMMENDED to support multi-source, or parallel, 
+      downloads, where portions of a file can be downloaded from multiple mirrors simultaneously (and optionally, from Peer-to-Peer sources). Metalink clients MUST support Instance Digests in HTTP <xref target="RFC3230"/> by 
       requesting and verifying cryptographic hashes. Metalink clients MAY make use of digital signatures if they are offered.</t>
 	  
 	  </section>
@@ -367,6 +367,12 @@ DYzYjRjYzFhOTlmNTQwYzI2M2QwM2U2MQ==
 <t>If the first request was not Range limited then abort it by closing the connection when it catches up with the other parallel downloads of the same object.</t>
 
 <t>Downloads from mirrors that do not have the same file size as the Metalink server MUST be aborted.</t>
+
+<t>If a Metalink client does not
+support certain download methods (such as FTP or BitTorrent) that a
+file is available from, and there are no available download methods
+that the client supports, then the download will have no way to
+complete.</t>
 
 <t>Once the download has completed, the Metalink client MUST verify the cryptographic hash of the file.</t>
 
@@ -779,7 +785,7 @@ other mirrors.</t>
 	      <t>(-) Requires software or configuration changes to originating server.</t>
 		  <t>(-?) Tied to HTTP, not as generic. FTP/P2P clients won't be using it unless they also support HTTP, unlike Metalink/XML.</t>
 	      <t>(-) Requires server-side support. Metalink/XML can be created by user (or server, but server component/changes not required).</t>
-		  <t>(-) Also, Metalink/XML files are easily mirrored on all servers. Even if usage in that case is not as transparent, it still gives access to users at all mirrors (FTP included) to all download information with no changes needed to the server.</t>
+		  <t>(-) Also, Metalink/XML files are easily mirrored on all servers. Even if usage in that case is not as transparent, this method still gives access to all download information (with no changes needed to servers) from all mirrors (FTP included).</t>
 	      <t>(-) Not portable/archivable/emailable. Metalink/XML is used to import/export transfer queues. Not as easy for search engines to index?</t>
 	      <t>(-) Not as rich metadata.</t>
 	      <t>(-) Not able to add multiple files to a download queue or create directory structure.</t>
@@ -795,10 +801,10 @@ other mirrors.</t>
 	      <t>Some organizations have many mirrors. Should all be sent, or only a certain number? All should be included in the Metalink/XML, if used.</t>
 		  <t>Would it make more sense to use qvalue-style policies to describe mirror priority, i.e. q=1.0 through q=0.0 ?</t>
 		  <t>Using Metalink/XML for partial file cryptographic hashes. That adds XML dependency to apps for an important feature. Is there a better method?</t>
-		  <t>Do we need an "official" MIME type for .torrent files or allow "application/x-bittorrent"?</t>
+		  <t>Do we need an "official" MIME type for .torrent files or keep using "application/x-bittorrent"?</t>
 	    </list></t>
 
-<t>-18 : September , 2010.
+<t>-18 : November , 2010.
 	    
 	    <list style="symbols">
 
@@ -819,7 +825,7 @@ other mirrors.</t>
 	      <t>Add draft-bryan-ftp-hash reference and FTP mirror coordination.</t>
 	    </list></t>
 		
-<t>-15 : December 31, 2009.
+<t>-15 : February 20, 2010.
 	    
 	    <list style="symbols">
 
@@ -861,7 +867,7 @@ other mirrors.</t>
 	      <t>Mirror coordination changes.</t>
 	    </list></t>
 		
-<t>-09 : October 12, 2009.
+<t>-09 : October 13, 2009.
 	    
 	    <list style="symbols">
 
@@ -912,7 +918,7 @@ other mirrors.</t>
 	      <t>Mention HEAD request, negotiate mirrors if Want-Digest is used.</t>
 	    </list></t>
 
-<t>-02 : September 6, 2009.
+<t>-02 : September 7, 2009.
 	    
 	    <list style="symbols">
 

@@ -144,13 +144,13 @@
 <tr><td class="header">Network Working Group</td><td class="header">A. Bryan</td></tr>
 <tr><td class="header">Internet-Draft</td><td class="header">N. McNab</td></tr>
 <tr><td class="header">Intended status: Standards Track</td><td class="header">H. Nordstrom</td></tr>
-<tr><td class="header">Expires: May 7, 2011</td><td class="header">T. Tsujikawa</td></tr>
+<tr><td class="header">Expires: May 27, 2011</td><td class="header">T. Tsujikawa</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">&nbsp;</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">P. Poeml</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">MirrorBrain</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">A. Ford</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">Roke Manor Research</td></tr>
-<tr><td class="header">&nbsp;</td><td class="header">November 3, 2010</td></tr>
+<tr><td class="header">&nbsp;</td><td class="header">November 23, 2010</td></tr>
 </table></td></tr></table>
 <h1><br />Metalink/HTTP: Mirrors and Cryptographic Hashes in HTTP Headers<br />draft-bryan-metalinkhttp-18</h1>
 
@@ -175,7 +175,7 @@ and may be updated, replaced, or obsoleted by other documents at any time.
 It is inappropriate to use Internet-Drafts as reference material or to cite
 them other than as &ldquo;work in progress.&rdquo;</p>
 <p>
-This Internet-Draft will expire on May 7, 2011.</p>
+This Internet-Draft will expire on May 27, 2011.</p>
 
 <h3>Copyright Notice</h3>
 <p>
@@ -344,9 +344,9 @@ Requirements</h3>
 <p>Mirror servers are typically FTP or HTTP servers that "mirror" another server. That is, they provide identical copies of (at least some) files that are also on the mirrored server. 
       Mirror servers MAY be Metalink servers. Mirror servers are RECOMMENDED to support serving partial content. HTTP mirror servers are RECOMMENDED to share the same ETag policy as the originating Metalink server. HTTP Mirror servers are RECOMMENDED to support Instance Digests in HTTP <a class='info' href='#RFC3230'>[RFC3230]<span> (</span><span class='info'>Mogul, J. and A. Van Hoff, &ldquo;Instance Digests in HTTP,&rdquo; January&nbsp;2002.</span><span>)</span></a>.
 </p>
-<p>Metalink clients use the mirrors provided by a Metalink server with Link header <a class='info' href='#RFC5988'>[RFC5988]<span> (</span><span class='info'>Nottingham, M., &ldquo;Web Linking,&rdquo; October&nbsp;2010.</span><span>)</span></a>. Metalink clients MUST support HTTP and MAY support FTP, BitTorrent, 
-      or other download methods. Metalink clients MUST switch downloads from one mirror to another if the mirror becomes unreachable. Metalink clients are RECOMMENDED to support multi-source, or parallel, 
-      downloads, where portions of a file are downloaded from multiple mirrors simultaneously (and optionally, from Peer-to-Peer sources). Metalink clients MUST support Instance Digests in HTTP <a class='info' href='#RFC3230'>[RFC3230]<span> (</span><span class='info'>Mogul, J. and A. Van Hoff, &ldquo;Instance Digests in HTTP,&rdquo; January&nbsp;2002.</span><span>)</span></a> by 
+<p>Metalink clients use the mirrors provided by a Metalink server with Link header <a class='info' href='#RFC5988'>[RFC5988]<span> (</span><span class='info'>Nottingham, M., &ldquo;Web Linking,&rdquo; October&nbsp;2010.</span><span>)</span></a>. Metalink clients MUST support HTTP and are RECOMMENDED to support FTP. Metalink clients MAY support BitTorrent, 
+      or other download methods. Metalink clients are RECOMMENDED to switch downloads from one mirror to another if a mirror becomes unreachable. Metalink clients are RECOMMENDED to support multi-source, or parallel, 
+      downloads, where portions of a file can be downloaded from multiple mirrors simultaneously (and optionally, from Peer-to-Peer sources). Metalink clients MUST support Instance Digests in HTTP <a class='info' href='#RFC3230'>[RFC3230]<span> (</span><span class='info'>Mogul, J. and A. Van Hoff, &ldquo;Instance Digests in HTTP,&rdquo; January&nbsp;2002.</span><span>)</span></a> by 
       requesting and verifying cryptographic hashes. Metalink clients MAY make use of digital signatures if they are offered.
 </p>
 <a name="mirrors"></a><br /><hr />
@@ -583,6 +583,12 @@ DYzYjRjYzFhOTlmNTQwYzI2M2QwM2U2MQ==
 <p>If the first request was not Range limited then abort it by closing the connection when it catches up with the other parallel downloads of the same object.
 </p>
 <p>Downloads from mirrors that do not have the same file size as the Metalink server MUST be aborted.
+</p>
+<p>If a Metalink client does not
+support certain download methods (such as FTP or BitTorrent) that a
+file is available from, and there are no available download methods
+that the client supports, then the download will have no way to
+complete.
 </p>
 <p>Once the download has completed, the Metalink client MUST verify the cryptographic hash of the file.
 </p>
@@ -831,7 +837,7 @@ Comparisons to Similar Options</h3>
 </li>
 <li>(-) Requires server-side support. Metalink/XML can be created by user (or server, but server component/changes not required).
 </li>
-<li>(-) Also, Metalink/XML files are easily mirrored on all servers. Even if usage in that case is not as transparent, it still gives access to users at all mirrors (FTP included) to all download information with no changes needed to the server.
+<li>(-) Also, Metalink/XML files are easily mirrored on all servers. Even if usage in that case is not as transparent, this method still gives access to all download information (with no changes needed to servers) from all mirrors (FTP included).
 </li>
 <li>(-) Not portable/archivable/emailable. Metalink/XML is used to import/export transfer queues. Not as easy for search engines to index?
 </li>
@@ -857,11 +863,11 @@ Document History</h3>
 </li>
 <li>Using Metalink/XML for partial file cryptographic hashes. That adds XML dependency to apps for an important feature. Is there a better method?
 </li>
-<li>Do we need an "official" MIME type for .torrent files or allow "application/x-bittorrent"?
+<li>Do we need an "official" MIME type for .torrent files or keep using "application/x-bittorrent"?
 </li>
 </ul>
 
-<p>-18 : September , 2010.
+<p>-18 : November , 2010.
 	    
 	    </p>
 <ul class="text">
@@ -885,7 +891,7 @@ Document History</h3>
 </li>
 </ul>
 
-<p>-15 : December 31, 2009.
+<p>-15 : February 20, 2010.
 	    
 	    </p>
 <ul class="text">
@@ -933,7 +939,7 @@ Document History</h3>
 </li>
 </ul>
 
-<p>-09 : October 12, 2009.
+<p>-09 : October 13, 2009.
 	    
 	    </p>
 <ul class="text">
@@ -993,7 +999,7 @@ Document History</h3>
 </li>
 </ul>
 
-<p>-02 : September 6, 2009.
+<p>-02 : September 7, 2009.
 	    
 	    </p>
 <ul class="text">
