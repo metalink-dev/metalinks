@@ -76,7 +76,20 @@ class Table(Tkinter.Frame):
         for datarow in datalist:
             column = 1
             for datacolumn in datarow:
-                label = Tkinter.Label(self.container, text=datacolumn)
+                color = ""
+                if column in (3, 4, 5) and row != 1:
+                    if datacolumn == "OK":
+                        color = "green"
+                    elif datacolumn[0] == "3":
+                        color = "yellow"
+                    elif datacolumn[0] == "?":
+                        pass
+                    else:
+                        color = "red"                     
+                if color != "":
+                    label = Tkinter.Label(self.container, text=datacolumn, bg=color)
+                else:
+                    label = Tkinter.Label(self.container, text=datacolumn)
                 label.config(anchor="w")
                 label.grid(column=column, row=row, sticky="NEWS")
                 self.subelements.append(label)
