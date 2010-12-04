@@ -341,7 +341,7 @@ def get(src, path, checksums = {}, force = False, handlers = {}, segmented = SEG
     # assume metalink if ends with .metalink
 
     result = download_metalink(src, path, force, handlers, segmented, headers)
-    if result:
+    if result != None:
         return result
             
     # assume normal file download here
@@ -796,13 +796,14 @@ def download_metalink(src, path, force = False, handlers = {}, segmented = SEGME
     Third parameter, optional, force a new download even if a valid copy already exists
     Fouth parameter, optional, progress handler callback
     Returns list of file paths if download(s) is successful
+    Returns None is the file is not a metalink file (parse_metalink output is False)
     Returns False otherwise (checksum fails)
     '''
     myheaders = headers.copy()
 
     metalinkobj = parse_metalink(src, myheaders, nocheck)
     if not metalinkobj:
-        return False
+        return None
         
     if is_remote(src):
         myheaders['referer'] = src
@@ -2203,11 +2204,20 @@ class FTP:
         if FTP_PROXY != "":
             # parse proxy URL
             url = urlparse.urlparse(FTP_PROXY)
-            if url.scheme == "" or url.scheme == "http": 
-                host = url.hostname 
-                port = url.port 
-                if url.username != None: 
-                    self.headers["Proxy-authorization"] = "Basic " + base64.encodestring(url.username+':'+url.password) + "\r\n"
+            if url[0] == "" or url[0] == "http":
+                port = httplib.HTTP_PORT
+                if url[1].find("@") != -1:
+                    host = url[1].split("@", 2)[1]
+                else:
+                    host = url[1]
+                    
+                try:
+                    if url.port != None:
+                        port = url.port
+                    if url.username != None:
+                        self.headers["Proxy-authorization"] = "Basic " + base64.encodestring(url.username+':'+url.password) + "\r\n"
+                except AttributeError:
+                    pass
                 self.conn = httplib.HTTPConnection(host, port)
             else:
                 raise AssertionError, _("Transport not supported for FTP_PROXY, %s") % url.scheme
@@ -2263,8 +2273,7 @@ class FTP:
             return self.conn.ntransfercmd(cmd, rest)
 
     def voidcmd(self, *args):
-        if FTP_PROXY == "":
-            return self.conn.voidcmd(*args)
+        return self.conn.voidcmd(*args)
 
     def quit(self):
         if FTP_PROXY != "":
