@@ -3,8 +3,8 @@
 
 Network Working Group                                           A. Bryan
 Internet-Draft                                              T. Tsujikawa
-Intended status: Standards Track                       December 14, 2010
-Expires: June 17, 2011
+Intended status: Standards Track                             D. Stenberg
+Expires: June 17, 2011                                 December 14, 2010
 
 
           File Transfer Protocol RANG Command for Byte Ranges
@@ -52,7 +52,7 @@ Copyright Notice
 
 
 
-Bryan & Tsujikawa         Expires June 17, 2011                 [Page 1]
+Bryan, et al.             Expires June 17, 2011                 [Page 1]
 
 Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
 
@@ -108,7 +108,7 @@ Table of Contents
 
 
 
-Bryan & Tsujikawa         Expires June 17, 2011                 [Page 2]
+Bryan, et al.             Expires June 17, 2011                 [Page 2]
 
 Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
 
@@ -164,7 +164,7 @@ Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
 
 
 
-Bryan & Tsujikawa         Expires June 17, 2011                 [Page 3]
+Bryan, et al.             Expires June 17, 2011                 [Page 3]
 
 Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
 
@@ -220,7 +220,7 @@ Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
 
 
 
-Bryan & Tsujikawa         Expires June 17, 2011                 [Page 4]
+Bryan, et al.             Expires June 17, 2011                 [Page 4]
 
 Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
 
@@ -276,7 +276,7 @@ Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
 
 
 
-Bryan & Tsujikawa         Expires June 17, 2011                 [Page 5]
+Bryan, et al.             Expires June 17, 2011                 [Page 5]
 
 Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
 
@@ -332,7 +332,7 @@ Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
 
 
 
-Bryan & Tsujikawa         Expires June 17, 2011                 [Page 6]
+Bryan, et al.             Expires June 17, 2011                 [Page 6]
 
 Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
 
@@ -388,7 +388,7 @@ Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
 
 
 
-Bryan & Tsujikawa         Expires June 17, 2011                 [Page 7]
+Bryan, et al.             Expires June 17, 2011                 [Page 7]
 
 Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
 
@@ -444,7 +444,7 @@ Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
 
 
 
-Bryan & Tsujikawa         Expires June 17, 2011                 [Page 8]
+Bryan, et al.             Expires June 17, 2011                 [Page 8]
 
 Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
 
@@ -500,7 +500,7 @@ Authors' Addresses
 
 
 
-Bryan & Tsujikawa         Expires June 17, 2011                 [Page 9]
+Bryan, et al.             Expires June 17, 2011                 [Page 9]
 
 Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
 
@@ -513,6 +513,10 @@ Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
    URI:   http://aria2.sourceforge.net
 
 
+   Daniel Stenberg
+
+   Email: daniel@haxx.se
+   URI:   http://www.haxx.se/
 
 
 
@@ -552,9 +556,5 @@ Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
 
 
 
-
-
-
-
-Bryan & Tsujikawa         Expires June 17, 2011                [Page 10]
+Bryan, et al.             Expires June 17, 2011                [Page 10]
 
