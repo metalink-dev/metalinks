@@ -39,7 +39,14 @@
           <email>tatsuhiro.t@gmail.com</email>
           <uri>http://aria2.sourceforge.net</uri>
         </address>
-      </author>	  
+      </author>
+      <author initials="D." surname="Stenberg" fullname="Daniel Stenberg">
+	    <organization></organization>
+	    <address>
+	      <email>daniel@haxx.se</email>
+	      <uri>http://www.haxx.se/</uri>
+	    </address>
+      </author>
 	<date year="2010"/>
       <abstract>
 	<t>The File Transfer Protocol offers REST, to designate a starting point for a transfer, but does not currently offer any method to specify an end point.
