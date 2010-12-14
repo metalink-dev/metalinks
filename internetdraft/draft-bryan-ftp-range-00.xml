@@ -1,0 +1,472 @@
+<?xml version="1.0" encoding="UTF-8"?><?rfc linefile="1:draft-bryan-ftp-range-00.xml"?>
+<?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
+<?rfc toc="yes" ?>
+<?rfc tocdepth="3" ?>
+<?rfc tocindent="yes" ?>
+<?rfc symrefs="yes" ?>
+<?rfc sortrefs="yes"?>
+<?rfc iprnotified="no" ?>
+<?rfc compact="yes" ?>
+<?rfc comments="yes" ?>
+<?rfc inline="yes" ?>
+<!DOCTYPE rfc
+  PUBLIC "" "rfc2629.dtd">
+<rfc category="std" docName="draft-bryan-ftp-range-00" ipr="trust200902">
+    <front>        
+      <title abbrev="FTP RANG Command for Byte Ranges">File Transfer Protocol RANG Command for Byte Ranges</title>
+      <author initials="A." surname="Bryan" fullname="Anthony Bryan">
+	    <organization></organization>
+	    <address>
+		  <postal>
+			<street></street>
+		    <city>Pompano Beach</city>
+			<region>FL</region>
+			<country>USA</country>
+		  </postal>
+	      <email>anthonybryan@gmail.com</email>
+	      <uri>http://www.metalinker.org</uri>
+	    </address>
+      </author>
+      <author initials="T." surname="Tsujikawa" fullname="Tatsuhiro Tsujikawa">
+        <organization></organization>
+        <address>
+		  <postal>
+			<street></street>
+			<city></city>
+			<region>Shiga</region>
+			<country>Japan</country>
+		  </postal>
+          <email>tatsuhiro.t@gmail.com</email>
+          <uri>http://aria2.sourceforge.net</uri>
+        </address>
+      </author>	  
+	<date year="2010"/>
+      <abstract>
+	<t>The File Transfer Protocol offers REST, to designate a starting point for a transfer, but does not currently offer any method to specify an end point.
+       This document specifies a new FTP RANG command to be used by clients to designate an end point for STREAM mode transfers.
+</t>
+      </abstract>    
+	  
+  </front>    
+
+  <middle>
+    <section title="Introduction">
+	<t>The File Transfer Protocol offers REST  <xref target="RFC3659"/>, to designate a starting point for a transfer, but does not currently offer any method to specify an end point.
+       This document specifies a new FTP RANG command to be used by clients to designate an end point for STREAM mode transfers.</t>
+	   
+	<t>The current alternatives, without being able to specify an end point, are to issue an ABOR command or close the data connection.</t>
+    <t>HTTP offers similar functionality with the Range: header, where a specific byte range can optionally be requested.</t>
+
+      <t>[[ Discussion of this draft should take place on the FTPEXT2 Working Group mailing list, although this draft is not a WG item: ftpext@ietf.org. ]]</t>
+	  
+	</section>
+
+      <section title="Document Conventions"> 
+
+	<t>This specification describes conformance of File Transfer Protocol Extension for RANG, and end point in a byte range.</t>
+     
+
+	<t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+	"SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+	document are to be interpreted as described in BCP 14, <xref target="RFC2119"/>, as scoped to those conformance targets.</t>
+	
+	<t>This document also uses notation defined in STD 9, <xref target="RFC0959"/>.
+	In particular, the terms or commands "reply", "user", "file", "FTP commands", "user-PI" (user protocol interpreter), "server-FTP process",
+    "server-PI", "mode", "type", "STOR", "RETR", and "ASCII", are all used here as defined there. The command "REST" is used as defined in Section 5 of <xref target="RFC3659"/>.</t>
+
+	<t>In the examples of FTP dialogs presented in this document, lines that
+   begin "C&gt; " were sent over the control connection from the user-PI to
+   the server-PI, and lines that begin "S&gt; " were sent over the control
+   connection from the server-PI to the user-PI. In all cases, the
+   prefixes shown above, including the one space, have been added for
+   the purposes of this document, and are not a part of the data
+   exchanged between client and server.</t>
+
+	
+	<t>Syntax required is defined using the Augmented BNF defined in <xref target="RFC5234"/>.</t>
+
+<section title="Basic Tokens">
+   <t>This document imports the core definitions given in Appendix B of
+   <xref target="RFC5234"/>.  There definitions will be found for basic ABNF elements
+   like ALPHA, DIGIT, SP, etc.  To that, the following term is added
+   for use in this document.</t>
+
+   
+
+<t><figure> 
+	  <preamble></preamble>
+	  <artwork type="ABNF">
+   TCHAR = VCHAR / SP / HTAB    ; visible plus white space
+</artwork></figure></t>
+
+   <t>The VCHAR (from <xref target="RFC5234"/>) and TCHAR rules give basic character
+   types from varying sub-sets of the ASCII character set for use in
+   various commands and responses.</t>
+
+   <t>Note that in ABNF, string literals are case insensitive.  That
+   convention is preserved in this document, and implies that FTP
+   commands and parameters that are added by this specification have
+   values that can be represented in any case.  That is, "RANG" is the
+   same as "rang", "Rang", "RaNg", etc., and "ftp.example.com" is the
+   same as "Ftp.Example.Com", "fTp.eXample.cOm", etc.</t>
+</section>
+
+<section title="Server Replies">
+
+   <t>Section 4.2 of <xref target="RFC0959"/> defines the format and meaning of replies
+   by the server-PI to FTP commands from the user-PI.  Those reply
+   conventions are used here without change.</t>
+
+<t><figure> 
+	  <preamble></preamble>
+	  <artwork type="ABNF">
+   error-response = error-code SP *TCHAR CRLF
+   error-code     = ("4" / "5") 2DIGIT
+</artwork></figure></t>
+
+   <t>Implementers should note that the ABNF syntax (which was not used in
+   <xref target="RFC0959"/>) used in this document, and other FTP related documents,
+   sometimes shows replies using the one line format.  Unless otherwise
+   explicitly stated, that is not intended to imply that multi-line
+   responses are not permitted.  Implementers should assume that, unless
+   stated to the contrary, any reply to any FTP command (including QUIT)
+   can be of the multi-line format described in <xref target="RFC0959"/>.</t>
+
+   <t>Throughout this document, replies will be identified by the three
+   digit code that is their first element.  Thus the term "500 reply"
+   means a reply from the server-PI using the three digit code "500".</t>
+
+</section>
+      </section>
+
+<section title="Byte Ranges in STREAM Mode">
+<t>
+   In STREAM mode, the data connection contains just a stream of
+   unformatted octets of data.  Explicit restart markers thus cannot be
+   inserted into the data stream, they would be indistinguishable from
+   data.  For this reason, the FTP specification <xref target="RFC0959"/> did not provide the
+   ability to do restarts in stream mode.  However, there is not really
+   a need to have explicit restart markers in this case, as restart
+   markers can be implied by the octet offset into the data stream.
+</t><t>
+   Because the data stream defines the file in STREAM mode, a different
+   data stream would represent a different file.  Thus, an offset will
+   always represent the same position within a file.  On the other hand,
+   in other modes than STREAM, the same file can be transferred using
+   quite different octet sequences and yet be reconstructed into the one
+   identical file.  Thus an offset into the data stream in transfer
+   modes other than STREAM would not give an unambiguous restart or end point.
+</t><t>
+   If the data representation TYPE is IMAGE and the STRUcture is File,
+   for many systems the file will be stored exactly in the same format
+   as it is sent across the data connection.  It is then usually very
+   easy for the receiver to determine how much data was previously
+   received, and notify the sender of the offset where the transfer
+   should be restarted.  In other representation types and structures
+   more effort will be required, but it remains always possible to
+   determine the offset with finite, but perhaps non-negligible, effort.
+   In the worst case, an FTP process may need to open a data connection
+   to itself, set the appropriate transfer type and structure, and
+   actually transmit the file, counting the transmitted octets.
+</t><t>
+   If the user-FTP process is intending to restart a retrieve, it will
+   directly calculate the restart marker and send that information in
+   the RESTart command.  However, if the user-FTP process is intending
+   to restart sending the file, it needs to be able to determine how
+   much data was previously sent, and correctly received and saved.
+   The purpose of the SIZE command, as documented in <xref target="RFC3659"/>, is to get this information.
+</t>
+   
+</section>
+	  
+<section title="The RANGe Command (RANG)" anchor="RANG">
+<t>A new command "RANG" is added to the FTP command set to allow the client to specify an end point byte range of a file from a server-FTP process.</t>
+<t>The syntax for the RANG command when the current transfer mode is STREAM is:
+
+<figure> 
+	  <preamble></preamble>
+	  <artwork type="ABNF">
+   range-command = "RANG" SP 1*DIGIT CRLF
+</artwork></figure></t>
+   
+<t>The numeric value gives the number of octets of the immediately-
+   following transfer to stop sending at, effectively causing the
+   transmission to be ended.  The server-PI will respond to the RANG command with a
+   350 reply, indicating that the RANG parameter has been saved, an OPTIONAL REST command with starting point, and
+   that another command, which should be either RETR or STOR, should
+   then follow to complete the transfer.</t>
+
+<t><figure> 
+	  <preamble></preamble>
+	  <artwork type="ABNF">
+   range-response = range-ok / error-response
+   range-ok       = "350" SP *TCHAR CRLF / error-response
+</artwork></figure></t>
+
+<t>The REST command is intended to complete a failed transfer, by indicating a point to restart from. The RANG command allows an end point to be indicated. This allows a file
+to be transferred from the beginning to and end point, or when used in conjuction with REST, from a restart point mid-file to an end point before the natural end of the file.</t>
+
+<t>Server-PI and user-PI that support the RANG command ARE RECOMMENDED to also support REST.</t>
+
+<section title="FEAT Command Response for RANG Command">
+
+<t>When replying to the FEAT command <xref target="RFC2389"/>, a server-FTP process that supports the RANG command, as specified here, MUST include, a line containing exactly the string "REST STREAM".
+This string is case insensitive, and MAY be sent in any mixture of upper or lower case, however it SHOULD be sent in upper case. That is, the response SHOULD be:</t>
+
+<t><figure> 
+	  <preamble></preamble>
+	  <artwork type="example">
+   C&gt; FEAT
+   S&gt; 211-Extensions supported:
+   S&gt;  ...
+   S&gt;  RANG STREAM
+   S&gt;  ...
+   S&gt; 211 END
+</artwork></figure></t>
+
+<t>The ellipses indicate place holders where other features may be included, and are not required. The one-space indentation of the feature lines is mandatory <xref target="RFC2389"/>.</t>
+
+<t><figure> 
+	  <preamble></preamble>
+	  <artwork type="ABNF">	
+   range-feat = SP "RANG" SP "STREAM"
+</artwork></figure></t>
+
+</section>
+
+
+<section title="User-PI usage of RANG">
+
+<t>The user-PI issues the FEAT command to query the server-PI if it supports the RANG command. In this example, the server-PI also supports REST.</t>
+
+<t><figure> 
+	  <preamble></preamble>
+	  <artwork type="example">
+   C&gt; FEAT
+   S&gt; 211-Extensions supported:
+   S&gt;  ...
+   S&gt;  REST STREAM
+   S&gt;  RANG STREAM   
+   S&gt;  ...
+   S&gt; 211 END
+</artwork></figure></t>
+
+<t>
+   Assume that the transfer of a largish file has previously been
+   interrupted after 802816 octets had been received, that the tranfer should stop at octet 1000000 of the file, that the previous
+   transfer was with TYPE=I, and that it has been verified that the file
+   on the server has not since changed.
+<figure>
+	  <preamble></preamble>
+	  <artwork type="example">
+   C&gt; TYPE I
+   S&gt; 200 Type set to I.
+   C&gt; PORT 127,0,0,1,15,107
+   S&gt; 200 PORT command successful.
+   C&gt; RANG 1000000
+   S&gt; 350 End Byte range at 1000000. Send STORE or RETRIEVE
+   C&gt; REST 802816
+   S&gt; 350 Restarting at 802816. Send STORE or RETRIEVE
+   C&gt; RETR cap60.pl198.tar
+   S&gt; 150 Opening BINARY mode data connection
+   [...]
+   S&gt; 226 Transfer complete.
+</artwork></figure></t>
+
+</section>
+
+<section title="RANG Command Errors">
+
+
+<t>The server-PI SHOULD reply with a 500 reply if the RANG command is unrecognized or unimplemented.</t>
+
+<t>The server-PI SHOULD reply with a 550 reply if the RANG command is used on a file that can not be found.</t>
+
+<t>The server-PI SHOULD reply with a 551 reply if the server-PI is unable to deliver the file with TYPE I and MODE S.</t>
+
+<t>The server-PI SHOULD reply with a 552 reply if the user is not allowed to use the RANG command.</t>
+
+<t>The server-PI SHOULD reply with a 553 reply if the user requests the RANG of a directory, which is not allowed.</t>
+
+<t>The server-PI SHOULD reply with a 5yz reply if the specified end point is larger than the actual file.</t>
+
+</section>
+
+</section>
+
+
+	<section title="IANA Considerations" anchor="IANA">
+	<t>This new command is added to the "FTP Commands and Extensions" registry created by <xref target="RFC5797"/>.</t>
+	<t>Command Name: RANG</t>
+	<t>Description: End point byte range (for STREAM mode).</t>
+	<t>FEAT String: RANG</t>
+	<t>Command Type: Service execution/parameter setting</t>
+	<t>Conformance Requirements: Optional</t>
+	<t>Reference: This specification</t>
+
+
+   
+	</section>
+	
+	  <section title="Security Considerations">
+	  
+<t>
+   This memo does not directly concern security.  It is not believed
+   that any of the mechanisms documented here impact in any particular
+   way upon the security of FTP.</t>
+		
+	  </section>
+	  
+
+
+	</middle>
+
+	<back>
+	  
+	  <references title="Normative References">
+
+<reference anchor="RFC0959">
+
+<front>
+<title>File Transfer Protocol</title>
+<author initials="J." surname="Postel" fullname="J. Postel">
+<organization/></author>
+<author initials="J." surname="Reynolds" fullname="J. Reynolds">
+<organization/></author>
+<date year="1985" month="October"/></front>
+
+<seriesInfo name="STD" value="9"/>
+<seriesInfo name="RFC" value="0959"/>
+</reference>
+
+<reference anchor="RFC2119">
+
+<front>
+<title abbrev="RFC Key Words">Key words for use in RFCs to Indicate Requirement Levels</title>
+<author initials="S." surname="Bradner" fullname="Scott Bradner">
+<organization>Harvard University</organization>
+<address>
+<postal>
+<street>1350 Mass. Ave.</street>
+<street>Cambridge</street>
+<street>MA 02138</street></postal>
+<phone>- +1 617 495 3864</phone>
+<email>sob@harvard.edu</email></address></author>
+<date year="1997" month="March"/>
+<area>General</area>
+<keyword>keyword</keyword>
+<abstract>
+<t>
+   In many standards track documents several words are used to signify
+   the requirements in the specification.  These words are often
+   capitalized.  This document defines these words as they should be
+   interpreted in IETF documents.  Authors who follow these guidelines
+   should incorporate this phrase near the beginning of their document:
+
+<list>
+<t>
+      The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL
+      NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED",  "MAY", and
+      "OPTIONAL" in this document are to be interpreted as described in
+      RFC 2119.
+</t></list></t>
+<t>
+   Note that the force of these words is modified by the requirement
+   level of the document in which they are used.
+</t></abstract></front>
+
+<seriesInfo name="BCP" value="14"/>
+<seriesInfo name="RFC" value="2119"/>
+</reference>
+
+<reference anchor="RFC2389">
+
+<front>
+<title>Feature negotiation mechanism for the File Transfer Protocol</title>
+<author initials="P." surname="Hethmon" fullname="P. Hethmon">
+<organization/></author>
+<author initials="R." surname="Elz" fullname="R. Elz">
+<organization/></author>
+<date year="1998" month="August"/></front>
+
+<seriesInfo name="RFC" value="2389"/>
+</reference>
+
+<reference anchor="RFC3659">
+
+<front>
+<title>Extensions to FTP</title>
+<author initials="P." surname="Hethmon" fullname="P. Hethmon">
+<organization/></author>
+<date year="2007" month="March"/></front>
+
+<seriesInfo name="RFC" value="3659"/>
+</reference>
+
+<reference anchor="RFC5234">
+
+<front>
+<title>Augmented BNF for Syntax Specifications: ABNF</title>
+<author initials="D." surname="Crocker" fullname="D. Crocker">
+<organization/></author>
+<author initials="P." surname="Overell" fullname="P. Overell">
+<organization/></author>
+<date year="2008" month="January"/></front>
+
+<seriesInfo name="STD" value="68"/>
+<seriesInfo name="RFC" value="5234"/>
+</reference>
+
+
+	  </references>
+
+
+	  <references title="Informative References">
+
+
+<reference anchor="RFC5797">
+
+<front>
+<title>FTP Command and Extension Registry</title>
+<author initials="J." surname="Klensin" fullname="J. Klensin">
+<organization/></author>
+<author initials="A." surname="Hoenes" fullname="A. Hoenes">
+<organization/></author>
+<date year="2010" month="March"/></front>
+
+<seriesInfo name="RFC" value="5797"/>
+</reference>
+
+
+
+	    </references> 
+
+	    <section title="Acknowledgements and Contributors">
+		  <t>Thanks to ...</t>
+		  <t>Portions of <xref target="RFC3659"/> were wholly reused in this document.</t>
+    </section>
+
+
+
+
+	    <section title="Document History">
+		<t>[[ to be removed by the RFC editor before publication as an RFC. ]]</t>
+		<t>Known issues concerning this draft:
+	    <list style="symbols"> 
+	      
+		  <t>Expand current alternatives (ABOR, close data connection) and why they are not optimal.</t>
+		  <t>Include more of Section 5 of RFC3659 text? Only 5.1 and 2 paragraphs of 5.3 are reused.</t>
+
+	    </list></t>
+		
+		
+<t>draft-bryan-ftp-range-00 : December 13, 2010.
+	    
+	    <list style="symbols">
+
+	      <t>Initial draft.</t>
+	    </list></t>
+		
+	    </section>
+	  </back> 
+	</rfc>

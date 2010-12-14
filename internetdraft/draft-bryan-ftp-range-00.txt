@@ -1,0 +1,560 @@
+
+
+
+Network Working Group                                           A. Bryan
+Internet-Draft                                              T. Tsujikawa
+Intended status: Standards Track                       December 14, 2010
+Expires: June 17, 2011
+
+
+          File Transfer Protocol RANG Command for Byte Ranges
+                        draft-bryan-ftp-range-00
+
+Abstract
+
+   The File Transfer Protocol offers REST, to designate a starting point
+   for a transfer, but does not currently offer any method to specify an
+   end point.  This document specifies a new FTP RANG command to be used
+   by clients to designate an end point for STREAM mode transfers.
+
+Status of this Memo
+
+   This Internet-Draft is submitted in full conformance with the
+   provisions of BCP 78 and BCP 79.
+
+   Internet-Drafts are working documents of the Internet Engineering
+   Task Force (IETF).  Note that other groups may also distribute
+   working documents as Internet-Drafts.  The list of current Internet-
+   Drafts is at http://datatracker.ietf.org/drafts/current/.
+
+   Internet-Drafts are draft documents valid for a maximum of six months
+   and may be updated, replaced, or obsoleted by other documents at any
+   time.  It is inappropriate to use Internet-Drafts as reference
+   material or to cite them other than as "work in progress."
+
+   This Internet-Draft will expire on June 17, 2011.
+
+Copyright Notice
+
+   Copyright (c) 2010 IETF Trust and the persons identified as the
+   document authors.  All rights reserved.
+
+   This document is subject to BCP 78 and the IETF Trust's Legal
+   Provisions Relating to IETF Documents
+   (http://trustee.ietf.org/license-info) in effect on the date of
+   publication of this document.  Please review these documents
+   carefully, as they describe your rights and restrictions with respect
+   to this document.  Code Components extracted from this document must
+   include Simplified BSD License text as described in Section 4.e of
+   the Trust Legal Provisions and are provided without warranty as
+   described in the Simplified BSD License.
+
+
+
+
+Bryan & Tsujikawa         Expires June 17, 2011                 [Page 1]
+
+Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
+
+
+Table of Contents
+
+   1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . . . 3
+   2.  Document Conventions  . . . . . . . . . . . . . . . . . . . . . 3
+     2.1.  Basic Tokens  . . . . . . . . . . . . . . . . . . . . . . . 4
+     2.2.  Server Replies  . . . . . . . . . . . . . . . . . . . . . . 4
+   3.  Byte Ranges in STREAM Mode  . . . . . . . . . . . . . . . . . . 4
+   4.  The RANGe Command (RANG)  . . . . . . . . . . . . . . . . . . . 5
+     4.1.  FEAT Command Response for RANG Command  . . . . . . . . . . 6
+     4.2.  User-PI usage of RANG . . . . . . . . . . . . . . . . . . . 7
+     4.3.  RANG Command Errors . . . . . . . . . . . . . . . . . . . . 7
+   5.  IANA Considerations . . . . . . . . . . . . . . . . . . . . . . 8
+   6.  Security Considerations . . . . . . . . . . . . . . . . . . . . 8
+   7.  References  . . . . . . . . . . . . . . . . . . . . . . . . . . 8
+     7.1.  Normative References  . . . . . . . . . . . . . . . . . . . 8
+     7.2.  Informative References  . . . . . . . . . . . . . . . . . . 9
+   Appendix A.  Acknowledgements and Contributors  . . . . . . . . . . 9
+   Appendix B.  Document History . . . . . . . . . . . . . . . . . . . 9
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . . . 9
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Bryan & Tsujikawa         Expires June 17, 2011                 [Page 2]
+
+Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
+
+
+1.  Introduction
+
+   The File Transfer Protocol offers REST [RFC3659], to designate a
+   starting point for a transfer, but does not currently offer any
+   method to specify an end point.  This document specifies a new FTP
+   RANG command to be used by clients to designate an end point for
+   STREAM mode transfers.
+
+   The current alternatives, without being able to specify an end point,
+   are to issue an ABOR command or close the data connection.
+
+   HTTP offers similar functionality with the Range: header, where a
+   specific byte range can optionally be requested.
+
+   [[ Discussion of this draft should take place on the FTPEXT2 Working
+   Group mailing list, although this draft is not a WG item:
+   ftpext@ietf.org. ]]
+
+
+2.  Document Conventions
+
+   This specification describes conformance of File Transfer Protocol
+   Extension for RANG, and end point in a byte range.
+
+   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+   document are to be interpreted as described in BCP 14, [RFC2119], as
+   scoped to those conformance targets.
+
+   This document also uses notation defined in STD 9, [RFC0959].  In
+   particular, the terms or commands "reply", "user", "file", "FTP
+   commands", "user-PI" (user protocol interpreter), "server-FTP
+   process", "server-PI", "mode", "type", "STOR", "RETR", and "ASCII",
+   are all used here as defined there.  The command "REST" is used as
+   defined in Section 5 of [RFC3659].
+
+   In the examples of FTP dialogs presented in this document, lines that
+   begin "C> " were sent over the control connection from the user-PI to
+   the server-PI, and lines that begin "S> " were sent over the control
+   connection from the server-PI to the user-PI.  In all cases, the
+   prefixes shown above, including the one space, have been added for
+   the purposes of this document, and are not a part of the data
+   exchanged between client and server.
+
+   Syntax required is defined using the Augmented BNF defined in
+   [RFC5234].
+
+
+
+
+
+Bryan & Tsujikawa         Expires June 17, 2011                 [Page 3]
+
+Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
+
+
+2.1.  Basic Tokens
+
+   This document imports the core definitions given in Appendix B of
+   [RFC5234].  There definitions will be found for basic ABNF elements
+   like ALPHA, DIGIT, SP, etc.  To that, the following term is added for
+   use in this document.
+
+
+      TCHAR = VCHAR / SP / HTAB    ; visible plus white space
+
+   The VCHAR (from [RFC5234]) and TCHAR rules give basic character types
+   from varying sub-sets of the ASCII character set for use in various
+   commands and responses.
+
+   Note that in ABNF, string literals are case insensitive.  That
+   convention is preserved in this document, and implies that FTP
+   commands and parameters that are added by this specification have
+   values that can be represented in any case.  That is, "RANG" is the
+   same as "rang", "Rang", "RaNg", etc., and "ftp.example.com" is the
+   same as "Ftp.Example.Com", "fTp.eXample.cOm", etc.
+
+2.2.  Server Replies
+
+   Section 4.2 of [RFC0959] defines the format and meaning of replies by
+   the server-PI to FTP commands from the user-PI.  Those reply
+   conventions are used here without change.
+
+
+      error-response = error-code SP *TCHAR CRLF
+      error-code     = ("4" / "5") 2DIGIT
+
+   Implementers should note that the ABNF syntax (which was not used in
+   [RFC0959]) used in this document, and other FTP related documents,
+   sometimes shows replies using the one line format.  Unless otherwise
+   explicitly stated, that is not intended to imply that multi-line
+   responses are not permitted.  Implementers should assume that, unless
+   stated to the contrary, any reply to any FTP command (including QUIT)
+   can be of the multi-line format described in [RFC0959].
+
+   Throughout this document, replies will be identified by the three
+   digit code that is their first element.  Thus the term "500 reply"
+   means a reply from the server-PI using the three digit code "500".
+
+
+3.  Byte Ranges in STREAM Mode
+
+   In STREAM mode, the data connection contains just a stream of
+   unformatted octets of data.  Explicit restart markers thus cannot be
+
+
+
+Bryan & Tsujikawa         Expires June 17, 2011                 [Page 4]
+
+Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
+
+
+   inserted into the data stream, they would be indistinguishable from
+   data.  For this reason, the FTP specification [RFC0959] did not
+   provide the ability to do restarts in stream mode.  However, there is
+   not really a need to have explicit restart markers in this case, as
+   restart markers can be implied by the octet offset into the data
+   stream.
+
+   Because the data stream defines the file in STREAM mode, a different
+   data stream would represent a different file.  Thus, an offset will
+   always represent the same position within a file.  On the other hand,
+   in other modes than STREAM, the same file can be transferred using
+   quite different octet sequences and yet be reconstructed into the one
+   identical file.  Thus an offset into the data stream in transfer
+   modes other than STREAM would not give an unambiguous restart or end
+   point.
+
+   If the data representation TYPE is IMAGE and the STRUcture is File,
+   for many systems the file will be stored exactly in the same format
+   as it is sent across the data connection.  It is then usually very
+   easy for the receiver to determine how much data was previously
+   received, and notify the sender of the offset where the transfer
+   should be restarted.  In other representation types and structures
+   more effort will be required, but it remains always possible to
+   determine the offset with finite, but perhaps non-negligible, effort.
+   In the worst case, an FTP process may need to open a data connection
+   to itself, set the appropriate transfer type and structure, and
+   actually transmit the file, counting the transmitted octets.
+
+   If the user-FTP process is intending to restart a retrieve, it will
+   directly calculate the restart marker and send that information in
+   the RESTart command.  However, if the user-FTP process is intending
+   to restart sending the file, it needs to be able to determine how
+   much data was previously sent, and correctly received and saved.  The
+   purpose of the SIZE command, as documented in [RFC3659], is to get
+   this information.
+
+
+4.  The RANGe Command (RANG)
+
+   A new command "RANG" is added to the FTP command set to allow the
+   client to specify an end point byte range of a file from a server-FTP
+   process.
+
+   The syntax for the RANG command when the current transfer mode is
+   STREAM is:
+
+
+
+
+
+
+Bryan & Tsujikawa         Expires June 17, 2011                 [Page 5]
+
+Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
+
+
+      range-command = "RANG" SP 1*DIGIT CRLF
+
+   The numeric value gives the number of octets of the immediately-
+   following transfer to stop sending at, effectively causing the
+   transmission to be ended.  The server-PI will respond to the RANG
+   command with a 350 reply, indicating that the RANG parameter has been
+   saved, an OPTIONAL REST command with starting point, and that another
+   command, which should be either RETR or STOR, should then follow to
+   complete the transfer.
+
+
+      range-response = range-ok / error-response
+      range-ok       = "350" SP *TCHAR CRLF / error-response
+
+   The REST command is intended to complete a failed transfer, by
+   indicating a point to restart from.  The RANG command allows an end
+   point to be indicated.  This allows a file to be transferred from the
+   beginning to and end point, or when used in conjuction with REST,
+   from a restart point mid-file to an end point before the natural end
+   of the file.
+
+   Server-PI and user-PI that support the RANG command ARE RECOMMENDED
+   to also support REST.
+
+4.1.  FEAT Command Response for RANG Command
+
+   When replying to the FEAT command [RFC2389], a server-FTP process
+   that supports the RANG command, as specified here, MUST include, a
+   line containing exactly the string "REST STREAM".  This string is
+   case insensitive, and MAY be sent in any mixture of upper or lower
+   case, however it SHOULD be sent in upper case.  That is, the response
+   SHOULD be:
+
+
+      C> FEAT
+      S> 211-Extensions supported:
+      S>  ...
+      S>  RANG STREAM
+      S>  ...
+      S> 211 END
+
+   The ellipses indicate place holders where other features may be
+   included, and are not required.  The one-space indentation of the
+   feature lines is mandatory [RFC2389].
+
+
+
+
+
+
+
+Bryan & Tsujikawa         Expires June 17, 2011                 [Page 6]
+
+Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
+
+
+      range-feat = SP "RANG" SP "STREAM"
+
+4.2.  User-PI usage of RANG
+
+   The user-PI issues the FEAT command to query the server-PI if it
+   supports the RANG command.  In this example, the server-PI also
+   supports REST.
+
+
+      C> FEAT
+      S> 211-Extensions supported:
+      S>  ...
+      S>  REST STREAM
+      S>  RANG STREAM
+      S>  ...
+      S> 211 END
+
+   Assume that the transfer of a largish file has previously been
+   interrupted after 802816 octets had been received, that the tranfer
+   should stop at octet 1000000 of the file, that the previous transfer
+   was with TYPE=I, and that it has been verified that the file on the
+   server has not since changed.
+
+
+      C> TYPE I
+      S> 200 Type set to I.
+      C> PORT 127,0,0,1,15,107
+      S> 200 PORT command successful.
+      C> RANG 1000000
+      S> 350 End Byte range at 1000000. Send STORE or RETRIEVE
+      C> REST 802816
+      S> 350 Restarting at 802816. Send STORE or RETRIEVE
+      C> RETR cap60.pl198.tar
+      S> 150 Opening BINARY mode data connection
+      [...]
+      S> 226 Transfer complete.
+
+4.3.  RANG Command Errors
+
+   The server-PI SHOULD reply with a 500 reply if the RANG command is
+   unrecognized or unimplemented.
+
+   The server-PI SHOULD reply with a 550 reply if the RANG command is
+   used on a file that can not be found.
+
+   The server-PI SHOULD reply with a 551 reply if the server-PI is
+   unable to deliver the file with TYPE I and MODE S.
+
+
+
+
+Bryan & Tsujikawa         Expires June 17, 2011                 [Page 7]
+
+Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
+
+
+   The server-PI SHOULD reply with a 552 reply if the user is not
+   allowed to use the RANG command.
+
+   The server-PI SHOULD reply with a 553 reply if the user requests the
+   RANG of a directory, which is not allowed.
+
+   The server-PI SHOULD reply with a 5yz reply if the specified end
+   point is larger than the actual file.
+
+
+5.  IANA Considerations
+
+   This new command is added to the "FTP Commands and Extensions"
+   registry created by [RFC5797].
+
+   Command Name: RANG
+
+   Description: End point byte range (for STREAM mode).
+
+   FEAT String: RANG
+
+   Command Type: Service execution/parameter setting
+
+   Conformance Requirements: Optional
+
+   Reference: This specification
+
+
+6.  Security Considerations
+
+   This memo does not directly concern security.  It is not believed
+   that any of the mechanisms documented here impact in any particular
+   way upon the security of FTP.
+
+
+7.  References
+
+7.1.  Normative References
+
+   [RFC0959]  Postel, J. and J. Reynolds, "File Transfer Protocol",
+              STD 9, RFC 0959, October 1985.
+
+   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
+              Requirement Levels", BCP 14, RFC 2119, March 1997.
+
+   [RFC2389]  Hethmon, P. and R. Elz, "Feature negotiation mechanism for
+              the File Transfer Protocol", RFC 2389, August 1998.
+
+
+
+
+Bryan & Tsujikawa         Expires June 17, 2011                 [Page 8]
+
+Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
+
+
+   [RFC3659]  Hethmon, P., "Extensions to FTP", RFC 3659, March 2007.
+
+   [RFC5234]  Crocker, D. and P. Overell, "Augmented BNF for Syntax
+              Specifications: ABNF", STD 68, RFC 5234, January 2008.
+
+7.2.  Informative References
+
+   [RFC5797]  Klensin, J. and A. Hoenes, "FTP Command and Extension
+              Registry", RFC 5797, March 2010.
+
+
+Appendix A.  Acknowledgements and Contributors
+
+   Thanks to ...
+
+   Portions of [RFC3659] were wholly reused in this document.
+
+
+Appendix B.  Document History
+
+   [[ to be removed by the RFC editor before publication as an RFC. ]]
+
+   Known issues concerning this draft:
+   o  Expand current alternatives (ABOR, close data connection) and why
+      they are not optimal.
+   o  Include more of Section 5 of RFC3659 text?  Only 5.1 and 2
+      paragraphs of 5.3 are reused.
+
+   draft-bryan-ftp-range-00 : December 13, 2010.
+   o  Initial draft.
+
+
+Authors' Addresses
+
+   Anthony Bryan
+   Pompano Beach, FL
+   USA
+
+   Email: anthonybryan@gmail.com
+   URI:   http://www.metalinker.org
+
+
+
+
+
+
+
+
+
+
+
+Bryan & Tsujikawa         Expires June 17, 2011                 [Page 9]
+
+Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
+
+
+   Tatsuhiro Tsujikawa
+   Shiga
+   Japan
+
+   Email: tatsuhiro.t@gmail.com
+   URI:   http://aria2.sourceforge.net
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Bryan & Tsujikawa         Expires June 17, 2011                [Page 10]
+

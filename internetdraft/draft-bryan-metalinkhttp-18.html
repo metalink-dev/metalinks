@@ -144,13 +144,13 @@
 <tr><td class="header">Network Working Group</td><td class="header">A. Bryan</td></tr>
 <tr><td class="header">Internet-Draft</td><td class="header">N. McNab</td></tr>
 <tr><td class="header">Intended status: Standards Track</td><td class="header">H. Nordstrom</td></tr>
-<tr><td class="header">Expires: May 27, 2011</td><td class="header">T. Tsujikawa</td></tr>
+<tr><td class="header">Expires: May 29, 2011</td><td class="header">T. Tsujikawa</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">&nbsp;</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">P. Poeml</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">MirrorBrain</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">A. Ford</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">Roke Manor Research</td></tr>
-<tr><td class="header">&nbsp;</td><td class="header">November 23, 2010</td></tr>
+<tr><td class="header">&nbsp;</td><td class="header">November 25, 2010</td></tr>
 </table></td></tr></table>
 <h1><br />Metalink/HTTP: Mirrors and Cryptographic Hashes in HTTP Headers<br />draft-bryan-metalinkhttp-18</h1>
 
@@ -175,7 +175,7 @@ and may be updated, replaced, or obsoleted by other documents at any time.
 It is inappropriate to use Internet-Drafts as reference material or to cite
 them other than as &ldquo;work in progress.&rdquo;</p>
 <p>
-This Internet-Draft will expire on May 27, 2011.</p>
+This Internet-Draft will expire on May 29, 2011.</p>
 
 <h3>Copyright Notice</h3>
 <p>
@@ -396,7 +396,7 @@ Mirror Geographical Location</h3>
 Coordinated Mirror Policies</h3>
 
 <p>There are two types of mirror servers: preferred and normal. Preferred mirror servers are HTTP mirror servers that MUST share the same ETag policy as the originating Metalink server. Preferred mirrors make it possible to detect early on, before data is transferred, if the file requested matches the desired file.
-      Preferred HTTP mirror servers have a "pref" value of 1. By default, if unspecified then mirrors are considered "normal" and do not share the same ETag policy. FTP mirrors, as they do not emit ETags, MUST always be considered "normal". (<a class='info' href='#draft-bryan-ftp-hash'>[draft&#8209;bryan&#8209;ftp&#8209;hash]<span> (</span><span class='info'>Bryan, A., Kosse, T., and D. Stenberg, &ldquo;FTP Extensions for Cryptographic Hashes,&rdquo; October&nbsp;2010.</span><span>)</span></a> allows for FTP mirrors to be coordinated and provide file hashes).
+      Preferred HTTP mirror servers have a "pref" value of 1. By default, if unspecified then mirrors are considered "normal" and do not share the same ETag policy. FTP mirrors, as they do not emit ETags, MUST always be considered "normal". (<a class='info' href='#draft-ietf-ftpext2-hash'>[draft&#8209;ietf&#8209;ftpext2&#8209;hash]<span> (</span><span class='info'>Bryan, A., Kosse, T., and D. Stenberg, &ldquo;FTP Extensions for Cryptographic Hashes,&rdquo; November&nbsp;2010.</span><span>)</span></a> allows for FTP mirrors to be coordinated and provide file hashes).
 </p>
 <p>HTTP Mirror servers SHOULD support Instance Digests in HTTP <a class='info' href='#RFC3230'>[RFC3230]<span> (</span><span class='info'>Mogul, J. and A. Van Hoff, &ldquo;Instance Digests in HTTP,&rdquo; January&nbsp;2002.</span><span>)</span></a>. Optimally, mirror servers will share the same ETag policy and support Instance Digests in HTTP.
 </p>
@@ -600,6 +600,8 @@ Error Prevention, Detection, and Correction</h3>
 <p>Error prevention, or early file mismatch detection, is possible before file transfers with the use of file sizes, ETags, and cryptographic hashes. Error detection requires Instance Digests, or cryptographic hashes, to
 determine after transfers if there has been an error. Error correction, or download repair, is possible with partial file cryptographic hashes.
 </p>
+<p>Note that cyptographic hashes obtained from Instance Digests are in base64 encoding, while those from Metalink/XML and FTP HASH are in hexadecimal.
+</p>
 <a name="earlyfilemismatchdetection"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.7.1.1"></a><h3>7.1.1.&nbsp;
@@ -652,7 +654,7 @@ detection of mismatches. If none is provided then early detection of
 mismatches is not possible unless the file length also differs, but the
 error is still detected when the merged response is verified.
 </p>
-<p>If FTP servers support the FTP HASH command <a class='info' href='#draft-bryan-ftp-hash'>[draft&#8209;bryan&#8209;ftp&#8209;hash]<span> (</span><span class='info'>Bryan, A., Kosse, T., and D. Stenberg, &ldquo;FTP Extensions for Cryptographic Hashes,&rdquo; October&nbsp;2010.</span><span>)</span></a> and the same hash algorithm as the originating Metalink server, then that information can be
+<p>If FTP servers support the FTP HASH command <a class='info' href='#draft-ietf-ftpext2-hash'>[draft&#8209;ietf&#8209;ftpext2&#8209;hash]<span> (</span><span class='info'>Bryan, A., Kosse, T., and D. Stenberg, &ldquo;FTP Extensions for Cryptographic Hashes,&rdquo; November&nbsp;2010.</span><span>)</span></a> and the same hash algorithm as the originating Metalink server, then that information can be
 used for early file mismatch detection.
 </p>
 <a name="errorcorrection"></a><br /><hr />
@@ -796,8 +798,8 @@ Signing</h3>
 <td class="author-text"><a href="mailto:anthonybryan@gmail.com">Bryan, A.</a>, <a href="mailto:tatsuhiro.t@gmail.com">Tsujikawa, T.</a>, <a href="mailto:neil@nabber.org">McNab, N.</a>, and <a href="mailto:peter@poeml.de">P. Poeml</a>, &ldquo;<a href="http://tools.ietf.org/html/rfc5854">The Metalink Download Description Format</a>,&rdquo; RFC&nbsp;5854, June&nbsp;2010.</td></tr>
 <tr><td class="author-text" valign="top"><a name="RFC5988">[RFC5988]</a></td>
 <td class="author-text"><a href="mailto:mnot@mnot.net">Nottingham, M.</a>, &ldquo;<a href="http://tools.ietf.org/html/rfc5988">Web Linking</a>,&rdquo; RFC&nbsp;5988, October&nbsp;2010.</td></tr>
-<tr><td class="author-text" valign="top"><a name="draft-bryan-ftp-hash">[draft-bryan-ftp-hash]</a></td>
-<td class="author-text"><a href="mailto:anthonybryan@gmail.com">Bryan, A.</a>, <a href="mailto:tim.kosse@filezilla-project.org">Kosse, T.</a>, and <a href="mailto:daniel@haxx.se">D. Stenberg</a>, &ldquo;<a href="http://www.ietf.org/internet-drafts/draft-bryan-ftp-hash-08.txt">FTP Extensions for Cryptographic Hashes</a>,&rdquo; draft-bryan-ftp-hash-08 (work in progress), October&nbsp;2010.</td></tr>
+<tr><td class="author-text" valign="top"><a name="draft-ietf-ftpext2-hash">[draft-ietf-ftpext2-hash]</a></td>
+<td class="author-text"><a href="mailto:anthonybryan@gmail.com">Bryan, A.</a>, <a href="mailto:tim.kosse@filezilla-project.org">Kosse, T.</a>, and <a href="mailto:daniel@haxx.se">D. Stenberg</a>, &ldquo;<a href="http://www.ietf.org/internet-drafts/draft-ietf-ftpext2-hash-00.txt">FTP Extensions for Cryptographic Hashes</a>,&rdquo; draft-ietf-ftpext2-hash-00 (work in progress), November&nbsp;2010.</td></tr>
 </table>
 
 <a name="anchor15"></a><br /><hr />
@@ -887,7 +889,7 @@ Document History</h3>
 	    
 	    </p>
 <ul class="text">
-<li>Add draft-bryan-ftp-hash reference and FTP mirror coordination.
+<li>Add draft-ietf-ftpext2-hash reference and FTP mirror coordination.
 </li>
 </ul>
 

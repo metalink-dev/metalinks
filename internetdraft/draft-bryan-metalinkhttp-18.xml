@@ -208,7 +208,7 @@ pri=2; geo="gb"; depth=1
 
 <section title="Coordinated Mirror Policies" anchor="coordinatedpolicies">
       <t>There are two types of mirror servers: preferred and normal. Preferred mirror servers are HTTP mirror servers that MUST share the same ETag policy as the originating Metalink server. Preferred mirrors make it possible to detect early on, before data is transferred, if the file requested matches the desired file.
-      Preferred HTTP mirror servers have a "pref" value of 1. By default, if unspecified then mirrors are considered "normal" and do not share the same ETag policy. FTP mirrors, as they do not emit ETags, MUST always be considered "normal". (<xref target="draft-bryan-ftp-hash"/> allows for FTP mirrors to be coordinated and provide file hashes).</t>
+      Preferred HTTP mirror servers have a "pref" value of 1. By default, if unspecified then mirrors are considered "normal" and do not share the same ETag policy. FTP mirrors, as they do not emit ETags, MUST always be considered "normal". (<xref target="draft-ietf-ftpext2-hash"/> allows for FTP mirrors to be coordinated and provide file hashes).</t>
 	  <t>HTTP Mirror servers SHOULD support Instance Digests in HTTP <xref target="RFC3230"/>. Optimally, mirror servers will share the same ETag policy and support Instance Digests in HTTP.</t>
 	  
       <t>[[Suggestion: In order for clients to identify servers that have coordinated ETag policies, the ETag MUST begin with "Metalink:", e.g.
@@ -381,6 +381,8 @@ complete.</t>
 <t>Error prevention, or early file mismatch detection, is possible before file transfers with the use of file sizes, ETags, and cryptographic hashes. Error detection requires Instance Digests, or cryptographic hashes, to
 determine after transfers if there has been an error. Error correction, or download repair, is possible with partial file cryptographic hashes.</t>
 
+<t>Note that cyptographic hashes obtained from Instance Digests are in base64 encoding, while those from Metalink/XML and FTP HASH are in hexadecimal.</t>
+
 <section title="Error Prevention (Early File Mismatch Detection)" anchor="earlyfilemismatchdetection">
 
 <t>In HTTP terms, the requirement is that merging of ranges from multiple
@@ -430,7 +432,7 @@ detection of mismatches. If none is provided then early detection of
 mismatches is not possible unless the file length also differs, but the
 error is still detected when the merged response is verified.</t>
 
-<t>If FTP servers support the FTP HASH command <xref target="draft-bryan-ftp-hash"/> and the same hash algorithm as the originating Metalink server, then that information can be
+<t>If FTP servers support the FTP HASH command <xref target="draft-ietf-ftpext2-hash"/> and the same hash algorithm as the originating Metalink server, then that information can be
 used for early file mismatch detection.</t>
 
 </section>
@@ -724,7 +726,7 @@ other mirrors.</t>
 <seriesInfo name="RFC" value="5854"/>
 </reference>
 
-<reference anchor="draft-bryan-ftp-hash">
+<reference anchor="draft-ietf-ftpext2-hash">
   <front>
       <title abbrev="FTP Extensions for Cryptographic Hashes">FTP Extensions for Cryptographic Hashes</title>
       <author initials="A." surname="Bryan" fullname="Anthony Bryan">
@@ -754,9 +756,9 @@ other mirrors.</t>
 	      <uri>http://www.haxx.se/</uri>
 	    </address>
       </author>
-	<date month="October" year="2010"/>   
+	<date month="November" year="2010"/>   
   </front>
-  <seriesInfo name="Internet-Draft" value="draft-bryan-ftp-hash-08"/>
+  <seriesInfo name="Internet-Draft" value="draft-ietf-ftpext2-hash-00"/>
 </reference>
 
 	  </references>
@@ -822,7 +824,7 @@ other mirrors.</t>
 	    
 	    <list style="symbols">
 
-	      <t>Add draft-bryan-ftp-hash reference and FTP mirror coordination.</t>
+	      <t>Add draft-ietf-ftpext2-hash reference and FTP mirror coordination.</t>
 	    </list></t>
 		
 <t>-15 : February 20, 2010.
