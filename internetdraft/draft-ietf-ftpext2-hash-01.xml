@@ -57,7 +57,7 @@
        however none have been formally specified, leading to non-interoperability and confusion. (See Appendix B for more information). To solve these issues, this document specifies a new FTP command to be used by clients to request cryptographic hashes of files.
 HTTP has a similar feature named Instance Digests <xref target="RFC3230"/> which allows a client to request the cryptographic hash of a file.</t>
 
-      <t>[[ Discussion of this draft should take place on ftpext@ietf.org (or apps-discuss@ietf.org if necessary). ]]</t>
+      <t>[[ Discussion of this draft should take place on the FTPEXT2 Working Group mailing list: ftpext@ietf.org. ]]</t>
 	  
       <section title="Example"><t><figure> 
 	  <preamble>Example of HASH client request:</preamble>
@@ -388,7 +388,7 @@ By uploading a file, running HASH against it and running HASH against another
 file location, the client could infer some filesystem deployment information 
 (e.g. that there is a logical link between a pair of directories in the tree).
 This is probably not an issue if the user has access to both branches 
-of the directory tree, there is the possibility that this information is exposable.
+of the directory tree, but there is the possibility that this information is exposable.
 To prevent this scenario it suffices to limit use of the HASH command to
 users who would already be able to download the file.</t>
 
@@ -556,6 +556,7 @@ purpose is an implementation decision.</t>
 	    </references> 
 
 	    <section title="Acknowledgements and Contributors">
+		  <t>This document is a product of the FTPEXT2 working group of the IETF.</t>
 		  <t>Thanks to John C. Klensin, Alfred Hoenes, James Twine, Robert McMurray, Mathias Berchtold, Tatsuhiro Tsujikawa, and Paul Ford-Hutchinson.</t>
 		  <t>Portions of <xref target="RFC3659"/> were wholly reused in this document.</t>
     </section>
@@ -602,6 +603,7 @@ purpose is an implementation decision.</t>
 <t>JAFS (supports XCRC and MD5) http://www.sbbi.net/site/jafs/features.html</t>
 <t>Kellerman FTP (supports XCRC) http://sharptoolbox.com/tools/kellerman-ftp</t>
 <t>Limagito FTP server (supports XCRC, XMD5, XSHA1) http://www.limagito.com/file-mover-features.html</t>
+<t>Lobster IntegrationServer (supports XCRC, XSHA1, XMD5; all with SP and EP).</t>
 <t>MOVEit DMZ (supports XSHA1)</t>
 <t>Nofeel FTP server (supports XCRC, XMD5, XSHA1) http://www.nftpserver.com/history.php</t>
 <t>Null FTP (supports XCRC, XMD5, XSHA) http://www.sharewareconnection.com/null-ftp-client-pro.htm</t>
@@ -639,6 +641,13 @@ purpose is an implementation decision.</t>
 	      
 		  <t>Section needs improvement: which files should a server process a HASH command for a logged in user?</t>
 
+	    </list></t>
+		
+<t>draft-ietf-ftpext2-hash-01 : , 2010
+
+	    <list style="symbols">
+
+          <t>Something.</t>
 	    </list></t>
 		
 <t>draft-ietf-ftpext2-hash-00 : November 24, 2010

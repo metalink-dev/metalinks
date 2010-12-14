@@ -144,7 +144,7 @@
 <tr><td class="header">FTPEXT2 Working Group</td><td class="header">A. Bryan</td></tr>
 <tr><td class="header">Internet-Draft</td><td class="header">T. Kosse</td></tr>
 <tr><td class="header">Intended status: Standards Track</td><td class="header">D. Stenberg</td></tr>
-<tr><td class="header">Expires: May 28, 2011</td><td class="header">November 24, 2010</td></tr>
+<tr><td class="header">Expires: June 12, 2011</td><td class="header">December 9, 2010</td></tr>
 </table></td></tr></table>
 <h1><br />File Transfer Protocol HASH Command for Cryptographic Hashes<br />draft-ietf-ftpext2-hash-01</h1>
 
@@ -169,7 +169,7 @@ and may be updated, replaced, or obsoleted by other documents at any time.
 It is inappropriate to use Internet-Drafts as reference material or to cite
 them other than as &ldquo;work in progress.&rdquo;</p>
 <p>
-This Internet-Draft will expire on May 28, 2011.</p>
+This Internet-Draft will expire on June 12, 2011.</p>
 
 <h3>Copyright Notice</h3>
 <p>
@@ -240,7 +240,7 @@ Introduction</h3>
        however none have been formally specified, leading to non-interoperability and confusion. (See Appendix B for more information). To solve these issues, this document specifies a new FTP command to be used by clients to request cryptographic hashes of files.
 HTTP has a similar feature named Instance Digests <a class='info' href='#RFC3230'>[RFC3230]<span> (</span><span class='info'>Mogul, J. and A. Van Hoff, &ldquo;Instance Digests in HTTP,&rdquo; January&nbsp;2002.</span><span>)</span></a> which allows a client to request the cryptographic hash of a file.
 </p>
-<p>[[ Discussion of this draft should take place on ftpext@ietf.org (or apps-discuss@ietf.org if necessary). ]]
+<p>[[ Discussion of this draft should take place on the FTPEXT2 Working Group mailing list: ftpext@ietf.org. ]]
 </p>
 <a name="anchor2"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
@@ -584,7 +584,7 @@ By uploading a file, running HASH against it and running HASH against another
 file location, the client could infer some filesystem deployment information 
 (e.g. that there is a logical link between a pair of directories in the tree).
 This is probably not an issue if the user has access to both branches 
-of the directory tree, there is the possibility that this information is exposable.
+of the directory tree, but there is the possibility that this information is exposable.
 To prevent this scenario it suffices to limit use of the HASH command to
 users who would already be able to download the file.
 </p>
@@ -633,6 +633,8 @@ References</h3>
 <a name="rfc.section.A"></a><h3>Appendix A.&nbsp;
 Acknowledgements and Contributors</h3>
 
+<p>This document is a product of the FTPEXT2 working group of the IETF.
+</p>
 <p>Thanks to John C. Klensin, Alfred Hoenes, James Twine, Robert McMurray, Mathias Berchtold, Tatsuhiro Tsujikawa, and Paul Ford-Hutchinson.
 </p>
 <p>Portions of <a class='info' href='#RFC3659'>[RFC3659]<span> (</span><span class='info'>Hethmon, P., &ldquo;Extensions to FTP,&rdquo; March&nbsp;2007.</span><span>)</span></a> were wholly reused in this document.
@@ -718,6 +720,8 @@ List of Non-standard Cryptographic Hash or Checksum Commands and Implementations
 </li>
 <li>Limagito FTP server (supports XCRC, XMD5, XSHA1) http://www.limagito.com/file-mover-features.html
 </li>
+<li>Lobster IntegrationServer (supports XCRC, XSHA1, XMD5; all with SP and EP).
+</li>
 <li>MOVEit DMZ (supports XSHA1)
 </li>
 <li>Nofeel FTP server (supports XCRC, XMD5, XSHA1) http://www.nftpserver.com/history.php
@@ -775,6 +779,14 @@ Document History</h3>
 	    </p>
 <ul class="text">
 <li>Section needs improvement: which files should a server process a HASH command for a logged in user?
+</li>
+</ul>
+
+<p>draft-ietf-ftpext2-hash-01 : , 2010
+
+	    </p>
+<ul class="text">
+<li>Something.
 </li>
 </ul>
 
