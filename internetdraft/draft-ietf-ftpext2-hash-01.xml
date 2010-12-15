@@ -86,7 +86,7 @@ HTTP has a similar feature named Instance Digests <xref target="RFC3230"/> which
 	
 	<t>This document also uses notation defined in STD 9, <xref target="RFC0959"/>.
 	In particular, the terms or commands "reply", "user", "file", "FTP commands", "user-PI" (user protocol interpreter), "server-FTP process",
-    "server-PI", "mode", "type", "STOR", "RETR", and "ASCII", are all used here as defined there. The term "pathname" is used as defined in Section 2.2 of <xref target="RFC3659"/>.</t>
+    "server-PI", "mode", "Image type", "Stream transfer mode", "type", "STOR", "RETR", and "ASCII", are all used here as defined there. The term "pathname" is used as defined in Section 2.2 of <xref target="RFC3659"/>.</t>
 
 	<t>In the examples of FTP dialogs presented in this document, lines that
    begin "C&gt; " were sent over the control connection from the user-PI to

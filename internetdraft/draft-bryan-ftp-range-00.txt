@@ -145,9 +145,10 @@ Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
    This document also uses notation defined in STD 9, [RFC0959].  In
    particular, the terms or commands "reply", "user", "file", "FTP
    commands", "user-PI" (user protocol interpreter), "server-FTP
-   process", "server-PI", "mode", "type", "STOR", "RETR", and "ASCII",
-   are all used here as defined there.  The command "REST" is used as
-   defined in Section 5 of [RFC3659].
+   process", "server-PI", "mode", "Image type", "Stream transfer mode",
+   "type", "STOR", "RETR", and "ASCII", are all used here as defined
+   there.  The command "REST" is used as defined in Section 5 of
+   [RFC3659].
 
    In the examples of FTP dialogs presented in this document, lines that
    begin "C> " were sent over the control connection from the user-PI to
@@ -159,7 +160,6 @@ Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
 
    Syntax required is defined using the Augmented BNF defined in
    [RFC5234].
-
 
 
 
@@ -309,7 +309,7 @@ Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
 
    When replying to the FEAT command [RFC2389], a server-FTP process
    that supports the RANG command, as specified here, MUST include, a
-   line containing exactly the string "REST STREAM".  This string is
+   line containing exactly the string "RANG STREAM".  This string is
    case insensitive, and MAY be sent in any mixture of upper or lower
    case, however it SHOULD be sent in upper case.  That is, the response
    SHOULD be:
@@ -366,7 +366,7 @@ Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
       C> PORT 127,0,0,1,15,107
       S> 200 PORT command successful.
       C> RANG 1000000
-      S> 350 End Byte range at 1000000. Send STORE or RETRIEVE
+      S> 350 End Byte range at 1000000. Send REST or RETRIEVE
       C> REST 802816
       S> 350 Restarting at 802816. Send STORE or RETRIEVE
       C> RETR cap60.pl198.tar
