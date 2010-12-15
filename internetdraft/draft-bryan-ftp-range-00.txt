@@ -4,7 +4,7 @@
 Network Working Group                                           A. Bryan
 Internet-Draft                                              T. Tsujikawa
 Intended status: Standards Track                             D. Stenberg
-Expires: June 17, 2011                                 December 14, 2010
+Expires: June 18, 2011                                 December 15, 2010
 
 
           File Transfer Protocol RANG Command for Byte Ranges
@@ -15,7 +15,8 @@ Abstract
    The File Transfer Protocol offers REST, to designate a starting point
    for a transfer, but does not currently offer any method to specify an
    end point.  This document specifies a new FTP RANG command to be used
-   by clients to designate an end point for STREAM mode transfers.
+   by clients to designate an end point for STREAM mode transfers with
+   RETR.
 
 Status of this Memo
 
@@ -32,7 +33,7 @@ Status of this Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on June 17, 2011.
+   This Internet-Draft will expire on June 18, 2011.
 
 Copyright Notice
 
@@ -51,8 +52,7 @@ Copyright Notice
 
 
 
-
-Bryan, et al.             Expires June 17, 2011                 [Page 1]
+Bryan, et al.             Expires June 18, 2011                 [Page 1]
 
 Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
 
@@ -108,7 +108,7 @@ Table of Contents
 
 
 
-Bryan, et al.             Expires June 17, 2011                 [Page 2]
+Bryan, et al.             Expires June 18, 2011                 [Page 2]
 
 Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
 
@@ -119,13 +119,14 @@ Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
    starting point for a transfer, but does not currently offer any
    method to specify an end point.  This document specifies a new FTP
    RANG command to be used by clients to designate an end point for
-   STREAM mode transfers.
+   STREAM mode transfers with RETR.
 
    The current alternatives, without being able to specify an end point,
    are to issue an ABOR command or close the data connection.
 
-   HTTP offers similar functionality with the Range: header, where a
-   specific byte range can optionally be requested.
+   HTTP offers similar functionality with the Range: header in Section
+   14.35 of [RFC2616], where a specific byte range can optionally be
+   requested.
 
    [[ Discussion of this draft should take place on the FTPEXT2 Working
    Group mailing list, although this draft is not a WG item:
@@ -163,8 +164,7 @@ Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
 
 
 
-
-Bryan, et al.             Expires June 17, 2011                 [Page 3]
+Bryan, et al.             Expires June 18, 2011                 [Page 3]
 
 Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
 
@@ -220,7 +220,7 @@ Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
 
 
 
-Bryan, et al.             Expires June 17, 2011                 [Page 4]
+Bryan, et al.             Expires June 18, 2011                 [Page 4]
 
 Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
 
@@ -276,7 +276,7 @@ Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
 
 
 
-Bryan, et al.             Expires June 17, 2011                 [Page 5]
+Bryan, et al.             Expires June 18, 2011                 [Page 5]
 
 Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
 
@@ -287,9 +287,9 @@ Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
    following transfer to stop sending at, effectively causing the
    transmission to be ended.  The server-PI will respond to the RANG
    command with a 350 reply, indicating that the RANG parameter has been
-   saved, an OPTIONAL REST command with starting point, and that another
-   command, which should be either RETR or STOR, should then follow to
-   complete the transfer.
+   saved, after which the user-PI MAY send an OPTIONAL REST command with
+   starting point, and that another command, which should be RETR,
+   should then follow to complete the transfer.
 
 
       range-response = range-ok / error-response
@@ -332,7 +332,7 @@ Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
 
 
 
-Bryan, et al.             Expires June 17, 2011                 [Page 6]
+Bryan, et al.             Expires June 18, 2011                 [Page 6]
 
 Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
 
@@ -374,6 +374,9 @@ Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
       [...]
       S> 226 Transfer complete.
 
+   In the above example, data is sent from offset 802816 to, and
+   including, offset 1000000.
+
 4.3.  RANG Command Errors
 
    The server-PI SHOULD reply with a 500 reply if the RANG command is
@@ -382,16 +385,16 @@ Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
    The server-PI SHOULD reply with a 550 reply if the RANG command is
    used on a file that can not be found.
 
-   The server-PI SHOULD reply with a 551 reply if the server-PI is
-   unable to deliver the file with TYPE I and MODE S.
 
 
 
-
-Bryan, et al.             Expires June 17, 2011                 [Page 7]
+Bryan, et al.             Expires June 18, 2011                 [Page 7]
 
 Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
 
+
+   The server-PI SHOULD reply with a 551 reply if the server-PI is
+   unable to deliver the file with TYPE I and MODE S.
 
    The server-PI SHOULD reply with a 552 reply if the user is not
    allowed to use the RANG command.
@@ -438,16 +441,16 @@ Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119, March 1997.
 
-   [RFC2389]  Hethmon, P. and R. Elz, "Feature negotiation mechanism for
-              the File Transfer Protocol", RFC 2389, August 1998.
 
 
 
-
-Bryan, et al.             Expires June 17, 2011                 [Page 8]
+Bryan, et al.             Expires June 18, 2011                 [Page 8]
 
 Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
 
+
+   [RFC2389]  Hethmon, P. and R. Elz, "Feature negotiation mechanism for
+              the File Transfer Protocol", RFC 2389, August 1998.
 
    [RFC3659]  Hethmon, P., "Extensions to FTP", RFC 3659, March 2007.
 
@@ -455,6 +458,10 @@ Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
               Specifications: ABNF", STD 68, RFC 5234, January 2008.
 
 7.2.  Informative References
+
+   [RFC2616]  Fielding, R., Gettys, J., Mogul, J., Frystyk, H.,
+              Masinter, L., Leach, P., and T. Berners-Lee, "Hypertext
+              Transfer Protocol -- HTTP/1.1", RFC 2616, June 1999.
 
    [RFC5797]  Klensin, J. and A. Hoenes, "FTP Command and Extension
               Registry", RFC 5797, March 2010.
@@ -493,14 +500,7 @@ Authors' Addresses
 
 
 
-
-
-
-
-
-
-
-Bryan, et al.             Expires June 17, 2011                 [Page 9]
+Bryan, et al.             Expires June 18, 2011                 [Page 9]
 
 Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
 
@@ -556,5 +556,5 @@ Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
 
 
 
-Bryan, et al.             Expires June 17, 2011                [Page 10]
+Bryan, et al.             Expires June 18, 2011                [Page 10]
 

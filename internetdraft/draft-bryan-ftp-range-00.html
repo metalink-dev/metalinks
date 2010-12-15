@@ -144,14 +144,14 @@
 <tr><td class="header">Network Working Group</td><td class="header">A. Bryan</td></tr>
 <tr><td class="header">Internet-Draft</td><td class="header">T. Tsujikawa</td></tr>
 <tr><td class="header">Intended status: Standards Track</td><td class="header">D. Stenberg</td></tr>
-<tr><td class="header">Expires: June 17, 2011</td><td class="header">December 14, 2010</td></tr>
+<tr><td class="header">Expires: June 18, 2011</td><td class="header">December 15, 2010</td></tr>
 </table></td></tr></table>
 <h1><br />File Transfer Protocol RANG Command for Byte Ranges<br />draft-bryan-ftp-range-00</h1>
 
 <h3>Abstract</h3>
 
 <p>The File Transfer Protocol offers REST, to designate a starting point for a transfer, but does not currently offer any method to specify an end point.
-       This document specifies a new FTP RANG command to be used by clients to designate an end point for STREAM mode transfers.
+       This document specifies a new FTP RANG command to be used by clients to designate an end point for STREAM mode transfers with RETR.
 
 </p>
 <h3>Status of this Memo</h3>
@@ -169,7 +169,7 @@ and may be updated, replaced, or obsoleted by other documents at any time.
 It is inappropriate to use Internet-Drafts as reference material or to cite
 them other than as &ldquo;work in progress.&rdquo;</p>
 <p>
-This Internet-Draft will expire on June 17, 2011.</p>
+This Internet-Draft will expire on June 18, 2011.</p>
 
 <h3>Copyright Notice</h3>
 <p>
@@ -231,11 +231,11 @@ Authors' Addresses<br />
 Introduction</h3>
 
 <p>The File Transfer Protocol offers REST  <a class='info' href='#RFC3659'>[RFC3659]<span> (</span><span class='info'>Hethmon, P., &ldquo;Extensions to FTP,&rdquo; March&nbsp;2007.</span><span>)</span></a>, to designate a starting point for a transfer, but does not currently offer any method to specify an end point.
-       This document specifies a new FTP RANG command to be used by clients to designate an end point for STREAM mode transfers.
+       This document specifies a new FTP RANG command to be used by clients to designate an end point for STREAM mode transfers with RETR.
 </p>
 <p>The current alternatives, without being able to specify an end point, are to issue an ABOR command or close the data connection.
 </p>
-<p>HTTP offers similar functionality with the Range: header, where a specific byte range can optionally be requested.
+<p>HTTP offers similar functionality with the Range: header in Section 14.35 of <a class='info' href='#RFC2616'>[RFC2616]<span> (</span><span class='info'>Fielding, R., Gettys, J., Mogul, J., Frystyk, H., Masinter, L., Leach, P., and T. Berners-Lee, &ldquo;Hypertext Transfer Protocol -- HTTP/1.1,&rdquo; June&nbsp;1999.</span><span>)</span></a>, where a specific byte range can optionally be requested.
 </p>
 <p>[[ Discussion of this draft should take place on the FTPEXT2 Working Group mailing list, although this draft is not a WG item: ftpext@ietf.org. ]]
 </p>
@@ -382,11 +382,10 @@ The RANGe Command (RANG)</h3>
    range-command = "RANG" SP 1*DIGIT CRLF
 </pre></div>
 
-<p>The numeric value gives the number of octets of the immediately-
-   following transfer to stop sending at, effectively causing the
+<p>The numeric value gives the number of octets of the immediately-following transfer to stop sending at, effectively causing the
    transmission to be ended.  The server-PI will respond to the RANG command with a
-   350 reply, indicating that the RANG parameter has been saved, an OPTIONAL REST command with starting point, and
-   that another command, which should be either RETR or STOR, should
+   350 reply, indicating that the RANG parameter has been saved, after which the user-PI MAY send an OPTIONAL REST command with starting point, and
+   that another command, which should be RETR, should
    then follow to complete the transfer.
 </p>
 <p>
@@ -469,6 +468,8 @@ User-PI usage of RANG</h3>
    S&gt; 226 Transfer complete.
 </pre></div>
 
+<p>In the above example, data is sent from offset 802816 to, and including, offset 1000000.
+</p>
 <a name="anchor8"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.3"></a><h3>4.3.&nbsp;
@@ -540,6 +541,8 @@ References</h3>
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <h3>7.2.&nbsp;Informative References</h3>
 <table width="99%" border="0">
+<tr><td class="author-text" valign="top"><a name="RFC2616">[RFC2616]</a></td>
+<td class="author-text"><a href="mailto:fielding@ics.uci.edu">Fielding, R.</a>, <a href="mailto:jg@w3.org">Gettys, J.</a>, <a href="mailto:mogul@wrl.dec.com">Mogul, J.</a>, <a href="mailto:frystyk@w3.org">Frystyk, H.</a>, <a href="mailto:masinter@parc.xerox.com">Masinter, L.</a>, <a href="mailto:paulle@microsoft.com">Leach, P.</a>, and <a href="mailto:timbl@w3.org">T. Berners-Lee</a>, &ldquo;<a href="http://tools.ietf.org/html/rfc2616">Hypertext Transfer Protocol -- HTTP/1.1</a>,&rdquo; RFC&nbsp;2616, June&nbsp;1999 (<a href="http://www.rfc-editor.org/rfc/rfc2616.txt">TXT</a>, <a href="http://www.rfc-editor.org/rfc/rfc2616.ps">PS</a>, <a href="http://www.rfc-editor.org/rfc/rfc2616.pdf">PDF</a>, <a href="http://xml.resource.org/public/rfc/html/rfc2616.html">HTML</a>, <a href="http://xml.resource.org/public/rfc/xml/rfc2616.xml">XML</a>).</td></tr>
 <tr><td class="author-text" valign="top"><a name="RFC5797">[RFC5797]</a></td>
 <td class="author-text">Klensin, J. and A. Hoenes, &ldquo;<a href="http://tools.ietf.org/html/rfc5797">FTP Command and Extension Registry</a>,&rdquo; RFC&nbsp;5797, March&nbsp;2010.</td></tr>
 </table>
