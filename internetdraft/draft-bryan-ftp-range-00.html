@@ -252,7 +252,7 @@ Document Conventions</h3>
 </p>
 <p>This document also uses notation defined in STD 9, <a class='info' href='#RFC0959'>[RFC0959]<span> (</span><span class='info'>Postel, J. and J. Reynolds, &ldquo;File Transfer Protocol,&rdquo; October&nbsp;1985.</span><span>)</span></a>.
 	In particular, the terms or commands "reply", "user", "file", "FTP commands", "user-PI" (user protocol interpreter), "server-FTP process",
-    "server-PI", "mode", "type", "STOR", "RETR", and "ASCII", are all used here as defined there. The command "REST" is used as defined in Section 5 of <a class='info' href='#RFC3659'>[RFC3659]<span> (</span><span class='info'>Hethmon, P., &ldquo;Extensions to FTP,&rdquo; March&nbsp;2007.</span><span>)</span></a>.
+    "server-PI", "mode", "Image type", "Stream transfer mode", "type", "STOR", "RETR", and "ASCII", are all used here as defined there. The command "REST" is used as defined in Section 5 of <a class='info' href='#RFC3659'>[RFC3659]<span> (</span><span class='info'>Hethmon, P., &ldquo;Extensions to FTP,&rdquo; March&nbsp;2007.</span><span>)</span></a>.
 </p>
 <p>In the examples of FTP dialogs presented in this document, lines that
    begin "C&gt; " were sent over the control connection from the user-PI to
@@ -406,7 +406,7 @@ to be transferred from the beginning to and end point, or when used in conjuctio
 <a name="rfc.section.4.1"></a><h3>4.1.&nbsp;
 FEAT Command Response for RANG Command</h3>
 
-<p>When replying to the FEAT command <a class='info' href='#RFC2389'>[RFC2389]<span> (</span><span class='info'>Hethmon, P. and R. Elz, &ldquo;Feature negotiation mechanism for the File Transfer Protocol,&rdquo; August&nbsp;1998.</span><span>)</span></a>, a server-FTP process that supports the RANG command, as specified here, MUST include, a line containing exactly the string "REST STREAM".
+<p>When replying to the FEAT command <a class='info' href='#RFC2389'>[RFC2389]<span> (</span><span class='info'>Hethmon, P. and R. Elz, &ldquo;Feature negotiation mechanism for the File Transfer Protocol,&rdquo; August&nbsp;1998.</span><span>)</span></a>, a server-FTP process that supports the RANG command, as specified here, MUST include, a line containing exactly the string "RANG STREAM".
 This string is case insensitive, and MAY be sent in any mixture of upper or lower case, however it SHOULD be sent in upper case. That is, the response SHOULD be:
 </p>
 <p>
@@ -460,7 +460,7 @@ User-PI usage of RANG</h3>
    C&gt; PORT 127,0,0,1,15,107
    S&gt; 200 PORT command successful.
    C&gt; RANG 1000000
-   S&gt; 350 End Byte range at 1000000. Send STORE or RETRIEVE
+   S&gt; 350 End Byte range at 1000000. Send REST or RETRIEVE
    C&gt; REST 802816
    S&gt; 350 Restarting at 802816. Send STORE or RETRIEVE
    C&gt; RETR cap60.pl198.tar
