@@ -4,7 +4,7 @@
 Network Working Group                                           A. Bryan
 Internet-Draft                                              T. Tsujikawa
 Intended status: Standards Track                             D. Stenberg
-Expires: June 18, 2011                                 December 15, 2010
+Expires: June 19, 2011                                 December 16, 2010
 
 
           File Transfer Protocol RANG Command for Byte Ranges
@@ -33,7 +33,7 @@ Status of this Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on June 18, 2011.
+   This Internet-Draft will expire on June 19, 2011.
 
 Copyright Notice
 
@@ -52,30 +52,30 @@ Copyright Notice
 
 
 
-Bryan, et al.             Expires June 18, 2011                 [Page 1]
+Bryan, et al.             Expires June 19, 2011                 [Page 1]
 
 Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
 
 
 Table of Contents
 
-   1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . . . 3
-   2.  Document Conventions  . . . . . . . . . . . . . . . . . . . . . 3
-     2.1.  Basic Tokens  . . . . . . . . . . . . . . . . . . . . . . . 4
-     2.2.  Server Replies  . . . . . . . . . . . . . . . . . . . . . . 4
-   3.  Byte Ranges in STREAM Mode  . . . . . . . . . . . . . . . . . . 4
-   4.  The RANGe Command (RANG)  . . . . . . . . . . . . . . . . . . . 5
-     4.1.  FEAT Command Response for RANG Command  . . . . . . . . . . 6
-     4.2.  User-PI usage of RANG . . . . . . . . . . . . . . . . . . . 7
-     4.3.  RANG Command Errors . . . . . . . . . . . . . . . . . . . . 7
-   5.  IANA Considerations . . . . . . . . . . . . . . . . . . . . . . 8
-   6.  Security Considerations . . . . . . . . . . . . . . . . . . . . 8
-   7.  References  . . . . . . . . . . . . . . . . . . . . . . . . . . 8
-     7.1.  Normative References  . . . . . . . . . . . . . . . . . . . 8
-     7.2.  Informative References  . . . . . . . . . . . . . . . . . . 9
-   Appendix A.  Acknowledgements and Contributors  . . . . . . . . . . 9
-   Appendix B.  Document History . . . . . . . . . . . . . . . . . . . 9
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . . . 9
+   1.  Introduction . . . . . . . . . . . . . . . . . . . . . . . . .  3
+   2.  Document Conventions . . . . . . . . . . . . . . . . . . . . .  3
+     2.1.  Basic Tokens . . . . . . . . . . . . . . . . . . . . . . .  4
+     2.2.  Server Replies . . . . . . . . . . . . . . . . . . . . . .  4
+   3.  Byte Ranges in STREAM Mode . . . . . . . . . . . . . . . . . .  4
+   4.  The RANGe Command (RANG) . . . . . . . . . . . . . . . . . . .  5
+     4.1.  FEAT Command Response for RANG Command . . . . . . . . . .  7
+     4.2.  User-PI usage of RANG  . . . . . . . . . . . . . . . . . .  7
+     4.3.  RANG Command Errors  . . . . . . . . . . . . . . . . . . .  8
+   5.  IANA Considerations  . . . . . . . . . . . . . . . . . . . . .  8
+   6.  Security Considerations  . . . . . . . . . . . . . . . . . . .  9
+   7.  References . . . . . . . . . . . . . . . . . . . . . . . . . .  9
+     7.1.  Normative References . . . . . . . . . . . . . . . . . . .  9
+     7.2.  Informative References . . . . . . . . . . . . . . . . . .  9
+   Appendix A.  Acknowledgements and Contributors . . . . . . . . . .  9
+   Appendix B.  Document History  . . . . . . . . . . . . . . . . . . 10
+   Authors' Addresses . . . . . . . . . . . . . . . . . . . . . . . . 10
 
 
 
@@ -108,7 +108,7 @@ Table of Contents
 
 
 
-Bryan, et al.             Expires June 18, 2011                 [Page 2]
+Bryan, et al.             Expires June 19, 2011                 [Page 2]
 
 Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
 
@@ -164,7 +164,7 @@ Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
 
 
 
-Bryan, et al.             Expires June 18, 2011                 [Page 3]
+Bryan, et al.             Expires June 19, 2011                 [Page 3]
 
 Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
 
@@ -220,7 +220,7 @@ Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
 
 
 
-Bryan, et al.             Expires June 18, 2011                 [Page 4]
+Bryan, et al.             Expires June 19, 2011                 [Page 4]
 
 Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
 
@@ -265,8 +265,8 @@ Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
 4.  The RANGe Command (RANG)
 
    A new command "RANG" is added to the FTP command set to allow the
-   client to specify an end point byte range of a file from a server-FTP
-   process.
+   client to specify both an start point byte range and an end point
+   byte range of a file from a server-FTP process.
 
    The syntax for the RANG command when the current transfer mode is
    STREAM is:
@@ -276,34 +276,66 @@ Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
 
 
 
-Bryan, et al.             Expires June 18, 2011                 [Page 5]
+Bryan, et al.             Expires June 19, 2011                 [Page 5]
 
 Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
 
 
-      range-command = "RANG" SP 1*DIGIT CRLF
+      range-command = "RANG" SP start-point  SP end-point CRLF
+      start-point = 1*DIGIT
+      end-point = 1*DIGIT
 
-   The numeric value gives the number of octets of the immediately-
-   following transfer to stop sending at, effectively causing the
-   transmission to be ended.  The server-PI will respond to the RANG
-   command with a 350 reply, indicating that the RANG parameter has been
-   saved, after which the user-PI MAY send an OPTIONAL REST command with
-   starting point, and that another command, which should be RETR,
-   should then follow to complete the transfer.
+   [NOTE: end-point is inclusive.]
+
+   start-point gives the number of octets of the immediately-following
+   transfer to not actually send, effectively causing the transmission
+   to be started at a later point.  A value of zero effectively causes
+   the transmission to be started at first byte. end-point gives the
+   number of octets of the immediately-following transfer to stop
+   sending at, effectively causing the transmission to be ended.  The
+   server-PI will response to the RANG command with a 350 reply,
+   indicating that RANG parameters has been saved, and that another
+   command, which should be RETR, should then follow to complete the
+   restart.
 
 
       range-response = range-ok / error-response
-      range-ok       = "350" SP *TCHAR CRLF / error-response
+      range-ok       = "350" SP *TCHAR CRLF
 
-   The REST command is intended to complete a failed transfer, by
-   indicating a point to restart from.  The RANG command allows an end
-   point to be indicated.  This allows a file to be transferred from the
-   beginning to and end point, or when used in conjuction with REST,
-   from a restart point mid-file to an end point before the natural end
-   of the file.
+   The RANG command is intended to get partial data of a file.  When the
+   RANG command is used with RETR, client bears the responsibility of
+   merging the retrieved data with partially retrieved file.  It may
+   choose to use the data obtained other than to complete an earlier
+   transfer, or to re-retrieve data that had been retrieved before.
 
-   Server-PI and user-PI that support the RANG command ARE RECOMMENDED
-   to also support REST.
+   The RANG command must be the last command issued before the data
+   transfer command that is to cause a partial data transfer.  The
+   effect of issuing a RANG command at any other time is undefined.  The
+   server-PI may react to a badly positioned RANG command by issuing an
+   error response to the following command, not being a restartable data
+   transfer command, or it may save the start-point and/or end-point
+   byte range value and apply it to the next data transfer command, or
+   it may silently ignore the inappropriate restart attempt.  Because of
+   this, a user-PI that has issued a RANG command, but that has not
+   successfully transmitted the following data transfer command for any
+   reason, should send another RANG command before the next data
+   transfer command.  If that transfer is not to be restarted, then
+   "REST 0" should be issued.
+
+   An error response will follow a RANG command only when the server
+   does not implement the command, or when command syntax is invalid.
+   Any other errors, including such problems as start-point and/or end-
+   point byte range out of range, should be reported when the following
+   transfer command is issued.  Such errors will cause that transfer
+   request to be rejected with an error indicating the invalid restart
+   attempt.
+
+
+
+Bryan, et al.             Expires June 19, 2011                 [Page 6]
+
+Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
+
 
 4.1.  FEAT Command Response for RANG Command
 
@@ -325,16 +357,6 @@ Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
    The ellipses indicate place holders where other features may be
    included, and are not required.  The one-space indentation of the
    feature lines is mandatory [RFC2389].
-
-
-
-
-
-
-
-Bryan, et al.             Expires June 18, 2011                 [Page 6]
-
-Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
 
 
       range-feat = SP "RANG" SP "STREAM"
@@ -361,6 +383,16 @@ Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
    server has not since changed.
 
 
+
+
+
+
+
+Bryan, et al.             Expires June 19, 2011                 [Page 7]
+
+Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
+
+
       C> TYPE I
       S> 200 Type set to I.
       C> PORT 127,0,0,1,15,107
@@ -384,14 +416,6 @@ Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
 
    The server-PI SHOULD reply with a 550 reply if the RANG command is
    used on a file that can not be found.
-
-
-
-
-Bryan, et al.             Expires June 18, 2011                 [Page 7]
-
-Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
-
 
    The server-PI SHOULD reply with a 551 reply if the server-PI is
    unable to deliver the file with TYPE I and MODE S.
@@ -417,6 +441,14 @@ Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
 
    FEAT String: RANG
 
+
+
+
+Bryan, et al.             Expires June 19, 2011                 [Page 8]
+
+Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
+
+
    Command Type: Service execution/parameter setting
 
    Conformance Requirements: Optional
@@ -440,14 +472,6 @@ Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119, March 1997.
-
-
-
-
-Bryan, et al.             Expires June 18, 2011                 [Page 8]
-
-Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
-
 
    [RFC2389]  Hethmon, P. and R. Elz, "Feature negotiation mechanism for
               the File Transfer Protocol", RFC 2389, August 1998.
@@ -474,6 +498,13 @@ Appendix A.  Acknowledgements and Contributors
    Portions of [RFC3659] were wholly reused in this document.
 
 
+
+
+Bryan, et al.             Expires June 19, 2011                 [Page 9]
+
+Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
+
+
 Appendix B.  Document History
 
    [[ to be removed by the RFC editor before publication as an RFC. ]]
@@ -496,13 +527,6 @@ Authors' Addresses
 
    Email: anthonybryan@gmail.com
    URI:   http://www.metalinker.org
-
-
-
-
-Bryan, et al.             Expires June 18, 2011                 [Page 9]
-
-Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
 
 
    Tatsuhiro Tsujikawa
@@ -532,29 +556,5 @@ Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Bryan, et al.             Expires June 18, 2011                [Page 10]
+Bryan, et al.             Expires June 19, 2011                [Page 10]
 
