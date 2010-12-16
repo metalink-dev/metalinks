@@ -151,7 +151,7 @@
 <h3>Abstract</h3>
 
 <p>The File Transfer Protocol offers REST, to designate a starting point for a transfer, but does not currently offer any method to specify an end point.
-       This document specifies a new FTP RANG command to be used by clients to designate an end point for STREAM mode transfers with RETR.
+       This document specifies a new FTP RANG command to be used by clients to designate a start and end point for STREAM mode transfers with RETR.
 
 </p>
 <h3>Status of this Memo</h3>
@@ -231,7 +231,7 @@ Authors' Addresses<br />
 Introduction</h3>
 
 <p>The File Transfer Protocol offers REST  <a class='info' href='#RFC3659'>[RFC3659]<span> (</span><span class='info'>Hethmon, P., &ldquo;Extensions to FTP,&rdquo; March&nbsp;2007.</span><span>)</span></a>, to designate a starting point for a transfer, but does not currently offer any method to specify an end point.
-       This document specifies a new FTP RANG command to be used by clients to designate an end point for STREAM mode transfers with RETR.
+       This document specifies a new FTP RANG command to be used by clients to designate a start and end point for STREAM mode transfers with RETR.
 </p>
 <p>The current alternatives, without being able to specify an end point, are to issue an ABOR command or close the data connection.
 </p>
@@ -392,12 +392,12 @@ byte range of a file from a server-FTP process.
 immediately-following transfer to not actually send, effectively
 causing the transmission to be started at a later point. A
 value of zero effectively causes the transmission to be started
-at first byte.  end-point gives the number of octets of the
+at first byte.  end-point gives the number of octets, counted from the beginning of the file, of the
 immediately-following transfer to stop sending at, effectively
-causing the transmission to be ended.  The server-PI will
+causing the transmission to be ended.  (That is, the end point is relative to the start of the file and not relative to the start point). The server-PI will
 response to the RANG command with a 350 reply, indicating that
 RANG parameters has been saved, and that another command, which
-should be RETR, should then follow to complete the restart.
+should be RETR, should then follow to complete the ranged request.
 </p>
 <p>
 <p>
@@ -494,10 +494,8 @@ User-PI usage of RANG</h3>
    S&gt; 200 Type set to I.
    C&gt; PORT 127,0,0,1,15,107
    S&gt; 200 PORT command successful.
-   C&gt; RANG 1000000
-   S&gt; 350 End Byte range at 1000000. Send REST or RETRIEVE
-   C&gt; REST 802816
-   S&gt; 350 Restarting at 802816. Send STORE or RETRIEVE
+   C&gt; RANG 802816 1000000
+   S&gt; 350 Restarting at 802816. End Byte range at 1000000. Send RETRIEVE
    C&gt; RETR cap60.pl198.tar
    S&gt; 150 Opening BINARY mode data connection
    [...]
@@ -521,7 +519,7 @@ RANG Command Errors</h3>
 </p>
 <p>The server-PI SHOULD reply with a 553 reply if the user requests the RANG of a directory, which is not allowed.
 </p>
-<p>The server-PI SHOULD reply with a 5yz reply if the specified end point is larger than the actual file.
+<p>The server-PI SHOULD reply with a 5yz reply if the specified end point is larger than the actual file or the end point is before the start point.
 </p>
 <a name="IANA"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
