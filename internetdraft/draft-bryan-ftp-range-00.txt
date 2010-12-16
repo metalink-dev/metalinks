@@ -15,8 +15,8 @@ Abstract
    The File Transfer Protocol offers REST, to designate a starting point
    for a transfer, but does not currently offer any method to specify an
    end point.  This document specifies a new FTP RANG command to be used
-   by clients to designate an end point for STREAM mode transfers with
-   RETR.
+   by clients to designate a start and end point for STREAM mode
+   transfers with RETR.
 
 Status of this Memo
 
@@ -118,8 +118,8 @@ Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
    The File Transfer Protocol offers REST [RFC3659], to designate a
    starting point for a transfer, but does not currently offer any
    method to specify an end point.  This document specifies a new FTP
-   RANG command to be used by clients to designate an end point for
-   STREAM mode transfers with RETR.
+   RANG command to be used by clients to designate a start and end point
+   for STREAM mode transfers with RETR.
 
    The current alternatives, without being able to specify an end point,
    are to issue an ABOR command or close the data connection.
@@ -291,12 +291,14 @@ Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
    transfer to not actually send, effectively causing the transmission
    to be started at a later point.  A value of zero effectively causes
    the transmission to be started at first byte. end-point gives the
-   number of octets of the immediately-following transfer to stop
-   sending at, effectively causing the transmission to be ended.  The
-   server-PI will response to the RANG command with a 350 reply,
-   indicating that RANG parameters has been saved, and that another
-   command, which should be RETR, should then follow to complete the
-   restart.
+   number of octets, counted from the beginning of the file, of the
+   immediately-following transfer to stop sending at, effectively
+   causing the transmission to be ended.  (That is, the end point is
+   relative to the start of the file and not relative to the start
+   point).  The server-PI will response to the RANG command with a 350
+   reply, indicating that RANG parameters has been saved, and that
+   another command, which should be RETR, should then follow to complete
+   the ranged request.
 
 
       range-response = range-ok / error-response
@@ -327,8 +329,6 @@ Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
    Any other errors, including such problems as start-point and/or end-
    point byte range out of range, should be reported when the following
    transfer command is issued.  Such errors will cause that transfer
-   request to be rejected with an error indicating the invalid restart
-   attempt.
 
 
 
@@ -336,6 +336,9 @@ Bryan, et al.             Expires June 19, 2011                 [Page 6]
 
 Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
 
+
+   request to be rejected with an error indicating the invalid restart
+   attempt.
 
 4.1.  FEAT Command Response for RANG Command
 
@@ -385,26 +388,21 @@ Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
 
 
 
-
-
-
 Bryan, et al.             Expires June 19, 2011                 [Page 7]
 
 Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
 
 
-      C> TYPE I
-      S> 200 Type set to I.
-      C> PORT 127,0,0,1,15,107
-      S> 200 PORT command successful.
-      C> RANG 1000000
-      S> 350 End Byte range at 1000000. Send REST or RETRIEVE
-      C> REST 802816
-      S> 350 Restarting at 802816. Send STORE or RETRIEVE
-      C> RETR cap60.pl198.tar
-      S> 150 Opening BINARY mode data connection
-      [...]
-      S> 226 Transfer complete.
+   C> TYPE I
+   S> 200 Type set to I.
+   C> PORT 127,0,0,1,15,107
+   S> 200 PORT command successful.
+   C> RANG 802816 1000000
+   S> 350 Restarting at 802816. End Byte range at 1000000. Send RETRIEVE
+   C> RETR cap60.pl198.tar
+   S> 150 Opening BINARY mode data connection
+   [...]
+   S> 226 Transfer complete.
 
    In the above example, data is sent from offset 802816 to, and
    including, offset 1000000.
@@ -427,7 +425,8 @@ Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
    RANG of a directory, which is not allowed.
 
    The server-PI SHOULD reply with a 5yz reply if the specified end
-   point is larger than the actual file.
+   point is larger than the actual file or the end point is before the
+   start point.
 
 
 5.  IANA Considerations
@@ -441,6 +440,7 @@ Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
 
    FEAT String: RANG
 
+   Command Type: Service execution/parameter setting
 
 
 
@@ -448,8 +448,6 @@ Bryan, et al.             Expires June 19, 2011                 [Page 8]
 
 Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
 
-
-   Command Type: Service execution/parameter setting
 
    Conformance Requirements: Optional
 
@@ -496,6 +494,8 @@ Appendix A.  Acknowledgements and Contributors
    Thanks to ...
 
    Portions of [RFC3659] were wholly reused in this document.
+
+
 
 
 
