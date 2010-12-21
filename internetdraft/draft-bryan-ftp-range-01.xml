@@ -296,7 +296,7 @@ This string is case insensitive, and MAY be sent in any mixture of upper or lowe
 
 <t>
    Assume that the transfer of a largish file has previously been
-   interrupted after 802816 octets had been received, that the tranfer should stop at octet 1000000 of the file, that the previous
+   interrupted after 802816 octets had been received, that the transfer should stop at octet 1000000 of the file, that the previous
    transfer was with TYPE=I, and that it has been verified that the file
    on the server has not since changed.
 <figure>
@@ -342,7 +342,7 @@ This string is case insensitive, and MAY be sent in any mixture of upper or lowe
 	<t>This new command is added to the "FTP Commands and Extensions" registry created by <xref target="RFC5797"/>.</t>
 	<t>Command Name: RANG</t>
 	<t>Description: End point byte range (for STREAM mode).</t>
-	<t>FEAT String: RANG</t>
+	<t>FEAT String: RANG STREAM</t>
 	<t>Command Type: Service execution/parameter setting</t>
 	<t>Conformance Requirements: Optional</t>
 	<t>Reference: This specification</t>
