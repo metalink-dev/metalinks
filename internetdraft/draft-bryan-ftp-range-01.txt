@@ -4,7 +4,7 @@
 Network Working Group                                           A. Bryan
 Internet-Draft                                              T. Tsujikawa
 Intended status: Standards Track                             D. Stenberg
-Expires: June 23, 2011                                 December 20, 2010
+Expires: June 24, 2011                                 December 21, 2010
 
 
           File Transfer Protocol RANG Command for Byte Ranges
@@ -33,7 +33,7 @@ Status of this Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on June 23, 2011.
+   This Internet-Draft will expire on June 24, 2011.
 
 Copyright Notice
 
@@ -52,7 +52,7 @@ Copyright Notice
 
 
 
-Bryan, et al.             Expires June 23, 2011                 [Page 1]
+Bryan, et al.             Expires June 24, 2011                 [Page 1]
 
 Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
 
@@ -108,7 +108,7 @@ Table of Contents
 
 
 
-Bryan, et al.             Expires June 23, 2011                 [Page 2]
+Bryan, et al.             Expires June 24, 2011                 [Page 2]
 
 Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
 
@@ -164,7 +164,7 @@ Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
 
 
 
-Bryan, et al.             Expires June 23, 2011                 [Page 3]
+Bryan, et al.             Expires June 24, 2011                 [Page 3]
 
 Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
 
@@ -220,7 +220,7 @@ Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
 
 
 
-Bryan, et al.             Expires June 23, 2011                 [Page 4]
+Bryan, et al.             Expires June 24, 2011                 [Page 4]
 
 Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
 
@@ -276,7 +276,7 @@ Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
 
 
 
-Bryan, et al.             Expires June 23, 2011                 [Page 5]
+Bryan, et al.             Expires June 24, 2011                 [Page 5]
 
 Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
 
@@ -332,7 +332,7 @@ Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
 
 
 
-Bryan, et al.             Expires June 23, 2011                 [Page 6]
+Bryan, et al.             Expires June 24, 2011                 [Page 6]
 
 Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
 
@@ -380,7 +380,7 @@ Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
       S> 211 END
 
    Assume that the transfer of a largish file has previously been
-   interrupted after 802816 octets had been received, that the tranfer
+   interrupted after 802816 octets had been received, that the transfer
    should stop at octet 1000000 of the file, that the previous transfer
    was with TYPE=I, and that it has been verified that the file on the
    server has not since changed.
@@ -388,7 +388,7 @@ Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
 
 
 
-Bryan, et al.             Expires June 23, 2011                 [Page 7]
+Bryan, et al.             Expires June 24, 2011                 [Page 7]
 
 Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
 
@@ -438,13 +438,13 @@ Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
 
    Description: End point byte range (for STREAM mode).
 
-   FEAT String: RANG
+   FEAT String: RANG STREAM
 
    Command Type: Service execution/parameter setting
 
 
 
-Bryan, et al.             Expires June 23, 2011                 [Page 8]
+Bryan, et al.             Expires June 24, 2011                 [Page 8]
 
 Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
 
@@ -500,7 +500,7 @@ Appendix A.  Acknowledgements and Contributors
 
 
 
-Bryan, et al.             Expires June 23, 2011                 [Page 9]
+Bryan, et al.             Expires June 24, 2011                 [Page 9]
 
 Internet-Draft      FTP RANG Command for Byte Ranges       December 2010
 
@@ -556,5 +556,5 @@ Authors' Addresses
 
 
 
-Bryan, et al.             Expires June 23, 2011                [Page 10]
+Bryan, et al.             Expires June 24, 2011                [Page 10]
 
