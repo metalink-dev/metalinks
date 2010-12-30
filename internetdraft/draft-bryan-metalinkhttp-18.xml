@@ -159,7 +159,8 @@ DYzYjRjYzFhOTlmNTQwYzI2M2QwM2U2MQ==
     <section title="Requirements" anchor="req">
       <t>In this context, "Metalink" refers to Metalink/HTTP which consists of mirrors and cryptographic hashes in HTTP Headers as described in this document. "Metalink/XML" refers to the XML format described in <xref target="RFC5854"/>.</t>
 	  
-      <t>Metalink resources include a Link header <xref target="RFC5988"/> to present a list of mirrors in the response to a client request for the resource. The cryptographic hash of a resource must be included via Instance Digests in HTTP <xref target="RFC3230"/>.</t>
+      <t>Metalink resources include a Link header <xref target="RFC5988"/> to present a list of mirrors in the response to a client request for the resource. The cryptographic hash of a resource must be included via Instance Digests in HTTP <xref target="RFC3230"/>. Valid algorithms are found in
+	  the IANA registry named "Hypertext Transfer Protocol (HTTP) Digest Algorithm Values" at http://www.iana.org/assignments/http-dig-alg/http-dig-alg.xhtml .</t>
 	  
 	  <t>Metalink servers are HTTP servers with one or more Metalink
  resources. Mirror and cryptographic hash information provided by the originating Metalink server MUST be considered authoritative. Metalink servers and their associated mirror servers
@@ -169,7 +170,7 @@ DYzYjRjYzFhOTlmNTQwYzI2M2QwM2U2MQ==
       Mirror servers MAY be Metalink servers. Mirror servers are RECOMMENDED to support serving partial content. HTTP mirror servers are RECOMMENDED to share the same ETag policy as the originating Metalink server. HTTP Mirror servers are RECOMMENDED to support Instance Digests in HTTP <xref target="RFC3230"/>.</t>
 
 
-      <t>Metalink clients use the mirrors provided by a Metalink server with Link header <xref target="RFC5988"/>. Metalink clients MUST support HTTP and are RECOMMENDED to support FTP. Metalink clients MAY support BitTorrent, 
+      <t>Metalink clients use the mirrors provided by a Metalink server with Link header <xref target="RFC5988"/>. Metalink clients MUST support HTTP and are RECOMMENDED to support FTP <xref target="RFC0959"/>. Metalink clients MAY support BitTorrent <xref target="BITTORRENT"/>, 
       or other download methods. Metalink clients are RECOMMENDED to switch downloads from one mirror to another if a mirror becomes unreachable. Metalink clients are RECOMMENDED to support multi-source, or parallel, 
       downloads, where portions of a file can be downloaded from multiple mirrors simultaneously (and optionally, from Peer-to-Peer sources). Metalink clients MUST support Instance Digests in HTTP <xref target="RFC3230"/> by 
       requesting and verifying cryptographic hashes. Metalink clients MAY make use of digital signatures if they are offered.</t>
@@ -208,7 +209,7 @@ pri=2; geo="gb"; depth=1
 
 <section title="Coordinated Mirror Policies" anchor="coordinatedpolicies">
       <t>There are two types of mirror servers: preferred and normal. Preferred mirror servers are HTTP mirror servers that MUST share the same ETag policy as the originating Metalink server. Preferred mirrors make it possible to detect early on, before data is transferred, if the file requested matches the desired file.
-      Preferred HTTP mirror servers have a "pref" value of 1. By default, if unspecified then mirrors are considered "normal" and do not share the same ETag policy. FTP mirrors, as they do not emit ETags, MUST always be considered "normal". (<xref target="draft-ietf-ftpext2-hash"/> allows for FTP mirrors to be coordinated and provide file hashes).</t>
+      Preferred HTTP mirror servers have a "pref" value of 1. By default, if unspecified then mirrors are considered "normal" and do not share the same ETag policy. FTP mirrors, as they do not emit ETags, are considered "normal". (<xref target="draft-ietf-ftpext2-hash"/> allows for FTP mirrors to be coordinated and provide file hashes).</t>
 	  <t>HTTP Mirror servers SHOULD support Instance Digests in HTTP <xref target="RFC3230"/>. Optimally, mirror servers will share the same ETag policy and support Instance Digests in HTTP.</t>
 	  
       <t>[[Suggestion: In order for clients to identify servers that have coordinated ETag policies, the ETag MUST begin with "Metalink:", e.g.
@@ -259,7 +260,7 @@ type="application/metalink4+xml"
     </section>
 
     <section title="OpenPGP Signatures" anchor="openpgp">
-      <t>OpenPGP signatures are specified with the Link header <xref target="RFC5988"/> and a relation type of "describedby" and a type parameter of "application/pgp-signature".</t>
+      <t>OpenPGP signatures <xref target="RFC3156"/> are specified with the Link header <xref target="RFC5988"/> and a relation type of "describedby" and a type parameter of "application/pgp-signature".</t>
 <t><figure> 
 	  <preamble>A brief Metalink server response with OpenPGP signature only:</preamble>
 	  <artwork type="example">
@@ -526,7 +527,7 @@ other mirrors.</t>
 	      <t>Currently, some of the digest values defined in Instance Digests in HTTP <xref target="RFC3230"/> are considered insecure. 
           These include the whole Message Digest family of algorithms which are not suitable for cryptographically strong verification. Malicious people could provide files that appear to be 
           identical to another file because of a collision, i.e. the weak cryptographic hashes of the intended file and a substituted malicious file could match.</t>
-          <t>If a Metalink contains whole file hashes as described in <xref target="wholehashes"/>, it SHOULD include "sha-256" which is SHA-256, as specified in <xref target="FIPS-180-3"/>, or stronger. It MAY also include other hashes.</t>
+          <t>If a Metalink contains whole file hashes as described in <xref target="wholehashes"/>, it SHOULD include SHA-256, as specified in <xref target="FIPS-180-3"/>, or stronger. It MAY also include other hashes.</t>
 
 	    </section>	
 		
@@ -546,7 +547,35 @@ other mirrors.</t>
 	<back> 
 	  
 	  <references title="Normative References">
-	  
+
+<reference anchor="BITTORRENT" target="http://www.bittorrent.org/beps/bep_0003.html">
+<front>
+<title>The BitTorrent Protocol Specification</title>
+
+<author initials="B" surname="Cohen" fullname="Bram Cohen">
+    <organization/>
+</author>
+
+
+<date month="February" day="28" year="2008"/>
+</front>
+
+<seriesInfo name="BITTORRENT" value="11031"/>
+</reference>	
+
+<reference anchor="RFC0959">
+
+<front>
+<title>File Transfer Protocol</title>
+<author initials="J." surname="Postel" fullname="J. Postel">
+<organization/></author>
+<author initials="J." surname="Reynolds" fullname="J. Reynolds">
+<organization/></author>
+<date year="1985" month="October"/></front>
+
+<seriesInfo name="STD" value="9"/>
+<seriesInfo name="RFC" value="0959"/>
+</reference>
 
 <reference anchor="RFC2119">
 
@@ -609,6 +638,27 @@ other mirrors.</t>
 <date year="1999" month="June"/></front>
 
 <seriesInfo name="RFC" value="2616"/>
+</reference>
+
+<reference anchor='RFC3156'>
+
+<front>
+<title>MIME Security with OpenPGP</title>
+<author initials='M.' surname='Elkins' fullname='M. Elkins'>
+<organization /></author>
+<author initials='D.' surname='Del Torto' fullname='D. Del Torto'>
+<organization /></author>
+<author initials='R.' surname='Levien' fullname='R. Levien'>
+<organization /></author>
+<author initials='T.' surname='Roessler' fullname='T. Roessler'>
+<organization /></author>
+<date year='2001' month='August' />
+<abstract>
+
+<t>This document describes how the OpenPGP Message Format can be used to provide privacy and authentication using the Multipurpose Internet Mail Extensions (MIME) security content types described in RFC 1847. [STANDARDS-TRACK]</t></abstract></front>
+
+<seriesInfo name='RFC' value='3156' />
+<format type='TXT' octets='26809' target='http://www.rfc-editor.org/rfc/rfc3156.txt' />
 </reference>
 
 
