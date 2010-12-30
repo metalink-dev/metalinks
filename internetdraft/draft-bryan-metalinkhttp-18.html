@@ -144,13 +144,13 @@
 <tr><td class="header">Network Working Group</td><td class="header">A. Bryan</td></tr>
 <tr><td class="header">Internet-Draft</td><td class="header">N. McNab</td></tr>
 <tr><td class="header">Intended status: Standards Track</td><td class="header">H. Nordstrom</td></tr>
-<tr><td class="header">Expires: May 29, 2011</td><td class="header">T. Tsujikawa</td></tr>
+<tr><td class="header">Expires: July 2, 2011</td><td class="header">T. Tsujikawa</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">&nbsp;</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">P. Poeml</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">MirrorBrain</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">A. Ford</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">Roke Manor Research</td></tr>
-<tr><td class="header">&nbsp;</td><td class="header">November 25, 2010</td></tr>
+<tr><td class="header">&nbsp;</td><td class="header">December 29, 2010</td></tr>
 </table></td></tr></table>
 <h1><br />Metalink/HTTP: Mirrors and Cryptographic Hashes in HTTP Headers<br />draft-bryan-metalinkhttp-18</h1>
 
@@ -175,7 +175,7 @@ and may be updated, replaced, or obsoleted by other documents at any time.
 It is inappropriate to use Internet-Drafts as reference material or to cite
 them other than as &ldquo;work in progress.&rdquo;</p>
 <p>
-This Internet-Draft will expire on May 29, 2011.</p>
+This Internet-Draft will expire on July 2, 2011.</p>
 
 <h3>Copyright Notice</h3>
 <p>
@@ -335,7 +335,8 @@ Requirements</h3>
 
 <p>In this context, "Metalink" refers to Metalink/HTTP which consists of mirrors and cryptographic hashes in HTTP Headers as described in this document. "Metalink/XML" refers to the XML format described in <a class='info' href='#RFC5854'>[RFC5854]<span> (</span><span class='info'>Bryan, A., Tsujikawa, T., McNab, N., and P. Poeml, &ldquo;The Metalink Download Description Format,&rdquo; June&nbsp;2010.</span><span>)</span></a>.
 </p>
-<p>Metalink resources include a Link header <a class='info' href='#RFC5988'>[RFC5988]<span> (</span><span class='info'>Nottingham, M., &ldquo;Web Linking,&rdquo; October&nbsp;2010.</span><span>)</span></a> to present a list of mirrors in the response to a client request for the resource. The cryptographic hash of a resource must be included via Instance Digests in HTTP <a class='info' href='#RFC3230'>[RFC3230]<span> (</span><span class='info'>Mogul, J. and A. Van Hoff, &ldquo;Instance Digests in HTTP,&rdquo; January&nbsp;2002.</span><span>)</span></a>.
+<p>Metalink resources include a Link header <a class='info' href='#RFC5988'>[RFC5988]<span> (</span><span class='info'>Nottingham, M., &ldquo;Web Linking,&rdquo; October&nbsp;2010.</span><span>)</span></a> to present a list of mirrors in the response to a client request for the resource. The cryptographic hash of a resource must be included via Instance Digests in HTTP <a class='info' href='#RFC3230'>[RFC3230]<span> (</span><span class='info'>Mogul, J. and A. Van Hoff, &ldquo;Instance Digests in HTTP,&rdquo; January&nbsp;2002.</span><span>)</span></a>. Valid algorithms are found in
+	  the IANA registry named "Hypertext Transfer Protocol (HTTP) Digest Algorithm Values" at http://www.iana.org/assignments/http-dig-alg/http-dig-alg.xhtml .
 </p>
 <p>Metalink servers are HTTP servers with one or more Metalink
  resources. Mirror and cryptographic hash information provided by the originating Metalink server MUST be considered authoritative. Metalink servers and their associated mirror servers
@@ -344,7 +345,7 @@ Requirements</h3>
 <p>Mirror servers are typically FTP or HTTP servers that "mirror" another server. That is, they provide identical copies of (at least some) files that are also on the mirrored server. 
       Mirror servers MAY be Metalink servers. Mirror servers are RECOMMENDED to support serving partial content. HTTP mirror servers are RECOMMENDED to share the same ETag policy as the originating Metalink server. HTTP Mirror servers are RECOMMENDED to support Instance Digests in HTTP <a class='info' href='#RFC3230'>[RFC3230]<span> (</span><span class='info'>Mogul, J. and A. Van Hoff, &ldquo;Instance Digests in HTTP,&rdquo; January&nbsp;2002.</span><span>)</span></a>.
 </p>
-<p>Metalink clients use the mirrors provided by a Metalink server with Link header <a class='info' href='#RFC5988'>[RFC5988]<span> (</span><span class='info'>Nottingham, M., &ldquo;Web Linking,&rdquo; October&nbsp;2010.</span><span>)</span></a>. Metalink clients MUST support HTTP and are RECOMMENDED to support FTP. Metalink clients MAY support BitTorrent, 
+<p>Metalink clients use the mirrors provided by a Metalink server with Link header <a class='info' href='#RFC5988'>[RFC5988]<span> (</span><span class='info'>Nottingham, M., &ldquo;Web Linking,&rdquo; October&nbsp;2010.</span><span>)</span></a>. Metalink clients MUST support HTTP and are RECOMMENDED to support FTP <a class='info' href='#RFC0959'>[RFC0959]<span> (</span><span class='info'>Postel, J. and J. Reynolds, &ldquo;File Transfer Protocol,&rdquo; October&nbsp;1985.</span><span>)</span></a>. Metalink clients MAY support BitTorrent <a class='info' href='#BITTORRENT'>[BITTORRENT]<span> (</span><span class='info'>Cohen, B., &ldquo;The BitTorrent Protocol Specification,&rdquo; February&nbsp;2008.</span><span>)</span></a>, 
       or other download methods. Metalink clients are RECOMMENDED to switch downloads from one mirror to another if a mirror becomes unreachable. Metalink clients are RECOMMENDED to support multi-source, or parallel, 
       downloads, where portions of a file can be downloaded from multiple mirrors simultaneously (and optionally, from Peer-to-Peer sources). Metalink clients MUST support Instance Digests in HTTP <a class='info' href='#RFC3230'>[RFC3230]<span> (</span><span class='info'>Mogul, J. and A. Van Hoff, &ldquo;Instance Digests in HTTP,&rdquo; January&nbsp;2002.</span><span>)</span></a> by 
       requesting and verifying cryptographic hashes. Metalink clients MAY make use of digital signatures if they are offered.
@@ -396,7 +397,7 @@ Mirror Geographical Location</h3>
 Coordinated Mirror Policies</h3>
 
 <p>There are two types of mirror servers: preferred and normal. Preferred mirror servers are HTTP mirror servers that MUST share the same ETag policy as the originating Metalink server. Preferred mirrors make it possible to detect early on, before data is transferred, if the file requested matches the desired file.
-      Preferred HTTP mirror servers have a "pref" value of 1. By default, if unspecified then mirrors are considered "normal" and do not share the same ETag policy. FTP mirrors, as they do not emit ETags, MUST always be considered "normal". (<a class='info' href='#draft-ietf-ftpext2-hash'>[draft&#8209;ietf&#8209;ftpext2&#8209;hash]<span> (</span><span class='info'>Bryan, A., Kosse, T., and D. Stenberg, &ldquo;FTP Extensions for Cryptographic Hashes,&rdquo; November&nbsp;2010.</span><span>)</span></a> allows for FTP mirrors to be coordinated and provide file hashes).
+      Preferred HTTP mirror servers have a "pref" value of 1. By default, if unspecified then mirrors are considered "normal" and do not share the same ETag policy. FTP mirrors, as they do not emit ETags, are considered "normal". (<a class='info' href='#draft-ietf-ftpext2-hash'>[draft&#8209;ietf&#8209;ftpext2&#8209;hash]<span> (</span><span class='info'>Bryan, A., Kosse, T., and D. Stenberg, &ldquo;FTP Extensions for Cryptographic Hashes,&rdquo; November&nbsp;2010.</span><span>)</span></a> allows for FTP mirrors to be coordinated and provide file hashes).
 </p>
 <p>HTTP Mirror servers SHOULD support Instance Digests in HTTP <a class='info' href='#RFC3230'>[RFC3230]<span> (</span><span class='info'>Mogul, J. and A. Van Hoff, &ldquo;Instance Digests in HTTP,&rdquo; January&nbsp;2002.</span><span>)</span></a>. Optimally, mirror servers will share the same ETag policy and support Instance Digests in HTTP.
 </p>
@@ -460,7 +461,7 @@ Metalink/XML Files</h3>
 <a name="rfc.section.5"></a><h3>5.&nbsp;
 OpenPGP Signatures</h3>
 
-<p>OpenPGP signatures are specified with the Link header <a class='info' href='#RFC5988'>[RFC5988]<span> (</span><span class='info'>Nottingham, M., &ldquo;Web Linking,&rdquo; October&nbsp;2010.</span><span>)</span></a> and a relation type of "describedby" and a type parameter of "application/pgp-signature".
+<p>OpenPGP signatures <a class='info' href='#RFC3156'>[RFC3156]<span> (</span><span class='info'>Elkins, M., Del Torto, D., Levien, R., and T. Roessler, &ldquo;MIME Security with OpenPGP,&rdquo; August&nbsp;2001.</span><span>)</span></a> are specified with the Link header <a class='info' href='#RFC5988'>[RFC5988]<span> (</span><span class='info'>Nottingham, M., &ldquo;Web Linking,&rdquo; October&nbsp;2010.</span><span>)</span></a> and a relation type of "describedby" and a type parameter of "application/pgp-signature".
 </p>
 <p>
 <p>A brief Metalink server response with OpenPGP signature only:
@@ -765,7 +766,7 @@ Cryptographic Hashes</h3>
           These include the whole Message Digest family of algorithms which are not suitable for cryptographically strong verification. Malicious people could provide files that appear to be 
           identical to another file because of a collision, i.e. the weak cryptographic hashes of the intended file and a substituted malicious file could match.
 </p>
-<p>If a Metalink contains whole file hashes as described in <a class='info' href='#wholehashes'>Section&nbsp;6<span> (</span><span class='info'>Cryptographic Hashes of Whole Files</span><span>)</span></a>, it SHOULD include "sha-256" which is SHA-256, as specified in <a class='info' href='#FIPS-180-3'>[FIPS&#8209;180&#8209;3]<span> (</span><span class='info'>National Institute of Standards and Technology (NIST), &ldquo;Secure Hash Standard (SHS),&rdquo; October&nbsp;2008.</span><span>)</span></a>, or stronger. It MAY also include other hashes.
+<p>If a Metalink contains whole file hashes as described in <a class='info' href='#wholehashes'>Section&nbsp;6<span> (</span><span class='info'>Cryptographic Hashes of Whole Files</span><span>)</span></a>, it SHOULD include SHA-256, as specified in <a class='info' href='#FIPS-180-3'>[FIPS&#8209;180&#8209;3]<span> (</span><span class='info'>National Institute of Standards and Technology (NIST), &ldquo;Secure Hash Standard (SHS),&rdquo; October&nbsp;2008.</span><span>)</span></a>, or stronger. It MAY also include other hashes.
 </p>
 <a name="anchor13"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
@@ -780,14 +781,20 @@ Signing</h3>
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <h3>11.&nbsp;Normative References</h3>
 <table width="99%" border="0">
+<tr><td class="author-text" valign="top"><a name="BITTORRENT">[BITTORRENT]</a></td>
+<td class="author-text">Cohen, B., &ldquo;<a href="http://www.bittorrent.org/beps/bep_0003.html">The BitTorrent Protocol Specification</a>,&rdquo; BITTORRENT&nbsp;11031, February&nbsp;2008.</td></tr>
 <tr><td class="author-text" valign="top"><a name="FIPS-180-3">[FIPS-180-3]</a></td>
 <td class="author-text">National Institute of Standards and Technology (NIST), &ldquo;Secure Hash Standard (SHS),&rdquo; FIPS PUB&nbsp;180-3, October&nbsp;2008.</td></tr>
 <tr><td class="author-text" valign="top"><a name="ISO3166-1">[ISO3166-1]</a></td>
 <td class="author-text">International Organization for Standardization, &ldquo;ISO 3166-1:2006.  Codes for the representation of names of countries and their subdivisions -- Part 1: Country codes,&rdquo; November&nbsp;2006.</td></tr>
+<tr><td class="author-text" valign="top"><a name="RFC0959">[RFC0959]</a></td>
+<td class="author-text">Postel, J. and J. Reynolds, &ldquo;<a href="http://tools.ietf.org/html/rfc0959">File Transfer Protocol</a>,&rdquo; STD&nbsp;9, RFC&nbsp;0959, October&nbsp;1985.</td></tr>
 <tr><td class="author-text" valign="top"><a name="RFC2119">[RFC2119]</a></td>
 <td class="author-text"><a href="mailto:sob@harvard.edu">Bradner, S.</a>, &ldquo;<a href="http://tools.ietf.org/html/rfc2119">Key words for use in RFCs to Indicate Requirement Levels</a>,&rdquo; BCP&nbsp;14, RFC&nbsp;2119, March&nbsp;1997.</td></tr>
 <tr><td class="author-text" valign="top"><a name="RFC2616">[RFC2616]</a></td>
 <td class="author-text">Fielding, R., Gettys, J., Mogul, J., Frystyk, H., Masinter, L., Leach, P., and T. Berners-Lee, &ldquo;<a href="http://tools.ietf.org/html/rfc2616">Hypertext Transfer Protocol -- HTTP/1.1</a>,&rdquo; RFC&nbsp;2616, June&nbsp;1999.</td></tr>
+<tr><td class="author-text" valign="top"><a name="RFC3156">[RFC3156]</a></td>
+<td class="author-text">Elkins, M., Del Torto, D., Levien, R., and T. Roessler, &ldquo;<a href="http://tools.ietf.org/html/rfc3156">MIME Security with OpenPGP</a>,&rdquo; RFC&nbsp;3156, August&nbsp;2001 (<a href="http://www.rfc-editor.org/rfc/rfc3156.txt">TXT</a>).</td></tr>
 <tr><td class="author-text" valign="top"><a name="RFC3230">[RFC3230]</a></td>
 <td class="author-text">Mogul, J. and A. Van Hoff, &ldquo;<a href="http://tools.ietf.org/html/rfc3230">Instance Digests in HTTP</a>,&rdquo; RFC&nbsp;3230, January&nbsp;2002.</td></tr>
 <tr><td class="author-text" valign="top"><a name="RFC3986">[RFC3986]</a></td>
