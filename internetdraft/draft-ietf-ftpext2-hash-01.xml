@@ -41,7 +41,7 @@
 	      <uri>http://www.haxx.se/</uri>
 	    </address>
       </author>
-	<date year="2010"/>
+	<date year="2011"/>
 	  <workgroup>FTPEXT2 Working Group</workgroup>
       <abstract>
 	<t>The File Transfer Protocol does not offer any method to verify the integrity of a transferred file, nor can two files be compared against each other without actually transferring them first. Cryptographic hashes are a possible solution to this problem. In the past, several attempts have been made to add commands to obtain checksums and hashes,
