@@ -14,7 +14,7 @@ Expires: July 5, 2011                                       T. Tsujikawa
 
 
     Metalink/HTTP: Mirrors and Cryptographic Hashes in HTTP Headers
-                      draft-bryan-metalinkhttp-18
+                      draft-bryan-metalinkhttp-19
 
 Abstract
 

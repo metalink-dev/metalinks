@@ -47,7 +47,7 @@
 	      <uri>http://www.haxx.se/</uri>
 	    </address>
       </author>
-	<date year="2010"/>
+	<date year="2011"/>
       <abstract>
 	<t>The File Transfer Protocol offers REST, to designate a starting point for a transfer, but does not currently offer any method to specify an end point.
        This document specifies a new FTP RANG command to be used by clients to designate a start and end point for STREAM mode transfers with RETR.
