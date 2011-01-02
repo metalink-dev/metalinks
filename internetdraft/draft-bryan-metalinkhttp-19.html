@@ -144,13 +144,13 @@
 <tr><td class="header">Network Working Group</td><td class="header">A. Bryan</td></tr>
 <tr><td class="header">Internet-Draft</td><td class="header">N. McNab</td></tr>
 <tr><td class="header">Intended status: Standards Track</td><td class="header">H. Nordstrom</td></tr>
-<tr><td class="header">Expires: July 5, 2011</td><td class="header">T. Tsujikawa</td></tr>
+<tr><td class="header">Expires: July 6, 2011</td><td class="header">T. Tsujikawa</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">&nbsp;</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">P. Poeml</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">MirrorBrain</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">A. Ford</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">Roke Manor Research</td></tr>
-<tr><td class="header">&nbsp;</td><td class="header">January 1, 2011</td></tr>
+<tr><td class="header">&nbsp;</td><td class="header">January 2, 2011</td></tr>
 </table></td></tr></table>
 <h1><br />Metalink/HTTP: Mirrors and Cryptographic Hashes in HTTP Headers<br />draft-bryan-metalinkhttp-19</h1>
 
@@ -175,7 +175,7 @@ and may be updated, replaced, or obsoleted by other documents at any time.
 It is inappropriate to use Internet-Drafts as reference material or to cite
 them other than as &ldquo;work in progress.&rdquo;</p>
 <p>
-This Internet-Draft will expire on July 5, 2011.</p>
+This Internet-Draft will expire on July 6, 2011.</p>
 
 <h3>Copyright Notice</h3>
 <p>
@@ -379,8 +379,6 @@ Mirror Priority</h3>
 </p>
 <p>This is purely an expression of the server's preferences; it is up to the client what it does with this information, particularly with reference to how many servers to use at any one time. A client MUST respect the server's priority ordering, however.
 </p>
-<p>[[Would it make more sense to use qvalue-style policies here, i.e. q=1.0 through q=0.0 ?]]
-</p>
 <a name="anchor6"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.3.2"></a><h3>3.2.&nbsp;
@@ -401,14 +399,6 @@ Coordinated Mirror Policies</h3>
 </p>
 <p>HTTP Mirror servers SHOULD support Instance Digests in HTTP <a class='info' href='#RFC3230'>[RFC3230]<span> (</span><span class='info'>Mogul, J. and A. Van Hoff, &ldquo;Instance Digests in HTTP,&rdquo; January&nbsp;2002.</span><span>)</span></a>. Optimally, mirror servers will share the same ETag policy and support Instance Digests in HTTP.
 </p>
-<p>[[Suggestion: In order for clients to identify servers that have coordinated ETag policies, the ETag MUST begin with "Metalink:", e.g.
-        </p>
-<div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
-ETag: "Metalink:SHA=thvDyvhfIqlvFe+A9MYgxAfm1q5="
-</pre></div><p>
-
-      ]]
-</p>
 <a name="anchor7"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.3.4"></a><h3>3.4.&nbsp;
@@ -417,7 +407,7 @@ Mirror Depth</h3>
 <p>Some mirrors may mirror single files, whole directories, or multiple directories.
 </p>
 <p>Mirror servers MAY have a "depth" value, where "depth=0" is the default. A value of 0 means ONLY that file is mirrored. A value of 1 means that file and all other files and subdirectories in the
-directory are mirrored. A value of 2 means the directory above, and all files and subdirectories, are mirrored. For each higher value, another directory closer to the root is mirrored.
+directory are mirrored. For values of N, you go up N-1 directories above. A value of 2 means means going up one directory above, and all files and subdirectories, are mirrored. For each higher value, another directory closer to the root is mirrored.
 </p>
 <p>
 <p>A mirror with a depth value of 4:
@@ -868,11 +858,9 @@ Document History</h3>
 <ul class="text">
 <li>Some organizations have many mirrors. Should all be sent, or only a certain number? All should be included in the Metalink/XML, if used.
 </li>
-<li>Would it make more sense to use qvalue-style policies to describe mirror priority, i.e. q=1.0 through q=0.0 ?
+<li>Use 3 letter or 2 letter ISO country codes.
 </li>
 <li>Using Metalink/XML for partial file cryptographic hashes. That adds XML dependency to apps for an important feature. Is there a better method?
-</li>
-<li>Do we need an "official" MIME type for .torrent files or keep using "application/x-bittorrent"?
 </li>
 </ul>
 
