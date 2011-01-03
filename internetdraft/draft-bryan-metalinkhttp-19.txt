@@ -95,13 +95,13 @@ Table of Contents
      10.2. Spoofing . . . . . . . . . . . . . . . . . . . . . . . . . 14
      10.3. Cryptographic Hashes . . . . . . . . . . . . . . . . . . . 15
      10.4. Signing  . . . . . . . . . . . . . . . . . . . . . . . . . 15
-   11. Normative References . . . . . . . . . . . . . . . . . . . . . 15
+   11. References . . . . . . . . . . . . . . . . . . . . . . . . . . 15
+     11.1. Normative References . . . . . . . . . . . . . . . . . . . 15
+     11.2. Informative References . . . . . . . . . . . . . . . . . . 16
    Appendix A.  Acknowledgements and Contributors . . . . . . . . . . 16
    Appendix B.  Comparisons to Similar Options  . . . . . . . . . . . 16
    Appendix C.  Document History  . . . . . . . . . . . . . . . . . . 17
    Authors' Addresses . . . . . . . . . . . . . . . . . . . . . . . . 19
-
-
 
 
 
@@ -249,6 +249,7 @@ Internet-Draft      Metalink/HTTP: Mirrors and Hashes       January 2011
    in the IANA registry named "Hypertext Transfer Protocol (HTTP) Digest
    Algorithm Values" at
    http://www.iana.org/assignments/http-dig-alg/http-dig-alg.xhtml .
+   SHA-256 and SHA-512 were added by [RFC5843].
 
    Metalink servers are HTTP servers with one or more Metalink
    resources.  Metalink servers MUST support the Link header for listing
@@ -272,7 +273,6 @@ Internet-Draft      Metalink/HTTP: Mirrors and Hashes       January 2011
    Mirror servers are RECOMMENDED to support Instance Digests in HTTP
    [RFC3230].
 
-   Metalink clients use the mirrors provided by a Metalink server with
 
 
 
@@ -281,6 +281,7 @@ Bryan, et al.             Expires July 6, 2011                  [Page 5]
 Internet-Draft      Metalink/HTTP: Mirrors and Hashes       January 2011
 
 
+   Metalink clients use the mirrors provided by a Metalink server with
    Link header [RFC5988].  Metalink clients MUST support HTTP and are
    RECOMMENDED to support FTP [RFC0959].  Metalink clients MAY support
    BitTorrent [BITTORRENT], or other download methods.  Metalink clients
@@ -328,7 +329,6 @@ Internet-Draft      Metalink/HTTP: Mirrors and Hashes       January 2011
 
    Mirror servers MAY have a "geo" value, which is a [ISO3166-1] alpha-2
    two letter country code for the geographical location of the physical
-   server the URI is used to access.  A client may use this information
 
 
 
@@ -337,6 +337,7 @@ Bryan, et al.             Expires July 6, 2011                  [Page 6]
 Internet-Draft      Metalink/HTTP: Mirrors and Hashes       January 2011
 
 
+   server the URI is used to access.  A client may use this information
    to select a mirror, or set of mirrors, that are geographically near
    (if the client has access to such information), with the aim of
    reducing network load at inter-country bottlenecks.
@@ -384,7 +385,6 @@ Internet-Draft      Metalink/HTTP: Mirrors and Hashes       January 2011
 
    Metainfo files, which describe ways to download a file over Peer-to-
    Peer networks or otherwise, are specified with the Link header
-   [RFC5988] and a relation type of "describedby" and a type parameter
 
 
 
@@ -393,6 +393,7 @@ Bryan, et al.             Expires July 6, 2011                  [Page 7]
 Internet-Draft      Metalink/HTTP: Mirrors and Hashes       January 2011
 
 
+   [RFC5988] and a relation type of "describedby" and a type parameter
    that indicates the MIME type of the metadata available at the URI.
 
    A brief Metalink server response with .torrent and .metalink:
@@ -436,7 +437,6 @@ Internet-Draft      Metalink/HTTP: Mirrors and Hashes       January 2011
 
    Digest: SHA-256=MWVkMWQxYTRiMzk5MDQ0MzI3NGU5NDEyZTk5OWY1ZGFmNzgyZTJlO
    DYzYjRjYzFhOTlmNTQwYzI2M2QwM2U2MQ==
-
 
 
 
@@ -808,7 +808,9 @@ Internet-Draft      Metalink/HTTP: Mirrors and Hashes       January 2011
    non-repudiation with proof of origin.
 
 
-11.  Normative References
+11.  References
+
+11.1.  Normative References
 
    [BITTORRENT]
               Cohen, B., "The BitTorrent Protocol Specification",
@@ -832,8 +834,6 @@ Internet-Draft      Metalink/HTTP: Mirrors and Hashes       January 2011
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119, March 1997.
 
-   [RFC2616]  Fielding, R., Gettys, J., Mogul, J., Frystyk, H.,
-
 
 
 Bryan, et al.             Expires July 6, 2011                 [Page 15]
@@ -841,6 +841,7 @@ Bryan, et al.             Expires July 6, 2011                 [Page 15]
 Internet-Draft      Metalink/HTTP: Mirrors and Hashes       January 2011
 
 
+   [RFC2616]  Fielding, R., Gettys, J., Mogul, J., Frystyk, H.,
               Masinter, L., Leach, P., and T. Berners-Lee, "Hypertext
               Transfer Protocol -- HTTP/1.1", RFC 2616, June 1999.
 
@@ -868,6 +869,11 @@ Internet-Draft      Metalink/HTTP: Mirrors and Hashes       January 2011
               Cryptographic Hashes", draft-ietf-ftpext2-hash-00 (work in
               progress), November 2010.
 
+11.2.  Informative References
+
+   [RFC5843]  Bryan, A., "Additional Hash Algorithms for HTTP Instance
+              Digests", RFC 5843, April 2010.
+
 
 Appendix A.  Acknowledgements and Contributors
 
@@ -883,12 +889,6 @@ Appendix B.  Comparisons to Similar Options
 
    [[ to be removed by the RFC editor before publication as an RFC. ]]
 
-   This draft, compared to the Metalink/XML format [RFC5854] :
-
-   o  (+) Reuses existing HTTP standards without much new besides a Link
-      Relation Type.  It's more of a collection/coordinated feature set.
-
-
 
 
 
@@ -897,6 +897,10 @@ Bryan, et al.             Expires July 6, 2011                 [Page 16]
 Internet-Draft      Metalink/HTTP: Mirrors and Hashes       January 2011
 
 
+   This draft, compared to the Metalink/XML format [RFC5854] :
+
+   o  (+) Reuses existing HTTP standards without much new besides a Link
+      Relation Type.  It's more of a collection/coordinated feature set.
    o  (?)  The existing standards don't seem to be widely implemented.
    o  (+) No XML dependency, except for Metalink/XML for partial file
       cryptographic hashes.
@@ -936,14 +940,10 @@ Appendix C.  Document History
       adds XML dependency to apps for an important feature.  Is there a
       better method?
 
-   -18 : November , 2010.
-   o  More realistic requirements.
+   -19 : January , 2011.
+   o
 
-   -17 : September 13 , 2010.
-   o  RFC 5854 Metalink/XML.
-
-   -16 : April 16, 2010.
-
+   -18 : January 1, 2010.
 
 
 
@@ -953,6 +953,12 @@ Bryan, et al.             Expires July 6, 2011                 [Page 17]
 Internet-Draft      Metalink/HTTP: Mirrors and Hashes       January 2011
 
 
+   o  AD review by Alexey Melnikov.
+
+   -17 : September 13, 2010.
+   o  RFC 5854 Metalink/XML.
+
+   -16 : April 16, 2010.
    o  Add draft-ietf-ftpext2-hash reference and FTP mirror coordination.
 
    -15 : February 20, 2010.
@@ -993,12 +999,6 @@ Internet-Draft      Metalink/HTTP: Mirrors and Hashes       January 2011
    o  ETags, preferably matching the Instance Digests.
 
    -04 : September 17, 2009.
-   o  Temporarily remove .torrent.
-
-   -03 : September 16, 2009.
-   o  Mention HEAD request, negotiate mirrors if Want-Digest is used.
-
-   -02 : September 7, 2009.
 
 
 
@@ -1009,6 +1009,12 @@ Bryan, et al.             Expires July 6, 2011                 [Page 18]
 Internet-Draft      Metalink/HTTP: Mirrors and Hashes       January 2011
 
 
+   o  Temporarily remove .torrent.
+
+   -03 : September 16, 2009.
+   o  Mention HEAD request, negotiate mirrors if Want-Digest is used.
+
+   -02 : September 7, 2009.
    o  Content-MD5 for partial file cryptographic hashes.
 
    -01 : September 1, 2009.
@@ -1046,12 +1052,6 @@ Authors' Addresses
 
    Email: tatsuhiro.t@gmail.com
    URI:   http://aria2.sourceforge.net
-
-
-
-
-
-
 
 
 
