@@ -245,12 +245,16 @@ Cryptographic Hashes<br />
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor13">10.4.</a>&nbsp;
 Signing<br />
 <a href="#rfc.references1">11.</a>&nbsp;
+References<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#rfc.references1">11.1.</a>&nbsp;
 Normative References<br />
-<a href="#anchor15">Appendix&nbsp;A.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#rfc.references2">11.2.</a>&nbsp;
+Informative References<br />
+<a href="#anchor16">Appendix&nbsp;A.</a>&nbsp;
 Acknowledgements and Contributors<br />
-<a href="#anchor16">Appendix&nbsp;B.</a>&nbsp;
+<a href="#anchor17">Appendix&nbsp;B.</a>&nbsp;
 Comparisons to Similar Options<br />
-<a href="#anchor17">Appendix&nbsp;C.</a>&nbsp;
+<a href="#anchor18">Appendix&nbsp;C.</a>&nbsp;
 Document History<br />
 <a href="#rfc.authors">&#167;</a>&nbsp;
 Authors' Addresses<br />
@@ -336,7 +340,7 @@ Requirements</h3>
 <p>In this context, "Metalink" refers to Metalink/HTTP which consists of mirrors and cryptographic hashes in HTTP Headers as described in this document. "Metalink/XML" refers to the XML format described in <a class='info' href='#RFC5854'>[RFC5854]<span> (</span><span class='info'>Bryan, A., Tsujikawa, T., McNab, N., and P. Poeml, &ldquo;The Metalink Download Description Format,&rdquo; June&nbsp;2010.</span><span>)</span></a>.
 </p>
 <p>Metalink resources include a Link header <a class='info' href='#RFC5988'>[RFC5988]<span> (</span><span class='info'>Nottingham, M., &ldquo;Web Linking,&rdquo; October&nbsp;2010.</span><span>)</span></a> to present a list of mirrors in the response to a client request for the resource. Metalink servers MUST include the cryptographic hash of a resource via Instance Digests in HTTP <a class='info' href='#RFC3230'>[RFC3230]<span> (</span><span class='info'>Mogul, J. and A. Van Hoff, &ldquo;Instance Digests in HTTP,&rdquo; January&nbsp;2002.</span><span>)</span></a>. Valid algorithms are found in
-	  the IANA registry named "Hypertext Transfer Protocol (HTTP) Digest Algorithm Values" at http://www.iana.org/assignments/http-dig-alg/http-dig-alg.xhtml .
+	  the IANA registry named "Hypertext Transfer Protocol (HTTP) Digest Algorithm Values" at http://www.iana.org/assignments/http-dig-alg/http-dig-alg.xhtml . SHA-256 and SHA-512 were added by <a class='info' href='#RFC5843'>[RFC5843]<span> (</span><span class='info'>Bryan, A., &ldquo;Additional Hash Algorithms for HTTP Instance Digests,&rdquo; April&nbsp;2010.</span><span>)</span></a>.
 </p>
 <p>Metalink servers are HTTP servers with one or more Metalink
  resources. Metalink servers MUST support the Link header for listing mirrors and MUST support Instance Digests in HTTP <a class='info' href='#RFC3230'>[RFC3230]<span> (</span><span class='info'>Mogul, J. and A. Van Hoff, &ldquo;Instance Digests in HTTP,&rdquo; January&nbsp;2002.</span><span>)</span></a>. Mirror and cryptographic hash information provided by the originating Metalink server MUST be considered authoritative. Metalink servers and their associated mirror servers
@@ -767,9 +771,14 @@ Signing</h3>
 </p>
 <p>Digital signatures provide authentication, message integrity, and non-repudiation with proof of origin.
 </p>
+<a name="rfc.references"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.11"></a><h3>11.&nbsp;
+References</h3>
+
 <a name="rfc.references1"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<h3>11.&nbsp;Normative References</h3>
+<h3>11.1.&nbsp;Normative References</h3>
 <table width="99%" border="0">
 <tr><td class="author-text" valign="top"><a name="BITTORRENT">[BITTORRENT]</a></td>
 <td class="author-text">Cohen, B., &ldquo;<a href="http://www.bittorrent.org/beps/bep_0003.html">The BitTorrent Protocol Specification</a>,&rdquo; BITTORRENT&nbsp;11031, February&nbsp;2008.</td></tr>
@@ -799,7 +808,15 @@ Signing</h3>
 <td class="author-text"><a href="mailto:anthonybryan@gmail.com">Bryan, A.</a>, <a href="mailto:tim.kosse@filezilla-project.org">Kosse, T.</a>, and <a href="mailto:daniel@haxx.se">D. Stenberg</a>, &ldquo;<a href="http://www.ietf.org/internet-drafts/draft-ietf-ftpext2-hash-00.txt">FTP Extensions for Cryptographic Hashes</a>,&rdquo; draft-ietf-ftpext2-hash-00 (work in progress), November&nbsp;2010.</td></tr>
 </table>
 
-<a name="anchor15"></a><br /><hr />
+<a name="rfc.references2"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<h3>11.2.&nbsp;Informative References</h3>
+<table width="99%" border="0">
+<tr><td class="author-text" valign="top"><a name="RFC5843">[RFC5843]</a></td>
+<td class="author-text">Bryan, A., &ldquo;<a href="http://tools.ietf.org/html/rfc5843">Additional Hash Algorithms for HTTP Instance Digests</a>,&rdquo; RFC&nbsp;5843, April&nbsp;2010 (<a href="http://www.rfc-editor.org/rfc/rfc5843.txt">TXT</a>).</td></tr>
+</table>
+
+<a name="anchor16"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.A"></a><h3>Appendix A.&nbsp;
 Acknowledgements and Contributors</h3>
@@ -808,7 +825,7 @@ Acknowledgements and Contributors</h3>
 </p>
 <p>Mark Handley and Javier Vela Diago did work on simultaneous download from multiple mirrors, which also provided validation of the benefits of this approach.
 </p>
-<a name="anchor16"></a><br /><hr />
+<a name="anchor17"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.B"></a><h3>Appendix B.&nbsp;
 Comparisons to Similar Options</h3>
@@ -846,7 +863,7 @@ Comparisons to Similar Options</h3>
 </li>
 </ul>
 
-<a name="anchor17"></a><br /><hr />
+<a name="anchor18"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.C"></a><h3>Appendix C.&nbsp;
 Document History</h3>
@@ -864,15 +881,23 @@ Document History</h3>
 </li>
 </ul>
 
-<p>-18 : November , 2010.
+<p>-19 : January  , 2011.
 	    
 	    </p>
 <ul class="text">
-<li>More realistic requirements.
+<li>
 </li>
 </ul>
 
-<p>-17 : September 13 , 2010.
+<p>-18 : January 1, 2010.
+	    
+	    </p>
+<ul class="text">
+<li>AD review by Alexey Melnikov.
+</li>
+</ul>
+
+<p>-17 : September 13, 2010.
 	    
 	    </p>
 <ul class="text">

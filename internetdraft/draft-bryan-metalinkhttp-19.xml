@@ -160,7 +160,7 @@ DYzYjRjYzFhOTlmNTQwYzI2M2QwM2U2MQ==
       <t>In this context, "Metalink" refers to Metalink/HTTP which consists of mirrors and cryptographic hashes in HTTP Headers as described in this document. "Metalink/XML" refers to the XML format described in <xref target="RFC5854"/>.</t>
 	  
       <t>Metalink resources include a Link header <xref target="RFC5988"/> to present a list of mirrors in the response to a client request for the resource. Metalink servers MUST include the cryptographic hash of a resource via Instance Digests in HTTP <xref target="RFC3230"/>. Valid algorithms are found in
-	  the IANA registry named "Hypertext Transfer Protocol (HTTP) Digest Algorithm Values" at http://www.iana.org/assignments/http-dig-alg/http-dig-alg.xhtml .</t>
+	  the IANA registry named "Hypertext Transfer Protocol (HTTP) Digest Algorithm Values" at http://www.iana.org/assignments/http-dig-alg/http-dig-alg.xhtml . SHA-256 and SHA-512 were added by <xref target="RFC5843"/>.</t>
 	  
 	  <t>Metalink servers are HTTP servers with one or more Metalink
  resources. Metalink servers MUST support the Link header for listing mirrors and MUST support Instance Digests in HTTP <xref target="RFC3230"/>. Mirror and cryptographic hash information provided by the originating Metalink server MUST be considered authoritative. Metalink servers and their associated mirror servers
@@ -699,7 +699,6 @@ other mirrors.</t>
 <seriesInfo name="RFC" value="3987"/>
 </reference>
 
-
 <reference anchor="RFC5988">
   <front>
     <title abbrev="Web Linking">Web Linking</title>
@@ -806,7 +805,24 @@ other mirrors.</t>
 </reference>
 
 	  </references>
-	  
+
+      <references title="Informative References">
+
+<reference anchor='RFC5843'>
+
+<front>
+<title>Additional Hash Algorithms for HTTP Instance Digests</title>
+<author initials='A.' surname='Bryan' fullname='A. Bryan'>
+<organization /></author>
+<date year='2010' month='April' />
+<abstract>
+<t>The IANA registry named "Hypertext Transfer Protocol (HTTP) Digest Algorithm Values" defines values for digest algorithms used by Instance Digests in HTTP.  Instance Digests in HTTP provide a digest, also known as a checksum or hash, of an entire representation of the current state of a resource.  This document adds new values to the registry and updates previous values.  This document is not an Internet Standards Track specification; it is published for informational purposes.</t></abstract></front>
+
+<seriesInfo name='RFC' value='5843' />
+<format type='TXT' octets='6731' target='http://www.rfc-editor.org/rfc/rfc5843.txt' />
+</reference>
+
+      </references>	  
 
 
 	    <section title="Acknowledgements and Contributors">
@@ -849,14 +865,22 @@ other mirrors.</t>
 		  <t>Using Metalink/XML for partial file cryptographic hashes. That adds XML dependency to apps for an important feature. Is there a better method?</t>
 	    </list></t>
 
-<t>-18 : November , 2010.
+
+<t>-19 : January  , 2011.
 	    
 	    <list style="symbols">
 
-	      <t>More realistic requirements.</t>
+	      <t></t>
 	    </list></t>
 
-<t>-17 : September 13 , 2010.
+<t>-18 : January 1, 2010.
+	    
+	    <list style="symbols">
+
+	      <t>AD review by Alexey Melnikov.</t>
+	    </list></t>
+
+<t>-17 : September 13, 2010.
 	    
 	    <list style="symbols">
 
