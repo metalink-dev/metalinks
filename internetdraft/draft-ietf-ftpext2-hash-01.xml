@@ -47,7 +47,21 @@
 	<t>The File Transfer Protocol does not offer any method to verify the integrity of a transferred file, nor can two files be compared against each other without actually transferring them first. Cryptographic hashes are a possible solution to this problem. In the past, several attempts have been made to add commands to obtain checksums and hashes,
        however none have been formally specified, leading to non-interoperability and confusion. To solve these issues, this document specifies a new FTP command to be used by clients to request cryptographic hashes of files.
 </t>
-      </abstract>    
+      </abstract>
+
+<note title="Editorial Note (To be removed by RFC Editor)">
+  <t>
+
+    Discussion of this draft should take place on the FTPEXT2 working group
+    mailing list (ftpext@ietf.org). The current issues list is
+    at <eref target="http://trac.tools.ietf.org/wg/ftpext2/trac/report/1"/>
+    and related documents (including fancy diffs) can be found at
+    <eref target="http://tools.ietf.org/wg/ftpext2/"/>.
+  </t>
+  <t>
+    The changes in this draft are summarized in <xref target="dochistory"/>.
+  </t>
+</note>
 	  
   </front>    
 
@@ -634,7 +648,7 @@ purpose is an implementation decision.</t>
 		
 
 
-	    <section title="Document History">
+	    <section title="Document History" anchor="dochistory">
 		<t>[[ to be removed by the RFC editor before publication as an RFC. ]]</t>
 		<t>Known issues concerning this draft:
 	    <list style="symbols"> 
