@@ -557,7 +557,7 @@ purpose is an implementation decision.</t>
 
 	    <section title="Acknowledgements and Contributors">
 		  <t>This document is a product of the FTPEXT2 working group of the IETF.</t>
-		  <t>Thanks to John C. Klensin, Alfred Hoenes, James Twine, Robert McMurray, Mathias Berchtold, Tatsuhiro Tsujikawa, and Paul Ford-Hutchinson.</t>
+		  <t>Thanks to John C. Klensin, Alfred Hoenes, James Twine, Robert McMurray, Mathias Berchtold, Tatsuhiro Tsujikawa, Paul Ford-Hutchinson, and Robert Oslin.</t>
 		  <t>Portions of <xref target="RFC3659"/> were wholly reused in this document.</t>
     </section>
 

@@ -70,7 +70,7 @@
 
       <section title="Document Conventions"> 
 
-	<t>This specification describes conformance of File Transfer Protocol Extension for RANG, and end point in a byte range.</t>
+	<t>This specification describes conformance of File Transfer Protocol Extension for RANG, a start and end point in a byte range.</t>
      
 
 	<t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
