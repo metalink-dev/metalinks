@@ -52,7 +52,20 @@
 	<t>The File Transfer Protocol offers REST, to designate a starting point for a transfer, but does not currently offer any method to specify an end point.
        This document specifies a new FTP RANG command to be used by clients to designate a start and end point for STREAM mode transfers with RETR.
 </t>
-      </abstract>    
+      </abstract>
+	  
+<note title="Editorial Note (To be removed by RFC Editor)">
+  <t>
+
+    Discussion of this draft should take place on the FTPEXT2 working group
+    mailing list (ftpext@ietf.org), althought this draft is not a WG item.
+	Related documents (including fancy diffs) can be found at
+    <eref target="http://tools.ietf.org/wg/ftpext2/"/>.
+  </t>
+  <t>
+    The changes in this draft are summarized in <xref target="dochistory"/>.
+  </t>
+</note>
 	  
   </front>    
 
@@ -64,8 +77,6 @@
 	<t>The current alternatives, without being able to specify an end point, are to issue an ABOR command or close the data connection.</t>
     <t>HTTP offers similar functionality with the Range: header in Section 14.35 of <xref target="RFC2616"/>, where a specific byte range can optionally be requested.</t>
 
-      <t>[[ Discussion of this draft should take place on the FTPEXT2 Working Group mailing list, although this draft is not a WG item: ftpext@ietf.org. ]]</t>
-	  
 	</section>
 
       <section title="Document Conventions"> 
@@ -602,13 +613,20 @@ This string is case insensitive, and MAY be sent in any mixture of upper or lowe
 
 
 
-	    <section title="Document History">
+	    <section title="Document History" anchor="dochistory">
 		<t>[[ to be removed by the RFC editor before publication as an RFC. ]]</t>
 		<t>Known issues concerning this draft:
 	    <list style="symbols"> 
 	      
 		  <t>Expand current alternatives (ABOR, close data connection) and why they are not optimal.</t>
 
+	    </list></t>
+		
+<t>draft-bryan-ftp-range-01 : January, 2011.
+	    
+	    <list style="symbols">
+
+	      <t>Refinements.</t>
 	    </list></t>
 		
 		

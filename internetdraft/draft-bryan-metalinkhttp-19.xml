@@ -87,9 +87,18 @@
       <abstract>
     <t>This document specifies Metalink/HTTP: Mirrors and Cryptographic Hashes in HTTP header fields, a different way to get information that is usually contained in the Metalink XML-based download description format. 
     Metalink/HTTP describes multiple download locations (mirrors), Peer-to-Peer, cryptographic hashes, digital signatures, and other information using existing standards for HTTP header fields. Clients can use this information to make file transfers more robust and reliable.</t>
-    <t>[[ Discussion of this draft should take place on IETF HTTP WG mailing list at ietf-http-wg@w3.org although this draft is not a WG item. ]]</t>
-      </abstract>      
-	  
+      </abstract>
+
+<note title="Editorial Note (To be removed by RFC Editor)">
+  <t>
+
+    Discussion of this draft should take place on the HTTPBIS working group
+    mailing list (ietf-http-wg@w3.org), althought this draft is not a WG item.
+  </t>
+  <t>
+    The changes in this draft are summarized in <xref target="dochistory"/>.
+  </t>
+</note>
   </front>    
 
   <middle>
@@ -132,9 +141,9 @@ Link: &lt;http://www2.example.com/example.ext&gt;; rel=duplicate
 Link: &lt;ftp://ftp.example.com/example.ext&gt;; rel=duplicate
 Link: &lt;http://example.com/example.ext.torrent&gt;; rel=describedby;
 type="application/x-bittorrent"
-Link: &lt;http://example.com/example.ext.metalink&gt;; rel="describedby";
+Link: &lt;http://example.com/example.ext.metalink&gt;; rel=describedby;
 type="application/metalink4+xml"
-Link: &lt;http://example.com/example.ext.asc&gt;; rel="describedby";
+Link: &lt;http://example.com/example.ext.asc&gt;; rel=describedby;
 type="application/pgp-signature"
 Digest: SHA-256=MWVkMWQxYTRiMzk5MDQ0MzI3NGU5NDEyZTk5OWY1ZGFmNzgyZTJlO
 DYzYjRjYzFhOTlmNTQwYzI2M2QwM2U2MQ==
@@ -159,8 +168,8 @@ DYzYjRjYzFhOTlmNTQwYzI2M2QwM2U2MQ==
 	  the IANA registry named "Hypertext Transfer Protocol (HTTP) Digest Algorithm Values" at &lt;http://www.iana.org/assignments/http-dig-alg/http-dig-alg.xhtml&gt;. SHA-256 and SHA-512 were added by <xref target="RFC5843"/>.</t>
 	  
 	  <t>Metalink servers are HTTP servers with one or more Metalink
- resources. Metalink servers MUST support the Link header fields for listing mirrors and MUST support Instance Digests in HTTP <xref target="RFC3230"/>. Metalink servers MUST return the same Link header fields and Instance Digests on HEAD requests. Metalink servers and their associated mirror servers
-      SHOULD all share the same ETag policy, meaning ETags are synchronized across servers, i.e. byte-for-byte identical files will have the same ETag on all servers. ETags could be based on the file contents (cryptographic hash) and not server-unique filesystem metadata. The emitted ETag MAY be implemented the same as the Instance Digest for simplicity. Metalink servers can offer Metalink/XML documents that contain cryptographic hashes of parts of the file and other information.</t>
+ resources. Metalink servers MUST support the Link header fields for listing mirrors and MUST support Instance Digests in HTTP <xref target="RFC3230"/>. Metalink servers MUST return the same Link header fields and Instance Digests on HEAD requests.
+      Metalink servers and their associated mirror servers SHOULD all share the same ETag policy. To have the same ETag policy means that ETags are synchronized across servers for duplicate resources, i.e. byte-for-byte identical files will have the same ETag on mirrors that they have on the Metalink server. ETags could be based on the file contents (cryptographic hash) and not server-unique filesystem metadata. The emitted ETag MAY be implemented the same as the Instance Digest for simplicity. Metalink servers can offer Metalink/XML documents that contain cryptographic hashes of parts of the file and other information.</t>
 
       <t>Mirror servers are typically FTP or HTTP servers that "mirror" another server. That is, they provide identical copies of (at least some) files that are also on the mirrored server. 
       Mirror servers MAY be Metalink servers. Mirror servers SHOULD support serving partial content. HTTP mirror servers SHOULD share the same ETag policy as the originating Metalink server. HTTP Mirror servers SHOULD support Instance Digests in HTTP <xref target="RFC3230"/>.</t>
@@ -179,10 +188,10 @@ DYzYjRjYzFhOTlmNTQwYzI2M2QwM2U2MQ==
 <t><figure> 
 	  <preamble>A brief Metalink server response with two mirrors only:</preamble>	  
 	  <artwork type="example">
-Link: &lt;http://www2.example.com/example.ext&gt;; rel="duplicate"; 
+Link: &lt;http://www2.example.com/example.ext&gt;; rel=duplicate; 
 pri=1; pref
-Link: &lt;ftp://ftp.example.com/example.ext&gt;; rel="duplicate"; 
-pri=2; geo="gb"; depth=1
+Link: &lt;ftp://ftp.example.com/example.ext&gt;; rel=duplicate; 
+pri=2; geo=gb; depth=1
 </artwork></figure></t>
 
 	  <t>[[Some organizations have many mirrors. Only send a few mirrors, or only use the Link header fields if Want-Digest is used?]]</t>
@@ -218,7 +227,7 @@ rightmost URI path segment are mirrored. For values of N, you go up N-1 URI path
 	  <preamble>A mirror with a depth value of 4:</preamble>	  
 	  <artwork type="example">
 Link: &lt;http://www2.example.com/dir1/dir2/dir3/dir4/dir5/example.ext&gt;; 
-rel="duplicate"; pri=1; pref; depth=4
+rel=duplicate; pri=1; pref; depth=4
 </artwork></figure></t>
 
       <t>In the above example, 4 URI path segments up are mirrored, from /dir2/ on down.</t>
@@ -233,9 +242,9 @@ rel="duplicate"; pri=1; pref; depth=4
 <t><figure> 
 	  <preamble>A brief Metalink server response with .torrent and .metalink:</preamble>	
 	  <artwork type="example">
-Link: &lt;http://example.com/example.ext.torrent&gt;; rel="describedby";
+Link: &lt;http://example.com/example.ext.torrent&gt;; rel=describedby;
 type="application/x-bittorrent"
-Link: &lt;http://example.com/example.ext.metalink&gt;; rel="describedby";
+Link: &lt;http://example.com/example.ext.metalink&gt;; rel=describedby;
 type="application/metalink4+xml"
 </artwork></figure></t>
 
@@ -254,7 +263,7 @@ type="application/metalink4+xml"
 <t><figure> 
 	  <preamble>A brief Metalink server response with OpenPGP signature only:</preamble>
 	  <artwork type="example">
-Link: &lt;http://example.com/example.ext.asc&gt;; rel="describedby";
+Link: &lt;http://example.com/example.ext.asc&gt;; rel=describedby;
 type="application/pgp-signature"
 </artwork></figure></t>
     
@@ -293,13 +302,13 @@ Accept-Ranges: bytes
 Content-Length: 14867603
 Content-Type: application/x-cd-image
 Etag: "thvDyvhfIqlvFe+A9MYgxAfm1q5="
-Link: &lt;http://www2.example.com/example.ext&gt;; rel="duplicate" pref
-Link: &lt;ftp://ftp.example.com/example.ext&gt;; rel="duplicate"
-Link: &lt;http://example.com/example.ext.torrent&gt;; rel="describedby";
+Link: &lt;http://www2.example.com/example.ext&gt;; rel=duplicate; pref
+Link: &lt;ftp://ftp.example.com/example.ext&gt;; rel=duplicate
+Link: &lt;http://example.com/example.ext.torrent&gt;; rel=describedby;
 type="application/x-bittorrent"
-Link: &lt;http://example.com/example.ext.metalink&gt;; rel="describedby";
+Link: &lt;http://example.com/example.ext.metalink&gt;; rel=describedby;
 type="application/metalink4+xml"
-Link: &lt;http://example.com/example.ext.asc&gt;; rel="describedby";
+Link: &lt;http://example.com/example.ext.asc&gt;; rel=describedby;
 type="application/pgp-signature"
 Digest: SHA-256=MWVkMWQxYTRiMzk5MDQ0MzI3NGU5NDEyZTk5OWY1ZGFmNzgyZTJlO
 DYzYjRjYzFhOTlmNTQwYzI2M2QwM2U2MQ==
@@ -477,15 +486,8 @@ other mirrors.</t>
 	of chunk requests.  At the same time, the amount of time
 	wasted waiting for the last chunk to download from the last
 	server after all the other servers have finished should be
-	minimized.  Thus we currently recommend that a chunk size of
-	at least 10KBytes should be used.  If the file being
-	transfered is very large, or the download speed very high,
-	this can be increased to perhaps 1MByte.  As network
-	bandwidths increase, we expect these numbers to increase
-	appropriately, so that the time to transfer a chunk remains
-	significantly larger than the latency of requesting a chunk
-	from a server.</t>
-	<t>Note that Range requests impose an overhead on servers and clients need to be aware of that and not abuse them.</t>
+	minimized. Note that Range requests impose an overhead on 
+	servers and clients need to be aware of that and not abuse them.</t>
     </section>
 
 	<section title="IANA Considerations" anchor="IANA">
@@ -855,18 +857,17 @@ other mirrors.</t>
 		
 	    </section>
 
-	    <section title="Document History">
+	    <section title="Document History" anchor="dochistory">
 		<t>[[ to be removed by the RFC editor before publication as an RFC. ]]</t>
 		<t>Known issues concerning this draft:
 	    <list style="symbols"> 
 	      
 	      <t>Some organizations have many mirrors. Should all be sent, or only a certain number? All should be included in the Metalink/XML, if used.</t>
-		  <t>Use 3 letter or 2 letter ISO country codes.</t>
 		  <t>Using Metalink/XML for partial file cryptographic hashes. That adds XML dependency to apps for an important feature. Is there a better method?</t>
 	    </list></t>
 
 
-<t>-19 : January  , 2011.
+<t>-19 : January 19, 2011.
 	    
 	    <list style="symbols">
 
