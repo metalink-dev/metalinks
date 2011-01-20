@@ -14,7 +14,7 @@ Expires: July 24, 2011                                      T. Tsujikawa
 
 
  Metalink/HTTP: Mirrors and Cryptographic Hashes in HTTP Header Fields
-                      draft-bryan-metalinkhttp-19
+                      draft-bryan-metalinkhttp-20
 
 Abstract
 
@@ -995,10 +995,10 @@ Appendix C.  Document History
       adds XML dependency to apps for an important feature.  Is there a
       better method?
 
-   -19 : January 20, 2011.
-   o  Julian Reschke's review.
+   -20 : January , 2011.
+   o  Stuff
 
-   -18 : January 1, 2010.
+   -19 : January 20, 2011.
 
 
 
@@ -1009,6 +1009,9 @@ Bryan, et al.             Expires July 24, 2011                [Page 18]
 Internet-Draft      Metalink/HTTP: Mirrors and Hashes       January 2011
 
 
+   o  Julian Reschke's review.
+
+   -18 : January 1, 2010.
    o  AD review by Alexey Melnikov.
 
    -17 : September 13, 2010.
@@ -1052,9 +1055,6 @@ Internet-Draft      Metalink/HTTP: Mirrors and Hashes       January 2011
    o  Remove Content-MD5 and Want-Digest.
 
    -05 : September 19, 2009.
-   o  ETags, preferably matching the Instance Digests.
-
-   -04 : September 17, 2009.
 
 
 
@@ -1065,6 +1065,9 @@ Bryan, et al.             Expires July 24, 2011                [Page 19]
 Internet-Draft      Metalink/HTTP: Mirrors and Hashes       January 2011
 
 
+   o  ETags, preferably matching the Instance Digests.
+
+   -04 : September 17, 2009.
    o  Temporarily remove .torrent.
 
    -03 : September 16, 2009.
@@ -1108,9 +1111,6 @@ Authors' Addresses
 
    Email: tatsuhiro.t@gmail.com
    URI:   http://aria2.sourceforge.net
-
-
-
 
 
 
