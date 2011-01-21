@@ -144,13 +144,13 @@
 <tr><td class="header">Network Working Group</td><td class="header">A. Bryan</td></tr>
 <tr><td class="header">Internet-Draft</td><td class="header">N. McNab</td></tr>
 <tr><td class="header">Intended status: Standards Track</td><td class="header">H. Nordstrom</td></tr>
-<tr><td class="header">Expires: July 24, 2011</td><td class="header">T. Tsujikawa</td></tr>
+<tr><td class="header">Expires: July 25, 2011</td><td class="header">T. Tsujikawa</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">&nbsp;</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">P. Poeml</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">MirrorBrain</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">A. Ford</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">Roke Manor Research</td></tr>
-<tr><td class="header">&nbsp;</td><td class="header">January 20, 2011</td></tr>
+<tr><td class="header">&nbsp;</td><td class="header">January 21, 2011</td></tr>
 </table></td></tr></table>
 <h1><br />Metalink/HTTP: Mirrors and Cryptographic Hashes in HTTP Header Fields<br />draft-bryan-metalinkhttp-20</h1>
 
@@ -186,7 +186,7 @@ and may be updated, replaced, or obsoleted by other documents at any time.
 It is inappropriate to use Internet-Drafts as reference material or to cite
 them other than as &ldquo;work in progress.&rdquo;</p>
 <p>
-This Internet-Draft will expire on July 24, 2011.</p>
+This Internet-Draft will expire on July 25, 2011.</p>
 
 <h3>Copyright Notice</h3>
 <p>
@@ -379,7 +379,7 @@ pri=2; geo=gb; depth=1
 
 <p>[[Some organizations have many mirrors. Only send a few mirrors, or only use the Link header fields if Want-Digest is used?]]
 </p>
-<p>It is up to the server to choose how many Link header fieldss to send. Such a decision could be a hard-coded limit, a random selection, based on file size, or based on server load.
+<p>It is up to the server to choose how many Link header fields to send. Such a decision could be a hard-coded limit, a random selection, based on file size, or based on server load.
 </p>
 <a name="anchor5"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
@@ -492,7 +492,7 @@ DYzYjRjYzFhOTlmNTQwYzI2M2QwM2U2MQ==
 <a name="rfc.section.7"></a><h3>7.&nbsp;
 Client / Server Multi-source Download Interaction</h3>
 
-<p>Metalink clients begin a download with a standard HTTP <a class='info' href='#RFC2616'>[RFC2616]<span> (</span><span class='info'>Fielding, R., Gettys, J., Mogul, J., Frystyk, H., Masinter, L., Leach, P., and T. Berners-Lee, &ldquo;Hypertext Transfer Protocol -- HTTP/1.1,&rdquo; June&nbsp;1999.</span><span>)</span></a> GET request to the Metalink server. A Range limit is optional, not required. Alternatively, Metalink clients can begin with a HEAD request to the Metalink server to discover mirrors via Link header fieldss. After that, the client follows with a GET request to the desired mirrors.
+<p>Metalink clients begin a download with a standard HTTP <a class='info' href='#RFC2616'>[RFC2616]<span> (</span><span class='info'>Fielding, R., Gettys, J., Mogul, J., Frystyk, H., Masinter, L., Leach, P., and T. Berners-Lee, &ldquo;Hypertext Transfer Protocol -- HTTP/1.1,&rdquo; June&nbsp;1999.</span><span>)</span></a> GET request to the Metalink server. A Range limit is optional, not required. Alternatively, Metalink clients can begin with a HEAD request to the Metalink server to discover mirrors via Link header fields. After that, the client follows with a GET request to the desired mirrors.
 </p>
 <p></p>
 <div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
@@ -546,12 +546,12 @@ object:
 </li>
 </ul>
 
-<p>(Alternatively, the client could have requested a HEAD only, and then skipped to making the following decisions on every available mirror server found via the Link header fieldss)
+<p>(Alternatively, the client could have requested a HEAD only, and then skipped to making the following decisions on every available mirror server found via the Link header fields)
 </p>
 <p>If the object is large and gets delivered slower than expected then the Metalink client starts a number of parallel ranged downloads (one per selected mirror server other than the
 first) using mirrors provided by the Link header fields with "duplicate" relation type, using the location of the original GET request in the "Referer" header field. The size and number of ranges requested from each server is for the client to decide, based upon the performance observed from each server. Further discussion of performance considerations is presented in <a class='info' href='#multiserver'>Section&nbsp;8<span> (</span><span class='info'>Multi-server Performance</span><span>)</span></a>.
 </p>
-<p>If no range limit was given in the original request then work from the tail of the object (the first request is still running and will eventually catch up), otherwise continue after the range requested in the first request. If no Range was provided, the original connection must be terminated once all parts of the resource have been retrieved. It is recommended that a HEAD request is undertaken first, so that the client can find out if there are any Link header fieldss, and then Range-based requests are undertaken to the mirror servers as well as on the original connection.
+<p>If no range limit was given in the original request then work from the tail of the object (the first request is still running and will eventually catch up), otherwise continue after the range requested in the first request. If no Range was provided, the original connection must be terminated once all parts of the resource have been retrieved. It is recommended that a HEAD request is undertaken first, so that the client can find out if there are any Link header fields, and then Range-based requests are undertaken to the mirror servers as well as on the original connection.
 </p>
 <p>Preferred mirrors have coordinated ETags, as described in <a class='info' href='#coordinatedpolicies'>Section&nbsp;3.3<span> (</span><span class='info'>Coordinated Mirror Policies</span><span>)</span></a>, and If-Match conditions based on the ETag SHOULD be used to quickly detect out-of-date mirrors by using the ETag from the Metalink server response. If no indication of ETag syncronisation/knowledge is given then If-Match
 should not be used, and optimally there will be an Instance Digest in the mirror response which we can use to detect a mismatch early, and if not then a mismatch won't be detected until the completed object is verified. Early file mismatch detection is described in detail in <a class='info' href='#earlyfilemismatchdetection'>Section&nbsp;7.1.1<span> (</span><span class='info'>Error Prevention (Early File Mismatch Detection)</span><span>)</span></a>.
@@ -647,7 +647,7 @@ has to rely on the Instance Digest returned by the Metalink master server in the
 first response for the verification of the downloaded object as a whole.
 </p>
 <p>If the mirror servers do return an Instance Digest, then that is a bonus,
-just as having them return the right set of Link header fieldss is. The set of
+just as having them return the right set of Link header fields is. The set of
 trusted mirrors doing that can be substituted as master servers
 accepting the initial request if one likes.
 </p>
