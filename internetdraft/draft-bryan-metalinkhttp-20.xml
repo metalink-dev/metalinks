@@ -196,7 +196,7 @@ pri=2; geo=gb; depth=1
 
 	  <t>[[Some organizations have many mirrors. Only send a few mirrors, or only use the Link header fields if Want-Digest is used?]]</t>
 	  
-      <t>It is up to the server to choose how many Link header fieldss to send. Such a decision could be a hard-coded limit, a random selection, based on file size, or based on server load.</t>
+      <t>It is up to the server to choose how many Link header fields to send. Such a decision could be a hard-coded limit, a random selection, based on file size, or based on server load.</t>
 
 <section title="Mirror Priority">
       <t>Entries for mirror servers are listed in order of priority (from most preferred to least) or have a "pri" value, where mirrors with lower values are used first.</t>
@@ -286,7 +286,7 @@ DYzYjRjYzFhOTlmNTQwYzI2M2QwM2U2MQ==
     </section>
 
     <section title="Client / Server Multi-source Download Interaction" anchor="clientserver">
-      <t>Metalink clients begin a download with a standard HTTP <xref target="RFC2616"/> GET request to the Metalink server. A Range limit is optional, not required. Alternatively, Metalink clients can begin with a HEAD request to the Metalink server to discover mirrors via Link header fieldss. After that, the client follows with a GET request to the desired mirrors.</t>
+      <t>Metalink clients begin a download with a standard HTTP <xref target="RFC2616"/> GET request to the Metalink server. A Range limit is optional, not required. Alternatively, Metalink clients can begin with a HEAD request to the Metalink server to discover mirrors via Link header fields. After that, the client follows with a GET request to the desired mirrors.</t>
 <t><figure> 
 	  <artwork type="example">
 GET /distribution/example.ext HTTP/1.1
@@ -328,12 +328,12 @@ object:</t>
 <t>Instance Digest, which is the whole file cryptographic hash.</t>
 </list></t>
 
-<t>(Alternatively, the client could have requested a HEAD only, and then skipped to making the following decisions on every available mirror server found via the Link header fieldss)</t>
+<t>(Alternatively, the client could have requested a HEAD only, and then skipped to making the following decisions on every available mirror server found via the Link header fields)</t>
 
 <t>If the object is large and gets delivered slower than expected then the Metalink client starts a number of parallel ranged downloads (one per selected mirror server other than the
 first) using mirrors provided by the Link header fields with "duplicate" relation type, using the location of the original GET request in the "Referer" header field. The size and number of ranges requested from each server is for the client to decide, based upon the performance observed from each server. Further discussion of performance considerations is presented in <xref target="multiserver"/>.</t>
 
-<t>If no range limit was given in the original request then work from the tail of the object (the first request is still running and will eventually catch up), otherwise continue after the range requested in the first request. If no Range was provided, the original connection must be terminated once all parts of the resource have been retrieved. It is recommended that a HEAD request is undertaken first, so that the client can find out if there are any Link header fieldss, and then Range-based requests are undertaken to the mirror servers as well as on the original connection.</t>
+<t>If no range limit was given in the original request then work from the tail of the object (the first request is still running and will eventually catch up), otherwise continue after the range requested in the first request. If no Range was provided, the original connection must be terminated once all parts of the resource have been retrieved. It is recommended that a HEAD request is undertaken first, so that the client can find out if there are any Link header fields, and then Range-based requests are undertaken to the mirror servers as well as on the original connection.</t>
 
 <t>Preferred mirrors have coordinated ETags, as described in <xref target="coordinatedpolicies"/>, and If-Match conditions based on the ETag SHOULD be used to quickly detect out-of-date mirrors by using the ETag from the Metalink server response. If no indication of ETag syncronisation/knowledge is given then If-Match
 should not be used, and optimally there will be an Instance Digest in the mirror response which we can use to detect a mismatch early, and if not then a mismatch won't be detected until the completed object is verified. Early file mismatch detection is described in detail in <xref target="earlyfilemismatchdetection"/>.</t>
@@ -423,7 +423,7 @@ has to rely on the Instance Digest returned by the Metalink master server in the
 first response for the verification of the downloaded object as a whole.</t>
 
 <t>If the mirror servers do return an Instance Digest, then that is a bonus,
-just as having them return the right set of Link header fieldss is. The set of
+just as having them return the right set of Link header fields is. The set of
 trusted mirrors doing that can be substituted as master servers
 accepting the initial request if one likes.</t>
 
