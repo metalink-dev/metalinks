@@ -144,13 +144,13 @@
 <tr><td class="header">Network Working Group</td><td class="header">A. Bryan</td></tr>
 <tr><td class="header">Internet-Draft</td><td class="header">T. Tsujikawa</td></tr>
 <tr><td class="header">Intended status: Standards Track</td><td class="header">D. Stenberg</td></tr>
-<tr><td class="header">Expires: July 23, 2011</td><td class="header">January 19, 2011</td></tr>
+<tr><td class="header">Expires: July 29, 2011</td><td class="header">January 25, 2011</td></tr>
 </table></td></tr></table>
 <h1><br />File Transfer Protocol RANG Command for Byte Ranges<br />draft-bryan-ftp-range-01</h1>
 
 <h3>Abstract</h3>
 
-<p>The File Transfer Protocol offers REST, to designate a starting point for a transfer, but does not currently offer any method to specify an end point.
+<p>The File Transfer Protocol offers the REST command, to designate a starting point for a transfer, but does not currently offer any method to specify an end point.
        This document specifies a new FTP RANG command to be used by clients to designate a start and end point for STREAM mode transfers with RETR.
 
 </p>
@@ -183,7 +183,7 @@ and may be updated, replaced, or obsoleted by other documents at any time.
 It is inappropriate to use Internet-Drafts as reference material or to cite
 them other than as &ldquo;work in progress.&rdquo;</p>
 <p>
-This Internet-Draft will expire on July 23, 2011.</p>
+This Internet-Draft will expire on July 29, 2011.</p>
 
 <h3>Copyright Notice</h3>
 <p>
@@ -244,7 +244,7 @@ Authors' Addresses<br />
 <a name="rfc.section.1"></a><h3>1.&nbsp;
 Introduction</h3>
 
-<p>The File Transfer Protocol offers REST  <a class='info' href='#RFC3659'>[RFC3659]<span> (</span><span class='info'>Hethmon, P., &ldquo;Extensions to FTP,&rdquo; March&nbsp;2007.</span><span>)</span></a>, to designate a starting point for a transfer, but does not currently offer any method to specify an end point.
+<p>The File Transfer Protocol offers the REST command <a class='info' href='#RFC3659'>[RFC3659]<span> (</span><span class='info'>Hethmon, P., &ldquo;Extensions to FTP,&rdquo; March&nbsp;2007.</span><span>)</span></a>, to designate a starting point for a transfer, but does not currently offer any method to specify an end point.
        This document specifies a new FTP RANG command to be used by clients to designate a start and end point for STREAM mode transfers with RETR.
 </p>
 <p>The current alternatives, without being able to specify an end point, are to issue an ABOR command or close the data connection.
@@ -385,7 +385,7 @@ Byte Ranges in STREAM Mode</h3>
 The RANGe Command (RANG)</h3>
 
 <p>A new command "RANG" is added to the FTP command set to allow the
-client to specify both an start point byte range and an end point
+client to specify both a start point byte range and an end point
 byte range of a file from a server-FTP process.
 </p>
 <p>The syntax for the RANG command when the current transfer mode is STREAM is:
@@ -400,15 +400,15 @@ byte range of a file from a server-FTP process.
 
 <p>[NOTE: end-point is inclusive.]
 </p>
-<p>start-point gives the number of octets of the
+<p>'start-point' gives the number of octets of the
 immediately-following transfer to not actually send, effectively
 causing the transmission to be started at a later point. A
 value of zero effectively causes the transmission to be started
-at first byte.  end-point gives the number of octets, counted from the beginning of the file, of the
+at first byte.  'end-point' gives the number of octets, counted from the beginning of the file, of the
 immediately-following transfer to stop sending at, effectively
 causing the transmission to be ended.  (That is, the end point is relative to the start of the file and not relative to the start point). The server-PI will
-response to the RANG command with a 350 reply, indicating that
-RANG parameters has been saved, and that another command, which
+respond to the RANG command with a 350 reply, indicating that
+RANG parameters have been saved, and that another command, which
 should be RETR, should then follow to complete the ranged request.
 </p>
 <p>
@@ -418,14 +418,18 @@ should be RETR, should then follow to complete the ranged request.
    range-ok       = "350" SP *TCHAR CRLF
 </pre></div>
 
-<p>The RANG command is intended to get partial data of a file.
-When the RANG command is used with RETR, client bears the
-responsibility of merging the retrieved data with partially
+<p>The RANG command is intended to select the partial data of a file.
+When the RANG command is used with RETR, the client bears the
+responsibility of merging the retrieved data with the partially
 retrieved file.  It may choose to use the data obtained other
 than to complete an earlier transfer, or to re-retrieve data that
 had been retrieved before.
 </p>
-<p>The RANG command must be the last command issued before the data
+<p>To reset the range command, "RANG 1 0" should be issued. 
+Invalid RANG requests where 'start-point' is larger than 'end-point' 
+automatically reset the byte selection to the default, which is the whole file.
+</p>
+<p>The RANG command MUST be the last command issued before the data
 transfer command that is to cause a partial data transfer.  The
 effect of issuing a RANG command at any other time is undefined.
 The server-PI may react to a badly positioned RANG command by
@@ -437,7 +441,7 @@ restart attempt.  Because of this, a user-PI that has issued a
 RANG command, but that has not successfully transmitted the
 following data transfer command for any reason, should send
 another RANG command before the next data transfer command.  If
-that transfer is not to be restarted, then "REST 0" should be
+that transfer is not to be restarted, then "RANG 1 0" should be
 issued.
 </p>
 <p>An error response will follow a RANG command only when the server
@@ -598,7 +602,7 @@ References</h3>
 <a name="rfc.section.A"></a><h3>Appendix A.&nbsp;
 Acknowledgements and Contributors</h3>
 
-<p>Thanks to ...
+<p>Thanks to the FTPEXT2 Working Group and Kamil Dudka.
 </p>
 <p>Portions of <a class='info' href='#RFC3659'>[RFC3659]<span> (</span><span class='info'>Hethmon, P., &ldquo;Extensions to FTP,&rdquo; March&nbsp;2007.</span><span>)</span></a> were wholly reused in this document.
 </p>
