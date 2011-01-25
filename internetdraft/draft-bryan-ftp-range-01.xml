@@ -49,7 +49,7 @@
       </author>
 	<date year="2011"/>
       <abstract>
-	<t>The File Transfer Protocol offers REST, to designate a starting point for a transfer, but does not currently offer any method to specify an end point.
+	<t>The File Transfer Protocol offers the REST command, to designate a starting point for a transfer, but does not currently offer any method to specify an end point.
        This document specifies a new FTP RANG command to be used by clients to designate a start and end point for STREAM mode transfers with RETR.
 </t>
       </abstract>
@@ -71,7 +71,7 @@
 
   <middle>
     <section title="Introduction">
-	<t>The File Transfer Protocol offers REST  <xref target="RFC3659"/>, to designate a starting point for a transfer, but does not currently offer any method to specify an end point.
+	<t>The File Transfer Protocol offers the REST command <xref target="RFC3659"/>, to designate a starting point for a transfer, but does not currently offer any method to specify an end point.
        This document specifies a new FTP RANG command to be used by clients to designate a start and end point for STREAM mode transfers with RETR.</t>
 	   
 	<t>The current alternatives, without being able to specify an end point, are to issue an ABOR command or close the data connection.</t>
@@ -199,7 +199,7 @@
 	  
 <section title="The RANGe Command (RANG)" anchor="RANG">
 <t>A new command "RANG" is added to the FTP command set to allow the
-client to specify both an start point byte range and an end point
+client to specify both a start point byte range and an end point
 byte range of a file from a server-FTP process.</t>
 <t>The syntax for the RANG command when the current transfer mode is STREAM is:
 
@@ -214,15 +214,15 @@ byte range of a file from a server-FTP process.</t>
 <t>[NOTE: end-point is inclusive.]</t>
 
    
-<t>start-point gives the number of octets of the
+<t>'start-point' gives the number of octets of the
 immediately-following transfer to not actually send, effectively
 causing the transmission to be started at a later point. A
 value of zero effectively causes the transmission to be started
-at first byte.  end-point gives the number of octets, counted from the beginning of the file, of the
+at first byte.  'end-point' gives the number of octets, counted from the beginning of the file, of the
 immediately-following transfer to stop sending at, effectively
 causing the transmission to be ended.  (That is, the end point is relative to the start of the file and not relative to the start point). The server-PI will
-response to the RANG command with a 350 reply, indicating that
-RANG parameters has been saved, and that another command, which
+respond to the RANG command with a 350 reply, indicating that
+RANG parameters have been saved, and that another command, which
 should be RETR, should then follow to complete the ranged request.</t>
 
 <t><figure> 
@@ -232,14 +232,18 @@ should be RETR, should then follow to complete the ranged request.</t>
    range-ok       = "350" SP *TCHAR CRLF	  
 </artwork></figure></t>
 
-<t>The RANG command is intended to get partial data of a file.
-When the RANG command is used with RETR, client bears the
-responsibility of merging the retrieved data with partially
+<t>The RANG command is intended to select the partial data of a file.
+When the RANG command is used with RETR, the client bears the
+responsibility of merging the retrieved data with the partially
 retrieved file.  It may choose to use the data obtained other
 than to complete an earlier transfer, or to re-retrieve data that
 had been retrieved before.</t>
 
-<t>The RANG command must be the last command issued before the data
+<t>To reset the range command, "RANG 1 0" should be issued. 
+Invalid RANG requests where 'start-point' is larger than 'end-point' 
+automatically reset the byte selection to the default, which is the whole file.</t>
+
+<t>The RANG command MUST be the last command issued before the data
 transfer command that is to cause a partial data transfer.  The
 effect of issuing a RANG command at any other time is undefined.
 The server-PI may react to a badly positioned RANG command by
@@ -251,7 +255,7 @@ restart attempt.  Because of this, a user-PI that has issued a
 RANG command, but that has not successfully transmitted the
 following data transfer command for any reason, should send
 another RANG command before the next data transfer command.  If
-that transfer is not to be restarted, then "REST 0" should be
+that transfer is not to be restarted, then "RANG 1 0" should be
 issued.</t>
 
 <t>An error response will follow a RANG command only when the server
@@ -606,7 +610,7 @@ This string is case insensitive, and MAY be sent in any mixture of upper or lowe
 	    </references> 
 
 	    <section title="Acknowledgements and Contributors">
-		  <t>Thanks to ...</t>
+		  <t>Thanks to the FTPEXT2 Working Group and Kamil Dudka.</t>
 		  <t>Portions of <xref target="RFC3659"/> were wholly reused in this document.</t>
     </section>
 
