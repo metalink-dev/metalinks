@@ -1,0 +1,672 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en"><head><title>File Transfer Protocol RANG Command for Byte Ranges</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="description" content="File Transfer Protocol RANG Command for Byte Ranges">
+<meta name="generator" content="xml2rfc v1.35 (http://xml.resource.org/)">
+<style type='text/css'><!--
+        body {
+                font-family: verdana, charcoal, helvetica, arial, sans-serif;
+                font-size: small; color: #000; background-color: #FFF;
+                margin: 2em;
+        }
+        h1, h2, h3, h4, h5, h6 {
+                font-family: helvetica, monaco, "MS Sans Serif", arial, sans-serif;
+                font-weight: bold; font-style: normal;
+        }
+        h1 { color: #900; background-color: transparent; text-align: right; }
+        h3 { color: #333; background-color: transparent; }
+
+        td.RFCbug {
+                font-size: x-small; text-decoration: none;
+                width: 30px; height: 30px; padding-top: 2px;
+                text-align: justify; vertical-align: middle;
+                background-color: #000;
+        }
+        td.RFCbug span.RFC {
+                font-family: monaco, charcoal, geneva, "MS Sans Serif", helvetica, verdana, sans-serif;
+                font-weight: bold; color: #666;
+        }
+        td.RFCbug span.hotText {
+                font-family: charcoal, monaco, geneva, "MS Sans Serif", helvetica, verdana, sans-serif;
+                font-weight: normal; text-align: center; color: #FFF;
+        }
+
+        table.TOCbug { width: 30px; height: 15px; }
+        td.TOCbug {
+                text-align: center; width: 30px; height: 15px;
+                color: #FFF; background-color: #900;
+        }
+        td.TOCbug a {
+                font-family: monaco, charcoal, geneva, "MS Sans Serif", helvetica, sans-serif;
+                font-weight: bold; font-size: x-small; text-decoration: none;
+                color: #FFF; background-color: transparent;
+        }
+
+        td.header {
+                font-family: arial, helvetica, sans-serif; font-size: x-small;
+                vertical-align: top; width: 33%;
+                color: #FFF; background-color: #666;
+        }
+        td.author { font-weight: bold; font-size: x-small; margin-left: 4em; }
+        td.author-text { font-size: x-small; }
+
+        /* info code from SantaKlauss at http://www.madaboutstyle.com/tooltip2.html */
+        a.info {
+                /* This is the key. */
+                position: relative;
+                z-index: 24;
+                text-decoration: none;
+        }
+        a.info:hover {
+                z-index: 25;
+                color: #FFF; background-color: #900;
+        }
+        a.info span { display: none; }
+        a.info:hover span.info {
+                /* The span will display just on :hover state. */
+                display: block;
+                position: absolute;
+                font-size: smaller;
+                top: 2em; left: -5em; width: 15em;
+                padding: 2px; border: 1px solid #333;
+                color: #900; background-color: #EEE;
+                text-align: left;
+        }
+
+        a { font-weight: bold; }
+        a:link    { color: #900; background-color: transparent; }
+        a:visited { color: #633; background-color: transparent; }
+        a:active  { color: #633; background-color: transparent; }
+
+        p { margin-left: 2em; margin-right: 2em; }
+        p.copyright { font-size: x-small; }
+        p.toc { font-size: small; font-weight: bold; margin-left: 3em; }
+        table.toc { margin: 0 0 0 3em; padding: 0; border: 0; vertical-align: text-top; }
+        td.toc { font-size: small; font-weight: bold; vertical-align: text-top; }
+
+        ol.text { margin-left: 2em; margin-right: 2em; }
+        ul.text { margin-left: 2em; margin-right: 2em; }
+        li      { margin-left: 3em; }
+
+        /* RFC-2629 <spanx>s and <artwork>s. */
+        em     { font-style: italic; }
+        strong { font-weight: bold; }
+        dfn    { font-weight: bold; font-style: normal; }
+        cite   { font-weight: normal; font-style: normal; }
+        tt     { color: #036; }
+        tt, pre, pre dfn, pre em, pre cite, pre span {
+                font-family: "Courier New", Courier, monospace; font-size: small;
+        }
+        pre {
+                text-align: left; padding: 4px;
+                color: #000; background-color: #CCC;
+        }
+        pre dfn  { color: #900; }
+        pre em   { color: #66F; background-color: #FFC; font-weight: normal; }
+        pre .key { color: #33C; font-weight: bold; }
+        pre .id  { color: #900; }
+        pre .str { color: #000; background-color: #CFF; }
+        pre .val { color: #066; }
+        pre .rep { color: #909; }
+        pre .oth { color: #000; background-color: #FCF; }
+        pre .err { background-color: #FCC; }
+
+        /* RFC-2629 <texttable>s. */
+        table.all, table.full, table.headers, table.none {
+                font-size: small; text-align: center; border-width: 2px;
+                vertical-align: top; border-collapse: collapse;
+        }
+        table.all, table.full { border-style: solid; border-color: black; }
+        table.headers, table.none { border-style: none; }
+        th {
+                font-weight: bold; border-color: black;
+                border-width: 2px 2px 3px 2px;
+        }
+        table.all th, table.full th { border-style: solid; }
+        table.headers th { border-style: none none solid none; }
+        table.none th { border-style: none; }
+        table.all td {
+                border-style: solid; border-color: #333;
+                border-width: 1px 2px;
+        }
+        table.full td, table.headers td, table.none td { border-style: none; }
+
+        hr { height: 1px; }
+        hr.insert {
+                width: 80%; border-style: none; border-width: 0;
+                color: #CCC; background-color: #CCC;
+        }
+--></style>
+</head>
+<body>
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<table summary="layout" width="66%" border="0" cellpadding="0" cellspacing="0"><tr><td><table summary="layout" width="100%" border="0" cellpadding="2" cellspacing="1">
+<tr><td class="header">Network Working Group</td><td class="header">A. Bryan</td></tr>
+<tr><td class="header">Internet-Draft</td><td class="header">T. Tsujikawa</td></tr>
+<tr><td class="header">Intended status: Standards Track</td><td class="header">D. Stenberg</td></tr>
+<tr><td class="header">Expires: July 29, 2011</td><td class="header">January 25, 2011</td></tr>
+</table></td></tr></table>
+<h1><br />File Transfer Protocol RANG Command for Byte Ranges<br />draft-bryan-ftp-range-02</h1>
+
+<h3>Abstract</h3>
+
+<p>The File Transfer Protocol offers the REST command, to designate a starting point for a transfer, but does not currently offer any method to specify an end point.
+       This document specifies a new FTP RANG command to be used by clients to designate a start and end point for STREAM mode transfers with RETR.
+
+</p>
+<h3>Editorial Note (To be removed by RFC Editor)</h3>
+
+<p>
+
+    Discussion of this draft should take place on the FTPEXT2 working group
+    mailing list (ftpext@ietf.org), althought this draft is not a WG item.
+	Related documents (including fancy diffs) can be found at
+    <a href='http://tools.ietf.org/wg/ftpext2/'>http://tools.ietf.org/wg/ftpext2/</a>.
+  
+</p>
+<p>
+    The changes in this draft are summarized in <a class='info' href='#dochistory'>Appendix&nbsp;B<span> (</span><span class='info'>Document History</span><span>)</span></a>.
+  
+</p>
+<h3>Status of this Memo</h3>
+<p>
+This Internet-Draft is submitted  in full
+conformance with the provisions of BCP&nbsp;78 and BCP&nbsp;79.</p>
+<p>
+Internet-Drafts are working documents of the Internet Engineering
+Task Force (IETF).  Note that other groups may also distribute
+working documents as Internet-Drafts.  The list of current
+Internet-Drafts is at http://datatracker.ietf.org/drafts/current/.</p>
+<p>
+Internet-Drafts are draft documents valid for a maximum of six months
+and may be updated, replaced, or obsoleted by other documents at any time.
+It is inappropriate to use Internet-Drafts as reference material or to cite
+them other than as &ldquo;work in progress.&rdquo;</p>
+<p>
+This Internet-Draft will expire on July 29, 2011.</p>
+
+<h3>Copyright Notice</h3>
+<p>
+Copyright (c) 2011 IETF Trust and the persons identified as the
+document authors.  All rights reserved.</p>
+<p>
+This document is subject to BCP 78 and the IETF Trust's Legal
+Provisions Relating to IETF Documents
+(http://trustee.ietf.org/license-info) in effect on the date of
+publication of this document.  Please review these documents
+carefully, as they describe your rights and restrictions with respect
+to this document. Code Components extracted from this document must
+include Simplified BSD License text as described in Section 4.e of
+the Trust Legal Provisions and are provided without warranty as
+described in the Simplified BSD License.</p>
+<a name="toc"></a><br /><hr />
+<h3>Table of Contents</h3>
+<p class="toc">
+<a href="#anchor1">1.</a>&nbsp;
+Introduction<br />
+<a href="#anchor2">2.</a>&nbsp;
+Document Conventions<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor3">2.1.</a>&nbsp;
+Basic Tokens<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor4">2.2.</a>&nbsp;
+Server Replies<br />
+<a href="#anchor5">3.</a>&nbsp;
+Byte Ranges in STREAM Mode<br />
+<a href="#RANG">4.</a>&nbsp;
+The RANGe Command (RANG)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor6">4.1.</a>&nbsp;
+FEAT Command Response for RANG Command<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor7">4.2.</a>&nbsp;
+User-PI usage of RANG<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor8">4.3.</a>&nbsp;
+RANG Command Errors<br />
+<a href="#IANA">5.</a>&nbsp;
+IANA Considerations<br />
+<a href="#anchor9">6.</a>&nbsp;
+Security Considerations<br />
+<a href="#rfc.references1">7.</a>&nbsp;
+References<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#rfc.references1">7.1.</a>&nbsp;
+Normative References<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#rfc.references2">7.2.</a>&nbsp;
+Informative References<br />
+<a href="#anchor12">Appendix&nbsp;A.</a>&nbsp;
+Acknowledgements and Contributors<br />
+<a href="#dochistory">Appendix&nbsp;B.</a>&nbsp;
+Document History<br />
+<a href="#rfc.authors">&#167;</a>&nbsp;
+Authors' Addresses<br />
+</p>
+<br clear="all" />
+
+<a name="anchor1"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.1"></a><h3>1.&nbsp;
+Introduction</h3>
+
+<p>The File Transfer Protocol offers the REST command <a class='info' href='#RFC3659'>[RFC3659]<span> (</span><span class='info'>Hethmon, P., &ldquo;Extensions to FTP,&rdquo; March&nbsp;2007.</span><span>)</span></a>, to designate a starting point for a transfer, but does not currently offer any method to specify an end point.
+       This document specifies a new FTP RANG command to be used by clients to designate a start and end point for STREAM mode transfers with RETR.
+</p>
+<p>The current alternatives, without being able to specify an end point, are to issue an ABOR command or close the data connection.
+</p>
+<p>HTTP offers similar functionality with the Range: header in Section 14.35 of <a class='info' href='#RFC2616'>[RFC2616]<span> (</span><span class='info'>Fielding, R., Gettys, J., Mogul, J., Frystyk, H., Masinter, L., Leach, P., and T. Berners-Lee, &ldquo;Hypertext Transfer Protocol -- HTTP/1.1,&rdquo; June&nbsp;1999.</span><span>)</span></a>, where a specific byte range can optionally be requested.
+</p>
+<a name="anchor2"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.2"></a><h3>2.&nbsp;
+Document Conventions</h3>
+
+<p>This specification describes conformance of File Transfer Protocol Extension for RANG, a start and end point in a byte range.
+</p>
+<p>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+	"SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+	document are to be interpreted as described in BCP 14, <a class='info' href='#RFC2119'>[RFC2119]<span> (</span><span class='info'>Bradner, S., &ldquo;Key words for use in RFCs to Indicate Requirement Levels,&rdquo; March&nbsp;1997.</span><span>)</span></a>, as scoped to those conformance targets.
+</p>
+<p>This document also uses notation defined in STD 9, <a class='info' href='#RFC0959'>[RFC0959]<span> (</span><span class='info'>Postel, J. and J. Reynolds, &ldquo;File Transfer Protocol,&rdquo; October&nbsp;1985.</span><span>)</span></a>.
+	In particular, the terms or commands "reply", "user", "file", "FTP commands", "user-PI" (user protocol interpreter), "server-FTP process",
+    "server-PI", "mode", "Image type", "Stream transfer mode", "type", "STOR", "RETR", and "ASCII", are all used here as defined there. The command "REST" is used as defined in Section 5 of <a class='info' href='#RFC3659'>[RFC3659]<span> (</span><span class='info'>Hethmon, P., &ldquo;Extensions to FTP,&rdquo; March&nbsp;2007.</span><span>)</span></a>.
+</p>
+<p>In the examples of FTP dialogs presented in this document, lines that
+   begin "C&gt; " were sent over the control connection from the user-PI to
+   the server-PI, and lines that begin "S&gt; " were sent over the control
+   connection from the server-PI to the user-PI. In all cases, the
+   prefixes shown above, including the one space, have been added for
+   the purposes of this document, and are not a part of the data
+   exchanged between client and server.
+</p>
+<p>Syntax required is defined using the Augmented BNF defined in <a class='info' href='#RFC5234'>[RFC5234]<span> (</span><span class='info'>Crocker, D. and P. Overell, &ldquo;Augmented BNF for Syntax Specifications: ABNF,&rdquo; January&nbsp;2008.</span><span>)</span></a>.
+</p>
+<a name="anchor3"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.2.1"></a><h3>2.1.&nbsp;
+Basic Tokens</h3>
+
+<p>This document imports the core definitions given in Appendix B of
+   <a class='info' href='#RFC5234'>[RFC5234]<span> (</span><span class='info'>Crocker, D. and P. Overell, &ldquo;Augmented BNF for Syntax Specifications: ABNF,&rdquo; January&nbsp;2008.</span><span>)</span></a>.  There definitions will be found for basic ABNF elements
+   like ALPHA, DIGIT, SP, etc.  To that, the following term is added
+   for use in this document.
+</p>
+<p>
+<p>
+</p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
+   TCHAR = VCHAR / SP / HTAB    ; visible plus white space
+</pre></div>
+
+<p>The VCHAR (from <a class='info' href='#RFC5234'>[RFC5234]<span> (</span><span class='info'>Crocker, D. and P. Overell, &ldquo;Augmented BNF for Syntax Specifications: ABNF,&rdquo; January&nbsp;2008.</span><span>)</span></a>) and TCHAR rules give basic character
+   types from varying sub-sets of the ASCII character set for use in
+   various commands and responses.
+</p>
+<p>Note that in ABNF, string literals are case insensitive.  That
+   convention is preserved in this document, and implies that FTP
+   commands and parameters that are added by this specification have
+   values that can be represented in any case.  That is, "RANG" is the
+   same as "rang", "Rang", "RaNg", etc., and "ftp.example.com" is the
+   same as "Ftp.Example.Com", "fTp.eXample.cOm", etc.
+</p>
+<a name="anchor4"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.2.2"></a><h3>2.2.&nbsp;
+Server Replies</h3>
+
+<p>Section 4.2 of <a class='info' href='#RFC0959'>[RFC0959]<span> (</span><span class='info'>Postel, J. and J. Reynolds, &ldquo;File Transfer Protocol,&rdquo; October&nbsp;1985.</span><span>)</span></a> defines the format and meaning of replies
+   by the server-PI to FTP commands from the user-PI.  Those reply
+   conventions are used here without change.
+</p>
+<p>
+<p>
+</p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
+   error-response = error-code SP *TCHAR CRLF
+   error-code     = ("4" / "5") 2DIGIT
+</pre></div>
+
+<p>Implementers should note that the ABNF syntax (which was not used in
+   <a class='info' href='#RFC0959'>[RFC0959]<span> (</span><span class='info'>Postel, J. and J. Reynolds, &ldquo;File Transfer Protocol,&rdquo; October&nbsp;1985.</span><span>)</span></a>) used in this document, and other FTP related documents,
+   sometimes shows replies using the one line format.  Unless otherwise
+   explicitly stated, that is not intended to imply that multi-line
+   responses are not permitted.  Implementers should assume that, unless
+   stated to the contrary, any reply to any FTP command (including QUIT)
+   can be of the multi-line format described in <a class='info' href='#RFC0959'>[RFC0959]<span> (</span><span class='info'>Postel, J. and J. Reynolds, &ldquo;File Transfer Protocol,&rdquo; October&nbsp;1985.</span><span>)</span></a>.
+</p>
+<p>Throughout this document, replies will be identified by the three
+   digit code that is their first element.  Thus the term "500 reply"
+   means a reply from the server-PI using the three digit code "500".
+</p>
+<a name="anchor5"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.3"></a><h3>3.&nbsp;
+Byte Ranges in STREAM Mode</h3>
+
+<p>
+   In STREAM mode, the data connection contains just a stream of
+   unformatted octets of data.  Explicit restart markers thus cannot be
+   inserted into the data stream, they would be indistinguishable from
+   data.  For this reason, the FTP specification <a class='info' href='#RFC0959'>[RFC0959]<span> (</span><span class='info'>Postel, J. and J. Reynolds, &ldquo;File Transfer Protocol,&rdquo; October&nbsp;1985.</span><span>)</span></a> did not provide the
+   ability to do restarts in stream mode.  However, there is not really
+   a need to have explicit restart markers in this case, as restart
+   markers can be implied by the octet offset into the data stream.
+
+</p>
+<p>
+   Because the data stream defines the file in STREAM mode, a different
+   data stream would represent a different file.  Thus, an offset will
+   always represent the same position within a file.  On the other hand,
+   in other modes than STREAM, the same file can be transferred using
+   quite different octet sequences and yet be reconstructed into the one
+   identical file.  Thus an offset into the data stream in transfer
+   modes other than STREAM would not give an unambiguous restart or end point.
+
+</p>
+<p>
+   If the data representation TYPE is IMAGE and the STRUcture is File,
+   for many systems the file will be stored exactly in the same format
+   as it is sent across the data connection.  It is then usually very
+   easy for the receiver to determine how much data was previously
+   received, and notify the sender of the offset where the transfer
+   should be restarted.  In other representation types and structures
+   more effort will be required, but it remains always possible to
+   determine the offset with finite, but perhaps non-negligible, effort.
+   In the worst case, an FTP process may need to open a data connection
+   to itself, set the appropriate transfer type and structure, and
+   actually transmit the file, counting the transmitted octets.
+
+</p>
+<p>
+   If the user-FTP process is intending to restart a retrieve, it will
+   directly calculate the restart marker and send that information in
+   the RESTart command.  However, if the user-FTP process is intending
+   to restart sending the file, it needs to be able to determine how
+   much data was previously sent, and correctly received and saved.
+   The purpose of the SIZE command, as documented in <a class='info' href='#RFC3659'>[RFC3659]<span> (</span><span class='info'>Hethmon, P., &ldquo;Extensions to FTP,&rdquo; March&nbsp;2007.</span><span>)</span></a>, is to get this information.
+
+</p>
+<a name="RANG"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.4"></a><h3>4.&nbsp;
+The RANGe Command (RANG)</h3>
+
+<p>A new command "RANG" is added to the FTP command set to allow the
+client to specify both a start point byte range and an end point
+byte range of a file from a server-FTP process.
+</p>
+<p>The syntax for the RANG command when the current transfer mode is STREAM is:
+
+
+<p>
+</p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
+   range-command = "RANG" SP start-point  SP end-point CRLF
+   start-point = 1*DIGIT
+   end-point = 1*DIGIT
+</pre></div>
+
+<p>[NOTE: end-point is inclusive.]
+</p>
+<p>'start-point' gives the number of octets of the
+immediately-following transfer to not actually send, effectively
+causing the transmission to be started at a later point. A
+value of zero effectively causes the transmission to be started
+at first byte.  'end-point' gives the number of octets, counted from the beginning of the file, of the
+immediately-following transfer to stop sending at, effectively
+causing the transmission to be ended.  (That is, the end point is relative to the start of the file and not relative to the start point). The server-PI will
+respond to the RANG command with a 350 reply, indicating that
+RANG parameters have been saved, and that another command, which
+should be RETR, should then follow to complete the ranged request.
+</p>
+<p>
+<p>
+</p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
+   range-response = range-ok / error-response
+   range-ok       = "350" SP *TCHAR CRLF
+</pre></div>
+
+<p>The RANG command is intended to select the partial data of a file.
+When the RANG command is used with RETR, the client bears the
+responsibility of merging the retrieved data with the partially
+retrieved file.  It may choose to use the data obtained other
+than to complete an earlier transfer, or to re-retrieve data that
+had been retrieved before.
+</p>
+<p>To reset the range command, "RANG 1 0" should be issued. 
+Invalid RANG requests where 'start-point' is larger than 'end-point' 
+automatically reset the byte selection to the default, which is the whole file.
+</p>
+<p>The RANG command MUST be the last command issued before the data
+transfer command that is to cause a partial data transfer.  The
+effect of issuing a RANG command at any other time is undefined.
+The server-PI may react to a badly positioned RANG command by
+issuing an error response to the following command, not being a
+restartable data transfer command, or it may save the start-point
+and/or end-point byte range value and apply it to the next data
+transfer command, or it may silently ignore the inappropriate
+restart attempt.  Because of this, a user-PI that has issued a
+RANG command, but that has not successfully transmitted the
+following data transfer command for any reason, should send
+another RANG command before the next data transfer command.  If
+that transfer is not to be restarted, then "RANG 1 0" should be
+issued.
+</p>
+<p>An error response will follow a RANG command only when the server
+does not implement the command, or when command syntax is
+invalid.  Any other errors, including such problems as
+start-point and/or end-point byte range out of range, should be
+reported when the following transfer command is issued.  Such
+errors will cause that transfer request to be rejected with an
+error indicating the invalid restart attempt.
+</p>
+<a name="anchor6"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.4.1"></a><h3>4.1.&nbsp;
+FEAT Command Response for RANG Command</h3>
+
+<p>When replying to the FEAT command <a class='info' href='#RFC2389'>[RFC2389]<span> (</span><span class='info'>Hethmon, P. and R. Elz, &ldquo;Feature negotiation mechanism for the File Transfer Protocol,&rdquo; August&nbsp;1998.</span><span>)</span></a>, a server-FTP process that supports the RANG command, as specified here, MUST include, a line containing exactly the string "RANG STREAM".
+This string is case insensitive, and MAY be sent in any mixture of upper or lower case, however it SHOULD be sent in upper case. That is, the response SHOULD be:
+</p>
+<p>
+<p>
+</p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
+   C&gt; FEAT
+   S&gt; 211-Extensions supported:
+   S&gt;  ...
+   S&gt;  RANG STREAM
+   S&gt;  ...
+   S&gt; 211 END
+</pre></div>
+
+<p>The ellipses indicate place holders where other features may be included, and are not required. The one-space indentation of the feature lines is mandatory <a class='info' href='#RFC2389'>[RFC2389]<span> (</span><span class='info'>Hethmon, P. and R. Elz, &ldquo;Feature negotiation mechanism for the File Transfer Protocol,&rdquo; August&nbsp;1998.</span><span>)</span></a>.
+</p>
+<p>
+<p>
+</p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
+   range-feat = SP "RANG" SP "STREAM"
+</pre></div>
+
+<a name="anchor7"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.4.2"></a><h3>4.2.&nbsp;
+User-PI usage of RANG</h3>
+
+<p>The user-PI issues the FEAT command to query the server-PI if it supports the RANG command. In this example, the server-PI also supports REST.
+</p>
+<p>
+<p>
+</p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
+   C&gt; FEAT
+   S&gt; 211-Extensions supported:
+   S&gt;  ...
+   S&gt;  REST STREAM
+   S&gt;  RANG STREAM
+   S&gt;  ...
+   S&gt; 211 END
+</pre></div>
+
+<p>
+   Assume that the transfer of a largish file has previously been
+   interrupted after 802816 octets had been received, that the transfer should stop at octet 1000000 of the file, that the previous
+   transfer was with TYPE=I, and that it has been verified that the file
+   on the server has not since changed.
+
+<p>
+</p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
+   C&gt; TYPE I
+   S&gt; 200 Type set to I.
+   C&gt; PORT 127,0,0,1,15,107
+   S&gt; 200 PORT command successful.
+   C&gt; RANG 802816 1000000
+   S&gt; 350 Restarting at 802816. End Byte range at 1000000. Send RETRIEVE
+   C&gt; RETR cap60.pl198.tar
+   S&gt; 150 Opening BINARY mode data connection
+   [...]
+   S&gt; 226 Transfer complete.
+</pre></div>
+
+<p>In the above example, data is sent from offset 802816 to, and including, offset 1000000.
+</p>
+<a name="anchor8"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.4.3"></a><h3>4.3.&nbsp;
+RANG Command Errors</h3>
+
+<p>The server-PI SHOULD reply with a 500 reply if the RANG command is unrecognized or unimplemented.
+</p>
+<p>The server-PI SHOULD reply with a 550 reply if the RANG command is used on a file that can not be found.
+</p>
+<p>The server-PI SHOULD reply with a 551 reply if the server-PI is unable to deliver the file with TYPE I and MODE S.
+</p>
+<p>The server-PI SHOULD reply with a 552 reply if the user is not allowed to use the RANG command.
+</p>
+<p>The server-PI SHOULD reply with a 553 reply if the user requests the RANG of a directory, which is not allowed.
+</p>
+<p>The server-PI SHOULD reply with a 5yz reply if the specified end point is larger than the actual file or the end point is before the start point.
+</p>
+<a name="IANA"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.5"></a><h3>5.&nbsp;
+IANA Considerations</h3>
+
+<p>This new command is added to the "FTP Commands and Extensions" registry created by <a class='info' href='#RFC5797'>[RFC5797]<span> (</span><span class='info'>Klensin, J. and A. Hoenes, &ldquo;FTP Command and Extension Registry,&rdquo; March&nbsp;2010.</span><span>)</span></a>.
+</p>
+<p>Command Name: RANG
+</p>
+<p>Description: End point byte range (for STREAM mode).
+</p>
+<p>FEAT String: RANG STREAM
+</p>
+<p>Command Type: Service execution/parameter setting
+</p>
+<p>Conformance Requirements: Optional
+</p>
+<p>Reference: This specification
+</p>
+<a name="anchor9"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.6"></a><h3>6.&nbsp;
+Security Considerations</h3>
+
+<p>
+   This memo does not directly concern security.  It is not believed
+   that any of the mechanisms documented here impact in any particular
+   way upon the security of FTP.
+</p>
+<a name="rfc.references"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.7"></a><h3>7.&nbsp;
+References</h3>
+
+<a name="rfc.references1"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<h3>7.1.&nbsp;Normative References</h3>
+<table width="99%" border="0">
+<tr><td class="author-text" valign="top"><a name="RFC0959">[RFC0959]</a></td>
+<td class="author-text">Postel, J. and J. Reynolds, &ldquo;<a href="http://tools.ietf.org/html/rfc0959">File Transfer Protocol</a>,&rdquo; STD&nbsp;9, RFC&nbsp;0959, October&nbsp;1985.</td></tr>
+<tr><td class="author-text" valign="top"><a name="RFC2119">[RFC2119]</a></td>
+<td class="author-text"><a href="mailto:sob@harvard.edu">Bradner, S.</a>, &ldquo;<a href="http://tools.ietf.org/html/rfc2119">Key words for use in RFCs to Indicate Requirement Levels</a>,&rdquo; BCP&nbsp;14, RFC&nbsp;2119, March&nbsp;1997.</td></tr>
+<tr><td class="author-text" valign="top"><a name="RFC2389">[RFC2389]</a></td>
+<td class="author-text">Hethmon, P. and R. Elz, &ldquo;<a href="http://tools.ietf.org/html/rfc2389">Feature negotiation mechanism for the File Transfer Protocol</a>,&rdquo; RFC&nbsp;2389, August&nbsp;1998.</td></tr>
+<tr><td class="author-text" valign="top"><a name="RFC3659">[RFC3659]</a></td>
+<td class="author-text">Hethmon, P., &ldquo;<a href="http://tools.ietf.org/html/rfc3659">Extensions to FTP</a>,&rdquo; RFC&nbsp;3659, March&nbsp;2007.</td></tr>
+<tr><td class="author-text" valign="top"><a name="RFC5234">[RFC5234]</a></td>
+<td class="author-text">Crocker, D. and P. Overell, &ldquo;<a href="http://tools.ietf.org/html/rfc5234">Augmented BNF for Syntax Specifications: ABNF</a>,&rdquo; STD&nbsp;68, RFC&nbsp;5234, January&nbsp;2008.</td></tr>
+</table>
+
+<a name="rfc.references2"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<h3>7.2.&nbsp;Informative References</h3>
+<table width="99%" border="0">
+<tr><td class="author-text" valign="top"><a name="RFC2616">[RFC2616]</a></td>
+<td class="author-text"><a href="mailto:fielding@ics.uci.edu">Fielding, R.</a>, <a href="mailto:jg@w3.org">Gettys, J.</a>, <a href="mailto:mogul@wrl.dec.com">Mogul, J.</a>, <a href="mailto:frystyk@w3.org">Frystyk, H.</a>, <a href="mailto:masinter@parc.xerox.com">Masinter, L.</a>, <a href="mailto:paulle@microsoft.com">Leach, P.</a>, and <a href="mailto:timbl@w3.org">T. Berners-Lee</a>, &ldquo;<a href="http://tools.ietf.org/html/rfc2616">Hypertext Transfer Protocol -- HTTP/1.1</a>,&rdquo; RFC&nbsp;2616, June&nbsp;1999 (<a href="http://www.rfc-editor.org/rfc/rfc2616.txt">TXT</a>, <a href="http://www.rfc-editor.org/rfc/rfc2616.ps">PS</a>, <a href="http://www.rfc-editor.org/rfc/rfc2616.pdf">PDF</a>, <a href="http://xml.resource.org/public/rfc/html/rfc2616.html">HTML</a>, <a href="http://xml.resource.org/public/rfc/xml/rfc2616.xml">XML</a>).</td></tr>
+<tr><td class="author-text" valign="top"><a name="RFC5797">[RFC5797]</a></td>
+<td class="author-text">Klensin, J. and A. Hoenes, &ldquo;<a href="http://tools.ietf.org/html/rfc5797">FTP Command and Extension Registry</a>,&rdquo; RFC&nbsp;5797, March&nbsp;2010.</td></tr>
+</table>
+
+<a name="anchor12"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.A"></a><h3>Appendix A.&nbsp;
+Acknowledgements and Contributors</h3>
+
+<p>Thanks to the FTPEXT2 Working Group and Kamil Dudka.
+</p>
+<p>Portions of <a class='info' href='#RFC3659'>[RFC3659]<span> (</span><span class='info'>Hethmon, P., &ldquo;Extensions to FTP,&rdquo; March&nbsp;2007.</span><span>)</span></a> were wholly reused in this document.
+</p>
+<a name="dochistory"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.B"></a><h3>Appendix B.&nbsp;
+Document History</h3>
+
+<p>[[ to be removed by the RFC editor before publication as an RFC. ]]
+</p>
+<p>Known issues concerning this draft:
+	    </p>
+<ul class="text">
+<li>Expand current alternatives (ABOR, close data connection) and why they are not optimal.
+</li>
+</ul>
+
+<p>draft-bryan-ftp-range-01 : January, 2011.
+	    
+	    </p>
+<ul class="text">
+<li>Refinements. "RANG 1 0" resets byte selection.
+</li>
+</ul>
+
+<p>draft-bryan-ftp-range-00 : December 13, 2010.
+	    
+	    </p>
+<ul class="text">
+<li>Initial draft.
+</li>
+</ul>
+
+<a name="rfc.authors"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<h3>Authors' Addresses</h3>
+<table width="99%" border="0" cellpadding="0" cellspacing="0">
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text">Anthony Bryan</td></tr>
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text">Pompano Beach, FL</td></tr>
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text">USA</td></tr>
+<tr><td class="author" align="right">Email:&nbsp;</td>
+<td class="author-text"><a href="mailto:anthonybryan@gmail.com">anthonybryan@gmail.com</a></td></tr>
+<tr><td class="author" align="right">URI:&nbsp;</td>
+<td class="author-text"><a href="http://www.metalinker.org">http://www.metalinker.org</a></td></tr>
+<tr cellpadding="3"><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text">Tatsuhiro Tsujikawa</td></tr>
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text">Shiga</td></tr>
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text">Japan</td></tr>
+<tr><td class="author" align="right">Email:&nbsp;</td>
+<td class="author-text"><a href="mailto:tatsuhiro.t@gmail.com">tatsuhiro.t@gmail.com</a></td></tr>
+<tr><td class="author" align="right">URI:&nbsp;</td>
+<td class="author-text"><a href="http://aria2.sourceforge.net">http://aria2.sourceforge.net</a></td></tr>
+<tr cellpadding="3"><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text">Daniel Stenberg</td></tr>
+<tr><td class="author" align="right">Email:&nbsp;</td>
+<td class="author-text"><a href="mailto:daniel@haxx.se">daniel@haxx.se</a></td></tr>
+<tr><td class="author" align="right">URI:&nbsp;</td>
+<td class="author-text"><a href="http://www.haxx.se/">http://www.haxx.se/</a></td></tr>
+</table>
+</body></html>
