@@ -206,7 +206,7 @@ byte range of a file from a server-FTP process.</t>
 <figure> 
 	  <preamble></preamble>
 	  <artwork type="ABNF">
-   range-command = "RANG" SP start-point  SP end-point CRLF
+   range-command = "RANG" SP start-point SP end-point CRLF
    start-point = 1*DIGIT
    end-point = 1*DIGIT	  
 </artwork></figure></t>

@@ -83,7 +83,7 @@ HTTP has a similar feature named Instance Digests <xref target="RFC3230"/> which
 <t><figure> 
 	  <preamble>HASH server response with Positive Completion code, the currently selected HASH algorithm, the requested hash of the file, and the pathname of the file:</preamble>
 	  <artwork type="example">
-   S&gt; 213 SHA-1 80bc95fd391772fa61c91ed68567f0980bb45fd9 filename.ext
+   S&gt; 213 SHA-1 0-255 80bc95fd391772fa61c91ed68567f0980bb45fd9 filename.ext
 </artwork></figure></t>
 	  
     </section>
@@ -191,8 +191,15 @@ HTTP has a similar feature named Instance Digests <xref target="RFC3230"/> which
 	  <preamble></preamble>
 	  <artwork type="ABNF">
    hash-response = hash-ok / error-response
-   hash-ok       = "213" SP hashname SP 1*HEXDIGIT SP &lt;pathname&gt; CRLF
+   hash-ok       = "213" SP hashname SP start-point "-" end-point SP filehash SP &lt;pathname&gt; CRLF
+   hashname      = 1*( hchar )
+   start-point   = 1*DIGIT
+   end-point     = 1*DIGIT
+   filehash      = 1*HEXDIGIT
+   hchar         = ALPHA / DIGIT / "-" / "_" / "/" / "." / ","
 </artwork></figure></t>
+
+<t>The 'start-point' and 'end-point' make up the byte range of the file that has been hashed, and MUST be included.</t>
 
 <t>All hash values MUST be encoded in lowercase hexadecimal format.</t>
 
@@ -206,6 +213,8 @@ TYPE I and MODE S and were to calculate the hash on the received octet
 data. In other words, if a client were to download a full file using
 TYPE I and MODE S and were to calculate the hash on the received octet
 data, it would be identical to the hash returned by HASH.</t>
+
+<t>Depending on multiple conditions, the final server response to a HASH command could take long time, so a server could output a "213-" line every 5-10 seconds to avoid the connection being idle and silent.</t>
 
 
 <section title="FEAT Command Response for HASH Command">
@@ -282,6 +291,13 @@ This command word is case insensitive, and MAY be sent in any mixture of upper o
 
 </section>
 
+<section title="Partial File Hashes with RANG">
+
+<t>Partial file hashes, as opposed to full file hashes, are available by selecting a byte range with the RANG command <xref target="I-D.bryan-ftp-range"/> and then performing the HASH command.</t>
+
+</section>
+
+
 <section title="User-PI usage of HASH">
 
 <t>The user-PI issues the FEAT command to query the server-PI about which algorithm is currently selected. This also reveals the other algorithms that the server supports. In this example, the SHA-1 algorithm is currently selected, as indicated by the asterisk.</t>
@@ -313,13 +329,27 @@ This command word is case insensitive, and MAY be sent in any mixture of upper o
    S&gt; 200 SHA-256
 </artwork></figure></t>
 
-<t>The user-PI requests the cryptographic hash of a file with HASH command. Server-PI replies with the Positive Completion code, the currently selected HASH algorithm, the requested hash of the file, and the pathname of the file.
+<t>The user-PI requests a byte range of 0-49 with the RANG command, then immediately followed by a request of the cryptographic hash of a file with HASH command. Server-PI replies with the Positive Completion code, the currently selected HASH algorithm, the byte range, the requested hash of the file, and the pathname of the file.
+<figure>
+	  <preamble></preamble>
+	  <artwork type="example">
+   C&gt; RANG 0 49
+   C&gt; HASH filename.ext
+   S&gt; 213-
+   S&gt; 213 SHA-256 0-49 169cd22282da7f147cb491e559e9dd46fa... filename.ext
+</artwork></figure></t>
+
+
+<t>Here, no RANG command is issued before HASH, so by default the whole file is hashed. The user-PI requests the cryptographic hash of a file with HASH command. Server-PI replies with the Positive Completion code, the currently selected HASH algorithm, the requested hash of the file, and the pathname of the file.
 <figure>
 	  <preamble></preamble>
 	  <artwork type="example">
    C&gt; HASH filename.ext
-   S&gt; 213 SHA-256 f0ad929cd259957e160ea442eb80986b5f... filename.ext
+   S&gt; 213-
+   S&gt; 213 SHA-256 0-99 f0ad929cd259957e160ea442eb80986b5f... filename.ext
 </artwork></figure></t>
+
+
 
 <t>Client downloads file. Client hashes the downloaded file and compares its hash to the hash obtained from the server. The HASH command could also be used to verify that an uploaded file has the same hash as the local file.</t>
 
@@ -387,7 +417,7 @@ updates or invalidates the cached hash when the content of the corresponding
 file changes. A server may refuse to process a HASH command for many reasons, 
 one of which may be a suspected denial-of-service attack. A client MUST be 
 able to understand that refusal to process HASH commands may be transient 
-(if indicated by a 4yz response) and MAY be honoured later if the server so 
+(if indicated by a 450 response) and MAY be honoured later if the server so 
 decides. A client MUST allow that a HASH command might take a reasonably long time to complete.</t>
 
 <t>Server operators might wish to allow the HASH command but restrict its use to certain files, for
@@ -524,6 +554,25 @@ purpose is an implementation decision.</t>
 <seriesInfo name="FIPS PUB" value="180-3"></seriesInfo>
 </reference>
 
+<reference anchor='I-D.bryan-ftp-range'>
+<front>
+<title>File Transfer Protocol RANG Command for Byte Ranges</title>
+
+<author initials='A' surname='Bryan' fullname='Anthony Bryan'>
+    <organization />
+</author>
+<author initials='T' surname='Tsujikawa' fullname='Tatsuhiro Tsujikawa'>
+    <organization />
+</author>
+<author initials='D' surname='Stenberg' fullname='Daniel Stenberg'>
+    <organization />
+</author>
+</front>
+<seriesInfo name='Internet-Draft' value='draft-bryan-ftp-range-01' />
+</reference>
+
+
+
 	  </references>
 
 
@@ -652,7 +701,7 @@ purpose is an implementation decision.</t>
 		<t>[[ to be removed by the RFC editor before publication as an RFC. ]]</t>
 		<t>Known issues concerning this draft:
 	    <list style="symbols"> 
-	      
+	      <t>Use "MLSx style" response? S> 213 Hash.SHA-1=80bc95fd3...;Range=0-199; filename.ext</t>
 		  <t>Section needs improvement: which files should a server process a HASH command for a logged in user?</t>
 
 	    </list></t>
@@ -661,7 +710,7 @@ purpose is an implementation decision.</t>
 
 	    <list style="symbols">
 
-          <t>Something.</t>
+          <t>Partial file hashes with RANG command.</t>
 	    </list></t>
 		
 <t>draft-ietf-ftpext2-hash-00 : November 24, 2010

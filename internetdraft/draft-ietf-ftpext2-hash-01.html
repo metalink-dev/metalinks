@@ -144,7 +144,7 @@
 <tr><td class="header">FTPEXT2 Working Group</td><td class="header">A. Bryan</td></tr>
 <tr><td class="header">Internet-Draft</td><td class="header">T. Kosse</td></tr>
 <tr><td class="header">Intended status: Standards Track</td><td class="header">D. Stenberg</td></tr>
-<tr><td class="header">Expires: July 23, 2011</td><td class="header">January 19, 2011</td></tr>
+<tr><td class="header">Expires: July 29, 2011</td><td class="header">January 25, 2011</td></tr>
 </table></td></tr></table>
 <h1><br />File Transfer Protocol HASH Command for Cryptographic Hashes<br />draft-ietf-ftpext2-hash-01</h1>
 
@@ -184,7 +184,7 @@ and may be updated, replaced, or obsoleted by other documents at any time.
 It is inappropriate to use Internet-Drafts as reference material or to cite
 them other than as &ldquo;work in progress.&rdquo;</p>
 <p>
-This Internet-Draft will expire on July 23, 2011.</p>
+This Internet-Draft will expire on July 29, 2011.</p>
 
 <h3>Copyright Notice</h3>
 <p>
@@ -220,14 +220,16 @@ FEAT Command Response for HASH Command<br />
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor7">3.2.</a>&nbsp;
 OPTS Parameters for HASH<br />
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor8">3.3.</a>&nbsp;
-User-PI usage of HASH<br />
+Partial File Hashes with RANG<br />
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor9">3.4.</a>&nbsp;
+User-PI usage of HASH<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor10">3.5.</a>&nbsp;
 HASH Command Errors<br />
 <a href="#IANA">4.</a>&nbsp;
 IANA Considerations<br />
-<a href="#anchor10">5.</a>&nbsp;
+<a href="#anchor11">5.</a>&nbsp;
 Implementation Requirements<br />
-<a href="#anchor11">6.</a>&nbsp;
+<a href="#anchor12">6.</a>&nbsp;
 Security Considerations<br />
 <a href="#rfc.references1">7.</a>&nbsp;
 References<br />
@@ -235,9 +237,9 @@ References<br />
 Normative References<br />
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="#rfc.references2">7.2.</a>&nbsp;
 Informative References<br />
-<a href="#anchor14">Appendix&nbsp;A.</a>&nbsp;
+<a href="#anchor15">Appendix&nbsp;A.</a>&nbsp;
 Acknowledgements and Contributors<br />
-<a href="#anchor15">Appendix&nbsp;B.</a>&nbsp;
+<a href="#anchor16">Appendix&nbsp;B.</a>&nbsp;
 List of Non-standard Cryptographic Hash or Checksum Commands and Implementations<br />
 <a href="#dochistory">Appendix&nbsp;C.</a>&nbsp;
 Document History<br />
@@ -271,7 +273,7 @@ Example</h3>
 <p>
 <p>HASH server response with Positive Completion code, the currently selected HASH algorithm, the requested hash of the file, and the pathname of the file:
 </p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
-   S&gt; 213 SHA-1 80bc95fd391772fa61c91ed68567f0980bb45fd9 filename.ext
+   S&gt; 213 SHA-1 0-255 80bc95fd391772fa61c91ed68567f0980bb45fd9 filename.ext
 </pre></div>
 
 <a name="anchor3"></a><br /><hr />
@@ -382,9 +384,16 @@ The HASH Command (HASH)</h3>
 <p>
 </p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
    hash-response = hash-ok / error-response
-   hash-ok       = "213" SP hashname SP 1*HEXDIGIT SP &lt;pathname&gt; CRLF
+   hash-ok       = "213" SP hashname SP start-point "-" end-point SP filehash SP &lt;pathname&gt; CRLF
+   hashname      = 1*( hchar )
+   start-point   = 1*DIGIT
+   end-point     = 1*DIGIT
+   filehash      = 1*HEXDIGIT
+   hchar         = ALPHA / DIGIT / "-" / "_" / "/" / "." / ","
 </pre></div>
 
+<p>The 'start-point' and 'end-point' make up the byte range of the file that has been hashed, and MUST be included.
+</p>
 <p>All hash values MUST be encoded in lowercase hexadecimal format.
 </p>
 <p>The HASH command uses the currently selected hash algorithm. The currently selected hash algorithm can be determined with FEAT or OPTS HASH, and changed with OPTS HASH.
@@ -396,6 +405,8 @@ TYPE I and MODE S and were to calculate the hash on the received octet
 data. In other words, if a client were to download a full file using
 TYPE I and MODE S and were to calculate the hash on the received octet
 data, it would be identical to the hash returned by HASH.
+</p>
+<p>Depending on multiple conditions, the final server response to a HASH command could take long time, so a server could output a "213-" line every 5-10 seconds to avoid the connection being idle and silent.
 </p>
 <a name="anchor6"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
@@ -476,6 +487,13 @@ OPTS Parameters for HASH</h3>
 <a name="anchor8"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.3.3"></a><h3>3.3.&nbsp;
+Partial File Hashes with RANG</h3>
+
+<p>Partial file hashes, as opposed to full file hashes, are available by selecting a byte range with the RANG command <a class='info' href='#I-D.bryan-ftp-range'>[I&#8209;D.bryan&#8209;ftp&#8209;range]<span> (</span><span class='info'>Bryan, A., Tsujikawa, T., and D. Stenberg, &ldquo;File Transfer Protocol RANG Command for Byte Ranges,&rdquo; .</span><span>)</span></a> and then performing the HASH command.
+</p>
+<a name="anchor9"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.3.4"></a><h3>3.4.&nbsp;
 User-PI usage of HASH</h3>
 
 <p>The user-PI issues the FEAT command to query the server-PI about which algorithm is currently selected. This also reveals the other algorithms that the server supports. In this example, the SHA-1 algorithm is currently selected, as indicated by the asterisk.
@@ -507,19 +525,30 @@ User-PI usage of HASH</h3>
    S&gt; 200 SHA-256
 </pre></div>
 
-<p>The user-PI requests the cryptographic hash of a file with HASH command. Server-PI replies with the Positive Completion code, the currently selected HASH algorithm, the requested hash of the file, and the pathname of the file.
+<p>The user-PI requests a byte range of 0-49 with the RANG command, then immediately followed by a request of the cryptographic hash of a file with HASH command. Server-PI replies with the Positive Completion code, the currently selected HASH algorithm, the byte range, the requested hash of the file, and the pathname of the file.
+
+<p>
+</p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
+   C&gt; RANG 0 49
+   C&gt; HASH filename.ext
+   S&gt; 213-
+   S&gt; 213 SHA-256 0-49 169cd22282da7f147cb491e559e9dd46fa... filename.ext
+</pre></div>
+
+<p>Here, no RANG command is issued before HASH, so by default the whole file is hashed. The user-PI requests the cryptographic hash of a file with HASH command. Server-PI replies with the Positive Completion code, the currently selected HASH algorithm, the requested hash of the file, and the pathname of the file.
 
 <p>
 </p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
    C&gt; HASH filename.ext
-   S&gt; 213 SHA-256 f0ad929cd259957e160ea442eb80986b5f... filename.ext
+   S&gt; 213-
+   S&gt; 213 SHA-256 0-99 f0ad929cd259957e160ea442eb80986b5f... filename.ext
 </pre></div>
 
 <p>Client downloads file. Client hashes the downloaded file and compares its hash to the hash obtained from the server. The HASH command could also be used to verify that an uploaded file has the same hash as the local file.
 </p>
-<a name="anchor9"></a><br /><hr />
+<a name="anchor10"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.3.4"></a><h3>3.4.&nbsp;
+<a name="rfc.section.3.5"></a><h3>3.5.&nbsp;
 HASH Command Errors</h3>
 
 <p>The server-PI SHOULD reply with a 450 reply if the server is busy, e.g. already hashing other files yet inviting the client to retry in the future.
@@ -557,14 +586,14 @@ IANA Considerations</h3>
 </p>
 <p>Reference: This specification
 </p>
-<a name="anchor10"></a><br /><hr />
+<a name="anchor11"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.5"></a><h3>5.&nbsp;
 Implementation Requirements</h3>
 
 <p>All conforming implementations MUST at least support the SHA-1 algorithm <a class='info' href='#FIPS-180-3'>[FIPS&#8209;180&#8209;3]<span> (</span><span class='info'>National Institute of Standards and Technology (NIST), &ldquo;Secure Hash Standard (SHS),&rdquo; October&nbsp;2008.</span><span>)</span></a>. Implementations SHOULD NOT make any algorithm the default that is known to be weaker than SHA-1. Support for any additional algorithms is OPTIONAL.
 </p>
-<a name="anchor11"></a><br /><hr />
+<a name="anchor12"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.6"></a><h3>6.&nbsp;
 Security Considerations</h3>
@@ -584,7 +613,7 @@ updates or invalidates the cached hash when the content of the corresponding
 file changes. A server may refuse to process a HASH command for many reasons, 
 one of which may be a suspected denial-of-service attack. A client MUST be 
 able to understand that refusal to process HASH commands may be transient 
-(if indicated by a 4yz response) and MAY be honoured later if the server so 
+(if indicated by a 450 response) and MAY be honoured later if the server so 
 decides. A client MUST allow that a HASH command might take a reasonably long time to complete.
 </p>
 <p>Server operators might wish to allow the HASH command but restrict its use to certain files, for
@@ -619,6 +648,8 @@ References</h3>
 <table width="99%" border="0">
 <tr><td class="author-text" valign="top"><a name="FIPS-180-3">[FIPS-180-3]</a></td>
 <td class="author-text">National Institute of Standards and Technology (NIST), &ldquo;Secure Hash Standard (SHS),&rdquo; FIPS PUB&nbsp;180-3, October&nbsp;2008.</td></tr>
+<tr><td class="author-text" valign="top"><a name="I-D.bryan-ftp-range">[I-D.bryan-ftp-range]</a></td>
+<td class="author-text">Bryan, A., Tsujikawa, T., and D. Stenberg, &ldquo;<a href="http://www.ietf.org/internet-drafts/draft-bryan-ftp-range-01.txt">File Transfer Protocol RANG Command for Byte Ranges</a>,&rdquo; draft-bryan-ftp-range-01 (work in progress).</td></tr>
 <tr><td class="author-text" valign="top"><a name="RFC0959">[RFC0959]</a></td>
 <td class="author-text">Postel, J. and J. Reynolds, &ldquo;<a href="http://tools.ietf.org/html/rfc0959">File Transfer Protocol</a>,&rdquo; STD&nbsp;9, RFC&nbsp;0959, October&nbsp;1985.</td></tr>
 <tr><td class="author-text" valign="top"><a name="RFC2119">[RFC2119]</a></td>
@@ -643,7 +674,7 @@ References</h3>
 <td class="author-text"><a href="mailto:jtwine@jrtwine.com">Twine, J.</a>, &ldquo;<a href="http://www.ietf.org/internet-drafts/draft-twine-ftpmd5-00.txt">The MD5 and MMD5 FTP Command Extensions</a>,&rdquo; draft-twine-ftpmd5-00 (work in progress), May&nbsp;2002.</td></tr>
 </table>
 
-<a name="anchor14"></a><br /><hr />
+<a name="anchor15"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.A"></a><h3>Appendix A.&nbsp;
 Acknowledgements and Contributors</h3>
@@ -654,7 +685,7 @@ Acknowledgements and Contributors</h3>
 </p>
 <p>Portions of <a class='info' href='#RFC3659'>[RFC3659]<span> (</span><span class='info'>Hethmon, P., &ldquo;Extensions to FTP,&rdquo; March&nbsp;2007.</span><span>)</span></a> were wholly reused in this document.
 </p>
-<a name="anchor15"></a><br /><hr />
+<a name="anchor16"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.B"></a><h3>Appendix B.&nbsp;
 List of Non-standard Cryptographic Hash or Checksum Commands and Implementations</h3>
@@ -793,6 +824,8 @@ Document History</h3>
 <p>Known issues concerning this draft:
 	    </p>
 <ul class="text">
+<li>Use "MLSx style" response? S> 213 Hash.SHA-1=80bc95fd3...;Range=0-199; filename.ext
+</li>
 <li>Section needs improvement: which files should a server process a HASH command for a logged in user?
 </li>
 </ul>
@@ -801,7 +834,7 @@ Document History</h3>
 
 	    </p>
 <ul class="text">
-<li>Something.
+<li>Partial file hashes with RANG command.
 </li>
 </ul>
 

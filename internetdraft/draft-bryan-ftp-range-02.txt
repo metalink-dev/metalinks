@@ -281,7 +281,7 @@ Bryan, et al.             Expires July 29, 2011                 [Page 5]
 Internet-Draft      FTP RANG Command for Byte Ranges        January 2011
 
 
-      range-command = "RANG" SP start-point  SP end-point CRLF
+      range-command = "RANG" SP start-point SP end-point CRLF
       start-point = 1*DIGIT
       end-point = 1*DIGIT
 
