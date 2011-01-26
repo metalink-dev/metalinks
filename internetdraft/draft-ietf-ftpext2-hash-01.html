@@ -492,6 +492,8 @@ Partial File Hashes with RANG</h3>
 <p>Partial file hashes, as opposed to full file hashes, are available by selecting a byte range with the RANG command <a class='info' href='#I-D.bryan-ftp-range'>[I&#8209;D.bryan&#8209;ftp&#8209;range]<span> (</span><span class='info'>Bryan, A., Tsujikawa, T., and D. Stenberg, &ldquo;File Transfer Protocol RANG Command for Byte Ranges,&rdquo; .</span><span>)</span></a> and then performing the HASH command.
 To reset the byte range and request the HASH of the full file, "RANG 1 0" is issued."
 </p>
+<p>Since the server can always reject a HASH request, it can opt to reject partial hashes if it decides that is the correct behavior.
+</p>
 <a name="anchor9"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.3.4"></a><h3>3.4.&nbsp;

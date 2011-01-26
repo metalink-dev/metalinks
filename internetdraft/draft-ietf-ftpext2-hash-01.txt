@@ -383,8 +383,8 @@ Internet-Draft  FTP HASH Command for Cryptographic Hashes   January 2011
    and then performing the HASH command.  To reset the byte range and
    request the HASH of the full file, "RANG 1 0" is issued."
 
-
-
+   Since the server can always reject a HASH request, it can opt to
+   reject partial hashes if it decides that is the correct behavior.
 
 
 
