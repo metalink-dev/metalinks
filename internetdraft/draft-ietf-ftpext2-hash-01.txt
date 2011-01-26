@@ -128,9 +128,6 @@ Internet-Draft  FTP HASH Command for Cryptographic Hashes   January 2011
    [RFC3230] which allows a client to request the cryptographic hash of
    a file.
 
-   [[ Discussion of this draft should take place on the FTPEXT2 Working
-   Group mailing list: ftpext@ietf.org. ]]
-
 1.1.  Example
 
    Example of HASH client request:
@@ -162,6 +159,9 @@ Internet-Draft  FTP HASH Command for Cryptographic Hashes   January 2011
    there.  The term "pathname" is used as defined in Section 2.2 of
    [RFC3659].
 
+   In the examples of FTP dialogs presented in this document, lines that
+   begin "C> " were sent over the control connection from the user-PI to
+
 
 
 Bryan, et al.             Expires July 29, 2011                 [Page 3]
@@ -169,8 +169,6 @@ Bryan, et al.             Expires July 29, 2011                 [Page 3]
 Internet-Draft  FTP HASH Command for Cryptographic Hashes   January 2011
 
 
-   In the examples of FTP dialogs presented in this document, lines that
-   begin "C> " were sent over the control connection from the user-PI to
    the server-PI, and lines that begin "S> " were sent over the control
    connection from the server-PI to the user-PI.  In all cases, the
    prefixes shown above, including the one space, have been added for
@@ -217,6 +215,8 @@ Internet-Draft  FTP HASH Command for Cryptographic Hashes   January 2011
    explicitly stated, that is not intended to imply that multi-line
    responses are not permitted.  Implementers should assume that, unless
    stated to the contrary, any reply to any FTP command (including QUIT)
+   can be of the multi-line format described in [RFC0959].
+
 
 
 
@@ -224,8 +224,6 @@ Bryan, et al.             Expires July 29, 2011                 [Page 4]
 
 Internet-Draft  FTP HASH Command for Cryptographic Hashes   January 2011
 
-
-   can be of the multi-line format described in [RFC0959].
 
    Throughout this document, replies will be identified by the three
    digit code that is their first element.  Thus the term "500 reply"
@@ -274,6 +272,8 @@ Internet-Draft  FTP HASH Command for Cryptographic Hashes   January 2011
    currently selected hash algorithm can be determined with FEAT or OPTS
    HASH, and changed with OPTS HASH.
 
+   The HASH command is meant to be used for files transmitted in Image
+
 
 
 Bryan, et al.             Expires July 29, 2011                 [Page 5]
@@ -281,7 +281,6 @@ Bryan, et al.             Expires July 29, 2011                 [Page 5]
 Internet-Draft  FTP HASH Command for Cryptographic Hashes   January 2011
 
 
-   The HASH command is meant to be used for files transmitted in Image
    type mode (TYPE I) and Stream transfer mode (MODE S).  The returned
    hash MUST be calculated as if a client were to download the full file
    using TYPE I and MODE S and were to calculate the hash on the
@@ -324,9 +323,10 @@ Internet-Draft  FTP HASH Command for Cryptographic Hashes   January 2011
    all the same.
 
 
-
-
-
+      hash-feat = SP "HASH" SP hashlist CRLF
+      hashlist  = 1*( hashname ["*"] ";" )
+      hashname  = 1*( hchar )
+      hchar     = ALPHA / DIGIT / "-" / "_" / "/" / "." / ","
 
 
 
@@ -336,11 +336,6 @@ Bryan, et al.             Expires July 29, 2011                 [Page 6]
 
 Internet-Draft  FTP HASH Command for Cryptographic Hashes   January 2011
 
-
-      hash-feat = SP "HASH" SP hashlist CRLF
-      hashlist  = 1*( hashname ["*"] ";" )
-      hashname  = 1*( hchar )
-      hchar     = ALPHA / DIGIT / "-" / "_" / "/" / "." / ","
 
 3.2.  OPTS Parameters for HASH
 
@@ -381,9 +376,14 @@ Internet-Draft  FTP HASH Command for Cryptographic Hashes   January 2011
 
 3.3.  Partial File Hashes with RANG
 
+   Full files are always hashed by default.
+
    Partial file hashes, as opposed to full file hashes, are available by
    selecting a byte range with the RANG command [I-D.bryan-ftp-range]
-   and then performing the HASH command.
+   and then performing the HASH command.  To reset the byte range and
+   request the HASH of the full file, "RANG 1 0" is issued."
+
+
 
 
 

@@ -71,8 +71,6 @@
        however none have been formally specified, leading to non-interoperability and confusion. (See Appendix B for more information). To solve these issues, this document specifies a new FTP command to be used by clients to request cryptographic hashes of files.
 HTTP has a similar feature named Instance Digests <xref target="RFC3230"/> which allows a client to request the cryptographic hash of a file.</t>
 
-      <t>[[ Discussion of this draft should take place on the FTPEXT2 Working Group mailing list: ftpext@ietf.org. ]]</t>
-	  
       <section title="Example"><t><figure> 
 	  <preamble>Example of HASH client request:</preamble>
 	  
@@ -293,7 +291,10 @@ This command word is case insensitive, and MAY be sent in any mixture of upper o
 
 <section title="Partial File Hashes with RANG">
 
-<t>Partial file hashes, as opposed to full file hashes, are available by selecting a byte range with the RANG command <xref target="I-D.bryan-ftp-range"/> and then performing the HASH command.</t>
+<t>Full files are always hashed by default.</t>
+
+<t>Partial file hashes, as opposed to full file hashes, are available by selecting a byte range with the RANG command <xref target="I-D.bryan-ftp-range"/> and then performing the HASH command.
+To reset the byte range and request the HASH of the full file, "RANG 1 0" is issued."</t>
 
 </section>
 

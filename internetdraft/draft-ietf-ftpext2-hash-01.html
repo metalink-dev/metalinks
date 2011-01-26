@@ -257,8 +257,6 @@ Introduction</h3>
        however none have been formally specified, leading to non-interoperability and confusion. (See Appendix B for more information). To solve these issues, this document specifies a new FTP command to be used by clients to request cryptographic hashes of files.
 HTTP has a similar feature named Instance Digests <a class='info' href='#RFC3230'>[RFC3230]<span> (</span><span class='info'>Mogul, J. and A. Van Hoff, &ldquo;Instance Digests in HTTP,&rdquo; January&nbsp;2002.</span><span>)</span></a> which allows a client to request the cryptographic hash of a file.
 </p>
-<p>[[ Discussion of this draft should take place on the FTPEXT2 Working Group mailing list: ftpext@ietf.org. ]]
-</p>
 <a name="anchor2"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.1.1"></a><h3>1.1.&nbsp;
@@ -489,7 +487,10 @@ OPTS Parameters for HASH</h3>
 <a name="rfc.section.3.3"></a><h3>3.3.&nbsp;
 Partial File Hashes with RANG</h3>
 
+<p>Full files are always hashed by default.
+</p>
 <p>Partial file hashes, as opposed to full file hashes, are available by selecting a byte range with the RANG command <a class='info' href='#I-D.bryan-ftp-range'>[I&#8209;D.bryan&#8209;ftp&#8209;range]<span> (</span><span class='info'>Bryan, A., Tsujikawa, T., and D. Stenberg, &ldquo;File Transfer Protocol RANG Command for Byte Ranges,&rdquo; .</span><span>)</span></a> and then performing the HASH command.
+To reset the byte range and request the HASH of the full file, "RANG 1 0" is issued."
 </p>
 <a name="anchor9"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
