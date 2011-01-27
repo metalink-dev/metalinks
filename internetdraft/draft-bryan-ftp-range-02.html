@@ -144,7 +144,7 @@
 <tr><td class="header">Network Working Group</td><td class="header">A. Bryan</td></tr>
 <tr><td class="header">Internet-Draft</td><td class="header">T. Tsujikawa</td></tr>
 <tr><td class="header">Intended status: Standards Track</td><td class="header">D. Stenberg</td></tr>
-<tr><td class="header">Expires: July 29, 2011</td><td class="header">January 25, 2011</td></tr>
+<tr><td class="header">Expires: July 31, 2011</td><td class="header">January 27, 2011</td></tr>
 </table></td></tr></table>
 <h1><br />File Transfer Protocol RANG Command for Byte Ranges<br />draft-bryan-ftp-range-02</h1>
 
@@ -183,7 +183,7 @@ and may be updated, replaced, or obsoleted by other documents at any time.
 It is inappropriate to use Internet-Drafts as reference material or to cite
 them other than as &ldquo;work in progress.&rdquo;</p>
 <p>
-This Internet-Draft will expire on July 29, 2011.</p>
+This Internet-Draft will expire on July 31, 2011.</p>
 
 <h3>Copyright Notice</h3>
 <p>
@@ -220,17 +220,19 @@ FEAT Command Response for RANG Command<br />
 User-PI usage of RANG<br />
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor8">4.3.</a>&nbsp;
 RANG Command Errors<br />
-<a href="#IANA">5.</a>&nbsp;
+<a href="#anchor9">5.</a>&nbsp;
+RANG Command Use with Other Commands<br />
+<a href="#IANA">6.</a>&nbsp;
 IANA Considerations<br />
-<a href="#anchor9">6.</a>&nbsp;
+<a href="#anchor10">7.</a>&nbsp;
 Security Considerations<br />
-<a href="#rfc.references1">7.</a>&nbsp;
+<a href="#rfc.references1">8.</a>&nbsp;
 References<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#rfc.references1">7.1.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#rfc.references1">8.1.</a>&nbsp;
 Normative References<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#rfc.references2">7.2.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#rfc.references2">8.2.</a>&nbsp;
 Informative References<br />
-<a href="#anchor12">Appendix&nbsp;A.</a>&nbsp;
+<a href="#anchor13">Appendix&nbsp;A.</a>&nbsp;
 Acknowledgements and Contributors<br />
 <a href="#dochistory">Appendix&nbsp;B.</a>&nbsp;
 Document History<br />
@@ -428,6 +430,9 @@ had been retrieved before.
 <p>To reset the range command, "RANG 1 0" should be issued. 
 Invalid RANG requests where 'start-point' is larger than 'end-point' 
 automatically reset the byte selection to the default, which is the whole file.
+The server-PI MUST reply with a 350 reply if "RANG 1 0" is issued
+by client-PI because it is a valid way of resetting range. (The range would also be reset if the session
+is reinitialized with REIN but this terminates the user and resets all parameters).
 </p>
 <p>The RANG command MUST be the last command issued before the data
 transfer command that is to cause a partial data transfer.  The
@@ -535,11 +540,19 @@ RANG Command Errors</h3>
 </p>
 <p>The server-PI SHOULD reply with a 553 reply if the user requests the RANG of a directory, which is not allowed.
 </p>
-<p>The server-PI SHOULD reply with a 5yz reply if the specified end point is larger than the actual file or the end point is before the start point.
+<p>The server-PI SHOULD reply with a 5yz reply if the specified end point is larger than the actual file.
+</p>
+<a name="anchor9"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.5"></a><h3>5.&nbsp;
+RANG Command Use with Other Commands</h3>
+
+<p>This specification defines the use of RANG in a certain way. Other commands could decide to use RANG in a similar way, to select a byte range, and their specification would
+define how they operate with RANG. The HASH command <a class='info' href='#draft-ietf-ftpext2-hash'>[draft&#8209;ietf&#8209;ftpext2&#8209;hash]<span> (</span><span class='info'>Bryan, A., Kosse, T., and D. Stenberg, &ldquo;FTP Extensions for Cryptographic Hashes,&rdquo; November&nbsp;2010.</span><span>)</span></a> uses RANG to select a byte range for partial file hashing.
 </p>
 <a name="IANA"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.5"></a><h3>5.&nbsp;
+<a name="rfc.section.6"></a><h3>6.&nbsp;
 IANA Considerations</h3>
 
 <p>This new command is added to the "FTP Commands and Extensions" registry created by <a class='info' href='#RFC5797'>[RFC5797]<span> (</span><span class='info'>Klensin, J. and A. Hoenes, &ldquo;FTP Command and Extension Registry,&rdquo; March&nbsp;2010.</span><span>)</span></a>.
@@ -556,9 +569,9 @@ IANA Considerations</h3>
 </p>
 <p>Reference: This specification
 </p>
-<a name="anchor9"></a><br /><hr />
+<a name="anchor10"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.6"></a><h3>6.&nbsp;
+<a name="rfc.section.7"></a><h3>7.&nbsp;
 Security Considerations</h3>
 
 <p>
@@ -568,12 +581,12 @@ Security Considerations</h3>
 </p>
 <a name="rfc.references"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.7"></a><h3>7.&nbsp;
+<a name="rfc.section.8"></a><h3>8.&nbsp;
 References</h3>
 
 <a name="rfc.references1"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<h3>7.1.&nbsp;Normative References</h3>
+<h3>8.1.&nbsp;Normative References</h3>
 <table width="99%" border="0">
 <tr><td class="author-text" valign="top"><a name="RFC0959">[RFC0959]</a></td>
 <td class="author-text">Postel, J. and J. Reynolds, &ldquo;<a href="http://tools.ietf.org/html/rfc0959">File Transfer Protocol</a>,&rdquo; STD&nbsp;9, RFC&nbsp;0959, October&nbsp;1985.</td></tr>
@@ -589,15 +602,17 @@ References</h3>
 
 <a name="rfc.references2"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<h3>7.2.&nbsp;Informative References</h3>
+<h3>8.2.&nbsp;Informative References</h3>
 <table width="99%" border="0">
 <tr><td class="author-text" valign="top"><a name="RFC2616">[RFC2616]</a></td>
 <td class="author-text"><a href="mailto:fielding@ics.uci.edu">Fielding, R.</a>, <a href="mailto:jg@w3.org">Gettys, J.</a>, <a href="mailto:mogul@wrl.dec.com">Mogul, J.</a>, <a href="mailto:frystyk@w3.org">Frystyk, H.</a>, <a href="mailto:masinter@parc.xerox.com">Masinter, L.</a>, <a href="mailto:paulle@microsoft.com">Leach, P.</a>, and <a href="mailto:timbl@w3.org">T. Berners-Lee</a>, &ldquo;<a href="http://tools.ietf.org/html/rfc2616">Hypertext Transfer Protocol -- HTTP/1.1</a>,&rdquo; RFC&nbsp;2616, June&nbsp;1999 (<a href="http://www.rfc-editor.org/rfc/rfc2616.txt">TXT</a>, <a href="http://www.rfc-editor.org/rfc/rfc2616.ps">PS</a>, <a href="http://www.rfc-editor.org/rfc/rfc2616.pdf">PDF</a>, <a href="http://xml.resource.org/public/rfc/html/rfc2616.html">HTML</a>, <a href="http://xml.resource.org/public/rfc/xml/rfc2616.xml">XML</a>).</td></tr>
 <tr><td class="author-text" valign="top"><a name="RFC5797">[RFC5797]</a></td>
 <td class="author-text">Klensin, J. and A. Hoenes, &ldquo;<a href="http://tools.ietf.org/html/rfc5797">FTP Command and Extension Registry</a>,&rdquo; RFC&nbsp;5797, March&nbsp;2010.</td></tr>
+<tr><td class="author-text" valign="top"><a name="draft-ietf-ftpext2-hash">[draft-ietf-ftpext2-hash]</a></td>
+<td class="author-text"><a href="mailto:anthonybryan@gmail.com">Bryan, A.</a>, <a href="mailto:tim.kosse@filezilla-project.org">Kosse, T.</a>, and <a href="mailto:daniel@haxx.se">D. Stenberg</a>, &ldquo;<a href="http://www.ietf.org/internet-drafts/draft-ietf-ftpext2-hash-00.txt">FTP Extensions for Cryptographic Hashes</a>,&rdquo; draft-ietf-ftpext2-hash-00 (work in progress), November&nbsp;2010.</td></tr>
 </table>
 
-<a name="anchor12"></a><br /><hr />
+<a name="anchor13"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.A"></a><h3>Appendix A.&nbsp;
 Acknowledgements and Contributors</h3>
@@ -620,7 +635,15 @@ Document History</h3>
 </li>
 </ul>
 
-<p>draft-bryan-ftp-range-01 : January, 2011.
+<p>draft-bryan-ftp-range-02 : January, 2011.
+	    
+	    </p>
+<ul class="text">
+<li>Refinements.
+</li>
+</ul>
+
+<p>draft-bryan-ftp-range-01 : January 25, 2011.
 	    
 	    </p>
 <ul class="text">

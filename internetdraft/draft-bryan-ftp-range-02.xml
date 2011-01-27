@@ -241,7 +241,10 @@ had been retrieved before.</t>
 
 <t>To reset the range command, "RANG 1 0" should be issued. 
 Invalid RANG requests where 'start-point' is larger than 'end-point' 
-automatically reset the byte selection to the default, which is the whole file.</t>
+automatically reset the byte selection to the default, which is the whole file.
+The server-PI MUST reply with a 350 reply if "RANG 1 0" is issued
+by client-PI because it is a valid way of resetting range. (The range would also be reset if the session
+is reinitialized with REIN but this terminates the user and resets all parameters).</t>
 
 <t>The RANG command MUST be the last command issued before the data
 transfer command that is to cause a partial data transfer.  The
@@ -346,9 +349,16 @@ This string is case insensitive, and MAY be sent in any mixture of upper or lowe
 
 <t>The server-PI SHOULD reply with a 553 reply if the user requests the RANG of a directory, which is not allowed.</t>
 
-<t>The server-PI SHOULD reply with a 5yz reply if the specified end point is larger than the actual file or the end point is before the start point.</t>
+<t>The server-PI SHOULD reply with a 5yz reply if the specified end point is larger than the actual file.</t>
 
 </section>
+
+</section>
+
+<section title="RANG Command Use with Other Commands">
+
+<t>This specification defines the use of RANG in a certain way. Other commands could decide to use RANG in a similar way, to select a byte range, and their specification would
+define how they operate with RANG. The HASH command <xref target="draft-ietf-ftpext2-hash"/> uses RANG to select a byte range for partial file hashing.</t>
 
 </section>
 
@@ -605,7 +615,40 @@ This string is case insensitive, and MAY be sent in any mixture of upper or lowe
 <seriesInfo name="RFC" value="5797"/>
 </reference>
 
-
+<reference anchor="draft-ietf-ftpext2-hash">
+  <front>
+      <title abbrev="FTP Extensions for Cryptographic Hashes">FTP Extensions for Cryptographic Hashes</title>
+      <author initials="A." surname="Bryan" fullname="Anthony Bryan">
+	    <organization></organization>
+	    <address>
+		  <postal>
+			<street></street>
+		    <city>Pompano Beach</city>
+			<region>FL</region>
+			<country>USA</country>
+		  </postal>
+	      <email>anthonybryan@gmail.com</email>	
+	      <uri>http://www.metalinker.org</uri>		
+	    </address>
+      </author>
+      <author initials="T." surname="Kosse" fullname="Tim Kosse">
+	    <organization></organization>
+	    <address>
+	      <email>tim.kosse@filezilla-project.org</email>	
+	      <uri>http://filezilla-project.org/</uri>		
+	    </address>
+      </author>
+      <author initials="D." surname="Stenberg" fullname="Daniel Stenberg">
+	    <organization></organization>
+	    <address>
+	      <email>daniel@haxx.se</email>
+	      <uri>http://www.haxx.se/</uri>
+	    </address>
+      </author>
+	<date month="November" year="2010"/>   
+  </front>
+  <seriesInfo name="Internet-Draft" value="draft-ietf-ftpext2-hash-00"/>
+</reference>
 
 	    </references> 
 
@@ -625,8 +668,15 @@ This string is case insensitive, and MAY be sent in any mixture of upper or lowe
 		  <t>Expand current alternatives (ABOR, close data connection) and why they are not optimal.</t>
 
 	    </list></t>
+
+<t>draft-bryan-ftp-range-02 : January, 2011.
+	    
+	    <list style="symbols">
+
+	      <t>Refinements.</t>
+	    </list></t>
 		
-<t>draft-bryan-ftp-range-01 : January, 2011.
+<t>draft-bryan-ftp-range-01 : January 25, 2011.
 	    
 	    <list style="symbols">
 
