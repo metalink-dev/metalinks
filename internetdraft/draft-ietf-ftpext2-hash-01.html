@@ -144,7 +144,7 @@
 <tr><td class="header">FTPEXT2 Working Group</td><td class="header">A. Bryan</td></tr>
 <tr><td class="header">Internet-Draft</td><td class="header">T. Kosse</td></tr>
 <tr><td class="header">Intended status: Standards Track</td><td class="header">D. Stenberg</td></tr>
-<tr><td class="header">Expires: July 29, 2011</td><td class="header">January 25, 2011</td></tr>
+<tr><td class="header">Expires: July 31, 2011</td><td class="header">January 27, 2011</td></tr>
 </table></td></tr></table>
 <h1><br />File Transfer Protocol HASH Command for Cryptographic Hashes<br />draft-ietf-ftpext2-hash-01</h1>
 
@@ -184,7 +184,7 @@ and may be updated, replaced, or obsoleted by other documents at any time.
 It is inappropriate to use Internet-Drafts as reference material or to cite
 them other than as &ldquo;work in progress.&rdquo;</p>
 <p>
-This Internet-Draft will expire on July 29, 2011.</p>
+This Internet-Draft will expire on July 31, 2011.</p>
 
 <h3>Copyright Notice</h3>
 <p>
@@ -489,7 +489,7 @@ Partial File Hashes with RANG</h3>
 
 <p>Full files are always hashed by default.
 </p>
-<p>Partial file hashes, as opposed to full file hashes, are available by selecting a byte range with the RANG command <a class='info' href='#I-D.bryan-ftp-range'>[I&#8209;D.bryan&#8209;ftp&#8209;range]<span> (</span><span class='info'>Bryan, A., Tsujikawa, T., and D. Stenberg, &ldquo;File Transfer Protocol RANG Command for Byte Ranges,&rdquo; .</span><span>)</span></a> and then performing the HASH command.
+<p>Partial file hashes, as opposed to full file hashes, are available by selecting a byte range with the RANG command <a class='info' href='#draft-bryan-ftp-range'>[draft&#8209;bryan&#8209;ftp&#8209;range]<span> (</span><span class='info'>Bryan, A., Tsujikawa, T., and D. Stenberg, &ldquo;File Transfer Protocol RANG Command for Byte Ranges,&rdquo; .</span><span>)</span></a> and then performing the HASH command.
 To reset the byte range and request the HASH of the full file, "RANG 1 0" is issued."
 </p>
 <p>Since the server can always reject a HASH request, it can opt to reject partial hashes if it decides that is the correct behavior.
@@ -651,8 +651,6 @@ References</h3>
 <table width="99%" border="0">
 <tr><td class="author-text" valign="top"><a name="FIPS-180-3">[FIPS-180-3]</a></td>
 <td class="author-text">National Institute of Standards and Technology (NIST), &ldquo;Secure Hash Standard (SHS),&rdquo; FIPS PUB&nbsp;180-3, October&nbsp;2008.</td></tr>
-<tr><td class="author-text" valign="top"><a name="I-D.bryan-ftp-range">[I-D.bryan-ftp-range]</a></td>
-<td class="author-text">Bryan, A., Tsujikawa, T., and D. Stenberg, &ldquo;<a href="http://www.ietf.org/internet-drafts/draft-bryan-ftp-range-01.txt">File Transfer Protocol RANG Command for Byte Ranges</a>,&rdquo; draft-bryan-ftp-range-01 (work in progress).</td></tr>
 <tr><td class="author-text" valign="top"><a name="RFC0959">[RFC0959]</a></td>
 <td class="author-text">Postel, J. and J. Reynolds, &ldquo;<a href="http://tools.ietf.org/html/rfc0959">File Transfer Protocol</a>,&rdquo; STD&nbsp;9, RFC&nbsp;0959, October&nbsp;1985.</td></tr>
 <tr><td class="author-text" valign="top"><a name="RFC2119">[RFC2119]</a></td>
@@ -663,6 +661,8 @@ References</h3>
 <td class="author-text">Hethmon, P., &ldquo;<a href="http://tools.ietf.org/html/rfc3659">Extensions to FTP</a>,&rdquo; RFC&nbsp;3659, March&nbsp;2007.</td></tr>
 <tr><td class="author-text" valign="top"><a name="RFC5234">[RFC5234]</a></td>
 <td class="author-text">Crocker, D. and P. Overell, &ldquo;<a href="http://tools.ietf.org/html/rfc5234">Augmented BNF for Syntax Specifications: ABNF</a>,&rdquo; STD&nbsp;68, RFC&nbsp;5234, January&nbsp;2008.</td></tr>
+<tr><td class="author-text" valign="top"><a name="draft-bryan-ftp-range">[draft-bryan-ftp-range]</a></td>
+<td class="author-text">Bryan, A., Tsujikawa, T., and D. Stenberg, &ldquo;<a href="http://www.ietf.org/internet-drafts/draft-bryan-ftp-range-01.txt">File Transfer Protocol RANG Command for Byte Ranges</a>,&rdquo; draft-bryan-ftp-range-01 (work in progress).</td></tr>
 </table>
 
 <a name="rfc.references2"></a><br /><hr />
@@ -833,11 +833,11 @@ Document History</h3>
 </li>
 </ul>
 
-<p>draft-ietf-ftpext2-hash-01 : , 2010
+<p>draft-ietf-ftpext2-hash-01 : January , 2011
 
 	    </p>
 <ul class="text">
-<li>Partial file hashes with RANG command.
+<li>Partial file hashes with RANG command. Mandatory byte range in response. "213-" to avoid timeout.
 </li>
 </ul>
 

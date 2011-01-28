@@ -293,7 +293,7 @@ This command word is case insensitive, and MAY be sent in any mixture of upper o
 
 <t>Full files are always hashed by default.</t>
 
-<t>Partial file hashes, as opposed to full file hashes, are available by selecting a byte range with the RANG command <xref target="I-D.bryan-ftp-range"/> and then performing the HASH command.
+<t>Partial file hashes, as opposed to full file hashes, are available by selecting a byte range with the RANG command <xref target="draft-bryan-ftp-range"/> and then performing the HASH command.
 To reset the byte range and request the HASH of the full file, "RANG 1 0" is issued."</t>
 
 <t>Since the server can always reject a HASH request, it can opt to reject partial hashes if it decides that is the correct behavior.</t>
@@ -557,7 +557,7 @@ purpose is an implementation decision.</t>
 <seriesInfo name="FIPS PUB" value="180-3"></seriesInfo>
 </reference>
 
-<reference anchor='I-D.bryan-ftp-range'>
+<reference anchor='draft-bryan-ftp-range'>
 <front>
 <title>File Transfer Protocol RANG Command for Byte Ranges</title>
 
@@ -709,11 +709,11 @@ purpose is an implementation decision.</t>
 
 	    </list></t>
 		
-<t>draft-ietf-ftpext2-hash-01 : , 2010
+<t>draft-ietf-ftpext2-hash-01 : January , 2011
 
 	    <list style="symbols">
 
-          <t>Partial file hashes with RANG command.</t>
+          <t>Partial file hashes with RANG command. Mandatory byte range in response. "213-" to avoid timeout.</t>
 	    </list></t>
 		
 <t>draft-ietf-ftpext2-hash-00 : November 24, 2010

@@ -4,7 +4,7 @@
 FTPEXT2 Working Group                                           A. Bryan
 Internet-Draft                                                  T. Kosse
 Intended status: Standards Track                             D. Stenberg
-Expires: July 29, 2011                                  January 25, 2011
+Expires: July 31, 2011                                  January 27, 2011
 
 
       File Transfer Protocol HASH Command for Cryptographic Hashes
@@ -47,12 +47,12 @@ Status of this Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on July 29, 2011.
+   This Internet-Draft will expire on July 31, 2011.
 
 
 
 
-Bryan, et al.             Expires July 29, 2011                 [Page 1]
+Bryan, et al.             Expires July 31, 2011                 [Page 1]
 
 Internet-Draft  FTP HASH Command for Cryptographic Hashes   January 2011
 
@@ -108,7 +108,7 @@ Table of Contents
 
 
 
-Bryan, et al.             Expires July 29, 2011                 [Page 2]
+Bryan, et al.             Expires July 31, 2011                 [Page 2]
 
 Internet-Draft  FTP HASH Command for Cryptographic Hashes   January 2011
 
@@ -164,7 +164,7 @@ Internet-Draft  FTP HASH Command for Cryptographic Hashes   January 2011
 
 
 
-Bryan, et al.             Expires July 29, 2011                 [Page 3]
+Bryan, et al.             Expires July 31, 2011                 [Page 3]
 
 Internet-Draft  FTP HASH Command for Cryptographic Hashes   January 2011
 
@@ -220,7 +220,7 @@ Internet-Draft  FTP HASH Command for Cryptographic Hashes   January 2011
 
 
 
-Bryan, et al.             Expires July 29, 2011                 [Page 4]
+Bryan, et al.             Expires July 31, 2011                 [Page 4]
 
 Internet-Draft  FTP HASH Command for Cryptographic Hashes   January 2011
 
@@ -276,7 +276,7 @@ Internet-Draft  FTP HASH Command for Cryptographic Hashes   January 2011
 
 
 
-Bryan, et al.             Expires July 29, 2011                 [Page 5]
+Bryan, et al.             Expires July 31, 2011                 [Page 5]
 
 Internet-Draft  FTP HASH Command for Cryptographic Hashes   January 2011
 
@@ -332,7 +332,7 @@ Internet-Draft  FTP HASH Command for Cryptographic Hashes   January 2011
 
 
 
-Bryan, et al.             Expires July 29, 2011                 [Page 6]
+Bryan, et al.             Expires July 31, 2011                 [Page 6]
 
 Internet-Draft  FTP HASH Command for Cryptographic Hashes   January 2011
 
@@ -379,7 +379,7 @@ Internet-Draft  FTP HASH Command for Cryptographic Hashes   January 2011
    Full files are always hashed by default.
 
    Partial file hashes, as opposed to full file hashes, are available by
-   selecting a byte range with the RANG command [I-D.bryan-ftp-range]
+   selecting a byte range with the RANG command [draft-bryan-ftp-range]
    and then performing the HASH command.  To reset the byte range and
    request the HASH of the full file, "RANG 1 0" is issued."
 
@@ -388,7 +388,7 @@ Internet-Draft  FTP HASH Command for Cryptographic Hashes   January 2011
 
 
 
-Bryan, et al.             Expires July 29, 2011                 [Page 7]
+Bryan, et al.             Expires July 31, 2011                 [Page 7]
 
 Internet-Draft  FTP HASH Command for Cryptographic Hashes   January 2011
 
@@ -444,7 +444,7 @@ Internet-Draft  FTP HASH Command for Cryptographic Hashes   January 2011
 
 
 
-Bryan, et al.             Expires July 29, 2011                 [Page 8]
+Bryan, et al.             Expires July 31, 2011                 [Page 8]
 
 Internet-Draft  FTP HASH Command for Cryptographic Hashes   January 2011
 
@@ -500,7 +500,7 @@ Internet-Draft  FTP HASH Command for Cryptographic Hashes   January 2011
 
 
 
-Bryan, et al.             Expires July 29, 2011                 [Page 9]
+Bryan, et al.             Expires July 31, 2011                 [Page 9]
 
 Internet-Draft  FTP HASH Command for Cryptographic Hashes   January 2011
 
@@ -556,7 +556,7 @@ Internet-Draft  FTP HASH Command for Cryptographic Hashes   January 2011
 
 
 
-Bryan, et al.             Expires July 29, 2011                [Page 10]
+Bryan, et al.             Expires July 31, 2011                [Page 10]
 
 Internet-Draft  FTP HASH Command for Cryptographic Hashes   January 2011
 
@@ -586,11 +586,6 @@ Internet-Draft  FTP HASH Command for Cryptographic Hashes   January 2011
               "Secure Hash Standard (SHS)", FIPS PUB 180-3,
               October 2008.
 
-   [I-D.bryan-ftp-range]
-              Bryan, A., Tsujikawa, T., and D. Stenberg, "File Transfer
-              Protocol RANG Command for Byte Ranges",
-              draft-bryan-ftp-range-01 (work in progress).
-
    [RFC0959]  Postel, J. and J. Reynolds, "File Transfer Protocol",
               STD 9, RFC 0959, October 1985.
 
@@ -605,6 +600,11 @@ Internet-Draft  FTP HASH Command for Cryptographic Hashes   January 2011
    [RFC5234]  Crocker, D. and P. Overell, "Augmented BNF for Syntax
               Specifications: ABNF", STD 68, RFC 5234, January 2008.
 
+   [draft-bryan-ftp-range]
+              Bryan, A., Tsujikawa, T., and D. Stenberg, "File Transfer
+              Protocol RANG Command for Byte Ranges",
+              draft-bryan-ftp-range-01 (work in progress).
+
 7.2.  Informative References
 
    [RFC3230]  Mogul, J. and A. Van Hoff, "Instance Digests in HTTP",
@@ -612,7 +612,7 @@ Internet-Draft  FTP HASH Command for Cryptographic Hashes   January 2011
 
 
 
-Bryan, et al.             Expires July 29, 2011                [Page 11]
+Bryan, et al.             Expires July 31, 2011                [Page 11]
 
 Internet-Draft  FTP HASH Command for Cryptographic Hashes   January 2011
 
@@ -668,7 +668,7 @@ Appendix B.  List of Non-standard Cryptographic Hash or Checksum
 
 
 
-Bryan, et al.             Expires July 29, 2011                [Page 12]
+Bryan, et al.             Expires July 31, 2011                [Page 12]
 
 Internet-Draft  FTP HASH Command for Cryptographic Hashes   January 2011
 
@@ -724,7 +724,7 @@ Internet-Draft  FTP HASH Command for Cryptographic Hashes   January 2011
 
 
 
-Bryan, et al.             Expires July 29, 2011                [Page 13]
+Bryan, et al.             Expires July 31, 2011                [Page 13]
 
 Internet-Draft  FTP HASH Command for Cryptographic Hashes   January 2011
 
@@ -780,7 +780,7 @@ Internet-Draft  FTP HASH Command for Cryptographic Hashes   January 2011
 
 
 
-Bryan, et al.             Expires July 29, 2011                [Page 14]
+Bryan, et al.             Expires July 31, 2011                [Page 14]
 
 Internet-Draft  FTP HASH Command for Cryptographic Hashes   January 2011
 
@@ -795,8 +795,9 @@ Appendix C.  Document History
    o  Section needs improvement: which files should a server process a
       HASH command for a logged in user?
 
-   draft-ietf-ftpext2-hash-01 : , 2010
-   o  Partial file hashes with RANG command.
+   draft-ietf-ftpext2-hash-01 : January , 2011
+   o  Partial file hashes with RANG command.  Mandatory byte range in
+      response. "213-" to avoid timeout.
 
    draft-ietf-ftpext2-hash-00 : November 24, 2010
    o  FTPEXT2 Working Group.
@@ -835,8 +836,7 @@ Appendix C.  Document History
 
 
 
-
-Bryan, et al.             Expires July 29, 2011                [Page 15]
+Bryan, et al.             Expires July 31, 2011                [Page 15]
 
 Internet-Draft  FTP HASH Command for Cryptographic Hashes   January 2011
 
@@ -892,5 +892,5 @@ Authors' Addresses
 
 
 
-Bryan, et al.             Expires July 29, 2011                [Page 16]
+Bryan, et al.             Expires July 31, 2011                [Page 16]
 
