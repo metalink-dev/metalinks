@@ -144,7 +144,7 @@
 <tr><td class="header">Network Working Group</td><td class="header">A. Bryan</td></tr>
 <tr><td class="header">Internet-Draft</td><td class="header">T. Tsujikawa</td></tr>
 <tr><td class="header">Intended status: Standards Track</td><td class="header">D. Stenberg</td></tr>
-<tr><td class="header">Expires: July 31, 2011</td><td class="header">January 27, 2011</td></tr>
+<tr><td class="header">Expires: August 2, 2011</td><td class="header">January 29, 2011</td></tr>
 </table></td></tr></table>
 <h1><br />File Transfer Protocol RANG Command for Byte Ranges<br />draft-bryan-ftp-range-02</h1>
 
@@ -183,7 +183,7 @@ and may be updated, replaced, or obsoleted by other documents at any time.
 It is inappropriate to use Internet-Drafts as reference material or to cite
 them other than as &ldquo;work in progress.&rdquo;</p>
 <p>
-This Internet-Draft will expire on July 31, 2011.</p>
+This Internet-Draft will expire on August 2, 2011.</p>
 
 <h3>Copyright Notice</h3>
 <p>
@@ -212,19 +212,21 @@ Basic Tokens<br />
 Server Replies<br />
 <a href="#anchor5">3.</a>&nbsp;
 Byte Ranges in STREAM Mode<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor6">3.1.</a>&nbsp;
+Error Recovery and Range Requests<br />
 <a href="#RANG">4.</a>&nbsp;
 The RANGe Command (RANG)<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor6">4.1.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor7">4.1.</a>&nbsp;
 FEAT Command Response for RANG Command<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor7">4.2.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor8">4.2.</a>&nbsp;
 User-PI usage of RANG<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor8">4.3.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor9">4.3.</a>&nbsp;
 RANG Command Errors<br />
-<a href="#anchor9">5.</a>&nbsp;
+<a href="#anchor10">5.</a>&nbsp;
 RANG Command Use with Other Commands<br />
 <a href="#IANA">6.</a>&nbsp;
 IANA Considerations<br />
-<a href="#anchor10">7.</a>&nbsp;
+<a href="#anchor11">7.</a>&nbsp;
 Security Considerations<br />
 <a href="#rfc.references1">8.</a>&nbsp;
 References<br />
@@ -232,7 +234,7 @@ References<br />
 Normative References<br />
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="#rfc.references2">8.2.</a>&nbsp;
 Informative References<br />
-<a href="#anchor13">Appendix&nbsp;A.</a>&nbsp;
+<a href="#anchor14">Appendix&nbsp;A.</a>&nbsp;
 Acknowledgements and Contributors<br />
 <a href="#dochistory">Appendix&nbsp;B.</a>&nbsp;
 Document History<br />
@@ -339,6 +341,12 @@ Server Replies</h3>
 Byte Ranges in STREAM Mode</h3>
 
 <p>
+   To get a specific part of a file without sending entire file,
+   both sides need some way to agree on where in
+   the data stream to start and end the data transfer.
+
+</p>
+<p>
    In STREAM mode, the data connection contains just a stream of
    unformatted octets of data.  Explicit restart markers thus cannot be
    inserted into the data stream, they would be indistinguishable from
@@ -378,7 +386,30 @@ Byte Ranges in STREAM Mode</h3>
    the RESTart command.  However, if the user-FTP process is intending
    to restart sending the file, it needs to be able to determine how
    much data was previously sent, and correctly received and saved.
-   The purpose of the SIZE command, as documented in <a class='info' href='#RFC3659'>[RFC3659]<span> (</span><span class='info'>Hethmon, P., &ldquo;Extensions to FTP,&rdquo; March&nbsp;2007.</span><span>)</span></a>, is to get this information.
+   The purpose of the SIZE command, as documented in Section 4 of <a class='info' href='#RFC3659'>[RFC3659]<span> (</span><span class='info'>Hethmon, P., &ldquo;Extensions to FTP,&rdquo; March&nbsp;2007.</span><span>)</span></a>, is to get this information.
+
+</p>
+<a name="anchor6"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.3.1"></a><h3>3.1.&nbsp;
+Error Recovery and Range Requests</h3>
+
+<p>
+  STREAM mode transfers with FILE STRUcture may be range requested even
+  though no restart marker has been transferred in addition to the data
+  itself.  This is done by using the SIZE command, if needed, in
+  combination with the RANG command, and one of the standard
+  file transfer commands.
+
+</p>
+<p>
+  When using TYPE ASCII or IMAGE, the SIZE command will return the
+  number of octets that would actually be transferred if the file were
+  to be sent between the two systems, i.e., with type IMAGE, the SIZE
+  normally would be the number of octets in the file.  With type ASCII,
+  the SIZE would be the number of octets in the file including any
+  modifications required to satisfy the TYPE ASCII CR-LF end-of-line
+  convention.
 
 </p>
 <a name="RANG"></a><br /><hr />
@@ -457,7 +488,7 @@ reported when the following transfer command is issued.  Such
 errors will cause that transfer request to be rejected with an
 error indicating the invalid restart attempt.
 </p>
-<a name="anchor6"></a><br /><hr />
+<a name="anchor7"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.1"></a><h3>4.1.&nbsp;
 FEAT Command Response for RANG Command</h3>
@@ -484,7 +515,7 @@ This string is case insensitive, and MAY be sent in any mixture of upper or lowe
    range-feat = SP "RANG" SP "STREAM"
 </pre></div>
 
-<a name="anchor7"></a><br /><hr />
+<a name="anchor8"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.2"></a><h3>4.2.&nbsp;
 User-PI usage of RANG</h3>
@@ -525,7 +556,7 @@ User-PI usage of RANG</h3>
 
 <p>In the above example, data is sent from offset 802816 to, and including, offset 1000000.
 </p>
-<a name="anchor8"></a><br /><hr />
+<a name="anchor9"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4.3"></a><h3>4.3.&nbsp;
 RANG Command Errors</h3>
@@ -542,7 +573,7 @@ RANG Command Errors</h3>
 </p>
 <p>The server-PI SHOULD reply with a 5yz reply if the specified end point is larger than the actual file.
 </p>
-<a name="anchor9"></a><br /><hr />
+<a name="anchor10"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.5"></a><h3>5.&nbsp;
 RANG Command Use with Other Commands</h3>
@@ -569,7 +600,7 @@ IANA Considerations</h3>
 </p>
 <p>Reference: This specification
 </p>
-<a name="anchor10"></a><br /><hr />
+<a name="anchor11"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.7"></a><h3>7.&nbsp;
 Security Considerations</h3>
@@ -612,7 +643,7 @@ References</h3>
 <td class="author-text"><a href="mailto:anthonybryan@gmail.com">Bryan, A.</a>, <a href="mailto:tim.kosse@filezilla-project.org">Kosse, T.</a>, and <a href="mailto:daniel@haxx.se">D. Stenberg</a>, &ldquo;<a href="http://www.ietf.org/internet-drafts/draft-ietf-ftpext2-hash-00.txt">FTP Extensions for Cryptographic Hashes</a>,&rdquo; draft-ietf-ftpext2-hash-00 (work in progress), November&nbsp;2010.</td></tr>
 </table>
 
-<a name="anchor13"></a><br /><hr />
+<a name="anchor14"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.A"></a><h3>Appendix A.&nbsp;
 Acknowledgements and Contributors</h3>

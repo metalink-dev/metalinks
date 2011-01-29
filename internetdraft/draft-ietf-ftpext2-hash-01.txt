@@ -4,7 +4,7 @@
 FTPEXT2 Working Group                                           A. Bryan
 Internet-Draft                                                  T. Kosse
 Intended status: Standards Track                             D. Stenberg
-Expires: July 31, 2011                                  January 27, 2011
+Expires: August 1, 2011                                 January 28, 2011
 
 
       File Transfer Protocol HASH Command for Cryptographic Hashes
@@ -47,12 +47,12 @@ Status of this Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on July 31, 2011.
+   This Internet-Draft will expire on August 1, 2011.
 
 
 
 
-Bryan, et al.             Expires July 31, 2011                 [Page 1]
+Bryan, et al.            Expires August 1, 2011                 [Page 1]
 
 Internet-Draft  FTP HASH Command for Cryptographic Hashes   January 2011
 
@@ -108,7 +108,7 @@ Table of Contents
 
 
 
-Bryan, et al.             Expires July 31, 2011                 [Page 2]
+Bryan, et al.            Expires August 1, 2011                 [Page 2]
 
 Internet-Draft  FTP HASH Command for Cryptographic Hashes   January 2011
 
@@ -164,7 +164,7 @@ Internet-Draft  FTP HASH Command for Cryptographic Hashes   January 2011
 
 
 
-Bryan, et al.             Expires July 31, 2011                 [Page 3]
+Bryan, et al.            Expires August 1, 2011                 [Page 3]
 
 Internet-Draft  FTP HASH Command for Cryptographic Hashes   January 2011
 
@@ -220,7 +220,7 @@ Internet-Draft  FTP HASH Command for Cryptographic Hashes   January 2011
 
 
 
-Bryan, et al.             Expires July 31, 2011                 [Page 4]
+Bryan, et al.            Expires August 1, 2011                 [Page 4]
 
 Internet-Draft  FTP HASH Command for Cryptographic Hashes   January 2011
 
@@ -276,7 +276,7 @@ Internet-Draft  FTP HASH Command for Cryptographic Hashes   January 2011
 
 
 
-Bryan, et al.             Expires July 31, 2011                 [Page 5]
+Bryan, et al.            Expires August 1, 2011                 [Page 5]
 
 Internet-Draft  FTP HASH Command for Cryptographic Hashes   January 2011
 
@@ -332,7 +332,7 @@ Internet-Draft  FTP HASH Command for Cryptographic Hashes   January 2011
 
 
 
-Bryan, et al.             Expires July 31, 2011                 [Page 6]
+Bryan, et al.            Expires August 1, 2011                 [Page 6]
 
 Internet-Draft  FTP HASH Command for Cryptographic Hashes   January 2011
 
@@ -388,7 +388,7 @@ Internet-Draft  FTP HASH Command for Cryptographic Hashes   January 2011
 
 
 
-Bryan, et al.             Expires July 31, 2011                 [Page 7]
+Bryan, et al.            Expires August 1, 2011                 [Page 7]
 
 Internet-Draft  FTP HASH Command for Cryptographic Hashes   January 2011
 
@@ -444,7 +444,7 @@ Internet-Draft  FTP HASH Command for Cryptographic Hashes   January 2011
 
 
 
-Bryan, et al.             Expires July 31, 2011                 [Page 8]
+Bryan, et al.            Expires August 1, 2011                 [Page 8]
 
 Internet-Draft  FTP HASH Command for Cryptographic Hashes   January 2011
 
@@ -500,7 +500,7 @@ Internet-Draft  FTP HASH Command for Cryptographic Hashes   January 2011
 
 
 
-Bryan, et al.             Expires July 31, 2011                 [Page 9]
+Bryan, et al.            Expires August 1, 2011                 [Page 9]
 
 Internet-Draft  FTP HASH Command for Cryptographic Hashes   January 2011
 
@@ -556,7 +556,7 @@ Internet-Draft  FTP HASH Command for Cryptographic Hashes   January 2011
 
 
 
-Bryan, et al.             Expires July 31, 2011                [Page 10]
+Bryan, et al.            Expires August 1, 2011                [Page 10]
 
 Internet-Draft  FTP HASH Command for Cryptographic Hashes   January 2011
 
@@ -569,7 +569,7 @@ Internet-Draft  FTP HASH Command for Cryptographic Hashes   January 2011
    the user has access to both branches of the directory tree, but there
    is the possibility that this information is exposable.  To prevent
    this scenario it suffices to limit use of the HASH command to users
-   who would already be able to download the file.
+   who uploaded the file or would already be able to download the file.
 
    This mechanism simply allows the FTP protocol to expose HASH values
    of files, using the currently chosen mechanism, accessible to the
@@ -612,7 +612,7 @@ Internet-Draft  FTP HASH Command for Cryptographic Hashes   January 2011
 
 
 
-Bryan, et al.             Expires July 31, 2011                [Page 11]
+Bryan, et al.            Expires August 1, 2011                [Page 11]
 
 Internet-Draft  FTP HASH Command for Cryptographic Hashes   January 2011
 
@@ -668,7 +668,7 @@ Appendix B.  List of Non-standard Cryptographic Hash or Checksum
 
 
 
-Bryan, et al.             Expires July 31, 2011                [Page 12]
+Bryan, et al.            Expires August 1, 2011                [Page 12]
 
 Internet-Draft  FTP HASH Command for Cryptographic Hashes   January 2011
 
@@ -724,7 +724,7 @@ Internet-Draft  FTP HASH Command for Cryptographic Hashes   January 2011
 
 
 
-Bryan, et al.             Expires July 31, 2011                [Page 13]
+Bryan, et al.            Expires August 1, 2011                [Page 13]
 
 Internet-Draft  FTP HASH Command for Cryptographic Hashes   January 2011
 
@@ -780,7 +780,7 @@ Internet-Draft  FTP HASH Command for Cryptographic Hashes   January 2011
 
 
 
-Bryan, et al.             Expires July 31, 2011                [Page 14]
+Bryan, et al.            Expires August 1, 2011                [Page 14]
 
 Internet-Draft  FTP HASH Command for Cryptographic Hashes   January 2011
 
@@ -836,7 +836,7 @@ Appendix C.  Document History
 
 
 
-Bryan, et al.             Expires July 31, 2011                [Page 15]
+Bryan, et al.            Expires August 1, 2011                [Page 15]
 
 Internet-Draft  FTP HASH Command for Cryptographic Hashes   January 2011
 
@@ -892,5 +892,5 @@ Authors' Addresses
 
 
 
-Bryan, et al.             Expires July 31, 2011                [Page 16]
+Bryan, et al.            Expires August 1, 2011                [Page 16]
 
