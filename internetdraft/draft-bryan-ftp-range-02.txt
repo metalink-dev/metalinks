@@ -21,8 +21,8 @@ Abstract
 Editorial Note (To be removed by RFC Editor)
 
    Discussion of this draft should take place on the FTPEXT2 working
-   group mailing list (ftpext@ietf.org), althought this draft is not a
-   WG item.  Related documents (including fancy diffs) can be found at
+   group mailing list (ftpext@ietf.org), although this draft is not a WG
+   item.  Related documents (including fancy diffs) can be found at
    <http://tools.ietf.org/wg/ftpext2/>.
 
    The changes in this draft are summarized in Appendix B.
