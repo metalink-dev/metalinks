@@ -158,7 +158,12 @@
       </section>
 
 <section title="Byte Ranges in STREAM Mode">
+
 <t>
+   To get a specific part of a file without sending entire file,
+   both sides need some way to agree on where in
+   the data stream to start and end the data transfer.
+</t><t>
    In STREAM mode, the data connection contains just a stream of
    unformatted octets of data.  Explicit restart markers thus cannot be
    inserted into the data stream, they would be indistinguishable from
@@ -192,8 +197,27 @@
    the RESTart command.  However, if the user-FTP process is intending
    to restart sending the file, it needs to be able to determine how
    much data was previously sent, and correctly received and saved.
-   The purpose of the SIZE command, as documented in <xref target="RFC3659"/>, is to get this information.
+   The purpose of the SIZE command, as documented in Section 4 of <xref target="RFC3659"/>, is to get this information.
 </t>
+
+<section title="Error Recovery and Range Requests">
+
+<t>
+  STREAM mode transfers with FILE STRUcture may be range requested even
+  though no restart marker has been transferred in addition to the data
+  itself.  This is done by using the SIZE command, if needed, in
+  combination with the RANG command, and one of the standard
+  file transfer commands.
+</t><t>
+  When using TYPE ASCII or IMAGE, the SIZE command will return the
+  number of octets that would actually be transferred if the file were
+  to be sent between the two systems, i.e., with type IMAGE, the SIZE
+  normally would be the number of octets in the file.  With type ASCII,
+  the SIZE would be the number of octets in the file including any
+  modifications required to satisfy the TYPE ASCII CR-LF end-of-line
+  convention.
+</t>   
+</section>
    
 </section>
 	  

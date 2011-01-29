@@ -437,7 +437,7 @@ file location, the client could infer some filesystem deployment information
 This is probably not an issue if the user has access to both branches 
 of the directory tree, but there is the possibility that this information is exposable.
 To prevent this scenario it suffices to limit use of the HASH command to
-users who would already be able to download the file.</t>
+users who uploaded the file or would already be able to download the file.</t>
 
 <t>This mechanism simply allows the FTP protocol to expose HASH values of files,
 using the currently chosen mechanism,  accessible to the server by the client.
