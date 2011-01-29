@@ -68,20 +68,6 @@
           <uri>http://mirrorbrain.org/~poeml/</uri>
         </address>
       </author>
-  	  <author initials="A." surname="Ford" fullname="Alan Ford">
-        <organization>Roke Manor Research</organization>
-        <address>
-		  <postal>
-			<street>Old Salisbury Lane</street>
-			<city>Romsey</city>
-			<code>SO51 0ZN</code>
-			<region>Hampshire</region>
-			<country>UK</country>
-		  </postal>
-		  <phone>+44 1794 833 465</phone>
-          <email>alan.ford@roke.co.uk</email>
-        </address>
-      </author>
 	<date year="2011"/>        
 
       <abstract>
@@ -93,7 +79,7 @@
   <t>
 
     Discussion of this draft should take place on the HTTPBIS working group
-    mailing list (ietf-http-wg@w3.org), althought this draft is not a WG item.
+    mailing list (ietf-http-wg@w3.org), although this draft is not a WG item.
   </t>
   <t>
     The changes in this draft are summarized in <xref target="dochistory"/>.
@@ -194,9 +180,7 @@ Link: &lt;ftp://ftp.example.com/example.ext&gt;; rel=duplicate;
 pri=2; geo=gb; depth=1
 </artwork></figure></t>
 
-	  <t>[[Some organizations have many mirrors. Only send a few mirrors, or only use the Link header fields if Want-Digest is used?]]</t>
-	  
-      <t>It is up to the server to choose how many Link header fields to send. Such a decision could be a hard-coded limit, a random selection, based on file size, or based on server load.</t>
+      <t>As some organizations can have many mirrors, it is up to the server to choose how many Link header fields to send. Such a decision could be a random selection or a hard-coded limit based on network proximity, file size, or server load.</t>
 
 <section title="Mirror Priority">
       <t>Entries for mirror servers are listed in order of priority (from most preferred to least) or have a "pri" value, where mirrors with lower values are used first.</t>
@@ -271,9 +255,9 @@ type="application/pgp-signature"
     </section>
 
 
-    <section title="Cryptographic Hashes of Whole Files" anchor="wholehashes">
+    <section title="Cryptographic Hashes of Whole Documents" anchor="wholehashes">
 	
-	<t>Metalink servers MUST provide Instance Digests in HTTP <xref target="RFC3230"/> for files they describe with mirrors via Link header fields. Mirror servers SHOULD as well. If Instance Digests are not provided by the Metalink servers, the Link header fields MUST be ignored.</t>
+	<t>Metalink servers MUST provide Instance Digests in HTTP <xref target="RFC3230"/> for files they describe with mirrors via Link header fields. Mirror servers SHOULD as well. If Instance Digests are not provided by the Metalink servers, the Link header fields pertaining to this specification MUST be ignored.</t>
 	
 <t><figure> 
 	  <preamble>A brief Metalink server response with cryptographic hash:</preamble>	
@@ -333,9 +317,11 @@ object:</t>
 <t>If the object is large and gets delivered slower than expected then the Metalink client starts a number of parallel ranged downloads (one per selected mirror server other than the
 first) using mirrors provided by the Link header fields with "duplicate" relation type, using the location of the original GET request in the "Referer" header field. The size and number of ranges requested from each server is for the client to decide, based upon the performance observed from each server. Further discussion of performance considerations is presented in <xref target="multiserver"/>.</t>
 
+<t>If any Ranged requests generated after the first request ends up with a complete response and not a partial one (as servers might not support HTTP ranges), then all but the fastest connection can be closed.</t>
+
 <t>If no range limit was given in the original request then work from the tail of the object (the first request is still running and will eventually catch up), otherwise continue after the range requested in the first request. If no Range was provided, the original connection must be terminated once all parts of the resource have been retrieved. It is recommended that a HEAD request is undertaken first, so that the client can find out if there are any Link header fields, and then Range-based requests are undertaken to the mirror servers as well as on the original connection.</t>
 
-<t>Preferred mirrors have coordinated ETags, as described in <xref target="coordinatedpolicies"/>, and If-Match conditions based on the ETag SHOULD be used to quickly detect out-of-date mirrors by using the ETag from the Metalink server response. If no indication of ETag syncronisation/knowledge is given then If-Match
+<t>Preferred mirrors have coordinated ETags, as described in <xref target="coordinatedpolicies"/>, and If-Match conditions based on the ETag SHOULD be used to quickly detect out-of-date mirrors by using the ETag from the Metalink server response. If no indication of ETag synchronisation/knowledge is given then If-Match
 should not be used, and optimally there will be an Instance Digest in the mirror response which we can use to detect a mismatch early, and if not then a mismatch won't be detected until the completed object is verified. Early file mismatch detection is described in detail in <xref target="earlyfilemismatchdetection"/>.</t>
 
 <t>One of the client requests to a mirror server:
@@ -384,7 +370,7 @@ of the downloaded file, see <xref target="errorcorrection"/> for a possible way 
 <t>Error prevention, or early file mismatch detection, is possible before file transfers with the use of file sizes, ETags, and cryptographic hashes. Error detection requires Instance Digests, or cryptographic hashes, to
 determine after transfers if there has been an error. Error correction, or download repair, is possible with partial file cryptographic hashes.</t>
 
-<t>Note that cyptographic hashes obtained from Instance Digests are in base64 encoding, while those from Metalink/XML and FTP HASH are in hexadecimal.</t>
+<t>Note that cryptographic hashes obtained from Instance Digests are in base64 encoding, while those from Metalink/XML and FTP HASH are in hexadecimal.</t>
 
 <section title="Error Prevention (Early File Mismatch Detection)" anchor="earlyfilemismatchdetection">
 
@@ -480,7 +466,7 @@ other mirrors.</t>
 	mirror might offer better performance.</t>
 
 	<t>The size of chunks chosen by the client should be sufficiently
-	large that the chunk request header fields and reponse header fields
+	large that the chunk request header fields and response header fields
 	represent neglible overhead, and sufficiently large that they
 	can be pipelined effectively without needing a very high rate
 	of chunk requests.  At the same time, the amount of time
@@ -828,9 +814,9 @@ other mirrors.</t>
 
 
 	    <section title="Acknowledgements and Contributors">
-		  <t>Thanks to the Metalink community, Alexey Melnikov, Julian Reschke, Mark Nottingham, Daniel Stenberg, Matt Domsch, Micah Cowan, and David Morris.</t>
+		  <t>Thanks to the Metalink community, Alexey Melnikov, Julian Reschke, Mark Nottingham, Daniel Stenberg, Matt Domsch, Micah Cowan, David Morris, Yves Lafon, Juergen Schoenwaelder, and the HTTPBIS Working Group.</t>
 		  
-          <t>Mark Handley and Javier Vela Diago did work on simultaneous download from multiple mirrors, which also provided validation of the benefits of this approach.</t>
+          <t>Thanks to Alan Ford and Mark Handley for spurring us on to publish our research.</t>
 
 	    </section> 
 
@@ -862,15 +848,14 @@ other mirrors.</t>
 		<t>Known issues concerning this draft:
 	    <list style="symbols"> 
 	      
-	      <t>Some organizations have many mirrors. Should all be sent, or only a certain number? All should be included in the Metalink/XML, if used.</t>
-		  <t>Using Metalink/XML for partial file cryptographic hashes. That adds XML dependency to apps for an important feature. Is there a better method?</t>
+	      <t>Remove dependency on 'draft-ietf-ftpext2-hash' in the Normative References section if we decide we don't want to wait for HASH to be finalized.</t>
 	    </list></t>
 
 <t>-20 : January , 2011.
 	    
 	    <list style="symbols">
 
-	      <t>Stuff</t>
+	      <t>Yves Lafon's apps-team review, Juergen Schoenwaelder's secdir review.</t>
 	    </list></t>
 
 
