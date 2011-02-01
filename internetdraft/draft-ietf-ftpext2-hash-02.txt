@@ -8,7 +8,7 @@ Expires: August 5, 2011                                 February 1, 2011
 
 
       File Transfer Protocol HASH Command for Cryptographic Hashes
-                       draft-ietf-ftpext2-hash-01
+                       draft-ietf-ftpext2-hash-02
 
 Abstract
 
