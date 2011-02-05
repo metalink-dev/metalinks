@@ -365,15 +365,9 @@ This string is case insensitive, and MAY be sent in any mixture of upper or lowe
 
 <t>The server-PI SHOULD reply with a 500 reply if the RANG command is unrecognized or unimplemented.</t>
 
-<t>The server-PI SHOULD reply with a 550 reply if the RANG command is used on a file that can not be found.</t>
-
-<t>The server-PI SHOULD reply with a 551 reply if the server-PI is unable to deliver the file with TYPE I and MODE S.</t>
+<t>The server-PI SHOULD reply with a 551 reply if the server-PI is not configured to use TYPE I and MODE S.</t>
 
 <t>The server-PI SHOULD reply with a 552 reply if the user is not allowed to use the RANG command.</t>
-
-<t>The server-PI SHOULD reply with a 553 reply if the user requests the RANG of a directory, which is not allowed.</t>
-
-<t>The server-PI SHOULD reply with a 5yz reply if the specified end point is larger than the actual file.</t>
 
 </section>
 
@@ -669,9 +663,8 @@ define how they operate with RANG. The HASH command <xref target="draft-ietf-ftp
 	      <uri>http://www.haxx.se/</uri>
 	    </address>
       </author>
-	<date month="November" year="2010"/>   
   </front>
-  <seriesInfo name="Internet-Draft" value="draft-ietf-ftpext2-hash-00"/>
+  <seriesInfo name="Internet-Draft" value="draft-ietf-ftpext2-hash-02"/>
 </reference>
 
 	    </references> 

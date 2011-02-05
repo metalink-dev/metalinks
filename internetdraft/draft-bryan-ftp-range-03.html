@@ -144,7 +144,7 @@
 <tr><td class="header">Network Working Group</td><td class="header">A. Bryan</td></tr>
 <tr><td class="header">Internet-Draft</td><td class="header">T. Tsujikawa</td></tr>
 <tr><td class="header">Intended status: Standards Track</td><td class="header">D. Stenberg</td></tr>
-<tr><td class="header">Expires: August 5, 2011</td><td class="header">February 1, 2011</td></tr>
+<tr><td class="header">Expires: August 9, 2011</td><td class="header">February 5, 2011</td></tr>
 </table></td></tr></table>
 <h1><br />File Transfer Protocol RANG Command for Byte Ranges<br />draft-bryan-ftp-range-03</h1>
 
@@ -183,7 +183,7 @@ and may be updated, replaced, or obsoleted by other documents at any time.
 It is inappropriate to use Internet-Drafts as reference material or to cite
 them other than as &ldquo;work in progress.&rdquo;</p>
 <p>
-This Internet-Draft will expire on August 5, 2011.</p>
+This Internet-Draft will expire on August 9, 2011.</p>
 
 <h3>Copyright Notice</h3>
 <p>
@@ -563,15 +563,9 @@ RANG Command Errors</h3>
 
 <p>The server-PI SHOULD reply with a 500 reply if the RANG command is unrecognized or unimplemented.
 </p>
-<p>The server-PI SHOULD reply with a 550 reply if the RANG command is used on a file that can not be found.
-</p>
-<p>The server-PI SHOULD reply with a 551 reply if the server-PI is unable to deliver the file with TYPE I and MODE S.
+<p>The server-PI SHOULD reply with a 551 reply if the server-PI is not configured to use TYPE I and MODE S.
 </p>
 <p>The server-PI SHOULD reply with a 552 reply if the user is not allowed to use the RANG command.
-</p>
-<p>The server-PI SHOULD reply with a 553 reply if the user requests the RANG of a directory, which is not allowed.
-</p>
-<p>The server-PI SHOULD reply with a 5yz reply if the specified end point is larger than the actual file.
 </p>
 <a name="anchor10"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
@@ -579,7 +573,7 @@ RANG Command Errors</h3>
 RANG Command Use with Other Commands</h3>
 
 <p>This specification defines the use of RANG in a certain way. Other commands could decide to use RANG in a similar way, to select a byte range, and their specification would
-define how they operate with RANG. The HASH command <a class='info' href='#draft-ietf-ftpext2-hash'>[draft&#8209;ietf&#8209;ftpext2&#8209;hash]<span> (</span><span class='info'>Bryan, A., Kosse, T., and D. Stenberg, &ldquo;FTP Extensions for Cryptographic Hashes,&rdquo; November&nbsp;2010.</span><span>)</span></a> uses RANG to select a byte range for partial file hashing.
+define how they operate with RANG. The HASH command <a class='info' href='#draft-ietf-ftpext2-hash'>[draft&#8209;ietf&#8209;ftpext2&#8209;hash]<span> (</span><span class='info'>Bryan, A., Kosse, T., and D. Stenberg, &ldquo;FTP Extensions for Cryptographic Hashes,&rdquo; .</span><span>)</span></a> uses RANG to select a byte range for partial file hashing.
 </p>
 <a name="IANA"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
@@ -640,7 +634,7 @@ References</h3>
 <tr><td class="author-text" valign="top"><a name="RFC5797">[RFC5797]</a></td>
 <td class="author-text">Klensin, J. and A. Hoenes, &ldquo;<a href="http://tools.ietf.org/html/rfc5797">FTP Command and Extension Registry</a>,&rdquo; RFC&nbsp;5797, March&nbsp;2010.</td></tr>
 <tr><td class="author-text" valign="top"><a name="draft-ietf-ftpext2-hash">[draft-ietf-ftpext2-hash]</a></td>
-<td class="author-text"><a href="mailto:anthonybryan@gmail.com">Bryan, A.</a>, <a href="mailto:tim.kosse@filezilla-project.org">Kosse, T.</a>, and <a href="mailto:daniel@haxx.se">D. Stenberg</a>, &ldquo;<a href="http://www.ietf.org/internet-drafts/draft-ietf-ftpext2-hash-00.txt">FTP Extensions for Cryptographic Hashes</a>,&rdquo; draft-ietf-ftpext2-hash-00 (work in progress), November&nbsp;2010.</td></tr>
+<td class="author-text"><a href="mailto:anthonybryan@gmail.com">Bryan, A.</a>, <a href="mailto:tim.kosse@filezilla-project.org">Kosse, T.</a>, and <a href="mailto:daniel@haxx.se">D. Stenberg</a>, &ldquo;<a href="http://www.ietf.org/internet-drafts/draft-ietf-ftpext2-hash-02.txt">FTP Extensions for Cryptographic Hashes</a>,&rdquo; draft-ietf-ftpext2-hash-02 (work in progress).</td></tr>
 </table>
 
 <a name="anchor14"></a><br /><hr />
