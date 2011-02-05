@@ -15,64 +15,6 @@
 <rfc category="std" docName="draft-bryan-ftpbis-00" updates="1123" obsoletes="775,959,1639" ipr="trust200902">
     <front>        
       <title abbrev="File Transfer Protocol">File Transfer Protocol (FTP)</title>
-      <author initials="J." surname="Postel" fullname="Jon Postel">
-	    <organization>ISI</organization>
-      </author>
-      <author initials="J." surname="Reynolds" fullname="Joyce Reynolds">
-	    <organization>ISI</organization>
-      </author>
-<author initials='P.' surname='Hethmon' fullname='Paul Hethmon'>
-<organization>Hethmon Brothers</organization>
-<address>
-<postal>
-<street>2305 Chukar Road</street>
-<street>Knoxville</street>
-<street>TN 37923</street>
-<country>USA</country></postal>
-<phone>+1 423 690 8990</phone>
-<email>phethmon@hethmon.com</email></address></author>
-
-<author initials='R.' surname='Elz' fullname='Robert Elz'>
-<organization>University of Melbourne</organization>
-<address>
-<postal>
-<street>Department of Computer Science</street>
-<street>Parkville</street>
-<street>Vic   3052</street>
-<country>Australia</country></postal>
-<email>kre@munnari.OZ.AU</email></address></author>
-
-<author initials='M.' surname='Allman' fullname='Mark Allman'>
-<organization>NASA Lewis Research Center/Sterling Software</organization>
-<address>
-<postal>
-<street>21000 Brookpark Rd.  MS 54-2</street>
-<street>Cleveland</street>
-<street>OH  44135</street></postal>
-<phone>(216) 433-6586</phone>
-<email>mallman@lerc.nasa.gov</email>
-<uri>http://gigahertz.lerc.nasa.gov/~mallman/</uri></address></author>
-
-<author initials='S.' surname='Ostermann' fullname='Shawn Ostermann'>
-<organization>Ohio University</organization>
-<address>
-<postal>
-<street>School of Electrical Engineering &amp; Computer Science</street>
-<street>416 Morton Hall</street>
-<street>Athens</street>
-<street>OH  45701</street></postal>
-<phone>(740) 593-1234</phone>
-<email>ostermann@cs.ohiou.edu</email></address></author>
-
-<author initials='C.' surname='Metz' fullname='Craig Metz'>
-<organization>The Inner Net</organization>
-<address>
-<postal>
-<street>Box 10314-1954</street>
-<street>Blacksburg</street>
-<street>VA  24062-0314</street></postal>
-<phone>(DSN) 754-8590</phone>
-<email>cmetz@inner.net</email></address></author>
 
       <author initials="A." surname="Bryan" fullname="Anthony Bryan" role="editor">
 	    <organization></organization>
@@ -88,7 +30,7 @@
 	    </address>
       </author>
 
-	<date year="2010"/>        
+	<date/>        
 
       <abstract>
 	<t>This current edition of the FTP specification is intended to
@@ -7069,6 +7011,90 @@ Debug Code
    the format prior to authentication are foreseen.
 </t>
 </section>
+
+</section>
+
+<section title="Authors of Included RFCs">
+
+<t>Authors of included RFCs:</t>
+<t>
+<figure>
+	  <artwork type="example">
+
+RFC 0959:	  
+	 
+Jon Postel
+ISI
+ 	 
+RFC 0959:
+
+Joyce Reynolds
+ISI
+
+RFC 1123:
+
+Robert Braden
+USC/Information Sciences Institute
+4676 Admiralty Way
+Marina del Rey, CA 90292-6695
+Phone: (213) 822 1511
+EMail: Braden@ISI.EDU
+
+RFC 2389, RFC 3659:
+
+Paul Hethmon
+Hethmon Brothers
+2305 Chukar Road
+Knoxville
+TN 37923
+USA
+Phone:  	+1 423 690 8990
+Email:  	phethmon@hethmon.com
+
+RFC 2389:
+
+Robert Elz
+University of Melbourne
+Department of Computer Science
+Parkville
+Vic 3052
+Australia
+Email:  	kre@munnari.OZ.AU
+
+RFC 2428, RFC 2577:
+
+Mark Allman
+NASA Lewis Research Center/Sterling Software
+21000 Brookpark Rd. MS 54-2
+Cleveland
+OH 44135
+Phone:  	(216) 433-6586
+Email:  	mallman@lerc.nasa.gov
+URI:  	http://gigahertz.lerc.nasa.gov/~mallman/
+ 
+RFC 2428, RFC 2577:
+
+Shawn Ostermann
+Ohio University
+School of Electrical Engineering & Computer Science
+416 Morton Hall
+Athens
+OH 45701
+Phone:  	(740) 593-1234
+Email:  	ostermann@cs.ohiou.edu
+
+RFC 2428:
+ 	 
+Craig Metz
+The Inner Net
+Box 10314-1954
+Blacksburg
+VA 24062-0314
+Phone:  	(DSN) 754-8590
+Email:  	cmetz@inner.net
+</artwork>
+</figure>
+</t>
 
 </section>
 

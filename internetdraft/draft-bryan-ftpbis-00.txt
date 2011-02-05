@@ -1,22 +1,13 @@
 
 
 
-Network Working Group                                          J. Postel
-Internet-Draft                                               J. Reynolds
-Obsoletes: 775,959,1639                                              ISI
-(if approved)                                                 P. Hethmon
-Updates: 1123 (if approved)                             Hethmon Brothers
-Intended status: Standards Track                                  R. Elz
-Expires: February 22, 2011                       University of Melbourne
-                                                               M. Allman
-                                                     NASA Lewis Research
-                                                Center/Sterling Software
-                                                            S. Ostermann
-                                                         Ohio University
-                                                                 C. Metz
-                                                           The Inner Net
-                                                           A. Bryan, Ed.
-                                                         August 21, 2010
+Network Working Group                                      A. Bryan, Ed.
+Internet-Draft                                          February 3, 2011
+Obsoletes: 775,959,1639
+(if approved)
+Updates: 1123 (if approved)
+Intended status: Standards Track
+Expires: August 7, 2011
 
 
                       File Transfer Protocol (FTP)
@@ -45,19 +36,11 @@ Status of this Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on February 22, 2011.
+   This Internet-Draft will expire on August 7, 2011.
 
 Copyright Notice
 
-
-
-
-Postel, et al.          Expires February 22, 2011               [Page 1]
-
-Internet-Draft           File Transfer Protocol              August 2010
-
-
-   Copyright (c) 2010 IETF Trust and the persons identified as the
+   Copyright (c) 2011 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -66,6 +49,14 @@ Internet-Draft           File Transfer Protocol              August 2010
    publication of this document.  Please review these documents
    carefully, as they describe your rights and restrictions with respect
    to this document.  Code Components extracted from this document must
+
+
+
+Bryan                    Expires August 7, 2011                 [Page 1]
+
+Internet-Draft           File Transfer Protocol            February 2011
+
+
    include Simplified BSD License text as described in Section 4.e of
    the Trust Legal Provisions and are provided without warranty as
    described in the Simplified BSD License.
@@ -105,14 +96,6 @@ Table of Contents
        4.1.5.  Extensions to FTP . . . . . . . . . . . . . . . . . .  49
        4.1.6.  Other Extensions  . . . . . . . . . . . . . . . . . . 100
        4.1.7.  Non-standard Command Verbs  . . . . . . . . . . . . . 100
-
-
-
-Postel, et al.          Expires February 22, 2011               [Page 2]
-
-Internet-Draft           File Transfer Protocol              August 2010
-
-
      4.2.   FTP Replies  . . . . . . . . . . . . . . . . . . . . . . 100
        4.2.1.  Protected Replies from RFC 2228 . . . . . . . . . . . 105
        4.2.2.  Reply Code By Function Groups . . . . . . . . . . . . 106
@@ -122,6 +105,14 @@ Internet-Draft           File Transfer Protocol              August 2010
      5.2.   Connections  . . . . . . . . . . . . . . . . . . . . . . 112
      5.3.   Commands . . . . . . . . . . . . . . . . . . . . . . . . 114
        5.3.1.  FTP Commands  . . . . . . . . . . . . . . . . . . . . 115
+
+
+
+Bryan                    Expires August 7, 2011                 [Page 2]
+
+Internet-Draft           File Transfer Protocol            February 2011
+
+
        5.3.2.  FTP Command Arguments . . . . . . . . . . . . . . . . 116
      5.4.   Sequencing of Commands and Replies . . . . . . . . . . . 116
    6.  State Diagrams  . . . . . . . . . . . . . . . . . . . . . . . 120
@@ -140,15 +131,16 @@ Internet-Draft           File Transfer Protocol              August 2010
      10.8.  Software-Base Security Problems  . . . . . . . . . . . . 130
      10.9.  Server Capabilities Exposed by FEAT  . . . . . . . . . . 131
      10.10. SIZE and MLSx  . . . . . . . . . . . . . . . . . . . . . 131
-   11. References  . . . . . . . . . . . . . . . . . . . . . . . . . 132
-     11.1.  Normative References . . . . . . . . . . . . . . . . . . 132
-     11.2.  Informative References . . . . . . . . . . . . . . . . . 133
-   Appendix A.  Page Structure . . . . . . . . . . . . . . . . . . . 133
-   Appendix B.  Directory Commands . . . . . . . . . . . . . . . . . 135
-   Appendix C.  RFCs on FTP  . . . . . . . . . . . . . . . . . . . . 138
-   Appendix D.  Acknowledgements and Contributors  . . . . . . . . . 141
-   Appendix E.  Changelog from RFC 959 and TODO  . . . . . . . . . . 141
-   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . . 143
+   11. Authors of Included RFCs  . . . . . . . . . . . . . . . . . . 131
+   12. References  . . . . . . . . . . . . . . . . . . . . . . . . . 133
+     12.1.  Normative References . . . . . . . . . . . . . . . . . . 133
+     12.2.  Informative References . . . . . . . . . . . . . . . . . 134
+   Appendix A.  Page Structure . . . . . . . . . . . . . . . . . . . 134
+   Appendix B.  Directory Commands . . . . . . . . . . . . . . . . . 136
+   Appendix C.  RFCs on FTP  . . . . . . . . . . . . . . . . . . . . 139
+   Appendix D.  Acknowledgements and Contributors  . . . . . . . . . 143
+   Appendix E.  Changelog from RFC 959 and TODO  . . . . . . . . . . 143
+   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . . 144
 
 
 
@@ -164,9 +156,17 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011               [Page 3]
+
+
+
+
+
+
+
+
+Bryan                    Expires August 7, 2011                 [Page 3]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
 1.  Introduction
@@ -220,9 +220,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011               [Page 4]
+Bryan                    Expires August 7, 2011                 [Page 4]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
         TCHAR          = VCHAR / SP / HTAB    ; visible plus white space
@@ -276,9 +276,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011               [Page 5]
+Bryan                    Expires August 7, 2011                 [Page 5]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
    it matters.  While it is useful for the user-PI to be able to
@@ -332,9 +332,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011               [Page 6]
+Bryan                    Expires August 7, 2011                 [Page 6]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
 2.2.1.  Pathname Syntax
@@ -388,9 +388,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011               [Page 7]
+Bryan                    Expires August 7, 2011                 [Page 7]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
    Symbolically, a time-val may be viewed as
@@ -444,9 +444,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011               [Page 8]
+Bryan                    Expires August 7, 2011                 [Page 8]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
    immediately after.  No examples here show data transferred over a
@@ -500,9 +500,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011               [Page 9]
+Bryan                    Expires August 7, 2011                 [Page 9]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
    In 1985, [RFC0959] added the following optional commands to FTP: CDUP
@@ -556,9 +556,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 10]
+Bryan                    Expires August 7, 2011                [Page 10]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
    access controls
@@ -612,9 +612,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 11]
+Bryan                    Expires August 7, 2011                [Page 11]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
       The end-of-file condition that defines the end of a file being
@@ -668,9 +668,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 12]
+Bryan                    Expires August 7, 2011                [Page 12]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
    pathname
@@ -724,9 +724,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 13]
+Bryan                    Expires August 7, 2011                [Page 13]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
       The server protocol interpreter "listens" on Port L for a
@@ -780,9 +780,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 14]
+Bryan                    Expires August 7, 2011                [Page 14]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
                                                -------------
@@ -836,9 +836,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 15]
+Bryan                    Expires August 7, 2011                [Page 15]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
    hosts, neither of which is a local host.  The user sets up control
@@ -892,9 +892,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 16]
+Bryan                    Expires August 7, 2011                [Page 16]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
    functions to be performed, and the replies to these commands (see
@@ -948,9 +948,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 17]
+Bryan                    Expires August 7, 2011                [Page 17]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
    over the data connection, called the "transfer byte size", and the
@@ -1004,9 +1004,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 18]
+Bryan                    Expires August 7, 2011                [Page 18]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
    structured file) to some convenient boundary (byte, word or block).
@@ -1060,9 +1060,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 19]
+Bryan                    Expires August 7, 2011                [Page 19]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
    associated with a file.  The following data representation types are
@@ -1116,9 +1116,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 20]
+Bryan                    Expires August 7, 2011                [Page 20]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
                      Character     Vertical Spacing
@@ -1172,9 +1172,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 21]
+Bryan                    Expires August 7, 2011                [Page 21]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
    record-oriented there may be problems if a file with one structure is
@@ -1228,9 +1228,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 22]
+Bryan                    Expires August 7, 2011                [Page 22]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
    page is sent with a page header.  The page header has the following
@@ -1284,9 +1284,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 23]
+Bryan                    Expires August 7, 2011                [Page 23]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
    All fields are one logical byte in length.  The logical byte size is
@@ -1340,9 +1340,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 24]
+Bryan                    Expires August 7, 2011                [Page 24]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
    when the user-DTP is sending the data in a transfer mode that
@@ -1396,9 +1396,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 25]
+Bryan                    Expires August 7, 2011                [Page 25]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
    not close the connection to indicate the end of file.  They have
@@ -1452,9 +1452,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 26]
+Bryan                    Expires August 7, 2011                [Page 26]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
    two-byte control code.  The first byte of the control code will be
@@ -1508,9 +1508,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 27]
+Bryan                    Expires August 7, 2011                [Page 27]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
                Code     Meaning
@@ -1564,9 +1564,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 28]
+Bryan                    Expires August 7, 2011                [Page 28]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
             Byte string:
@@ -1620,9 +1620,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 29]
+Bryan                    Expires August 7, 2011                [Page 29]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
 3.5.  Error Recovery and Restart
@@ -1676,9 +1676,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 30]
+Bryan                    Expires August 7, 2011                [Page 30]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
    is a second server-DTP, then it is governed by its PI on command from
@@ -1732,9 +1732,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 31]
+Bryan                    Expires August 7, 2011                [Page 31]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
       command, as some sites may require an account for login and others
@@ -1788,9 +1788,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 32]
+Bryan                    Expires August 7, 2011                [Page 32]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
       This command terminates a USER and if file transfer is not in
@@ -1844,9 +1844,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 33]
+Bryan                    Expires August 7, 2011                [Page 33]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
       A server-FTP MUST implement the PASV command.
@@ -1900,9 +1900,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 34]
+Bryan                    Expires August 7, 2011                [Page 34]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
       The default structure is File.
@@ -1956,9 +1956,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 35]
+Bryan                    Expires August 7, 2011                [Page 35]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
    specified.  The delimiter character MUST be one of the ASCII
@@ -2012,9 +2012,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 36]
+Bryan                    Expires August 7, 2011                [Page 36]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
    Upon receipt of a valid EPRT command, the server MUST return a code
@@ -2068,9 +2068,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 37]
+Bryan                    Expires August 7, 2011                [Page 37]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
    is:
@@ -2124,9 +2124,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 38]
+Bryan                    Expires August 7, 2011                [Page 38]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
    as outlined in Section 4.1.2.1.1.
@@ -2180,9 +2180,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 39]
+Bryan                    Expires August 7, 2011                [Page 39]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
    STOR or RETR).  The data, when transferred in response to FTP service
@@ -2236,9 +2236,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 40]
+Bryan                    Expires August 7, 2011                [Page 40]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
       This command may be required by some servers to reserve sufficient
@@ -2292,9 +2292,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 41]
+Bryan                    Expires August 7, 2011                [Page 41]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
       In the second case, the server aborts the FTP service in progress
@@ -2348,9 +2348,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 42]
+Bryan                    Expires August 7, 2011                [Page 42]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
       This command causes a directory listing to be sent from server to
@@ -2404,9 +2404,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 43]
+Bryan                    Expires August 7, 2011                [Page 43]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
       the server FTP process.  This should include current values of all
@@ -2460,9 +2460,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 44]
+Bryan                    Expires August 7, 2011                [Page 44]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
    Special Action
@@ -2516,9 +2516,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 45]
+Bryan                    Expires August 7, 2011                [Page 45]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
 4.1.4.1.  Feature (FEAT) Command Syntax
@@ -2572,9 +2572,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 46]
+Bryan                    Expires August 7, 2011                [Page 46]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
    facilitate the possible inclusion of parameters supported by each
@@ -2628,9 +2628,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 47]
+Bryan                    Expires August 7, 2011                [Page 47]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
    which existed before the existence of FEAT.  That is, when a client
@@ -2684,9 +2684,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 48]
+Bryan                    Expires August 7, 2011                [Page 48]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
         response-message = *TCHAR
@@ -2740,9 +2740,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 49]
+Bryan                    Expires August 7, 2011                [Page 49]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
    should make sure to allow for possible clock skew when comparing
@@ -2796,9 +2796,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 50]
+Bryan                    Expires August 7, 2011                [Page 50]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
 4.1.5.1.2.  Error Responses
@@ -2852,9 +2852,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 51]
+Bryan                    Expires August 7, 2011                [Page 51]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
          C> MDTM A
@@ -2908,9 +2908,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 52]
+Bryan                    Expires August 7, 2011                [Page 52]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
    STREAM mode, to determine the restart point.  The server-PI might
@@ -2964,9 +2964,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 53]
+Bryan                    Expires August 7, 2011                [Page 53]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
    in any mixture of upper or lower case, however it SHOULD be sent in
@@ -3020,9 +3020,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 54]
+Bryan                    Expires August 7, 2011                [Page 54]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
 4.1.5.3.  Restart of Interrupted Transfer (REST)
@@ -3076,9 +3076,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 55]
+Bryan                    Expires August 7, 2011                [Page 55]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
    not really a need to have explicit restart markers in this case, as
@@ -3132,9 +3132,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 56]
+Bryan                    Expires August 7, 2011                [Page 56]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
 4.1.5.3.3.  Syntax
@@ -3188,9 +3188,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 57]
+Bryan                    Expires August 7, 2011                [Page 57]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
    other time is undefined.  The server-PI may react to a badly
@@ -3244,9 +3244,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 58]
+Bryan                    Expires August 7, 2011                [Page 58]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
    on the server has not since changed.
@@ -3300,9 +3300,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 59]
+Bryan                    Expires August 7, 2011                [Page 59]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
    accepted from the user-PI.
@@ -3356,9 +3356,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 60]
+Bryan                    Expires August 7, 2011                [Page 60]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
    may be) in the virtual file store.
@@ -3412,9 +3412,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 61]
+Bryan                    Expires August 7, 2011                [Page 61]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
    + There are no defined "magic" names, like ".", ".." or "C:".
@@ -3468,9 +3468,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 62]
+Bryan                    Expires August 7, 2011                [Page 62]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
 4.1.5.4.4.  OPTS for TVFS
@@ -3524,9 +3524,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 63]
+Bryan                    Expires August 7, 2011                [Page 63]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
    pathnames (/X /Y /A/Z /A/C/P /A/C/Q /B/P and /B/Q) may refer to the
@@ -3580,9 +3580,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 64]
+Bryan                    Expires August 7, 2011                [Page 64]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
    Two commands are defined, MLST and MLSD.  MLST provides data about
@@ -3636,9 +3636,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 65]
+Bryan                    Expires August 7, 2011                [Page 65]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
    prohibit any particular server-PI implementing such a shorthand.
@@ -3692,9 +3692,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 66]
+Bryan                    Expires August 7, 2011                [Page 66]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
    parameter, and if invalid return an error-response.  For this
@@ -3748,9 +3748,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 67]
+Bryan                    Expires August 7, 2011                [Page 67]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
    The complete format for a successful reply to the MLSD command would
@@ -3804,9 +3804,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 68]
+Bryan                    Expires August 7, 2011                [Page 68]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
    names as octet sequences.
@@ -3860,9 +3860,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 69]
+Bryan                    Expires August 7, 2011                [Page 69]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
 4.1.5.5.4.  Format of Facts
@@ -3916,9 +3916,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 70]
+Bryan                    Expires August 7, 2011                [Page 70]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
          x.desc -- File description
@@ -3972,9 +3972,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 71]
+Bryan                    Expires August 7, 2011                [Page 71]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
    appearing at the start, though frequently may do so, and may occur
@@ -4028,9 +4028,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 72]
+Bryan                    Expires August 7, 2011                [Page 72]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
    directory.  The "unique" fact (if supported and supplied) can be used
@@ -4084,9 +4084,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 73]
+Bryan                    Expires August 7, 2011                [Page 73]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
    with each entry MUST be identical to the others representing the same
@@ -4140,9 +4140,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 74]
+Bryan                    Expires August 7, 2011                [Page 74]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
 4.1.5.5.5.4.  The create Fact
@@ -4196,9 +4196,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 75]
+Bryan                    Expires August 7, 2011                [Page 75]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
    The "e" permission applies to the directory types.  When set on an
@@ -4252,9 +4252,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 76]
+Bryan                    Expires August 7, 2011                [Page 76]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
    directory.
@@ -4308,9 +4308,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 77]
+Bryan                    Expires August 7, 2011                [Page 77]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
 4.1.5.5.5.8.  The media-type Fact
@@ -4364,9 +4364,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 78]
+Bryan                    Expires August 7, 2011                [Page 78]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
    convey the information available.  It must be encoded as a "token" as
@@ -4420,9 +4420,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 79]
+Bryan                    Expires August 7, 2011                [Page 79]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
    similar) would not be present in an actual connection, or were not,
@@ -4476,9 +4476,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 80]
+Bryan                    Expires August 7, 2011                [Page 80]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
    directory, and to list its contents, but not to modify it in any way.
@@ -4532,9 +4532,9 @@ S> 226 MLSD completed
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 81]
+Bryan                    Expires August 7, 2011                [Page 81]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
    C> MLst test
@@ -4588,9 +4588,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 82]
+Bryan                    Expires August 7, 2011                [Page 82]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
    possibilities.  It can be seen that the OS type of the server is
@@ -4644,9 +4644,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 83]
+Bryan                    Expires August 7, 2011                [Page 83]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
 4.1.5.5.7.5.  More Accurate Time Information
@@ -4700,9 +4700,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 84]
+Bryan                    Expires August 7, 2011                [Page 84]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
 C> MLST
@@ -4756,9 +4756,9 @@ S> 226 Listing completed.
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 85]
+Bryan                    Expires August 7, 2011                [Page 85]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
 C> MLSD
@@ -4812,9 +4812,9 @@ S> 257 "/iana/assignments" is current directory.
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 86]
+Bryan                    Expires August 7, 2011                [Page 86]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
    listings are much longer.
@@ -4868,9 +4868,9 @@ S> 226 MLSD completed
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 87]
+Bryan                    Expires August 7, 2011                [Page 87]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
    file, whereas "file3", "File3" and "FILE3" all represent different
@@ -4924,9 +4924,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 88]
+Bryan                    Expires August 7, 2011                [Page 88]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
    C> MlsD
@@ -4980,9 +4980,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 89]
+Bryan                    Expires August 7, 2011                [Page 89]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
    outputs.  That may be an artifact of the underlying file system
@@ -5036,9 +5036,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 90]
+Bryan                    Expires August 7, 2011                [Page 90]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
    This examples shows yet another server implementation, showing a
@@ -5092,9 +5092,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 91]
+Bryan                    Expires August 7, 2011                [Page 91]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
    D> Type=cdir;Unique=aaabceUYqaaa;Perm=el; /sub/dir
@@ -5148,9 +5148,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 92]
+Bryan                    Expires August 7, 2011                [Page 92]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
    based upon hashing of some kind.  Note that the "pdir" and "cdir"
@@ -5204,9 +5204,9 @@ S>  MLST Type*;Size*;Modify*;Perm*;Unique*;UNIX.mode;UNIX.chgd;X.hidden;
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 93]
+Bryan                    Expires August 7, 2011                [Page 93]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
 S> 211 End
@@ -5260,9 +5260,9 @@ S> 211 End
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 94]
+Bryan                    Expires August 7, 2011                [Page 94]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
 4.1.5.5.9.  OPTS Parameters for MLST
@@ -5316,9 +5316,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 95]
+Bryan                    Expires August 7, 2011                [Page 95]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
          mlst-opt-resp = "MLST OPTS" [ SP 1*( factname ";" ) ]
@@ -5372,9 +5372,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 96]
+Bryan                    Expires August 7, 2011                [Page 96]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
   S> 211 End
@@ -5428,9 +5428,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 97]
+Bryan                    Expires August 7, 2011                [Page 97]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
 C> Feat
@@ -5484,9 +5484,9 @@ S> 250 End
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 98]
+Bryan                    Expires August 7, 2011                [Page 98]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
    preceding the pathname when no facts were selected, either
@@ -5540,9 +5540,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011              [Page 99]
+Bryan                    Expires August 7, 2011                [Page 99]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
    obtained via other means.
@@ -5596,9 +5596,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011             [Page 100]
+Bryan                    Expires August 7, 2011               [Page 100]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
    the sequence necessitates the repetition of the entire sequence from
@@ -5652,9 +5652,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011             [Page 101]
+Bryan                    Expires August 7, 2011               [Page 101]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
    the front to avoid confusion.
@@ -5708,9 +5708,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011             [Page 102]
+Bryan                    Expires August 7, 2011               [Page 102]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
    responses by the user-process.  The first digit denotes whether the
@@ -5764,9 +5764,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011             [Page 103]
+Bryan                    Expires August 7, 2011               [Page 103]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
                User-processes) have to agree on the interpretation.
@@ -5820,9 +5820,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011             [Page 104]
+Bryan                    Expires August 7, 2011               [Page 104]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
    function categories, specified by the second digit.  The list of
@@ -5876,9 +5876,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011             [Page 105]
+Bryan                    Expires August 7, 2011               [Page 105]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
             implementation-specific.  An end-of-line code need not be
@@ -5932,9 +5932,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011             [Page 106]
+Bryan                    Expires August 7, 2011               [Page 106]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
           This may include errors such as command line too long.
@@ -5988,9 +5988,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011             [Page 107]
+Bryan                    Expires August 7, 2011               [Page 107]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
       235 [ADAT=base64data]
@@ -6044,9 +6044,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011             [Page 108]
+Bryan                    Expires August 7, 2011               [Page 108]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
       553 Requested action not taken.
@@ -6100,9 +6100,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011             [Page 109]
+Bryan                    Expires August 7, 2011               [Page 109]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
       226 Closing data connection.
@@ -6156,9 +6156,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011             [Page 110]
+Bryan                    Expires August 7, 2011               [Page 110]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
           This may include errors such as command line too long.
@@ -6212,9 +6212,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011             [Page 111]
+Bryan                    Expires August 7, 2011               [Page 111]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
             Type: ASCII Non-print, IMAGE, LOCAL 8
@@ -6268,9 +6268,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011             [Page 112]
+Bryan                    Expires August 7, 2011               [Page 112]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
    Note that all FTP implementation MUST support data transfer using the
@@ -6324,9 +6324,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011             [Page 113]
+Bryan                    Expires August 7, 2011               [Page 113]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
    queued on the connection and issue the close on its own side.
@@ -6380,9 +6380,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011             [Page 114]
+Bryan                    Expires August 7, 2011               [Page 114]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
 5.3.1.  FTP Commands
@@ -6436,9 +6436,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011             [Page 115]
+Bryan                    Expires August 7, 2011               [Page 115]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
 5.3.2.  FTP Command Arguments
@@ -6492,9 +6492,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011             [Page 116]
+Bryan                    Expires August 7, 2011               [Page 116]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
    should wait for this greeting message before sending any commands.
@@ -6548,9 +6548,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011             [Page 117]
+Bryan                    Expires August 7, 2011               [Page 117]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
                      332
@@ -6604,9 +6604,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011             [Page 118]
+Bryan                    Expires August 7, 2011               [Page 118]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
                      500, 501, 502, 421, 530
@@ -6660,9 +6660,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011             [Page 119]
+Bryan                    Expires August 7, 2011               [Page 119]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
                      250
@@ -6716,9 +6716,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011             [Page 120]
+Bryan                    Expires August 7, 2011               [Page 120]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
    The command groupings were determined by constructing a model for
@@ -6772,9 +6772,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011             [Page 121]
+Bryan                    Expires August 7, 2011               [Page 121]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
    This diagram models the commands:
@@ -6828,9 +6828,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011             [Page 122]
+Bryan                    Expires August 7, 2011               [Page 122]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
          +---+   REST    +---+    1,2    +---+
@@ -6884,9 +6884,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011             [Page 123]
+Bryan                    Expires August 7, 2011               [Page 123]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
                                1
@@ -6940,9 +6940,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011             [Page 124]
+Bryan                    Expires August 7, 2011               [Page 124]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
                   ------------------------------------
@@ -6996,9 +6996,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011             [Page 125]
+Bryan                    Expires August 7, 2011               [Page 125]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
       LOCAL COMMANDS BY USER              ACTION INVOLVED
@@ -7052,9 +7052,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011             [Page 126]
+Bryan                    Expires August 7, 2011               [Page 126]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
 10.  Security Considerations
@@ -7108,9 +7108,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011             [Page 127]
+Bryan                    Expires August 7, 2011               [Page 127]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
    making a direct connection.  This makes it difficult to track
@@ -7164,9 +7164,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011             [Page 128]
+Bryan                    Expires August 7, 2011               [Page 128]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
    server should confirm that the network address of the remote hosts on
@@ -7220,9 +7220,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011             [Page 129]
+Bryan                    Expires August 7, 2011               [Page 129]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
    an invalid username.
@@ -7276,9 +7276,9 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011             [Page 130]
+Bryan                    Expires August 7, 2011               [Page 130]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
    This document recommends that implementors of FTP servers with these
@@ -7325,19 +7325,102 @@ Internet-Draft           File Transfer Protocol              August 2010
    the selection of the format prior to authentication are foreseen.
 
 
-11.  References
+11.  Authors of Included RFCs
+
+   Authors of included RFCs:
 
 
 
 
-
-
-Postel, et al.          Expires February 22, 2011             [Page 131]
+Bryan                    Expires August 7, 2011               [Page 131]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
-11.1.  Normative References
+   RFC 0959:
+
+   Jon Postel
+   ISI
+
+   RFC 0959:
+
+   Joyce Reynolds
+   ISI
+
+   RFC 1123:
+
+   Robert Braden
+   USC/Information Sciences Institute
+   4676 Admiralty Way
+   Marina del Rey, CA 90292-6695
+   Phone: (213) 822 1511
+   EMail: Braden@ISI.EDU
+
+   RFC 2389, RFC 3659:
+
+   Paul Hethmon
+   Hethmon Brothers
+   2305 Chukar Road
+   Knoxville
+   TN 37923
+   USA
+   Phone:          +1 423 690 8990
+   Email:          phethmon@hethmon.com
+
+   RFC 2389:
+
+   Robert Elz
+   University of Melbourne
+   Department of Computer Science
+   Parkville
+   Vic 3052
+   Australia
+   Email:          kre@munnari.OZ.AU
+
+   RFC 2428, RFC 2577:
+
+   Mark Allman
+   NASA Lewis Research Center/Sterling Software
+   21000 Brookpark Rd. MS 54-2
+   Cleveland
+   OH 44135
+   Phone:          (216) 433-6586
+
+
+
+Bryan                    Expires August 7, 2011               [Page 132]
+
+Internet-Draft           File Transfer Protocol            February 2011
+
+
+   Email:          mallman@lerc.nasa.gov
+   URI:    http://gigahertz.lerc.nasa.gov/~mallman/
+
+   RFC 2428, RFC 2577:
+
+   Shawn Ostermann
+   Ohio University
+   School of Electrical Engineering & Computer Science
+   416 Morton Hall
+   Athens
+   OH 45701
+   Phone:          (740) 593-1234
+   Email:          ostermann@cs.ohiou.edu
+
+   RFC 2428:
+
+   Craig Metz
+   The Inner Net
+   Box 10314-1954
+   Blacksburg
+   VA 24062-0314
+   Phone:          (DSN) 754-8590
+   Email:          cmetz@inner.net
+
+
+12.  References
+
+12.1.  Normative References
 
    [IPTW]     Feinler, E., "Internet Protocol Transition Workbook",  ,
               March 1982.
@@ -7358,6 +7441,14 @@ Internet-Draft           File Transfer Protocol              August 2010
               and Support", STD 3, RFC 1123, October 1989.
 
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
+
+
+
+Bryan                    Expires August 7, 2011               [Page 133]
+
+Internet-Draft           File Transfer Protocol            February 2011
+
+
               Requirement Levels", BCP 14, RFC 2119, March 1997.
 
    [RFC2228]  Horowitz, M., "FTP Security Extensions", RFC 2228,
@@ -7383,17 +7474,7 @@ Internet-Draft           File Transfer Protocol              August 2010
    [RFC4217]  Ford-Hutchinson, P., "Securing FTP with TLS", RFC 4217,
               October 2005.
 
-
-
-
-
-
-Postel, et al.          Expires February 22, 2011             [Page 132]
-
-Internet-Draft           File Transfer Protocol              August 2010
-
-
-11.2.  Informative References
+12.2.  Informative References
 
    [RFC1639]  Piscitello, D., "FTP Operation Over Big Address Records
               (FOOBAR)", RFC 1639, June 1994.
@@ -7416,6 +7497,14 @@ Appendix A.  Page Structure
    The operating system provides an interface to the file system so that
    many applications view files as sequential streams of characters.
    However, a few applications use the underlying page structures
+
+
+
+Bryan                    Expires August 7, 2011               [Page 134]
+
+Internet-Draft           File Transfer Protocol            February 2011
+
+
    directly, and some of these create holey files.
 
    A TOPS-20 disk file consists of four things: a pathname, a page
@@ -7441,14 +7530,6 @@ Appendix A.  Page Structure
    contiguous.  There may be empty page table slots between occupied
    ones.  Also, the end of file pointer is simply a number.  There is no
    requirement that it in fact point at the "last" datum in the file.
-
-
-
-Postel, et al.          Expires February 22, 2011             [Page 133]
-
-Internet-Draft           File Transfer Protocol              August 2010
-
-
    Ordinary sequential I/O calls in TOPS-20 will cause the end of file
    pointer to be left after the last datum written, but other operations
    may cause it not to be so, if a particular programming system so
@@ -7472,6 +7553,14 @@ Internet-Draft           File Transfer Protocol              August 2010
    Word 1: Page Index.
 
    If the data is a disk file page, this is the number of that page in
+
+
+
+Bryan                    Expires August 7, 2011               [Page 135]
+
+Internet-Draft           File Transfer Protocol            February 2011
+
+
    the file's page map.  Empty pages (holes) in the file are simply not
    sent.  Note that a hole is NOT the same as a page of zeros.
 
@@ -7498,13 +7587,6 @@ Internet-Draft           File Transfer Protocol              August 2010
    than 512 in that case.
 
 
-
-
-Postel, et al.          Expires February 22, 2011             [Page 134]
-
-Internet-Draft           File Transfer Protocol              August 2010
-
-
 Appendix B.  Directory Commands
 
    Since UNIX has a tree-like directory structure in which directories
@@ -7527,6 +7609,13 @@ Appendix B.  Directory Commands
    PWD
 
    Print the current working directory name.
+
+
+
+Bryan                    Expires August 7, 2011               [Page 136]
+
+Internet-Draft           File Transfer Protocol            February 2011
+
 
    CDUP
 
@@ -7553,14 +7642,6 @@ Appendix B.  Directory Commands
    freshly created directory will probably be the object of a future
 
    CWD command.  Unfortunately, the argument to MKD may not always be a
-
-
-
-Postel, et al.          Expires February 22, 2011             [Page 135]
-
-Internet-Draft           File Transfer Protocol              August 2010
-
-
    suitable argument for CWD.  This is the case, for example, when a
    TOPS-20 subdirectory is created by giving just the subdirectory name.
    That is, with a TOPS-20 server FTP, the command sequence
@@ -7583,6 +7664,14 @@ Internet-Draft           File Transfer Protocol              August 2010
    command, the server should return a line of the form:
 
    257<space>"<directory-name>"<space><commentary>
+
+
+
+
+Bryan                    Expires August 7, 2011               [Page 137]
+
+Internet-Draft           File Transfer Protocol            February 2011
+
 
    That is, the server will tell the user what string to use when
    referring to the created directory.  The directory name can contain
@@ -7611,12 +7700,6 @@ Internet-Draft           File Transfer Protocol              August 2010
    case.
 
 
-
-Postel, et al.          Expires February 22, 2011             [Page 136]
-
-Internet-Draft           File Transfer Protocol              August 2010
-
-
             CWD /usr/dm
             200 directory changed to /usr/dm
             MKD pathname
@@ -7638,6 +7721,14 @@ Internet-Draft           File Transfer Protocol              August 2010
    Because these commands will be most useful in transferring subtrees
    from one machine to another, carefully observe that the argument to
    MKD is to be interpreted as a sub-directory of the current working
+
+
+
+Bryan                    Expires August 7, 2011               [Page 138]
+
+Internet-Draft           File Transfer Protocol            February 2011
+
+
    directory, unless it contains enough information for the destination
    host to tell otherwise.  A hypothetical example of its use in the
    TOPS-20 world:
@@ -7665,14 +7756,6 @@ Internet-Draft           File Transfer Protocol              August 2010
 
    <unambiguous> directory is a top-level directory.  Note also that in
    the first example the user "violated" the protocol by attempting to
-
-
-
-Postel, et al.          Expires February 22, 2011             [Page 137]
-
-Internet-Draft           File Transfer Protocol              August 2010
-
-
    access the freshly created directory with a name other than the one
    returned by TOPS-20.  Problems could have resulted in this case had
    there been an <overrainbow> directory; this is an ambiguity inherent
@@ -7694,6 +7777,13 @@ Appendix C.  RFCs on FTP
 
    Bhushan, Abhay, et al, "The File Transfer Protocol", RFC 172 (NIC
    6794), MIT-Project MAC, 23 June 1971.
+
+
+
+Bryan                    Expires August 7, 2011               [Page 139]
+
+Internet-Draft           File Transfer Protocol            February 2011
+
 
    Braden, Bob, "Comments on DTP and FTP Proposals", RFC 238 (NIC 7663),
    UCLA/CCN, 29 September 1971.
@@ -7721,14 +7811,6 @@ Appendix C.  RFCs on FTP
    Comments", RFC 414 (NIC 12406), MIT-Project MAC, 20 November 1972.
 
    Braden, Bob, "Comments on File Transfer Protocol", RFC 430 (NIC
-
-
-
-Postel, et al.          Expires February 22, 2011             [Page 138]
-
-Internet-Draft           File Transfer Protocol              August 2010
-
-
    13299), UCLA/CCN, 7 February 1973.
 
    Thomas, Bob, and Bob Clements, "FTP Server-Server Interaction", RFC
@@ -7751,6 +7833,13 @@ Internet-Draft           File Transfer Protocol              August 2010
 
    Pogran, Ken, and Nancy Neigus, "Response to RFC 607 - Comments on the
    File Transfer Protocol", RFC 614 (NIC 21530), BBN, 28 January 1974.
+
+
+
+Bryan                    Expires August 7, 2011               [Page 140]
+
+Internet-Draft           File Transfer Protocol            February 2011
+
 
    Krilanovich, Mark, George Gregg, Wayne Hathaway, and Jim White,
    "Comments on the File Transfer Protocol", RFC 624 (NIC 22054), UCSB,
@@ -7777,14 +7866,6 @@ Internet-Draft           File Transfer Protocol              August 2010
    Padlipsky, Mike, "An FTP Command-Naming Problem", RFC 506 (NIC
    16157), MIT-Multics, 26 June 1973.
 
-
-
-
-Postel, et al.          Expires February 22, 2011             [Page 139]
-
-Internet-Draft           File Transfer Protocol              August 2010
-
-
    Day, John, "Memo to FTP Group (Proposal for File Access Protocol)",
    RFC 520 (NIC 16819), Illinois, 25 June 1973.
 
@@ -7808,6 +7889,14 @@ Internet-Draft           File Transfer Protocol              August 2010
    SU-AI, 10 May 1975.
 
    Harvey, Brian, "One More Try on the FTP", RFC 691 (NIC 32700), SU-AI,
+
+
+
+Bryan                    Expires August 7, 2011               [Page 141]
+
+Internet-Draft           File Transfer Protocol            February 2011
+
+
    28 May 1975.
 
    Lieb, J., "CWD Command of FTP", RFC 697 (NIC 32963), 14 July 1975.
@@ -7834,13 +7923,6 @@ Internet-Draft           File Transfer Protocol              August 2010
 
    RFC 1123 "Requirements for Internet Hosts -- Application and Support"
 
-
-
-Postel, et al.          Expires February 22, 2011             [Page 140]
-
-Internet-Draft           File Transfer Protocol              August 2010
-
-
    RFC 1415 "FTP-FTAM Gateway Specification"
 
    RFC 1545 "FTP Operation Over Big Address Records (FOOBAR)"
@@ -7862,6 +7944,14 @@ Internet-Draft           File Transfer Protocol              August 2010
 
    RFC 2585 "Internet X.509 Public Key Infrastructure Operational
    Protocols: FTP and HTTP"
+
+
+
+
+Bryan                    Expires August 7, 2011               [Page 142]
+
+Internet-Draft           File Transfer Protocol            February 2011
+
 
    RFC 2640 "Internationalization of the File Transfer Protocol"
 
@@ -7889,14 +7979,6 @@ Appendix E.  Changelog from RFC 959 and TODO
 
    Changelog from RFC 959.
 
-
-
-
-Postel, et al.          Expires February 22, 2011             [Page 141]
-
-Internet-Draft           File Transfer Protocol              August 2010
-
-
       Incorporate [RFC0959] Errata.
 
       Incorporate FTP specific clarifications (Sec 4.1) from [RFC1123]
@@ -7918,6 +8000,14 @@ Internet-Draft           File Transfer Protocol              August 2010
       Section 10.2.
 
       Update Appendix C to include all known FTP RFCs.
+
+
+
+
+Bryan                    Expires August 7, 2011               [Page 143]
+
+Internet-Draft           File Transfer Protocol            February 2011
+
 
       Use BCP 14/[RFC2119] key words in text from [RFC0959] sections.
 
@@ -7945,14 +8035,6 @@ Internet-Draft           File Transfer Protocol              August 2010
 
       Should we update IP Address:Port description to ABNF?  (We could
       borrow from HOST).  Or standardize on one example:
-
-
-
-Postel, et al.          Expires February 22, 2011             [Page 142]
-
-Internet-Draft           File Transfer Protocol              August 2010
-
-
       h1,h2,h3,h4,p1,p2 or A1,A2,A3,A4,a1,a2?
 
       Should we move the whole sentence that is Section 8 into
@@ -7970,76 +8052,20 @@ Internet-Draft           File Transfer Protocol              August 2010
       to contact.
 
 
-Authors' Addresses
-
-   Jon Postel
-   ISI
-
-
-   Joyce Reynolds
-   ISI
-
-
-   Paul Hethmon
-   Hethmon Brothers
-   2305 Chukar Road
-   Knoxville
-   TN 37923
-   USA
-
-   Phone: +1 423 690 8990
-   Email: phethmon@hethmon.com
-
-
-   Robert Elz
-   University of Melbourne
-   Department of Computer Science
-   Parkville
-   Vic   3052
-   Australia
-
-   Email: kre@munnari.OZ.AU
 
 
 
 
 
-Postel, et al.          Expires February 22, 2011             [Page 143]
+
+
+
+Bryan                    Expires August 7, 2011               [Page 144]
 
-Internet-Draft           File Transfer Protocol              August 2010
+Internet-Draft           File Transfer Protocol            February 2011
 
 
-   Mark Allman
-   NASA Lewis Research Center/Sterling Software
-   21000 Brookpark Rd.  MS 54-2
-   Cleveland
-   OH  44135
-
-   Phone: (216) 433-6586
-   Email: mallman@lerc.nasa.gov
-   URI:   http://gigahertz.lerc.nasa.gov/~mallman/
-
-
-   Shawn Ostermann
-   Ohio University
-   School of Electrical Engineering & Computer Science
-   416 Morton Hall
-   Athens
-   OH  45701
-
-   Phone: (740) 593-1234
-   Email: ostermann@cs.ohiou.edu
-
-
-   Craig Metz
-   The Inner Net
-   Box 10314-1954
-   Blacksburg
-   VA  24062-0314
-
-   Phone: (DSN) 754-8590
-   Email: cmetz@inner.net
-
+Author's Address
 
    Anthony Bryan (editor)
    Pompano Beach, FL
@@ -8060,5 +8086,35 @@ Internet-Draft           File Transfer Protocol              August 2010
 
 
 
-Postel, et al.          Expires February 22, 2011             [Page 144]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Bryan                    Expires August 7, 2011               [Page 145]
 
