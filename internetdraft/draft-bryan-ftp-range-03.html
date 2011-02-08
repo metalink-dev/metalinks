@@ -144,7 +144,7 @@
 <tr><td class="header">Network Working Group</td><td class="header">A. Bryan</td></tr>
 <tr><td class="header">Internet-Draft</td><td class="header">T. Tsujikawa</td></tr>
 <tr><td class="header">Intended status: Standards Track</td><td class="header">D. Stenberg</td></tr>
-<tr><td class="header">Expires: August 9, 2011</td><td class="header">February 5, 2011</td></tr>
+<tr><td class="header">Expires: August 12, 2011</td><td class="header">February 8, 2011</td></tr>
 </table></td></tr></table>
 <h1><br />File Transfer Protocol RANG Command for Byte Ranges<br />draft-bryan-ftp-range-03</h1>
 
@@ -183,7 +183,7 @@ and may be updated, replaced, or obsoleted by other documents at any time.
 It is inappropriate to use Internet-Drafts as reference material or to cite
 them other than as &ldquo;work in progress.&rdquo;</p>
 <p>
-This Internet-Draft will expire on August 9, 2011.</p>
+This Internet-Draft will expire on August 12, 2011.</p>
 
 <h3>Copyright Notice</h3>
 <p>
@@ -487,6 +487,11 @@ start-point and/or end-point byte range out of range, should be
 reported when the following transfer command is issued.  Such
 errors will cause that transfer request to be rejected with an
 error indicating the invalid restart attempt.
+</p>
+<p>The server-PI SHOULD transfer 0 bytes with RETR if the specified start
+point is larger than the actual file size.
+</p>
+<p>The server-PI SHOULD transfer the whole range from the start point to the end point with RETR if the end point is larger than the actual file.
 </p>
 <a name="anchor7"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
