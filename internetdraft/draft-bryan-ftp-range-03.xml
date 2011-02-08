@@ -293,6 +293,11 @@ reported when the following transfer command is issued.  Such
 errors will cause that transfer request to be rejected with an
 error indicating the invalid restart attempt.</t>
 
+<t>The server-PI SHOULD transfer 0 bytes with RETR if the specified start
+point is larger than the actual file size.</t>
+
+<t>The server-PI SHOULD transfer the whole range from the start point to the end point with RETR if the end point is larger than the actual file.</t>
+
 <section title="FEAT Command Response for RANG Command">
 
 <t>When replying to the FEAT command <xref target="RFC2389"/>, a server-FTP process that supports the RANG command, as specified here, MUST include, a line containing exactly the string "RANG STREAM".
