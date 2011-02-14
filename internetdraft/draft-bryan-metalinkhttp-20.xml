@@ -111,13 +111,8 @@
       In contrast, a traditional HTTP redirect to a mirror conveys only extremely minimal information - one link to one server, and there is no provision in the HTTP protocol to handle failures.
       Furthermore, in order to provide better load distribution across servers and potentially faster downloads to users, Metalink/HTTP facilitates multi-source downloads, where portions of a file are downloaded from multiple mirrors (and optionally, Peer-to-Peer) simultaneously.</t>
 
+	  <t>Upon connection to a Metalink/HTTP server, a client will receive information about other sources of the same resource and a cryptographic hash of the whole resource. The client will then be able to request chunks of the file from the various sources, scheduling appropriately in order to maximize the download rate.</t>
    
-      <section title="Operation Overview">
-        <t>Detailed discussion of Metalink operation is covered in <xref target="req"/>; this section will present a very brief, high-level overview of how Metalink achieves its goals.</t>
-
-        <t>Upon connection to a Metalink/HTTP server, a client will receive information about other sources of the same resource and a cryptographic hash of the whole resource. The client will then be able to request chunks of the file from the various sources, scheduling appropriately in order to maximise the download rate.</t>
-      </section>   
-
       <section title="Examples"><t><figure> 
 	  <preamble>This example shows a brief Metalink server response with ETag, mirrors, .metalink, OpenPGP signature, and a cryptographic hash of the whole file:</preamble>
 	  
@@ -158,7 +153,7 @@ DYzYjRjYzFhOTlmNTQwYzI2M2QwM2U2MQ==
       Metalink servers and their associated mirror servers SHOULD all share the same ETag policy. It is up to the administrator of the Metalink server to communicate the details of the shared ETag policy to the administrators of the mirror servers so that the mirror servers can be configured with the same ETag policy. To have the same ETag policy means that ETags are synchronized across servers for resources that are mirrored, i.e. byte-for-byte identical files will have the same ETag on mirrors that they have on the Metalink server. ETags could be based on the file contents (cryptographic hash) and not server-unique filesystem metadata. The emitted ETag could be implemented the same as the Instance Digest for simplicity. Metalink servers SHOULD offer Metalink/XML documents that contain cryptographic hashes of parts of the file (and other information) if error recovery is desirable.</t>
 
       <t>Mirror servers are typically FTP or HTTP servers that "mirror" another server. That is, they provide identical copies of (at least some) files that are also on the mirrored server. 
-      Mirror servers can also be Metalink servers. Mirror servers SHOULD support serving partial content. HTTP mirror servers SHOULD share the same ETag policy as the originating Metalink server. HTTP Mirror servers SHOULD support Instance Digests in HTTP <xref target="RFC3230"/>.  Optimally, mirror servers will share the same ETag policy and support Instance Digests in HTTP.</t>
+      Mirror servers SHOULD support serving partial content. HTTP mirror servers SHOULD share the same ETag policy as the originating Metalink server. HTTP Mirror servers SHOULD support Instance Digests in HTTP <xref target="RFC3230"/> using the same algorithm as the Metalink server.  Optimally, mirror servers will share the same ETag policy and support Instance Digests in HTTP.</t>
 
 
       <t>Metalink clients use the mirrors provided by a Metalink server in Link header fields <xref target="RFC5988"/>. Metalink clients MUST support HTTP and SHOULD support FTP <xref target="RFC0959"/>. Metalink clients MAY support BitTorrent <xref target="BITTORRENT"/>, 
@@ -196,8 +191,10 @@ pri=2; geo=gb; depth=1
 </section>
 
 <section title="Coordinated Mirror Policies" anchor="coordinatedpolicies">
-      <t>There are two types of mirror servers: preferred and normal. Preferred mirror servers are HTTP mirror servers that MUST share the same ETag policy as the originating Metalink server. Preferred mirrors make it possible to detect early on, before data is transferred, if the file requested matches the desired file.
-      Entries for preferred HTTP mirror servers have a "pref" value. By default, if unspecified then mirrors are considered "normal" and do not necessarily share the same ETag policy. FTP mirrors, as they do not emit ETags, are considered "normal".</t>
+      <t>There are two types of mirror servers: preferred and normal. Preferred mirror servers are HTTP mirror servers that MUST share the same ETag policy as the originating Metalink server and/or MUST provide Instance Digests using the same algorithm as the Metalink server. 
+	  Preferred mirrors make it possible to detect early on, before data is transferred, if the file requested matches the desired file.
+      Entries for preferred HTTP mirror servers have a "pref" value. By default, if unspecified then mirrors are considered "normal" and do not necessarily share the same ETag policy or support Instance Digests using the same algorithm as the Metalink server.
+	  FTP mirrors are considered "normal", as they do not emit ETags or support Instance Digests.</t>
 	  
 </section>
 
@@ -300,9 +297,10 @@ Digest: SHA-256=MWVkMWQxYTRiMzk5MDQ0MzI3NGU5NDEyZTk5OWY1ZGFmNzgyZTJlO
 DYzYjRjYzFhOTlmNTQwYzI2M2QwM2U2MQ==
 </artwork></figure></t>
 
-<t>After that, the client follows with a GET request to the desired mirrors.</t>
+<t>Alternatively, Metalink clients can begin with a HEAD request to the Metalink server to discover mirrors via Link header fields,
+ and then skip to making the following decisions on every available mirror server found via the Link header fields.</t>
 
-<t>Alternatively, Metalink clients can begin with a HEAD request to the Metalink server to discover mirrors via Link header fields, and then skip to making the following decisions on every available mirror server found via the Link header fields.</t>
+<t>After that, the client follows with a GET request to the desired mirrors.</t>
 
 <t>From the Metalink server response the client learns some or all of the following metadata
 about the requested object, in addition to also starting to receive the
@@ -318,7 +316,7 @@ object:</t>
 <t>Digital signature.</t>
 </list></t>
 
-<t>Next, the Metalink client requests a Range of the object from a mirror server:
+<t>Next, the Metalink client requests a Range of the object from a preferred mirror server, so it can use If-Match conditions:
 
 <figure> 
 	  <artwork type="example">
@@ -329,7 +327,7 @@ If-Match: "thvDyvhfIqlvFe+A9MYgxAfm1q5="
 Referer: http://www.example.com/distribution/example.ext
 </artwork></figure></t>
 
-<t>The mirror servers respond with a 206 Partial Content HTTP status code and appropriate "Content-Length" and "Content Range" header fields. The mirror server response, with data, to the above request:
+<t>Here, the preferred mirror server has the correct file (the If-Match conditions match) and responds with a 206 Partial Content HTTP status code and appropriate "Content-Length", "Content Range", ETag, and Instance Digest header fields. The mirror server response, with data, to the above request:
 
 <figure> 
 	  <artwork type="example">
@@ -345,16 +343,32 @@ DYzYjRjYzFhOTlmNTQwYzI2M2QwM2U2MQ==
 <t>The Metalink client MUST abort the first request, if it was not Range limited, by closing the connection when it catches up with the other parallel downloads of the same object.</t>
 
 <t>If the object is large and gets delivered slower than expected, then the Metalink client MAY start a number of parallel ranged downloads (one per selected mirror server other than the
-first) using mirrors provided by the Link header fields with "duplicate" relation type, using the location of the original GET request in the "Referer" header field. The size and number of ranges requested from each server is for the client to decide, based upon the performance observed from each server. Further discussion of performance considerations is presented in <xref target="multiserver"/>.</t>
+first) using mirrors provided by the Link header fields with "duplicate" relation type. Metalink clients SHOULD use the location of the original GET request in the "Referer" header field for
+these ranged requests.</t>
 
-<t>Metalink clients SHOULD close all but the fastest connection if any Ranged requests generated after the first request end up with a complete response and instead of a partial response (as servers might not support HTTP ranges).</t>
+<t>The Metalink client can determine the size and number of ranges requested from each server, based upon the type and number of mirrors and performance observed from each mirror.
+Note that Range requests impose an overhead on servers and clients need to be aware of that and not abuse them. Metalink clients SHOULD NOT make more than one concurrent Range request to
+each mirror server that it downloads from.</t>
 
-<t>The client works from the tail of the object if no range limit was given in the original request (the first request is still running and will eventually catch up), otherwise continue after the range requested in the first request. If no Range was provided in the original request, the original connection must be terminated once all parts of the resource have been retrieved. It is recommended that a HEAD request is undertaken first, so that the client can find out if there are any Link header fields, and then Range-based requests are undertaken to the mirror servers as well as on the original connection.</t>
+<t>Metalink clients SHOULD close all but the fastest connection if any Ranged requests generated after the first request end up with a complete response, instead of a partial response
+(as some mirrors might not support HTTP ranges), if the goal is the fastest transfer. Similarly, Metalink clients SHOULD abort extremely slow or stalled range requests and finish the request on
+other mirrors. If all ranges have finished except for the final one, the Metalink client can split the final range into multiple range requests to other mirrors so the transfer finishes faster.</t>
 
-<t>Preferred mirrors have coordinated ETags, as described in <xref target="coordinatedpolicies"/>, and Metalink clients SHOULD use If-Match conditions based on the ETag to quickly detect out-of-date mirrors by using the ETag from the Metalink server response. If no indication of ETag synchronisation/knowledge is given then If-Match
-should not be used, and optimally there will be an Instance Digest in the mirror response which the client can use to detect a mismatch early, and if not then a mismatch won't be detected until the completed object is verified. Early file mismatch detection is described in detail in <xref target="earlyfilemismatchdetection"/>.</t>
+<t>The client works from the tail of the object if no range limit was given in the original request (the first request is still running and will eventually catch up), otherwise continue
+after the range requested in the first request. If no Range was provided in the original request, the original connection must be terminated once all parts of the resource have been 
+retrieved. Metalink clients can use a HEAD request first, if possible, so that the client can find out if there are any Link header fields, and then Range-based requests are undertaken
+to the mirror servers as well as on the original connection.</t>
 
-<t>Metalink clients MUST NOT use downloads from mirrors that do not have the same file size as the Metalink server.</t>
+<t>Preferred mirrors have coordinated ETags, as described in <xref target="coordinatedpolicies"/>, and Metalink clients SHOULD use If-Match conditions based on the ETag to quickly 
+detect out-of-date mirrors by using the ETag from the Metalink server response. 
+Metalink clients should not use If-Match header fields with GET requests if no pref parameter is present.
+Optimally, the mirror server will include an Instance Digest in the mirror response to the client GET request, which the client can also use to detect a mismatch early. If the mirror did not include
+the pref parameter or an Instance Digest, then a mismatch can not be 
+detected until the completed object is verified. Early file mismatch detection is described in detail in <xref target="earlyfilemismatchdetection"/>.</t>
+
+<t>Metalink clients MUST reject downloads from mirrors where the file size does not match the file size as reported by the Metalink server.</t>
+
+<t>Metalink clients MUST reject downloads from mirrors that support Instance Digests if the Instance Digest from the mirror does not match the Instance Digest as reported by the Metalink server and the same algorithm is used.</t>
 
 <t>If a Metalink client does not
 support certain download methods (such as FTP or BitTorrent) that a
@@ -362,32 +376,32 @@ file is available from, and there are no available download methods
 that the client supports, then the download will have no way to
 complete.</t>
 
-<t>Once the download has completed, the Metalink client MUST verify the cryptographic hash of the file. If the cryptographic hash offered by the Metalink server with Instance Digests does not match the cryptographic hash
+<t>Metalink clients MUST verify the cryptographic hash of the file once the download has completed. If the cryptographic hash offered by the Metalink server with Instance Digests
+does not match the cryptographic hash
 of the downloaded file, see <xref target="errorcorrection"/> for a possible way to repair errors.</t>
 
 <t>If the download can not be repaired, it is considered corrupt. The client can attempt to re-download the file.</t>
 
 <section title="Error Prevention, Detection, and Correction">
 
-<t>Error prevention, or early file mismatch detection, is possible before file transfers with the use of file sizes, ETags, and cryptographic hashes. Error detection requires Instance Digests, or cryptographic hashes, to
-determine after transfers if there has been an error. Error correction, or download repair, is possible with partial file cryptographic hashes.</t>
+<t>Error prevention, or early file mismatch detection, is possible before file transfers with the use of file sizes, ETags, and Instance Digests provided by Metalink servers. Error detection requires Instance Digests
+to detect errors in transfer after the transfers have completed. Error correction, or download repair, is possible with partial file cryptographic hashes.</t>
 
 <t>Note that cryptographic hashes obtained from Instance Digests are in base64 encoding, while those from Metalink/XML are in hexadecimal.</t>
 
 <section title="Error Prevention (Early File Mismatch Detection)" anchor="earlyfilemismatchdetection">
 
 <t>In HTTP terms, the merging of ranges from multiple
-responses must be verified with a strong validator, which in this
-context is the same as either Instance Digest or a strong ETag.
-In most cases it is sufficient that the Metalink server provides
+responses can be verified with a strong validator, which in this
+context is either an Instance Digest or a strong ETag.
+In most cases, it is sufficient that the Metalink server provides
 mirrors and Instance Digest information, but operation will be
-more robust and efficient if the mirror servers do implement a synchronized
-ETag as well. In fact, the emitted ETag
-can be implemented the same as the Instance Digest for simplicity,
-but there is no need to specify how the ETag is generated, just that it needs
-to be shared among the mirror servers.
-If the mirror server provides neither synchronized ETag or Instance Digest, then early detection of
-mismatches is not possible unless file length also differs. Finally, the error is still detectable, after the download has completed, when the merged response is verified.</t>
+more robust and efficient if the mirror servers do implement a shared
+ETag policy or Instance Digests as well. There is no need to specify how the ETag is generated, just that it needs to be shared between the Metalink server and the mirror servers.
+The benefit of having mirror servers return an Instance Digest is that the client then can detect
+mismatches early even if ETags are not used. Mirrors that support both a shared ETag and Instance Digests do provide value, but just one is sufficient for early
+detection of mismatches. If the mirror server provides neither shared ETag or Instance Digest, then early detection of
+mismatches is not possible unless file length also differs. Finally, errors are still detectable after the download has completed, when the cryptographic hash of the merged response is verified.</t>
 
 <t>ETags can not be used for verifying the integrity of the received
 content. But it is a guarantee issued by the Metalink server that the content is
@@ -395,82 +409,40 @@ correct for that ETag. And if the ETag given by the mirror server matches
 the ETag given by the Metalink server, then there is a chain of trust where the Metalink server
 authorizes these responses as valid for that object.</t>
 
-<t>This guarantees that a mismatch will be detected by using only the synchronized ETag from a Metalink server and mirror server, even alerted by the mirror servers themselves by responding
-with an error, preventing accidental merges of ranges from different
-versions of files with the same name. This even includes many malicious attacks
-where the data on the mirror has been replaced by some other file, but
-not all.</t>
+<t>This guarantees that a mismatch will be detected by using only the shared
+ETag from a Metalink server and mirror server.
+Mirror servers will respond
+with an error if ETags do not match, which will prevent accidental merges of ranges from different
+versions of files with the same name.</t>
 
-<t>Synchronized ETag can not strictly protect against malicious attacks or server or
-network errors replacing content, but neither can Instance Digest on the
-mirror servers as the attacker most certainly can make the server
-seemingly respond with the expected Instance Digest even if the file
-contents have been modified, just as he can with ETag, and the same
-for various system failures also causing bad data to be returned. The Metalink client
-has to rely on the Instance Digest returned by the Metalink Metalink server in the
+<t>A shared ETag or Instance Digest can not strictly protect against malicious attacks or server or
+network errors replacing content.
+An the attacker can make a mirror server seemingly respond with the expected Instance Digest or ETags even if the file
+contents have been modified. The same goes
+for various system failures which would also cause bad data (i.e. corrupted files) to be returned. The Metalink client
+has to rely on the Instance Digest returned by the Metalink server in the
 first response for the verification of the downloaded object as a whole.</t>
-
-<t>If the mirror servers do return an Instance Digest, then that is a bonus,
-just as having them return the right set of Link header fields is. The set of
-trusted mirrors doing that can be substituted as Metalink servers
-accepting the initial request if one likes.</t>
-
-<t>The benefit of having mirror servers return Instance Digest is that the client then can detect
-mismatches early even if ETag is not used. Mirrors that support both shared ETag and Instance Digests do provide value, but just one is sufficient for early
-detection of mismatches. If neither is provided, then early detection of
-mismatches is not possible unless the file length also differs, but the
-error is still detected when the merged response is verified.</t>
 
 </section>
 
 <section title="Error Correction" anchor="errorcorrection">
 
-<t>Partial file cryptographic hashes can be used to detect errors during the download. Metalink servers SHOULD provide Metalink/XML files with partial file hashes in Link header fields as specified in <xref target="metalinkxml"/>, and Metalink clients SHOULD use them for error recovery.</t>
+<t>Partial file cryptographic hashes can be used to detect errors during the download. Metalink servers SHOULD provide Metalink/XML files with partial file hashes 
+in Link header fields as specified in <xref target="metalinkxml"/>, and Metalink clients SHOULD use them for error correction.</t>
 
-<t>If the cryptographic hash of the object does not match the Instance Digest from the Metalink server, then the client SHOULD fetch the Metalink/XML (if available) that could contain partial file cryptographic hashes which
+<t>If the cryptographic hash of the object does not match the Instance Digest from the Metalink server, then the client SHOULD fetch the Metalink/XML (if available)
+that could contain partial file cryptographic hashes which
 will allow detection of which mirror server returned incorrect data.
-If the Instance Digest computation does not match then the client needs
-to fetch the partial file cryptographic hashes, if available, and from there figure out what of
+Metalink clients SHOULD figure out what ranges of
 the downloaded data can be recovered and what needs to be fetched again.
-If no partial cryptographic hashes are available, then the client MUST fetch the complete object from
-other mirrors.</t>
+</t>
+
+<t>Other methods can be used for error correction. For example, some other metainfo files also include partial file hashes that can be used to check for errors.</t>
 
 </section>
 
 </section>
 
-    </section>
-	
-    <section title="Multi-server Performance" anchor="multiserver">
-      <t>When opting to download simultaneously from multiple mirrors, there are a number of factors (both within and outside the influence of the client software) that are relevant to the performance achieved:</t>
-      <t>
-        <list style="symbols">
-          <t>The number of servers used simultaneously.</t>
-        	<t>The ability to pipeline sufficient or sufficiently large range requests to each server so as to avoid connections going idle.</t>
-	        <t>The ability to pipeline sufficiently few or sufficiently small range requests to servers so that all the servers finish their final chunks simultaneously.</t>
-	        <t>The ability to switch between mirrors dynamically so as to use the fastest mirrors at any moment in time</t> 
-        </list>
-      </t>
-      	<t>Obviously, using too many simultaneous
-	connections is undesirable, or other traffic sharing a bottleneck link will
-	be starved.  But at the same time, good performance requires
-	that the client can simultaneously download from at least one
-	fast mirror while exploring whether any other mirror is
-	faster.  Based on laboratory experiments, a good
-	default number of simultaneous connections is four,
-	with three of these being used for the best three mirrors
-	found so far, and one being used to evaluate whether any other
-	mirror might offer better performance.</t>
-
-	<t>The size of chunks chosen by the client should be sufficiently
-	large that the chunk request header fields and response header fields
-	represent negligible overhead, and sufficiently large that they
-	can be pipelined effectively without needing a very high rate
-	of chunk requests.  At the same time, the amount of time
-	wasted waiting for the last chunk to download from the last
-	server after all the other servers have finished should be
-	minimized. Note that Range requests impose an overhead on 
-	servers and clients need to be aware of that and not abuse them.</t>
     </section>
 
 	<section title="IANA Considerations" anchor="IANA">
@@ -497,7 +469,7 @@ other mirrors.</t>
 	    <section title="Spoofing">
 
 	      <t>There is potential for spoofing attacks where the attacker publishes Metalinks with false information.
-          In that case, this could deceive unaware downloaders into downloading a malicious or worthless file. Also, malicious publishers could attempt a distributed denial of service attack by inserting unrelated URIs into Metalinks.</t>
+          In that case, this could deceive unaware downloaders into downloading a malicious or worthless file. As with all downloads, users should only download from trusted sources. Also, malicious publishers could attempt a distributed denial of service attack by inserting unrelated URIs into Metalinks.</t>
 
 	    </section>	
 		
