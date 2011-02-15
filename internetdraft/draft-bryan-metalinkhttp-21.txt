@@ -4,11 +4,11 @@
 Network Working Group                                           A. Bryan
 Internet-Draft                                                  N. McNab
 Intended status: Standards Track                            T. Tsujikawa
-Expires: August 18, 2011
+Expires: August 19, 2011
                                                                 P. Poeml
                                                              MirrorBrain
                                                             H. Nordstrom
-                                                       February 14, 2011
+                                                       February 15, 2011
 
 
  Metalink/HTTP: Mirrors and Cryptographic Hashes in HTTP Header Fields
@@ -48,11 +48,11 @@ Status of this Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on August 18, 2011.
+   This Internet-Draft will expire on August 19, 2011.
 
 
 
-Bryan, et al.            Expires August 18, 2011                [Page 1]
+Bryan, et al.            Expires August 19, 2011                [Page 1]
 
 Internet-Draft      Metalink/HTTP: Mirrors and Hashes      February 2011
 
@@ -108,7 +108,7 @@ Table of Contents
 
 
 
-Bryan, et al.            Expires August 18, 2011                [Page 2]
+Bryan, et al.            Expires August 19, 2011                [Page 2]
 
 Internet-Draft      Metalink/HTTP: Mirrors and Hashes      February 2011
 
@@ -164,7 +164,7 @@ Internet-Draft      Metalink/HTTP: Mirrors and Hashes      February 2011
 
 
 
-Bryan, et al.            Expires August 18, 2011                [Page 3]
+Bryan, et al.            Expires August 19, 2011                [Page 3]
 
 Internet-Draft      Metalink/HTTP: Mirrors and Hashes      February 2011
 
@@ -189,15 +189,15 @@ Internet-Draft      Metalink/HTTP: Mirrors and Hashes      February 2011
 1.1.  Examples
 
    This example shows a brief Metalink server response with ETag,
-   mirrors, .metalink, OpenPGP signature, and a cryptographic hash of
-   the whole file:
+   mirrors, .meta4, OpenPGP signature, and a cryptographic hash of the
+   whole file:
 
    Etag: "thvDyvhfIqlvFe+A9MYgxAfm1q5="
    Link: <http://www2.example.com/example.ext>; rel=duplicate
    Link: <ftp://ftp.example.com/example.ext>; rel=duplicate
    Link: <http://example.com/example.ext.torrent>; rel=describedby;
    type="application/x-bittorrent"
-   Link: <http://example.com/example.ext.metalink>; rel=describedby;
+   Link: <http://example.com/example.ext.meta4>; rel=describedby;
    type="application/metalink4+xml"
    Link: <http://example.com/example.ext.asc>; rel=describedby;
    type="application/pgp-signature"
@@ -220,7 +220,7 @@ Internet-Draft      Metalink/HTTP: Mirrors and Hashes      February 2011
 
 
 
-Bryan, et al.            Expires August 18, 2011                [Page 4]
+Bryan, et al.            Expires August 19, 2011                [Page 4]
 
 Internet-Draft      Metalink/HTTP: Mirrors and Hashes      February 2011
 
@@ -276,7 +276,7 @@ Internet-Draft      Metalink/HTTP: Mirrors and Hashes      February 2011
 
 
 
-Bryan, et al.            Expires August 18, 2011                [Page 5]
+Bryan, et al.            Expires August 19, 2011                [Page 5]
 
 Internet-Draft      Metalink/HTTP: Mirrors and Hashes      February 2011
 
@@ -332,7 +332,7 @@ Internet-Draft      Metalink/HTTP: Mirrors and Hashes      February 2011
 
 
 
-Bryan, et al.            Expires August 18, 2011                [Page 6]
+Bryan, et al.            Expires August 19, 2011                [Page 6]
 
 Internet-Draft      Metalink/HTTP: Mirrors and Hashes      February 2011
 
@@ -388,7 +388,7 @@ Internet-Draft      Metalink/HTTP: Mirrors and Hashes      February 2011
 
 
 
-Bryan, et al.            Expires August 18, 2011                [Page 7]
+Bryan, et al.            Expires August 19, 2011                [Page 7]
 
 Internet-Draft      Metalink/HTTP: Mirrors and Hashes      February 2011
 
@@ -396,11 +396,11 @@ Internet-Draft      Metalink/HTTP: Mirrors and Hashes      February 2011
    name parameter can be used.
 
    This example shows a brief Metalink server response with .torrent and
-   .metalink:
+   .meta4:
 
    Link: <http://example.com/example.ext.torrent>; rel=describedby;
    type="application/x-bittorrent"; name="differentname.ext"
-   Link: <http://example.com/example.ext.metalink>; rel=describedby;
+   Link: <http://example.com/example.ext.meta4>; rel=describedby;
    type="application/metalink4+xml"
 
    Metalink clients MAY support the use of metainfo files for
@@ -444,7 +444,7 @@ Internet-Draft      Metalink/HTTP: Mirrors and Hashes      February 2011
 
 
 
-Bryan, et al.            Expires August 18, 2011                [Page 8]
+Bryan, et al.            Expires August 19, 2011                [Page 8]
 
 Internet-Draft      Metalink/HTTP: Mirrors and Hashes      February 2011
 
@@ -479,7 +479,7 @@ Internet-Draft      Metalink/HTTP: Mirrors and Hashes      February 2011
    Link: <ftp://ftp.example.com/example.ext>; rel=duplicate
    Link: <http://example.com/example.ext.torrent>; rel=describedby;
    type="application/x-bittorrent"
-   Link: <http://example.com/example.ext.metalink>; rel=describedby;
+   Link: <http://example.com/example.ext.meta4>; rel=describedby;
    type="application/metalink4+xml"
    Link: <http://example.com/example.ext.asc>; rel=describedby;
    type="application/pgp-signature"
@@ -500,7 +500,7 @@ Internet-Draft      Metalink/HTTP: Mirrors and Hashes      February 2011
 
 
 
-Bryan, et al.            Expires August 18, 2011                [Page 9]
+Bryan, et al.            Expires August 19, 2011                [Page 9]
 
 Internet-Draft      Metalink/HTTP: Mirrors and Hashes      February 2011
 
@@ -556,7 +556,7 @@ Internet-Draft      Metalink/HTTP: Mirrors and Hashes      February 2011
 
 
 
-Bryan, et al.            Expires August 18, 2011               [Page 10]
+Bryan, et al.            Expires August 19, 2011               [Page 10]
 
 Internet-Draft      Metalink/HTTP: Mirrors and Hashes      February 2011
 
@@ -612,7 +612,7 @@ Internet-Draft      Metalink/HTTP: Mirrors and Hashes      February 2011
 
 
 
-Bryan, et al.            Expires August 18, 2011               [Page 11]
+Bryan, et al.            Expires August 19, 2011               [Page 11]
 
 Internet-Draft      Metalink/HTTP: Mirrors and Hashes      February 2011
 
@@ -668,7 +668,7 @@ Internet-Draft      Metalink/HTTP: Mirrors and Hashes      February 2011
 
 
 
-Bryan, et al.            Expires August 18, 2011               [Page 12]
+Bryan, et al.            Expires August 19, 2011               [Page 12]
 
 Internet-Draft      Metalink/HTTP: Mirrors and Hashes      February 2011
 
@@ -724,7 +724,7 @@ Internet-Draft      Metalink/HTTP: Mirrors and Hashes      February 2011
 
 
 
-Bryan, et al.            Expires August 18, 2011               [Page 13]
+Bryan, et al.            Expires August 19, 2011               [Page 13]
 
 Internet-Draft      Metalink/HTTP: Mirrors and Hashes      February 2011
 
@@ -780,7 +780,7 @@ Internet-Draft      Metalink/HTTP: Mirrors and Hashes      February 2011
 
 
 
-Bryan, et al.            Expires August 18, 2011               [Page 14]
+Bryan, et al.            Expires August 19, 2011               [Page 14]
 
 Internet-Draft      Metalink/HTTP: Mirrors and Hashes      February 2011
 
@@ -836,7 +836,7 @@ Internet-Draft      Metalink/HTTP: Mirrors and Hashes      February 2011
 
 
 
-Bryan, et al.            Expires August 18, 2011               [Page 15]
+Bryan, et al.            Expires August 19, 2011               [Page 15]
 
 Internet-Draft      Metalink/HTTP: Mirrors and Hashes      February 2011
 
@@ -892,7 +892,7 @@ Appendix B.  Comparisons to Similar Options
 
 
 
-Bryan, et al.            Expires August 18, 2011               [Page 16]
+Bryan, et al.            Expires August 19, 2011               [Page 16]
 
 Internet-Draft      Metalink/HTTP: Mirrors and Hashes      February 2011
 
@@ -948,7 +948,7 @@ Appendix C.  Document History
 
 
 
-Bryan, et al.            Expires August 18, 2011               [Page 17]
+Bryan, et al.            Expires August 19, 2011               [Page 17]
 
 Internet-Draft      Metalink/HTTP: Mirrors and Hashes      February 2011
 
@@ -1004,7 +1004,7 @@ Authors' Addresses
 
 
 
-Bryan, et al.            Expires August 18, 2011               [Page 18]
+Bryan, et al.            Expires August 19, 2011               [Page 18]
 
 Internet-Draft      Metalink/HTTP: Mirrors and Hashes      February 2011
 
@@ -1060,5 +1060,5 @@ Internet-Draft      Metalink/HTTP: Mirrors and Hashes      February 2011
 
 
 
-Bryan, et al.            Expires August 18, 2011               [Page 19]
+Bryan, et al.            Expires August 19, 2011               [Page 19]
 

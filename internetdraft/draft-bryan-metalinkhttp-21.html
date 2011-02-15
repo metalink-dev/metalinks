@@ -144,11 +144,11 @@
 <tr><td class="header">Network Working Group</td><td class="header">A. Bryan</td></tr>
 <tr><td class="header">Internet-Draft</td><td class="header">N. McNab</td></tr>
 <tr><td class="header">Intended status: Standards Track</td><td class="header">T. Tsujikawa</td></tr>
-<tr><td class="header">Expires: August 18, 2011</td><td class="header">&nbsp;</td></tr>
+<tr><td class="header">Expires: August 19, 2011</td><td class="header">&nbsp;</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">P. Poeml</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">MirrorBrain</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">H. Nordstrom</td></tr>
-<tr><td class="header">&nbsp;</td><td class="header">February 14, 2011</td></tr>
+<tr><td class="header">&nbsp;</td><td class="header">February 15, 2011</td></tr>
 </table></td></tr></table>
 <h1><br />Metalink/HTTP: Mirrors and Cryptographic Hashes in HTTP Header Fields<br />draft-bryan-metalinkhttp-21</h1>
 
@@ -184,7 +184,7 @@ and may be updated, replaced, or obsoleted by other documents at any time.
 It is inappropriate to use Internet-Drafts as reference material or to cite
 them other than as &ldquo;work in progress.&rdquo;</p>
 <p>
-This Internet-Draft will expire on August 18, 2011.</p>
+This Internet-Draft will expire on August 19, 2011.</p>
 
 <h3>Copyright Notice</h3>
 <p>
@@ -300,14 +300,14 @@ Introduction</h3>
 Examples</h3>
 
 <p>
-<p>This example shows a brief Metalink server response with ETag, mirrors, .metalink, OpenPGP signature, and a cryptographic hash of the whole file:
+<p>This example shows a brief Metalink server response with ETag, mirrors, .meta4, OpenPGP signature, and a cryptographic hash of the whole file:
 </p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
 Etag: "thvDyvhfIqlvFe+A9MYgxAfm1q5="
 Link: &lt;http://www2.example.com/example.ext&gt;; rel=duplicate
 Link: &lt;ftp://ftp.example.com/example.ext&gt;; rel=duplicate
 Link: &lt;http://example.com/example.ext.torrent&gt;; rel=describedby;
 type="application/x-bittorrent"
-Link: &lt;http://example.com/example.ext.metalink&gt;; rel=describedby;
+Link: &lt;http://example.com/example.ext.meta4&gt;; rel=describedby;
 type="application/metalink4+xml"
 Link: &lt;http://example.com/example.ext.asc&gt;; rel=describedby;
 type="application/pgp-signature"
@@ -423,11 +423,11 @@ Peer-to-Peer / Metainfo</h3>
    the MIME type of the metadata available at the URI. Since metainfo files can sometimes describe multiple files, or the filename may not be the same on the Metalink server and in the metainfo file but still have the same content, an optional name parameter can be used.
 </p>
 <p>
-<p>This example shows a brief Metalink server response with .torrent and .metalink:
+<p>This example shows a brief Metalink server response with .torrent and .meta4:
 </p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
 Link: &lt;http://example.com/example.ext.torrent&gt;; rel=describedby;
 type="application/x-bittorrent"; name="differentname.ext"
-Link: &lt;http://example.com/example.ext.metalink&gt;; rel=describedby;
+Link: &lt;http://example.com/example.ext.meta4&gt;; rel=describedby;
 type="application/metalink4+xml"
 </pre></div>
 
@@ -502,7 +502,7 @@ Link: &lt;http://www2.example.com/example.ext&gt;; rel=duplicate; pref
 Link: &lt;ftp://ftp.example.com/example.ext&gt;; rel=duplicate
 Link: &lt;http://example.com/example.ext.torrent&gt;; rel=describedby;
 type="application/x-bittorrent"
-Link: &lt;http://example.com/example.ext.metalink&gt;; rel=describedby;
+Link: &lt;http://example.com/example.ext.meta4&gt;; rel=describedby;
 type="application/metalink4+xml"
 Link: &lt;http://example.com/example.ext.asc&gt;; rel=describedby;
 type="application/pgp-signature"
