@@ -114,7 +114,7 @@
 	  <t>Upon connection to a Metalink/HTTP server, a client will receive information about other sources of the same resource and a cryptographic hash of the whole resource. The client will then be able to request chunks of the file from the various sources, scheduling appropriately in order to maximize the download rate.</t>
    
       <section title="Examples"><t><figure> 
-	  <preamble>This example shows a brief Metalink server response with ETag, mirrors, .metalink, OpenPGP signature, and a cryptographic hash of the whole file:</preamble>
+	  <preamble>This example shows a brief Metalink server response with ETag, mirrors, .meta4, OpenPGP signature, and a cryptographic hash of the whole file:</preamble>
 	  
 	  <artwork type="example">
 Etag: "thvDyvhfIqlvFe+A9MYgxAfm1q5="
@@ -122,7 +122,7 @@ Link: &lt;http://www2.example.com/example.ext&gt;; rel=duplicate
 Link: &lt;ftp://ftp.example.com/example.ext&gt;; rel=duplicate
 Link: &lt;http://example.com/example.ext.torrent&gt;; rel=describedby;
 type="application/x-bittorrent"
-Link: &lt;http://example.com/example.ext.metalink&gt;; rel=describedby;
+Link: &lt;http://example.com/example.ext.meta4&gt;; rel=describedby;
 type="application/metalink4+xml"
 Link: &lt;http://example.com/example.ext.asc&gt;; rel=describedby;
 type="application/pgp-signature"
@@ -220,11 +220,11 @@ rel=duplicate; pri=1; pref; depth=4
       <t>Entries for metainfo files, which describe ways to download a file over Peer-to-Peer networks or otherwise, are specified with the Link header fields <xref target="RFC5988"/> and a relation type of "describedby" and a type parameter that indicates
    the MIME type of the metadata available at the URI. Since metainfo files can sometimes describe multiple files, or the filename may not be the same on the Metalink server and in the metainfo file but still have the same content, an optional name parameter can be used.</t>
 <t><figure> 
-	  <preamble>This example shows a brief Metalink server response with .torrent and .metalink:</preamble>	
+	  <preamble>This example shows a brief Metalink server response with .torrent and .meta4:</preamble>	
 	  <artwork type="example">
 Link: &lt;http://example.com/example.ext.torrent&gt;; rel=describedby;
 type="application/x-bittorrent"; name="differentname.ext"
-Link: &lt;http://example.com/example.ext.metalink&gt;; rel=describedby;
+Link: &lt;http://example.com/example.ext.meta4&gt;; rel=describedby;
 type="application/metalink4+xml"
 </artwork></figure></t>
 
@@ -289,7 +289,7 @@ Link: &lt;http://www2.example.com/example.ext&gt;; rel=duplicate; pref
 Link: &lt;ftp://ftp.example.com/example.ext&gt;; rel=duplicate
 Link: &lt;http://example.com/example.ext.torrent&gt;; rel=describedby;
 type="application/x-bittorrent"
-Link: &lt;http://example.com/example.ext.metalink&gt;; rel=describedby;
+Link: &lt;http://example.com/example.ext.meta4&gt;; rel=describedby;
 type="application/metalink4+xml"
 Link: &lt;http://example.com/example.ext.asc&gt;; rel=describedby;
 type="application/pgp-signature"
