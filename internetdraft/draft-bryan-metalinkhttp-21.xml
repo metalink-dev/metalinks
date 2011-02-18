@@ -145,15 +145,17 @@ DYzYjRjYzFhOTlmNTQwYzI2M2QwM2U2MQ==
     <section title="Requirements" anchor="req">
       <t>In this context, "Metalink" refers to Metalink/HTTP which consists of mirrors and cryptographic hashes in HTTP header fields as described in this document. "Metalink/XML" refers to the XML format described in <xref target="RFC5854"/>.</t>
 	  
-      <t>Metalink resources include Link header fields <xref target="RFC5988"/> to present a list of mirrors in the response to a client request for the resource. Metalink servers MUST include the cryptographic hash of a resource via Instance Digests in HTTP <xref target="RFC3230"/>. Valid algorithms are found in
-	  the IANA registry named "Hypertext Transfer Protocol (HTTP) Digest Algorithm Values" at &lt;http://www.iana.org/assignments/http-dig-alg/http-dig-alg.xhtml&gt;. SHA-256 and SHA-512 were added to the registry by <xref target="RFC5843"/>.</t>
+      <t>Metalink resources include Link header fields <xref target="RFC5988"/> to present a list of mirrors in the response to a client request for the resource. Metalink servers MUST include the cryptographic hash of a resource via Instance Digests in HTTP <xref target="RFC3230"/>.
+	  Algorithms used in the Instance Digest field are registered in the IANA registry named "Hypertext Transfer Protocol (HTTP) Digest Algorithm Values" at &lt;http://www.iana.org/assignments/http-dig-alg/http-dig-alg.xhtml&gt;. This document restricts the use of these algorithms.
+	  SHA-256 and SHA-512 were added to the registry by <xref target="RFC5843"/>.</t>
 	  
 	  <t>Metalink servers are HTTP servers with one or more Metalink
  resources. Metalink servers MUST support the Link header fields for listing mirrors and MUST support Instance Digests in HTTP <xref target="RFC3230"/>. Metalink servers MUST return the same Link header fields and Instance Digests on HEAD requests.
       Metalink servers and their associated mirror servers SHOULD all share the same ETag policy. It is up to the administrator of the Metalink server to communicate the details of the shared ETag policy to the administrators of the mirror servers so that the mirror servers can be configured with the same ETag policy. To have the same ETag policy means that ETags are synchronized across servers for resources that are mirrored, i.e. byte-for-byte identical files will have the same ETag on mirrors that they have on the Metalink server. ETags could be based on the file contents (cryptographic hash) and not server-unique filesystem metadata. The emitted ETag could be implemented the same as the Instance Digest for simplicity. Metalink servers SHOULD offer Metalink/XML documents that contain cryptographic hashes of parts of the file (and other information) if error recovery is desirable.</t>
 
       <t>Mirror servers are typically FTP or HTTP servers that "mirror" another server. That is, they provide identical copies of (at least some) files that are also on the mirrored server. 
-      Mirror servers SHOULD support serving partial content. HTTP mirror servers SHOULD share the same ETag policy as the originating Metalink server. HTTP Mirror servers SHOULD support Instance Digests in HTTP <xref target="RFC3230"/> using the same algorithm as the Metalink server.  Optimally, mirror servers will share the same ETag policy and support Instance Digests in HTTP.</t>
+      Mirror servers SHOULD support serving partial content. HTTP mirror servers SHOULD share the same ETag policy as the originating Metalink server. HTTP Mirror servers SHOULD support Instance Digests in HTTP <xref target="RFC3230"/> using the same algorithm as the Metalink server.  Optimally, mirror servers will share the same ETag policy and support Instance Digests in HTTP.
+	  Mirror servers that share the same ETag policy with a Metalink server are known as preferred mirror servers and/or</t>
 
 
       <t>Metalink clients use the mirrors provided by a Metalink server in Link header fields <xref target="RFC5988"/>. Metalink clients MUST support HTTP and SHOULD support FTP <xref target="RFC0959"/>. Metalink clients MAY support BitTorrent <xref target="BITTORRENT"/>, 
@@ -192,7 +194,7 @@ pri=2; geo=gb; depth=1
 
 <section title="Coordinated Mirror Policies" anchor="coordinatedpolicies">
       <t>There are two types of mirror servers: preferred and normal. Preferred mirror servers are HTTP mirror servers that MUST share the same ETag policy as the originating Metalink server and/or MUST provide Instance Digests using the same algorithm as the Metalink server. 
-	  Preferred mirrors make it possible to detect early on, before data is transferred, if the file requested matches the desired file.
+	  Preferred mirrors make it possible for Metalink clients to detect early on, before data is transferred, if the file requested matches the desired file. This early file mismatch detection is described in <xref target="earlyfilemismatchdetection"/>.
       Entries for preferred HTTP mirror servers have a "pref" value. By default, if unspecified then mirrors are considered "normal" and do not necessarily share the same ETag policy or support Instance Digests using the same algorithm as the Metalink server.
 	  FTP mirrors are considered "normal", as they do not emit ETags or support Instance Digests.</t>
 	  
@@ -239,6 +241,8 @@ type="application/metalink4+xml"
 	
     </section>
 
+<section title="Signatures" anchor="signatures">
+	
     <section title="OpenPGP Signatures" anchor="openpgp">
       <t>OpenPGP signatures <xref target="RFC3156"/> are specified with the Link header fields <xref target="RFC5988"/> and a relation type of "describedby" and a type parameter of "application/pgp-signature".</t>
 <t><figure> 
@@ -250,8 +254,20 @@ type="application/pgp-signature"
     
 <t>Metalink clients SHOULD support the use of OpenPGP signatures.</t>
     </section>
-
-
+	
+    <section title="S/MIME Signatures">
+      <t>S/MIME signatures <xref target="RFC5751"/> are specified with the Link header fields <xref target="RFC5988"/> and a relation type of "describedby" and a type parameter of "application/pkcs7-mime".</t>
+<t><figure> 
+	  <preamble>This example shows a brief Metalink server response with S/MIME signature only:</preamble>
+	  <artwork type="example">
+Link: &lt;http://example.com/example.ext.asc&gt;; rel=describedby;
+type="application/pkcs7-mime"
+</artwork></figure></t>
+    
+<t>Metalink clients SHOULD support the use of S/MIME signatures.</t>
+</section>
+</section>
+	
     <section title="Cryptographic Hashes of Whole Documents" anchor="wholehashes">
 	
 	<t>If Instance Digests are not provided by the Metalink servers, the Link header fields pertaining to this specification MUST be ignored.</t>
@@ -327,6 +343,15 @@ If-Match: "thvDyvhfIqlvFe+A9MYgxAfm1q5="
 Referer: http://www.example.com/distribution/example.ext
 </artwork></figure></t>
 
+<t>Metalink clients SHOULD use preferred mirrors, if possible, as they allow early file mismatch detection as described in <xref target="earlyfilemismatchdetection"/>.
+Preferred mirrors have coordinated ETags, as described in <xref target="coordinatedpolicies"/>, and Metalink clients SHOULD use If-Match conditions based on the ETag to quickly 
+detect out-of-date mirrors by using the ETag from the Metalink server response.</t>
+
+<t>Optimally, the mirror server also will include an Instance Digest in the mirror response to the client GET request, which the client can also use to detect a mismatch early. 
+Metalink clients MUST reject individual downloads from mirrors that support Instance Digests if the Instance Digest from the mirror does not match the Instance Digest as reported by the Metalink server and the same algorithm is used.
+If normal mirrors are used, then a mismatch can not be 
+detected until the completed object is verified. Errors in transmission and substitutions of incorrect data on mirrors, whether deliberate or accidental, can be detected with error correction as described in <xref target="errorcorrection"/>.</t>
+
 <t>Here, the preferred mirror server has the correct file (the If-Match conditions match) and responds with a 206 Partial Content HTTP status code and appropriate "Content-Length", "Content Range", ETag, and Instance Digest header fields. In this example, the mirror server responds, with data, to the above request:
 
 <figure> 
@@ -360,15 +385,7 @@ other mirrors. If all ranges have finished except for the final one, the Metalin
  header fields, and then Range-based requests are undertaken to
  the mirror servers without sacrificing a first connection.</t>
 
-<t>Preferred mirrors have coordinated ETags, as described in <xref target="coordinatedpolicies"/>, and Metalink clients SHOULD use If-Match conditions based on the ETag to quickly 
-detect out-of-date mirrors by using the ETag from the Metalink server response. 
-Optimally, the mirror server will include an Instance Digest in the mirror response to the client GET request, which the client can also use to detect a mismatch early. If the mirror did not include
-the pref parameter or an Instance Digest, then a mismatch can not be 
-detected until the completed object is verified. Early file mismatch detection is described in detail in <xref target="earlyfilemismatchdetection"/>.</t>
-
-<t>Metalink clients MUST reject downloads from mirrors where the file size does not match the file size as reported by the Metalink server.</t>
-
-<t>Metalink clients MUST reject downloads from mirrors that support Instance Digests if the Instance Digest from the mirror does not match the Instance Digest as reported by the Metalink server and the same algorithm is used.</t>
+<t>Metalink clients MUST reject individual downloads from mirrors where the file size does not match the file size as reported by the Metalink server.</t>
 
 <t>If a Metalink client does not
 support certain download methods (such as FTP or BitTorrent) that a
@@ -382,6 +399,10 @@ of the downloaded file, see <xref target="errorcorrection"/> for a possible way 
 
 <t>If the download can not be repaired, it is considered corrupt. The client can attempt to re-download the file.</t>
 
+<t>*REPLACE* "Need to say something about what to do if the signature is included.
+Does it to validate back to a trust anchor.  Point to OpenPGP/RFC5280 for
+validation rules." *REPLACE*</t>
+
 <section title="Error Prevention, Detection, and Correction">
 
 <t>Error prevention, or early file mismatch detection, is possible before file transfers with the use of file sizes, ETags, and Instance Digests provided by Metalink servers. Error detection requires Instance Digests
@@ -392,8 +413,8 @@ to detect errors in transfer after the transfers have completed. Error correctio
 <section title="Error Prevention (Early File Mismatch Detection)" anchor="earlyfilemismatchdetection">
 
 <t>In HTTP terms, the merging of ranges from multiple
-responses can be verified with a strong validator, which in this
-context is either an Instance Digest or a shared ETag.
+responses SHOULD be verified with a strong validator, which in this
+context is either an Instance Digest or a shared ETag from that Metalink server that matches with the same provided by a preferred mirror server.
 In most cases, it is sufficient that the Metalink server provides
 mirrors and Instance Digest information, but operation will be
 more robust and efficient if the mirror servers do implement a shared
@@ -421,7 +442,7 @@ An attacker can make a mirror server seemingly respond with the expected Instanc
 contents have been modified. The same goes
 for various system failures which would also cause bad data (i.e. corrupted files) to be returned. The Metalink client
 has to rely on the Instance Digest returned by the Metalink server in the
-first response for the verification of the downloaded object as a whole.</t>
+first response for the verification of the downloaded object as a whole. To verify the individual ranges, which might have been requested from different sources, see <xref target="errorcorrection"/>.</t>
 
 </section>
 
@@ -485,7 +506,7 @@ the downloaded data can be recovered and what needs to be fetched again.
 		
 	    <section title="Signing">
 
-	      <t>Metalinks SHOULD include digital signatures, as described in <xref target="openpgp"/>.</t>
+	      <t>Metalinks SHOULD include digital signatures, as described in <xref target="signatures"/>.</t>
 
 	      <t>Digital signatures provide authentication, message integrity, and non-repudiation with proof of origin.</t>
 
@@ -689,6 +710,23 @@ the downloaded data can be recovered and what needs to be fetched again.
 </front>
 <seriesInfo name="FIPS PUB" value="180-3"></seriesInfo>
 </reference>
+
+<reference anchor='RFC5751'>
+
+<front>
+<title>Secure/Multipurpose Internet Mail Extensions (S/MIME) Version 3.2 Message Specification</title>
+<author initials='B.' surname='Ramsdell' fullname='B. Ramsdell'>
+<organization /></author>
+<author initials='S.' surname='Turner' fullname='S. Turner'>
+<organization /></author>
+<date year='2010' month='January' />
+<abstract>
+<t>This document defines Secure/Multipurpose Internet Mail Extensions (S/MIME) version 3.2.  S/MIME provides a consistent way to send and receive secure MIME data.  Digital signatures provide authentication, message integrity, and non-repudiation with proof of origin.  Encryption provides data confidentiality.  Compression can be used to reduce data size.  This document obsoletes RFC 3851. [STANDARDS-TRACK]</t></abstract></front>
+
+<seriesInfo name='RFC' value='5751' />
+
+</reference>
+
 
 <reference anchor="RFC5854">
   <front>

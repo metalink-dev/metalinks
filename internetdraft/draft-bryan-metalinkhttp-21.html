@@ -144,11 +144,11 @@
 <tr><td class="header">Network Working Group</td><td class="header">A. Bryan</td></tr>
 <tr><td class="header">Internet-Draft</td><td class="header">N. McNab</td></tr>
 <tr><td class="header">Intended status: Standards Track</td><td class="header">T. Tsujikawa</td></tr>
-<tr><td class="header">Expires: August 19, 2011</td><td class="header">&nbsp;</td></tr>
+<tr><td class="header">Expires: August 20, 2011</td><td class="header">&nbsp;</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">P. Poeml</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">MirrorBrain</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">H. Nordstrom</td></tr>
-<tr><td class="header">&nbsp;</td><td class="header">February 15, 2011</td></tr>
+<tr><td class="header">&nbsp;</td><td class="header">February 16, 2011</td></tr>
 </table></td></tr></table>
 <h1><br />Metalink/HTTP: Mirrors and Cryptographic Hashes in HTTP Header Fields<br />draft-bryan-metalinkhttp-21</h1>
 
@@ -184,7 +184,7 @@ and may be updated, replaced, or obsoleted by other documents at any time.
 It is inappropriate to use Internet-Drafts as reference material or to cite
 them other than as &ldquo;work in progress.&rdquo;</p>
 <p>
-This Internet-Draft will expire on August 19, 2011.</p>
+This Internet-Draft will expire on August 20, 2011.</p>
 
 <h3>Copyright Notice</h3>
 <p>
@@ -225,13 +225,17 @@ Mirror Depth<br />
 Peer-to-Peer / Metainfo<br />
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="#metalinkxml">4.1.</a>&nbsp;
 Metalink/XML Files<br />
-<a href="#openpgp">5.</a>&nbsp;
+<a href="#signatures">5.</a>&nbsp;
+Signatures<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#openpgp">5.1.</a>&nbsp;
 OpenPGP Signatures<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor7">5.2.</a>&nbsp;
+S/MIME Signatures<br />
 <a href="#wholehashes">6.</a>&nbsp;
 Cryptographic Hashes of Whole Documents<br />
 <a href="#clientserver">7.</a>&nbsp;
 Client / Server Multi-source Download Interaction<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor7">7.1.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor8">7.1.</a>&nbsp;
 Error Prevention, Detection, and Correction<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="#earlyfilemismatchdetection">7.1.1.</a>&nbsp;
 Error Prevention (Early File Mismatch Detection)<br />
@@ -239,15 +243,15 @@ Error Prevention (Early File Mismatch Detection)<br />
 Error Correction<br />
 <a href="#IANA">8.</a>&nbsp;
 IANA Considerations<br />
-<a href="#anchor8">9.</a>&nbsp;
+<a href="#anchor9">9.</a>&nbsp;
 Security Considerations<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor9">9.1.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor10">9.1.</a>&nbsp;
 URIs and IRIs<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor10">9.2.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor11">9.2.</a>&nbsp;
 Spoofing<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor11">9.3.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor12">9.3.</a>&nbsp;
 Cryptographic Hashes<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor12">9.4.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor13">9.4.</a>&nbsp;
 Signing<br />
 <a href="#rfc.references1">10.</a>&nbsp;
 References<br />
@@ -255,9 +259,9 @@ References<br />
 Normative References<br />
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="#rfc.references2">10.2.</a>&nbsp;
 Informative References<br />
-<a href="#anchor15">Appendix&nbsp;A.</a>&nbsp;
+<a href="#anchor16">Appendix&nbsp;A.</a>&nbsp;
 Acknowledgements and Contributors<br />
-<a href="#anchor16">Appendix&nbsp;B.</a>&nbsp;
+<a href="#anchor17">Appendix&nbsp;B.</a>&nbsp;
 Comparisons to Similar Options<br />
 <a href="#dochistory">Appendix&nbsp;C.</a>&nbsp;
 Document History<br />
@@ -333,8 +337,9 @@ Requirements</h3>
 
 <p>In this context, "Metalink" refers to Metalink/HTTP which consists of mirrors and cryptographic hashes in HTTP header fields as described in this document. "Metalink/XML" refers to the XML format described in <a class='info' href='#RFC5854'>[RFC5854]<span> (</span><span class='info'>Bryan, A., Tsujikawa, T., McNab, N., and P. Poeml, &ldquo;The Metalink Download Description Format,&rdquo; June&nbsp;2010.</span><span>)</span></a>.
 </p>
-<p>Metalink resources include Link header fields <a class='info' href='#RFC5988'>[RFC5988]<span> (</span><span class='info'>Nottingham, M., &ldquo;Web Linking,&rdquo; October&nbsp;2010.</span><span>)</span></a> to present a list of mirrors in the response to a client request for the resource. Metalink servers MUST include the cryptographic hash of a resource via Instance Digests in HTTP <a class='info' href='#RFC3230'>[RFC3230]<span> (</span><span class='info'>Mogul, J. and A. Van Hoff, &ldquo;Instance Digests in HTTP,&rdquo; January&nbsp;2002.</span><span>)</span></a>. Valid algorithms are found in
-	  the IANA registry named "Hypertext Transfer Protocol (HTTP) Digest Algorithm Values" at &lt;http://www.iana.org/assignments/http-dig-alg/http-dig-alg.xhtml&gt;. SHA-256 and SHA-512 were added to the registry by <a class='info' href='#RFC5843'>[RFC5843]<span> (</span><span class='info'>Bryan, A., &ldquo;Additional Hash Algorithms for HTTP Instance Digests,&rdquo; April&nbsp;2010.</span><span>)</span></a>.
+<p>Metalink resources include Link header fields <a class='info' href='#RFC5988'>[RFC5988]<span> (</span><span class='info'>Nottingham, M., &ldquo;Web Linking,&rdquo; October&nbsp;2010.</span><span>)</span></a> to present a list of mirrors in the response to a client request for the resource. Metalink servers MUST include the cryptographic hash of a resource via Instance Digests in HTTP <a class='info' href='#RFC3230'>[RFC3230]<span> (</span><span class='info'>Mogul, J. and A. Van Hoff, &ldquo;Instance Digests in HTTP,&rdquo; January&nbsp;2002.</span><span>)</span></a>.
+	  Algorithms used in the Instance Digest field are registered in the IANA registry named "Hypertext Transfer Protocol (HTTP) Digest Algorithm Values" at &lt;http://www.iana.org/assignments/http-dig-alg/http-dig-alg.xhtml&gt;. This document restricts the use of these algorithms.
+	  SHA-256 and SHA-512 were added to the registry by <a class='info' href='#RFC5843'>[RFC5843]<span> (</span><span class='info'>Bryan, A., &ldquo;Additional Hash Algorithms for HTTP Instance Digests,&rdquo; April&nbsp;2010.</span><span>)</span></a>.
 </p>
 <p>Metalink servers are HTTP servers with one or more Metalink
  resources. Metalink servers MUST support the Link header fields for listing mirrors and MUST support Instance Digests in HTTP <a class='info' href='#RFC3230'>[RFC3230]<span> (</span><span class='info'>Mogul, J. and A. Van Hoff, &ldquo;Instance Digests in HTTP,&rdquo; January&nbsp;2002.</span><span>)</span></a>. Metalink servers MUST return the same Link header fields and Instance Digests on HEAD requests.
@@ -342,6 +347,7 @@ Requirements</h3>
 </p>
 <p>Mirror servers are typically FTP or HTTP servers that "mirror" another server. That is, they provide identical copies of (at least some) files that are also on the mirrored server. 
       Mirror servers SHOULD support serving partial content. HTTP mirror servers SHOULD share the same ETag policy as the originating Metalink server. HTTP Mirror servers SHOULD support Instance Digests in HTTP <a class='info' href='#RFC3230'>[RFC3230]<span> (</span><span class='info'>Mogul, J. and A. Van Hoff, &ldquo;Instance Digests in HTTP,&rdquo; January&nbsp;2002.</span><span>)</span></a> using the same algorithm as the Metalink server.  Optimally, mirror servers will share the same ETag policy and support Instance Digests in HTTP.
+	  Mirror servers that share the same ETag policy with a Metalink server are known as preferred mirror servers and/or
 </p>
 <p>Metalink clients use the mirrors provided by a Metalink server in Link header fields <a class='info' href='#RFC5988'>[RFC5988]<span> (</span><span class='info'>Nottingham, M., &ldquo;Web Linking,&rdquo; October&nbsp;2010.</span><span>)</span></a>. Metalink clients MUST support HTTP and SHOULD support FTP <a class='info' href='#RFC0959'>[RFC0959]<span> (</span><span class='info'>Postel, J. and J. Reynolds, &ldquo;File Transfer Protocol,&rdquo; October&nbsp;1985.</span><span>)</span></a>. Metalink clients MAY support BitTorrent <a class='info' href='#BITTORRENT'>[BITTORRENT]<span> (</span><span class='info'>Cohen, B., &ldquo;The BitTorrent Protocol Specification,&rdquo; February&nbsp;2008.</span><span>)</span></a>, 
       or other download methods. Metalink clients SHOULD switch downloads from one mirror to another if a mirror becomes unreachable. Metalink clients MAY support multi-source, or parallel, 
@@ -391,7 +397,7 @@ Mirror Geographical Location</h3>
 Coordinated Mirror Policies</h3>
 
 <p>There are two types of mirror servers: preferred and normal. Preferred mirror servers are HTTP mirror servers that MUST share the same ETag policy as the originating Metalink server and/or MUST provide Instance Digests using the same algorithm as the Metalink server. 
-	  Preferred mirrors make it possible to detect early on, before data is transferred, if the file requested matches the desired file.
+	  Preferred mirrors make it possible for Metalink clients to detect early on, before data is transferred, if the file requested matches the desired file. This early file mismatch detection is described in <a class='info' href='#earlyfilemismatchdetection'>Section&nbsp;7.1.1<span> (</span><span class='info'>Error Prevention (Early File Mismatch Detection)</span><span>)</span></a>.
       Entries for preferred HTTP mirror servers have a "pref" value. By default, if unspecified then mirrors are considered "normal" and do not necessarily share the same ETag policy or support Instance Digests using the same algorithm as the Metalink server.
 	  FTP mirrors are considered "normal", as they do not emit ETags or support Instance Digests.
 </p>
@@ -443,9 +449,14 @@ Metalink/XML Files</h3>
       client to recover from errors (see <a class='info' href='#errorcorrection'>Section&nbsp;7.1.2<span> (</span><span class='info'>Error Correction</span><span>)</span></a>). Metalink servers SHOULD provide
 	  Metalink/XML files with partial file hashes in Link header fields and Metalink clients SHOULD use them for error recovery.
 </p>
-<a name="openpgp"></a><br /><hr />
+<a name="signatures"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.5"></a><h3>5.&nbsp;
+Signatures</h3>
+
+<a name="openpgp"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.5.1"></a><h3>5.1.&nbsp;
 OpenPGP Signatures</h3>
 
 <p>OpenPGP signatures <a class='info' href='#RFC3156'>[RFC3156]<span> (</span><span class='info'>Elkins, M., Del Torto, D., Levien, R., and T. Roessler, &ldquo;MIME Security with OpenPGP,&rdquo; August&nbsp;2001.</span><span>)</span></a> are specified with the Link header fields <a class='info' href='#RFC5988'>[RFC5988]<span> (</span><span class='info'>Nottingham, M., &ldquo;Web Linking,&rdquo; October&nbsp;2010.</span><span>)</span></a> and a relation type of "describedby" and a type parameter of "application/pgp-signature".
@@ -458,6 +469,22 @@ type="application/pgp-signature"
 </pre></div>
 
 <p>Metalink clients SHOULD support the use of OpenPGP signatures.
+</p>
+<a name="anchor7"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.5.2"></a><h3>5.2.&nbsp;
+S/MIME Signatures</h3>
+
+<p>S/MIME signatures <a class='info' href='#RFC5751'>[RFC5751]<span> (</span><span class='info'>Ramsdell, B. and S. Turner, &ldquo;Secure/Multipurpose Internet Mail Extensions (S/MIME) Version 3.2 Message Specification,&rdquo; January&nbsp;2010.</span><span>)</span></a> are specified with the Link header fields <a class='info' href='#RFC5988'>[RFC5988]<span> (</span><span class='info'>Nottingham, M., &ldquo;Web Linking,&rdquo; October&nbsp;2010.</span><span>)</span></a> and a relation type of "describedby" and a type parameter of "application/pkcs7-mime".
+</p>
+<p>
+<p>This example shows a brief Metalink server response with S/MIME signature only:
+</p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
+Link: &lt;http://example.com/example.ext.asc&gt;; rel=describedby;
+type="application/pkcs7-mime"
+</pre></div>
+
+<p>Metalink clients SHOULD support the use of S/MIME signatures.
 </p>
 <a name="wholehashes"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
@@ -551,6 +578,15 @@ Referer: http://www.example.com/distribution/example.ext
 </pre></div><p>
 
 </p>
+<p>Metalink clients SHOULD use preferred mirrors, if possible, as they allow early file mismatch detection as described in <a class='info' href='#earlyfilemismatchdetection'>Section&nbsp;7.1.1<span> (</span><span class='info'>Error Prevention (Early File Mismatch Detection)</span><span>)</span></a>.
+Preferred mirrors have coordinated ETags, as described in <a class='info' href='#coordinatedpolicies'>Section&nbsp;3.3<span> (</span><span class='info'>Coordinated Mirror Policies</span><span>)</span></a>, and Metalink clients SHOULD use If-Match conditions based on the ETag to quickly 
+detect out-of-date mirrors by using the ETag from the Metalink server response.
+</p>
+<p>Optimally, the mirror server also will include an Instance Digest in the mirror response to the client GET request, which the client can also use to detect a mismatch early. 
+Metalink clients MUST reject individual downloads from mirrors that support Instance Digests if the Instance Digest from the mirror does not match the Instance Digest as reported by the Metalink server and the same algorithm is used.
+If normal mirrors are used, then a mismatch can not be 
+detected until the completed object is verified. Errors in transmission and substitutions of incorrect data on mirrors, whether deliberate or accidental, can be detected with error correction as described in <a class='info' href='#errorcorrection'>Section&nbsp;7.1.2<span> (</span><span class='info'>Error Correction</span><span>)</span></a>.
+</p>
 <p>Here, the preferred mirror server has the correct file (the If-Match conditions match) and responds with a 206 Partial Content HTTP status code and appropriate "Content-Length", "Content Range", ETag, and Instance Digest header fields. In this example, the mirror server responds, with data, to the above request:
 
 </p>
@@ -585,15 +621,7 @@ other mirrors. If all ranges have finished except for the final one, the Metalin
  header fields, and then Range-based requests are undertaken to
  the mirror servers without sacrificing a first connection.
 </p>
-<p>Preferred mirrors have coordinated ETags, as described in <a class='info' href='#coordinatedpolicies'>Section&nbsp;3.3<span> (</span><span class='info'>Coordinated Mirror Policies</span><span>)</span></a>, and Metalink clients SHOULD use If-Match conditions based on the ETag to quickly 
-detect out-of-date mirrors by using the ETag from the Metalink server response. 
-Optimally, the mirror server will include an Instance Digest in the mirror response to the client GET request, which the client can also use to detect a mismatch early. If the mirror did not include
-the pref parameter or an Instance Digest, then a mismatch can not be 
-detected until the completed object is verified. Early file mismatch detection is described in detail in <a class='info' href='#earlyfilemismatchdetection'>Section&nbsp;7.1.1<span> (</span><span class='info'>Error Prevention (Early File Mismatch Detection)</span><span>)</span></a>.
-</p>
-<p>Metalink clients MUST reject downloads from mirrors where the file size does not match the file size as reported by the Metalink server.
-</p>
-<p>Metalink clients MUST reject downloads from mirrors that support Instance Digests if the Instance Digest from the mirror does not match the Instance Digest as reported by the Metalink server and the same algorithm is used.
+<p>Metalink clients MUST reject individual downloads from mirrors where the file size does not match the file size as reported by the Metalink server.
 </p>
 <p>If a Metalink client does not
 support certain download methods (such as FTP or BitTorrent) that a
@@ -607,7 +635,11 @@ of the downloaded file, see <a class='info' href='#errorcorrection'>Section&nbsp
 </p>
 <p>If the download can not be repaired, it is considered corrupt. The client can attempt to re-download the file.
 </p>
-<a name="anchor7"></a><br /><hr />
+<p>*REPLACE* "Need to say something about what to do if the signature is included.
+Does it to validate back to a trust anchor.  Point to OpenPGP/RFC5280 for
+validation rules." *REPLACE*
+</p>
+<a name="anchor8"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.7.1"></a><h3>7.1.&nbsp;
 Error Prevention, Detection, and Correction</h3>
@@ -623,8 +655,8 @@ to detect errors in transfer after the transfers have completed. Error correctio
 Error Prevention (Early File Mismatch Detection)</h3>
 
 <p>In HTTP terms, the merging of ranges from multiple
-responses can be verified with a strong validator, which in this
-context is either an Instance Digest or a shared ETag.
+responses SHOULD be verified with a strong validator, which in this
+context is either an Instance Digest or a shared ETag from that Metalink server that matches with the same provided by a preferred mirror server.
 In most cases, it is sufficient that the Metalink server provides
 mirrors and Instance Digest information, but operation will be
 more robust and efficient if the mirror servers do implement a shared
@@ -652,7 +684,7 @@ An attacker can make a mirror server seemingly respond with the expected Instanc
 contents have been modified. The same goes
 for various system failures which would also cause bad data (i.e. corrupted files) to be returned. The Metalink client
 has to rely on the Instance Digest returned by the Metalink server in the
-first response for the verification of the downloaded object as a whole.
+first response for the verification of the downloaded object as a whole. To verify the individual ranges, which might have been requested from different sources, see <a class='info' href='#errorcorrection'>Section&nbsp;7.1.2<span> (</span><span class='info'>Error Correction</span><span>)</span></a>.
 </p>
 <a name="errorcorrection"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
@@ -686,12 +718,12 @@ IANA Considerations</h3>
 </p>
 <p>o  Notes: This relation is for static resources. That is, an HTTP GET request on any duplicate will return the same representation. It does not make sense for dynamic or POSTable resources and should not be used for them.
 </p>
-<a name="anchor8"></a><br /><hr />
+<a name="anchor9"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.9"></a><h3>9.&nbsp;
 Security Considerations</h3>
 
-<a name="anchor9"></a><br /><hr />
+<a name="anchor10"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.9.1"></a><h3>9.1.&nbsp;
 URIs and IRIs</h3>
@@ -699,7 +731,7 @@ URIs and IRIs</h3>
 <p>Metalink clients handle URIs and IRIs. See Section 7 of <a class='info' href='#RFC3986'>[RFC3986]<span> (</span><span class='info'>Berners-Lee, T., Fielding, R., and L. Masinter, &ldquo;Uniform Resource Identifier (URI): Generic Syntax,&rdquo; January&nbsp;2005.</span><span>)</span></a> and Section 8 of <a class='info' href='#RFC3987'>[RFC3987]<span> (</span><span class='info'>Duerst, M. and M. Suignard, &ldquo;Internationalized Resource Identifiers (IRIs),&rdquo; January&nbsp;2005.</span><span>)</span></a> for security
           considerations related to their handling and use.
 </p>
-<a name="anchor10"></a><br /><hr />
+<a name="anchor11"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.9.2"></a><h3>9.2.&nbsp;
 Spoofing</h3>
@@ -707,7 +739,7 @@ Spoofing</h3>
 <p>There is potential for spoofing attacks where the attacker publishes Metalinks with false information.
           In that case, this could deceive unaware downloaders into downloading a malicious or worthless file. As with all downloads, users should only download from trusted sources. Also, malicious publishers could attempt a distributed denial of service attack by inserting unrelated URIs into Metalinks.
 </p>
-<a name="anchor11"></a><br /><hr />
+<a name="anchor12"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.9.3"></a><h3>9.3.&nbsp;
 Cryptographic Hashes</h3>
@@ -718,12 +750,12 @@ Cryptographic Hashes</h3>
 </p>
 <p>If a Metalink contains whole file hashes as described in <a class='info' href='#wholehashes'>Section&nbsp;6<span> (</span><span class='info'>Cryptographic Hashes of Whole Documents</span><span>)</span></a>, it SHOULD include SHA-256, as specified in <a class='info' href='#FIPS-180-3'>[FIPS&#8209;180&#8209;3]<span> (</span><span class='info'>National Institute of Standards and Technology (NIST), &ldquo;Secure Hash Standard (SHS),&rdquo; October&nbsp;2008.</span><span>)</span></a>, or stronger. It MAY also include other hashes.
 </p>
-<a name="anchor12"></a><br /><hr />
+<a name="anchor13"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.9.4"></a><h3>9.4.&nbsp;
 Signing</h3>
 
-<p>Metalinks SHOULD include digital signatures, as described in <a class='info' href='#openpgp'>Section&nbsp;5<span> (</span><span class='info'>OpenPGP Signatures</span><span>)</span></a>.
+<p>Metalinks SHOULD include digital signatures, as described in <a class='info' href='#signatures'>Section&nbsp;5<span> (</span><span class='info'>Signatures</span><span>)</span></a>.
 </p>
 <p>Digital signatures provide authentication, message integrity, and non-repudiation with proof of origin.
 </p>
@@ -756,6 +788,8 @@ References</h3>
 <td class="author-text">Berners-Lee, T., Fielding, R., and L. Masinter, &ldquo;<a href="http://tools.ietf.org/html/rfc3986">Uniform Resource Identifier (URI): Generic Syntax</a>,&rdquo; STD&nbsp;66, RFC&nbsp;3986, January&nbsp;2005.</td></tr>
 <tr><td class="author-text" valign="top"><a name="RFC3987">[RFC3987]</a></td>
 <td class="author-text">Duerst, M. and M. Suignard, &ldquo;<a href="http://tools.ietf.org/html/rfc3987">Internationalized Resource Identifiers (IRIs)</a>,&rdquo; RFC&nbsp;3987, January&nbsp;2005.</td></tr>
+<tr><td class="author-text" valign="top"><a name="RFC5751">[RFC5751]</a></td>
+<td class="author-text">Ramsdell, B. and S. Turner, &ldquo;<a href="http://tools.ietf.org/html/rfc5751">Secure/Multipurpose Internet Mail Extensions (S/MIME) Version 3.2 Message Specification</a>,&rdquo; RFC&nbsp;5751, January&nbsp;2010.</td></tr>
 <tr><td class="author-text" valign="top"><a name="RFC5854">[RFC5854]</a></td>
 <td class="author-text"><a href="mailto:anthonybryan@gmail.com">Bryan, A.</a>, <a href="mailto:tatsuhiro.t@gmail.com">Tsujikawa, T.</a>, <a href="mailto:neil@nabber.org">McNab, N.</a>, and <a href="mailto:peter@poeml.de">P. Poeml</a>, &ldquo;<a href="http://tools.ietf.org/html/rfc5854">The Metalink Download Description Format</a>,&rdquo; RFC&nbsp;5854, June&nbsp;2010.</td></tr>
 <tr><td class="author-text" valign="top"><a name="RFC5988">[RFC5988]</a></td>
@@ -770,7 +804,7 @@ References</h3>
 <td class="author-text">Bryan, A., &ldquo;<a href="http://tools.ietf.org/html/rfc5843">Additional Hash Algorithms for HTTP Instance Digests</a>,&rdquo; RFC&nbsp;5843, April&nbsp;2010 (<a href="http://www.rfc-editor.org/rfc/rfc5843.txt">TXT</a>).</td></tr>
 </table>
 
-<a name="anchor15"></a><br /><hr />
+<a name="anchor16"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.A"></a><h3>Appendix A.&nbsp;
 Acknowledgements and Contributors</h3>
@@ -779,7 +813,7 @@ Acknowledgements and Contributors</h3>
 </p>
 <p>Thanks to Alan Ford and Mark Handley for spurring us on to publish this document.
 </p>
-<a name="anchor16"></a><br /><hr />
+<a name="anchor17"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.B"></a><h3>Appendix B.&nbsp;
 Comparisons to Similar Options</h3>
