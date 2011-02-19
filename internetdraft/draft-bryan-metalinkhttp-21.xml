@@ -188,7 +188,7 @@ pri=2; geo=gb; depth=1
 <section title="Mirror Geographical Location">
         <t>Entries for a mirror servers can have a "geo" value, which
         is a <xref target="ISO3166-1"/> alpha-2 two letter country code for the geographical location of the physical server the URI is used
-        to access. A client can use this information to select a mirror, or set of mirrors, that are geographically near (if the client has access to such information), with the aim of reducing network load at inter-country bottlenecks.
+        to access. A client MAY use this information to select a mirror, or set of mirrors, that are geographically near (if the client has access to such information), with the aim of reducing network load at inter-country bottlenecks.
         </t>
 </section>
 
@@ -220,7 +220,7 @@ rel=duplicate; pri=1; pref; depth=4
 
     <section title="Peer-to-Peer / Metainfo" anchor="p2p">
       <t>Entries for metainfo files, which describe ways to download a file over Peer-to-Peer networks or otherwise, are specified with the Link header fields <xref target="RFC5988"/> and a relation type of "describedby" and a type parameter that indicates
-   the MIME type of the metadata available at the URI. Since metainfo files can sometimes describe multiple files, or the filename may not be the same on the Metalink server and in the metainfo file but still have the same content, an optional name parameter can be used.</t>
+   the MIME type of the metadata available at the URI. Since metainfo files can sometimes describe multiple files, or the filename MAY not be the same on the Metalink server and in the metainfo file but still have the same content, an OPTIONAL name parameter can be used.</t>
 <t><figure> 
 	  <preamble>This example shows a brief Metalink server response with .torrent and .meta4:</preamble>	
 	  <artwork type="example">
