@@ -819,7 +819,7 @@ If the cryptographic hash of the object does not match the Instance Digest from 
 
 
 	    <section title="Acknowledgements and Contributors">
-		  <t>Thanks to the Metalink community, Alexey Melnikov, Julian Reschke, Mark Nottingham, Daniel Stenberg, Matt Domsch, Micah Cowan, David Morris, Yves Lafon, Juergen Schoenwaelder, Ben Campbell, Lars Eggert, Sean Turner, and the HTTPBIS Working Group.</t>
+		  <t>Thanks to the Metalink community, Alexey Melnikov, Julian Reschke, Mark Nottingham, Daniel Stenberg, Matt Domsch, Micah Cowan, David Morris, Yves Lafon, Juergen Schoenwaelder, Ben Campbell, Lars Eggert, Sean Turner, Robert Sparks, and the HTTPBIS Working Group.</t>
 		  
           <t>Thanks to Alan Ford and Mark Handley for spurring us on to publish this document.</t>
 
