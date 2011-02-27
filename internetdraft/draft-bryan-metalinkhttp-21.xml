@@ -113,7 +113,7 @@
 
 	  <t>Upon connection to a Metalink/HTTP server, a client will receive information about other sources of the same resource and a cryptographic hash of the whole resource. The client will then be able to request chunks of the file from the various sources, scheduling appropriately in order to maximize the download rate.</t>
    
-      <section title="Examples"><t><figure> 
+      <section title="Examples Metalink Server Response"><t><figure> 
 	  <preamble>This example shows a brief Metalink server response with ETag, mirrors, .meta4, OpenPGP signature, and a cryptographic hash of the whole file:</preamble>
 	  
 	  <artwork type="example">
@@ -147,18 +147,18 @@ DYzYjRjYzFhOTlmNTQwYzI2M2QwM2U2MQ==
 	  
       <t>Metalink resources include Link header fields <xref target="RFC5988"/> to present a list of mirrors in the response to a client request for the resource. Metalink servers MUST include the cryptographic hash of a resource via Instance Digests in HTTP <xref target="RFC3230"/>.
 	  Algorithms used in the Instance Digest field are registered in the IANA registry named "Hypertext Transfer Protocol (HTTP) Digest Algorithm Values" at &lt;http://www.iana.org/assignments/http-dig-alg/http-dig-alg.xhtml&gt;. This document restricts the use of these algorithms.
-	  SHA-256 and SHA-512 were added to the registry by <xref target="RFC5843"/>.</t>
+	  SHA-256 and SHA-512 were added to the registry by <xref target="RFC5843"/>. If a Metalink contains whole file hashes as described in <xref target="wholehashes"/>, it SHOULD include SHA-256, as specified in <xref target="FIPS-180-3"/>, or stronger. It MAY also include other hashes.</t>
 	  
 	  <t>Metalink servers are HTTP servers with one or more Metalink
- resources. Metalink servers MUST support the Link header fields for listing mirrors and MUST support Instance Digests in HTTP <xref target="RFC3230"/>. Metalink servers MUST return the same Link header fields and Instance Digests on HEAD requests. Metalink servers MUST NOT return another Metalink servers in Link header fields <xref target="RFC5988"/>.
-      Metalink servers and their associated mirror servers SHOULD all share the same ETag policy. It is up to the administrator of the Metalink server to communicate the details of the shared ETag policy to the administrators of the mirror servers so that the mirror servers can be configured with the same ETag policy. To have the same ETag policy means that ETags are synchronized across servers for resources that are mirrored, i.e. byte-for-byte identical files will have the same ETag on mirrors that they have on the Metalink server. ETags could be based on the file contents (cryptographic hash) and not server-unique filesystem metadata. The emitted ETag could be implemented the same as the Instance Digest for simplicity. Metalink servers SHOULD offer Metalink/XML documents that contain cryptographic hashes of parts of the file (and other information) if error recovery is desirable.</t>
+ resources. Metalink servers MUST support the Link header fields for listing mirrors and MUST support Instance Digests in HTTP <xref target="RFC3230"/>. Metalink servers MUST return the same Link header fields and Instance Digests on HEAD requests. 
+      Metalink servers and their associated mirror servers SHOULD all share the same ETag policy. It is up to the administrator of the Metalink server to communicate the details of the shared ETag policy to the administrators of the mirror servers so that the mirror servers can be configured with the same ETag policy. To have the same ETag policy means that ETags are synchronized across servers for resources that are mirrored, i.e. byte-for-byte identical files will have the same ETag on mirrors that they have on the Metalink server.   For example, it would be better to derive an ETag from a
+  cryptographic hash of the file contents than on server-unique filesystem metadata. Metalink servers SHOULD offer Metalink/XML documents that contain cryptographic hashes of parts of the file (and other information) if error recovery is desirable.</t>
 
-      <t>Mirror servers are typically FTP or HTTP servers that "mirror" another server. That is, they provide identical copies of (at least some) files that are also on the mirrored server. Mirror servers MUST NOT return Link header fields <xref target="RFC5988"/> for listing mirrors.
+      <t>Mirror servers are typically FTP or HTTP servers that "mirror" another server. That is, they provide identical copies of (at least some) files that are also on the mirrored server.
       Mirror servers SHOULD support serving partial content. HTTP mirror servers SHOULD share the same ETag policy as the originating Metalink server. HTTP Mirror servers SHOULD support Instance Digests in HTTP <xref target="RFC3230"/> using the same algorithm as the Metalink server.  Optimally, mirror servers will share the same ETag policy and support Instance Digests in HTTP.
-	  Mirror servers that share the same ETag policy with a Metalink server are known as preferred mirror servers and/or</t>
+	  Mirror servers that share the same ETag policy and/or support Instance Digests in HTTP using the same algorithm as a Metalink server are known as preferred mirror servers.</t>
 
-
-      <t>Metalink clients use the mirrors provided by a Metalink server in Link header fields <xref target="RFC5988"/> but it is restricted to the initial Metalink server they contacted. If Metalink clients find Link header fields <xref target="RFC5988"/> for listing mirrors from mirrors, they MUST discard such Link header fields <xref target="RFC5988"/> to prevent possible infinite loop. Metalink clients MUST support HTTP and SHOULD support FTP <xref target="RFC0959"/>. Metalink clients MAY support BitTorrent <xref target="BITTORRENT"/>, 
+      <t>Metalink clients use the mirrors provided by a Metalink server in Link header fields <xref target="RFC5988"/> but it is restricted to the initial Metalink server they contacted. If Metalink clients find Link header fields <xref target="RFC5988"/> for listing mirrors from mirrors, they MUST discard such Link header fields <xref target="RFC5988"/> to prevent a possible infinite loop. Metalink clients MUST support HTTP and SHOULD support FTP <xref target="RFC0959"/>. Metalink clients MAY support BitTorrent <xref target="BITTORRENT"/>, 
       or other download methods. Metalink clients SHOULD switch downloads from one mirror to another if a mirror becomes unreachable. Metalink clients MAY support multi-source, or parallel, 
       downloads, where portions of a file can be downloaded from multiple mirrors simultaneously (and optionally, from Peer-to-Peer sources). Metalink clients MUST support Instance Digests in HTTP <xref target="RFC3230"/> by 
       requesting and verifying cryptographic hashes. Metalink clients SHOULD support error recovery by using the cryptographic hashes of parts of the file listed in Metalink/XML files. Metalink clients SHOULD support checking digital signatures.</t>
@@ -167,6 +167,14 @@ DYzYjRjYzFhOTlmNTQwYzI2M2QwM2U2MQ==
 	
     <section title="Mirrors / Multiple Download Locations" anchor="mirrors">
       <t>Mirrors are specified with the Link header fields <xref target="RFC5988"/> and a relation type of "duplicate" as defined in <xref target="IANA"/>.</t>
+	  <t>The following OPTIONAL attributes are defined:
+	    <list style="symbols">
+
+		  <t>"depth" : mirror depth in <xref target="depth"/>.</t>
+		  <t>"geo"   : mirror geographical location in <xref target="geo"/>.</t>
+	      <t>"pref"  : a preferred mirror server in <xref target="coordinatedpolicies"/>.</t>
+		  <t>"pri"   : mirror priority in <xref target="priority"/>.</t>
+	    </list></t>	  
 
 <t><figure> 
 	  <preamble>This example shows a brief Metalink server response with two mirrors only:</preamble>	  
@@ -179,14 +187,14 @@ pri=2; geo=gb; depth=1
 
       <t>As some organizations can have many mirrors, it is up to the organization to configure the amount of Link header fields the Metalink server will provide. Such a decision could be a random selection or a hard-coded limit based on network proximity, file size, server load, or other factors.</t>
 
-<section title="Mirror Priority">
+<section title="Mirror Priority" anchor="priority">
       <t>Entries for mirror servers are listed in order of priority (from most preferred to least) or have a "pri" value, where mirrors with lower values are used first.</t>
       <t>This is purely an expression of the server's preferences; it is up to the client what it does with this information, particularly with reference to how many servers to use at any one time.</t>
 
 </section>
 
-<section title="Mirror Geographical Location">
-        <t>Entries for a mirror servers can have a "geo" value, which
+<section title="Mirror Geographical Location" anchor="geo">
+        <t>Entries for a mirror server MAY have a "geo" value, which
         is a <xref target="ISO3166-1"/> alpha-2 two letter country code for the geographical location of the physical server the URI is used
         to access. A client MAY use this information to select a mirror, or set of mirrors, that are geographically near (if the client has access to such information), with the aim of reducing network load at inter-country bottlenecks.
         </t>
@@ -200,10 +208,11 @@ pri=2; geo=gb; depth=1
 	  
 </section>
 
-<section title="Mirror Depth">
+<section title="Mirror Depth" anchor="depth">
       <t>Some mirrors can mirror single files, whole directories, or multiple directories.</t>
-      <t>Entries for mirror servers can have a "depth" value, where "depth=0" is the default. A value of 0 means ONLY that file is mirrored and that other URI path segments are not. A value of 1 means that file and all other files and URI path segments contained in the
-rightmost URI path segment are mirrored. For values of N, the client will go up N-1 URI path segments above. A value of 2 means means going up one URI path segment above, and all files and URI path segments contained are mirrored. For each higher value, another URI path segment closer to the Host is mirrored.</t>
+      <t>Entries for mirror servers can have a "depth" value, where "depth=0" is the default. A value of 0 means only that file is mirrored and that other URI path segments are not. A value of 1 means that file and all other files and URI path segments contained in the
+rightmost URI path segment are mirrored. For values of N, N-1 URI path segments closer to the Host are mirrored. A value of 2 means one URI path segment closer to the Host is mirrored, and all files and URI path segments contained are mirrored. 
+For each higher value, another URI path segment closer to the Host is mirrored.</t>
 
 <t><figure> 
 	  <preamble>This example shows a mirror with a depth value of 4:</preamble>	  
@@ -212,7 +221,7 @@ Link: &lt;http://www2.example.com/dir1/dir2/dir3/dir4/dir5/example.ext&gt;;
 rel=duplicate; pri=1; pref; depth=4
 </artwork></figure></t>
 
-      <t>In the above example, 4 URI path segments up are mirrored, from /dir2/ on down.</t>
+      <t>In the above example, 4 URI path segments closer to the Host are mirrored, from /dir2/ and all files and directories included.</t>
 
 </section>
 
@@ -220,7 +229,14 @@ rel=duplicate; pri=1; pref; depth=4
 
     <section title="Peer-to-Peer / Metainfo" anchor="p2p">
       <t>Entries for metainfo files, which describe ways to download a file over Peer-to-Peer networks or otherwise, are specified with the Link header fields <xref target="RFC5988"/> and a relation type of "describedby" and a type parameter that indicates
-   the MIME type of the metadata available at the URI. Since metainfo files can sometimes describe multiple files, or the filename MAY not be the same on the Metalink server and in the metainfo file but still have the same content, an OPTIONAL name parameter can be used.</t>
+   the MIME type of the metadata available at the URI. Since metainfo files can sometimes describe multiple files, or the filename MAY not be the same on the Metalink server and in the metainfo file but still have the same content, an OPTIONAL "name" attribute can be used.</t>
+
+	  <t>The following OPTIONAL attribute is defined:
+	    <list style="symbols">
+
+		  <t>"name" : a file described within the metainfo file.</t>
+	    </list></t>	  
+   
 <t><figure> 
 	  <preamble>This example shows a brief Metalink server response with .torrent and .meta4:</preamble>	
 	  <artwork type="example">
@@ -233,8 +249,8 @@ type="application/metalink4+xml"
 <t>Metalink clients MAY support the use of metainfo files for downloading files.</t>
 
     <section title="Metalink/XML Files" anchor="metalinkxml">
-      <t>Full Metalink/XML files for a given resource can be specified as shown in the example in <xref target="p2p"/>.
-      This is particularly useful for providing metadata such as cryptographic hashes of parts of a file, allowing a
+      <t>Metalink/XML files for a given resource MAY be provided in a Link header field as shown in the example in <xref target="p2p"/>.
+	  Metalink/XML files are specified in <xref target="RFC5854"/> and they are particularly useful for providing metadata such as cryptographic hashes of parts of a file, allowing a
       client to recover from errors (see <xref target="errorcorrection"/>). Metalink servers SHOULD provide
 	  Metalink/XML files with partial file hashes in Link header fields and Metalink clients SHOULD use them for error recovery.</t>
     </section>
@@ -244,7 +260,7 @@ type="application/metalink4+xml"
 <section title="Signatures" anchor="signatures">
 	
     <section title="OpenPGP Signatures" anchor="openpgp">
-      <t>OpenPGP signatures <xref target="RFC3156"/> are specified with the Link header fields <xref target="RFC5988"/> and a relation type of "describedby" and a type parameter of "application/pgp-signature".</t>
+      <t>OpenPGP signatures <xref target="RFC3156"/> of requested files are specified with the Link header fields <xref target="RFC5988"/> and a relation type of "describedby" and a type parameter of "application/pgp-signature".</t>
 <t><figure> 
 	  <preamble>This example shows a brief Metalink server response with OpenPGP signature only:</preamble>
 	  <artwork type="example">
@@ -256,11 +272,11 @@ type="application/pgp-signature"
     </section>
 	
     <section title="S/MIME Signatures">
-      <t>S/MIME signatures <xref target="RFC5751"/> are specified with the Link header fields <xref target="RFC5988"/> and a relation type of "describedby" and a type parameter of "application/pkcs7-mime".</t>
+      <t>S/MIME signatures <xref target="RFC5751"/> of requested files are specified with the Link header fields <xref target="RFC5988"/> and a relation type of "describedby" and a type parameter of "application/pkcs7-mime".</t>
 <t><figure> 
 	  <preamble>This example shows a brief Metalink server response with S/MIME signature only:</preamble>
 	  <artwork type="example">
-Link: &lt;http://example.com/example.ext.asc&gt;; rel=describedby;
+Link: &lt;http://example.com/example.ext.p7m&gt;; rel=describedby;
 type="application/pkcs7-mime"
 </artwork></figure></t>
     
@@ -345,7 +361,7 @@ Referer: http://www.example.com/distribution/example.ext
 
 <t>Metalink clients SHOULD use preferred mirrors, if possible, as they allow early file mismatch detection as described in <xref target="earlyfilemismatchdetection"/>.
 Preferred mirrors have coordinated ETags, as described in <xref target="coordinatedpolicies"/>, and Metalink clients SHOULD use If-Match conditions based on the ETag to quickly 
-detect out-of-date mirrors by using the ETag from the Metalink server response.</t>
+detect out-of-date mirrors by using the ETag from the Metalink server response. Metalink clients SHOULD use partial file cryptographic hashes as described in <xref target="errorcorrection"/>, if available, to detect if the mirror server returned the correct data.</t>
 
 <t>Optimally, the mirror server also will include an Instance Digest in the mirror response to the client GET request, which the client can also use to detect a mismatch early. 
 Metalink clients MUST reject individual downloads from mirrors that support Instance Digests if the Instance Digest from the mirror does not match the Instance Digest as reported by the Metalink server and the same algorithm is used.
@@ -366,7 +382,9 @@ DYzYjRjYzFhOTlmNTQwYzI2M2QwM2U2MQ==
 </artwork></figure></t>
 
 <t>If the object is large and gets delivered slower than expected, then the Metalink client MAY start a number of parallel ranged downloads (one per selected mirror server other than the
-first) using mirrors provided by the Link header fields with "duplicate" relation type. Metalink clients SHOULD use the location of the original GET request in the "Referer" header field for
+first) using mirrors provided by the Link header fields with "duplicate" relation type. Metalink clients MUST limit the number of parallel connections to mirror servers, ideally based on
+observing how the aggregate throughput changes as connections are opened. It would be pointless to blindly open connections once the path bottleneck is filled.
+Metalink clients SHOULD use the location of the original GET request in the "Referer" header field for
 these ranged requests.</t>
 
 <t>The Metalink client can determine the size and number of ranges requested from each server, based upon the type and number of mirrors and performance observed from each mirror.
@@ -399,9 +417,8 @@ of the downloaded file, see <xref target="errorcorrection"/> for a possible way 
 
 <t>If the download can not be repaired, it is considered corrupt. The client can attempt to re-download the file.</t>
 
-<t>*REPLACE* "Need to say something about what to do if the signature is included.
-Does it to validate back to a trust anchor.  Point to OpenPGP/RFC5280 for
-validation rules." *REPLACE*</t>
+<t>Metalink clients that support verifying digital signatures MUST verify digital signatures of requested files if they are included.
+Digital signatures MUST validate back to a trust anchor as described in the validation rules in <xref target="RFC3156"/> and RFC5280.</t>
 
 <section title="Error Prevention, Detection, and Correction">
 
@@ -425,10 +442,8 @@ detection of mismatches. If the mirror server provides neither shared ETag nor I
 mismatches is not possible unless file length also differs. Finally, errors are still detectable after the download has completed, when the cryptographic hash of the merged response is verified.</t>
 
 <t>ETags can not be used for verifying the integrity of the received
-content. But it is a guarantee issued by the Metalink server that the content is
-correct for that ETag. And if the ETag given by the mirror server matches
-the ETag given by the Metalink server, then there is a chain of trust where the Metalink server
-authorizes these responses as valid for that object.</t>
+content. If the ETag given by the mirror server matches
+the ETag given by the Metalink server, then the Metalink client assumes the responses are valid for that object.</t>
 
 <t>This guarantees that a mismatch will be detected by using only the shared
 ETag from a Metalink server and mirror server.
@@ -451,11 +466,10 @@ first response for the verification of the downloaded object as a whole. To veri
 <t>Partial file cryptographic hashes can be used to detect errors during the download. Metalink servers SHOULD provide Metalink/XML files with partial file hashes 
 in Link header fields as specified in <xref target="metalinkxml"/>, and Metalink clients SHOULD use them for error correction.</t>
 
-<t>If the cryptographic hash of the object does not match the Instance Digest from the Metalink server, then the client SHOULD fetch the Metalink/XML (if available)
-that could contain partial file cryptographic hashes which
-will allow detection of which mirror server returned incorrect data.
-Metalink clients SHOULD figure out what ranges of
-the downloaded data can be recovered and what needs to be fetched again.
+<t>An error in transfer or a substitution attack will be detected by a cryptographic hash of the object not matching the Instance Digest from the Metalink server.
+If the cryptographic hash of the object does not match the Instance Digest from the Metalink server, then the client SHOULD fetch the Metalink/XML (if available).
+ This may contain partial file cryptographic hashes which will allow detection of which mirror server returned incorrect data.  
+ Metalink clients SHOULD use the Metalink/XML data to figure out what ranges of the downloaded data can be recovered and what needs to be fetched again. 
 </t>
 
 <t>Other methods can be used for error correction. For example, some other metainfo files also include partial file hashes that can be used to check for errors.</t>
@@ -490,7 +504,8 @@ the downloaded data can be recovered and what needs to be fetched again.
 	    <section title="Spoofing">
 
 	      <t>There is potential for spoofing attacks where the attacker publishes Metalinks with false information.
-          In that case, this could deceive unaware downloaders into downloading a malicious or worthless file. As with all downloads, users should only download from trusted sources. Also, malicious publishers could attempt a distributed denial of service attack by inserting unrelated URIs into Metalinks.</t>
+          In that case, this could deceive unaware downloaders into downloading a malicious or worthless file. As with all downloads, users should only download from trusted sources. Also, malicious publishers could attempt a distributed denial of service attack by inserting unrelated URIs into Metalinks. 
+		  <xref target="RFC4732"/> contains information on amplification attacks and denial of service attacks.</t>
 
 	    </section>	
 		
@@ -499,7 +514,6 @@ the downloaded data can be recovered and what needs to be fetched again.
 	      <t>Currently, some of the digest values defined in Instance Digests in HTTP <xref target="RFC3230"/> are considered insecure. 
           These include the whole Message Digest family of algorithms which are not suitable for cryptographically strong verification. Malicious people could provide files that appear to be 
           identical to another file because of a collision, i.e. the weak cryptographic hashes of the intended file and a substituted malicious file could match.</t>
-          <t>If a Metalink contains whole file hashes as described in <xref target="wholehashes"/>, it SHOULD include SHA-256, as specified in <xref target="FIPS-180-3"/>, or stronger. It MAY also include other hashes.</t>
 
 	    </section>	
 		
@@ -508,7 +522,7 @@ the downloaded data can be recovered and what needs to be fetched again.
 
 	      <t>Metalinks SHOULD include digital signatures, as described in <xref target="signatures"/>.</t>
 
-	      <t>Digital signatures provide authentication, message integrity, and non-repudiation with proof of origin.</t>
+	      <t>Digital signatures provide authentication, message integrity, and enable non-repudiation with proof of origin.</t>
 
 	    </section>
 
@@ -689,17 +703,6 @@ the downloaded data can be recovered and what needs to be fetched again.
   <seriesInfo name="RFC" value="5988"/>
 </reference>
 
-
-<reference anchor="ISO3166-1">
-
-<front>
-<title>ISO 3166-1:2006.  Codes for the representation of names of countries and their subdivisions -- Part 1: Country codes</title>
-<author>
-<organization>International Organization for Standardization</organization>
-</author>
-<date month="November" year="2006"/></front>
-</reference>
-
 <reference anchor="FIPS-180-3">
 <front>
 <title>Secure Hash Standard (SHS)</title>
@@ -769,6 +772,25 @@ the downloaded data can be recovered and what needs to be fetched again.
 
       <references title="Informative References">
 
+<reference anchor='RFC4732'>
+
+<front>
+<title>Internet Denial-of-Service Considerations</title>
+<author initials='M.' surname='Handley' fullname='M. Handley'>
+<organization /></author>
+<author initials='E.' surname='Rescorla' fullname='E. Rescorla'>
+<organization /></author>
+<author>
+<organization>IAB</organization></author>
+<date year='2006' month='December' />
+<abstract>
+<t>This document provides an overview of possible avenues for denial-of-service (DoS) attack on Internet systems.  The aim is to encourage protocol designers and network engineers towards designs that are more robust.  We discuss partial solutions that reduce the effectiveness of attacks, and how some solutions might inadvertently open up alternative vulnerabilities.  This memo provides information for the Internet community.</t></abstract></front>
+
+<seriesInfo name='RFC' value='4732' />
+<format type='TXT' octets='91844' target='http://www.rfc-editor.org/rfc/rfc4732.txt' />
+</reference>
+	  
+
 <reference anchor='RFC5843'>
 
 <front>
@@ -783,11 +805,21 @@ the downloaded data can be recovered and what needs to be fetched again.
 <format type='TXT' octets='6731' target='http://www.rfc-editor.org/rfc/rfc5843.txt' />
 </reference>
 
+<reference anchor="ISO3166-1">
+
+<front>
+<title>ISO 3166-1:2006.  Codes for the representation of names of countries and their subdivisions -- Part 1: Country codes</title>
+<author>
+<organization>International Organization for Standardization</organization>
+</author>
+<date month="November" year="2006"/></front>
+</reference>
+
       </references>	  
 
 
 	    <section title="Acknowledgements and Contributors">
-		  <t>Thanks to the Metalink community, Alexey Melnikov, Julian Reschke, Mark Nottingham, Daniel Stenberg, Matt Domsch, Micah Cowan, David Morris, Yves Lafon, Juergen Schoenwaelder, Ben Campbell, and the HTTPBIS Working Group.</t>
+		  <t>Thanks to the Metalink community, Alexey Melnikov, Julian Reschke, Mark Nottingham, Daniel Stenberg, Matt Domsch, Micah Cowan, David Morris, Yves Lafon, Juergen Schoenwaelder, Ben Campbell, Lars Eggert, Sean Turner, and the HTTPBIS Working Group.</t>
 		  
           <t>Thanks to Alan Ford and Mark Handley for spurring us on to publish this document.</t>
 
