@@ -12,7 +12,7 @@ Expires: August 31, 2011
 
 
  Metalink/HTTP: Mirrors and Cryptographic Hashes in HTTP Header Fields
-                      draft-bryan-metalinkhttp-21
+                      draft-bryan-metalinkhttp-22
 
 Abstract
 
