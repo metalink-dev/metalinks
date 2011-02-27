@@ -981,7 +981,7 @@ Appendix A.  Acknowledgements and Contributors
    Thanks to the Metalink community, Alexey Melnikov, Julian Reschke,
    Mark Nottingham, Daniel Stenberg, Matt Domsch, Micah Cowan, David
    Morris, Yves Lafon, Juergen Schoenwaelder, Ben Campbell, Lars Eggert,
-   Sean Turner, and the HTTPBIS Working Group.
+   Sean Turner, Robert Sparks, and the HTTPBIS Working Group.
 
    Thanks to Alan Ford and Mark Handley for spurring us on to publish
    this document.
