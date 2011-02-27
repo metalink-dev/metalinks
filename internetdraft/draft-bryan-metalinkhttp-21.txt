@@ -1037,7 +1037,10 @@ Appendix C.  Document History
    Known issues concerning this draft:
    o  None.
 
-   -20 : January , 2011.
+   -21 : February , 2011.
+   o  IESG review.
+
+   -20 : February 14, 2011.
    o  Yves Lafon's apps-team review, Juergen Schoenwaelder's secdir
       review, Ben Campbell's Gen-ART review.
 
@@ -1054,9 +1057,6 @@ Appendix C.  Document History
    o  Add draft-ietf-ftpext2-hash reference and FTP mirror coordination.
 
    -15 : February 20, 2010.
-   o  Update references and terminology.
-
-   -14 : December 31, 2009.
 
 
 
@@ -1065,6 +1065,9 @@ Bryan, et al.            Expires August 31, 2011               [Page 19]
 Internet-Draft      Metalink/HTTP: Mirrors and Hashes      February 2011
 
 
+   o  Update references and terminology.
+
+   -14 : December 31, 2009.
    o  Baseline file hash: SHA-256.
 
    -13 : November 22, 2009.
@@ -1108,9 +1111,6 @@ Internet-Draft      Metalink/HTTP: Mirrors and Hashes      February 2011
    o  Content-MD5 for partial file cryptographic hashes.
 
    -01 : September 1, 2009.
-   o  Link Relation Type Registration: "duplicate"
-
-   -00 : August 24, 2009.
 
 
 
@@ -1121,6 +1121,9 @@ Bryan, et al.            Expires August 31, 2011               [Page 20]
 Internet-Draft      Metalink/HTTP: Mirrors and Hashes      February 2011
 
 
+   o  Link Relation Type Registration: "duplicate"
+
+   -00 : August 24, 2009.
    o  Initial draft.
 
 
@@ -1163,9 +1166,6 @@ Authors' Addresses
 
    Email: henrik@henriknordstrom.net
    URI:   http://www.henriknordstrom.net/
-
-
-
 
 
 
