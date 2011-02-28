@@ -113,7 +113,7 @@
 
 	  <t>Upon connection to a Metalink/HTTP server, a client will receive information about other sources of the same resource and a cryptographic hash of the whole resource. The client will then be able to request chunks of the file from the various sources, scheduling appropriately in order to maximize the download rate.</t>
    
-      <section title="Examples Metalink Server Response"><t><figure> 
+      <section title="Example Metalink Server Response"><t><figure> 
 	  <preamble>This example shows a brief Metalink server response with ETag, mirrors, .meta4, OpenPGP signature, and a cryptographic hash of the whole file:</preamble>
 	  
 	  <artwork type="example">
@@ -388,7 +388,7 @@ Metalink clients SHOULD use the location of the original GET request in the "Ref
 these ranged requests.</t>
 
 <t>The Metalink client can determine the size and number of ranges requested from each server, based upon the type and number of mirrors and performance observed from each mirror.
-Note that Range requests impose an overhead on servers and clients need to be aware of that and not abuse them. Metalink clients SHOULD NOT make more than one concurrent Range request to
+Note that Range requests impose an overhead on servers and clients need to be aware of that and not abuse them. Metalink clients MUST NOT make more than one concurrent request to
 each mirror server that it downloads from.</t>
 
 <t>Metalink clients SHOULD close all but the fastest connection if any Ranged requests generated after the first request end up with a complete response, instead of a partial response
@@ -504,7 +504,10 @@ If the cryptographic hash of the object does not match the Instance Digest from 
 	    <section title="Spoofing">
 
 	      <t>There is potential for spoofing attacks where the attacker publishes Metalinks with false information.
-          In that case, this could deceive unaware downloaders into downloading a malicious or worthless file. As with all downloads, users should only download from trusted sources. Also, malicious publishers could attempt a distributed denial of service attack by inserting unrelated URIs into Metalinks. 
+          In that case, this could deceive unaware downloaders into downloading a malicious or worthless file. 
+		  Metalink clients are advised to prevent loops, possibly from a mirror server to a Metalink server and back again, in <xref target="req"/>.
+		  As with all downloads, users should only download from trusted sources. 
+		  Also, malicious publishers could attempt a distributed denial of service attack by inserting unrelated URIs into Metalinks. 
 		  <xref target="RFC4732"/> contains information on amplification attacks and denial of service attacks.</t>
 
 	    </section>	

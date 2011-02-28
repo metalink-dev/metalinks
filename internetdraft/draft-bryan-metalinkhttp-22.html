@@ -144,11 +144,11 @@
 <tr><td class="header">Network Working Group</td><td class="header">A. Bryan</td></tr>
 <tr><td class="header">Internet-Draft</td><td class="header">N. McNab</td></tr>
 <tr><td class="header">Intended status: Standards Track</td><td class="header">T. Tsujikawa</td></tr>
-<tr><td class="header">Expires: August 31, 2011</td><td class="header">&nbsp;</td></tr>
+<tr><td class="header">Expires: September 1, 2011</td><td class="header">&nbsp;</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">P. Poeml</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">MirrorBrain</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">H. Nordstrom</td></tr>
-<tr><td class="header">&nbsp;</td><td class="header">February 27, 2011</td></tr>
+<tr><td class="header">&nbsp;</td><td class="header">February 28, 2011</td></tr>
 </table></td></tr></table>
 <h1><br />Metalink/HTTP: Mirrors and Cryptographic Hashes in HTTP Header Fields<br />draft-bryan-metalinkhttp-22</h1>
 
@@ -184,7 +184,7 @@ and may be updated, replaced, or obsoleted by other documents at any time.
 It is inappropriate to use Internet-Drafts as reference material or to cite
 them other than as &ldquo;work in progress.&rdquo;</p>
 <p>
-This Internet-Draft will expire on August 31, 2011.</p>
+This Internet-Draft will expire on September 1, 2011.</p>
 
 <h3>Copyright Notice</h3>
 <p>
@@ -206,7 +206,7 @@ described in the Simplified BSD License.</p>
 <a href="#anchor1">1.</a>&nbsp;
 Introduction<br />
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor2">1.1.</a>&nbsp;
-Examples Metalink Server Response<br />
+Example Metalink Server Response<br />
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor3">1.2.</a>&nbsp;
 Notational Conventions<br />
 <a href="#req">2.</a>&nbsp;
@@ -301,7 +301,7 @@ Introduction</h3>
 <a name="anchor2"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.1.1"></a><h3>1.1.&nbsp;
-Examples Metalink Server Response</h3>
+Example Metalink Server Response</h3>
 
 <p>
 <p>This example shows a brief Metalink server response with ETag, mirrors, .meta4, OpenPGP signature, and a cryptographic hash of the whole file:
@@ -630,7 +630,7 @@ Metalink clients SHOULD use the location of the original GET request in the "Ref
 these ranged requests.
 </p>
 <p>The Metalink client can determine the size and number of ranges requested from each server, based upon the type and number of mirrors and performance observed from each mirror.
-Note that Range requests impose an overhead on servers and clients need to be aware of that and not abuse them. Metalink clients SHOULD NOT make more than one concurrent Range request to
+Note that Range requests impose an overhead on servers and clients need to be aware of that and not abuse them. Metalink clients MUST NOT make more than one concurrent request to
 each mirror server that it downloads from.
 </p>
 <p>Metalink clients SHOULD close all but the fastest connection if any Ranged requests generated after the first request end up with a complete response, instead of a partial response
@@ -757,7 +757,10 @@ URIs and IRIs</h3>
 Spoofing</h3>
 
 <p>There is potential for spoofing attacks where the attacker publishes Metalinks with false information.
-          In that case, this could deceive unaware downloaders into downloading a malicious or worthless file. As with all downloads, users should only download from trusted sources. Also, malicious publishers could attempt a distributed denial of service attack by inserting unrelated URIs into Metalinks. 
+          In that case, this could deceive unaware downloaders into downloading a malicious or worthless file. 
+		  Metalink clients are advised to prevent loops, possibly from a mirror server to a Metalink server and back again, in <a class='info' href='#req'>Section&nbsp;2<span> (</span><span class='info'>Requirements</span><span>)</span></a>.
+		  As with all downloads, users should only download from trusted sources. 
+		  Also, malicious publishers could attempt a distributed denial of service attack by inserting unrelated URIs into Metalinks. 
 		  <a class='info' href='#RFC4732'>[RFC4732]<span> (</span><span class='info'>Handley, M., Rescorla, E., and IAB, &ldquo;Internet Denial-of-Service Considerations,&rdquo; December&nbsp;2006.</span><span>)</span></a> contains information on amplification attacks and denial of service attacks.
 </p>
 <a name="anchor9"></a><br /><hr />
