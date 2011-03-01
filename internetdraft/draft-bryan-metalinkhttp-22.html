@@ -144,11 +144,11 @@
 <tr><td class="header">Network Working Group</td><td class="header">A. Bryan</td></tr>
 <tr><td class="header">Internet-Draft</td><td class="header">N. McNab</td></tr>
 <tr><td class="header">Intended status: Standards Track</td><td class="header">T. Tsujikawa</td></tr>
-<tr><td class="header">Expires: September 1, 2011</td><td class="header">&nbsp;</td></tr>
+<tr><td class="header">Expires: September 2, 2011</td><td class="header">&nbsp;</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">P. Poeml</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">MirrorBrain</td></tr>
 <tr><td class="header">&nbsp;</td><td class="header">H. Nordstrom</td></tr>
-<tr><td class="header">&nbsp;</td><td class="header">February 28, 2011</td></tr>
+<tr><td class="header">&nbsp;</td><td class="header">March 1, 2011</td></tr>
 </table></td></tr></table>
 <h1><br />Metalink/HTTP: Mirrors and Cryptographic Hashes in HTTP Header Fields<br />draft-bryan-metalinkhttp-22</h1>
 
@@ -184,7 +184,7 @@ and may be updated, replaced, or obsoleted by other documents at any time.
 It is inappropriate to use Internet-Drafts as reference material or to cite
 them other than as &ldquo;work in progress.&rdquo;</p>
 <p>
-This Internet-Draft will expire on September 1, 2011.</p>
+This Internet-Draft will expire on September 2, 2011.</p>
 
 <h3>Copyright Notice</h3>
 <p>
@@ -339,7 +339,7 @@ Requirements</h3>
 </p>
 <p>Metalink resources include Link header fields <a class='info' href='#RFC5988'>[RFC5988]<span> (</span><span class='info'>Nottingham, M., &ldquo;Web Linking,&rdquo; October&nbsp;2010.</span><span>)</span></a> to present a list of mirrors in the response to a client request for the resource. Metalink servers MUST include the cryptographic hash of a resource via Instance Digests in HTTP <a class='info' href='#RFC3230'>[RFC3230]<span> (</span><span class='info'>Mogul, J. and A. Van Hoff, &ldquo;Instance Digests in HTTP,&rdquo; January&nbsp;2002.</span><span>)</span></a>.
 	  Algorithms used in the Instance Digest field are registered in the IANA registry named "Hypertext Transfer Protocol (HTTP) Digest Algorithm Values" at &lt;http://www.iana.org/assignments/http-dig-alg/http-dig-alg.xhtml&gt;. This document restricts the use of these algorithms.
-	  SHA-256 and SHA-512 were added to the registry by <a class='info' href='#RFC5843'>[RFC5843]<span> (</span><span class='info'>Bryan, A., &ldquo;Additional Hash Algorithms for HTTP Instance Digests,&rdquo; April&nbsp;2010.</span><span>)</span></a>. If a Metalink contains whole file hashes as described in <a class='info' href='#wholehashes'>Section&nbsp;6<span> (</span><span class='info'>Cryptographic Hashes of Whole Documents</span><span>)</span></a>, it SHOULD include SHA-256, as specified in <a class='info' href='#FIPS-180-3'>[FIPS&#8209;180&#8209;3]<span> (</span><span class='info'>National Institute of Standards and Technology (NIST), &ldquo;Secure Hash Standard (SHS),&rdquo; October&nbsp;2008.</span><span>)</span></a>, or stronger. It MAY also include other hashes.
+	  SHA-256 and SHA-512 were added to the registry by <a class='info' href='#RFC5843'>[RFC5843]<span> (</span><span class='info'>Bryan, A., &ldquo;Additional Hash Algorithms for HTTP Instance Digests,&rdquo; April&nbsp;2010.</span><span>)</span></a>. If a Metalink contains whole file hashes as described in <a class='info' href='#wholehashes'>Section&nbsp;6<span> (</span><span class='info'>Cryptographic Hashes of Whole Documents</span><span>)</span></a>, it MUST include SHA-256, as specified in <a class='info' href='#FIPS-180-3'>[FIPS&#8209;180&#8209;3]<span> (</span><span class='info'>National Institute of Standards and Technology (NIST), &ldquo;Secure Hash Standard (SHS),&rdquo; October&nbsp;2008.</span><span>)</span></a>, or stronger. It MAY also include other hashes.
 </p>
 <p>Metalink servers are HTTP servers with one or more Metalink
  resources. Metalink servers MUST support the Link header fields for listing mirrors and MUST support Instance Digests in HTTP <a class='info' href='#RFC3230'>[RFC3230]<span> (</span><span class='info'>Mogul, J. and A. Van Hoff, &ldquo;Instance Digests in HTTP,&rdquo; January&nbsp;2002.</span><span>)</span></a>. Metalink servers MUST return the same Link header fields and Instance Digests on HEAD requests. 

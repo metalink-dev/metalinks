@@ -147,7 +147,7 @@ DYzYjRjYzFhOTlmNTQwYzI2M2QwM2U2MQ==
 	  
       <t>Metalink resources include Link header fields <xref target="RFC5988"/> to present a list of mirrors in the response to a client request for the resource. Metalink servers MUST include the cryptographic hash of a resource via Instance Digests in HTTP <xref target="RFC3230"/>.
 	  Algorithms used in the Instance Digest field are registered in the IANA registry named "Hypertext Transfer Protocol (HTTP) Digest Algorithm Values" at &lt;http://www.iana.org/assignments/http-dig-alg/http-dig-alg.xhtml&gt;. This document restricts the use of these algorithms.
-	  SHA-256 and SHA-512 were added to the registry by <xref target="RFC5843"/>. If a Metalink contains whole file hashes as described in <xref target="wholehashes"/>, it SHOULD include SHA-256, as specified in <xref target="FIPS-180-3"/>, or stronger. It MAY also include other hashes.</t>
+	  SHA-256 and SHA-512 were added to the registry by <xref target="RFC5843"/>. If a Metalink contains whole file hashes as described in <xref target="wholehashes"/>, it MUST include SHA-256, as specified in <xref target="FIPS-180-3"/>, or stronger. It MAY also include other hashes.</t>
 	  
 	  <t>Metalink servers are HTTP servers with one or more Metalink
  resources. Metalink servers MUST support the Link header fields for listing mirrors and MUST support Instance Digests in HTTP <xref target="RFC3230"/>. Metalink servers MUST return the same Link header fields and Instance Digests on HEAD requests. 
