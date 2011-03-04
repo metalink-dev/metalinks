@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><?rfc linefile="1:draft-bryan-metalinkhttp-22.xml"?>
+<?xml version="1.0" encoding="UTF-8"?><?rfc linefile="1:draft-bryan-metalinkhttp-23.xml"?>
 <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
 <?rfc toc="yes" ?>
 <?rfc tocdepth="3" ?>
@@ -11,7 +11,7 @@
 <?rfc inline="yes" ?>
 <!DOCTYPE rfc
   PUBLIC "" "rfc2629.dtd">
-<rfc category="std" docName="draft-bryan-metalinkhttp-22" ipr="trust200902">
+<rfc category="std" docName="draft-bryan-metalinkhttp-23" ipr="trust200902">
     <front>        
       <title abbrev="Metalink/HTTP: Mirrors and Hashes">Metalink/HTTP: Mirrors and Hashes</title>		
       <author initials="A." surname="Bryan" fullname="Anthony Bryan">
@@ -285,7 +285,8 @@ type="application/metalink4+xml"
       <t>Metalink/XML files for a given resource MAY be provided in a Link header field as shown in the example in <xref target="p2p"/>.
 	  Metalink/XML files are specified in <xref target="RFC5854"/> and they are particularly useful for providing metadata such as cryptographic hashes of parts of a file, allowing a
       client to recover from errors (see <xref target="errorcorrection"/>). Metalink servers SHOULD provide
-	  Metalink/XML files with partial file hashes in Link header fields and Metalink clients SHOULD use them for error recovery.</t>
+	  Metalink/XML files with partial file hashes in Link header fields and Metalink clients SHOULD use them for error recovery. Section 4.1.3 of <xref target="RFC5854"/> specifies how to
+	  include partial file hashes in Metalink/XML files.</t>
     </section>
 	
     </section>
