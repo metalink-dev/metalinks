@@ -12,7 +12,7 @@ Expires: September 5, 2011
 
 
                    Metalink/HTTP: Mirrors and Hashes
-                      draft-bryan-metalinkhttp-22
+                      draft-bryan-metalinkhttp-23
 
 Abstract
 
@@ -540,7 +540,8 @@ Internet-Draft      Metalink/HTTP: Mirrors and Hashes         March 2011
    allowing a client to recover from errors (see Section 7.1.2).
    Metalink servers SHOULD provide Metalink/XML files with partial file
    hashes in Link header fields and Metalink clients SHOULD use them for
-   error recovery.
+   error recovery.  Section 4.1.3 of [RFC5854] specifies how to include
+   partial file hashes in Metalink/XML files.
 
 
 5.  Signatures
@@ -550,7 +551,6 @@ Internet-Draft      Metalink/HTTP: Mirrors and Hashes         March 2011
    OpenPGP signatures [RFC3156] of requested files are specified with
    the Link header fields [RFC5988] and a relation type of "describedby"
    and a type parameter of "application/pgp-signature".
-
 
 
 
