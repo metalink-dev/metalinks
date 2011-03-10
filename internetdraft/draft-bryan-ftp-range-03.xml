@@ -50,7 +50,8 @@
 	<date year="2011"/>
       <abstract>
 	<t>The File Transfer Protocol offers the REST command, to designate a starting point for a transfer, but does not currently offer any method to specify an end point.
-       This document specifies a new FTP RANG command to be used by clients to designate a start and end point for STREAM mode transfers with RETR.
+       This document specifies a new FTP RANG command to be used by clients to designate a start and end point to permit restarts and repairs of
+       interrupted data transfers in STREAM mode.
 </t>
       </abstract>
 	  
@@ -72,7 +73,7 @@
   <middle>
     <section title="Introduction">
 	<t>The File Transfer Protocol offers the REST command <xref target="RFC3659"/>, to designate a starting point for a transfer, but does not currently offer any method to specify an end point.
-       This document specifies a new FTP RANG command to be used by clients to designate a start and end point for STREAM mode transfers with RETR.</t>
+       This document specifies a new FTP RANG command to be used by clients to designate a start and end point to permit restarts and repairs of interrupted data transfers in STREAM mode. </t>
 	   
 	<t>The current alternatives, without being able to specify an end point, are to issue an ABOR command or close the data connection.</t>
     <t>HTTP offers similar functionality with the Range: header in Section 14.35 of <xref target="RFC2616"/>, where a specific byte range can optionally be requested.</t>
@@ -249,6 +250,14 @@ respond to the RANG command with a 350 reply, indicating that
 RANG parameters have been saved, and that another command, which
 should be RETR, should then follow to complete the ranged request.</t>
 
+<t>To reset the range command, "RANG 1 0" should be issued. 
+Invalid RANG requests where 'start-point' is larger than 'end-point' 
+automatically reset the byte selection to the default, which is the whole file.
+The server-PI MUST reply with a 350 reply if "RANG 1 0" is issued
+by client-PI because it is a valid way of resetting range. (The range would also be reset if the session
+is reinitialized with REIN but this terminates the user and resets all parameters).</t>
+
+
 <t><figure> 
 	  <preamble></preamble>
 	  <artwork type="ABNF">
@@ -256,19 +265,31 @@ should be RETR, should then follow to complete the ranged request.</t>
    range-ok       = "350" SP *TCHAR CRLF	  
 </artwork></figure></t>
 
-<t>The RANG command is intended to select the partial data of a file.
-When the RANG command is used with RETR, the client bears the
-responsibility of merging the retrieved data with the partially
-retrieved file.  It may choose to use the data obtained other
-than to complete an earlier transfer, or to re-retrieve data that
-had been retrieved before.</t>
 
-<t>To reset the range command, "RANG 1 0" should be issued. 
-Invalid RANG requests where 'start-point' is larger than 'end-point' 
-automatically reset the byte selection to the default, which is the whole file.
-The server-PI MUST reply with a 350 reply if "RANG 1 0" is issued
-by client-PI because it is a valid way of resetting range. (The range would also be reset if the session
-is reinitialized with REIN but this terminates the user and resets all parameters).</t>
+<t>Server-FTP processes may permit transfer commands other than RETR and
+STOR, such as APPE and STOU, to complete a restart or repair;
+however, this is
+not recommended.  STOU (store unique) is undefined in this usage, as
+storing the remainder of a file into a unique file name is rarely
+going to be useful.  If APPE (append) is permitted, it MUST act
+identically to STOR when a restart marker has been set.  That is, in
+both cases, octets from the data connection are placed into the file
+at the location indicated by the restart marker value.</t>
+
+<t>The RANG command is intended to complete or repair a failed transfer.  Use with
+RETR is comparatively well defined in all cases, as the client bears
+the responsibility of merging the retrieved data with the partially
+retrieved file.  It may choose to use the data obtained other than to
+complete an earlier transfer, or to re-retrieve data that had been
+retrieved before.  With STOR, however, the server must insert the
+data into the file named.  The results are undefined if a client uses
+RANG to do other than restart to complete a transfer of a file that
+had previously failed to completely transfer.  In particular, if the
+restart marker set with a RANG command is not at the end of the data
+currently stored at the server, as reported by the server, or if
+insufficient data are provided in a STOR that follows a RANG to
+extend the destination file to at least its previous size, then the
+effects are undefined.</t>
 
 <t>The RANG command MUST be the last command issued before the data
 transfer command that is to cause a partial data transfer.  The
