@@ -79,7 +79,7 @@ HTTP has a similar feature named Instance Digests <xref target="RFC3230"/> which
 </artwork></figure></t>
 
 <t><figure> 
-	  <preamble>HASH server response with Positive Completion code, the currently selected HASH algorithm, the requested hash of the file, and the pathname of the file:</preamble>
+	  <preamble>Server response to HASH command by client with Positive Completion code, the currently selected HASH algorithm, a byte range including the start point and end point of the file that was hashed, the requested hash of the file, and the pathname of the file:</preamble>
 	  <artwork type="example">
    S&gt; 213 SHA-1 0-255 80bc95fd391772fa61c91ed68567f09... filename.ext
 </artwork></figure></t>

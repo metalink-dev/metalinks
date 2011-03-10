@@ -418,7 +418,13 @@ DYzYjRjYzFhOTlmNTQwYzI2M2QwM2U2MQ==
 <t>Metalink clients MAY start a number of parallel ranged downloads (one per selected mirror server other than the
 first) using mirrors provided by the Link header fields with "duplicate" relation type. Metalink clients MUST limit the number of parallel connections to mirror servers, ideally based on
 observing how the aggregate throughput changes as connections are opened. It would be pointless to blindly open connections once the path bottleneck is filled.
-Metalink clients SHOULD use the location of the original GET request in the "Referer" header field for
+After establishing a new connection, a Metalink client SHOULD monitor whether the aggregate throughput increases over all connections
+that are part of the download. The client SHOULD NOT open additional
+connections during this period. If the aggregate throughput has increased,
+the client MAY open an additional connection and repeat these steps. Otherwise,
+the client SHOULD NOT open a new connection until an established one closes.
+</t>
+<t>Metalink clients SHOULD use the location of the original GET request in the "Referer" header field for
 these ranged requests.</t>
 
 <t>The Metalink client can determine the size and number of ranges requested from each server, based upon the type and number of mirrors and performance observed from each mirror.
