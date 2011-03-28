@@ -72,7 +72,7 @@
 
       <abstract>
     <t>This document specifies Metalink/HTTP: Mirrors and Cryptographic Hashes in HTTP header fields, a different way to get information that is usually contained in the Metalink XML-based download description format. 
-    Metalink/HTTP describes multiple download locations (mirrors), Peer-to-Peer, cryptographic hashes, digital signatures, and other information using existing standards for HTTP header fields. Metalink clients can use this information to make file transfers more robust and reliable.
+    Metalink/HTTP describes multiple download locations (mirrors and Peer-to-Peer), cryptographic hashes, digital signatures, and other information using existing standards for HTTP header fields. Metalink clients can use this information to make file transfers more robust and reliable.
 	Normative requirements for Metalink/HTTP clients and servers are described here.</t>
       </abstract>
 
@@ -94,7 +94,7 @@
       <t>Metalink/HTTP is an alternative and complementary representation of Metalink information, which is usually presented as an XML-based document format <xref target="RFC5854"/>. 
       Metalink/HTTP attempts to provide as much functionality as the Metalink/XML format by using existing standards such as Web Linking <xref target="RFC5988"/>, 
       Instance Digests in HTTP <xref target="RFC3230"/>, and Entity Tags (also known as ETags) <xref target="RFC2616"/>. Metalink/HTTP is used to list
-      information about a file to be downloaded. This can include lists of multiple URIs (mirrors), Peer-to-Peer information, cryptographic hashes, and digital signatures.</t>
+      information about a file to be downloaded. This can include lists of multiple URIs (mirrors and Peer-to-Peer information), cryptographic hashes, and digital signatures.</t>
       
       <t>Identical copies of a file are frequently accessible in multiple locations on the Internet over a variety of protocols (such as FTP, HTTP, and Peer-to-Peer).
       In some cases, users are shown a list of these multiple download locations (mirrors) and must manually select a single one on the basis of geographical location, priority, or bandwidth.
@@ -177,7 +177,7 @@ mirror servers SHOULD all share the same ETag policy.
       Mirror servers SHOULD support serving partial content. HTTP mirror servers SHOULD share the same ETag policy as the originating Metalink server. HTTP Mirror servers SHOULD support Instance Digests in HTTP <xref target="RFC3230"/> using the same algorithm as the Metalink server.  Optimally, mirror servers will share the same ETag policy and support Instance Digests in HTTP.
 	  Mirror servers that share the same ETag policy and/or support Instance Digests in HTTP using the same algorithm as a Metalink server are known as preferred mirror servers.</t>
 
-      <t>Metalink clients use the mirrors provided by a Metalink server in Link header fields <xref target="RFC5988"/> but it is restricted to the initial Metalink server they contacted. If Metalink clients find Link header fields <xref target="RFC5988"/> for listing mirrors from mirrors or a Metalink server listing itself as a mirror, they MUST discard such Link header fields <xref target="RFC5988"/> to prevent a possible infinite loop. Metalink clients MUST support HTTP and SHOULD support FTP <xref target="RFC0959"/>. Metalink clients MAY support BitTorrent <xref target="BITTORRENT"/>, 
+      <t>Metalink clients use the mirrors provided by a Metalink server in Link header fields <xref target="RFC5988"/> but this is restricted to the initial Metalink server they contacted. If Metalink clients find Link header fields <xref target="RFC5988"/> for listing mirrors from mirrors or a Metalink server listing itself as a mirror, they MUST discard such Link header fields <xref target="RFC5988"/> to prevent a possible infinite loop. Metalink clients MUST support HTTP and SHOULD support FTP <xref target="RFC0959"/>. Metalink clients MAY support BitTorrent <xref target="BITTORRENT"/>, 
       or other download methods. Metalink clients SHOULD switch downloads from one mirror to another if a mirror becomes unreachable. Metalink clients MAY support multi-source, or parallel, 
       downloads, where portions of a file can be downloaded from multiple mirrors simultaneously (and optionally, from Peer-to-Peer sources). Metalink clients MUST support Instance Digests in HTTP <xref target="RFC3230"/> by 
       requesting and verifying cryptographic hashes. Metalink clients SHOULD support error recovery by using the cryptographic hashes of parts of the file listed in Metalink/XML files. Metalink clients SHOULD support checking digital signatures.</t>
@@ -926,7 +926,20 @@ If the cryptographic hash of the object does not match the Instance Digest from 
 	      
 	      <t>None.</t>
 	    </list></t>
+<t>-23 : March , 2011.
+	    
+	    <list style="symbols">
 
+	      <t>IESG review.</t>
+	    </list></t>
+
+<t>-22 : March 4, 2011.
+	    
+	    <list style="symbols">
+
+	      <t>IESG review.</t>
+	    </list></t>
+		
 <t>-21 : February 27, 2011.
 	    
 	    <list style="symbols">
