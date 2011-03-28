@@ -8,7 +8,7 @@ Expires: September 15, 2011                               March 14, 2011
 
 
           File Transfer Protocol RANG Command for Byte Ranges
-                        draft-bryan-ftp-range-03
+                        draft-bryan-ftp-range-04
 
 Abstract
 
