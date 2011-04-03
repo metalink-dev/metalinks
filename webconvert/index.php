@@ -98,7 +98,7 @@ class curl {
         $lines = metalink3to4(trim($lines));
     }
 
-    $lines = split("\n", trim($lines));
+    $lines = explode("\n", trim($lines));
 
     $i = 0;
     foreach ($lines as $line) {
