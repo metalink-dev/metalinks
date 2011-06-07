@@ -1,0 +1,499 @@
+<?xml version="1.0" encoding="UTF-8"?><?rfc linefile="1:draft-bryan-ftp-lock-00.xml"?>
+
+<?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
+<?rfc toc="yes" ?>
+<?rfc tocdepth="3" ?>
+<?rfc tocindent="yes" ?>
+<?rfc symrefs="yes" ?>
+<?rfc sortrefs="yes"?>
+<?rfc iprnotified="no" ?>
+<?rfc compact="yes" ?>
+<?rfc comments="yes" ?>
+<?rfc inline="yes" ?>
+<?rfc subcompact="no"?>
+<?rfc rfcedstyle="yes"?>
+
+<!DOCTYPE rfc
+  PUBLIC "" "rfc2629.dtd">
+  
+<rfc category="std" docName="draft-bryan-ftp-lock-00" ipr="trust200902">
+
+    <front>        
+      <title abbrev="FTP LOCK Command for Using a Single Port">File Transfer Protocol LOCK Command for Using a Single Port</title>
+      <author initials="A." surname="Bryan" fullname="Anthony Bryan">
+	    <organization></organization>
+	    <address>
+		  <postal>
+			<street></street>
+		    <city>Pompano Beach</city>
+			<region>FL</region>
+			<country>USA</country>
+		  </postal>
+	      <email>anthonybryan@gmail.com</email>
+	      <uri>http://www.metalinker.org</uri>
+	    </address>
+      </author>
+      <author initials="D." surname="Stenberg" fullname="Daniel Stenberg">
+	    <organization></organization>
+	    <address>
+	      <email>daniel@haxx.se</email>
+	      <uri>http://www.haxx.se/</uri>
+	    </address>
+      </author>
+      <author initials="T." surname="Tsujikawa" fullname="Tatsuhiro Tsujikawa">
+        <organization></organization>
+        <address>
+		  <postal>
+			<street></street>
+			<city></city>
+			<region>Shiga</region>
+			<country>Japan</country>
+		  </postal>
+          <email>tatsuhiro.t@gmail.com</email>
+          <uri>http://aria2.sourceforge.net</uri>
+        </address>
+      </author>
+	<date year="2011"/>
+      <abstract>
+	<t>One of the biggest hurdles for FTP in real life usage is its use of two connections. First, it uses a primary connection to send control commands on, and when it sends or receives data, it opens a second TCP stream for that purpose. 
+       This document specifies a new FTP LOCK command to be used by clients to request the server to use the control connection for data transfers, using
+	   a single port instead of two.
+    </t>
+      </abstract>
+	  
+<note title="Editorial Note (To be removed by RFC Editor)">
+  <t>
+
+    Discussion of this draft should take place on the FTPEXT2 working group
+    mailing list (ftpext@ietf.org), although this draft is not a WG item.
+	Related documents (including fancy diffs) can be found at
+    <eref target="http://tools.ietf.org/wg/ftpext2/"/>.
+  </t>
+  <t>
+    The changes in this draft are summarized in <xref target="dochistory"/>.
+  </t>
+</note>
+	  
+  </front>    
+
+  <middle>
+    <section title="Introduction">
+	<t>One of the biggest hurdles for FTP in real life usage is its use of two connections. First, it uses a primary connection to send control commands on, and when it sends or receives data, it opens a second TCP stream for that purpose. 
+       This document specifies a new FTP LOCK command to be used by clients to request the server to use the control connection for data transfers, using
+	   a single port instead of two.
+    </t>	   
+    <t>The use of two connections for FTP, where the second one uses dynamic port numbers and can go in either direction, has been known to give firewall administrators grief and firewalls really have to "understand" FTP at the application protocol layer to work really well.
+	Since firewalls need to inspect and understand FTP to be able to open ports for the secondary connection etc, there's a huge problem with encrypted FTP (FTP-SSL or FTPS) since then the control connection is sent encrypted and the firewall(s) cannot interpret the commands that deal with creating the second connection.
+	Things might seem fine over the control connection, but will start to fail when the data connection is attempted.</t>
+
+    <t>This also means that if both parties are behind NATs (Network Address Translation), you cannot use FTP.</t>
+
+    <t>Additionally, as NATs often are setup to kill idle connections and the nature of FTP makes the control channel remain quiet during long and slow FTP transfers, we often end up with the control channel getting cut off by the NAT due to idleness.</t>
+	</section>
+      <section title="Example"><t><figure> 
+	  <preamble>Example of LOCK client request:</preamble>
+	  
+	  <artwork type="example">
+   C&gt; LOCK
+   S&gt; 200 LOCK OK to current port
+   C&gt; RETR filename.ext
+   S&gt; 150 Opening BINARY mode
+   boundary=separator189dhde78b287734237842g3847g
+   --separator189dhde78b287734237842g3847g
+   
+   [raw binary data]
+   --separator189dhde78b287734237842g3847g--
+   S&gt; 226 Transfer complete.
+</artwork></figure></t>
+
+	  
+    </section>	
+
+      <section title="Document Conventions"> 
+
+	<t>This specification describes conformance of File Transfer Protocol Extension for LOCK, so data transfers occur over the control connection and not a separate data connection.</t>
+     
+
+	<t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+	"SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+	document are to be interpreted as described in BCP 14, <xref target="RFC2119"/>, as scoped to those conformance targets.</t>
+	
+	<t>This document also uses notation defined in STD 9, <xref target="RFC0959"/>.
+	In particular, the terms or commands "reply", "user", "file", "FTP commands", "user-PI" (user protocol interpreter), "server-FTP process",
+    "server-PI", "control connection", "data connection", "mode", "Image type", "Stream transfer mode", "type", "LIST", "NLST", "STOR", "RETR", "STOU", "APPE", and "ASCII", are all used here as defined there.</t>
+
+	<t>In the examples of FTP dialogs presented in this document, lines that
+   begin "C&gt; " were sent over the control connection from the user-PI to
+   the server-PI, and lines that begin "S&gt; " were sent over the control
+   connection from the server-PI to the user-PI. In all cases, the
+   prefixes shown above, including the one space, have been added for
+   the purposes of this document, and are not a part of the data
+   exchanged between client and server.</t>
+
+	
+	<t>Syntax required is defined using the Augmented BNF defined in <xref target="RFC5234"/>.</t>
+
+<section title="Basic Tokens">
+   <t>This document imports the core definitions given in Appendix B of
+   <xref target="RFC5234"/>.  There definitions will be found for basic ABNF elements
+   like ALPHA, DIGIT, SP, etc.  To that, the following term is added
+   for use in this document.</t>
+
+   
+
+<t><figure> 
+	  <preamble></preamble>
+	  <artwork type="ABNF">
+   TCHAR = VCHAR / SP / HTAB    ; visible plus white space
+</artwork></figure></t>
+
+   <t>The VCHAR (from <xref target="RFC5234"/>) and TCHAR rules give basic character
+   types from varying sub-sets of the ASCII character set for use in
+   various commands and responses.</t>
+
+   <t>Note that in ABNF, string literals are case insensitive.  That
+   convention is preserved in this document, and implies that FTP
+   commands and parameters that are added by this specification have
+   values that can be represented in any case.  That is, "LOCK" is the
+   same as "lock", "Lock", "LoCk", etc., and "ftp.example.com" is the
+   same as "Ftp.Example.Com", "fTp.eXample.cOm", etc.</t>
+</section>
+
+<section title="Server Replies">
+
+   <t>Section 4.2 of <xref target="RFC0959"/> defines the format and meaning of replies
+   by the server-PI to FTP commands from the user-PI.  Those reply
+   conventions are used here without change.</t>
+
+<t><figure> 
+	  <preamble></preamble>
+	  <artwork type="ABNF">
+   error-response = error-code SP *TCHAR CRLF
+   error-code     = ("4" / "5") 2DIGIT
+</artwork></figure></t>
+
+   <t>Implementers should note that the ABNF syntax (which was not used in
+   <xref target="RFC0959"/>) used in this document, and other FTP related documents,
+   sometimes shows replies using the one line format.  Unless otherwise
+   explicitly stated, that is not intended to imply that multi-line
+   responses are not permitted.  Implementers should assume that, unless
+   stated to the contrary, any reply to any FTP command (including QUIT)
+   can be of the multi-line format described in <xref target="RFC0959"/>.</t>
+
+   <t>Throughout this document, replies will be identified by the three
+   digit code that is their first element.  Thus the term "500 reply"
+   means a reply from the server-PI using the three digit code "500".</t>
+
+</section>
+      </section>
+
+<section title="FTP Data Transfers Over Control Connection">
+
+<t>
+   As mentioned, the use of two ports with FTP became problematic with the advent of firewalls and NATs.
+</t><t>
+   By using a single port, like many other protocols, these problems are eliminated.
+</t><t>
+   There are drawbacks, such as not being able to carry out control connection actions during transfer, but the benefits outweigh them. Many implementations do not really allow the client to do much on the control connection while the transfer is ongoing anyway.
+</t><t>
+   The LOCK command causes anything that would normally open a data connection to be re-routed over the control connection and remain using a single connection.
+</t>
+  
+</section>
+	  
+<section title="The LOCK Command (LOCK)" anchor="LOCK">
+<t>A new command "LOCK" is added to the FTP command set to allow the
+client to request that data transfers occur over the current control connection without opening up another port for a data connection.</t>
+<t>The syntax for the LOCK command when the current transfer mode is STREAM is:
+
+<figure> 
+	  <preamble></preamble>
+	  <artwork type="ABNF">
+   lock-command = "LOCK" CRLF
+   lock-response = lock-ok / error-response
+   lock-ok       = "200" SP *TCHAR CRLF	  
+</artwork></figure></t>
+
+
+<t>Post-LOCK transfers use a MIME-style separator. 
+The boundary style is a subset of MIME. The first boundary string is prefixed with two dashes "--" and a blank line, while the final boundary string is prefixed and suffixed with two dashes "--".</t>
+
+<t>The sender MUST set the separator. 
+A careful sender SHOULD check the file first so that there is no occurance 
+of the separator within the file, but this method is used by browsers and HTTP clients 
+today without checking the file since the risk that a very long string with lots of randomness would actually exist in the file is next to none.</t>
+
+<t>When uploading files, the client MUST use end-of-marker solution.</t>
+
+<t>
+<figure> 
+	  <preamble></preamble>
+	  <artwork type="ABNF">
+   boundary-announce = "boundary=" separator CRLF
+   boundary-start    = "--" separator CRLF CRLF
+   boundary-end      = "--" separator "--" CRLF
+   separator         = *TCHAR
+</artwork></figure></t>
+
+<t>The following commands would usually cause a data connection to be opened, but post-LOCK they will occur over the control connection: LIST, NLST, STOR, RETR, STOU, APPE.</t>
+
+<t>The LOCK command will cause LIST and NLST directory listings to be sent over the control connection, instead of the data connection. Some clients issue one of these commands automatically at login,
+so if the server supports LOCK and the client prefers LOCK, then LOCK should be issued after login but before one of these commands.</t>
+
+<t>If the LOCK command is issued after a data connection has already been opened, it will continue to completion uninterrupted and close once finished.</t>
+
+
+<section title="FEAT Command Response for LOCK Command">
+
+<t>When replying to the FEAT command <xref target="RFC2389"/>, a server-FTP process that supports the LOCK command, as specified here, MUST include, a line containing exactly the string "LOCK".
+This string is case insensitive, and MAY be sent in any mixture of upper or lower case, however it SHOULD be sent in upper case. That is, the response SHOULD be:</t>
+
+<t><figure> 
+	  <preamble></preamble>
+	  <artwork type="example">
+   C&gt; FEAT
+   S&gt; 211-Extensions supported:
+   S&gt;  ...
+   S&gt;  LOCK
+   S&gt;  ...
+   S&gt; 211 END
+</artwork></figure></t>
+
+<t>The ellipses indicate place holders where other features may be included, and are not required. The one-space indentation of the feature lines is mandatory <xref target="RFC2389"/>.</t>
+
+<t><figure> 
+	  <preamble></preamble>
+	  <artwork type="ABNF">	
+   lock-feat = SP "LOCK" CRLF
+</artwork></figure></t>
+
+</section>
+
+
+<section title="User-PI usage of LOCK">
+
+<t>The user-PI issues the FEAT command to query the server-PI if it supports the LOCK command.</t>
+
+<t><figure> 
+	  <preamble></preamble>
+	  <artwork type="example">
+   C&gt; FEAT
+   S&gt; 211-Extensions supported:
+   S&gt;  ...
+   S&gt;  LOCK
+   S&gt;  ...
+   S&gt; 211 END
+</artwork></figure></t>
+
+<t>
+   The client requests that data transfers will be over the current connection, instead of opening another port.
+<figure>
+	  <preamble></preamble>
+	  <artwork type="example">
+   C&gt; TYPE I
+   S&gt; 200 Type set to I.
+   C&gt; LOCK
+   S&gt; 200 LOCK OK to current port
+   C&gt; RETR filename.ext
+   S&gt; 150 Opening BINARY mode
+   boundary=separator189dhde78b287734237842g3847g
+   --separator189dhde78b287734237842g3847g
+   
+   [raw binary data]
+   --separator189dhde78b287734237842g3847g--
+   S&gt; 226 Transfer complete.
+</artwork></figure></t>
+
+
+</section>
+
+<section title="LOCK Command Errors">
+
+
+<t>The server-PI SHOULD reply with a 500 reply if the LOCK command is unrecognized or unimplemented.</t>
+
+<t>The server-PI SHOULD reply with a 552 reply if the user is not allowed to use the LOCK command.</t>
+
+</section>
+
+</section>
+
+
+
+	<section title="IANA Considerations" anchor="IANA">
+	<t>This new command is added to the "FTP Commands and Extensions" registry created by <xref target="RFC5797"/>.</t>
+	<t>Command Name: LOCK</t>
+	<t>Description: Single port data transfers for FTP.</t>
+	<t>FEAT String: LOCK</t>
+	<t>Command Type: Service execution/parameter setting</t>
+	<t>Conformance Requirements: Optional</t>
+	<t>Reference: This specification</t>
+
+
+   
+	</section>
+	
+	  <section title="Security Considerations">
+	  
+
+<t>
+   FTP can be secured with TLS by encrypting the control connection and data connection, as per <xref target="RFC4217"/>. Under optimal conditions with LOCK, no data connection is opened
+   and all data transfers occur over the control connection. When LOCK is in use, if data transfers need to be encrypted, then the control connection MUST be encrypted (instead of the data connection, as with non-LOCK transfers).</t>
+		
+	  </section>
+	  
+
+
+	</middle>
+
+	<back>
+	  
+	  <references title="Normative References">
+
+<reference anchor="RFC0959">
+
+<front>
+<title>File Transfer Protocol</title>
+<author initials="J." surname="Postel" fullname="J. Postel">
+<organization/></author>
+<author initials="J." surname="Reynolds" fullname="J. Reynolds">
+<organization/></author>
+<date year="1985" month="October"/></front>
+
+<seriesInfo name="STD" value="9"/>
+<seriesInfo name="RFC" value="0959"/>
+</reference>
+
+<reference anchor="RFC2119">
+
+<front>
+<title abbrev="RFC Key Words">Key words for use in RFCs to Indicate Requirement Levels</title>
+<author initials="S." surname="Bradner" fullname="Scott Bradner">
+<organization>Harvard University</organization>
+<address>
+<postal>
+<street>1350 Mass. Ave.</street>
+<street>Cambridge</street>
+<street>MA 02138</street></postal>
+<phone>- +1 617 495 3864</phone>
+<email>sob@harvard.edu</email></address></author>
+<date year="1997" month="March"/>
+<area>General</area>
+<keyword>keyword</keyword>
+<abstract>
+<t>
+   In many standards track documents several words are used to signify
+   the requirements in the specification.  These words are often
+   capitalized.  This document defines these words as they should be
+   interpreted in IETF documents.  Authors who follow these guidelines
+   should incorporate this phrase near the beginning of their document:
+
+<list>
+<t>
+      The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL
+      NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED",  "MAY", and
+      "OPTIONAL" in this document are to be interpreted as described in
+      RFC 2119.
+</t></list></t>
+<t>
+   Note that the force of these words is modified by the requirement
+   level of the document in which they are used.
+</t></abstract></front>
+
+<seriesInfo name="BCP" value="14"/>
+<seriesInfo name="RFC" value="2119"/>
+</reference>
+
+<reference anchor="RFC2389">
+
+<front>
+<title>Feature negotiation mechanism for the File Transfer Protocol</title>
+<author initials="P." surname="Hethmon" fullname="P. Hethmon">
+<organization/></author>
+<author initials="R." surname="Elz" fullname="R. Elz">
+<organization/></author>
+<date year="1998" month="August"/></front>
+
+<seriesInfo name="RFC" value="2389"/>
+</reference>
+
+
+<reference anchor="RFC5234">
+
+<front>
+<title>Augmented BNF for Syntax Specifications: ABNF</title>
+<author initials="D." surname="Crocker" fullname="D. Crocker">
+<organization/></author>
+<author initials="P." surname="Overell" fullname="P. Overell">
+<organization/></author>
+<date year="2008" month="January"/></front>
+
+<seriesInfo name="STD" value="68"/>
+<seriesInfo name="RFC" value="5234"/>
+</reference>
+
+
+	  </references>
+
+
+	  <references title="Informative References">
+
+<reference anchor='RFC4217'>
+
+<front>
+<title>Securing FTP with TLS</title>
+<author initials='P.' surname='Ford-Hutchinson' fullname='P. Ford-Hutchinson'>
+<organization /></author>
+<date year='2005' month='October' />
+<abstract>
+<t>This document describes a mechanism that can be used by FTP clients and servers to implement security and authentication using the TLS protocol defined by RFC 2246, "The TLS Protocol Version 1.0.", and the extensions to the FTP protocol defined by RFC 2228, "FTP Security Extensions". It describes the subset of the extensions that are required and the parameters to be used, discusses some of the policy issues that clients and servers will need to take, considers some of the implications of those policies, and discusses some expected behaviours of implementations to allow interoperation. This document is intended to provide TLS support for FTP in a similar way to that provided for SMTP in RFC 2487, "SMTP Service Extension for Secure SMTP over Transport Layer Security", and HTTP in RFC 2817, "Upgrading to TLS Within HTTP/1.1.".&lt;/t>&lt;t> This specification is in accordance with RFC 959, "File Transfer Protocol". It relies on RFC 2246, "The TLS Protocol Version 1.0.", and RFC 2228, "FTP Security Extensions". [STANDARDS-TRACK]</t></abstract></front>
+
+<seriesInfo name='RFC' value='4217' />
+
+<format type='TXT' octets='61180' target='http://www.rfc-editor.org/rfc/rfc4217.txt' />
+</reference>
+
+
+<reference anchor="RFC5797">
+
+<front>
+<title>FTP Command and Extension Registry</title>
+<author initials="J." surname="Klensin" fullname="J. Klensin">
+<organization/></author>
+<author initials="A." surname="Hoenes" fullname="A. Hoenes">
+<organization/></author>
+<date year="2010" month="March"/></front>
+
+<seriesInfo name="RFC" value="5797"/>
+</reference>
+
+	    </references> 
+
+	    <section title="Acknowledgements and Contributors">
+		  <t>Thanks to the FTPEXT2 Working Group and Robert McMurray.</t>
+
+
+
+
+	    <section title="Document History" anchor="dochistory">
+		<t>[[ to be removed by the RFC editor before publication as an RFC. ]]</t>
+		<t>Known issues concerning this draft:
+	    <list style="symbols"> 
+	      
+		  <t>Should there be a way to unLOCK and go back to two connection style?</t>
+
+	    </list></t>
+
+		
+		
+<t>draft-bryan-ftp-lock-00 : June 7, 2011.
+	    
+	    <list style="symbols">
+
+	      <t>Initial draft.</t>
+	    </list></t>
+		
+	    </section>
+		</section>
+	  </back> 
+	</rfc>

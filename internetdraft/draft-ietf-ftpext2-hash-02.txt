@@ -4,7 +4,7 @@
 FTPEXT2 Working Group                                           A. Bryan
 Internet-Draft                                                  T. Kosse
 Intended status: Standards Track                             D. Stenberg
-Expires: September 9, 2011                                 March 8, 2011
+Expires: December 3, 2011                                   June 1, 2011
 
 
       File Transfer Protocol HASH Command for Cryptographic Hashes
@@ -47,14 +47,14 @@ Status of this Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on September 9, 2011.
+   This Internet-Draft will expire on December 3, 2011.
 
 
 
 
-Bryan, et al.           Expires September 9, 2011               [Page 1]
+Bryan, et al.           Expires December 3, 2011                [Page 1]
 
-Internet-Draft  FTP HASH Command for Cryptographic Hashes     March 2011
+Internet-Draft  FTP HASH Command for Cryptographic Hashes      June 2011
 
 
 Copyright Notice
@@ -108,9 +108,9 @@ Table of Contents
 
 
 
-Bryan, et al.           Expires September 9, 2011               [Page 2]
+Bryan, et al.           Expires December 3, 2011                [Page 2]
 
-Internet-Draft  FTP HASH Command for Cryptographic Hashes     March 2011
+Internet-Draft  FTP HASH Command for Cryptographic Hashes      June 2011
 
 
 1.  Introduction
@@ -164,9 +164,9 @@ Internet-Draft  FTP HASH Command for Cryptographic Hashes     March 2011
 
 
 
-Bryan, et al.           Expires September 9, 2011               [Page 3]
+Bryan, et al.           Expires December 3, 2011                [Page 3]
 
-Internet-Draft  FTP HASH Command for Cryptographic Hashes     March 2011
+Internet-Draft  FTP HASH Command for Cryptographic Hashes      June 2011
 
 
    there.  The term "pathname" is used as defined in Section 2.2 of
@@ -220,9 +220,9 @@ Internet-Draft  FTP HASH Command for Cryptographic Hashes     March 2011
 
 
 
-Bryan, et al.           Expires September 9, 2011               [Page 4]
+Bryan, et al.           Expires December 3, 2011                [Page 4]
 
-Internet-Draft  FTP HASH Command for Cryptographic Hashes     March 2011
+Internet-Draft  FTP HASH Command for Cryptographic Hashes      June 2011
 
 
    explicitly stated, that is not intended to imply that multi-line
@@ -276,9 +276,9 @@ Internet-Draft  FTP HASH Command for Cryptographic Hashes     March 2011
 
 
 
-Bryan, et al.           Expires September 9, 2011               [Page 5]
+Bryan, et al.           Expires December 3, 2011                [Page 5]
 
-Internet-Draft  FTP HASH Command for Cryptographic Hashes     March 2011
+Internet-Draft  FTP HASH Command for Cryptographic Hashes      June 2011
 
 
    The HASH command uses the currently selected hash algorithm.  The
@@ -332,9 +332,9 @@ Internet-Draft  FTP HASH Command for Cryptographic Hashes     March 2011
 
 
 
-Bryan, et al.           Expires September 9, 2011               [Page 6]
+Bryan, et al.           Expires December 3, 2011                [Page 6]
 
-Internet-Draft  FTP HASH Command for Cryptographic Hashes     March 2011
+Internet-Draft  FTP HASH Command for Cryptographic Hashes      June 2011
 
 
       hash-feat = SP "HASH" SP hashlist CRLF
@@ -388,9 +388,9 @@ Internet-Draft  FTP HASH Command for Cryptographic Hashes     March 2011
 
 
 
-Bryan, et al.           Expires September 9, 2011               [Page 7]
+Bryan, et al.           Expires December 3, 2011                [Page 7]
 
-Internet-Draft  FTP HASH Command for Cryptographic Hashes     March 2011
+Internet-Draft  FTP HASH Command for Cryptographic Hashes      June 2011
 
 
    and then performing the HASH command.  To reset the byte range and
@@ -444,9 +444,9 @@ Internet-Draft  FTP HASH Command for Cryptographic Hashes     March 2011
 
 
 
-Bryan, et al.           Expires September 9, 2011               [Page 8]
+Bryan, et al.           Expires December 3, 2011                [Page 8]
 
-Internet-Draft  FTP HASH Command for Cryptographic Hashes     March 2011
+Internet-Draft  FTP HASH Command for Cryptographic Hashes      June 2011
 
 
    file with HASH command.  Server-PI replies with the Positive
@@ -500,9 +500,9 @@ Internet-Draft  FTP HASH Command for Cryptographic Hashes     March 2011
 
 
 
-Bryan, et al.           Expires September 9, 2011               [Page 9]
+Bryan, et al.           Expires December 3, 2011                [Page 9]
 
-Internet-Draft  FTP HASH Command for Cryptographic Hashes     March 2011
+Internet-Draft  FTP HASH Command for Cryptographic Hashes      June 2011
 
 
    Command Name: HASH
@@ -556,9 +556,9 @@ Internet-Draft  FTP HASH Command for Cryptographic Hashes     March 2011
 
 
 
-Bryan, et al.           Expires September 9, 2011              [Page 10]
+Bryan, et al.           Expires December 3, 2011               [Page 10]
 
-Internet-Draft  FTP HASH Command for Cryptographic Hashes     March 2011
+Internet-Draft  FTP HASH Command for Cryptographic Hashes      June 2011
 
 
    556 response) and will not be honoured later.
@@ -612,9 +612,9 @@ Internet-Draft  FTP HASH Command for Cryptographic Hashes     March 2011
 
 
 
-Bryan, et al.           Expires September 9, 2011              [Page 11]
+Bryan, et al.           Expires December 3, 2011               [Page 11]
 
-Internet-Draft  FTP HASH Command for Cryptographic Hashes     March 2011
+Internet-Draft  FTP HASH Command for Cryptographic Hashes      June 2011
 
 
 7.2.  Informative References
@@ -668,9 +668,9 @@ Appendix B.  List of Non-standard Cryptographic Hash or Checksum
 
 
 
-Bryan, et al.           Expires September 9, 2011              [Page 12]
+Bryan, et al.           Expires December 3, 2011               [Page 12]
 
-Internet-Draft  FTP HASH Command for Cryptographic Hashes     March 2011
+Internet-Draft  FTP HASH Command for Cryptographic Hashes      June 2011
 
 
       are optional parameters.  Algorithm specific command.  Response
@@ -724,9 +724,9 @@ Internet-Draft  FTP HASH Command for Cryptographic Hashes     March 2011
 
 
 
-Bryan, et al.           Expires September 9, 2011              [Page 13]
+Bryan, et al.           Expires December 3, 2011               [Page 13]
 
-Internet-Draft  FTP HASH Command for Cryptographic Hashes     March 2011
+Internet-Draft  FTP HASH Command for Cryptographic Hashes      June 2011
 
 
    o  ioFTPD (supports XCRC)
@@ -780,9 +780,9 @@ Internet-Draft  FTP HASH Command for Cryptographic Hashes     March 2011
 
 
 
-Bryan, et al.           Expires September 9, 2011              [Page 14]
+Bryan, et al.           Expires December 3, 2011               [Page 14]
 
-Internet-Draft  FTP HASH Command for Cryptographic Hashes     March 2011
+Internet-Draft  FTP HASH Command for Cryptographic Hashes      June 2011
 
 
    o  zFTPServer
@@ -793,10 +793,11 @@ Appendix C.  Document History
    [[ to be removed by the RFC editor before publication as an RFC. ]]
 
    Known issues concerning this draft:
-   o  Use "MLSx style" response?  S> 213 Hash.SHA-
+   o  Should HASH use "MLSx style" responses?  S> 213 Hash.SHA-
       1=80bc95fd3...;Range=0-199; filename.ext
-   o  Section needs improvement: which files should a server process a
-      HASH command for a logged in user?
+
+   draft-ietf-ftpext2-hash-02 : June, 2011
+   o  Refinements.
 
    draft-ietf-ftpext2-hash-01 : February 1, 2011
    o  Partial file hashes with RANG command.  Mandatory byte range in
@@ -830,17 +831,17 @@ Appendix C.  Document History
 
    draft-bryan-ftp-hash-01 : April 7, 2010.
    o  Changing HASH algorithm with OPTS.
-   o  Reference RFC 5797 and add IANA Considerations section.
 
 
 
 
 
-Bryan, et al.           Expires September 9, 2011              [Page 15]
+Bryan, et al.           Expires December 3, 2011               [Page 15]
 
-Internet-Draft  FTP HASH Command for Cryptographic Hashes     March 2011
+Internet-Draft  FTP HASH Command for Cryptographic Hashes      June 2011
 
 
+   o  Reference RFC 5797 and add IANA Considerations section.
    o  Informative Reference to expired Internet Draft
       (draft-twine-ftpmd5) which attempted to address this issue (it
       only supported one hash, MD5).
@@ -891,6 +892,5 @@ Authors' Addresses
 
 
 
-
-Bryan, et al.           Expires September 9, 2011              [Page 16]
+Bryan, et al.           Expires December 3, 2011               [Page 16]
 

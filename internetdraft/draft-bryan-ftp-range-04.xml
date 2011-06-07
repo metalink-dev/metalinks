@@ -341,7 +341,7 @@ This string is case insensitive, and MAY be sent in any mixture of upper or lowe
 <t><figure> 
 	  <preamble></preamble>
 	  <artwork type="ABNF">	
-   range-feat = SP "RANG" SP "STREAM"
+   range-feat = SP "RANG" SP "STREAM" CRLF
 </artwork></figure></t>
 
 </section>
