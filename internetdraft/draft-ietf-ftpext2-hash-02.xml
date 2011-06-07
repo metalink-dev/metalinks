@@ -706,9 +706,15 @@ purpose is an implementation decision.</t>
 		<t>[[ to be removed by the RFC editor before publication as an RFC. ]]</t>
 		<t>Known issues concerning this draft:
 	    <list style="symbols"> 
-	      <t>Use "MLSx style" response? S> 213 Hash.SHA-1=80bc95fd3...;Range=0-199; filename.ext</t>
-		  <t>Section needs improvement: which files should a server process a HASH command for a logged in user?</t>
+	      <t>Should HASH use "MLSx style" responses? S> 213 Hash.SHA-1=80bc95fd3...;Range=0-199; filename.ext</t>
 
+	    </list></t>
+		
+<t>draft-ietf-ftpext2-hash-02 : June, 2011
+
+	    <list style="symbols">
+
+          <t>Refinements.</t>
 	    </list></t>
 		
 <t>draft-ietf-ftpext2-hash-01 : February 1, 2011

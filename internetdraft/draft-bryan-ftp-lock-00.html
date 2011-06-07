@@ -1,8 +1,8 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en"><head><title>File Transfer Protocol RANG Command for Byte Ranges</title>
+<html lang="en"><head><title>File Transfer Protocol LOCK Command for Using a Single Port</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="description" content="File Transfer Protocol RANG Command for Byte Ranges">
-<meta name="generator" content="xml2rfc v1.35 (http://xml.resource.org/)">
+<meta name="description" content="File Transfer Protocol LOCK Command for Using a Single Port">
+<meta name="generator" content="xml2rfc v1.36 (http://xml.resource.org/)">
 <style type='text/css'><!--
         body {
                 font-family: verdana, charcoal, helvetica, arial, sans-serif;
@@ -142,18 +142,18 @@
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <table summary="layout" width="66%" border="0" cellpadding="0" cellspacing="0"><tr><td><table summary="layout" width="100%" border="0" cellpadding="2" cellspacing="1">
 <tr><td class="header">Network Working Group</td><td class="header">A. Bryan</td></tr>
-<tr><td class="header">Internet-Draft</td><td class="header">T. Tsujikawa</td></tr>
-<tr><td class="header">Intended status: Standards Track</td><td class="header">D. Stenberg</td></tr>
-<tr><td class="header">Expires: November 28, 2011</td><td class="header">May 27, 2011</td></tr>
+<tr><td class="header">Internet-Draft</td><td class="header">D. Stenberg</td></tr>
+<tr><td class="header">Intended status: Standards Track</td><td class="header">T. Tsujikawa</td></tr>
+<tr><td class="header">Expires: December 9, 2011</td><td class="header">June 7, 2011</td></tr>
 </table></td></tr></table>
-<h1><br />File Transfer Protocol RANG Command for Byte Ranges<br />draft-bryan-ftp-range-04</h1>
+<h1><br />File Transfer Protocol LOCK Command for Using a Single Port<br />draft-bryan-ftp-lock-00</h1>
 
 <h3>Abstract</h3>
 
-<p>The File Transfer Protocol offers the REST command to designate a starting point for a transfer, but does not currently offer any method to specify an end point.
-       This document specifies a new FTP RANG command to be used by clients to designate a start and end point to permit restarts and repairs of
-       interrupted data transfers in STREAM mode.
-
+<p>One of the biggest hurdles for FTP in real life usage is its use of two connections. First, it uses a primary connection to send control commands on, and when it sends or receives data, it opens a second TCP stream for that purpose. 
+       This document specifies a new FTP LOCK command to be used by clients to request the server to use the control connection for data transfers, using
+	   a single port instead of two.
+    
 </p>
 <h3>Editorial Note (To be removed by RFC Editor)</h3>
 
@@ -166,10 +166,10 @@
   
 </p>
 <p>
-    The changes in this draft are summarized in <a class='info' href='#dochistory'>Appendix&nbsp;B<span> (</span><span class='info'>Document History</span><span>)</span></a>.
+    The changes in this draft are summarized in <a class='info' href='#dochistory'>Appendix&nbsp;A.1<span> (</span><span class='info'>Document History</span><span>)</span></a>.
   
 </p>
-<h3>Status of this Memo</h3>
+<h3>Status of This Memo</h3>
 <p>
 This Internet-Draft is submitted  in full
 conformance with the provisions of BCP&nbsp;78 and BCP&nbsp;79.</p>
@@ -184,7 +184,7 @@ and may be updated, replaced, or obsoleted by other documents at any time.
 It is inappropriate to use Internet-Drafts as reference material or to cite
 them other than as &ldquo;work in progress.&rdquo;</p>
 <p>
-This Internet-Draft will expire on November 28, 2011.</p>
+This Internet-Draft will expire on December 9, 2011.</p>
 
 <h3>Copyright Notice</h3>
 <p>
@@ -206,28 +206,26 @@ described in the Simplified BSD License.</p>
 <a href="#anchor1">1.</a>&nbsp;
 Introduction<br />
 <a href="#anchor2">2.</a>&nbsp;
+Example<br />
+<a href="#anchor3">3.</a>&nbsp;
 Document Conventions<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor3">2.1.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor4">3.1.</a>&nbsp;
 Basic Tokens<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor4">2.2.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor5">3.2.</a>&nbsp;
 Server Replies<br />
-<a href="#anchor5">3.</a>&nbsp;
-Byte Ranges in STREAM Mode<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor6">3.1.</a>&nbsp;
-Error Recovery and Range Requests<br />
-<a href="#RANG">4.</a>&nbsp;
-The RANGe Command (RANG)<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor7">4.1.</a>&nbsp;
-FEAT Command Response for RANG Command<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor8">4.2.</a>&nbsp;
-User-PI usage of RANG<br />
-&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor9">4.3.</a>&nbsp;
-RANG Command Errors<br />
-<a href="#anchor10">5.</a>&nbsp;
-RANG Command Use with Other Commands<br />
+<a href="#anchor6">4.</a>&nbsp;
+FTP Data Transfers Over Control Connection<br />
+<a href="#LOCK">5.</a>&nbsp;
+The LOCK Command (LOCK)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor7">5.1.</a>&nbsp;
+FEAT Command Response for LOCK Command<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor8">5.2.</a>&nbsp;
+User-PI usage of LOCK<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#anchor9">5.3.</a>&nbsp;
+LOCK Command Errors<br />
 <a href="#IANA">6.</a>&nbsp;
 IANA Considerations<br />
-<a href="#anchor11">7.</a>&nbsp;
+<a href="#anchor10">7.</a>&nbsp;
 Security Considerations<br />
 <a href="#rfc.references1">8.</a>&nbsp;
 References<br />
@@ -235,12 +233,10 @@ References<br />
 Normative References<br />
 &nbsp;&nbsp;&nbsp;&nbsp;<a href="#rfc.references2">8.2.</a>&nbsp;
 Informative References<br />
-<a href="#anchor14">Appendix&nbsp;A.</a>&nbsp;
+<a href="#anchor13">Appendix&nbsp;A.</a>&nbsp;
 Acknowledgements and Contributors<br />
-<a href="#dochistory">Appendix&nbsp;B.</a>&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="#dochistory">A.1.</a>&nbsp;
 Document History<br />
-<a href="#rfc.authors">&#167;</a>&nbsp;
-Authors' Addresses<br />
 </p>
 <br clear="all" />
 
@@ -249,19 +245,45 @@ Authors' Addresses<br />
 <a name="rfc.section.1"></a><h3>1.&nbsp;
 Introduction</h3>
 
-<p>The File Transfer Protocol offers the REST command <a class='info' href='#RFC3659'>[RFC3659]<span> (</span><span class='info'>Hethmon, P., &ldquo;Extensions to FTP,&rdquo; March&nbsp;2007.</span><span>)</span></a> to designate a starting point for a transfer, but does not currently offer any method to specify an end point.
-       This document specifies a new FTP RANG command to be used by clients to designate a start and end point to permit restarts and repairs of interrupted data transfers in STREAM mode. 
+<p>One of the biggest hurdles for FTP in real life usage is its use of two connections. First, it uses a primary connection to send control commands on, and when it sends or receives data, it opens a second TCP stream for that purpose. 
+       This document specifies a new FTP LOCK command to be used by clients to request the server to use the control connection for data transfers, using
+	   a single port instead of two.
+    
 </p>
-<p>The current alternatives, without being able to specify an end point, are to issue an ABOR command or close the data connection.
+<p>The use of two connections for FTP, where the second one uses dynamic port numbers and can go in either direction, has been known to give firewall administrators grief and firewalls really have to "understand" FTP at the application protocol layer to work really well.
+	Since firewalls need to inspect and understand FTP to be able to open ports for the secondary connection etc, there's a huge problem with encrypted FTP (FTP-SSL or FTPS) since then the control connection is sent encrypted and the firewall(s) cannot interpret the commands that deal with creating the second connection.
+	Things might seem fine over the control connection, but will start to fail when the data connection is attempted.
 </p>
-<p>HTTP offers similar functionality with the Range: header field in Section 14.35 of <a class='info' href='#RFC2616'>[RFC2616]<span> (</span><span class='info'>Fielding, R., Gettys, J., Mogul, J., Frystyk, H., Masinter, L., Leach, P., and T. Berners-Lee, &ldquo;Hypertext Transfer Protocol -- HTTP/1.1,&rdquo; June&nbsp;1999.</span><span>)</span></a>, where a specific byte range can optionally be requested.
+<p>This also means that if both parties are behind NATs (Network Address Translation), you cannot use FTP.
+</p>
+<p>Additionally, as NATs often are setup to kill idle connections and the nature of FTP makes the control channel remain quiet during long and slow FTP transfers, we often end up with the control channel getting cut off by the NAT due to idleness.
 </p>
 <a name="anchor2"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.2"></a><h3>2.&nbsp;
+Example</h3>
+
+<p>
+<p>Example of LOCK client request:
+</p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
+   C&gt; LOCK
+   S&gt; 200 LOCK OK to current port
+   C&gt; RETR filename.ext
+   S&gt; 150 Opening BINARY mode
+   boundary=separator189dhde78b287734237842g3847g
+   --separator189dhde78b287734237842g3847g
+
+   [raw binary data]
+   --separator189dhde78b287734237842g3847g--
+   S&gt; 226 Transfer complete.
+</pre></div>
+
+<a name="anchor3"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.3"></a><h3>3.&nbsp;
 Document Conventions</h3>
 
-<p>This specification describes conformance of File Transfer Protocol Extension for RANG, a start and end point in a byte range.
+<p>This specification describes conformance of File Transfer Protocol Extension for LOCK, so data transfers occur over the control connection and not a separate data connection.
 </p>
 <p>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
 	"SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
@@ -269,7 +291,7 @@ Document Conventions</h3>
 </p>
 <p>This document also uses notation defined in STD 9, <a class='info' href='#RFC0959'>[RFC0959]<span> (</span><span class='info'>Postel, J. and J. Reynolds, &ldquo;File Transfer Protocol,&rdquo; October&nbsp;1985.</span><span>)</span></a>.
 	In particular, the terms or commands "reply", "user", "file", "FTP commands", "user-PI" (user protocol interpreter), "server-FTP process",
-    "server-PI", "mode", "Image type", "Stream transfer mode", "type", "STOR", "RETR", and "ASCII", are all used here as defined there. The command "REST" is used as defined in Section 5 of <a class='info' href='#RFC3659'>[RFC3659]<span> (</span><span class='info'>Hethmon, P., &ldquo;Extensions to FTP,&rdquo; March&nbsp;2007.</span><span>)</span></a>.
+    "server-PI", "control connection", "data connection", "mode", "Image type", "Stream transfer mode", "type", "LIST", "NLST", "STOR", "RETR", "STOU", "APPE", and "ASCII", are all used here as defined there.
 </p>
 <p>In the examples of FTP dialogs presented in this document, lines that
    begin "C&gt; " were sent over the control connection from the user-PI to
@@ -281,9 +303,9 @@ Document Conventions</h3>
 </p>
 <p>Syntax required is defined using the Augmented BNF defined in <a class='info' href='#RFC5234'>[RFC5234]<span> (</span><span class='info'>Crocker, D. and P. Overell, &ldquo;Augmented BNF for Syntax Specifications: ABNF,&rdquo; January&nbsp;2008.</span><span>)</span></a>.
 </p>
-<a name="anchor3"></a><br /><hr />
+<a name="anchor4"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.2.1"></a><h3>2.1.&nbsp;
+<a name="rfc.section.3.1"></a><h3>3.1.&nbsp;
 Basic Tokens</h3>
 
 <p>This document imports the core definitions given in Appendix B of
@@ -304,13 +326,13 @@ Basic Tokens</h3>
 <p>Note that in ABNF, string literals are case insensitive.  That
    convention is preserved in this document, and implies that FTP
    commands and parameters that are added by this specification have
-   values that can be represented in any case.  That is, "RANG" is the
-   same as "rang", "Rang", "RaNg", etc., and "ftp.example.com" is the
+   values that can be represented in any case.  That is, "LOCK" is the
+   same as "lock", "Lock", "LoCk", etc., and "ftp.example.com" is the
    same as "Ftp.Example.Com", "fTp.eXample.cOm", etc.
 </p>
-<a name="anchor4"></a><br /><hr />
+<a name="anchor5"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.2.2"></a><h3>2.2.&nbsp;
+<a name="rfc.section.3.2"></a><h3>3.2.&nbsp;
 Server Replies</h3>
 
 <p>Section 4.2 of <a class='info' href='#RFC0959'>[RFC0959]<span> (</span><span class='info'>Postel, J. and J. Reynolds, &ldquo;File Transfer Protocol,&rdquo; October&nbsp;1985.</span><span>)</span></a> defines the format and meaning of replies
@@ -336,190 +358,78 @@ Server Replies</h3>
    digit code that is their first element.  Thus the term "500 reply"
    means a reply from the server-PI using the three digit code "500".
 </p>
-<a name="anchor5"></a><br /><hr />
-<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.3"></a><h3>3.&nbsp;
-Byte Ranges in STREAM Mode</h3>
-
-<p>
-   To get a specific part of a file without sending entire file,
-   both sides need some way to agree on where in
-   the data stream to start and end the data transfer.
-
-</p>
-<p>
-   In STREAM mode, the data connection contains just a stream of
-   unformatted octets of data.  Explicit restart markers thus cannot be
-   inserted into the data stream, they would be indistinguishable from
-   data.  For this reason, the FTP specification <a class='info' href='#RFC0959'>[RFC0959]<span> (</span><span class='info'>Postel, J. and J. Reynolds, &ldquo;File Transfer Protocol,&rdquo; October&nbsp;1985.</span><span>)</span></a> did not provide the
-   ability to do restarts in stream mode.  However, there is not really
-   a need to have explicit restart markers in this case, as restart
-   markers can be implied by the octet offset into the data stream.
-
-</p>
-<p>
-   Because the data stream defines the file in STREAM mode, a different
-   data stream would represent a different file.  Thus, an offset will
-   always represent the same position within a file.  On the other hand,
-   in other modes than STREAM, the same file can be transferred using
-   quite different octet sequences and yet be reconstructed into the one
-   identical file.  Thus an offset into the data stream in transfer
-   modes other than STREAM would not give an unambiguous restart or end point.
-
-</p>
-<p>
-   If the data representation TYPE is IMAGE and the STRUcture is File,
-   for many systems the file will be stored exactly in the same format
-   as it is sent across the data connection.  It is then usually very
-   easy for the receiver to determine how much data was previously
-   received, and notify the sender of the offset where the transfer
-   should be restarted.  In other representation types and structures
-   more effort will be required, but it remains always possible to
-   determine the offset with finite, but perhaps non-negligible, effort.
-   In the worst case, an FTP process may need to open a data connection
-   to itself, set the appropriate transfer type and structure, and
-   actually transmit the file, counting the transmitted octets.
-
-</p>
-<p>
-   If the user-FTP process is intending to restart a retrieve, it will
-   directly calculate the restart marker and send that information in
-   the RESTart command.  However, if the user-FTP process is intending
-   to restart sending the file, it needs to be able to determine how
-   much data was previously sent, and correctly received and saved.
-   The purpose of the SIZE command, as documented in Section 4 of <a class='info' href='#RFC3659'>[RFC3659]<span> (</span><span class='info'>Hethmon, P., &ldquo;Extensions to FTP,&rdquo; March&nbsp;2007.</span><span>)</span></a>, is to get this information.
-
-</p>
 <a name="anchor6"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.3.1"></a><h3>3.1.&nbsp;
-Error Recovery and Range Requests</h3>
-
-<p>
-  STREAM mode transfers with FILE STRUcture may be range requested even
-  though no restart marker has been transferred in addition to the data
-  itself.  This is done by using the SIZE command, if needed, in
-  combination with the RANG command, and one of the standard
-  file transfer commands.
-
-</p>
-<p>
-  When using TYPE ASCII or IMAGE, the SIZE command will return the
-  number of octets that would actually be transferred if the file were
-  to be sent between the two systems, i.e., with type IMAGE, the SIZE
-  normally would be the number of octets in the file.  With type ASCII,
-  the SIZE would be the number of octets in the file including any
-  modifications required to satisfy the TYPE ASCII CR-LF end-of-line
-  convention.
-
-</p>
-<a name="RANG"></a><br /><hr />
-<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.4"></a><h3>4.&nbsp;
-The RANGe Command (RANG)</h3>
+FTP Data Transfers Over Control Connection</h3>
 
-<p>A new command "RANG" is added to the FTP command set to allow the
-client to specify both a start point byte range and an end point
-byte range of a file from a server-FTP process.
+<p>
+   As mentioned, the use of two ports with FTP became problematic with the advent of firewalls and NATs.
+
 </p>
-<p>The syntax for the RANG command when the current transfer mode is STREAM is:
+<p>
+   By using a single port, like many other protocols, these problems are eliminated.
+
+</p>
+<p>
+   There are drawbacks, such as not being able to carry out control connection actions during transfer, but the benefits outweigh them. Many implementations do not really allow the client to do much on the control connection while the transfer is ongoing anyway.
+
+</p>
+<p>
+   The LOCK command causes anything that would normally open a data connection to be re-routed over the control connection and remain using a single connection.
+
+</p>
+<a name="LOCK"></a><br /><hr />
+<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
+<a name="rfc.section.5"></a><h3>5.&nbsp;
+The LOCK Command (LOCK)</h3>
+
+<p>A new command "LOCK" is added to the FTP command set to allow the
+client to request that data transfers occur over the current control connection without opening up another port for a data connection.
+</p>
+<p>The syntax for the LOCK command when the current transfer mode is STREAM is:
 
 
 <p>
 </p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
-   range-command = "RANG" SP start-point SP end-point CRLF
-   start-point = 1*DIGIT
-   end-point = 1*DIGIT
+   lock-command = "LOCK" CRLF
+   lock-response = lock-ok / error-response
+   lock-ok       = "200" SP *TCHAR CRLF
 </pre></div>
 
-<p>[NOTE: end-point is inclusive.]
+<p>Post-LOCK transfers use a MIME-style separator. 
+The boundary style is a subset of MIME. The first boundary string is prefixed with two dashes "--" and a blank line, while the final boundary string is prefixed and suffixed with two dashes "--".
 </p>
-<p>'start-point' gives the number of octets of the
-immediately-following transfer to not actually send, effectively
-causing the transmission to be started at a later point. A
-value of zero effectively causes the transmission to be started
-at first byte.
+<p>The sender MUST set the separator. 
+A careful sender SHOULD check the file first so that there is no occurance 
+of the separator within the file, but this method is used by browsers and HTTP clients 
+today without checking the file since the risk that a very long string with lots of randomness would actually exist in the file is next to none.
 </p>
-<p>'end-point' gives the number of octets, counted from the beginning of the file, of the
-immediately-following transfer to stop sending at, effectively
-causing the transmission to be ended.  (That is, the end point is relative to the start of the file and not relative to the start point). The server-PI will
-respond to the RANG command with a 350 reply, indicating that
-RANG parameters have been saved, and that another command, which
-can be one of the standard file transfer commands, should then follow to complete the ranged request.
-</p>
-<p>To reset the range command, "RANG 1 0" should be issued. 
-Invalid RANG requests where 'start-point' is larger than 'end-point' 
-automatically reset the byte selection to the default, which is the whole file.
-The server-PI MUST reply with a 350 reply if "RANG 1 0" is issued
-by client-PI because it is a valid way of resetting the range. (The range would also be reset if the session
-is reinitialized with REIN but this terminates the user and resets all parameters).
+<p>When uploading files, the client MUST use end-of-marker solution.
 </p>
 <p>
+
 <p>
 </p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
-   range-response = range-ok / error-response
-   range-ok       = "350" SP *TCHAR CRLF
+   boundary-announce = "boundary=" separator CRLF
+   boundary-start    = "--" separator CRLF CRLF
+   boundary-end      = "--" separator "--" CRLF
+   separator         = *TCHAR
 </pre></div>
 
-<p>Server-FTP processes may permit transfer commands other than RETR and
-STOR, such as APPE and STOU, to complete a restart or repair;
-however, this is
-not recommended.  STOU (store unique) is undefined in this usage, as
-storing the remainder of a file into a unique file name is rarely
-going to be useful.  If APPE (append) is permitted, it MUST act
-identically to STOR when a restart marker has been set.  That is, in
-both cases, octets from the data connection are placed into the file
-at the location indicated by the restart marker value.
+<p>The following commands would usually cause a data connection to be opened, but post-LOCK they will occur over the control connection: LIST, NLST, STOR, RETR, STOU, APPE.
 </p>
-<p>The RANG command is intended to complete or repair a failed transfer.  Use with
-RETR is comparatively well defined in all cases, as the client bears
-the responsibility of merging the retrieved data with the partially
-retrieved file.  It may choose to use the data obtained other than to
-complete an earlier transfer, or to re-retrieve data that had been
-retrieved before.  With STOR, however, the server must insert the
-data into the file named.  The results are undefined if a client uses
-RANG to do other than restart to complete a transfer of a file that
-had previously failed to completely transfer.  In particular, if the
-restart marker set with a RANG command is not at the end of the data
-currently stored at the server, as reported by the server, or if
-insufficient data are provided in a STOR that follows a RANG to
-extend the destination file to at least its previous size, then the
-effects are undefined.
+<p>The LOCK command will cause LIST and NLST directory listings to be sent over the control connection, instead of the data connection. Some clients issue one of these commands automatically at login,
+so if the server supports LOCK and the client prefers LOCK, then LOCK should be issued after login but before one of these commands.
 </p>
-<p>The RANG command MUST be the last command issued before the data
-transfer command that is to cause a partial data transfer.  The
-effect of issuing a RANG command at any other time is undefined.
-The server-PI may react to a badly positioned RANG command by
-issuing an error response to the following command, not being a
-restartable data transfer command, or it may save the start-point
-and/or end-point byte range value and apply it to the next data
-transfer command, or it may silently ignore the inappropriate
-restart attempt.  Because of this, a user-PI that has issued a
-RANG command, but that has not successfully transmitted the
-following data transfer command for any reason, should send
-another RANG command before the next data transfer command.  If
-that transfer is not to be restarted, then "RANG 1 0" should be
-issued.
-</p>
-<p>An error response will follow a RANG command only when the server
-does not implement the command, or when command syntax is
-invalid.  Any other errors, including such problems as
-start-point and/or end-point byte range out of range, should be
-reported when the following transfer command is issued.  Such
-errors will cause that transfer request to be rejected with an
-error indicating the invalid restart attempt.
-</p>
-<p>The server-PI SHOULD transfer 0 bytes with RETR if the specified start
-point is larger than the actual file size.
-</p>
-<p>The server-PI SHOULD transfer the whole range from the start point to the end point with RETR if the end point is larger than the actual file.
+<p>If the LOCK command is issued after a data connection has already been opened, it will continue to completion uninterrupted and close once finished.
 </p>
 <a name="anchor7"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.4.1"></a><h3>4.1.&nbsp;
-FEAT Command Response for RANG Command</h3>
+<a name="rfc.section.5.1"></a><h3>5.1.&nbsp;
+FEAT Command Response for LOCK Command</h3>
 
-<p>When replying to the FEAT command <a class='info' href='#RFC2389'>[RFC2389]<span> (</span><span class='info'>Hethmon, P. and R. Elz, &ldquo;Feature negotiation mechanism for the File Transfer Protocol,&rdquo; August&nbsp;1998.</span><span>)</span></a>, a server-FTP process that supports the RANG command, as specified here, MUST include, a line containing exactly the string "RANG STREAM".
+<p>When replying to the FEAT command <a class='info' href='#RFC2389'>[RFC2389]<span> (</span><span class='info'>Hethmon, P. and R. Elz, &ldquo;Feature negotiation mechanism for the File Transfer Protocol,&rdquo; August&nbsp;1998.</span><span>)</span></a>, a server-FTP process that supports the LOCK command, as specified here, MUST include, a line containing exactly the string "LOCK".
 This string is case insensitive, and MAY be sent in any mixture of upper or lower case, however it SHOULD be sent in upper case. That is, the response SHOULD be:
 </p>
 <p>
@@ -528,7 +438,7 @@ This string is case insensitive, and MAY be sent in any mixture of upper or lowe
    C&gt; FEAT
    S&gt; 211-Extensions supported:
    S&gt;  ...
-   S&gt;  RANG STREAM
+   S&gt;  LOCK
    S&gt;  ...
    S&gt; 211 END
 </pre></div>
@@ -538,15 +448,15 @@ This string is case insensitive, and MAY be sent in any mixture of upper or lowe
 <p>
 <p>
 </p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
-   range-feat = SP "RANG" SP "STREAM" CRLF
+   lock-feat = SP "LOCK" CRLF
 </pre></div>
 
 <a name="anchor8"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.4.2"></a><h3>4.2.&nbsp;
-User-PI usage of RANG</h3>
+<a name="rfc.section.5.2"></a><h3>5.2.&nbsp;
+User-PI usage of LOCK</h3>
 
-<p>The user-PI issues the FEAT command to query the server-PI if it supports the RANG command. In this example, the server-PI also supports REST.
+<p>The user-PI issues the FEAT command to query the server-PI if it supports the LOCK command.
 </p>
 <p>
 <p>
@@ -554,52 +464,38 @@ User-PI usage of RANG</h3>
    C&gt; FEAT
    S&gt; 211-Extensions supported:
    S&gt;  ...
-   S&gt;  REST STREAM
-   S&gt;  RANG STREAM
+   S&gt;  LOCK
    S&gt;  ...
    S&gt; 211 END
 </pre></div>
 
 <p>
-   Assume that the transfer of a largish file has previously been
-   interrupted after 802816 octets had been received, that the transfer should stop at octet 1000000 of the file, that the previous
-   transfer was with TYPE=I, and that it has been verified that the file
-   on the server has not since changed.
+   The client requests that data transfers will be over the current connection, instead of opening another port.
 
 <p>
 </p><div style='display: table; width: 0; margin-left: 3em; margin-right: auto'><pre>
    C&gt; TYPE I
    S&gt; 200 Type set to I.
-   C&gt; PORT 127,0,0,1,15,107
-   S&gt; 200 PORT command successful.
-   C&gt; RANG 802816 1000000
-   S&gt; 350 Restarting at 802816. End Byte range at 1000000.
-   C&gt; RETR cap60.pl198.tar
-   S&gt; 150 Opening BINARY mode data connection
-   [...]
+   C&gt; LOCK
+   S&gt; 200 LOCK OK to current port
+   C&gt; RETR filename.ext
+   S&gt; 150 Opening BINARY mode
+   boundary=separator189dhde78b287734237842g3847g
+   --separator189dhde78b287734237842g3847g
+
+   [raw binary data]
+   --separator189dhde78b287734237842g3847g--
    S&gt; 226 Transfer complete.
 </pre></div>
 
-<p>In the above example, data is sent from offset 802816 to, and including, offset 1000000.
-</p>
 <a name="anchor9"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.4.3"></a><h3>4.3.&nbsp;
-RANG Command Errors</h3>
+<a name="rfc.section.5.3"></a><h3>5.3.&nbsp;
+LOCK Command Errors</h3>
 
-<p>The server-PI SHOULD reply with a 500 reply if the RANG command is unrecognized or unimplemented.
+<p>The server-PI SHOULD reply with a 500 reply if the LOCK command is unrecognized or unimplemented.
 </p>
-<p>The server-PI SHOULD reply with a 551 reply if the server-PI is not configured to use TYPE I and MODE S.
-</p>
-<p>The server-PI SHOULD reply with a 552 reply if the user is not allowed to use the RANG command.
-</p>
-<a name="anchor10"></a><br /><hr />
-<table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.5"></a><h3>5.&nbsp;
-RANG Command Use with Other Commands</h3>
-
-<p>This specification defines the use of RANG in a certain way. Other commands could decide to use RANG in a similar way, to select a byte range, and their specification would
-define how they operate with RANG. The HASH command <a class='info' href='#draft-ietf-ftpext2-hash'>[draft&#8209;ietf&#8209;ftpext2&#8209;hash]<span> (</span><span class='info'>Bryan, A., Kosse, T., and D. Stenberg, &ldquo;FTP Extensions for Cryptographic Hashes,&rdquo; .</span><span>)</span></a> uses RANG to select a byte range for partial file hashing.
+<p>The server-PI SHOULD reply with a 552 reply if the user is not allowed to use the LOCK command.
 </p>
 <a name="IANA"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
@@ -608,11 +504,11 @@ IANA Considerations</h3>
 
 <p>This new command is added to the "FTP Commands and Extensions" registry created by <a class='info' href='#RFC5797'>[RFC5797]<span> (</span><span class='info'>Klensin, J. and A. Hoenes, &ldquo;FTP Command and Extension Registry,&rdquo; March&nbsp;2010.</span><span>)</span></a>.
 </p>
-<p>Command Name: RANG
+<p>Command Name: LOCK
 </p>
-<p>Description: End point byte range (for STREAM mode).
+<p>Description: Single port data transfers for FTP.
 </p>
-<p>FEAT String: RANG STREAM
+<p>FEAT String: LOCK
 </p>
 <p>Command Type: Service execution/parameter setting
 </p>
@@ -620,15 +516,14 @@ IANA Considerations</h3>
 </p>
 <p>Reference: This specification
 </p>
-<a name="anchor11"></a><br /><hr />
+<a name="anchor10"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.7"></a><h3>7.&nbsp;
 Security Considerations</h3>
 
 <p>
-   This memo does not directly concern security.  It is not believed
-   that any of the mechanisms documented here impact in any particular
-   way upon the security of FTP.
+   FTP can be secured with TLS by encrypting the control connection and data connection, as per <a class='info' href='#RFC4217'>[RFC4217]<span> (</span><span class='info'>Ford-Hutchinson, P., &ldquo;Securing FTP with TLS,&rdquo; October&nbsp;2005.</span><span>)</span></a>. Under optimal conditions with LOCK, no data connection is opened
+   and all data transfers occur over the control connection. When LOCK is in use, if data transfers need to be encrypted, then the control connection MUST be encrypted (instead of the data connection, as with non-LOCK transfers).
 </p>
 <a name="rfc.references"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
@@ -645,8 +540,6 @@ References</h3>
 <td class="author-text"><a href="mailto:sob@harvard.edu">Bradner, S.</a>, &ldquo;<a href="http://tools.ietf.org/html/rfc2119">Key words for use in RFCs to Indicate Requirement Levels</a>,&rdquo; BCP&nbsp;14, RFC&nbsp;2119, March&nbsp;1997.</td></tr>
 <tr><td class="author-text" valign="top"><a name="RFC2389">[RFC2389]</a></td>
 <td class="author-text">Hethmon, P. and R. Elz, &ldquo;<a href="http://tools.ietf.org/html/rfc2389">Feature negotiation mechanism for the File Transfer Protocol</a>,&rdquo; RFC&nbsp;2389, August&nbsp;1998.</td></tr>
-<tr><td class="author-text" valign="top"><a name="RFC3659">[RFC3659]</a></td>
-<td class="author-text">Hethmon, P., &ldquo;<a href="http://tools.ietf.org/html/rfc3659">Extensions to FTP</a>,&rdquo; RFC&nbsp;3659, March&nbsp;2007.</td></tr>
 <tr><td class="author-text" valign="top"><a name="RFC5234">[RFC5234]</a></td>
 <td class="author-text">Crocker, D. and P. Overell, &ldquo;<a href="http://tools.ietf.org/html/rfc5234">Augmented BNF for Syntax Specifications: ABNF</a>,&rdquo; STD&nbsp;68, RFC&nbsp;5234, January&nbsp;2008.</td></tr>
 </table>
@@ -655,26 +548,22 @@ References</h3>
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <h3>8.2.&nbsp;Informative References</h3>
 <table width="99%" border="0">
-<tr><td class="author-text" valign="top"><a name="RFC2616">[RFC2616]</a></td>
-<td class="author-text"><a href="mailto:fielding@ics.uci.edu">Fielding, R.</a>, <a href="mailto:jg@w3.org">Gettys, J.</a>, <a href="mailto:mogul@wrl.dec.com">Mogul, J.</a>, <a href="mailto:frystyk@w3.org">Frystyk, H.</a>, <a href="mailto:masinter@parc.xerox.com">Masinter, L.</a>, <a href="mailto:paulle@microsoft.com">Leach, P.</a>, and <a href="mailto:timbl@w3.org">T. Berners-Lee</a>, &ldquo;<a href="http://tools.ietf.org/html/rfc2616">Hypertext Transfer Protocol -- HTTP/1.1</a>,&rdquo; RFC&nbsp;2616, June&nbsp;1999 (<a href="http://www.rfc-editor.org/rfc/rfc2616.txt">TXT</a>, <a href="http://www.rfc-editor.org/rfc/rfc2616.ps">PS</a>, <a href="http://www.rfc-editor.org/rfc/rfc2616.pdf">PDF</a>, <a href="http://xml.resource.org/public/rfc/html/rfc2616.html">HTML</a>, <a href="http://xml.resource.org/public/rfc/xml/rfc2616.xml">XML</a>).</td></tr>
+<tr><td class="author-text" valign="top"><a name="RFC4217">[RFC4217]</a></td>
+<td class="author-text">Ford-Hutchinson, P., &ldquo;<a href="http://tools.ietf.org/html/rfc4217">Securing FTP with TLS</a>,&rdquo; RFC&nbsp;4217, October&nbsp;2005 (<a href="http://www.rfc-editor.org/rfc/rfc4217.txt">TXT</a>).</td></tr>
 <tr><td class="author-text" valign="top"><a name="RFC5797">[RFC5797]</a></td>
 <td class="author-text">Klensin, J. and A. Hoenes, &ldquo;<a href="http://tools.ietf.org/html/rfc5797">FTP Command and Extension Registry</a>,&rdquo; RFC&nbsp;5797, March&nbsp;2010.</td></tr>
-<tr><td class="author-text" valign="top"><a name="draft-ietf-ftpext2-hash">[draft-ietf-ftpext2-hash]</a></td>
-<td class="author-text"><a href="mailto:anthonybryan@gmail.com">Bryan, A.</a>, <a href="mailto:tim.kosse@filezilla-project.org">Kosse, T.</a>, and <a href="mailto:daniel@haxx.se">D. Stenberg</a>, &ldquo;<a href="http://www.ietf.org/internet-drafts/draft-ietf-ftpext2-hash-02.txt">FTP Extensions for Cryptographic Hashes</a>,&rdquo; draft-ietf-ftpext2-hash-02 (work in progress).</td></tr>
 </table>
 
-<a name="anchor14"></a><br /><hr />
+<a name="anchor13"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
 <a name="rfc.section.A"></a><h3>Appendix A.&nbsp;
 Acknowledgements and Contributors</h3>
 
-<p>Thanks to the FTPEXT2 Working Group and Kamil Dudka.
-</p>
-<p>Portions of <a class='info' href='#RFC3659'>[RFC3659]<span> (</span><span class='info'>Hethmon, P., &ldquo;Extensions to FTP,&rdquo; March&nbsp;2007.</span><span>)</span></a> were wholly reused in this document.
+<p>Thanks to the FTPEXT2 Working Group and Robert McMurray.
 </p>
 <a name="dochistory"></a><br /><hr />
 <table summary="layout" cellpadding="0" cellspacing="2" class="TOCbug" align="right"><tr><td class="TOCbug"><a href="#toc">&nbsp;TOC&nbsp;</a></td></tr></table>
-<a name="rfc.section.B"></a><h3>Appendix B.&nbsp;
+<a name="rfc.section.A.1"></a><h3>A.1.&nbsp;
 Document History</h3>
 
 <p>[[ to be removed by the RFC editor before publication as an RFC. ]]
@@ -682,35 +571,11 @@ Document History</h3>
 <p>Known issues concerning this draft:
 	    </p>
 <ul class="text">
-<li>Expand current alternatives (ABOR, close data connection) and why they are not optimal.
+<li>Should there be a way to unLOCK and go back to two connection style?
 </li>
 </ul>
 
-<p>draft-bryan-ftp-range-03 : March 14, 2011.
-	    
-	    </p>
-<ul class="text">
-<li>Refinements.
-</li>
-</ul>
-
-<p>draft-bryan-ftp-range-02 : February 1, 2011.
-	    
-	    </p>
-<ul class="text">
-<li>Refinements.
-</li>
-</ul>
-
-<p>draft-bryan-ftp-range-01 : January 25, 2011.
-	    
-	    </p>
-<ul class="text">
-<li>Refinements. "RANG 1 0" resets byte selection.
-</li>
-</ul>
-
-<p>draft-bryan-ftp-range-00 : December 13, 2010.
+<p>draft-bryan-ftp-lock-00 : June 7, 2011.
 	    
 	    </p>
 <ul class="text">
@@ -728,10 +593,17 @@ Document History</h3>
 <td class="author-text">Pompano Beach, FL</td></tr>
 <tr><td class="author-text">&nbsp;</td>
 <td class="author-text">USA</td></tr>
-<tr><td class="author" align="right">Email:&nbsp;</td>
+<tr><td class="author" align="right">EMail:&nbsp;</td>
 <td class="author-text"><a href="mailto:anthonybryan@gmail.com">anthonybryan@gmail.com</a></td></tr>
 <tr><td class="author" align="right">URI:&nbsp;</td>
 <td class="author-text"><a href="http://www.metalinker.org">http://www.metalinker.org</a></td></tr>
+<tr cellpadding="3"><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td class="author-text">&nbsp;</td>
+<td class="author-text">Daniel Stenberg</td></tr>
+<tr><td class="author" align="right">EMail:&nbsp;</td>
+<td class="author-text"><a href="mailto:daniel@haxx.se">daniel@haxx.se</a></td></tr>
+<tr><td class="author" align="right">URI:&nbsp;</td>
+<td class="author-text"><a href="http://www.haxx.se/">http://www.haxx.se/</a></td></tr>
 <tr cellpadding="3"><td>&nbsp;</td><td>&nbsp;</td></tr>
 <tr><td class="author-text">&nbsp;</td>
 <td class="author-text">Tatsuhiro Tsujikawa</td></tr>
@@ -739,16 +611,9 @@ Document History</h3>
 <td class="author-text">Shiga</td></tr>
 <tr><td class="author-text">&nbsp;</td>
 <td class="author-text">Japan</td></tr>
-<tr><td class="author" align="right">Email:&nbsp;</td>
+<tr><td class="author" align="right">EMail:&nbsp;</td>
 <td class="author-text"><a href="mailto:tatsuhiro.t@gmail.com">tatsuhiro.t@gmail.com</a></td></tr>
 <tr><td class="author" align="right">URI:&nbsp;</td>
 <td class="author-text"><a href="http://aria2.sourceforge.net">http://aria2.sourceforge.net</a></td></tr>
-<tr cellpadding="3"><td>&nbsp;</td><td>&nbsp;</td></tr>
-<tr><td class="author-text">&nbsp;</td>
-<td class="author-text">Daniel Stenberg</td></tr>
-<tr><td class="author" align="right">Email:&nbsp;</td>
-<td class="author-text"><a href="mailto:daniel@haxx.se">daniel@haxx.se</a></td></tr>
-<tr><td class="author" align="right">URI:&nbsp;</td>
-<td class="author-text"><a href="http://www.haxx.se/">http://www.haxx.se/</a></td></tr>
 </table>
 </body></html>

@@ -2,7 +2,7 @@
 <html lang="en"><head><title>File Transfer Protocol HASH Command for Cryptographic Hashes</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="description" content="File Transfer Protocol HASH Command for Cryptographic Hashes">
-<meta name="generator" content="xml2rfc v1.35 (http://xml.resource.org/)">
+<meta name="generator" content="xml2rfc v1.36 (http://xml.resource.org/)">
 <style type='text/css'><!--
         body {
                 font-family: verdana, charcoal, helvetica, arial, sans-serif;
@@ -144,7 +144,7 @@
 <tr><td class="header">FTPEXT2 Working Group</td><td class="header">A. Bryan</td></tr>
 <tr><td class="header">Internet-Draft</td><td class="header">T. Kosse</td></tr>
 <tr><td class="header">Intended status: Standards Track</td><td class="header">D. Stenberg</td></tr>
-<tr><td class="header">Expires: September 9, 2011</td><td class="header">March 8, 2011</td></tr>
+<tr><td class="header">Expires: December 3, 2011</td><td class="header">June 1, 2011</td></tr>
 </table></td></tr></table>
 <h1><br />File Transfer Protocol HASH Command for Cryptographic Hashes<br />draft-ietf-ftpext2-hash-02</h1>
 
@@ -184,7 +184,7 @@ and may be updated, replaced, or obsoleted by other documents at any time.
 It is inappropriate to use Internet-Drafts as reference material or to cite
 them other than as &ldquo;work in progress.&rdquo;</p>
 <p>
-This Internet-Draft will expire on September 9, 2011.</p>
+This Internet-Draft will expire on December 3, 2011.</p>
 
 <h3>Copyright Notice</h3>
 <p>
@@ -664,7 +664,7 @@ References</h3>
 <tr><td class="author-text" valign="top"><a name="RFC5234">[RFC5234]</a></td>
 <td class="author-text">Crocker, D. and P. Overell, &ldquo;<a href="http://tools.ietf.org/html/rfc5234">Augmented BNF for Syntax Specifications: ABNF</a>,&rdquo; STD&nbsp;68, RFC&nbsp;5234, January&nbsp;2008.</td></tr>
 <tr><td class="author-text" valign="top"><a name="draft-bryan-ftp-range">[draft-bryan-ftp-range]</a></td>
-<td class="author-text">Bryan, A., Tsujikawa, T., and D. Stenberg, &ldquo;<a href="http://www.ietf.org/internet-drafts/draft-bryan-ftp-range-03.txt">File Transfer Protocol RANG Command for Byte Ranges</a>,&rdquo; draft-bryan-ftp-range-03 (work in progress).</td></tr>
+<td class="author-text">Bryan, A., Tsujikawa, T., and D. Stenberg, &ldquo;<a href="http://tools.ietf.org/html/draft-bryan-ftp-range-03">File Transfer Protocol RANG Command for Byte Ranges</a>,&rdquo; draft-bryan-ftp-range-03 (work in progress).</td></tr>
 </table>
 
 <a name="rfc.references2"></a><br /><hr />
@@ -676,7 +676,7 @@ References</h3>
 <tr><td class="author-text" valign="top"><a name="RFC5797">[RFC5797]</a></td>
 <td class="author-text">Klensin, J. and A. Hoenes, &ldquo;<a href="http://tools.ietf.org/html/rfc5797">FTP Command and Extension Registry</a>,&rdquo; RFC&nbsp;5797, March&nbsp;2010.</td></tr>
 <tr><td class="author-text" valign="top"><a name="draft-twine-ftpmd5">[draft-twine-ftpmd5]</a></td>
-<td class="author-text"><a href="mailto:jtwine@jrtwine.com">Twine, J.</a>, &ldquo;<a href="http://www.ietf.org/internet-drafts/draft-twine-ftpmd5-00.txt">The MD5 and MMD5 FTP Command Extensions</a>,&rdquo; draft-twine-ftpmd5-00 (work in progress), May&nbsp;2002.</td></tr>
+<td class="author-text"><a href="mailto:jtwine@jrtwine.com">Twine, J.</a>, &ldquo;<a href="http://tools.ietf.org/html/draft-twine-ftpmd5-00">The MD5 and MMD5 FTP Command Extensions</a>,&rdquo; draft-twine-ftpmd5-00 (work in progress), May&nbsp;2002.</td></tr>
 </table>
 
 <a name="anchor15"></a><br /><hr />
@@ -829,9 +829,15 @@ Document History</h3>
 <p>Known issues concerning this draft:
 	    </p>
 <ul class="text">
-<li>Use "MLSx style" response? S> 213 Hash.SHA-1=80bc95fd3...;Range=0-199; filename.ext
+<li>Should HASH use "MLSx style" responses? S> 213 Hash.SHA-1=80bc95fd3...;Range=0-199; filename.ext
 </li>
-<li>Section needs improvement: which files should a server process a HASH command for a logged in user?
+</ul>
+
+<p>draft-ietf-ftpext2-hash-02 : June, 2011
+
+	    </p>
+<ul class="text">
+<li>Refinements.
 </li>
 </ul>
 
