@@ -2,10 +2,10 @@ How to build Metalink Editor
 
 You will need the following:
 
-Python - http://www.python.org
+Python 2.6.x (2.5.x may still work, but it is no longer supported) - http://www.python.org
 Nullsoft Scriptable Install System (NSIS) - http://nsis.sourceforge.net
 py2exe 0.6.6 - http://www.py2exe.org
-wxPython 2.6 - http://www.wxpython.org
+wxPython 2.8 - http://www.wxpython.org
 
 The program can be run as a normal Python script if Python is present.  NSIS 
 and py2exe are not required, these are included only for supporting 
