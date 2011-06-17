@@ -2,7 +2,7 @@ How to build Metalink Checker
 
 You will need the following:
 
-Python 2.5.4 - http://www.python.org
+Python 2.6.x - http://www.python.org
 
 py2exe 0.6.6 - http://www.py2exe.org
  -OR-

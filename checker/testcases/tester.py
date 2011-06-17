@@ -5,7 +5,7 @@
 # URL: http://www.nabber.org/projects/
 # E-mail: webmaster@nabber.org
 #
-# Copyright: (C) 2007-2008, Neil McNab
+# Copyright: (C) 2007-2011, Neil McNab
 # License: GNU General Public License Version 2
 #   (http://www.gnu.org/copyleft/gpl.html)
 #
@@ -47,9 +47,10 @@ import time
 import subprocess
 import shutil
 import unittest
+import ctypes
 
 # Metalink Checker
-CMD = "\"" + sys.executable + "\" ../console.py -d -f %s"
+CMD = "\"" + sys.executable + "\" ../console.py -d %s"
 # Aria2
 # CMD = "\"c:\\program files\\aria2\\aria2c.exe\" -M %s"
 
@@ -226,14 +227,21 @@ def system(command, timeout=600, cwd=None):
             return process.poll()
         if endtime <= time.time():
             # kill process here
-            if os.name == 'nt':
-                command = "taskkill /F /PID %s /T" % process.pid
-            else:
-                command = "kill -9 %s" % process.pid
-            os.system(command)
+            kill(process.pid)
             #print "Test timed out.  Process killed."
             raise AssertionError, "Test timed out.  Process killed."
             #return process.poll()
+            
+def kill(pid):
+    if os.name == 'nt':
+        return winkill(pid)
+    return os.kill(pid)      
+            
+def winkill(pid):
+    """kill function for Win32"""
+    kernel32 = ctypes.windll.kernel32
+    handle = kernel32.OpenProcess(1, 0, pid)
+    return (0 != kernel32.TerminateProcess(handle, 0))            
         
 def run():
     '''
