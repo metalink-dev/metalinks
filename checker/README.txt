@@ -5,7 +5,7 @@
 # URL: http://www.nabber.org/projects/
 # E-mail: webmaster@nabber.org
 #
-# Copyright: (C) 2007-2010, Neil McNab
+# Copyright: (C) 2007-2011, Neil McNab
 # License: GNU General Public License Version 2
 #   (http://www.gnu.org/copyleft/gpl.html)
 #
@@ -86,6 +86,11 @@
 # results = metalink.check_metalink("file.metalink")
 #
 # CHANGELOG:
+#
+# Version 6.0
+# -----------
+# - Support for RFC 3230 - Instance Digests in HTTP
+# - Support for RFC 6249 - Metalink/HTTP: Mirrors and Hashes
 #
 # Version 5.1
 # -----------

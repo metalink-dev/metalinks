@@ -5,7 +5,7 @@
 # URL: http://www.nabber.org/projects/
 # E-mail: webmaster@nabber.org
 #
-# Copyright: (C) 2007-2010, Neil McNab
+# Copyright: (C) 2007-2011, Neil McNab
 # License: GNU General Public License Version 2
 #   (http://www.gnu.org/copyleft/gpl.html)
 #
@@ -86,6 +86,11 @@
 # results = metalink.check_metalink("file.metalink")
 #
 # CHANGELOG:
+#
+# Version 6.0
+# -----------
+# - Support for RFC 3230 - Instance Digests in HTTP
+# - Support for RFC 6249 - Metalink/HTTP: Mirrors and Hashes
 #
 # Version 5.1
 # -----------
@@ -332,7 +337,7 @@ class Dummy:
 
 
 NAME="Metalink Checker"
-VERSION="5.1"
+VERSION="6.0"
 
 #WEBSITE="http://www.metalinker.org"
 WEBSITE="http://www.nabber.org/projects/checker/"
@@ -814,7 +819,7 @@ checker.translate = translate
 # URL: http://www.nabber.org/projects/
 # E-mail: webmaster@nabber.org
 #
-# Copyright: (C) 2007-2010, Neil McNab
+# Copyright: (C) 2007-2011, Neil McNab
 # License: GNU General Public License Version 2
 #   (http://www.gnu.org/copyleft/gpl.html)
 #
@@ -832,12 +837,13 @@ checker.translate = translate
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
-# Filename: $URL: https://appupdater.svn.sourceforge.net/svnroot/appupdater/trunk/libappupdater/download.py $
-# Last Updated: $Date: 2011-06-23 00:24:58 -0400 (Thu, 23 Jun 2011) $
+# Filename: $URL: https://metalinks.svn.sourceforge.net/svnroot/metalinks/checker/download.py $
+# Last Updated: $Date: 2011-06-28 23:03:11 -0400 (Tue, 28 Jun 2011) $
 # Author(s): Neil McNab
 #
 # Description:
-#   Download library that can handle metalink files.
+#   Download library that can handle metalink files, RFC 5854, RFC 6249.
+# Also supports Instance Digests, RFC 3230.
 #
 # Library Instructions:
 #   - Use as expected.
@@ -874,7 +880,7 @@ checker.translate = translate
 
 
 
-USER_AGENT = "Metalink Checker/5.1 +http://www.nabber.org/projects/"
+USER_AGENT = "Metalink Checker/6.0 +http://www.nabber.org/projects/"
 
 SEGMENTED = True
 LIMIT_PER_HOST = 1
@@ -913,6 +919,8 @@ PROTOCOLS=("http","https","ftp")
 # See http://www.poeml.de/transmetalink-test/README
 MIME_TYPE = "application/metalink+xml"
 
+DIGESTS = "md5,sha,sha-256,sha-384,sha-512"
+
 def translate():
     '''
     Setup translation path
@@ -949,6 +957,7 @@ def urlopen(url, data = None, metalink_header=False, headers = {}):
     req.add_header('Cache-Control', "no-cache")
     req.add_header('Pragma', "no-cache")
     req.add_header('Accept-Encoding', 'gzip')
+    req.add_header('Want-Digest', DIGESTS)
     if metalink_header:
         req.add_header('Accept', MIME_TYPE + ", */*")
 
@@ -970,6 +979,7 @@ def urlhead(url, metalink_header=False, headers = {}):
     req.add_header('User-agent', USER_AGENT)
     req.add_header('Cache-Control', "no-cache")
     req.add_header('Pragma', "no-cache")
+    req.add_header('Want-Digest', DIGESTS)    
     if metalink_header:
         req.add_header('Accept', MIME_TYPE + ", */*")
 
@@ -980,6 +990,21 @@ def urlhead(url, metalink_header=False, headers = {}):
     fp.close()
     return newheaders
 
+def digest_parse(digest):
+    if digest is None:
+        return {}
+        
+    hashes = digest.split(",")
+    digestsums = {}
+    for myhash in hashes:
+        parts = myhash.split("=", 1)
+        # create digest list here
+        if parts[0].strip() == 'sha':
+            digestsums['sha-1'] = binascii.hexlify(binascii.a2b_base64(parts[1].strip()))
+        else:
+            digestsums[parts[0].strip()] = binascii.hexlify(binascii.a2b_base64(parts[1].strip()))
+    return digestsums            
+    
 
 def get(src, path, checksums = {}, force = False, handlers = {}, segmented = SEGMENTED, headers = {}):
     '''
@@ -1260,11 +1285,17 @@ class URLManager(Manager):
             return
         myheaders = self.temp.info()
 
+        if len(self.checksums) == 0:
+            try:
+                self.checksums = digest_parse(myheaders['Digest'])
+            except KeyError:
+                pass
+
         try:
             self.size = int(myheaders['Content-Length'])
         except KeyError:
-            self.size = 0
-
+            self.size = 0            
+            
         self.streamserver = None
         if PORT != None:
             self.streamserver = StreamServer((HOST, PORT), StreamRequest)
@@ -1353,7 +1384,7 @@ def parse_metalink(src, headers = {}, nocheck = False, ver=3):
             print _("Metalink content-type detected.")
             is_metalink = True
         elif myheaders["link"]:
-            # Metalink HTTP Link headers implementation
+            # Metalink HTTP Link headers implementation, RFC 6249
             # does not check for describedby urls but we can't use any of those anyway
             # TODO this should be more robust and ignore commas in <> for urls
             links = myheaders['link'].split(",")
@@ -1388,14 +1419,10 @@ def parse_metalink(src, headers = {}, nocheck = False, ver=3):
                         fileobj.add_url(parts[0].strip(" <>"), type=typestr, priority=pri)
                 except KeyError: pass
             try:
-                hashes = myheaders['digest'].split(",")
-                for myhash in hashes:
-                    parts = myhash.split("=", 1)
-                    if parts[0].strip() == 'sha':
-                        fileobj.hashlist['sha-1'] = binascii.hexlify(binascii.a2b_base64(parts[1].strip()))
-                    else:
-                        fileobj.hashlist[parts[0].strip()] = binascii.hexlify(binascii.a2b_base64(parts[1].strip()))
-            except KeyError: pass
+                fileobj.hashlist = digest_parse(myheaders['digest'])
+            except KeyError:
+                # RFC requires link headers to be ignored if no digest header, use standard download method
+                return False
             print _("Using Metalink HTTP Link headers.")
             mobj = metalink.Metalink4()
             mobj.files.append(fileobj)
@@ -2081,6 +2108,7 @@ class Segment_Manager(Manager):
         '''
         i = 0
         sizes = []
+        checksums = []
         urls = list(self.urls)
         
         while (i < len(urls) and (len(sizes) < 3)):
@@ -2090,21 +2118,28 @@ class Segment_Manager(Manager):
                 status = httplib.MOVED_PERMANENTLY
                 count = 0
                 size = None
+                checksum_dict = {}
                 while (status == httplib.MOVED_PERMANENTLY or status == httplib.FOUND) and count < MAX_REDIRECTS:
                     http = Http_Host(url)
                     if http.conn != None: 
                         try:
-                            http.conn.request("HEAD", url, headers = self.headers)
+                            headers = {}
+                            headers['Want-Digest'] = DIGESTS
+                            headers.update(self.headers)
+                            http.conn.request("HEAD", url, headers = headers)
                             response = http.conn.getresponse()
                             status = response.status
                             url = response.getheader("Location")
                             size = response.getheader("content-length")
+                            checksum_dict = digest_parse(response.getheader("Digest", None))
                         except: pass
                         http.close()
                     count += 1
 
                 if (status == httplib.OK) and (size != None):
                     sizes.append(size)
+                    if len(checksum_dict > 0):
+                        checksums.append(checksum_dict)
 
             elif protocol == "ftp":
                 ftp = Ftp_Host(url)
@@ -2118,6 +2153,14 @@ class Segment_Manager(Manager):
                     sizes.append(size)
                 
             i += 1
+          
+        if len(self.checksums) == 0 and len(checksums) > 0:
+            if len(checksums) == 1:
+                self.checksums = checksums[0]
+            if checksums.count(checksums[0]) >= 2:
+                self.checksums = checksums[0]
+            if checksums.count(checksums[1]) >= 2:
+                self.checksums = checksums[1]            
 
         if len(sizes) == 0:
             return None
@@ -2837,6 +2880,20 @@ class Http_Host_Segment(threading.Thread, Host_Segment):
             self.response = None
             return
 
+        # Check digest headers against expected
+        digest = self.response.getheader("Digest", None)
+        if digest is not None:
+            digestsums = digest_parse(digest)                    
+            # check digest here, skip if missing, return if mismatch                        
+            for hashtype in self.checksums.keys():
+                try:
+                    digestsums[hashtype]
+                except KeyError:
+                    continue
+                    
+                if self.checksums[hashtype] != digestsums[hashtype]:
+                    return
+            
         body = data
         size = len(body)
         
@@ -2968,6 +3025,7 @@ download = Dummy()
 download.CONNECT_RETRY_COUNT = CONNECT_RETRY_COUNT
 download.COUNTRY = COUNTRY
 download.DEFAULT_CHUNK_SIZE = DEFAULT_CHUNK_SIZE
+download.DIGESTS = DIGESTS
 download.FileResume = FileResume
 download.Ftp_Host = Ftp_Host
 download.Ftp_Host_Segment = Ftp_Host_Segment
@@ -3000,6 +3058,7 @@ download.USER_AGENT = USER_AGENT
 download._ = _
 download.complete_url = complete_url
 download.convert_jigdo = convert_jigdo
+download.digest_parse = digest_parse
 download.download_file = download_file
 download.download_file_node = download_file_node
 download.download_file_urls = download_file_urls
@@ -5275,8 +5334,8 @@ metalink.rfc3339_parsedate = rfc3339_parsedate
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
 # Filename: $URL: https://metalinks.svn.sourceforge.net/svnroot/metalinks/checker/console.py $
-# Last Updated: $Date: 2010-04-10 18:23:19 -0700 (Sat, 10 Apr 2010) $
-# Version: $Rev: 637 $
+# Last Updated: $Date: 2011-06-28 21:30:00 -0400 (Tue, 28 Jun 2011) $
+# Version: $Rev: 790 $
 # Author(s): Neil McNab
 #
 # Description:
@@ -5353,7 +5412,7 @@ def run():
         return
 
     socket.setdefaulttimeout(10)
-    download.set_proxies()
+    proxy.set_proxies()
     if options.os != None:
         download.OS = options.os
     if options.language != None:
