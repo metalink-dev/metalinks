@@ -8,12 +8,12 @@ import glob
 import zipfile
 
 APP_NAME = 'metalink-checker'
-VERSION = '5.1'
+VERSION = '6.0'
 LICENSE = 'GPL'
 DESC = 'A metalink checker and download client.'
 AUTHOR_NAME = 'Neil McNab'
 EMAIL = 'neil@nabber.org'
-URL = 'http://www.nabber.org/projects/'
+URL = 'http://www.nabber.org/projects/metalink/checker/'
 
 #main is first
 gmodules = ['console', 'metalink', 'GPG', 'download', 'checker']
