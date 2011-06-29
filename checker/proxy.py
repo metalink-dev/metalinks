@@ -1,3 +1,57 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+########################################################################
+#
+# Project: Metalink Checker
+# URL: http://www.nabber.org/projects/
+# E-mail: webmaster@nabber.org
+#
+# Copyright: (C) 2011, Neil McNab
+# License: GNU General Public License Version 2
+#   (http://www.gnu.org/copyleft/gpl.html)
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+#
+# Filename: $URL$
+# Last Updated: $Date$
+# Author(s): Neil McNab
+#
+# Description:
+#   Library to make proxied Python connections easy.
+#
+# Library Instructions:
+#   - Use as described with standard urllib2 calls.  You can also use the 
+# following objects as replacements for the builtins:
+#
+#   ftplib.FTP => proxy.FTP
+#   httplib.HTTPConnection => proxy.HTTPConnection 
+#   httplib.HTTPSConnection => proxy.HTTPSConnection 
+#
+# import proxy
+#
+# # optional, set your own proxy settings 
+# proxy.HTTP_PROXY = "http://user:pass@myproxy:80"
+#
+# # initialize proxy from whatever system settings we can find
+# proxy.set_proxies()
+#
+# # all urllib2 calls are now configured for proxy
+# urllib2.urlopen("http://example.com/test.html")
+#
+########################################################################
+
 import os
 import urllib2
 import ftplib
@@ -396,11 +450,11 @@ class HTTPSConnection(httplib.HTTPSConnection):
 
             self._set_hostport(host, port)
 
-def test_urllib2(url):
-    handle = urllib2.urlopen(url)
-    #print handle.read()
-    print len(handle.read())
-    handle.close()
+# def test_urllib2(url):
+    # handle = urllib2.urlopen(url)
+    # #print handle.read()
+    # print len(handle.read())
+    # handle.close()
     
 # if __name__=="__main__":
     # set_proxies()
