@@ -60,7 +60,7 @@ NAME="Metalink Checker"
 VERSION="6.0"
 
 #WEBSITE="http://www.metalinker.org"
-WEBSITE="http://www.nabber.org/projects/checker/"
+WEBSITE="http://www.nabber.org/projects/metalink/checker/"
 
 MAX_REDIRECTS = 20
 MAX_THREADS = 10

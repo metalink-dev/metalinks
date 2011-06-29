@@ -316,8 +316,8 @@ class Dummy:
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
 # Filename: $URL: https://metalinks.svn.sourceforge.net/svnroot/metalinks/checker/checker.py $
-# Last Updated: $Date: 2010-04-21 22:05:23 -0700 (Wed, 21 Apr 2010) $
-# Version: $Rev: 653 $
+# Last Updated: $Date: 2011-06-29 00:20:08 -0400 (Wed, 29 Jun 2011) $
+# Version: $Rev: 794 $
 # Author(s): Neil McNab
 #
 # Description:
@@ -340,7 +340,7 @@ NAME="Metalink Checker"
 VERSION="6.0"
 
 #WEBSITE="http://www.metalinker.org"
-WEBSITE="http://www.nabber.org/projects/checker/"
+WEBSITE="http://www.nabber.org/projects/metalink/checker/"
 
 MAX_REDIRECTS = 20
 MAX_THREADS = 10
@@ -838,7 +838,7 @@ checker.translate = translate
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 #
 # Filename: $URL: https://metalinks.svn.sourceforge.net/svnroot/metalinks/checker/download.py $
-# Last Updated: $Date: 2011-06-28 23:03:11 -0400 (Tue, 28 Jun 2011) $
+# Last Updated: $Date: 2011-06-29 00:20:08 -0400 (Wed, 29 Jun 2011) $
 # Author(s): Neil McNab
 #
 # Description:
