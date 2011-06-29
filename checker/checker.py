@@ -92,7 +92,7 @@ _ = translate()
 
 ABOUT = NAME + "\n" + _("Version") + ": " + VERSION + "\n" + \
                      _("Website") + ": " + WEBSITE + "\n\n" + \
-                     _("Copyright") + ": 2009 Neil McNab\n" + \
+                     _("Copyright") + ": 2009-2011 Neil McNab\n" + \
                      _("License") + ": " + _("GNU General Public License, Version 2") + "\n\n" + \
                      NAME + _(" comes with ABSOLUTELY NO WARRANTY.  This is free software, and you are welcome to redistribute it under certain conditions, see LICENSE.txt for details.")
 
