@@ -57,7 +57,7 @@ import locale
 import gettext
 
 NAME="Metalink Checker"
-VERSION="5.1"
+VERSION="6.0"
 
 #WEBSITE="http://www.metalinker.org"
 WEBSITE="http://www.nabber.org/projects/checker/"

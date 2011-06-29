@@ -131,6 +131,8 @@ PROTOCOLS=("http","https","ftp")
 # See http://www.poeml.de/transmetalink-test/README
 MIME_TYPE = "application/metalink+xml"
 
+DIGESTS = "md5,sha,sha-256,sha-384,sha-512"
+
 def translate():
     '''
     Setup translation path
@@ -167,7 +169,7 @@ def urlopen(url, data = None, metalink_header=False, headers = {}):
     req.add_header('Cache-Control', "no-cache")
     req.add_header('Pragma', "no-cache")
     req.add_header('Accept-Encoding', 'gzip')
-    req.add_header('Want-Digest', 'md5,sha,sha-256,sha-384,sha-512')
+    req.add_header('Want-Digest', DIGESTS)
     if metalink_header:
         req.add_header('Accept', MIME_TYPE + ", */*")
 
@@ -189,6 +191,7 @@ def urlhead(url, metalink_header=False, headers = {}):
     req.add_header('User-agent', USER_AGENT)
     req.add_header('Cache-Control', "no-cache")
     req.add_header('Pragma', "no-cache")
+    req.add_header('Want-Digest', DIGESTS)    
     if metalink_header:
         req.add_header('Accept', MIME_TYPE + ", */*")
 
@@ -199,6 +202,21 @@ def urlhead(url, metalink_header=False, headers = {}):
     fp.close()
     return newheaders
 
+def digest_parse(digest):
+    if digest is None:
+        return {}
+        
+    hashes = digest.split(",")
+    digestsums = {}
+    for myhash in hashes:
+        parts = myhash.split("=", 1)
+        # create digest list here
+        if parts[0].strip() == 'sha':
+            digestsums['sha-1'] = binascii.hexlify(binascii.a2b_base64(parts[1].strip()))
+        else:
+            digestsums[parts[0].strip()] = binascii.hexlify(binascii.a2b_base64(parts[1].strip()))
+    return digestsums            
+    
 
 def get(src, path, checksums = {}, force = False, handlers = {}, segmented = SEGMENTED, headers = {}):
     '''
@@ -479,11 +497,17 @@ class URLManager(Manager):
             return
         myheaders = self.temp.info()
 
+        if len(self.checksums) == 0:
+            try:
+                self.checksums = digest_parse(myheaders['Digest'])
+            except KeyError:
+                pass
+
         try:
             self.size = int(myheaders['Content-Length'])
         except KeyError:
-            self.size = 0
-
+            self.size = 0            
+            
         self.streamserver = None
         if PORT != None:
             self.streamserver = StreamServer((HOST, PORT), StreamRequest)
@@ -607,13 +631,7 @@ def parse_metalink(src, headers = {}, nocheck = False, ver=3):
                         fileobj.add_url(parts[0].strip(" <>"), type=typestr, priority=pri)
                 except KeyError: pass
             try:
-                hashes = myheaders['digest'].split(",")
-                for myhash in hashes:
-                    parts = myhash.split("=", 1)
-                    if parts[0].strip() == 'sha':
-                        fileobj.hashlist['sha-1'] = binascii.hexlify(binascii.a2b_base64(parts[1].strip()))
-                    else:
-                        fileobj.hashlist[parts[0].strip()] = binascii.hexlify(binascii.a2b_base64(parts[1].strip()))
+                fileobj.hashlist = digest_parse(myheaders['digest'])
             except KeyError:
                 # RFC requires link headers to be ignored if no digest header, use standard download method
                 return False
@@ -1302,6 +1320,7 @@ class Segment_Manager(Manager):
         '''
         i = 0
         sizes = []
+        checksums = []
         urls = list(self.urls)
         
         while (i < len(urls) and (len(sizes) < 3)):
@@ -1311,21 +1330,28 @@ class Segment_Manager(Manager):
                 status = httplib.MOVED_PERMANENTLY
                 count = 0
                 size = None
+                checksum_dict = {}
                 while (status == httplib.MOVED_PERMANENTLY or status == httplib.FOUND) and count < MAX_REDIRECTS:
                     http = Http_Host(url)
                     if http.conn != None: 
                         try:
-                            http.conn.request("HEAD", url, headers = self.headers)
+                            headers = {}
+                            headers['Want-Digest'] = DIGESTS
+                            headers.update(self.headers)
+                            http.conn.request("HEAD", url, headers = headers)
                             response = http.conn.getresponse()
                             status = response.status
                             url = response.getheader("Location")
                             size = response.getheader("content-length")
+                            checksum_dict = digest_parse(response.getheader("Digest", None))
                         except: pass
                         http.close()
                     count += 1
 
                 if (status == httplib.OK) and (size != None):
                     sizes.append(size)
+                    if len(checksum_dict > 0):
+                        checksums.append(checksum_dict)
 
             elif protocol == "ftp":
                 ftp = Ftp_Host(url)
@@ -1339,6 +1365,14 @@ class Segment_Manager(Manager):
                     sizes.append(size)
                 
             i += 1
+          
+        if len(self.checksums) == 0 and len(checksums) > 0:
+            if len(checksums) == 1:
+                self.checksums = checksums[0]
+            if checksums.count(checksums[0]) >= 2:
+                self.checksums = checksums[0]
+            if checksums.count(checksums[1]) >= 2:
+                self.checksums = checksums[1]            
 
         if len(sizes) == 0:
             return None
@@ -2061,16 +2095,7 @@ class Http_Host_Segment(threading.Thread, Host_Segment):
         # Check digest headers against expected
         digest = self.response.getheader("Digest", None)
         if digest is not None:
-            hashes = digest.split(",")
-            digestsums = {}
-            for myhash in hashes:
-                parts = myhash.split("=", 1)
-                # create digest list here
-                if parts[0].strip() == 'sha':
-                    digestsums['sha-1'] = binascii.hexlify(binascii.a2b_base64(parts[1].strip()))
-                else:
-                    digestsums[parts[0].strip()] = binascii.hexlify(binascii.a2b_base64(parts[1].strip()))
-                    
+            digestsums = digest_parse(digest)                    
             # check digest here, skip if missing, return if mismatch                        
             for hashtype in self.checksums.keys():
                 try:
