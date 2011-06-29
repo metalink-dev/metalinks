@@ -78,6 +78,8 @@ import random
 try: import GPG
 except: pass
 
+import proxy
+
 # for jython support
 #try: import bz2
 #except ImportError: pass
@@ -117,13 +119,6 @@ PGP_KEY_DIR="."
 PGP_KEY_EXTS = (".gpg", ".asc")
 PGP_KEY_STORE=None
 
-# Configure proxies (user and password optional)
-# HTTP_PROXY = http://user:password@myproxy:port
-HTTP_PROXY=""
-FTP_PROXY=""
-HTTPS_PROXY=""
-SOCKS_PROXY=""
-
 # Streaming server setings to use
 HOST = "localhost"
 PORT = None
@@ -134,111 +129,6 @@ PROTOCOLS=("http","https","ftp")
 
 # See http://www.poeml.de/transmetalink-test/README
 MIME_TYPE = "application/metalink+xml"
-
-##### PROXY SETUP #########
-
-def reg_query(keyname, value=None):
-    if os.name != "nt":
-        return []
-
-    blanklines = 1
-    
-    if value == None:
-        tempresult = os.popen2("reg.exe query \"%s\"" % keyname)
-    else:
-        tempresult = os.popen2("reg.exe query \"%s\" /v \"%s\"" % (keyname, value))
-    stdout = tempresult[1]
-    stdout = stdout.readlines()
-
-    # handle case when reg.exe isn't in path
-    if len(stdout) == 0:
-        if value == None:
-            tempresult = os.popen2(os.environ["WINDIR"] + "\\system32\\reg.exe query \"%s\"" % keyname)
-        else:
-            tempresult = os.popen2(os.environ["WINDIR"] + "\\system32\\reg.exe query \"%s\" /v \"%s\"" % (keyname, value))
-        stdout = tempresult[1]
-        stdout = stdout.readlines()
-
-    # For Windows XP, this was changed in Vista!
-    if len(stdout) > 0 and stdout[1].startswith("! REG.EXE"):
-        blanklines += 2
-        if value == None:
-            blanklines += 2
-
-    stdout = stdout[blanklines:]
-    
-    return stdout
-
-def get_key_value(key, value):
-    '''
-    Probes registry for uninstall information
-    First parameter, key to look in
-    Second parameter, value name to extract
-    Returns the uninstall command as a string
-    '''
-    # does not handle non-paths yet
-    result = u""
-
-    try:
-        keyid = win32api.RegOpenKeyEx(win32con.HKEY_CURRENT_USER, key)
-        tempvalue = win32api.RegQueryValueEx(keyid, value)
-        win32api.RegCloseKey(keyid)
-        result = unicode(tempvalue[0])
-    except NameError:
-        # alternate method if win32api is not available, probably only works on Windows NT variants
-        stdout = reg_query(u"HKCU\\" + key, value)
-        
-        try:
-            # XP vs. Vista
-            if stdout[1].find(u"\t") != -1:
-                lines = stdout[1].split(u"\t")
-                index = 2
-            else:
-                lines = stdout[1].split(u"    ")
-                index = 3
-            result = lines[index].strip()
-        except IndexError:
-            result = u""
-    except: pass
-
-    result = unicode(os.path.expandvars(result))
-    return result
-
-def get_proxy_info():
-    global HTTP_PROXY
-    global FTP_PROXY
-    global HTTPS_PROXY
-
-    # from environment variables
-    if os.environ.has_key('http_proxy') and HTTP_PROXY == "":
-        HTTP_PROXY=os.environ['http_proxy']
-    if os.environ.has_key('ftp_proxy') and FTP_PROXY == "":
-        FTP_PROXY=os.environ['ftp_proxy']
-    if os.environ.has_key('https_proxy') and HTTPS_PROXY == "":
-        HTTPS_PROXY=os.environ['https_proxy']
-
-    # from IE in registry
-    proxy_enable = get_key_value("Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings", "ProxyEnable")
-    try:
-    	proxy_enable = int(proxy_enable[-1])
-    except IndexError:
-        proxy_enable = False
-
-    if proxy_enable:
-        proxy_string = get_key_value("Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings", "ProxyServer")
-        if proxy_string.find("=") == -1:
-            # if all use the same settings
-            for proxy in ("HTTP_PROXY", "FTP_PROXY", "HTTPS_PROXY"):
-                if getattr(sys.modules[__name__], proxy) == "":
-                    setattr(sys.modules[__name__], proxy, "http://" + str(proxy_string))
-        else:
-            proxies = proxy_string.split(";")
-            for proxy in proxies:
-                name, value = proxy.split("=")
-                if getattr(sys.modules[__name__], name.upper() + "_PROXY") == "":
-                    setattr(sys.modules[__name__], name.upper() + "_PROXY", "http://" + value)
-
-get_proxy_info()
 
 def translate():
     '''
@@ -307,21 +197,6 @@ def urlhead(url, metalink_header=False, headers = {}):
     fp.close()
     return newheaders
 
-def set_proxies():
-    # Set proxies
-    proxies = {}
-    if HTTP_PROXY != "":
-        proxies['http'] = HTTP_PROXY
-    if HTTPS_PROXY != "":
-        proxies['https'] = HTTPS_PROXY
-    if FTP_PROXY != "":
-        proxies['ftp'] = FTP_PROXY
-        
-    proxy_handler = urllib2.ProxyHandler(proxies)
-    opener = urllib2.build_opener(proxy_handler, urllib2.HTTPBasicAuthHandler(), 
-            urllib2.HTTPHandler, urllib2.HTTPSHandler, urllib2.FTPHandler)
-    # install this opener
-    urllib2.install_opener(opener)
 
 def get(src, path, checksums = {}, force = False, handlers = {}, segmented = SEGMENTED, headers = {}):
     '''
@@ -373,6 +248,8 @@ def download_file(url, local_file, size=0, checksums={}, force = False,
     #urllist[url] = URL(url)
 
     fileobj = metalink.MetalinkFile(local_file)
+    # Need to set this again for absolute file paths
+    fileobj.filename = local_file
     fileobj.set_size(size)
     fileobj.hashlist = checksums
     fileobj.pieces = chunksums
@@ -405,7 +282,8 @@ def download_file_urls(metalinkfile, force = False, handlers = {}, segmented = S
                 print _("Checksum failed, retrying download of %s.") % os.path.basename(metalinkfile.filename)
                 
         if metalinkfile.size == actsize:
-            handlers["status"](1, actsize, actsize)
+            if handlers.has_key("status"):
+                handlers["status"](1, actsize, actsize)
             print ""
             print _("Already downloaded %s.") % os.path.basename(metalinkfile.filename)
             return metalinkfile.filename
@@ -1447,7 +1325,12 @@ class Segment_Manager(Manager):
 
             elif protocol == "ftp":
                 ftp = Ftp_Host(url)
-                size = ftp.conn.size(url)
+                
+                try:
+                    size = ftp.conn.size(url)
+                except ftplib.error_perm:
+                    size = None
+                    
                 if size != None:
                     sizes.append(size)
                 
@@ -1786,7 +1669,7 @@ class Ftp_Host(Host_Base):
             if port == None:
                 port = ftplib.FTP_PORT
 
-            self.conn = FTP()
+            self.conn = proxy.FTP()
             self.conn.connect(urlparts[1], port)
             try:
                 self.conn.login(username, password)
@@ -1794,8 +1677,10 @@ class Ftp_Host(Host_Base):
                 #self.error = "login failed"
                 raise
                 return
-            # set to binary mode
-            self.conn.voidcmd("TYPE I")
+            # set to binary mode, only works when not proxied
+            try:
+                self.conn.voidcmd("TYPE I")
+            except: pass
         else:
             self.error = _("unsupported protocol")
             raise AssertionError
@@ -1828,7 +1713,7 @@ class Http_Host(Host_Base):
             if port == None:
                 port = httplib.HTTP_PORT
             try:
-                self.conn = HTTPConnection(urlparts[1], port)
+                self.conn = proxy.HTTPConnection(urlparts[1], port)
             except httplib.InvalidURL:
                 self.error = _("invalid url")
                 return
@@ -1840,7 +1725,7 @@ class Http_Host(Host_Base):
             if port == None:
                 port = httplib.HTTPS_PORT
             try:
-                self.conn = HTTPSConnection(urlparts[1], port)
+                self.conn = proxy.HTTPSConnection(urlparts[1], port)
             except httplib.InvalidURL:
                 self.error = _("invalid url")
                 return
@@ -2189,174 +2074,6 @@ class Http_Host_Segment(threading.Thread, Host_Segment):
         if self.bytes >= self.byte_count:
             self.response = None
 
-########### PROXYING OBJECTS ########################
-
-class FTP:
-    def __init__(self, host=None, user="", passwd="", acct=""):
-        self.conn = None
-        self.headers = {}
-        if host != None:
-            self.connect(host)
-        if user != "":
-            self.login(user, passwd, acct)
-
-    def connect(self, host, port=ftplib.FTP_PORT):
-        if FTP_PROXY != "":
-            # parse proxy URL
-            url = urlparse.urlparse(FTP_PROXY)
-            if url[0] == "" or url[0] == "http":
-                port = httplib.HTTP_PORT
-                if url[1].find("@") != -1:
-                    host = url[1].split("@", 2)[1]
-                else:
-                    host = url[1]
-                    
-                try:
-                    if url.port != None:
-                        port = url.port
-                    if url.username != None:
-                        self.headers["Proxy-authorization"] = "Basic " + base64.encodestring(url.username+':'+url.password) + "\r\n"
-                except AttributeError:
-                    pass
-                self.conn = httplib.HTTPConnection(host, port)
-            else:
-                raise AssertionError, _("Transport not supported for FTP_PROXY, %s") % url.scheme
-
-        else:
-            self.conn = ftplib.FTP()
-            self.conn.connect(host, port)
-
-    def login(self, *args):
-        if FTP_PROXY == "":
-            return self.conn.login(*args)
-
-    def size(self, url):
-        if FTP_PROXY != "":
-            result = self.conn.request("HEAD", url)
-            return int(result.getheader("Content-length", None))
-        else:
-            urlparts = urlparse.urlsplit(url)
-            size = self.conn.size(urlparts.path)
-            return size
-
-    def exist(self, url):
-        if FTP_PROXY != "":
-            result = self.conn.request("HEAD", url)
-            if result.status < 400:
-                return True
-            return False
-        else:
-            urlparts = urlparse.urlsplit(url)
-            try:
-                files = self.conn.nlst(os.path.dirname(urlparts.path))
-            except:
-                return False
-
-            # directory listing can be in two formats, full path or current directory
-            if (os.path.basename(urlparts.path) in files) or (urlparts.path in files):
-                return True
-
-            return False
-
-    def ntransfercmd(self, cmd, rest=0, rest_end=None):
-        if FTP_PROXY != "":
-            if cmd.startswith("RETR"):
-                url = cmd.split(" ", 2)
-                size = self.size(url)
-                if rest_end == None:
-                    rest_end = size
-                result = self.conn.request("GET", url, "", {"Range": "bytes=%lu-%lu\r\n" % (rest, rest_end)})
-                result.recv = result.read
-                return (result, size)
-            return (None, None)
-        else:
-            return self.conn.ntransfercmd(cmd, rest)
-
-    def voidcmd(self, *args):
-        return self.conn.voidcmd(*args)
-
-    def quit(self):
-        if FTP_PROXY != "":
-            return self.conn.close()
-        else:
-            return self.conn.quit()
-
-class HTTPConnection:
-    def __init__(self, host, port=httplib.HTTP_PORT):
-        self.headers = {}
-        
-        if HTTP_PROXY != "":
-            # parse proxy URL
-            url = urlparse.urlparse(HTTP_PROXY)
-            if url.scheme == "" or url.scheme == "http":
-                host = url.hostname
-                port = url.port
-                if url.username != None:
-                    self.headers["Proxy-authorization"] = "Basic " + base64.encodestring(url.username+':'+url.password) + "\r\n"
-            else:
-                raise AssertionError, _("Transport not supported for HTTP_PROXY, %s") % url.scheme
-
-        self.conn = httplib.HTTPConnection(host, port)
-
-    def request(self, method, url, body="", headers={}):
-        '''
-        raise socket.error e.g. "Operation timed out"
-        '''
-        myheaders = headers.copy()
-        myheaders.update(self.headers)
-
-        #print "HTTP REQUEST:", headers
-        if HTTP_PROXY == "":
-            urlparts = urlparse.urlsplit(url)
-            url = urlparts.path + "?" + urlparts.query
-        return self.conn.request(method, url, body, myheaders)
-
-    def getresponse(self):
-        return self.conn.getresponse()
-
-    def close(self):
-        self.conn.close()
-
-class HTTPSConnection:
-    ######## still very broken for proxy!
-    def __init__(self, host, port=httplib.HTTPS_PORT):
-        self.headers = {}
-        
-        if HTTPS_PROXY != "":
-            # parse proxy URL
-            url = urlparse.urlparse(HTTPS_PROXY)
-            if url.scheme == "" or url.scheme == "http":
-                port = httplib.HTTP_PORT
-                host = url.hostname
-                if url.port != None:
-                    port = url.port
-                if url.username != None:
-                    self.headers["Proxy-authorization"] = "Basic " + base64.encodestring(url.username+':'+url.password) + "\r\n"
-            else:
-                raise AssertionError, "Transport %s not supported for HTTPS_PROXY" % url.scheme
-
-            self.conn = httplib.HTTPConnection(host, port)
-        else:
-            self.conn = httplib.HTTPSConnection(host, port)
-
-    def request(self, method, url, body="", headers={}):
-        myheaders = headers.copy()
-        myheaders.update(self.headers)
-        urlparts = urlparse.urlsplit(url)
-        if HTTPS_PROXY != "":
-            port = httplib.HTTPS_PORT
-            if urlparts.port != None:
-                port = urlparts.port
-            return self.conn.request("CONNECT", urlparts.hostname + ":" + port, body, myheaders)
-        else:
-            url = urlparts.path + "?" + urlparts.query
-            return self.conn.request("GET", url, body, myheaders)
-
-    def getresponse(self):
-        return self.conn.getresponse()
-
-    def close(self):
-        return self.conn.close()
 
 class StreamRequest(BaseHTTPServer.BaseHTTPRequestHandler):
     def do_GET(self):
@@ -2426,6 +2143,37 @@ class StreamServer(BaseHTTPServer.HTTPServer):
     def set_length(self, length):
         self.length = int(length)
 
+# if __name__=="__main__":
+    # testurls = ("ftp://ftp.freebsd.org/pub/FreeBSD/README.TXT", "http://www.google.com", "https://encrypted.google.com")
+    # #testurls = ("http://www.google.com", "https://encrypted.google.com")
+    # # for testfile in testurls:
+        # # files = get(testfile, os.getcwd(), force=True, segmented=False)
+        # # print "Downloaded:", files
+        
+    # # print "=" * 79
+    
+    # # for testfile in testurls:
+        # # files = get(testfile, os.getcwd(), force=True, segmented=True)
+        # # print "Downloaded:", files
+        
+    # # print "=" * 79        
+        
+    # proxystr = "http://localhost:8000"
+    # proxy.HTTP_PROXY = proxystr
+    # proxy.HTTPS_PROXY = proxystr
+    # proxy.FTP_PROXY = proxystr
+    # proxy.set_proxies()
+    
+    # # for testfile in testurls:
+       # # files = get(testfile, os.getcwd(), force=True, segmented=False)
+       # # print "Downloaded:", files
+    
+    # # print "=" * 79    
+    
+    # for testfile in testurls:
+       # files = get(testfile, os.getcwd(), force=True, segmented=True)
+       # print "Downloaded:", files
+    
 ##myserver = StreamServer(("localhost", 8080), StreamRequest)
 ##myserver.set_stream(ThreadSafeFile("C:\\library\\avril\\Avril Lavigne - Complicated.mpg", "rb"))
 ##myserver.set_length(50000000)
