@@ -6,7 +6,7 @@
 # URL: http://www.nabber.org/projects/
 # E-mail: webmaster@nabber.org
 #
-# Copyright: (C) 2007-2010, Neil McNab
+# Copyright: (C) 2007-2011, Neil McNab
 # License: GNU General Public License Version 2
 #   (http://www.gnu.org/copyleft/gpl.html)
 #
@@ -29,7 +29,8 @@
 # Author(s): Neil McNab
 #
 # Description:
-#   Download library that can handle metalink files.
+#   Download library that can handle metalink files, RFC 5854, RFC 6249.
+# Also supports Instance Digests, RFC 3230.
 #
 # Library Instructions:
 #   - Use as expected.
@@ -91,7 +92,7 @@ except: pass
 try: import win32con
 except: pass
 
-USER_AGENT = "Metalink Checker/5.1 +http://www.nabber.org/projects/"
+USER_AGENT = "Metalink Checker/6.0 +http://www.nabber.org/projects/"
 
 SEGMENTED = True
 LIMIT_PER_HOST = 1
@@ -166,6 +167,7 @@ def urlopen(url, data = None, metalink_header=False, headers = {}):
     req.add_header('Cache-Control', "no-cache")
     req.add_header('Pragma', "no-cache")
     req.add_header('Accept-Encoding', 'gzip')
+    req.add_header('Want-Digest', 'md5,sha,sha-256,sha-384,sha-512')
     if metalink_header:
         req.add_header('Accept', MIME_TYPE + ", */*")
 
@@ -570,7 +572,7 @@ def parse_metalink(src, headers = {}, nocheck = False, ver=3):
             print _("Metalink content-type detected.")
             is_metalink = True
         elif myheaders["link"]:
-            # Metalink HTTP Link headers implementation
+            # Metalink HTTP Link headers implementation, RFC 6249
             # does not check for describedby urls but we can't use any of those anyway
             # TODO this should be more robust and ignore commas in <> for urls
             links = myheaders['link'].split(",")
@@ -612,7 +614,9 @@ def parse_metalink(src, headers = {}, nocheck = False, ver=3):
                         fileobj.hashlist['sha-1'] = binascii.hexlify(binascii.a2b_base64(parts[1].strip()))
                     else:
                         fileobj.hashlist[parts[0].strip()] = binascii.hexlify(binascii.a2b_base64(parts[1].strip()))
-            except KeyError: pass
+            except KeyError:
+                # RFC requires link headers to be ignored if no digest header, use standard download method
+                return False
             print _("Using Metalink HTTP Link headers.")
             mobj = metalink.Metalink4()
             mobj.files.append(fileobj)
@@ -2054,6 +2058,29 @@ class Http_Host_Segment(threading.Thread, Host_Segment):
             self.response = None
             return
 
+        # Check digest headers against expected
+        digest = self.response.getheader("Digest", None)
+        if digest is not None:
+            hashes = digest.split(",")
+            digestsums = {}
+            for myhash in hashes:
+                parts = myhash.split("=", 1)
+                # create digest list here
+                if parts[0].strip() == 'sha':
+                    digestsums['sha-1'] = binascii.hexlify(binascii.a2b_base64(parts[1].strip()))
+                else:
+                    digestsums[parts[0].strip()] = binascii.hexlify(binascii.a2b_base64(parts[1].strip()))
+                    
+            # check digest here, skip if missing, return if mismatch                        
+            for hashtype in self.checksums.keys():
+                try:
+                    digestsums[hashtype]
+                except KeyError:
+                    continue
+                    
+                if self.checksums[hashtype] != digestsums[hashtype]:
+                    return
+            
         body = data
         size = len(body)
         
