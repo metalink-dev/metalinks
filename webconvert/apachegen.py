@@ -6,7 +6,7 @@
 # URL: http://www.metamirrors.nl/node/59
 # E-mail: webmaster@nabber.org
 #
-# Copyright: (C) 2009, Neil McNab
+# Copyright: (C) 2009-2011, Neil McNab
 # License: GNU General Public License Version 2
 #   (http://www.gnu.org/copyleft/gpl.html)
 #
@@ -29,7 +29,7 @@
 # Author(s): Neil McNab
 #
 # Description:
-#   Converts a .metalink file into Apache directives for mod_headers and mod_setenvif based on RFC draft.
+#   Converts a .metalink file into Apache directives for mod_headers and mod_setenvif based on RFC 6249.
 # http://tools.ietf.org/html/draft-bryan-metalinkhttp
 # 
 ########################################################################
