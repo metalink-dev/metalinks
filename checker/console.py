@@ -46,6 +46,7 @@ import os
 import download
 import checker
 import GPG
+import proxy
 
 import os.path
 import locale
@@ -112,7 +113,7 @@ def run():
         return
 
     socket.setdefaulttimeout(10)
-    download.set_proxies()
+    proxy.set_proxies()
     if options.os != None:
         download.OS = options.os
     if options.language != None:
