@@ -246,5 +246,4 @@
 # - download priority based on speed
 # - use maxconnections
 # - dump FTP data chunks directly to file instead of holding in memory
-# - maybe HTTPS proxy support if people need it
 ########################################################################
