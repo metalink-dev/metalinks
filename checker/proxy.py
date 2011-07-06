@@ -109,7 +109,7 @@ def replace():
     #ftplib.FTP = FTP
     #httplib.HTTPConnection = HTTPConnection
     #httplib.HTTPSConnection = HTTPSConnection
-    urllib.get_proxies = get_proxies
+    urllib.getproxies = getproxies
     urllib._urlopener = FancyURLopener()
 
 def reg_query(keyname, value=None):
@@ -290,7 +290,7 @@ def set_proxies():
     # install this opener
     urllib2.install_opener(opener)
     
-def get_proxies():
+def getproxies():
     proxies = {}
 
     if HTTP_PROXY != "":
