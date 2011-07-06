@@ -283,7 +283,7 @@ class ConnectHTTPSHandler(urllib2.HTTPSHandler):
 
 def set_proxies():
     # Set proxies
-    proxies = get_proxies()
+    proxies = getproxies()
         
     proxy_handler = urllib2.ProxyHandler(proxies)
     opener = urllib2.build_opener(proxy_handler, HTTPHandler, ConnectHTTPSHandler, FTPHandler)
