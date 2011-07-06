@@ -100,12 +100,17 @@ def translate():
 _ = translate()
 
 def replace():
-    # TODO, replace native calls in httplib, ftplib, urllib eventually?
+    # TODO, replace native calls in httplib, ftplib eventually?
     # or can we replace something at a lower level to cover them all?
     # looks like urllib2 is covered already
+    # we've got urllib covered now too
+    
+    # doesn't work because we use this as a base class
+    #ftplib.FTP = FTP
     #httplib.HTTPConnection = HTTPConnection
     #httplib.HTTPSConnection = HTTPSConnection
-    pass
+    urllib.get_proxies = get_proxies
+    urllib._urlopener = FancyURLopener()
 
 def reg_query(keyname, value=None):
     if os.name != "nt":
@@ -278,6 +283,14 @@ class ConnectHTTPSHandler(urllib2.HTTPSHandler):
 
 def set_proxies():
     # Set proxies
+    proxies = get_proxies()
+        
+    proxy_handler = urllib2.ProxyHandler(proxies)
+    opener = urllib2.build_opener(proxy_handler, HTTPHandler, ConnectHTTPSHandler, FTPHandler)
+    # install this opener
+    urllib2.install_opener(opener)
+    
+def get_proxies():
     proxies = {}
 
     if HTTP_PROXY != "":
@@ -287,13 +300,13 @@ def set_proxies():
     if FTP_PROXY != "":
         proxies['ftp'] = FTP_PROXY
         
-    proxy_handler = urllib2.ProxyHandler(proxies)
-    opener = urllib2.build_opener(proxy_handler, HTTPHandler, ConnectHTTPSHandler, FTPHandler)
-    # install this opener
-    urllib2.install_opener(opener)
-
+    return proxies
 
 ########### PROXYING OBJECTS ########################
+
+class FancyURLopener(urllib.FancyURLopener):
+    def open(self, fullurl, data=None):
+        return urllib2.urlopen(fullurl, data)
 
 class FTP(ftplib.FTP):
     def __init__(self, *args, **kwargs):
@@ -455,6 +468,13 @@ class HTTPSConnection(httplib.HTTPSConnection):
     # #print handle.read()
     # print len(handle.read())
     # handle.close()
+
+# def test_urllib(url):
+    # replace()
+    # handle = urllib.urlopen(url)
+    # #print handle.read()
+    # print len(handle.read())
+    # handle.close()
     
 # if __name__=="__main__":
     # set_proxies()
@@ -465,14 +485,15 @@ class HTTPSConnection(httplib.HTTPSConnection):
     # #test_urllib2("ftp://ftp.freebsd.org/pub/FreeBSD/README.TXT")
     # #HTTP_PROXY = "http://gatekeeper-w:80"
     # #HTTPS_PROXY = "http://gatekeeper-w:80"
-    # FTP_PROXY = "http://test:pass@10.0.1.240:8000"
-    # HTTP_PROXY = "http://10.0.1.240:8000"
-    # HTTPS_PROXY = "http://10.0.1.240:8000"
+    # FTP_PROXY = "http://127.0.0.1:8000"
+    # HTTP_PROXY = "http://127.0.0.1:8000"
+    # HTTPS_PROXY = "http://127.0.0.1:8000"
     # print HTTP_PROXY, HTTPS_PROXY, FTP_PROXY
     # set_proxies()
+    # print get_proxies()
     # test_urllib2("ftp://ftp.freebsd.org/pub/FreeBSD/README.TXT")    
-    # test_urllib2("http://www.google.com")
-    # test_urllib2("https://encrypted.google.com")
+    # test_urllib("http://www.google.com")
+    # test_urllib("https://encrypted.google.com")
     
     #print "opening"
 ##    c = HTTPSConnection("encrypted.google.com")
