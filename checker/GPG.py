@@ -180,6 +180,9 @@ class ImportResult:
     def KEYEXPIRED(self, value):
         self.error = _("Signature error, signing key expired at %s.") % value
 
+    def SIGEXPIRED(self, value):
+        self.error = _("Signature error, signature expired at %s.") % value
+
     def summary(self):
         l = []
         l.append('%d imported'%self.imported)
