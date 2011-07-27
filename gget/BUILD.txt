@@ -1,12 +1,14 @@
 Depends on:
 
-= Python 2.6.x - http://www.python.org/download/
+- Python 2.6.x - http://www.python.org/download/
 - pygobject 2.28.3 - http://www.pygtk.org/downloads.html
 - pycairo 1.8.10 - http://www.pygtk.org/downloads.html
 - pygtk 2.24.0 - http://www.pygtk.org/downloads.html
 
 I recommend the all in one pygtk installer version 2.24.0 to get it all easily.
 
+
 Included in source tree:
+
 - GTK+ 2.16.6 - http://gtk-win.sourceforge.net/home/index.php/en/Downloads
 - libglade 2.6.3 DLL - http://www.gtk-server.org/download.html
