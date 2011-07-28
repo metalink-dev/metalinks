@@ -8,7 +8,7 @@ Expires: January 29, 2012                                  July 28, 2011
 
 
       File Transfer Protocol HASH Command for Cryptographic Hashes
-                       draft-ietf-ftpext2-hash-02
+                       draft-ietf-ftpext2-hash-03
 
 Abstract
 
@@ -796,6 +796,9 @@ Appendix C.  Document History
    o  Should HASH use "MLSx style" responses?  S> 213 Hash.SHA-
       1=80bc95fd3...;Range=0-199; filename.ext
 
+   draft-ietf-ftpext2-hash-03 : , 2011
+   o  .
+
    draft-ietf-ftpext2-hash-02 : July 28, 2011
    o  Refinements.
 
@@ -830,9 +833,6 @@ Appendix C.  Document History
    o  Error codes section.
 
    draft-bryan-ftp-hash-01 : April 7, 2010.
-   o  Changing HASH algorithm with OPTS.
-
-
 
 
 
@@ -841,6 +841,7 @@ Bryan, et al.           Expires January 29, 2012               [Page 15]
 Internet-Draft  FTP HASH Command for Cryptographic Hashes      July 2011
 
 
+   o  Changing HASH algorithm with OPTS.
    o  Reference RFC 5797 and add IANA Considerations section.
    o  Informative Reference to expired Internet Draft
       (draft-twine-ftpmd5) which attempted to address this issue (it
@@ -870,7 +871,6 @@ Authors' Addresses
 
    Email: daniel@haxx.se
    URI:   http://www.haxx.se/
-
 
 
 
