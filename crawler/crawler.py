@@ -92,7 +92,10 @@ class App(threading.Thread):
         self.metalink_count += 1
         filename = os.path.join(METADIR, os.path.basename(url))
         if not os.path.exists(METADIR):
-            os.makedirs(METADIR)
+            # if METADIR is a symlink we need to catch the error
+            try:
+                os.makedirs(METADIR)
+            except: pass
     
         mtime = 0
         if os.access(filename, os.F_OK):
@@ -175,7 +178,11 @@ class App(threading.Thread):
         self.rp = robotparser.RobotFileParser()
         parts = urlparse.urlparse(self.url)
         self.rp.set_url(parts.scheme + '://' + parts.netloc + "/robots.txt")
-        self.rp.read()
+        try:
+            self.rp.read()
+        except:
+            print self.url
+            raise
 
     def check_robots(self, url):
         if (not self.obey_robots) or (self.rp == None):
