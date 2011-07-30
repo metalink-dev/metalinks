@@ -180,9 +180,8 @@ class App(threading.Thread):
         self.rp.set_url(parts.scheme + '://' + parts.netloc + "/robots.txt")
         try:
             self.rp.read()
-        except:
-            print self.url
-            raise
+        except IOError:
+            print "Connection failed: ", self.url
 
     def check_robots(self, url):
         if (not self.obey_robots) or (self.rp == None):
