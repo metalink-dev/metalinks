@@ -1,0 +1,14 @@
+<h1>digital-signatures</h1>
+<p>Metalinks can contain digital signatures. These signatures prove authenticity, that the file is from a certain person or group/project and has not been tampered with. This is in contrast to whole file checksums, which can be used to verify a file's integrity which means that it is an exact copy and does not have errors, and chunk checksums which are for repairing a portion of a file if there are errors.</p><p><br></p>A sample signature included in a .metalink:<br><p><br></p><font style="font-family: courier new,monospace;" size="2">&lt;verification&gt;<br>&lt;hash type="md5"&gt;6315db7c4373b586bac5f528322ba10e&lt;/hash&gt;<br>&lt;hash type="sha1"&gt;5d72f9fbf3eab6474a8dc22192056119030087f6&lt;/hash&gt;<br>&lt;signature type="pgp"&gt;<br>-----BEGIN PGP SIGNATURE-----<br>Version: GnuPG v1.4.6 (GNU/Linux)<br>iD8DBQBH71kDeOEcayedXJERAmfWAJ0bsBFUJ6ooykT2qPeegvIH4KIVqACfRtt5<br>Rv6MJSuz/b6NItnG7zoYGFw=<br>=GKuk<br>-----END PGP SIGNATURE-----<br>&lt;/signature&gt;<br>&lt;/verification&gt;</font><p><br></p><p>Currently, cURL, Appupdater, and openSUSE (via MirrorBrain) make use of .metalinks that contain signatures. Only Metalink Checker supports using the signatures, and GnuPG or GPG4Win must be installed. (aria2 tells you if a signature is included but does not verify it).<br></p><p>cURL .metalinks are available at http://curl.haxx.se/download.html</p><p><br></p><p>Go to the cURL download page and If you don't already have it, import the cURL GPG key (you can find it at the upper right corner) or put it in a key.asc file in the same directory.&nbsp;</p><p>&nbsp;</p><p>At the command line type:<br><br></p><p>$ <b>python metalink.py -d -f http://curl.haxx.se/metalink.cgi?curl=tar.gz<br></b>
+<br>
+You'll then see:<br>
+<br>
+Downloading to curl-7.18.1.tar.gz<br>
+[#########################----</p><div>--------------------------] 47% 1.00/2.12 MB<br>
+-----BEGIN PGP SIGNATURE INFORMATION-----<br>
+timestamp: Sun, 30 Mar 2008 05:10:27 (Eastern Daylight Time)<br>
+fingerprint: 914C533DF9B2ADA2204F586D78E11C6B279D5C91<br>
+uid: Daniel Stenberg (Haxx) &lt;<a href="mailto:daniel@haxx.se">daniel@haxx.se</a>&gt;<br>
+-----END PGP SIGNATURE INFORMATION-----<br>
+<br>
+[#######################################################] 100% 2.12/2.12 MB</div><div>&nbsp;</div><div>&nbsp;<br></div><div>Example Metalinks with signatures: <a href="metalink-discussionhttpd-2.2.8.tar.gz.metalink">apache</a>, <a href="metalink-discussioncurl-7.18.1.tar.gz.metalink">curl</a>, <a href="metalink-discussionlinux-2.6.25.tar.bz2.metalink">linux</a>, <a href="metalink-discussionPython-2.5.2.tar.bz2.metalink">python</a>.<br></div><div><br></div><wbr>
