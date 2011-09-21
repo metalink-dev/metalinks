@@ -1,0 +1,44 @@
+<h1>aria2fe</h1>
+<p>aria2fe by Mike Wells is a GUI front end (QT) for aria2. <a href="http://www.aria2fe.com/">http://www.aria2fe.com/</a><br></p><p>&nbsp;</p><h1 id="introduction">Introduction</h1>
+      <p><b>"aria2fe"</b> (the "fe" stands for "front end") is a graphical user interface (GUI) for the command line (CLI) based program
+				 aria2. aria2fe was designed and constructed using C++/Qt for the GNU Unix/Posix/Linux platform.</p>
+			<p>&nbsp;</p><p>Essentially, the purpose of aria2fe is to construct the aria2 command line syntax and arguments from a point and click
+				 environment and to launch aria2 via xterm. Download progress monitoring is done through xterm acting as a console
+				 for aria2fe. In fact, once aria2 has been started, aria2fe can be closed which will free up the system resources
+				 (physical memory) allocated to it. xterm will continue its role as console until the download is complete.</p>
+			<p>&nbsp;</p><p>Depending
+upon the type of download being done the command line for aria2 can
+become quite long and complex. Given that, the chance for errors (typos
+and incorrect arguments) increases dramatically. aria2fe diminishes the
+chance for errors by delivering a syntactically correct command line
+each and every time. Furthermore, the ability to "visualize" the
+command line being constructed aids the user in argument selection.
+Additionally, command line configurations can be saved to a "conf" file
+and reloaded for future use. There is no limit to the number of conf
+files a user may have at any one given time and a browse dialog
+expedites the finding and loading process for saved configurations.</p>
+
+			<p><b>&nbsp;</b></p><p><b>aria2</b>
+is a high-speed download utility with resuming and segmented
+downloading. Supported protocols are HTTP/HTTPS/FTP and BitTorrent. It
+also supports Metalink version 3.0. As of 0.10.0 aria2 supports chunk
+checksums in Metalink. It validates chunk checksums while downloading
+files like BitTorrents. This provides a safer and more reliable
+download experience. It is being actively developed by Tatsuhiro
+Tsujikawa.</p><p>&nbsp;</p><h1 id="features">Features</h1>
+<!--      <p>Features go here...</p> -->
+		 	<p>WYSIWYG editing.
+			<br>Concurrent downloads.
+			<br>Desktop environment non-dependent.
+			<br>Unlimited configuration files.
+			<br>Argument preview before launch.
+			<br>Goback for error correction or forgotten arguments.
+			<br>Exit after launch (minimize system resource allocation).
+			<br>Detailed progress monitoring via xterm.
+			<br>Pop-up context menu for editing actions.
+			<br>Immediate access to aria2 help.
+			<br>SaveAs action for cloning configuration files.
+			<br>Point and click operation for most common arguments
+			<br>Default aria2 work log.
+			<br>Small footprint.
+			<br>Download type specific dialogs for argument specification (future release).</p><p>&nbsp;</p><p>&nbsp;</p><p style="text-align: center; clear: both;"><a style="border: 0pt none ; background-color: transparent; clear: left; margin-bottom: 1em; float: left; margin-right: 1em;" href="metalink-discussionaria2fe.png"><img src="metalink-discussionaria2fe.png?display=thumb&amp;width=420&amp;height=420" style="border: 0pt none ;"></a></p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p style="text-align: center; clear: both;"><a style="border: 0pt none ; background-color: transparent; clear: left; margin-bottom: 1em; float: left; margin-right: 1em;" href="metalink-discussionaria2fe-arg-list.png"><img src="metalink-discussionaria2fe-arg-list.png?display=thumb&amp;width=420&amp;height=420" style="border: 0pt none ;"></a></p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p>&nbsp;</p><p style="text-align: center; clear: both;"><a style="border: 0pt none ; background-color: transparent; clear: left; margin-bottom: 1em; float: left; margin-right: 1em;" href="metalink-discussionaria2fe-console.png"><img src="metalink-discussionaria2fe-console.png?display=thumb&amp;width=420&amp;height=420" style="border: 0pt none ;"></a></p><p>&nbsp;</p><wbr>

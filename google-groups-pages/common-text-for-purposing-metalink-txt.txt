@@ -1,0 +1,26 @@
+<h1>common-text-for-purposing-metalink-txt</h1>
+<p><b>&nbsp;</b></p><p><b>&nbsp;</b></p><p><b>&nbsp;</b></p><p><b>&nbsp;</b></p><p><b>&nbsp;</b></p><p><b>&nbsp;</b></p><p><b>&nbsp;</b></p><p><b>&nbsp;</b></p><p><b>&nbsp;You have chosen to download requested file(s) by metalink but your browser or your download program does not recognize it....</b></p><p>&nbsp;</p><p>&nbsp;</p><p>Metalink makes downloading easier, faster, and more reliable.<br><br>&nbsp;&nbsp;&nbsp; * Standard format for listing multiple mirrors for redundancy and/<br>or automatic accelerated (segmented) downloads.<br>&nbsp;&nbsp;&nbsp; * Combines FTP and HTTP with Peer-to-peer (P2P, shared bandwidth).<br>&nbsp;&nbsp;&nbsp; * Automatic checksum verification; No separate MD5/SHA-1 file or<br>manual process for integrity verification.<br>&nbsp;&nbsp;&nbsp; * Stores more descriptive and useful information for software<br>distribution.<br>&nbsp;&nbsp;&nbsp; * Automatic load balancing distributes traffic so individual<br>servers are under less strain.<br>&nbsp;&nbsp;&nbsp; * Makes the download process simpler for users (automatic<br>selection of language, Operating System, location, etc).<br><br><b>A lot of software can read metalinks,</b> see http://www.metalinker.org/implementation.html<br>to choose best way to download <b>with metalink help.</b><br>&nbsp;</p><p>&nbsp;</p><p>***************************************************************************<wbr>&nbsp;</p><p>Download distrolinux10.iso&nbsp;</p><p>- by BitTorrent <br> <a target="_blank" rel="nofollow" href="http://ww.foo.com/distrolinux10.iso.torrent">http://www.foo.com/distrolinux10.iso.torrent</a>&nbsp;</p><p>- by FTP <br> <a target="_blank" rel="nofollow" href="ftp://ww.foo.com/distrolinux10.iso">ftp://ftp.foo.com/distrolinux10.iso</a> <br> 
+
+</p><p> </p>
+
+<p> </p><p> <a target="_blank" rel="nofollow" href="ftp://ww.foo.com/distrolinux10.iso">ftp://mirrorftp1.foo.com/distrolinux10.iso</a> <br>
+ 
+
+</p>
+<p> </p>
+
+
+<p> </p>
+
+
+<p> <a target="_blank" rel="nofollow" href="ftp://ww.foo.com/distrolinux10.iso">ftp://mirrorftp2.foo.com/distrolinux10.iso</a> <br>
+ 
+
+</p>
+<p> </p>
+
+
+<p> </p>
+
+
+<p>&nbsp;- by HTTP <br> <a target="_blank" rel="nofollow" href="http://ww.foo.com/distrolinux10.iso">http://ww.foo.com/distrolinux10.iso</a> <br> </p><p>&nbsp;</p><p>***************************************************************************</p><p><wbr></p><br>
