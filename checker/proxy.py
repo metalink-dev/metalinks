@@ -63,6 +63,7 @@ import ssl
 import base64
 import locale
 import gettext
+import sys
 
 # Configure proxies (user and password optional)
 # HTTP_PROXY = http://user:password@myproxy:port
