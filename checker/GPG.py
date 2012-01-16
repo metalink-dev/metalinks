@@ -265,6 +265,16 @@ class GPGSubprocess:
                 if os.path.exists(fullname + ".exe"):
                     gpg_binary = fullname + ".exe"
                     break
+                    
+                # gpg2 support
+                fullname += '2'
+                if os.path.exists(fullname):
+                    gpg_binary = fullname
+                    break
+
+                if os.path.exists(fullname + ".exe"):
+                    gpg_binary = fullname + ".exe"
+                    break                    
             else:
                 raise ValueError, (_("Couldn't find 'gpg' binary on path %s.")
                                    % repr(path) )
@@ -683,13 +693,13 @@ class GPGFile(list):
 
 
 ##    
-##if __name__ == '__main__':
+if __name__ == '__main__':
 ##    import sys
 ##    if len(sys.argv) == 1:
 ##        print 'Usage: GPG.py <signed file>'
 ##        sys.exit()
 ##
-##    obj = GPGSubprocess()
+    obj = GPGSubprocess()
 ##    file = open(sys.argv[1], 'rb')
 ##    sig = obj.verify_file( file )
 ##    print sig.__dict__
