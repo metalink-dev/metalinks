@@ -1,2 +1,2 @@
-SET JAVAPATH=c:\Program Files\Java\jdk1.6.0_12\bin
+SET JAVAPATH=c:\Program Files\Java\jdk1.7.0_02\bin
 SET APPNAME=DLApplet
