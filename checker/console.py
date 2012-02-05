@@ -5,7 +5,7 @@
 # URL: http://www.nabber.org/projects/
 # E-mail: webmaster@nabber.org
 #
-# Copyright: (C) 2007-2009, Neil McNab
+# Copyright: (C) 2007-2012, Neil McNab
 # License: GNU General Public License Version 2
 #   (http://www.gnu.org/copyleft/gpl.html)
 #
@@ -102,6 +102,7 @@ def run():
     parser.add_option("--rconvert", dest="rev", action="store_true", help="Reverses conversion from 4 (IETF RFC) to 3")
     parser.add_option("--output", dest="output", metavar="OUTFILE", help=_("Output conversion result to this file instead of screen"))
     parser.add_option("--rss", "-r", action="store_true", dest="rss", help=_("RSS/Atom Feed Mode, implies -d"))
+    parser.add_option("--testable", action="store_true", dest="only_testable", help=_("Limit tests to only the URL types we can test (HTTP/HTTPS/FTP)"))
     parser.add_option("-w", dest="writedir", default=os.getcwd(), help=_("Directory to write output files to (default: current directory)"))
     (options, args) = parser.parse_args()
     
@@ -180,14 +181,16 @@ def run():
         return
 
     if options.check:
+        failure = False
         for item in args:
             print "=" * 79
             print item
-            mcheck = checker.Checker()
+            mcheck = checker.Checker(options.only_testable)
             mcheck.check_metalink(item)
             results = mcheck.get_results()
-            print_totals(results)
-        return
+            result = print_totals(results)
+            failure |= result
+        sys.exit(int(failure))
             
     if options.download:
         for item in args:
@@ -208,6 +211,7 @@ def run():
     sys.exit(0)
     
 def print_totals(results):
+    complete_failure = False
     for key in results.keys():
         print "=" * 79
         print _("Summary for file") + ":", key
@@ -254,6 +258,9 @@ def print_totals(results):
         print _("Size check failures") + ": %s/%s" % (size_count, total)
         print _("Checksum failures") + ": %s/%s" % (checksum_count, total)
         print _("Overall failures") + ": %s/%s" % (error_count, total)
+        if error_count == total:
+            complete_failure = True
+    return complete_failure
 
 ##def print_summary(results):
 ##    for key in results.keys():
