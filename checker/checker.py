@@ -52,6 +52,7 @@ import time
 import binascii
 
 import download
+import proxy
 
 import locale
 import gettext
@@ -358,7 +359,7 @@ class URLCheck:
                 self.infostring += _("Response") + ": " + _("Bad URL") + "\r\n"
                 return
     
-            conn = download.HTTPConnection(urlparts.hostname, port)
+            conn = proxy.HTTPConnection(urlparts.hostname, port)
             try:
                 conn.request("HEAD", url, headers = headers)
             except socket.error, error:
@@ -387,7 +388,7 @@ class URLCheck:
                 if urlparts.port != None:
                     port = urlparts.port
                 
-                conn = download.HTTPConnection(urlparts.hostname, urlparts.port)
+                conn = proxy.HTTPConnection(urlparts.hostname, urlparts.port)
                 try:
                     conn.request("HEAD", url, headers = headers)
                     resp = conn.getresponse()
