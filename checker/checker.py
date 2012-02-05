@@ -5,7 +5,7 @@
 # URL: http://www.nabber.org/projects/
 # E-mail: webmaster@nabber.org
 #
-# Copyright: (C) 2007-2010, Neil McNab
+# Copyright: (C) 2007-2012, Neil McNab
 # License: GNU General Public License Version 2
 #   (http://www.gnu.org/copyleft/gpl.html)
 #
@@ -123,11 +123,12 @@ class Webpage(HTMLParser.HTMLParser):
 
 
 class Checker:
-    def __init__(self):
+    def __init__(self, only_testable=False):
         self.threadlist = []
         self.running = False
         self.clear_results()
         self.cancel = False
+        self.only_testable = only_testable
         
     def check_metalink(self, src):
         '''
@@ -324,13 +325,21 @@ class Checker:
         result = {}
         while (count <= len(urllist)):
             filename = urllist[number].url
-            #don't start too many threads at once
-            while self.activeCount() > MAX_THREADS and not self.cancel:
-                time.sleep(0.1)
-            mythread = threading.Thread(target = thread, args = [filename, myheaders], name = filename)
-            mythread.start()
-            self.threadlist.append(mythread)
-            #thread(filename)
+            testme = True
+            urltype = str(filename.split("://", 1)[0])
+            #print self.only_testable, urltype
+            if self.only_testable and urltype not in ("http", "https", "ftp"):
+                #print "not checking"
+                testme = False
+
+            if testme:
+                #don't start too many threads at once
+                while self.activeCount() > MAX_THREADS and not self.cancel:
+                    time.sleep(0.1)
+                mythread = threading.Thread(target = thread, args = [filename, myheaders], name = filename)
+                mythread.start()
+                self.threadlist.append(mythread)
+                #thread(filename)
             number = (number + 1) % len(urllist)
             count += 1
 
