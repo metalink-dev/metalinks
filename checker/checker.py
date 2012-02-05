@@ -483,7 +483,7 @@ class URLCheck:
                 username = "anonymous"
                 password = "anonymous"
 
-            ftpobj = download.FTP()
+            ftpobj = proxy.FTP()
             try:
                 ftpobj.connect(urlparts[1])
             except socket.gaierror:
