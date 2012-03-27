@@ -8,7 +8,7 @@ Expires: September 28, 2012                               March 27, 2012
 
 
       File Transfer Protocol HASH Command for Cryptographic Hashes
-                       draft-ietf-ftpext2-hash-03
+                       draft-ietf-ftpext2-hash-04
 
 Abstract
 
@@ -800,6 +800,9 @@ Appendix C.  Document History
    o  Should HASH use "MLSx style" responses?  S> 213 Hash.SHA-
       1=80bc95fd3...;Range=0-199; filename.ext
 
+   draft-ietf-ftpext2-hash-04 : , 2012
+   o  .
+
    draft-ietf-ftpext2-hash-03 : March 27, 2012
    o  Editorial nits.
 
@@ -830,9 +833,6 @@ Appendix C.  Document History
    o  User-PI usage and command errors sections updated.
 
    draft-bryan-ftp-hash-03 : May 21, 2010.
-   o  List of non-standard checksum and hash commands and their
-      implementations.
-
 
 
 
@@ -840,6 +840,9 @@ Bryan, et al.          Expires September 28, 2012              [Page 15]
 
 Internet-Draft  FTP HASH Command for Cryptographic Hashes     March 2012
 
+
+   o  List of non-standard checksum and hash commands and their
+      implementations.
 
    draft-bryan-ftp-hash-02 : April 16, 2010.
    o  Error codes section.
@@ -875,9 +878,6 @@ Authors' Addresses
 
    Email: daniel@haxx.se
    URI:   http://www.haxx.se/
-
-
-
 
 
 
