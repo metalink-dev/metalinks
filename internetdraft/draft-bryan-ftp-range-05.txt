@@ -8,7 +8,7 @@ Expires: September 28, 2012                               March 27, 2012
 
 
           File Transfer Protocol RANG Command for Byte Ranges
-                        draft-bryan-ftp-range-04
+                        draft-bryan-ftp-range-05
 
 Abstract
 
@@ -579,6 +579,9 @@ Appendix B.  Document History
    o  Expand current alternatives (ABOR, close data connection) and why
       they are not optimal.
 
+   draft-bryan-ftp-range-05 : , 2012.
+   o  .
+
    draft-bryan-ftp-range-04 : March 27, 2012.
    o  Editorial nits.
 
@@ -603,9 +606,6 @@ Authors' Addresses
 
    Email: anthonybryan@gmail.com
    URI:   http://www.metalinker.org
-
-
-
 
 
 
