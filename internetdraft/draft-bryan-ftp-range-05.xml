@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><?rfc linefile="1:draft-bryan-ftp-range-04.xml"?>
+<?xml version="1.0" encoding="UTF-8"?><?rfc linefile="1:draft-bryan-ftp-range-05.xml"?>
 <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
 <?rfc toc="yes" ?>
 <?rfc tocdepth="3" ?>
@@ -404,7 +404,7 @@ can be sent by the server-PI, as specified in <xref target="RFC0959"/>.</t>
 <section title="RANG Command Use with Other Commands">
 
 <t>This specification defines the use of RANG in a certain way. Other commands could decide to use RANG in a similar way, to select a byte range, and their specification would
-define how they operate with RANG. The HASH command <xref target="draft-ietf-ftpext2-hash"/> uses RANG to select a byte range for partial file hashing.</t>
+define how they operate with RANG. The HASH command <xref target="draft-bryan-ftpext-hash"/> uses RANG to select a byte range for partial file hashing.</t>
 
 </section>
 
@@ -661,7 +661,7 @@ define how they operate with RANG. The HASH command <xref target="draft-ietf-ftp
 <seriesInfo name="RFC" value="5797"/>
 </reference>
 
-<reference anchor="draft-ietf-ftpext2-hash">
+<reference anchor="draft-bryan-ftpext-hash">
   <front>
       <title abbrev="FTP Extensions for Cryptographic Hashes">FTP Extensions for Cryptographic Hashes</title>
       <author initials="A." surname="Bryan" fullname="Anthony Bryan">
@@ -692,7 +692,7 @@ define how they operate with RANG. The HASH command <xref target="draft-ietf-ftp
 	    </address>
       </author>
   </front>
-  <seriesInfo name="Internet-Draft" value="draft-ietf-ftpext2-hash-03"/>
+  <seriesInfo name="Internet-Draft" value="draft-bryan-ftpext-hash-00"/>
 </reference>
 
 	    </references> 
@@ -714,11 +714,12 @@ define how they operate with RANG. The HASH command <xref target="draft-ietf-ftp
 
 	    </list></t>
 
-<t>draft-bryan-ftp-range-05 : , 2012.
+
+<t>draft-bryan-ftp-range-05 : April 6, 2012.
 	    
 	    <list style="symbols">
 
-	      <t>.</t>
+	      <t>FTPEXT2 WG concluded, HASH draft renamed.</t>
 	    </list></t>
 
 <t>draft-bryan-ftp-range-04 : March 27, 2012.
