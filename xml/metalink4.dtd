@@ -1,0 +1,43 @@
+<!ELEMENT metalink (published?|generator?|origin?|updated?|file+)+>
+<!ATTLIST metalink xmlns CDATA #IMPLIED>
+<!ELEMENT published (#PCDATA)>
+<!ELEMENT generator (#PCDATA)>
+<!ELEMENT updated (#PCDATA)>
+
+<!ELEMENT origin (#PCDATA)>
+<!ATTLIST origin dynamic CDATA #IMPLIED>
+
+<!ELEMENT file (description?|identity?|size?|language*|version?|url*|hash*|logo?|os*|pieces*|publisher?|signature?|copyright?|metaurl*)+>
+<!ATTLIST file name CDATA #REQUIRED>
+
+<!ELEMENT identity (#PCDATA)>
+<!ELEMENT version (#PCDATA)>
+<!ELEMENT description (#PCDATA)>
+<!ELEMENT size (#PCDATA)>
+<!ELEMENT logo (#PCDATA)>
+<!ELEMENT os (#PCDATA)>
+<!ELEMENT copyright (#PCDATA)>
+<!ELEMENT language (#PCDATA)>
+
+<!ELEMENT signature (#PCDATA)>
+<!ATTLIST signature mediatype CDATA #REQUIRED>
+
+<!ELEMENT publisher (#PCDATA)>
+<!ATTLIST publisher url CDATA #IMPLIED>
+<!ATTLIST publisher name CDATA #REQUIRED>
+
+<!ELEMENT pieces (hash+)>
+<!ATTLIST pieces type CDATA #REQUIRED>
+<!ATTLIST pieces length CDATA #REQUIRED>
+
+<!ELEMENT url (#PCDATA)>
+<!ATTLIST url location CDATA #IMPLIED>
+<!ATTLIST url priority CDATA #IMPLIED>
+
+<!ELEMENT metaurl (#PCDATA)>
+<!ATTLIST metaurl mediatype CDATA #REQUIRED>
+<!ATTLIST metaurl priority CDATA #IMPLIED>
+<!ATTLIST metaurl name CDATA #IMPLIED>
+
+<!ELEMENT hash (#PCDATA)>
+<!ATTLIST hash type CDATA #IMPLIED>
