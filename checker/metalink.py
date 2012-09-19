@@ -6,7 +6,7 @@
 # URL: http://www.nabber.org/projects/
 # E-mail: webmaster@nabber.org
 #
-# Copyright: (C) 2007-2010, Hampus Wessman, Neil McNab
+# Copyright: (C) 2007-2012, Hampus Wessman, Neil McNab
 # License: GNU General Public License Version 2
 #   (http://www.gnu.org/copyleft/gpl.html)
 #
@@ -489,6 +489,7 @@ class MetalinkFile4(MetalinkFileBase):
 class MetalinkFile(MetalinkFileBase):
     def __init__(self, filename, attrs = {}, do_ed2k=True, do_magnet=False):
         self.maxconnections = ""
+        self.upgrade = ""
         MetalinkFileBase.__init__(self, filename, attrs, do_ed2k, do_magnet)
 
     def compare_checksums(self, checksums):
@@ -552,6 +553,8 @@ class MetalinkFile(MetalinkFileBase):
             text += '      <language>'+self.language+'</language>\n'
         if self.os.strip() != "":
             text += '      <os>'+self.os+'</os>\n'
+        if self.upgrade.strip() != "":
+            text += '  <upgrade>'+self.upgrade+'</upgrade>\n'
         # Verification
 #        if self.hashlist["md5"].strip() != "" or self.hashlist["sha1"].strip() != "":
         if len(self.hashlist) > 0 or len(self.pieces) > 0:
@@ -666,7 +669,6 @@ class Metalink(MetalinkBase):
         self.license_name = ""
         self.license_url = ""
         self.version = ""
-        self.upgrade = ""
         self.tags = ""
         self.type = ""
         self.pubdate = ""
@@ -724,8 +726,6 @@ class Metalink(MetalinkBase):
             text += '  <copyright>'+self.copyright+'</copyright>\n'
         if self.description.strip() != "":
             text += '  <description>'+self.description+'</description>\n'
-        if self.upgrade.strip() != "":
-            text += '  <upgrade>'+self.upgrade+'</upgrade>\n'
         return text
             
     # 3 handler functions
@@ -759,7 +759,7 @@ class Metalink(MetalinkBase):
                 self.tags = self.data.strip()
             elif name in ("name", "url"):
                 setattr(self, self.parent[-1].name + "_" + name, self.data.strip())
-            elif name in ("identity", "copyright", "description", "version", "upgrade"):
+            elif name in ("identity", "copyright", "description", "version"):
                 setattr(self, name, self.data.strip())
             elif name == "hash" and self.parent[-1].name == "verification":
                 hashtype = tag.attrs["type"]
@@ -778,7 +778,7 @@ class Metalink(MetalinkBase):
             elif name == "hash" and self.parent[-1].name == "pieces":
                 fileobj = self.files[-1]
                 fileobj.pieces.append(self.data.strip())
-            elif name in ("os", "language", "tags"):
+            elif name in ("os", "language", "tags", "upgrade"):
                 fileobj = self.files[-1]
                 setattr(fileobj, name, self.data.strip())
             elif name in ("size"):
