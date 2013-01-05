@@ -1,9 +1,9 @@
 #!/usr/bin/env python2.5
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2008 Johan Svedberg <johan@svedberg.com>
+# Copyright (C) 2013 Neil McNab <neil@nabber.org>
 
-# This file is part of GGet.
+# This file is part of GGet for Windows.
 
 # GGet is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
