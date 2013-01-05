@@ -1,3 +1,24 @@
+#!/usr/bin/env python2.5
+# -*- coding: utf-8 -*-
+
+# Copyright (C) 2013 Neil McNab <neil@nabber.org>
+
+# This file is part of GGet for Windows.  It converts gconf calls to a .ini settings file
+
+# GGet is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+
+# GGet is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with GGet; if not, write to the Free Software
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA
+
 CLIENT_PRELOAD_RECURSIVE = 1
 VALUE_STRING = 2
 VALUE_BOOL = 3
