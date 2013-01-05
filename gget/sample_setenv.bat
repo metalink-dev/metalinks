@@ -4,6 +4,7 @@ SET SFUSER=sourceforgenetuser
 SET BUILDS=..\builds
 SET PATH=%PATH%;%PROGRAMFILES%\upx;%USERPROFILE%\downloads\development_tools\upx307w;%PROGRAMFILES(X86)%\NSIS;%PROGRAMFILES%\NSIS
 SET PORTABLE=%USERPROFILE%\downloads\development_tools\PortableApps.comInstaller\PortableApps.comInstaller.exe
+SET PYTHONDIR=C:\python26
 
 FOR /F "TOKENS=1,2 DELIMS=/ " %%A IN ('DATE /T') DO SET mm=%%B
 FOR /F "TOKENS=2,3 DELIMS=/ " %%A IN ('DATE /T') DO SET dd=%%B
