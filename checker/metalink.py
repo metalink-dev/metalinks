@@ -388,8 +388,6 @@ class MetalinkFile4(MetalinkFileBase):
     def __init__(self, filename, attrs = {}, do_ed2k=True, do_magnet=False):
         self.description = ""
         self.identity = ""
-        self.license_name = ""
-        self.license_url = ""
         self.publisher_name = ""
         self.publisher_url = ""
         self.version = ""
@@ -446,15 +444,6 @@ class MetalinkFile4(MetalinkFileBase):
             if self.publisher_url.strip() != "":
                 lictext += ' url="' + self.publisher_url + '"'
             text += '      <publisher%s></publisher>\n' % lictext
-        # License info
-        if self.license_name.strip() != "" or self.license_url.strip() != "":
-            #text += '  <license>\n'
-            lictext = ""
-            if self.license_name.strip() != "":
-                lictext += ' name="' + self.license_name + '"'
-            if self.license_url.strip() != "":
-                lictext += ' url="' + self.license_url + '"'
-            text += '      <license%s></license>\n' % lictext
         # Release info
         if self.identity.strip() != "":
             text += '      <identity>'+self.identity+'</identity>\n'
@@ -822,6 +811,8 @@ class Metalink4(MetalinkBase):
         text = '<?xml version="1.0" encoding="utf-8"?>\n'
         text += '<metalink xmlns="' + self.XMLNS + '">\n'
 
+        # TODO published/updated
+
         attr = 'dynamic="false"'        
         if self.dynamic.lower() == "true":
             attr = 'dynamic="true"'
@@ -865,7 +856,7 @@ class Metalink4(MetalinkBase):
             elif name in ("url", "metaurl"):
                 fileobj = self.files[-1]
                 fileobj.add_url(self.data.strip(), attrs=tag.attrs)
-            elif name in ("publisher", "license"):
+            elif name in ("publisher",):
                 fileobj = self.files[-1]
                 try:
                     setattr(fileobj, name + "_name", tag.attrs["name"])
@@ -1272,7 +1263,7 @@ def convert_4to3(metalinkobj4):
         for attr in ('filename', 'pieces', 'piecelength', 'language', 'os', 'size'):
             setattr(fileobj3, attr, getattr(fileobj4, attr))
         setattr(fileobj3, "piecetype", getattr(fileobj4, "piecetype").replace("-", ""))
-        for attr in ('description', 'version', 'identity', 'license_url', 'license_name', 'publisher_url', 'publisher_name'):
+        for attr in ('description', 'version', 'identity', 'publisher_url', 'publisher_name'):
             setattr(metalinkobj3, attr, getattr(fileobj4, attr))
         # copy hashlist, change key names
         for key in fileobj4.hashlist.keys():
@@ -1305,7 +1296,7 @@ def convert_3to4(metalinkobj3):
         # copy common attributes
         for attr in ('filename', 'pieces', 'piecelength', 'piecetype', 'language', 'os', 'size'):
             setattr(fileobj4, attr, getattr(fileobj3, attr))
-        for attr in ('description', 'identity', 'version', 'license_url', 'license_name', 'publisher_url', 'publisher_name'):
+        for attr in ('description', 'identity', 'version', 'publisher_url', 'publisher_name'):
             setattr(fileobj4, attr, getattr(metalinkobj3, attr))
         # copy hashlist, change key names
         for key in fileobj3.hashlist.keys():
