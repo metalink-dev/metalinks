@@ -587,8 +587,15 @@ class MetalinkBase:
     def __init__(self):
         self.errors = []
         self.files = []
+
         self.generator = GENERATOR
         self.origin = ""
+        self.identity = ""
+        self.publisher_name = ""
+        self.publisher_url = ""
+        self.description = ""
+        self.version = ""
+
         self.data = ""
 
         self.p = xml.parsers.expat.ParserCreate(namespace_separator=XMLSEP)
@@ -650,14 +657,9 @@ class MetalinkBase:
 class Metalink(MetalinkBase):
     def __init__(self):
         self.ver = 3
-        self.identity = ""
-        self.publisher_name = ""
-        self.publisher_url = ""
         self.copyright = ""
-        self.description = ""
         self.license_name = ""
         self.license_url = ""
-        self.version = ""
         self.tags = ""
         self.type = ""
         self.pubdate = ""
@@ -783,6 +785,14 @@ class Metalink(MetalinkBase):
             
     def validate(self, *args):
         valid = True
+
+        if self.pubdate.strip() != "" and not rfc822.parsedate(self.pubdate):
+            self.errors.append("Invalid pubdate: " + self.pubdate)
+            valid = False
+        if self.refreshdate.strip() != "" and not rfc822.parsedate(self.refreshdate):
+            self.errors.append("Invalid refreshdate: " + self.refreshdate)
+            valid = False
+
         if self.publisher_url.strip() != "":
             if not self.validate_url(self.publisher_url):
                 self.errors.append("Invalid URL: " + self.publisher_url + '.')
@@ -811,7 +821,13 @@ class Metalink4(MetalinkBase):
         text = '<?xml version="1.0" encoding="utf-8"?>\n'
         text += '<metalink xmlns="' + self.XMLNS + '">\n'
 
-        # TODO published/updated
+        if self.generator.strip() != "":
+            text += '<generator>'+self.generator+'</generator>\n'
+
+        if self.published.strip() != "":
+            text += '<published>'+self.published+'</published>\n'
+        if self.updated.strip() != "":
+            text += '<updated>'+self.updated+'</updated>\n'
 
         attr = 'dynamic="false"'        
         if self.dynamic.lower() == "true":
@@ -893,7 +909,20 @@ class Metalink4(MetalinkBase):
    
     def validate(self, *args):
         valid = True
-                
+
+        if self.published.strip() != "":
+            try:  
+                rfc3339_parsedate(self.published)
+            except:
+                self.errors.append("Invalid published date: " + str(self.published))
+                valid = False
+        if self.updated.strip() != "":
+            try:  
+                rfc3339_parsedate(self.updated)
+            except:
+                self.errors.append("Invalid updated date: " + str(self.updated))
+                valid = False
+
         for fileobj in self.files:
             result = fileobj.validate()
             valid = valid and result
