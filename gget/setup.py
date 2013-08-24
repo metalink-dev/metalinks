@@ -178,7 +178,7 @@ elif sys.argv[1] == 'py2exe':
     setup(windows = ["gget.py"],
       zipfile = None,
       data_files = data,
-      options={"py2exe" : {"packages": 'encodings', "includes" : "cairo, pango, pangocairo, atk, gobject", "optimize": 2}},
+      options={"py2exe" : {"packages": 'encodings', "includes" : "cairo, pango, pangocairo, atk, gobject, gio", "optimize": 2}},
       name = APP_NAME,
       version = VERSION,
       license = LICENSE,
