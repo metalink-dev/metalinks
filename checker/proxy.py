@@ -185,6 +185,12 @@ def get_proxy_info():
     global HTTP_PROXY
     global FTP_PROXY
     global HTTPS_PROXY
+    global SOCKS_PROXY
+    
+    HTTP_PROXY=""
+    FTP_PROXY=""
+    HTTPS_PROXY=""
+    SOCKS_PROXY=""
 
     # from environment variables
     if os.environ.has_key('http_proxy') and HTTP_PROXY == "":
