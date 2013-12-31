@@ -258,21 +258,21 @@ class GPGSubprocess:
             for pathdir in path:
                 pathdir = os.path.expandvars(pathdir)
                 fullname = os.path.join(pathdir, 'gpg')
-                if os.path.exists(fullname):
+                if self._check_file(fullname):
                     gpg_binary = fullname
                     break
 
-                if os.path.exists(fullname + ".exe"):
+                if self._check_file(fullname + ".exe"):
                     gpg_binary = fullname + ".exe"
                     break
                     
                 # gpg2 support
                 fullname += '2'
-                if os.path.exists(fullname):
+                if self._check_file(fullname):
                     gpg_binary = fullname
                     break
 
-                if os.path.exists(fullname + ".exe"):
+                if self._check_file(fullname + ".exe"):
                     gpg_binary = fullname + ".exe"
                     break                    
             else:
@@ -281,6 +281,11 @@ class GPGSubprocess:
 
         self.gpg_binary = "\"" + gpg_binary + "\""
         self.keyring = keyring
+        
+    def _check_file(self, filename):
+        if os.path.isfile(filename) and os.access(filename, os.X_OK):
+            return True
+        return False
 
     def _open_subprocess(self, *args):
         '''
