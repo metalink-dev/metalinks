@@ -6,7 +6,7 @@
 # URL: http://www.nabber.org/projects/
 # E-mail: webmaster@nabber.org
 #
-# Copyright: (C) 2007-2011, Neil McNab
+# Copyright: (C) 2007-2014, Neil McNab
 # License: GNU General Public License Version 2
 #   (http://www.gnu.org/copyleft/gpl.html)
 #
@@ -75,6 +75,7 @@ import sys
 import gettext
 import binascii
 import random
+import uuid
 
 try: import GPG
 except: pass
@@ -93,6 +94,7 @@ try: import win32con
 except: pass
 
 USER_AGENT = "Metalink Checker/6.0 +http://www.nabber.org/projects/"
+UUID = None
 
 SEGMENTED = True
 LIMIT_PER_HOST = 1
@@ -160,12 +162,33 @@ def translate():
     return t.ugettext
 
 _ = translate()
+
+def set_uuid(uuidval=None):
+    ''' Set uuid to None to clear, returns true on set success '''
+    global UUID
+    
+    if uuidval is None:
+        UUID = None
+        return True
+    # check uuid format
+    try:
+        parseduuid = uuid.UUID(uuidval)
+    except ValueError:
+        return False
+    UUID = str(parseduuid)
+    return True
+
+def get_uuid():
+    ''' if not set return None'''
+    return UUID
     
 def urlopen(url, data = None, metalink_header=False, headers = {}):
     #print "URLOPEN:", url, headers
     url = complete_url(url)
     req = urllib2.Request(url, data, headers)
     req.add_header('User-agent', USER_AGENT)
+    if UUID:
+        req.add_header('Authorization', "Basic " + base64.encodestring('%s:' % UUID).strip())
     req.add_header('Cache-Control', "no-cache")
     req.add_header('Pragma', "no-cache")
     req.add_header('Accept-Encoding', 'gzip')
@@ -189,6 +212,8 @@ def urlhead(url, metalink_header=False, headers = {}):
     url = complete_url(url)
     req = urllib2.Request(url, None, headers)
     req.add_header('User-agent', USER_AGENT)
+    if UUID:
+        req.add_header('Authorization', "Basic " + base64.encodestring('%s:' % UUID).strip())
     req.add_header('Cache-Control', "no-cache")
     req.add_header('Pragma', "no-cache")
     req.add_header('Want-Digest', DIGESTS)    
@@ -259,8 +284,7 @@ def download_file(url, local_file, size=0, checksums={}, force = False,
     segmented ?
     chunksums ?
     chunk_size ?
-    returns ? 
-    unicode Returns file path if download is successful.
+    returns unicode Returns file path if download is successful.
         Returns False otherwise (checksum fails).    
     '''
     # convert string filename into something we can use
@@ -1350,7 +1374,7 @@ class Segment_Manager(Manager):
 
                 if (status == httplib.OK) and (size != None):
                     sizes.append(size)
-                    if len(checksum_dict > 0):
+                    if len(checksum_dict) > 0:
                         checksums.append(checksum_dict)
 
             elif protocol == "ftp":
