@@ -92,7 +92,7 @@ def build(xml, urls, output=None, localfile=None, download=True, do_ed2k=True, d
     if output == None:
         output = localfile + ".metalink"
 
-    if v4 or output.endswith(".meta4")):
+    if v4 or output.endswith(".meta4"):
         # convert to v4
         xml = metalink.convert(xml, 4)
 
