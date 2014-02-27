@@ -5,7 +5,7 @@
 # URL: http://www.metamirrors.nl/node/59
 # E-mail: webmaster@nabber.org
 #
-# Copyright: (C) 2008-2009 Neil McNab
+# Copyright: (C) 2008-2014 Neil McNab
 # License: GNU General Public License Version 2
 #   (http://www.gnu.org/copyleft/gpl.html)
 #
@@ -89,9 +89,13 @@ def build(xml, urls, output=None, localfile=None, download=True, do_ed2k=True, d
     print "Generating XML..."
     if output == None:
         output = localfile + ".metalink"
-    
-    if output.endswith(".meta4") or v4:
+    if v4 or output.endswith(".meta4"):
+        # convert to v4
         xml = metalink.convert(xml, 4)
+
+        if output == None:
+            output = localfile + ".meta4"
+
     handle = open(output, "wb")
     handle.write(xml.generate())
     handle.close()
