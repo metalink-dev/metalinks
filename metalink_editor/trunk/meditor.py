@@ -87,14 +87,14 @@ def build(xml, urls, output=None, localfile=None, download=True, do_ed2k=True, d
         return
 
     print "Generating XML..."
-    if output == None:
-        output = localfile + ".metalink"
     if v4 or output.endswith(".meta4"):
         # convert to v4
         xml = metalink.convert(xml, 4)
 
         if output == None:
             output = localfile + ".meta4"
+    elif output == None:
+        output = localfile + ".metalink"
 
     handle = open(output, "wb")
     handle.write(xml.generate())
