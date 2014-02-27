@@ -89,7 +89,7 @@ def build(xml, urls, output=None, localfile=None, download=True, do_ed2k=True, d
     print "Generating XML..."
     if output == None and v4:
         output = localfile + ".meta4"
-    elif output == None:
+    if output == None:
         output = localfile + ".metalink"
 
     if v4 or output.endswith(".meta4")):
