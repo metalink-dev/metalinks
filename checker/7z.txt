@@ -1,0 +1,4 @@
+;!@Install@!UTF-8!
+Title="Metalink Checker"
+ExecuteFile="metalinkc.exe"
+;!@InstallEnd@!
