@@ -69,7 +69,7 @@ def load_icon(icon, width=48, height=48):
 # Register our icon with the icon theme if running from source
 if utils.runned_from_source():
     for size in [16, 22, 24, 32]:
-        icon_dir = os.path.join(utils.get_images_dir(), "%sx%s" % (size, size))
+        icon_dir = "%sx%s" % (size, size)
         icon_file = os.path.join(icon_dir, "gget.png")
         pixbuf = load_icon(icon_file, size, size)
         gtk.icon_theme_add_builtin_icon(NAME.lower(), size, pixbuf)
