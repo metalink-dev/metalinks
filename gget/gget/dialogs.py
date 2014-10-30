@@ -47,7 +47,7 @@ class AboutDialog(gtk.AboutDialog):
         self.set_logo_icon_name(NAME.lower())
         self.set_name(NAME)
         self.set_version(VERSION)
-        self.set_copyright("Copyright (C) 2008 Johan Svedberg, 2013 Neil McNab")
+        self.set_copyright("Copyright (C) 2008 Johan Svedberg, 2013-2014 Neil McNab")
         #self.set_website("http://live.gnome.org/GGet")
         self.set_website("http://sourceforge.net/projects/metalinks/")
         self.set_comments(_("GGet is a Download Manager for the GNOME desktop."))

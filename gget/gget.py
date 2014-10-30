@@ -70,7 +70,7 @@ def fix_pixbuf_paths():
         handle.writelines(outbuf)
         handle.close()
     
-fix_pixbuf_paths()
+#fix_pixbuf_paths()
 
 import gget.utils
     
