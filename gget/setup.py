@@ -13,8 +13,7 @@ LICENSE = 'GPL'
 DESC = ''
 AUTHOR_NAME = 'Neil McNab'
 EMAIL = 'webmaster@nabber.org'
-URL = 'http://www.nabber.org/projects/'
-
+URL = 'http://www.nabber.org/projects/metalink'
 
 def clean():
     ignore = []
@@ -156,6 +155,9 @@ elif sys.argv[1] == 'clean':
 elif sys.argv[1] == 'py2exe':
     import py2exe
 
+    # DLL files to exclude from distribution
+    dlllist = [ "DNSAPI.DLL", "MSIMG32.DLL", "NSI.DLL", "USP10.DLL"]
+    
     #localegen()
     #localecompile()
     
@@ -178,7 +180,7 @@ elif sys.argv[1] == 'py2exe':
     setup(windows = ["gget.py"],
       zipfile = None,
       data_files = data,
-      options={"py2exe" : {"packages": 'encodings', "includes" : "cairo, pango, pangocairo, atk, gobject, gio", "optimize": 2}},
+      options={"py2exe" : {'dll_excludes': dlllist, "packages": 'encodings', "includes" : "cairo, pango, pangocairo, atk, gobject, gio", "optimize": 2}},
       name = APP_NAME,
       version = VERSION,
       license = LICENSE,
@@ -187,10 +189,6 @@ elif sys.argv[1] == 'py2exe':
       author_email = EMAIL,
       url = URL
       )
-      
-    # TODO we can probably eliminate some files from here
-    for dir in ('lib', 'share', 'etc'):
-        copy_directory(os.path.join("gtk", dir), os.path.join("dist", dir))
         
     copyfiles = [os.path.join(sys.exec_prefix,"Lib\\site-packages\\gtk-2.0\\runtime\\bin\\libxml2-2.dll")]
     for filename in copyfiles:
