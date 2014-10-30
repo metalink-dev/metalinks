@@ -36,42 +36,6 @@ def get_main_dir():
         return os.path.dirname(sys.executable)
     return os.path.dirname(sys.argv[0])
 
-def fix_pixbuf_paths():
-    if main_is_frozen():
-        gtkdir = ""
-    else:
-        gtkdir = "gtk"
-        
-    filename = os.path.join(gtkdir, "etc\\gtk-2.0\\gdk-pixbuf.loaders")
-    fullgtkdir = os.path.join(get_main_dir(), gtkdir)
-        
-    handle = open(filename, "r")
-    lines = handle.readlines()
-    fixed = False
-    outbuf = []
-    for line in lines:
-        if line.find("libpixbufloader") != -1:
-            normalized = os.path.abspath(line.strip().strip("\""))
-            if not normalized.startswith(fullgtkdir):
-                find = normalized.rfind("\\lib\\")
-                if find != -1:
-                    fixed = True
-                    outbuf.append("\"" + os.path.join(fullgtkdir, normalized[find+1:]).replace("\\","/") + "\"\n")
-                else:
-                    outbuf.append(line)
-            else:
-                outbuf.append(line)
-        else:
-            outbuf.append(line)
-    handle.close()
-    
-    if fixed:
-        handle = open(filename, "w")
-        handle.writelines(outbuf)
-        handle.close()
-    
-#fix_pixbuf_paths()
-
 import gget.utils
     
 gget.utils.runned_from_source = runned_from_source
