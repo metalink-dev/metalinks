@@ -96,7 +96,7 @@ def localecompile():
             raise AssertionError, "Generation of .mo file failed for %s." % pofile
             
 def rec_search(end, abspath = True, ignoredirs = []):
-    start = os.path.dirname(__file__)
+    start = os.path.abspath(os.path.dirname(__file__))
     mylist = []
     for root, dirs, files in os.walk(start):
         if not check_ignore(root[len(start):].strip("\\"), ignoredirs):
@@ -191,6 +191,10 @@ elif sys.argv[1] == 'py2exe':
     # TODO we can probably eliminate some files from here
     for dir in ('lib', 'share', 'etc'):
         copy_directory(os.path.join("gtk", dir), os.path.join("dist", dir))
+        
+    copyfiles = [os.path.join(sys.exec_prefix,"Lib\\site-packages\\gtk-2.0\\runtime\\bin\\libxml2-2.dll")]
+    for filename in copyfiles:
+        shutil.copy(filename, "dist")
         
 elif sys.argv[1] == 'zip':
     #print "Zipping up..."
