@@ -6,7 +6,7 @@
 # URL: http://www.nabber.org/projects/
 # E-mail: webmaster@nabber.org
 #
-# Copyright: (C) 2007-2014, Neil McNab
+# Copyright: (C) 2007-2015, Neil McNab
 # License: GNU General Public License Version 2
 #   (http://www.gnu.org/copyleft/gpl.html)
 #
@@ -38,6 +38,7 @@
 # import download
 #
 # files = download.get("file.metalink", os.getcwd())
+# fp = download.urlopen("file.metalink")
 #
 # Callback Definitions:
 # def cancel():
@@ -76,6 +77,7 @@ import gettext
 import binascii
 import random
 import uuid
+import ssl
 
 try: import GPG
 except: pass
@@ -92,6 +94,14 @@ except: pass
 
 try: import win32con
 except: pass
+
+# Need python 2.7.9 or newer for the really good stuff
+if sys.version_info[0] >= 2 and sys.version_info[1] >= 7 and sys.version_info[2] >= 9:
+    SSL_ANYTHING = ssl.SSLContext(ssl.PROTOCOL_SSL23)
+    SSL_DEFAULT = ssl.create_default_context()
+    SSL_HIGH = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
+    SSL_HIGH.verify_mode = ssl.CERT_REQUIRED | ssl.VERIFY_CRL_CHECK_CHAIN
+    SSL_HIGH.set_ciphers("ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES256-GCM-SHA384:DHE-RSA-AES128-GCM-SHA256:DHE-DSS-AES128-GCM-SHA256:kEDH+AESGCM:ECDHE-RSA-AES128-SHA256:ECDHE-ECDSA-AES128-SHA256:ECDHE-RSA-AES128-SHA:ECDHE-ECDSA-AES128-SHA:ECDHE-RSA-AES256-SHA384:ECDHE-ECDSA-AES256-SHA384:ECDHE-RSA-AES256-SHA:ECDHE-ECDSA-AES256-SHA:DHE-RSA-AES128-SHA256:DHE-RSA-AES128-SHA:DHE-DSS-AES128-SHA256:DHE-RSA-AES256-SHA256:DHE-DSS-AES256-SHA:DHE-RSA-AES256-SHA:!aNULL:!eNULL:!EXPORT:!DES:!RC4:!3DES:!MD5:!PSK")
 
 USER_AGENT = "Metalink Checker/6.0 +http://www.nabber.org/projects/"
 UUID = None
