@@ -6,7 +6,7 @@
 # URL: http://www.nabber.org/projects/
 # E-mail: webmaster@nabber.org
 #
-# Copyright: (C) 2007-2012, Hampus Wessman, Neil McNab
+# Copyright: (C) 2007-2015, Hampus Wessman, Neil McNab
 # License: GNU General Public License Version 2
 #   (http://www.gnu.org/copyleft/gpl.html)
 #
@@ -681,13 +681,16 @@ class Metalink(MetalinkBase):
         origin = ""
         if self.origin.strip() != "":
             origin = 'origin="'+self.origin+'" '
+        pubdate = ""
+        if self.pubdate.strip() != "":
+            pubdate = 'pubdate="'+self.pubdate+'" '
         typetext = ""
         if self.type.strip() != "":
             typetext = 'type="'+self.type+'" '
         gentext = ""
         if self.generator.strip() != "":
             gentext = 'generator="'+self.generator+'" '
-        text += '<metalink version="3.0" '+origin + typetext + gentext + 'xmlns="' + self.XMLNS + '">\n'
+        text += '<metalink version="3.0" '+ origin + pubdate + typetext + gentext + 'xmlns="' + self.XMLNS + '">\n'
         text += self.generate_info()
         text += '  <files>\n'
         for fileobj in self.files:
@@ -828,6 +831,8 @@ class Metalink4(MetalinkBase):
 
         if self.origin.strip() != "":
             text += '<origin ' + attr + '>'+self.origin+'</origin>\n'
+        if self.published.strip() != "":
+            text += '<published>'+self.published+'</published>\n'
        
         for fileobj in self.files:
             text += fileobj.generate_file()

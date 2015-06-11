@@ -5,7 +5,7 @@
 # URL: http://www.metamirrors.nl/node/59
 # E-mail: webmaster@nabber.org
 #
-# Copyright: (C) 2008-2014 Neil McNab
+# Copyright: (C) 2008-2015 Neil McNab
 # License: GNU General Public License Version 2
 #   (http://www.gnu.org/copyleft/gpl.html)
 #
@@ -37,6 +37,7 @@ import urllib
 import optparse
 import os.path
 import sys
+import time
 
 metalink.GENERATOR = "Metalink Editor version 1.3.1"
 
@@ -56,7 +57,7 @@ def xml_encode(data):
             tempstr += char
     return tempstr
 
-def build(xml, urls, output=None, localfile=None, download=True, do_ed2k=True, do_magnet=False, v4=False):
+def build(xml, urls, output=None, localfile=None, download=True, do_ed2k=True, do_magnet=False, v4=False, pubdate=None):
     '''
     urls - RFC 2396 encoded urls
     '''
@@ -75,11 +76,15 @@ def build(xml, urls, output=None, localfile=None, download=True, do_ed2k=True, d
             urllib.urlretrieve(url, localfile, progress.download_update)
             progress.download_end()
 
+
     xmlfile = metalink.MetalinkFile(localfile, do_ed2k=do_ed2k, do_magnet=do_magnet)
     xml.files.append(xmlfile)
     xmlfile.scan_file(localfile)
     for item in urls:
         xmlfile.add_url(item)
+
+    if pubdate:
+        xml.pubdate = time.strftime(metalink.RFC822, time.gmtime(os.path.getmtime(localfile)))
 
     if not xml.validate():
         for line in xml.errors:
@@ -142,7 +147,7 @@ def run():
     #parser.add_option("--maxconn", dest="maxconn_total", help="Maximum number of connections for downloading")    
     parser.add_option("--origin", dest="origin", help="URL for the finished metalink file to check for updates")
     #parser.add_option("--logo", dest="logo", help="URL for a related logo")
-    #parser.add_option("-d", dest="pubdate", action="store_true", help="Set publication date to now")
+    parser.add_option("-p", dest="pubdateflag", action="store_true", help="Set publication date to modified time")
         
     #parser.add_option("-s", "--size", dest="size", help="File size")
 
@@ -153,9 +158,8 @@ def run():
         parser.print_help()
         return
 
-    #if options.pubdate:
-        # RFC 822 format
-    #    options.pubdate = time.strftime("%a, %d %b %Y %H:%M:%S +0000", time.gmtime())
+#    if options.pubdate:
+#            options.pubdate = time.strftime("%a, %d %b %Y %H:%M:%S +0000", time.gmtime())
 
     xml = metalink.Metalink()
     #options.ed2k, options.magnet)
@@ -185,7 +189,7 @@ def run():
     if options.download:
         download = False
     
-    build(xml, args, None, options.output, download, options.ed2k, options.magnet, options.v4)
+    build(xml, args, None, options.output, download, options.ed2k, options.magnet, options.v4, options.pubdateflag)
 
 class ProgressBar:
     def __init__(self, length = 68):
