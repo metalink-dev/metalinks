@@ -36,7 +36,7 @@ class="nounderline"
 style="color: black; font-weight: bold" href="http://www.metalinker.org/samples.html">get a supported download program &amp; try it</a>!
                 </p>
 
-        <h2><xsl:value-of select="metalink4:identity"/><xsl:text> </xsl:text><xsl:value-of select='metalink4:version'/></h2>
+        <h2>Metalink Information</h2>
 
 <p>
 <xsl:if test="metalink4:origin/@dynamic">
@@ -46,6 +46,29 @@ Dynamic: <xsl:value-of select="metalink4:origin/@dynamic"/><br />
 Origin:
 <a><xsl:attribute name="href"><xsl:value-of select="metalink4:origin"/></xsl:attribute><xsl:value-of select="metalink4:origin"/></a><br />
 </xsl:if>
+<xsl:if test="metalink4:published">
+Publication Date:
+<xsl:variable name="dateParam" select="metalink4:published" />
+<xsl:variable name="year" select="substring($dateParam,1,4)" />
+<xsl:variable name="month" select="substring($dateParam,6,2)" />
+<xsl:variable name="day" select="substring($dateParam,9,2)" />
+
+<xsl:choose>
+      <xsl:when test="$month=1">January</xsl:when>
+      <xsl:when test="$month=2">February</xsl:when>
+      <xsl:when test="$month=3">March</xsl:when>
+      <xsl:when test="$month=4">April</xsl:when>
+      <xsl:when test="$month=5">May</xsl:when>
+      <xsl:when test="$month=6">June</xsl:when>
+      <xsl:when test="$month=7">July</xsl:when>
+      <xsl:when test="$month=8">August</xsl:when>
+      <xsl:when test="$month=9">September</xsl:when>
+      <xsl:when test="$month=10">October</xsl:when>
+      <xsl:when test="$month=11">November</xsl:when>
+      <xsl:when test="$month=12">December</xsl:when>
+</xsl:choose>&#160;
+<xsl:value-of select="format-number($day, '##')" />, <xsl:value-of select="$year" />
+</xsl:if>
 </p>
 
 <!-- List file summary -->
@@ -53,22 +76,22 @@ Origin:
 <h3>Table of Contents</h3>
         <table border="1">
             <tr>
-                <th>Identity</th>
+                <th>Identity/Version</th>
                 <th>File Name</th>
-                <th>Size (Bytes)</th>
+                <th>Size (MBytes)</th>
                 <th>OS</th>
             </tr>
 
         <xsl:for-each select="metalink4:file">
         <tr>
                 <td>
-                        <a><xsl:attribute name="href">#<xsl:value-of select="@name"/></xsl:attribute><xsl:value-of select="metalink4:identity"/></a>
+                        <a><xsl:attribute name="href">#<xsl:value-of select="@name"/></xsl:attribute><xsl:value-of select="metalink4:identity"/>&#160;<xsl:value-of select="metalink4:version"/></a>
                 </td>
                 <td>
                         <a><xsl:attribute name="href">#<xsl:value-of select="@name"/></xsl:attribute><xsl:value-of select="@name"/></a>
                 </td>
                 <td>
-                        <xsl:value-of select="format-number(metalink4:size, '###,###,###,###,###')"/>
+                        <xsl:value-of select="format-number(metalink4:size div 1024 div 1024, '###,###,###,###,##0.##')"/>
                 </td>
                 <td>
                         <xsl:value-of select="metalink4:os"/>
@@ -80,7 +103,7 @@ Origin:
 <!-- List file details -->
 
 <xsl:for-each select="metalink4:file">
-<h3><a><xsl:attribute name="name"><xsl:value-of select="@name"/></xsl:attribute><xsl:value-of select="metalink4:identity"/> (<xsl:value-of select="@name"/>)</a></h3>
+<h3><a><xsl:attribute name="name"><xsl:value-of select="@name"/></xsl:attribute><xsl:value-of select="metalink4:identity"/>&#160;<xsl:value-of select="metalink4:version"/> (<xsl:value-of select="@name"/>)</a></h3>
 
 <p>
 <xsl:if test="metalink4:publisher/@name">
@@ -276,6 +299,18 @@ Origin:
 select="@origin"/></xsl:attribute><xsl:value-of select="@origin"/></a><br />
 </xsl:if>
 
+<xsl:if test="@pubdate">
+Publication Date: 
+
+<xsl:variable name="dateParam" select="@pubdate" />
+<xsl:variable name="year" select="substring($dateParam,13,4)" />
+<xsl:variable name="month" select="substring($dateParam,9,3)" />
+<xsl:variable name="day" select="substring($dateParam,6,2)" />
+
+<xsl:value-of select="$month" />&#160;<xsl:value-of select="format-number($day, '##')" />, <xsl:value-of select="$year" />
+
+</xsl:if>
+
 <xsl:if test="metalink:tags">
 Keywords: <xsl:value-of select="metalink:tags"/>
 </xsl:if>
@@ -297,7 +332,7 @@ Keywords: <xsl:value-of select="metalink:tags"/>
         <table border="1">
             <tr>
                 <th>File Name</th>
-                <th>Size (Bytes)</th>
+                <th>Size (MBytes)</th>
                 <th>OS</th>
             </tr>
 
@@ -307,7 +342,7 @@ Keywords: <xsl:value-of select="metalink:tags"/>
 			<a><xsl:attribute name="href">#<xsl:value-of select="@name"/></xsl:attribute><xsl:value-of select="@name"/></a>
 		</td>
 		<td>
-			<xsl:value-of select="format-number(metalink:size, '###,###,###,###,###')"/>
+			<xsl:value-of select="format-number(metalink:size div 1024 div 1024, '###,###,###,###,##0.##')"/>
 		</td>
 		<td>
 			<xsl:value-of select="metalink:os"/>
