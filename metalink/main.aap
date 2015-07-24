@@ -1,5 +1,0 @@
-
-all: src/metalink
-
-:include metalink.aap
-
